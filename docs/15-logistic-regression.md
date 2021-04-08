@@ -52,7 +52,8 @@ spider <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Grain.size = col_double(),
 ##   Spiders = col_character()
@@ -534,7 +535,8 @@ bugs2 <- read_table("exposed.txt")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   `Log-Concentration` = col_double(),
 ##   `Insects exposed` = col_double(),
@@ -579,7 +581,8 @@ bugs2 <- read_table("exposed2.txt")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Log_Concentration = col_double(),
 ##   Insects_exposed = col_double(),
@@ -1439,7 +1442,8 @@ infect <- read_tsv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   infected = col_character(),
 ##   age = col_double(),
@@ -2516,7 +2520,8 @@ decide <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   decision = col_character(),
 ##   idealism = col_double(),
@@ -3833,7 +3838,8 @@ heart <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_double(),
 ##   age = col_double(),
@@ -3859,18 +3865,18 @@ heart
 
 ```
 ## # A tibble: 270 x 15
-##       X1   age sex   pain.type resting.bp serum.chol high.blood.sugar electro
-##    <dbl> <dbl> <chr> <chr>          <dbl>      <dbl> <chr>            <chr>  
-##  1     1    70 male  asymptom…        130        322 no               hypert…
-##  2     2    67 fema… nonangin…        115        564 no               hypert…
-##  3     3    57 male  atypical         124        261 no               normal 
-##  4     4    64 male  asymptom…        128        263 no               normal 
-##  5     5    74 fema… atypical         120        269 no               hypert…
-##  6     6    65 male  asymptom…        120        177 no               normal 
-##  7     7    56 male  nonangin…        130        256 yes              hypert…
-##  8     8    59 male  asymptom…        110        239 no               hypert…
-##  9     9    60 male  asymptom…        140        293 no               hypert…
-## 10    10    63 fema… asymptom…        150        407 no               hypert…
+##       X1   age sex    pain.type  resting.bp serum.chol high.blood.sugar electro 
+##    <dbl> <dbl> <chr>  <chr>           <dbl>      <dbl> <chr>            <chr>   
+##  1     1    70 male   asymptoma…        130        322 no               hypertr…
+##  2     2    67 female nonanginal        115        564 no               hypertr…
+##  3     3    57 male   atypical          124        261 no               normal  
+##  4     4    64 male   asymptoma…        128        263 no               normal  
+##  5     5    74 female atypical          120        269 no               hypertr…
+##  6     6    65 male   asymptoma…        120        177 no               normal  
+##  7     7    56 male   nonanginal        130        256 yes              hypertr…
+##  8     8    59 male   asymptoma…        110        239 no               hypertr…
+##  9     9    60 male   asymptoma…        140        293 no               hypertr…
+## 10    10    63 female asymptoma…        150        407 no               hypertr…
 ## # … with 260 more rows, and 7 more variables: max.hr <dbl>, angina <chr>,
 ## #   oldpeak <dbl>, slope <chr>, colored <dbl>, thal <chr>, heart.disease <chr>
 ```
@@ -4417,7 +4423,7 @@ heart %>% summarize_if(is.numeric, funs(q1, q3))
 ```
 
 ```
-## Warning: `funs()` is deprecated as of dplyr 0.8.0.
+## Warning: `funs()` was deprecated in dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -4428,8 +4434,6 @@ heart %>% summarize_if(is.numeric, funs(q1, q3))
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -4850,16 +4854,16 @@ heart.new %>% sample_n(8)
 
 ```
 ## # A tibble: 8 x 10
-##   sex   pain.type resting.bp serum.chol max.hr oldpeak slope colored thal 
-##   <chr> <chr>          <dbl>      <dbl>  <dbl>   <dbl> <chr>   <dbl> <chr>
-## 1 male  nonangin…        120        280    133     1.6 flat        0 norm…
-## 2 male  atypical         140        213    166     0   upsl…       1 reve…
-## 3 fema… nonangin…        140        213    133     0   upsl…       0 reve…
-## 4 fema… nonangin…        120        280    133     1.6 flat        0 reve…
-## 5 fema… typical          120        213    166     1.6 down…       0 fixed
-## 6 male  nonangin…        140        280    166     0   upsl…       1 fixed
-## 7 male  typical          140        213    133     0   flat        1 fixed
-## 8 fema… atypical         120        213    166     0   down…       1 reve…
+##   sex    pain.type  resting.bp serum.chol max.hr oldpeak slope   colored thal   
+##   <chr>  <chr>           <dbl>      <dbl>  <dbl>   <dbl> <chr>     <dbl> <chr>  
+## 1 female atypical          120        213    166     0   flat          0 fixed  
+## 2 male   atypical          120        213    166     0   downsl…       1 revers…
+## 3 female nonanginal        140        280    166     1.6 downsl…       0 normal 
+## 4 male   nonanginal        120        213    166     1.6 upslop…       0 normal 
+## 5 male   nonanginal        140        280    133     1.6 upslop…       0 normal 
+## 6 male   nonanginal        140        280    133     1.6 flat          0 revers…
+## 7 female nonanginal        140        213    133     0   downsl…       0 revers…
+## 8 male   nonanginal        140        213    166     1.6 flat          1 fixed  
 ## # … with 1 more variable: pred <dbl>
 ```
 
@@ -5075,7 +5079,8 @@ breastfeed <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   gest.age = col_double(),
 ##   bf.yes = col_double(),
@@ -5463,7 +5468,8 @@ donner <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   age = col_double(),
 ##   gender = col_character(),
@@ -5576,10 +5582,6 @@ donner %>% group_by(gender) %>% summarize(m = mean(age))
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 2
 ##   gender     m
 ##   <chr>  <dbl>
@@ -5634,10 +5636,6 @@ donner %>% group_by(survived) %>% summarize(m = mean(age))
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 2
 ##   survived     m
 ##   <chr>    <dbl>
@@ -5672,7 +5670,7 @@ donner %>% group_by(gender, survived) %>% summarize(n = n())
 ```
 
 ```
-## `summarise()` regrouping output by 'gender' (override with `.groups` argument)
+## `summarise()` has grouped output by 'gender'. You can override using the `.groups` argument.
 ```
 
 ```
@@ -6160,7 +6158,8 @@ icu <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   apache = col_double(),
 ##   patients = col_double(),
@@ -6620,7 +6619,8 @@ ha <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   second = col_character(),
 ##   anger = col_character(),

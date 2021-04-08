@@ -609,7 +609,8 @@ rats=read_delim(my_url," ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   group = col_character(),
 ##   density = col_double()
@@ -665,10 +666,6 @@ equivalent on a Mac):
 ```r
 rats %>% group_by(group) %>%
 summarize(m=mean(density))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -776,7 +773,8 @@ testing <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double(),
@@ -857,7 +855,8 @@ testing2 <- read_delim("testing.txt", " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double(),
@@ -924,7 +923,8 @@ cars <- read_csv("cars.csv")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Car = col_character(),
 ##   MPG = col_double(),
@@ -982,7 +982,8 @@ testing <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double(),

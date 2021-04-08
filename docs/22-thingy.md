@@ -54,14 +54,12 @@ seabed <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double()
 ## )
-```
-
-```
-## See spec(...) for full column specifications.
+## ℹ Use `spec()` for the full column specifications.
 ```
 
 ```r
@@ -380,7 +378,8 @@ seabed.z <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   site = col_character(),
 ##   a = col_double(),
@@ -1279,7 +1278,8 @@ fruit1 <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Property = col_character(),
 ##   Apple = col_double(),
@@ -1585,7 +1585,8 @@ dissims <- read_table("fruits.txt")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   fruit = col_character(),
 ##   Apple = col_double(),
@@ -1774,7 +1775,8 @@ species <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   what = col_character(),
 ##   Man = col_double(),
@@ -2123,7 +2125,8 @@ beer <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_character(),
 ##   AnchorS = col_double(),
@@ -2679,7 +2682,8 @@ swiss <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   left = col_double(),
@@ -2829,9 +2833,9 @@ wssq
 ## 4        5  449.
 ## 5        6  413.
 ## 6        7  382.
-## 7        8  356.
-## 8        9  335.
-## 9       10  313.
+## 7        8  355.
+## 8        9  334.
+## 9       10  320.
 ```
 
  
@@ -2853,11 +2857,11 @@ wssq.2
 ## 2        3 <kmeans>  576.
 ## 3        4 <kmeans>  492.
 ## 4        5 <kmeans>  451.
-## 5        6 <kmeans>  415.
+## 5        6 <kmeans>  413.
 ## 6        7 <kmeans>  382.
 ## 7        8 <kmeans>  355.
-## 8        9 <kmeans>  334.
-## 9       10 <kmeans>  318.
+## 8        9 <kmeans>  335.
+## 9       10 <kmeans>  313.
 ```
 
  
@@ -2883,8 +2887,8 @@ wss.1
 ```
 
 ```
-##  [1]       NA 701.2054 576.1284 491.7085 449.3900 412.6598 381.5568 357.6396
-##  [9] 334.8232 312.5101
+##  [1]       NA 701.2054 576.1284 491.7085 449.3900 412.9139 381.3926 355.3338
+##  [9] 338.5621 318.1799
 ```
 
        
@@ -3006,11 +3010,11 @@ wssq.2
 ## 2        3 <kmeans>  576.
 ## 3        4 <kmeans>  492.
 ## 4        5 <kmeans>  451.
-## 5        6 <kmeans>  415.
+## 5        6 <kmeans>  413.
 ## 6        7 <kmeans>  382.
 ## 7        8 <kmeans>  355.
-## 8        9 <kmeans>  334.
-## 9       10 <kmeans>  318.
+## 8        9 <kmeans>  335.
+## 9       10 <kmeans>  313.
 ```
 
  
@@ -3035,25 +3039,25 @@ swiss.7a
 
 ```
 ## [[1]]
-## K-means clustering with 4 clusters of sizes 50, 50, 68, 32
+## K-means clustering with 4 clusters of sizes 32, 50, 50, 68
 ## 
 ## Cluster means:
 ##       length       left      right     bottom         top       diag
-## 1  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 1  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
 ## 2 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
-## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
-## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
+## 3  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 4 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
 ## 
 ## Clustering vector:
-##   [1] 4 3 3 3 3 4 3 3 3 4 4 3 4 3 3 3 3 3 3 3 3 4 4 4 3 4 4 4 4 3 4 3 3 4 4 4 4
-##  [38] 3 4 3 3 3 3 4 3 3 3 3 3 3 3 4 3 4 3 3 4 3 4 3 3 3 3 3 3 4 3 3 3 1 3 3 3 3
-##  [75] 3 3 3 3 4 3 3 3 3 4 4 3 3 3 4 3 3 4 3 3 3 4 4 3 3 3 1 1 1 1 2 2 1 1 1 1 1
-## [112] 1 1 2 2 1 2 2 2 1 1 2 1 1 2 1 1 1 1 1 2 2 1 1 2 2 2 1 2 2 1 2 2 1 2 2 2 1
-## [149] 2 1 2 2 2 2 2 2 2 2 2 1 1 2 2 2 2 1 4 1 1 2 1 2 2 2 2 2 2 1 1 1 2 1 1 1 2
-## [186] 2 1 2 1 2 1 1 2 1 2 1 1 1 1 2
+##   [1] 1 4 4 4 4 1 4 4 4 1 1 4 1 4 4 4 4 4 4 4 4 1 1 1 4 1 1 1 1 4 1 4 4 1 1 1 1
+##  [38] 4 1 4 4 4 4 1 4 4 4 4 4 4 4 1 4 1 4 4 1 4 1 4 4 4 4 4 4 1 4 4 4 3 4 4 4 4
+##  [75] 4 4 4 4 1 4 4 4 4 1 1 4 4 4 1 4 4 1 4 4 4 1 1 4 4 4 3 3 3 3 2 2 3 3 3 3 3
+## [112] 3 3 2 2 3 2 2 2 3 3 2 3 3 2 3 3 3 3 3 2 2 3 3 2 2 2 3 2 2 3 2 2 3 2 2 2 3
+## [149] 2 3 2 2 2 2 2 2 2 2 2 3 3 2 2 2 2 3 1 3 3 2 3 2 2 2 2 2 2 3 3 3 2 3 3 3 2
+## [186] 2 3 2 3 2 3 3 2 3 2 3 3 3 3 2
 ## 
 ## Within cluster sum of squares by cluster:
-## [1] 137.68573  95.51948 166.12573  92.37757
+## [1]  92.37757  95.51948 137.68573 166.12573
 ##  (between_SS / total_SS =  58.8 %)
 ## 
 ## Available components:
@@ -3086,10 +3090,10 @@ swiss.7a[[1]]$centers
 
 ```
 ##       length       left      right     bottom         top       diag
-## 1  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 1  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
 ## 2 -0.5683115  0.2617543  0.3254371  1.3197396  0.04670298 -0.8483286
-## 3 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
-## 4  1.1475776  0.6848546  0.2855308 -0.5788787 -0.40538184  0.7764051
+## 3  0.1062264  0.6993965  0.8352473  0.1927865  1.18251937 -0.9316427
+## 4 -0.2002681 -1.0290130 -0.9878119 -0.8397381 -0.71307204  0.9434354
 ```
 
  
@@ -3218,7 +3222,8 @@ cars <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Carname = col_character(),
 ##   mpg = col_double(),
@@ -4212,7 +4217,8 @@ decathlon0 <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   name = col_character(),
 ##   x100m = col_double(),
@@ -4234,18 +4240,18 @@ decathlon0
 
 ```
 ## # A tibble: 24 x 11
-##    name  x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
-##    <chr> <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
-##  1 Asht…  10.4      7.73     14.4      1.93  46.0   13.7   45          5.2
-##  2 Dami…  10.4      7.39     14.2      2.05  48.4   14.0   44.1        4.8
-##  3 Rico…  10.6      7.22     14.8      1.99  48.0   13.9   48.7        4.9
-##  4 Miha…  10.7      7.51     13.4      1.96  47.7   14.6   44.1        4.9
-##  5 Mich…  10.7      7.85     14.6      1.99  47.7   14.3   46.4        5  
-##  6 Carl…  10.8      7.54     14.5      1.96  48.8   14.0   45.8        5.1
-##  7 Gunn…  10.8      7.8      14.7      2.14  48.6   14.6   42.4        4.6
-##  8 Eelc…  10.8      7.65     14.1      2.02  48.2   14.2   39.2        5.3
-##  9 Pasc…  11.0      7.19     15.9      1.99  48.4   14.5   45.7        4.7
-## 10 Will…  11.0      7.44     13.9      2.05  48.3   14.3   43.2        4.5
+##    name        x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
+##    <chr>       <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
+##  1 Ashton Eat…  10.4      7.73     14.4      1.93  46.0   13.7   45          5.2
+##  2 Damian War…  10.4      7.39     14.2      2.05  48.4   14.0   44.1        4.8
+##  3 Rico Freim…  10.6      7.22     14.8      1.99  48.0   13.9   48.7        4.9
+##  4 Mihail Dud…  10.7      7.51     13.4      1.96  47.7   14.6   44.1        4.9
+##  5 Michael Sc…  10.7      7.85     14.6      1.99  47.7   14.3   46.4        5  
+##  6 Carlos Chi…  10.8      7.54     14.5      1.96  48.8   14.0   45.8        5.1
+##  7 Gunnar Nix…  10.8      7.8      14.7      2.14  48.6   14.6   42.4        4.6
+##  8 Eelco Sint…  10.8      7.65     14.1      2.02  48.2   14.2   39.2        5.3
+##  9 Pascal Beh…  11.0      7.19     15.9      1.99  48.4   14.5   45.7        4.7
+## 10 Willem Coe…  11.0      7.44     13.9      2.05  48.3   14.3   43.2        4.5
 ## # … with 14 more rows, and 2 more variables: javelin <dbl>, x1500m <dbl>
 ```
 
@@ -4369,8 +4375,8 @@ w
 ```
 
 ```
-##  [1]        NA 175.03246 151.08750 131.30247 113.59681 100.26941  89.56250  78.80407
-##  [9]  68.99662  60.77665  54.11902  47.64227  41.40352  35.39181  29.52008  25.49505
+##  [1]        NA 175.03246 151.08750 131.30247 113.59681 100.26941  89.64931  78.80407
+##  [9]  69.53387  60.77665  54.11902  47.64227  41.40352  35.39181  29.52008  25.49505
 ## [17]  21.02841  17.28444  13.80627  10.44197
 ```
 
@@ -5245,7 +5251,8 @@ bridges0 <- read_csv(my_url, na = "?")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────
 ## cols(
 ##   id = col_character(),
 ##   river = col_character(),
@@ -5269,18 +5276,18 @@ bridges0
 
 ```
 ## # A tibble: 108 x 13
-##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E1    M            3 CRAFTS  HIGHWAY <NA>       2 N       THRO…
-##  2 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  3 E3    A           39 CRAFTS  AQUEDU… <NA>       1 N       THRO…
-##  4 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  5 E6    M           23 CRAFTS  HIGHWAY <NA>       2 N       THRO…
-##  6 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
-##  7 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
-##  8 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  9 E10   A           39 CRAFTS  AQUEDU… <NA>       1 N       DECK 
-## 10 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##    id    river location erected purpose  length lanes clear_g t_d    
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
+##  1 E1    M            3 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH
+##  2 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  3 E3    A           39 CRAFTS  AQUEDUCT <NA>       1 N       THROUGH
+##  4 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  5 E6    M           23 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH
+##  6 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
+##  7 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
+##  8 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  9 E10   A           39 CRAFTS  AQUEDUCT <NA>       1 N       DECK   
+## 10 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
 ## # … with 98 more rows, and 4 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>
 ```
@@ -5382,18 +5389,18 @@ bridges
 
 ```
 ## # A tibble: 70 x 13
-##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
-##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##    id    river location erected purpose  length lanes clear_g t_d    
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
+##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
+##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
+##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH
+## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
 ## # … with 60 more rows, and 4 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>
 ```
@@ -5639,18 +5646,18 @@ bridges
 
 ```
 ## # A tibble: 70 x 13
-##    id    river location erected purpose length lanes clear_g t_d  
-##    <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-##  1 E2    A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  2 E5    A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  3 E7    A           27 CRAFTS  HIGHWAY SHORT      2 N       THRO…
-##  4 E8    A           28 CRAFTS  AQUEDU… MEDIUM     1 N       THRO…
-##  5 E9    M            3 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  6 E11   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  7 E14   M            6 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  8 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-##  9 E18   A           28 CRAFTS  RR      MEDIUM     2 N       THRO…
-## 10 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
+##    id    river location erected purpose  length lanes clear_g t_d    
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
+##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
+##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
+##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
+##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH
+## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
 ## # … with 60 more rows, and 4 more variables: material <chr>,
 ## #   span <chr>, rel_l <chr>, type <chr>
 ```
@@ -5799,19 +5806,17 @@ mm
 ##  8     8     4     4     4     4     3     3     4     0     4     3
 ##  9     9     3     3     5     3     3     4     5     4     0     4
 ## 10    10     1     1     1     5     4     0     1     3     4     0
-## # … with 60 more rows, and 60 more variables: `11` <int>, `12` <int>,
-## #   `13` <int>, `14` <int>, `15` <int>, `16` <int>, `17` <int>,
-## #   `18` <int>, `19` <int>, `20` <int>, `21` <int>, `22` <int>,
-## #   `23` <int>, `24` <int>, `25` <int>, `26` <int>, `27` <int>,
-## #   `28` <int>, `29` <int>, `30` <int>, `31` <int>, `32` <int>,
-## #   `33` <int>, `34` <int>, `35` <int>, `36` <int>, `37` <int>,
-## #   `38` <int>, `39` <int>, `40` <int>, `41` <int>, `42` <int>,
-## #   `43` <int>, `44` <int>, `45` <int>, `46` <int>, `47` <int>,
-## #   `48` <int>, `49` <int>, `50` <int>, `51` <int>, `52` <int>,
-## #   `53` <int>, `54` <int>, `55` <int>, `56` <int>, `57` <int>,
-## #   `58` <int>, `59` <int>, `60` <int>, `61` <int>, `62` <int>,
-## #   `63` <int>, `64` <int>, `65` <int>, `66` <int>, `67` <int>,
-## #   `68` <int>, `69` <int>, `70` <int>
+## # … with 60 more rows, and 60 more variables: 11 <int>, 12 <int>,
+## #   13 <int>, 14 <int>, 15 <int>, 16 <int>, 17 <int>, 18 <int>,
+## #   19 <int>, 20 <int>, 21 <int>, 22 <int>, 23 <int>, 24 <int>,
+## #   25 <int>, 26 <int>, 27 <int>, 28 <int>, 29 <int>, 30 <int>,
+## #   31 <int>, 32 <int>, 33 <int>, 34 <int>, 35 <int>, 36 <int>,
+## #   37 <int>, 38 <int>, 39 <int>, 40 <int>, 41 <int>, 42 <int>,
+## #   43 <int>, 44 <int>, 45 <int>, 46 <int>, 47 <int>, 48 <int>,
+## #   49 <int>, 50 <int>, 51 <int>, 52 <int>, 53 <int>, 54 <int>,
+## #   55 <int>, 56 <int>, 57 <int>, 58 <int>, 59 <int>, 60 <int>,
+## #   61 <int>, 62 <int>, 63 <int>, 64 <int>, 65 <int>, 66 <int>,
+## #   67 <int>, 68 <int>, 69 <int>, 70 <int>
 ```
 
  
@@ -5858,14 +5863,12 @@ mmm <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────
 ## cols(
 ##   .default = col_double()
 ## )
-```
-
-```
-## See spec(...) for full column specifications.
+## ℹ Use `spec()` for the full column specifications.
 ```
 
 ```r
@@ -5886,19 +5889,17 @@ mmm
 ##  8     8     4     4     4     4     3     3     4     0     4     3
 ##  9     9     3     3     5     3     3     4     5     4     0     4
 ## 10    10     1     1     1     5     4     0     1     3     4     0
-## # … with 60 more rows, and 60 more variables: `11` <dbl>, `12` <dbl>,
-## #   `13` <dbl>, `14` <dbl>, `15` <dbl>, `16` <dbl>, `17` <dbl>,
-## #   `18` <dbl>, `19` <dbl>, `20` <dbl>, `21` <dbl>, `22` <dbl>,
-## #   `23` <dbl>, `24` <dbl>, `25` <dbl>, `26` <dbl>, `27` <dbl>,
-## #   `28` <dbl>, `29` <dbl>, `30` <dbl>, `31` <dbl>, `32` <dbl>,
-## #   `33` <dbl>, `34` <dbl>, `35` <dbl>, `36` <dbl>, `37` <dbl>,
-## #   `38` <dbl>, `39` <dbl>, `40` <dbl>, `41` <dbl>, `42` <dbl>,
-## #   `43` <dbl>, `44` <dbl>, `45` <dbl>, `46` <dbl>, `47` <dbl>,
-## #   `48` <dbl>, `49` <dbl>, `50` <dbl>, `51` <dbl>, `52` <dbl>,
-## #   `53` <dbl>, `54` <dbl>, `55` <dbl>, `56` <dbl>, `57` <dbl>,
-## #   `58` <dbl>, `59` <dbl>, `60` <dbl>, `61` <dbl>, `62` <dbl>,
-## #   `63` <dbl>, `64` <dbl>, `65` <dbl>, `66` <dbl>, `67` <dbl>,
-## #   `68` <dbl>, `69` <dbl>, `70` <dbl>
+## # … with 60 more rows, and 60 more variables: 11 <dbl>, 12 <dbl>,
+## #   13 <dbl>, 14 <dbl>, 15 <dbl>, 16 <dbl>, 17 <dbl>, 18 <dbl>,
+## #   19 <dbl>, 20 <dbl>, 21 <dbl>, 22 <dbl>, 23 <dbl>, 24 <dbl>,
+## #   25 <dbl>, 26 <dbl>, 27 <dbl>, 28 <dbl>, 29 <dbl>, 30 <dbl>,
+## #   31 <dbl>, 32 <dbl>, 33 <dbl>, 34 <dbl>, 35 <dbl>, 36 <dbl>,
+## #   37 <dbl>, 38 <dbl>, 39 <dbl>, 40 <dbl>, 41 <dbl>, 42 <dbl>,
+## #   43 <dbl>, 44 <dbl>, 45 <dbl>, 46 <dbl>, 47 <dbl>, 48 <dbl>,
+## #   49 <dbl>, 50 <dbl>, 51 <dbl>, 52 <dbl>, 53 <dbl>, 54 <dbl>,
+## #   55 <dbl>, 56 <dbl>, 57 <dbl>, 58 <dbl>, 59 <dbl>, 60 <dbl>,
+## #   61 <dbl>, 62 <dbl>, 63 <dbl>, 64 <dbl>, 65 <dbl>, 66 <dbl>,
+## #   67 <dbl>, 68 <dbl>, 69 <dbl>, 70 <dbl>
 ```
 
 ```r
@@ -5979,11 +5980,11 @@ bridges %>% slice(c(41, 42, 48))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d  
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THRO…
-## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THRO…
-## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THRO…
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
+## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
+## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
+## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
 ## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
 ## #   type <chr>
 ```
@@ -6004,11 +6005,11 @@ bridges %>% slice(c(10, 12, 19))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d  
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-## 1 E19   A           29 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-## 2 E22   A           24 EMERGI… HIGHWAY MEDIUM     4 G       THRO…
-## 3 E4    A           27 MATURE  AQUEDU… MEDIUM     1 N       THRO…
+##   id    river location erected  purpose  length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>  
+## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
+## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
+## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
 ## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
 ## #   type <chr>
 ```
@@ -6028,11 +6029,11 @@ bridges %>% slice(c(8, 24, 52))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d  
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THRO…
-## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THRO…
-## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THRO…
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
+## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
+## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
+## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
 ## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
 ## #   type <chr>
 ```
@@ -6105,10 +6106,10 @@ bridges.rpart %>% slice(c(20, 29))
 
 ```
 ## # A tibble: 2 x 14
-##   id    river location erected purpose length lanes clear_g t_d  
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>
-## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THRO…
-## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THRO…
+##   id    river location erected purpose length lanes clear_g t_d    
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
+## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
+## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
 ## # … with 5 more variables: material <chr>, span <chr>, rel_l <chr>,
 ## #   type <chr>, cluster <int>
 ```
@@ -6196,7 +6197,8 @@ athletes <- read_tsv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────
 ## cols(
 ##   Sex = col_character(),
 ##   Sport = col_character(),
@@ -6267,8 +6269,8 @@ athletes.s
 ##  8  -2.01   -0.283 -1.80  -1.59    0.529   0.522    2.69        2.11 
 ##  9  -1.66   -0.893 -1.85  -1.59   -0.124  -0.114    0.985       0.714
 ## 10  -0.608   1.44  -0.462 -0.342  -0.271  -0.0544   1.76        1.85 
-## # … with 192 more rows, and 3 more variables: LBM[,1] <dbl>,
-## #   Ht[,1] <dbl>, Wt[,1] <dbl>
+## # … with 192 more rows, and 3 more variables: LBM <dbl[,1]>,
+## #   Ht <dbl[,1]>, Wt <dbl[,1]>
 ```
 
  

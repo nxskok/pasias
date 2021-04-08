@@ -47,7 +47,8 @@ rains=read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   station = col_character(),
 ##   rainfall = col_double(),
@@ -580,7 +581,8 @@ cigs <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   tar = col_double(),
 ##   nicotine = col_double(),
@@ -980,7 +982,8 @@ boys <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   uptake = col_double(),
 ##   age = col_double(),
@@ -1398,7 +1401,8 @@ fb <- read_tsv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   GMdensity = col_double(),
 ##   FBfriends = col_double()
@@ -1728,7 +1732,8 @@ carp <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   tank = col_double(),
 ##   bodyweight = col_double(),
@@ -1998,18 +2003,18 @@ carp.2a
 
 ```
 ## # A tibble: 10 x 9
-##     tank bodyweight   ENE .fitted .resid .std.resid  .hat .sigma .cooksd
-##    <dbl>      <dbl> <dbl>   <dbl>  <dbl>      <dbl> <dbl>  <dbl>   <dbl>
-##  1     1       11.7  15.3   12.6   2.74       1.43  0.239   1.99 0.215  
-##  2     2       25.3   9.3   11.3  -2.01      -1.00  0.163   2.19 0.0651 
-##  3     3       90.2   6.5    6.75 -0.252     -0.132 0.240   2.37 0.00182
-##  4     4      213     6      4.43  1.57       0.871 0.325   2.24 0.122  
-##  5     5       10.2  15.7   12.7   3.00       1.58  0.251   1.90 0.279  
-##  6     6       17.6  10     12.0  -2.01      -1.02  0.199   2.19 0.0866 
-##  7     7       32.6   8.6   10.7  -2.08      -1.03  0.143   2.18 0.0583 
-##  8     8       81.3   6.4    7.24 -0.841     -0.431 0.211   2.34 0.0166 
-##  9     9      142.    5.6    4.78  0.822      0.466 0.355   2.33 0.0398 
-## 10    10      286.    6      6.94 -0.940     -1.21  0.875   2.11 3.40
+##     tank bodyweight   ENE .fitted .resid  .hat .sigma .cooksd .std.resid
+##    <dbl>      <dbl> <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>      <dbl>
+##  1     1       11.7  15.3   12.6   2.74  0.239   1.99 0.215        1.43 
+##  2     2       25.3   9.3   11.3  -2.01  0.163   2.19 0.0651      -1.00 
+##  3     3       90.2   6.5    6.75 -0.252 0.240   2.37 0.00182     -0.132
+##  4     4      213     6      4.43  1.57  0.325   2.24 0.122        0.871
+##  5     5       10.2  15.7   12.7   3.00  0.251   1.90 0.279        1.58 
+##  6     6       17.6  10     12.0  -2.01  0.199   2.19 0.0866      -1.02 
+##  7     7       32.6   8.6   10.7  -2.08  0.143   2.18 0.0583      -1.03 
+##  8     8       81.3   6.4    7.24 -0.841 0.211   2.34 0.0166      -0.431
+##  9     9      142.    5.6    4.78  0.822 0.355   2.33 0.0398       0.466
+## 10    10      286.    6      6.94 -0.940 0.875   2.11 3.40        -1.21
 ```
 
  
@@ -2240,7 +2245,8 @@ sparrowhawks <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   returning = col_double(),
 ##   newadults = col_double()
@@ -2516,7 +2522,8 @@ soc <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   experience = col_double(),
 ##   salary = col_double()
@@ -3207,7 +3214,8 @@ trees <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   diameter = col_double(),
 ##   volume = col_double()
@@ -3361,9 +3369,9 @@ glance(volume.1)
 
 ```
 ## # A tibble: 1 x 12
-##   r.squared adj.r.squared sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl> <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953  20.4      185. 8.22e-7     1  -43.2  92.4  93.4
+##   r.squared adj.r.squared sigma statistic     p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl> <dbl>     <dbl>       <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953  20.4      185. 0.000000822     1  -43.2  92.4  93.4
 ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
@@ -3787,11 +3795,11 @@ bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 
 ```
 ## # A tibble: 3 x 12
-##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
-## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
-## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
+##   r.squared adj.r.squared  sigma statistic     p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl>  <dbl>     <dbl>       <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  0.000000822     1 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  0.00000136      1 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 0.0000206       1  -1.12  8.25  9.16
 ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
@@ -3820,11 +3828,11 @@ map_df(model_list, ~ glance(.))
 
 ```
 ## # A tibble: 3 x 12
-##   r.squared adj.r.squared  sigma statistic p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl>  <dbl>     <dbl>   <dbl> <dbl>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953 20.4       185.  8.22e-7     1 -43.2  92.4  93.4 
-## 2     0.953         0.947 21.7       162.  1.36e-6     1 -43.8  93.7  94.6 
-## 3     0.908         0.896  0.303      78.7 2.06e-5     1  -1.12  8.25  9.16
+##   r.squared adj.r.squared  sigma statistic     p.value    df logLik   AIC   BIC
+##       <dbl>         <dbl>  <dbl>     <dbl>       <dbl> <dbl>  <dbl> <dbl> <dbl>
+## 1     0.959         0.953 20.4       185.  0.000000822     1 -43.2  92.4  93.4 
+## 2     0.953         0.947 21.7       162.  0.00000136      1 -43.8  93.7  94.6 
+## 3     0.908         0.896  0.303      78.7 0.0000206       1  -1.12  8.25  9.16
 ## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
 ```
 
@@ -3889,7 +3897,8 @@ tortoises <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   eggs = col_double()
@@ -4241,7 +4250,8 @@ crickets <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   species = col_character(),
 ##   temperature = col_double(),
@@ -4791,7 +4801,8 @@ coasters <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   coaster_name = col_character(),
 ##   state = col_character(),
@@ -4973,19 +4984,19 @@ coasters %>%
 
 ```
 ## # A tibble: 10 x 10
-##    coaster_name state  drop duration .fitted .resid .std.resid  .hat .sigma
-##    <chr>        <chr> <dbl>    <dbl>   <dbl>  <dbl>      <dbl> <dbl>  <dbl>
-##  1 Nitro        New …   215      240    143.  97.0      2.05   0.138   37.5
-##  2 The Beast    Ohio    141       65    125. -60.1     -1.26   0.118   48.8
-##  3 Millennium … Ohio    300      105    164. -58.6     -1.52   0.429   45.9
-##  4 Ghost Rider  Cali…   108      160    117.  42.8      0.928  0.180   51.5
-##  5 Goliath      Cali…   255      180    153.  27.3      0.614  0.239   53.2
-##  6 Thunderbolt  Penn…    95       90    114. -24.0     -0.532  0.216   53.5
-##  7 Raven        Indi…    86       90    112. -21.8     -0.493  0.245   53.6
-##  8 Incredible … Flor…   105      135    116.  18.6      0.404  0.188   53.9
-##  9 Magnum XL-2… Ohio    195      120    138. -18.2     -0.379  0.111   54.0
-## 10 Son of Beast Ohio    214      140    143.  -2.81    -0.0593 0.136   54.5
-## # … with 1 more variable: .cooksd <dbl>
+##    coaster_name    state       drop duration .fitted .resid  .hat .sigma .cooksd
+##    <chr>           <chr>      <dbl>    <dbl>   <dbl>  <dbl> <dbl>  <dbl>   <dbl>
+##  1 Nitro           New Jersey   215      240    143.  97.0  0.138   37.5 3.36e-1
+##  2 The Beast       Ohio         141       65    125. -60.1  0.118   48.8 1.06e-1
+##  3 Millennium For… Ohio         300      105    164. -58.6  0.429   45.9 8.70e-1
+##  4 Ghost Rider     California   108      160    117.  42.8  0.180   51.5 9.46e-2
+##  5 Goliath         California   255      180    153.  27.3  0.239   53.2 5.91e-2
+##  6 Thunderbolt     Pennsylva…    95       90    114. -24.0  0.216   53.5 3.91e-2
+##  7 Raven           Indiana       86       90    112. -21.8  0.245   53.6 3.95e-2
+##  8 Incredible Hulk Florida      105      135    116.  18.6  0.188   53.9 1.89e-2
+##  9 Magnum XL-2000  Ohio         195      120    138. -18.2  0.111   54.0 8.98e-3
+## 10 Son of Beast    Ohio         214      140    143.  -2.81 0.136   54.5 2.77e-4
+## # … with 1 more variable: .std.resid <dbl>
 ```
 
  
@@ -5042,7 +5053,8 @@ runs <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   distance = col_double(),
 ##   blood_sugar = col_double()
@@ -5403,7 +5415,8 @@ pizza <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Type = col_character(),
 ##   Calories = col_double(),
@@ -5854,7 +5867,8 @@ fire <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   distance = col_double(),
 ##   damage = col_double()
@@ -6323,7 +6337,8 @@ satisf <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   satis = col_double(),
 ##   age = col_double(),
@@ -7253,7 +7268,8 @@ chemicals <- read_table(my_url, col_names = cols)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   minutes = col_double(),
 ##   drums = col_double(),
@@ -7457,28 +7473,28 @@ as_tibble(d)
 
 ```
 ## # A tibble: 20 x 9
-##    minutes drums weight .fitted .resid .std.resid   .hat .sigma  .cooksd
-##      <dbl> <dbl>  <dbl>   <dbl>  <dbl>      <dbl>  <dbl>  <dbl>    <dbl>
-##  1      58     7   5.11    55.7  2.34      0.437  0.0913   5.76 0.00641 
-##  2     152    18  16.7    156.  -4.08     -0.809  0.194    5.68 0.0524  
-##  3      41     5   3.2     38.4  2.58      0.493  0.131    5.75 0.0122  
-##  4      93    14   7.03    91.8  1.21      0.252  0.268    5.78 0.00779 
-##  5     101    11  11.0    101.   0.453     0.0873 0.149    5.79 0.000445
-##  6      38     5   4.04    42.7 -4.69     -0.900  0.141    5.65 0.0441  
-##  7     203    23  22.1    202.   0.903     0.213  0.429    5.78 0.0113  
-##  8      78     9   7.03    72.9  5.05      0.931  0.0665   5.64 0.0206  
-##  9     117    16  10.6    118.  -0.559    -0.107  0.135    5.79 0.000593
-## 10      44     5   4.76    46.3 -2.34     -0.456  0.165    5.75 0.0137  
-## 11     121    17  11.0    123.  -2.36     -0.463  0.179    5.75 0.0156  
-## 12     112    12   9.51    96.8 15.2       2.77   0.0514   4.29 0.138   
-## 13      50     6   3.79    45.2  4.82      0.909  0.110    5.65 0.0341  
-## 14      82    12   6.45    81.3  0.695     0.135  0.156    5.79 0.00112 
-## 15      48     8   4.6     56.8 -8.84     -1.65   0.0954   5.30 0.0961  
-## 16     127    15  13.9    130.  -3.25     -0.619  0.128    5.72 0.0188  
-## 17     140    17  13.0    134.   6.43      1.20   0.0970   5.54 0.0520  
-## 18     155    21  15.2    160.  -4.72     -0.957  0.230    5.63 0.0914  
-## 19      39     6   3.64    44.4 -5.42     -1.02   0.112    5.61 0.0440  
-## 20      90    11   9.57    93.4 -3.39     -0.626  0.0725   5.72 0.0102
+##    minutes drums weight .fitted .resid   .hat .sigma  .cooksd .std.resid
+##      <dbl> <dbl>  <dbl>   <dbl>  <dbl>  <dbl>  <dbl>    <dbl>      <dbl>
+##  1      58     7   5.11    55.7  2.34  0.0913   5.76 0.00641      0.437 
+##  2     152    18  16.7    156.  -4.08  0.194    5.68 0.0524      -0.809 
+##  3      41     5   3.2     38.4  2.58  0.131    5.75 0.0122       0.493 
+##  4      93    14   7.03    91.8  1.21  0.268    5.78 0.00779      0.252 
+##  5     101    11  11.0    101.   0.453 0.149    5.79 0.000445     0.0873
+##  6      38     5   4.04    42.7 -4.69  0.141    5.65 0.0441      -0.900 
+##  7     203    23  22.1    202.   0.903 0.429    5.78 0.0113       0.213 
+##  8      78     9   7.03    72.9  5.05  0.0665   5.64 0.0206       0.931 
+##  9     117    16  10.6    118.  -0.559 0.135    5.79 0.000593    -0.107 
+## 10      44     5   4.76    46.3 -2.34  0.165    5.75 0.0137      -0.456 
+## 11     121    17  11.0    123.  -2.36  0.179    5.75 0.0156      -0.463 
+## 12     112    12   9.51    96.8 15.2   0.0514   4.29 0.138        2.77  
+## 13      50     6   3.79    45.2  4.82  0.110    5.65 0.0341       0.909 
+## 14      82    12   6.45    81.3  0.695 0.156    5.79 0.00112      0.135 
+## 15      48     8   4.6     56.8 -8.84  0.0954   5.30 0.0961      -1.65  
+## 16     127    15  13.9    130.  -3.25  0.128    5.72 0.0188      -0.619 
+## 17     140    17  13.0    134.   6.43  0.0970   5.54 0.0520       1.20  
+## 18     155    21  15.2    160.  -4.72  0.230    5.63 0.0914      -0.957 
+## 19      39     6   3.64    44.4 -5.42  0.112    5.61 0.0440      -1.02  
+## 20      90    11   9.57    93.4 -3.39  0.0725   5.72 0.0102      -0.626
 ```
 
  
@@ -7577,9 +7593,9 @@ d %>% filter(.resid > 10)
 
 ```
 ## # A tibble: 1 x 9
-##   minutes drums weight .fitted .resid .std.resid   .hat .sigma .cooksd
-##     <dbl> <dbl>  <dbl>   <dbl>  <dbl>      <dbl>  <dbl>  <dbl>   <dbl>
-## 1     112    12   9.51    96.8   15.2       2.77 0.0514   4.29   0.138
+##   minutes drums weight .fitted .resid   .hat .sigma .cooksd .std.resid
+##     <dbl> <dbl>  <dbl>   <dbl>  <dbl>  <dbl>  <dbl>   <dbl>      <dbl>
+## 1     112    12   9.51    96.8   15.2 0.0514   4.29   0.138       2.77
 ```
 
  
@@ -7719,7 +7735,8 @@ salaries <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   salary = col_double(),
 ##   workqual = col_double(),
@@ -8156,7 +8173,8 @@ gpa <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   high_GPA = col_double(),
 ##   math_SAT = col_double(),

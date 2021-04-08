@@ -39,7 +39,8 @@ movies <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   rating = col_character()
@@ -167,10 +168,6 @@ If you like, you can make a table of means to verify that:
 movies %>%
   group_by(rating) %>%
   summarize(mean = mean(length))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -335,7 +332,8 @@ deer <- read_delim(myurl, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   month = col_character(),
 ##   food = col_double()
@@ -352,10 +350,6 @@ number of observations in each group:
 deer %>%
   group_by(month) %>%
   summarize(n = n(), med = median(food))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -846,7 +840,8 @@ movies <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   rating = col_character()
@@ -884,10 +879,6 @@ Now, the actual for-credit part, which is a `group_by` and
 movies %>%
   group_by(rating) %>%
   summarize(count = n(), med = median(length))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1089,10 +1080,6 @@ column). We can remind ourselves of the sample medians:
 movies %>%
   group_by(rating) %>%
   summarize(count = n(), med = median(length))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1610,13 +1597,6 @@ medians <- movies %>%
   group_by(rating) %>%
   summarize(med = median(length)) %>%
   arrange(desc(med))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```r
 medians
 ```
 
@@ -1776,7 +1756,8 @@ carbon <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   method = col_double(),
 ##   weight = col_double()
@@ -2214,7 +2195,8 @@ caffeine.untidy <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Sub = col_double(),
 ##   High = col_double(),

@@ -40,7 +40,8 @@ wisc <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   social.stratum = col_character(),
 ##   encouragement = col_character(),
@@ -329,7 +330,8 @@ vote0 <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   class = col_character(),

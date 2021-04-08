@@ -96,7 +96,8 @@ bodyfat <- read_delim(myurl, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
@@ -343,7 +344,8 @@ throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
@@ -586,7 +588,8 @@ throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball"
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
@@ -942,7 +945,8 @@ salaries <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   employee = col_character(),
 ##   jan2016 = col_double(),
@@ -1249,7 +1253,8 @@ bodyfat <- read_delim(myurl, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),

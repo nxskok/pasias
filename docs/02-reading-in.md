@@ -57,7 +57,8 @@ juice <- read_delim(url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   run = col_double(),
 ##   sweetness = col_double(),
@@ -164,7 +165,8 @@ read_delim("a.txt", " ", col_names = c("x", "y"), skip = 1)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double()
@@ -267,7 +269,8 @@ soap <- read_delim(url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   case = col_double(),
 ##   scrap = col_double(),
@@ -715,7 +718,8 @@ shipments <- read_csv(url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   warehouse = col_character(),
 ##   size = col_double(),

@@ -56,5 +56,8 @@ ch26: index.Rmd 26-bootstrap.Rmd bootstrap.Rmd bootstrap_median.Rmd
 	Rscript -e "bookdown::preview_chapter('26-bootstrap.Rmd')"
 ch27: index.Rmd 27-stan.Rmd binomial_stan.Rmd regression_stan.Rmd
 	Rscript -e "bookdown::preview_chapter('27-stan.Rmd')"
+ch31: index.Rmd 
+	Rscript -e "bookdown::preview_chapter('31-working-with-dataframes.Rmd')"
+	
 
 

@@ -38,7 +38,8 @@ plugged=read_delim(myurl," ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   year = col_double(),
 ##   hours = col_double()
@@ -89,10 +90,6 @@ or the more verbose form of the same thing:
 
 ```r
 plugged %>% group_by(year) %>% summarize(rows=n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -546,7 +543,8 @@ parking2 <- read_csv("parking2.csv")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   distance = col_double(),
 ##   gender = col_character()
@@ -1104,7 +1102,8 @@ pepper <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   field = col_character(),
 ##   water = col_double()
@@ -1350,7 +1349,8 @@ mice <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Time = col_double(),
 ##   Environment = col_character()
@@ -1640,7 +1640,8 @@ diet <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   sect = col_character(),
 ##   height = col_double()

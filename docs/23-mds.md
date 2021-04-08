@@ -39,7 +39,8 @@ wisc <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   location = col_character(),
 ##   Appleton = col_double(),
@@ -63,20 +64,20 @@ wisc
 
 ```
 ## # A tibble: 12 x 13
-##    location Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe
-##    <chr>       <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>  <dbl>
-##  1 Appleton        0    130            98     102        103       100    149
-##  2 Beloit        130      0            33      50        185        73     33
-##  3 Fort.At…       98     33             0      36        164        54     58
-##  4 Madison       102     50            36       0        138        77     47
-##  5 Marshfi…      103    185           164     138          0       184    170
-##  6 Milwauk…      100     73            54      77        184         0    107
-##  7 Monroe        149     33            58      47        170       107      0
-##  8 Superior      315    377           359     330        219       394    362
-##  9 Wausau         91    186           166     139         45       181    186
-## 10 Dubuque       196     94           119      95        186       168     61
-## 11 St.Paul       257    304           287     258        161       322    289
-## 12 Chicago       186     97           113     146        276        93    130
+##    location    Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe
+##    <chr>          <dbl>  <dbl>         <dbl>   <dbl>      <dbl>     <dbl>  <dbl>
+##  1 Appleton           0    130            98     102        103       100    149
+##  2 Beloit           130      0            33      50        185        73     33
+##  3 Fort.Atkin…       98     33             0      36        164        54     58
+##  4 Madison          102     50            36       0        138        77     47
+##  5 Marshfield       103    185           164     138          0       184    170
+##  6 Milwaukee        100     73            54      77        184         0    107
+##  7 Monroe           149     33            58      47        170       107      0
+##  8 Superior         315    377           359     330        219       394    362
+##  9 Wausau            91    186           166     139         45       181    186
+## 10 Dubuque          196     94           119      95        186       168     61
+## 11 St.Paul          257    304           287     258        161       322    289
+## 12 Chicago          186     97           113     146        276        93    130
 ## # … with 5 more variables: Superior <dbl>, Wausau <dbl>, Dubuque <dbl>,
 ## #   St.Paul <dbl>, Chicago <dbl>
 ```
@@ -742,8 +743,6 @@ ddd <- as_tibble(v$points) %>%
 ```
 ## Warning: The `x` argument of `as_tibble.matrix()` must have unique column names if `.name_repair` is omitted as of tibble 2.0.0.
 ## Using compatibility `.name_repair`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```r
@@ -835,7 +834,8 @@ stimuli <- read_delim(my_url, " ", col_names = F)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_character(),
 ##   X2 = col_double(),
@@ -951,25 +951,25 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
-##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
-##  1 inner…                0    22        23    24           26    27
-##  2 brick                22     0        27    27           27    29
-##  3 cardb…               23    27         0    18           19    28
-##  4 cork                 24    27        18     0           15    28
-##  5 rubbe…               26    27        19    15            0    28
-##  6 felt                 27    29        28    28           28     0
-##  7 leath…               26    29        23    25           20    24
-##  8 rigid…               23    28        24    26           27    28
-##  9 veryf…               24    16        24    28           24    29
-## 10 nylon…               23    18        29    28           27    26
-## 11 cellu…               23    28        27    20           24    26
-## 12 woven…               18    25        28    27           25    29
-## 13 block…               23    24        21    10           19    28
-## 14 ungla…               21    10        26    26           24    29
-## 15 velvet               28    29        28    28           29     4
-## 16 waxpa…               24    28        24    28           24    28
-## 17 gloss…               22    27        23    29           28    29
+##    object           innersurfaceofpine… brick cardboard  cork rubbereraser  felt
+##    <chr>                          <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
+##  1 innersurfaceofp…                   0    22        23    24           26    27
+##  2 brick                             22     0        27    27           27    29
+##  3 cardboard                         23    27         0    18           19    28
+##  4 cork                              24    27        18     0           15    28
+##  5 rubbereraser                      26    27        19    15            0    28
+##  6 felt                              27    29        28    28           28     0
+##  7 leatherwallet                     26    29        23    25           20    24
+##  8 rigidplasticshe…                  23    28        24    26           27    28
+##  9 veryfinesandpap…                  24    16        24    28           24    29
+## 10 nylonscouringpad                  23    18        29    28           27    26
+## 11 cellulosekitche…                  23    28        27    20           24    26
+## 12 wovenstraw                        18    25        28    27           25    29
+## 13 blockofstyrofoam                  23    24        21    10           19    28
+## 14 unglazedceramic…                  21    10        26    26           24    29
+## 15 velvet                            28    29        28    28           29     4
+## 16 waxpaper                          24    28        24    28           24    28
+## 17 glossypaintedwo…                  22    27        23    29           28    29
 ## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
 ## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,
@@ -1623,7 +1623,8 @@ letters <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_character(),
 ##   C = col_double(),
@@ -2157,7 +2158,8 @@ beer <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_character(),
 ##   AnchorS = col_double(),
@@ -2487,25 +2489,25 @@ stimuli
 
 ```
 ## # A tibble: 17 x 18
-##    object innersurfaceofp… brick cardboard  cork rubbereraser  felt
-##    <chr>             <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
-##  1 inner…                0    22        23    24           26    27
-##  2 brick                22     0        27    27           27    29
-##  3 cardb…               23    27         0    18           19    28
-##  4 cork                 24    27        18     0           15    28
-##  5 rubbe…               26    27        19    15            0    28
-##  6 felt                 27    29        28    28           28     0
-##  7 leath…               26    29        23    25           20    24
-##  8 rigid…               23    28        24    26           27    28
-##  9 veryf…               24    16        24    28           24    29
-## 10 nylon…               23    18        29    28           27    26
-## 11 cellu…               23    28        27    20           24    26
-## 12 woven…               18    25        28    27           25    29
-## 13 block…               23    24        21    10           19    28
-## 14 ungla…               21    10        26    26           24    29
-## 15 velvet               28    29        28    28           29     4
-## 16 waxpa…               24    28        24    28           24    28
-## 17 gloss…               22    27        23    29           28    29
+##    object           innersurfaceofpine… brick cardboard  cork rubbereraser  felt
+##    <chr>                          <dbl> <dbl>     <dbl> <dbl>        <dbl> <dbl>
+##  1 innersurfaceofp…                   0    22        23    24           26    27
+##  2 brick                             22     0        27    27           27    29
+##  3 cardboard                         23    27         0    18           19    28
+##  4 cork                              24    27        18     0           15    28
+##  5 rubbereraser                      26    27        19    15            0    28
+##  6 felt                              27    29        28    28           28     0
+##  7 leatherwallet                     26    29        23    25           20    24
+##  8 rigidplasticshe…                  23    28        24    26           27    28
+##  9 veryfinesandpap…                  24    16        24    28           24    29
+## 10 nylonscouringpad                  23    18        29    28           27    26
+## 11 cellulosekitche…                  23    28        27    20           24    26
+## 12 wovenstraw                        18    25        28    27           25    29
+## 13 blockofstyrofoam                  23    24        21    10           19    28
+## 14 unglazedceramic…                  21    10        26    26           24    29
+## 15 velvet                            28    29        28    28           29     4
+## 16 waxpaper                          24    28        24    28           24    28
+## 17 glossypaintedwo…                  22    27        23    29           28    29
 ## # … with 11 more variables: leatherwallet <dbl>, rigidplasticsheet <dbl>,
 ## #   veryfinesandpaper <dbl>, nylonscouringpad <dbl>,
 ## #   cellulosekitchensponge <dbl>, wovenstraw <dbl>, blockofstyrofoam <dbl>,

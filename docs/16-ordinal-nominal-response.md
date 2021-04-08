@@ -40,7 +40,8 @@ mobile <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   gender = col_character(),
 ##   age.group = col_character(),
@@ -784,7 +785,8 @@ abortion <- read_table2(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   year = col_double(),
 ##   religion = col_character(),
@@ -1568,7 +1570,8 @@ ess <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   cntry = col_character(),
 ##   cname = col_character(),
@@ -1596,18 +1599,18 @@ ess
 
 ```
 ## # A tibble: 2,286 x 17
-##    cntry cname cedition cproddat cseqno name  essround edition   idno dweight
-##    <chr> <chr>    <dbl> <chr>     <dbl> <chr>    <dbl>   <dbl>  <dbl>   <dbl>
-##  1 GB    ESS1…        1 26.11.2… 134168 ESS6…        6     2.1 101014   1.01 
-##  2 GB    ESS1…        1 26.11.2… 134169 ESS6…        6     2.1 101048   2.02 
-##  3 GB    ESS1…        1 26.11.2… 134170 ESS6…        6     2.1 101055   1.01 
-##  4 GB    ESS1…        1 26.11.2… 134171 ESS6…        6     2.1 101089   0.505
-##  5 GB    ESS1…        1 26.11.2… 134172 ESS6…        6     2.1 101097   0.505
-##  6 GB    ESS1…        1 26.11.2… 134173 ESS6…        6     2.1 101113   1.01 
-##  7 GB    ESS1…        1 26.11.2… 134174 ESS6…        6     2.1 101121   0.505
-##  8 GB    ESS1…        1 26.11.2… 134175 ESS6…        6     2.1 101139   0.505
-##  9 GB    ESS1…        1 26.11.2… 134176 ESS6…        6     2.1 101154   1.01 
-## 10 GB    ESS1…        1 26.11.2… 134177 ESS6…        6     2.1 101170   1.01 
+##    cntry cname   cedition cproddat cseqno name   essround edition   idno dweight
+##    <chr> <chr>      <dbl> <chr>     <dbl> <chr>     <dbl>   <dbl>  <dbl>   <dbl>
+##  1 GB    ESS1-6…        1 26.11.2… 134168 ESS6e…        6     2.1 101014   1.01 
+##  2 GB    ESS1-6…        1 26.11.2… 134169 ESS6e…        6     2.1 101048   2.02 
+##  3 GB    ESS1-6…        1 26.11.2… 134170 ESS6e…        6     2.1 101055   1.01 
+##  4 GB    ESS1-6…        1 26.11.2… 134171 ESS6e…        6     2.1 101089   0.505
+##  5 GB    ESS1-6…        1 26.11.2… 134172 ESS6e…        6     2.1 101097   0.505
+##  6 GB    ESS1-6…        1 26.11.2… 134173 ESS6e…        6     2.1 101113   1.01 
+##  7 GB    ESS1-6…        1 26.11.2… 134174 ESS6e…        6     2.1 101121   0.505
+##  8 GB    ESS1-6…        1 26.11.2… 134175 ESS6e…        6     2.1 101139   0.505
+##  9 GB    ESS1-6…        1 26.11.2… 134176 ESS6e…        6     2.1 101154   1.01 
+## 10 GB    ESS1-6…        1 26.11.2… 134177 ESS6e…        6     2.1 101170   1.01 
 ## # … with 2,276 more rows, and 7 more variables: pspwght <dbl>, pweight <dbl>,
 ## #   prtvtgb <dbl>, gndr <dbl>, agea <dbl>, eduyrs <dbl>, inwtm <dbl>
 ```
@@ -2252,7 +2255,8 @@ gators.orig <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   profile = col_double(),
 ##   Gender = col_character(),
@@ -3034,7 +3038,8 @@ steak0 <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   respondent_id = col_double(),
 ##   lottery_a = col_logical(),
@@ -3672,10 +3677,6 @@ arrange(desc(count))
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 39 x 2
 ##    Category        count
 ##    <chr>           <int>
@@ -4052,7 +4053,8 @@ steak <- read_csv("steak1.csv")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   respondent_id = col_double(),
 ##   lottery_a = col_logical(),
@@ -5473,7 +5475,8 @@ hsb <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   race = col_character(),
@@ -5967,7 +5970,8 @@ athletes <- read_tsv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   Sex = col_character(),
 ##   Sport = col_character(),
@@ -6016,7 +6020,8 @@ athletes <- read_delim(my_url, "\t")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   Sex = col_character(),
 ##   Sport = col_character(),

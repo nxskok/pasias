@@ -64,7 +64,8 @@ whas100 <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_double(),
 ##   id = col_double(),
@@ -804,7 +805,8 @@ drugusers <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   row = col_double(),
 ##   ID = col_double(),
@@ -1635,7 +1637,8 @@ myeloma <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   time = col_double(),
 ##   vstatus = col_double(),
@@ -1690,17 +1693,17 @@ glimpse(myeloma)
 ```
 ## Rows: 65
 ## Columns: 11
-## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6.00, …
-## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355, 1.68…
-## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9.7, 1…
-## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, …
-## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61, 53, …
-## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542, 3.73…
-## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, …
-## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628, 1.73…
-## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1, 1, …
-## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 12, 10…
+## $ time     <dbl> 1.25, 1.25, 2.00, 2.00, 2.00, 3.00, 5.00, 5.00, 6.00, 6.00, 6…
+## $ vstatus  <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ logbun   <dbl> 2.2175, 1.9395, 1.5185, 1.7482, 1.3010, 1.5441, 2.2355, 1.681…
+## $ hgb      <dbl> 9.4, 12.0, 9.8, 11.3, 5.1, 6.7, 10.1, 6.5, 9.0, 10.2, 9.7, 10…
+## $ platelet <dbl> 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1…
+## $ age      <dbl> 67, 38, 81, 75, 57, 46, 50, 74, 77, 70, 60, 67, 48, 61, 53, 5…
+## $ logwbc   <dbl> 3.6628, 3.9868, 3.8751, 3.8062, 3.7243, 4.4757, 4.9542, 3.732…
+## $ frac     <dbl> 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1…
+## $ logpbm   <dbl> 1.9542, 1.9542, 2.0000, 1.2553, 2.0000, 1.9345, 1.6628, 1.732…
+## $ protein  <dbl> 12, 20, 2, 0, 3, 12, 4, 5, 1, 1, 0, 0, 5, 1, 1, 0, 0, 1, 1, 0…
+## $ scalc    <dbl> 10, 18, 15, 12, 9, 10, 9, 9, 8, 8, 10, 8, 10, 10, 13, 12, 10,…
 ```
 
  
@@ -1879,8 +1882,8 @@ y.00 <- coxph(y ~ ., data = myeloma)
 ```
 
 ```
-## Warning in fitter(X, Y, istrat, offset, init, control, weights = weights, : Ran
-## out of iterations and did not converge
+## Warning in coxph.fit(X, Y, istrat, offset, init, control, weights = weights, :
+## Ran out of iterations and did not converge
 ```
 
 ```r
@@ -1893,35 +1896,37 @@ summary(y.00)
 ## 
 ##   n= 65, number of events= 48 
 ## 
-##                coef  exp(coef)   se(coef)      z Pr(>|z|)
-## time     -1.067e+01  2.321e-05  2.556e+01 -0.417    0.676
-## vstatus   1.506e+01  3.458e+06  5.167e+02  0.029    0.977
-## logbun    2.941e-04  1.000e+00  7.904e-01  0.000    1.000
-## hgb       1.678e-05  1.000e+00  9.143e-02  0.000    1.000
-## platelet  1.381e-04  1.000e+00  6.220e-01  0.000    1.000
-## age      -6.911e-06  1.000e+00  2.245e-02  0.000    1.000
-## logwbc   -4.948e-06  1.000e+00  8.940e-01  0.000    1.000
-## frac     -1.162e-04  9.999e-01  6.262e-01  0.000    1.000
-## logpbm    4.899e-04  1.000e+00  7.307e-01  0.001    0.999
-## protein   6.151e-05  1.000e+00  6.775e-02  0.001    0.999
-## scalc    -2.720e-05  1.000e+00  1.091e-01  0.000    1.000
+##                coef  exp(coef)   se(coef)       z Pr(>|z|)    
+## time     -1.109e+01  1.526e-05  9.799e-01 -11.318   <2e-16 ***
+## vstatus   1.543e+01  5.031e+06  6.233e+02   0.025     0.98    
+## logbun    1.759e-04  1.000e+00  7.904e-01   0.000     1.00    
+## hgb       6.861e-06  1.000e+00  9.143e-02   0.000     1.00    
+## platelet  9.226e-05  1.000e+00  6.221e-01   0.000     1.00    
+## age      -4.311e-06  1.000e+00  2.245e-02   0.000     1.00    
+## logwbc   -1.220e-06  1.000e+00  8.940e-01   0.000     1.00    
+## frac     -6.694e-05  9.999e-01  6.262e-01   0.000     1.00    
+## logpbm    2.400e-04  1.000e+00  7.307e-01   0.000     1.00    
+## protein   3.472e-05  1.000e+00  6.776e-02   0.001     1.00    
+## scalc    -1.447e-05  1.000e+00  1.091e-01   0.000     1.00    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ##          exp(coef) exp(-coef) lower .95 upper .95
-## time     2.321e-05  4.308e+04 4.068e-27 1.324e+17
-## vstatus  3.458e+06  2.892e-07 0.000e+00       Inf
-## logbun   1.000e+00  9.997e-01 2.125e-01 4.709e+00
-## hgb      1.000e+00  1.000e+00 8.360e-01 1.196e+00
-## platelet 1.000e+00  9.999e-01 2.955e-01 3.385e+00
-## age      1.000e+00  1.000e+00 9.569e-01 1.045e+00
-## logwbc   1.000e+00  1.000e+00 1.734e-01 5.767e+00
-## frac     9.999e-01  1.000e+00 2.930e-01 3.412e+00
-## logpbm   1.000e+00  9.995e-01 2.389e-01 4.189e+00
-## protein  1.000e+00  9.999e-01 8.757e-01 1.142e+00
-## scalc    1.000e+00  1.000e+00 8.074e-01 1.238e+00
+## time     1.526e-05  6.554e+04 2.236e-06 0.0001041
+## vstatus  5.031e+06  1.988e-07 0.000e+00       Inf
+## logbun   1.000e+00  9.998e-01 2.124e-01 4.7087742
+## hgb      1.000e+00  1.000e+00 8.359e-01 1.1962633
+## platelet 1.000e+00  9.999e-01 2.955e-01 3.3849492
+## age      1.000e+00  1.000e+00 9.569e-01 1.0449881
+## logwbc   1.000e+00  1.000e+00 1.734e-01 5.7673011
+## frac     9.999e-01  1.000e+00 2.930e-01 3.4119518
+## logpbm   1.000e+00  9.998e-01 2.389e-01 4.1885763
+## protein  1.000e+00  1.000e+00 8.757e-01 1.1420792
+## scalc    1.000e+00  1.000e+00 8.075e-01 1.2384242
 ## 
 ## Concordance= 1  (se = 0 )
 ## Likelihood ratio test= 277  on 11 df,   p=<2e-16
-## Wald test            = 0.18  on 11 df,   p=1
+## Wald test            = 128.1  on 11 df,   p=<2e-16
 ## Score (logrank) test = 87.4  on 11 df,   p=5e-14
 ```
 
@@ -2430,11 +2435,9 @@ ovarian %>% as.tibble()
 ```
 
 ```
-## Warning: `as.tibble()` is deprecated as of tibble 2.0.0.
+## Warning: `as.tibble()` was deprecated in tibble 2.0.0.
 ## Please use `as_tibble()` instead.
 ## The signature and semantics have changed, see `?as_tibble`.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```

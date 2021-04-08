@@ -51,7 +51,8 @@ acidrain <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   soil_depth = col_character(),
 ##   date = col_date(format = ""),
@@ -263,7 +264,8 @@ hayfever <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   relief = col_double(),
 ##   a = col_character(),
@@ -323,7 +325,7 @@ hayfever %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'a' (override with `.groups` argument)
+## `summarise()` has grouped output by 'a'. You can override using the `.groups` argument.
 ```
 
 ```r
@@ -363,7 +365,7 @@ hayfever %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'a' (override with `.groups` argument)
+## `summarise()` has grouped output by 'a'. You can override using the `.groups` argument.
 ```
 
 ```r
@@ -654,7 +656,8 @@ caffeine.untidy <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Sub = col_double(),
 ##   High = col_double(),
@@ -885,10 +888,6 @@ Count them, or find the distinct ones:
 
 ```r
 caffeine %>% group_by(amount) %>% summarize(count = n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1335,7 +1334,8 @@ studyhours <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   major = col_character(),
@@ -1881,7 +1881,8 @@ smith <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   context = col_character(),
@@ -2364,7 +2365,8 @@ shirts <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   treatment = col_character(),
 ##   score = col_double()
@@ -2549,10 +2551,6 @@ shirts %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 5 x 2
 ##   treatment                 m
 ##   <fct>                 <dbl>
@@ -2571,10 +2569,6 @@ non-alphabetical order?
 
 ```r
 d %>% group_by(trt2) %>% summarize(m = mean(score))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -2912,7 +2906,8 @@ productivity <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   expenditure = col_character(),
 ##   improvement = col_double(),
@@ -3365,7 +3360,8 @@ lepro <- read_table(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   drug = col_character(),
 ##   pre = col_double(),

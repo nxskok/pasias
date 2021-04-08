@@ -46,7 +46,8 @@ societies=read_delim(url," ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   name = col_character(),
 ##   density = col_double()
@@ -276,7 +277,8 @@ journey.times <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   minutes = col_double()
 ## )
@@ -530,7 +532,8 @@ bw <- read_csv(myurl)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   `Father Age` = col_double(),
 ##   `Mother Age` = col_double(),
@@ -803,7 +806,8 @@ nenana <- read_tsv(myurl)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Year = col_double(),
 ##   JulianDate = col_double(),

@@ -40,7 +40,8 @@ bw <- read_csv(myurl)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   `Father Age` = col_double(),
 ##   `Mother Age` = col_double(),
@@ -71,21 +72,21 @@ bw
 
 ```
 ## # A tibble: 500 x 10
-##    `Father Age` `Mother Age` `Weeks Gestatio… `Pre-natal Visi… `Marital Status`
-##           <dbl>        <dbl>            <dbl>            <dbl>            <dbl>
-##  1           27           26               38               14                1
-##  2           35           33               40               11                1
-##  3           34           22               37               10                2
-##  4           NA           16               38                9                2
-##  5           35           33               39               12                1
-##  6           32           24               36               12                1
-##  7           33           33               38               15                2
-##  8           38           35               38               16                1
-##  9           28           29               40                5                1
-## 10           NA           19               34               10                2
-## # … with 490 more rows, and 5 more variables: `Mother Weight Gained` <dbl>,
-## #   `Low Birthweight?` <dbl>, `Weight (pounds)` <dbl>, `Premie?` <dbl>, `Few
-## #   Visits?` <dbl>
+##    `Father Age` `Mother Age` `Weeks Gestation` `Pre-natal Visi… `Marital Status`
+##           <dbl>        <dbl>             <dbl>            <dbl>            <dbl>
+##  1           27           26                38               14                1
+##  2           35           33                40               11                1
+##  3           34           22                37               10                2
+##  4           NA           16                38                9                2
+##  5           35           33                39               12                1
+##  6           32           24                36               12                1
+##  7           33           33                38               15                2
+##  8           38           35                38               16                1
+##  9           28           29                40                5                1
+## 10           NA           19                34               10                2
+## # … with 490 more rows, and 5 more variables: Mother Weight Gained <dbl>,
+## #   Low Birthweight? <dbl>, Weight (pounds) <dbl>, Premie? <dbl>,
+## #   Few Visits? <dbl>
 ```
 
  
@@ -100,16 +101,16 @@ glimpse(bw)
 ```
 ## Rows: 500
 ## Columns: 10
-## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 28, 34…
-## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 26, 31…
-## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 39, 39…
-## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15, 15, …
-## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2…
-## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45, 22,…
-## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0…
-## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5.8125…
-## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0…
-## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0…
+## $ `Father Age`           <dbl> 27, 35, 34, NA, 35, 32, 33, 38, 28, NA, 28, 34,…
+## $ `Mother Age`           <dbl> 26, 33, 22, 16, 33, 24, 33, 35, 29, 19, 26, 31,…
+## $ `Weeks Gestation`      <dbl> 38, 40, 37, 38, 39, 36, 38, 38, 40, 34, 39, 39,…
+## $ `Pre-natal Visits`     <dbl> 14, 11, 10, 9, 12, 12, 15, 16, 5, 10, 15, 15, 0…
+## $ `Marital Status`       <dbl> 1, 1, 2, 2, 1, 1, 2, 1, 1, 2, 1, 1, 2, 2, 2, 2,…
+## $ `Mother Weight Gained` <dbl> 32, 23, 50, NA, 15, 12, 60, 2, 20, NA, 45, 22, …
+## $ `Low Birthweight?`     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,…
+## $ `Weight (pounds)`      <dbl> 6.8750, 6.8125, 7.2500, 8.8125, 8.8125, 5.8125,…
+## $ `Premie?`              <dbl> 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0,…
+## $ `Few Visits?`          <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0,…
 ```
 
  
@@ -387,7 +388,8 @@ Solution
 
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   `Father Age` = col_double(),
 ##   `Mother Age` = col_double(),
@@ -481,10 +483,6 @@ bw %>% group_by(`Premie?`) %>%
 summarize( n=n(),
 min=min(`Weeks Gestation`),
 max=max(`Weeks Gestation`))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -676,7 +674,8 @@ nenana <- read_tsv(myurl)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   Year = col_double(),
 ##   JulianDate = col_double(),
@@ -707,7 +706,8 @@ x <- read_delim(myurl, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   `Year	JulianDate	Date&Time` = col_character()
 ## )
@@ -837,9 +837,9 @@ glimpse(nenana)
 ```
 ## Rows: 87
 ## Columns: 3
-## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 192…
-## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 132.555…
-## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 at 2:…
+## $ Year        <dbl> 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926…
+## $ JulianDate  <dbl> 120.4795, 131.3983, 123.6066, 132.4490, 131.2795, 132.5559…
+## $ `Date&Time` <chr> "April 30 at 11:30 AM", "May 11 at 9:33 AM", "May 3 at 2:3…
 ```
 
  
@@ -1136,7 +1136,8 @@ anxiety=read_delim(url," ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   gender = col_character(),
 ##   CAS = col_double(),
@@ -1197,10 +1198,6 @@ This also works (and is therefore good):
 
 ```r
 anxiety %>% group_by(gender) %>% summarize(count=n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1267,10 +1264,6 @@ anxiety %>% group_by(gender) %>% summarize(med=median(CAS))
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 2
 ##   gender   med
 ##   <chr>  <dbl>
@@ -1297,7 +1290,7 @@ anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ```
 
 ```
-## Warning: `funs()` is deprecated as of dplyr 0.8.0.
+## Warning: `funs()` was deprecated in dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -1308,8 +1301,6 @@ anxiety %>% summarize_if(is.numeric,funs(mean,sd))
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -1507,7 +1498,8 @@ marks <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   class = col_character(),
 ##   score = col_double()
@@ -1552,7 +1544,8 @@ read_delim(my_url, " ", col_names = F, skip = 1)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_character(),
 ##   X2 = col_double()
@@ -1588,7 +1581,8 @@ read_delim(my_url, " ", col_names = c("instructor", "mark"), skip = 1)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   instructor = col_character(),
 ##   mark = col_double()
@@ -1770,10 +1764,6 @@ marks %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 2 x 2
 ##   class    med
 ##   <chr>  <dbl>
@@ -1798,10 +1788,6 @@ marks %>%
     med = median(score),
     q3 = quantile(score, 0.75)
   )
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```

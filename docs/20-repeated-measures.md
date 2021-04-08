@@ -45,7 +45,8 @@ weights <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   rat = col_double(),
 ##   drug = col_character(),
@@ -252,26 +253,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    16 thiouracil Time0     46     0
-##  2    13 thiouracil Time2     92     2
-##  3    14 thiouracil Time0     56     0
-##  4    21 control    Time4    164     4
-##  5     2 thyroxin   Time2     90     2
-##  6    13 thiouracil Time4    119     4
-##  7    14 thiouracil Time1     78     1
-##  8    14 thiouracil Time2     95     2
-##  9    27 control    Time0     57     0
-## 10     1 thyroxin   Time1     85     1
-## 11    16 thiouracil Time1     61     1
-## 12    23 control    Time1     70     1
-## 13    11 thiouracil Time1     88     1
-## 14     2 thyroxin   Time3    110     3
-## 15    18 control    Time3    139     3
-## 16     6 thyroxin   Time2     97     2
-## 17     9 thiouracil Time0     59     0
-## 18    24 control    Time3    110     3
-## 19    21 control    Time2    100     2
-## 20    17 thiouracil Time3    104     3
+##  1    20 control    Time0     52     0
+##  2    25 control    Time1     91     1
+##  3    27 control    Time3    139     3
+##  4    17 thiouracil Time3    104     3
+##  5    22 control    Time1     81     1
+##  6    14 thiouracil Time2     95     2
+##  7    12 thiouracil Time3    123     3
+##  8    13 thiouracil Time4    119     4
+##  9    18 control    Time2    114     2
+## 10    26 control    Time0     49     0
+## 11    21 control    Time1     67     1
+## 12    25 control    Time2    112     2
+## 13    20 control    Time2    111     2
+## 14    26 control    Time1     67     1
+## 15     5 thyroxin   Time4    144     4
+## 16     7 thyroxin   Time2    105     2
+## 17     1 thyroxin   Time3    156     3
+## 18     9 thiouracil Time4    122     4
+## 19    10 thiouracil Time0     53     0
+## 20    23 control    Time1     70     1
 ```
 
  
@@ -303,7 +304,7 @@ weights.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'time' (override with `.groups` argument)
+## `summarise()` has grouped output by 'time'. You can override using the `.groups` argument.
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-10-1.png" width="672"  />
@@ -521,7 +522,8 @@ geriatrics <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   subject = col_double(),
 ##   treatment = col_character(),
@@ -724,7 +726,7 @@ geriatrics.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'treatment' (override with `.groups` argument)
+## `summarise()` has grouped output by 'treatment'. You can override using the `.groups` argument.
 ```
 
 ```r
@@ -1278,7 +1280,8 @@ airport <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   epi_1 = col_double(),
 ##   epi_2 = col_double(),
@@ -1463,7 +1466,7 @@ airport.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'floc' (override with `.groups` argument)
+## `summarise()` has grouped output by 'floc'. You can override using the `.groups` argument.
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-35-1.png" width="672"  />
@@ -1489,7 +1492,7 @@ airport.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'location' (override with `.groups` argument)
+## `summarise()` has grouped output by 'location'. You can override using the `.groups` argument.
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-36-1.png" width="672"  />
@@ -1509,7 +1512,7 @@ airport.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'location' (override with `.groups` argument)
+## `summarise()` has grouped output by 'location'. You can override using the `.groups` argument.
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-37-1.png" width="672"  />
@@ -1994,7 +1997,7 @@ airport %>%
 ```
 
 ```
-## Warning: `funs()` is deprecated as of dplyr 0.8.0.
+## Warning: `funs()` was deprecated in dplyr 0.8.0.
 ## Please use a list of either functions or lambdas: 
 ## 
 ##   # Simple named list: 
@@ -2005,8 +2008,6 @@ airport %>%
 ## 
 ##   # Using lambdas
 ##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_warnings()` to see where this warning was generated.
 ```
 
 ```
@@ -2249,7 +2250,8 @@ bodyfat <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
@@ -2584,7 +2586,8 @@ king <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   context = col_character(),
@@ -2895,7 +2898,7 @@ king.long %>%
 ```
 
 ```
-## `summarise()` regrouping output by 'context' (override with `.groups` argument)
+## `summarise()` has grouped output by 'context'. You can override using the `.groups` argument.
 ```
 
 <img src="20-repeated-measures_files/figure-html/unnamed-chunk-67-1.png" width="672"  />
@@ -3006,7 +3009,8 @@ treatments <- read_tsv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   trt = col_character(),
 ##   time = col_character(),

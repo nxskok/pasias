@@ -6,18 +6,18 @@ library(tidyverse)
 ```
 
 ```
-## ── Attaching packages ─────────────────────────────────── tidyverse 1.3.0 ──
+## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.0 ──
 ```
 
 ```
-## ✓ ggplot2 3.3.2     ✓ purrr   0.3.4
-## ✓ tibble  3.0.4     ✓ dplyr   1.0.2
-## ✓ tidyr   1.1.2     ✓ stringr 1.4.0
-## ✓ readr   1.3.1     ✓ forcats 0.5.0
+## ✓ ggplot2 3.3.3     ✓ purrr   0.3.4
+## ✓ tibble  3.1.0     ✓ dplyr   1.0.5
+## ✓ tidyr   1.1.3     ✓ stringr 1.4.0
+## ✓ readr   1.4.0     ✓ forcats 0.5.1
 ```
 
 ```
-## ── Conflicts ────────────────────────────────────── tidyverse_conflicts() ──
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()
 ```
@@ -58,7 +58,8 @@ times <- read_delim(myurl, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   time = col_double()
 ## )
@@ -730,7 +731,8 @@ bags=read_csv("chips.txt")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   chips = col_double()
 ## )
@@ -816,10 +818,6 @@ or the more verbose
 ```r
 bags %>% mutate(less=(chips<1100)) %>%
 group_by(less) %>% summarize(howmany=n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1032,8 +1030,8 @@ x
 ```
 
 ```
-##  [1] 54.86450 65.10858 22.15768 38.05706 42.41133 72.24686 35.44998 34.23035
-##  [9] 56.61626 39.42888
+##  [1] 61.04306 44.24529 57.87886 48.04657 41.52611 41.27977 49.94019 45.54531
+##  [9] 35.50342 17.79922
 ```
 
 
@@ -1057,8 +1055,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        5
-## 2 TRUE         5
+## 1 FALSE        8
+## 2 TRUE         2
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1092,7 +1090,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       5 FALSE
+## 1       2 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1112,7 +1110,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       5 FALSE
+## 1       2 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1602,7 +1600,8 @@ cereals=read_delim(my_url," ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   who = col_character(),
 ##   sugar = col_double()
@@ -1651,10 +1650,6 @@ Solution
 ```r
 cereals %>% group_by(who) %>%
 summarize(sugar_mean=mean(sugar))
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -1833,7 +1828,8 @@ math <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   course = col_character(),
 ##   phobia = col_double()
@@ -1886,10 +1882,6 @@ you, if you can make it do so. Other ways:
 
 ```r
 math %>% group_by(course) %>% summarize(count = n())
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
 ```
 
 ```
@@ -2240,7 +2232,8 @@ instr <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   group = col_character(),
 ##   score = col_double()

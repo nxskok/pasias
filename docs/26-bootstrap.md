@@ -53,7 +53,8 @@ aircon <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()
@@ -215,7 +216,7 @@ quantile(means, c(0.025, 0.975))
 
 ```
 ##      2.5%     97.5% 
-##  47.05625 187.93333
+##  46.74583 180.92917
 ```
 
  
@@ -244,7 +245,7 @@ mean(means) + c(-1, 1) * t_star * sd(means)
 ```
 
 ```
-## [1]  25.33401 186.81249
+## [1]  26.18964 185.96786
 ```
 
  
@@ -262,7 +263,7 @@ mean - margin
 ```
 
 ```
-## [1] 25.33401
+## [1] 26.18964
 ```
 
 ```r
@@ -270,7 +271,7 @@ mean + margin
 ```
 
 ```
-## [1] 186.8125
+## [1] 185.9679
 ```
 
  
@@ -304,19 +305,19 @@ bca
 
 ```
 ##      alpha bca point
-## [1,] 0.025  55.58333
-## [2,] 0.050  61.25000
-## [3,] 0.100  70.66667
-## [4,] 0.160  78.50000
-## [5,] 0.840 160.66667
-## [6,] 0.900 178.50000
-## [7,] 0.950 204.25000
-## [8,] 0.975 228.75000
+## [1,] 0.025     55.25
+## [2,] 0.050     61.25
+## [3,] 0.100     70.50
+## [4,] 0.160     78.50
+## [5,] 0.840    160.50
+## [6,] 0.900    178.00
+## [7,] 0.950    204.25
+## [8,] 0.975    228.75
 ```
 
  
 
-Pull out the ones from this that you need: the top one and the bottom one, to get an interval of 55.6 
+Pull out the ones from this that you need: the top one and the bottom one, to get an interval of 55.2 
 to 228.8. 
 
 I seem to need to define the function `theta` first and pass it into `bcanon` as the third input. You may have more luck with `bcanon(hours, 1000, mean)` than I did. Try it.
@@ -332,7 +333,7 @@ bca %>%
 ```
 
 ```
-## [1]  55.58333 228.75000
+## [1]  55.25 228.75
 ```
 
  
@@ -376,7 +377,8 @@ aircon <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()

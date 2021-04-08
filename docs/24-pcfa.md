@@ -773,7 +773,8 @@ air <- read_csv(my_url)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   wind = col_double(),
 ##   solar.radiation = col_double(),
@@ -1507,7 +1508,8 @@ corr <- read_delim("cov5.txt", " ", col_names = F)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_double(),
 ##   X2 = col_double(),
@@ -1545,7 +1547,8 @@ corr2 <- read_delim("cov5.txt", " ", col_names = my_names)
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   first = col_double(),
 ##   second = col_double(),
@@ -2010,14 +2013,12 @@ pers <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double()
 ## )
-```
-
-```
-## See spec(...) for full column specifications.
+## ℹ Use `spec()` for the full column specifications.
 ```
 
 ```r
@@ -2212,10 +2213,6 @@ pers %>%
 ```
 
 ```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```
 ## # A tibble: 26 x 2
 ##       id     m
 ##    <dbl> <dbl>
@@ -2249,13 +2246,6 @@ pers %>%
   group_by(id) %>%
   summarize(m = mean(rating)) %>%
   mutate(has_missing = is.na(m)) -> pers.hm
-```
-
-```
-## `summarise()` ungrouping output (override with `.groups` argument)
-```
-
-```r
 pers.hm 
 ```
 
