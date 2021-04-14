@@ -207,7 +207,7 @@ do. There are two equally good ways to tackle this part and the next:
 
 * Write a function to calculate the total within-cluster  sum
 of squares (in this part) and somehow use it in the next part,
-eg. via `map_dbl` or a loop, to get the total
+eg. via `rowwise`, to get the total
 within-cluster sum of squares for *each* number of clusters.
 
 * Skip the function-writing part and go directly to a loop in
@@ -314,12 +314,12 @@ say, that loops over the `nstart` runs that we're doing for
 so far for `i` clusters, we save it. Or, at least,
 `kmeans` saves it.
 
-Or, using `map_dbl`, which I like better (perhaps because I
-have mastered how it works):
+Or, using `rowwise`, which I like better:
 
 ```{r }
-wwx <- tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, wss, cars.s))
+tibble(clusters = 2:10) %>%
+  rowwise() %>% 
+  mutate(ss = wss(clusters, cars.s)) -> wwx
 wwx
 ```
 
@@ -328,15 +328,18 @@ wwx
 Note that `w` starts at 1, but `wwx` starts at 2. For
 this way, you *have* to define a function first to calculate the
 total within-cluster sum of squares for a given number of clusters. If
-you must, you can define the function within the `map_dbl`,
+you must, you can do the calculation in the `mutate` rather than writing a function, 
 but I find that very confusing to read, so I'd rather define the
-function first, and then use it later. 
+function first, and then use it later.  (The principle is to keep the `mutate` simple, and put the complexity in the function where it belongs.)
 
-This one is just about simple enough to define the function within the `map_dbl`:
+As I say, if you *must*:
 
 ```{r }
-wwx <- tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(cars.s, ., nstart = 20)$tot.withinss))
+tibble(clusters = 2:10) %>%
+  rowwise() %>% 
+  mutate(wss = kmeans(cars.s, 
+                      clusters, 
+                      nstart = 20)$tot.withinss) -> wwx
 wwx
 ```
 
