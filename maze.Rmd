@@ -217,13 +217,12 @@ pval_sign(55, times, time)
 
 So, 55 is inside the interval and 58 is outside. I could investigate
 further in similar fashion, but I thought I would try a whole bunch of null
-medians all at once. That goes like this:
+medians all at once. That goes like this, `rowwise` because `pval_sign` expects *one* null-hypothesis median, not several all at once:
 
 ```{r }
-meds <- seq(55, 58, 0.25)
-meds
-pvals <- map_dbl(meds, pval_sign, times, time)
-data.frame(meds, pvals)
+tibble(meds = seq(55, 58, 0.25)) %>% 
+  rowwise() %>% 
+  mutate(pvals = pval_sign(meds, times, time))
 ```
 
  
@@ -231,35 +230,6 @@ data.frame(meds, pvals)
 So values for the median all the way up to and including 57.5 are in
 the confidence interval.
 
-What `map_dbl` does is to take a vector of values, here the
-ones in `meds` (55 through 58 in steps of 0.25), feed them into
-a function, here `pval_sign`, one by one and gather together
-the results. `pval_sign` has two other inputs, `times` and
-`time`, which are added to `map_dbl` at the end. (They
-are the same no matter what median we are testing.)  So, putting the
-calculated P-values side by side with the null medians they belong to
-shows you which medians are inside the confidence interval and which
-are outside.
-
-The function is called `map_dbl` because *my* function
-called `pval_sign` that is called repeatedly returns a single
-decimal number (a `dbl`). There is also, for example,
-`map_chr` for repeatedly calling a function that returns a
-single piece of text, and plain `map` that is used when the
-repeatedly-called function returns a data frame.
-
-Since you don't know about `map_dbl`, I didn't want to confuse
-things more than necessary, but now that you *do* know what it
-does, you might be in a better position to understand this more
-Tidyverse-flavoured code, with the `map_dbl` inside a
-`mutate` and the data frame created as we go:
-
-```{r }
-tibble(meds = seq(55, 58, 0.25)) %>%
-  mutate(pvals = map_dbl(meds, pval_sign, times, time))
-```
-
- 
 
 Now for the other end of the interval. I'm going to do this a
 different way: more efficient, but less transparent. The first thing I
@@ -353,11 +323,12 @@ above and one below.
 Likewise, you can use the function with a zero on its name and feed it
 a column rather than a data frame and a column name:
 
+**********************************
+
 ```{r }
-meds <- seq(55, 58, 0.25)
-meds
-pvals <- map_dbl(meds, ~ with(times, pval_sign0(., time)))
-data.frame(meds, pvals)
+tibble(meds =  seq(55, 58, 0.25)) %>% 
+  rowwise() %>% 
+  mutate(pvals =  with(times, pval_sign0(meds, time)))
 ```
 
  

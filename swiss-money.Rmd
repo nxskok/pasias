@@ -368,18 +368,16 @@ for each row separately. This also should work:
 
 ```{r error=T}
 d %>%
-  mutate(max.post = map2_dbl(
-    posterior.counterfeit, posterior.genuine, ~ max(.x, .y)
-  )) %>%
+  rowwise() %>% 
+  mutate(max.post = max(posterior.counterfeit, posterior.genuine)) %>%
   filter(max.post < 0.99) %>%
   select(-c(length:diag))
 ```
 
  
-Because we're using `map`, `max` is applied to the pairs
+Because we're using `rowwise`, `max` is applied to the pairs
 of values of `posterior.counterfeit` and `posterior.genuine`, 
-*taken one at a time.*
-`r tufte::margin_note("The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.")`
- 
+*taken one row at a time.*
+
 
 

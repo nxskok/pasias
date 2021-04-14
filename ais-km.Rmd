@@ -81,21 +81,19 @@ set.seed(457299)
 Here we go:
 ```{r }
 withinss <- tibble(clusters = 2:20) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(athletes.s, ., nstart = 20)$tot.withinss))
+  rowwise() %>% 
+  mutate(wss = kmeans(athletes.s, clusters, nstart = 20)$tot.withinss)
 withinss
 ```
 
      
 
-A one-liner, kinda. The thing after the squiggle is called an
-"anonymous function"; it is what is done for each of the first
-thing, and where you want the thing you're varying to go, you put a
-dot (the notation is like the dot meaning 
-"whatever came out of the previous step"). 
+A one-liner, kinda. Remember that `kmeans` expects a single number of clusters, a value like 5, rather than a collection of possible numbers of clusters in a vector, so to do each of them, we need to work rowwise (and do one row at a time).
+
 The advantage to this is that it looks exactly like
-the `kmeans` that you would write, except for the number of
-clusters that is replaced by a dot.
-All right then, how would I expect *you* to do this? First write
+the `kmeans` that you would write.
+
+All right then, what is a better way to do this? First write
 a function to take a number of clusters and a data frame and return
 the total within-cluster sum of squares:
 
@@ -118,8 +116,7 @@ twss(3, athletes.s)
 
 Check (with a few extra decimals).
 
-Now, recognize that your function returns a decimal number, so that
-you will be using `map_dbl` in a moment, and then calculate
+Then calculate
 all the total within-cluster sum of squares values by making a little
 data frame with all your numbers of clusters:
 
@@ -128,15 +125,16 @@ tibble(clusters = 2:20)
 ```
 
  
+and then make a pipeline and save it, using `rowwise` and your function:
 
-and then make a pipeline and save it:
 ```{r }
 tibble(clusters = 2:20) %>%
-  mutate(wss = map_dbl(clusters, ~ twss(., athletes.s))) -> withinss
+  rowwise() %>% 
+  mutate(wss = twss(clusters, athletes.s)) -> withinss
 withinss
 ```
 
- 
+This is better because the `mutate` line is simpler; you have off-loaded the details of the thinking to your function. Read this as "for each number of clusters, work out the total within-cluster sum of squares for that number of clusters." The important thing here is what you are doing, not how you are doing it; if you care about the how-you-are-doing-it, go back and look at your function. Remember that business about how you can only keep track of seven things, plus or minus two, at once? When you write a function, you are saving some of the things you have to keep track of.
 
 
 (d) Use the data frame you just created to make a scree plot. What
