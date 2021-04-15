@@ -230,7 +230,7 @@ to handle this. Here's step 1:
 
 ```{r }
 marks %>%
-  nest(-class)
+  nest_by(class)
 ```
 
  
@@ -242,15 +242,15 @@ had a `score`, so 5 or 6 rows and 1 column. The column
 `data` is known in the trade as a "list-column".
 
 Now, for each of those mini-data-frames, we want to calculate the
-quantiles of `score`. 
-To do that, use `map`, which is the
-`tidyverse` version of "for each": for each of our
-mini-data-frames, calculate the five-number summary of the column called `score` in *it*:
+quantiles of `score`. This is `rowwise`:
+for each of our
+mini-data-frames `data`, calculate the five-number summary of the column called `score` in *it*:
 
 ```{r }
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ quantile(.$score)))
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(quantile(data$score)))
 ```
 
   
@@ -267,8 +267,9 @@ Now we want to display the quantiles. This is the easiest way:
 
 ```{r }
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ quantile(.$score))) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(quantile(data$score))) %>% 
   unnest(qq)
 ```
 
@@ -311,8 +312,9 @@ which quantile is which. So let's rewrite our code to use this:
 
 ```{r }
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score)))))
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) 
 ```
 
  
@@ -324,8 +326,9 @@ And finally `unnest` `qq`:
 
 ```{r }
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) %>% 
   unnest(qq)
 ```
 
@@ -335,9 +338,10 @@ Success! Or even:
 
 ```{r }
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
-  unnest(qq) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) %>% 
+  unnest(qq) %>% 
   mutate(qn = parse_number(name)) %>%
   select(-name) %>%
   pivot_wider(names_from = qn, values_from = value)

@@ -182,160 +182,43 @@ There's nothing special about 3; any number will do.
 
 The second stage is to run this for each desired number of
 clusters, without using a loop. 
-This uses a family of functions whose
-names start with `map`. To figure out which one to
-use, take a look at your line of code above: ours returns a single number, a
-`double` in the jargon (decimal number), so the `map`
-function we need is called `map_dbl`, and it goes like
-this. You can do it inside or outside a data frame, but I prefer to do
-it inside with a `mutate`:
+There are two parts to this, in my favoured way of doing it. First, write a function that will get the total within-group sum of squares for any K-means analysis for any number of clusters (input) for any dataframe (also input):
 
-```{r }
-tibble(clusters = 2:maxclust) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(decathlon, .,
-    nstart = 20
-  )$tot.withinss)) -> ww
-ww
+```{r}
+twss <- function(i, d) {
+  ans <- kmeans(d, i, nstart = 20)
+  ans$tot.withinss
+}
 ```
 
- 
+The value of doing it this way is that you only ever have to write this function once, and you can use it for any K-means analysis you ever do afterwards. Or, copy this one and use it yourself.
 
-I have to say that I got this right the first time, but I think I
-benefitted greatly in that regard by writing out that explanation for
-you first. `wss` in `ww` has the same values as
-`w`, but without the missing one.
+Let's make sure it works:
+
+```{r}
+twss(3, decathlon)
+```
+
+Check. 
+
+Second, use `rowwise` to work out the total within-group sum of squares for a variety of numbers of clusters. What you use depends on how much data you have, and therefore how many clusters you think it would be able to support (a smallish fraction of the total number of observations). I went from 2 to 20 before, so I'll do that again:
+
+```{r}
+tibble(clusters = 2:20) %>% 
+  rowwise() %>% 
+  mutate(wss = twss(clusters, decathlon)) -> wsss
+wsss
+```
+
+This got a name that was `wss` with an extra `s`. Sometimes my imagination runs out. 
 
 There was (still is) also a function `sapply` that does the
-same thing, but the `map` functions work more uniformly. I
+same thing.
+I
 learned `sapply` and friends a long time ago, and now, with the
-arrival of purrr, I think I need to unlearn them.
+arrival of `rowwise`, I think I need to unlearn them.
 
-If the thing in the "for each" slot of a `map` is a data
-frame (or if you pipe a data frame into it), then the function is
-applied to every column of that data frame, so that if I go back to
-`decathlon0`, which was a data frame, and do this:
-
-```{r echo=F}
-options(width = 70)
-```
-
- 
-
-```{r }
-decathlon0 %>% select(-name) -> decathlon.tmp
-decathlon.tmp %>% map_dbl(~ mean(.))
-```
-
- 
-
-then what I get is the mean of each (numeric) column. I first get rid
-of the name column, and save the result in a new temporary data frame
-`decathlon.tmp`;
-the `name` column would be a
-pretty silly thing to take the mean of.
-
-I wrote this out a couple of years ago, and realize that I no longer
-like doing things this way; what I prefer is `summarize_at` or
-`summarize_if` or 
-`summarize_all`. These work in much
-the same way as a `map`, dot and all. The last one is easiest:
-
-```{r }
-decathlon0 %>%
-  select(-name) %>%
-  summarize_all(~ mean(.))
-```
-
- 
-
-That is, "for each column, find the mean of it". 
-
-The `_if` variant uses only those columns that have a property
-like being numeric (so that these are the only columns for which
-finding the mean makes sense):
-
-```{r }
-decathlon0 %>%
-  summarize_if(is.numeric, ~ mean(.))
-```
-
- 
-
-In words, "for each column that is numeric, find the mean of it". 
-This way, we no longer have to explicitly remove the names.
-
-The `_at` variant only uses the columns whose *names*
-satisfy some property, like beginning with `x`:
-
-```{r }
-decathlon0 %>%
-  summarize_at(vars(starts_with("x")), ~ mean(.))
-```
-
- 
-
-In words, "for each variable whose name starts with `x`, find the mean of it."
-Now, what happens, I hear you asking, if the function returns more than one
-thing, like for example `quantile`, which returns a vector
-containing the five-number summary? Well, then you use `map_df`
-and you get this:
-```{r }
-decathlon.tmp %>% map_df(~ quantile(.))
-```
-
- 
-
-The idea is that `quantile` returns something that can be
-treated as a one-column data frame, and `map_df` says
-"`quantile` returns a data frame rather than just a number."
-The only downside is that `quantile` actually (for each
-variable) returns a vector with a name attribute (the names of the
-five percentiles that were calculated), and the `tidyverse`
-treats those like row names and discards them.
-
-Another way that might work (and might keep the quantiles) is
-
-```{r }
-decathlon.tmp %>%
-  map_df(~ enframe(quantile(.)))
-```
-
- 
-This keeps the quantiles, but loses the variable names!
-
-All right, let's make the data frame long before taking quantiles,
-since the Tidyverse likes that kind of thing better anyway. This is
-the same kind of idea that you might have seen for plotting the
-residuals against *all* the $x$-variables in a multiple regression:
-
-```{r }
-decathlon.tmp %>%
-  pivot_longer(everything(), names_to="event", values_to="performance") %>%
-  nest(-event) %>%
-  mutate(quantile = map(data, ~ enframe(quantile(.$performance),
-    name = "quantile",
-    value = "perf"
-  ))) %>%
-  unnest(quantile) -> quantiles.long
-quantiles.long
-```
-
- 
-
-To follow this, run it one line at a time. The `nest(-event)`
-line creates a two-column data frame that contains a column called
-`event` and a second column `data` that contains
-everything else (just `performance` in this case). Then the big `mutate` line says "for each data frame in `data`, calculate the quantiles of the performance column in it, giving names to the columns of the output". 
-This produces a second list-column called `quantile`, which I
-then `unnest` to display all the quantiles for each event.
-
-Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `pivot_wider`:
-
-```{r }
-quantiles.long %>% pivot_wider(names_from=quantile, values_from=perf)
-```
-
-and that looks nice.
+`r tufte::marginpar("I wrote that a few years ago, and you may be pleased to learn that I have indeed completely forgotten about apply, sapply, lapply and all the others. I remember struggling through them when I first learned R, but you are in the happy position of never having to worry about them.")`
 
 Extra: I made a post on Twitter, [link](https://twitter.com/KenButler12/status/1100133496637542401). 
 To which Malcolm Barrett replied with this: [link](https://twitter.com/malco_barrett/status/1100141130186780672) 
@@ -346,7 +229,7 @@ So now you know all about the Four Noble R Truths.
 
 
 (d) Using what you calculated in the previous part, draw a scree
-plot. (You may have to create a data frame first.) How does your
+plot. How does your
 scree plot tell you that 5 is a possible number of clusters? Explain
 briefly.
 
@@ -377,7 +260,7 @@ values for 2 through `r maxclust` clusters already in a data
 frame, so it is a fair bit simpler:
 
 ```{r bilharzia}
-ww %>%
+wsss %>%
   ggplot(aes(x = clusters, y = wss)) +
   geom_point() + geom_line()
 ```
