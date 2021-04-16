@@ -383,21 +383,22 @@ mm <- crossing(i = 1:70, j = 1:70)
 
  
 
-and then use `map2_int` (since our dissimilarity function
-returns a whole number):
+and then use `rowwise`:
 
 ```{r cache=T}
-mm <- mm %>% mutate(diff = map2_int(i, j, row_diff, bridges))
+mm %>% 
+  rowwise() %>% 
+  mutate(diff = row_diff(i, j, bridges)) -> mm
 mm
 ```
 
- 
+If you forget the `rowwise`, the answers (in `diff`) will all be the same, which should make you suspicious.
 
 This is long format, though, so we need to `pivot_wider` the
 `j` column to get a square array of dissimilarities:
 
 ```{r }
-mm <- mm %>% pivot_wider(names_from=j, values_from=diff)
+mm %>% pivot_wider(names_from=j, values_from=diff) -> mm
 mm
 ```
 
@@ -429,7 +430,7 @@ d1 <- as.dist(m)
 or 
 
 ```{r }
-d2 <- mm %>% select(-i) %>% as.dist()
+mm %>% select(-i) %>% as.dist() -> d2
 ```
 
  
@@ -440,7 +441,8 @@ or, if you got stuck,
 my_url <- "http://www.utsc.utoronto.ca/~butler/d29/mm.csv"
 mmm <- read_csv(my_url)
 mmm
-d3 <- mmm %>% select(-i) %>% as.dist()
+mmm %>% select(-i) %>% as.dist() -> d3
+d3
 ```
 
  

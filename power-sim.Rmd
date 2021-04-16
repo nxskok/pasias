@@ -97,17 +97,22 @@ Solution
 
 Once you get the hang of these, they all look almost the
 same. This one is easier than some because we don't have to do
-anything special to get a two-sided alternative hypothesis:
-```{r }
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
-```         
+anything special to get a two-sided alternative hypothesis. The initial setup is to make a dataframe with a column called something like `sim` to label the simulations, and then a `rowwise` to generate one random sample, $t$-test and P-value for each simulation:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 20))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
+```
+
+
+    
 
 The power is about 4.2\%. This seems depressingly small, but see the
-next part.
+next part. (Are you confused about something in this one? You have a right to be.)
 
 
 
@@ -147,13 +152,14 @@ Solution
 
 Here's the code we just used:
 
-```{r eval=F}
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
-```       
+```{r, eval=FALSE}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 20))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
+```
 
 One of those 20s needs to become 22. Not the one in the
 `t.test`, since the hypotheses have not changed.  So we need to
@@ -161,20 +167,22 @@ change the 20 in the `rnorm` line to 22, since that's where
 we're generating data from the true distribution. The rest of it stays
 the same:
 
-```{r }
-rerun(1000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
-```         
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 22))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
+```
+         
 
 This time, we *want* to reject, since the null hypothesis is
-false. So look at the `TRUE` count of 798: the power is about
-$798/1000 \simeq 80\%$. We are very likely to correctly reject a null
+false. So look at the `TRUE` count: the power is about
+$80\%$. We are very likely to correctly reject a null
 of 20 when the mean is actually 22.
 
-Another way to reason that the power should be fairly large is to
+Extra: another way to reason that the power should be fairly large is to
 think about what kind of sample you are likely to get from the true
 distribution: one with a mean around 22 and an SD around 2. Thus the
 $t$-statistic should be somewhere around this (we have a sample size
@@ -218,8 +226,9 @@ the difference between true and null means:
 power.t.test(n=10,delta=22-20,sd=2,type="one.sample",alternative="two.sided")
 ```       
 
-This, 0.803, is very close to the 0.798 I got from my
+This, 0.803, is very close to the value I got from my
 simulation. Which makes me think I did them both right. This is not a watertight proof, though: for example, I might have made a mistake and gotten lucky somewhere. But it does at least give me confidence.
+
 Extra: when you estimate power by simulation, what you are doing is
 rejecting or not with a certain probability (which is the same for all
 simulations). So the number of times you actually *do* reject has
@@ -249,6 +258,8 @@ out of 1000:
 prop.test(42,1000,0.05)
 ``` 
 
+** check that the values are correct below **
+
 Looking at the P-value, we definitely fail to reject that the
 probability of (incorrectly) rejecting is the 0.05 that it should
 be. Ouch. That's true, but unnecessarily confusing. Look at the
@@ -275,13 +286,16 @@ the right answer of 0.803.
 This might be an accurate enough assessment of the power for you, but
 if not, you can do more simulations, say 10,000:
 
-```{r }
-rerun(10000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
-``` 
+
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 22))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
+```
+
 
 I copied and pasted my code again, which means that I'm dangerously
 close to turning it into a function, but anyway.
@@ -301,7 +315,7 @@ simulations, and thus ought to be a factor of $\sqrt{10}\simeq 3.16$
 times longer.
 
 This means that you can estimate power as accurately as you like by
-doing a large enough number of simulations. Provided, that is, that
+doing a large enough (possibly very large) number of simulations. Provided, that is, that
 you are prepared to wait a possibly long time for it to finish working!
 
 

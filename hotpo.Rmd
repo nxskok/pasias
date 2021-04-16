@@ -141,7 +141,7 @@ Solution
 
 
 This is a loop, but not a `for` loop (or something that we
-could do with a `map`), because we don't know how many
+could do `rowwise`), because we don't know how many
 times we have to go around. This is the kind of thing that we
 should use a `while` loop for: 
 "keep going while a condition is true".
@@ -276,25 +276,21 @@ one goes up highest?
 Solution
 
 
-This one uses `map` ideas: an actual `map` for the
-sequence, and `map_dbl` for the length and maximum value,
-since these are both actually integers but the calculation in our
-functions actually uses decimals.
+This one uses `rowwise` ideas:
 `r tufte::margin_note("I should have been more careful in my functions to make sure everything was integers, and, in particular, to do integer division by 2 because I knew that this division was going to come out even.")` 
-Thus, a pipeline:
+
 ```{r }
 tibble(x = 11:20) %>%
-  mutate(sequence = map(x, ~ hotpo(.))) %>%
-  mutate(length = map_dbl(sequence, ~ hotpo_len(.))) %>%
-  mutate(high = map_dbl(sequence, ~ hotpo_max(.)))
+  rowwise %>% 
+  mutate(sequence = list(hotpo(x))) %>%
+  mutate(length = hotpo_len(sequence)) %>%
+  mutate(high = hotpo_max(sequence))
 ```
 
      
 
-First, we obtain a list-column containing the sequences, then two
-ordinary columns of their lengths and their maximum values. The
-`map` is the same each time: for each of the first thing, run
-the function on *it*, where "it" is represented by the dot.
+First, we obtain a list-column containing the sequences (which is why its calculation needs a `list` around it), then two
+ordinary columns of their lengths and their maximum values. 
 
 The sequences for 18 and 19 are the longest, but the sequence for 15
 goes up the highest.

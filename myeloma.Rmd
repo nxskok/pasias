@@ -324,32 +324,17 @@ myeloma %>% summarize(
 )
 ```
 
- 
+Next is the tidyverse-approved way to get both quartiles for both variables at once. Use `across` to select the variables to use, and then something with a squiggle and a dot to say "do this on each of the columns selected in the `across`". If you have a cleverer way to select those two columns without naming them, go for it. Read this in English as "for each of the columns `logbun` and `hgb`, work out the first and third quantiles of it", where the dot is read as "it":
 
-There is a `tidyverse` way to obtain the quartiles of
-*all* the columns. It lives in package `purrr`, which gets
-loaded with the `tidyverse`:
-```{r }
-myeloma %>%
-  select(logbun, hgb) %>%
-  map(quantile, c(0.25, 0.75))
+```{r}
+myeloma %>% 
+  summarize(across(c(logbun, hgb), 
+                   ~quantile(., c(0.25, 0.75))))
 ```
 
+We have lost which quartile is which, but of course the lower one must be Q1 and the higher one Q3 for each variable. 
  
-
-This is what R calls a `list`. It would look nicer as a data
-frame. There is a way to get that:
-```{r }
-myeloma %>%
-  select(logbun, hgb) %>%
-  map_df(~ quantile(., c(0.25, 0.75)))
-```
-
- 
-The `25%` and `75%` have gone missing. They were
-actually the `names` of each of the components of the list,
-which I don't think we easily have access to.
-`r tufte::margin_note("The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.")`
+`r tufte::margin_note("The way, as we  have seen elsewhere, is to use {\tt tidy(quantile)} or {\tt enframe(quantile)}, which  produce a two-column data frame with the percentiles shown.")`
     
 
 

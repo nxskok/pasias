@@ -63,7 +63,7 @@ rbinom(3, 100, 0.6)
  
 
 Three random binomials, that happened to come out just below 60. We're
-going to leave the first input as 1, though, and let `rerun`
+going to leave the first input as 1, though, and let `rowwise`
 handle "lots of sampled values" later.
     
  
@@ -123,20 +123,20 @@ Yep, the same.
 
 
 
-(d) Use `rerun` to estimate the power of a test of
+(d) Estimate the power of a test of
 $H_0: p=0.5$ against $H_a: p>0.5$ when $n=500$ and $p=0.56$, using
 $\alpha=0.05$. There are three steps:
 
 
-* use `rerun` to generate random samples from binomial
+* generate random samples from binomial
 distributions with $n=500$ and $p=0.56$, repeated "many" times
 (something like 1000 or 10,000 is good)
 
-* use `map` to run `prop.test` on each of those
-random samples
+* run `prop.test` on each of those
+random samples 
 
-* use `map_dbl` to extract the P-value for each test and
-save the results (in a vector called, perhaps, `pvals`).
+* extract the P-value for each test and
+save the results (in a column called, perhaps, `pvals`).
 
 So I lied: the fourth and final step is to count how many of
 those P-values are 0.05 or less.
@@ -144,24 +144,28 @@ those P-values are 0.05 or less.
 
 Solution
 
+The first part of the first step is to create a column called something like `sim` that labels each simulated sample, and to make sure that everything happens rowwise. After that, you follow the procedure:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = rbinom(1, 500, 0.56)) %>% 
+  mutate(test = list(prop.test(sample, 500, 0.5, alternative = "greater"))) %>% 
+  mutate(pvals = test$p.value) %>% 
+  count(pvals <= 0.05)
+```
+
+
 
 The previous parts, using `rbinom` and `prop.test`,
 were meant to provide you with the ingredients for this part.
 The first step is to use `rbinom`. The first input is 1 since
-we only want one random binomial each time (the `rerun` will
-handle the fact that you actually want lots of them). The second step
+we only want one random binomial each time (the `rowwise` will
+handle the fact that you actually want lots of them; you only want one *per row* since you are working rowwise). The second step
 runs `prop.test`; the first input to that is each one of the
-numbers of successes from the first step. (This is an implied
-for-each, with each of the simulated binomials playing the role of
-"it", in turn.). The last part is to pull out all the P-values and
-make a table of them, just like the example in class.
-```{r }
-rerun(10000, rbinom(1, 500, 0.56)) %>%
-  map(~ prop.test(., 500, 0.5, alternative = "greater")) %>%
-  map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals <= 0.05)
-```
+numbers of successes from the first step. The last part is to pull out all the P-values and
+make a table of them, just like the example in lecture.
+
 
  
 

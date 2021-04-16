@@ -60,13 +60,13 @@ Solution
 
 
 Like this (the cleanest):
-```{r }
-air %>% map_df(~ quantile(.))
+
+```{r}
+air %>% 
+  summarize(across(everything(), ~quantile(.)))
 ```
 
-     
 
-using `map` from `purrr`: "for each (column of) `air`, calculate the quantiles of it"..
 I have to figure out how to
 identify which number from the five number summary each of these is,
 but in this case you can easily figure it out since the min is the
@@ -77,19 +77,41 @@ Or, with some more work, this:
 ```{r }
 air %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>% 
-  nest(-xname) %>%
-  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  nest_by(xname) %>%
+  rowwise() %>% 
+  mutate(q = list(enframe(quantile(data$x)))) %>%
   unnest(q) %>%
   pivot_wider(names_from=name, values_from=value) %>% 
   select(-data)
 ```
 
-This time, I put the percentiles in columns and variable names in rows (because it seemed to be easier that way).
- 
+There's a lot here. Run it one line at a time to see what it does:
 
-just like the weather problem (in fact, *exactly* like the weather
-problem).
+- put the names of the variables in one column and the values in a second. This is the same trick as when we want to make plots of all the variables facetted.
 
+- the `nest_by` says: for each variable (whose names are now in `xname`), make a dataframe called `data` of the observations (in `x`) for that variable
+
+- the rest of the way, work one row at a time
+
+- work out the five-number summary for each variable, using the values `x` in the data frame `data` of each row of the list-column, one at a time. This is the base R `quantile`, working on a vector (the column `x` of the data frame `data`), so it gives you back a named vector. If you are not familiar with that, try running `quantile(1:10)` and see how the output has both the percentiles and, above them, the percents that they go with. The tidyverse doesn't like names, so my favourite way of keeping them with a named vector is to run it through `enframe`. This makes a two-column dataframe, with a column called `name` that is in this case the percents, and a column called `value` that is the percentiles. This is a dataframe rather than a single number, so it needs a `list` on the front as well (to make another list-column).
+There are rather a lot of brackets to close here; if you are not sure you have enough, type another close bracket, pause, and see what it matches (R Studio will show you). If it matches nothing, you have too many close brackets.
+
+- show the values of the five-number summary for each variable (in long format, but with the percentages attached)
+
+- for human consumption, put the percentiles in columns, one row for each variable
+
+- finally, get rid of the dataframes of original values (that we don't need any more now that we have summarized them).
+
+Extra: say you wanted to make facetted histograms of each variable. You would begin the same way, with the `pivot_longer`, and at the end, `facet_wrap` with `scales = "free"` (since the variables are measured on different scales):
+
+```{r}
+air %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>% 
+  ggplot(aes(x=x)) + geom_histogram(bins = 6) +
+  facet_wrap(~xname, scales = "free")
+```
+
+Extra extra: I originally put a pipe symbol on the end of the line with the `geom_histogram` on it, and got an impenetrable error. However, googling the error message (often a good plan) gave me a first hit that told me exactly what I had done.
     
 
 
@@ -312,13 +334,14 @@ d %>% arrange(Comp.2) %>% slice(1)
 
 and for convenience, we'll grab the quantiles again:
 
-```{r }
-air %>% map_df(~ quantile(.))
+```{r}
+air %>% 
+  summarize(across(everything(), ~quantile(.)))
 ```
 
  
 
-Day 34. We said that component 2 depends (negatively) on solar
+Day 34 (at the end of the line). We said that component 2 depends (negatively) on solar
 radiation and ozone and possibly positively on nitric oxide. This
 means that day 34 ought to be *high* on the first two and low on
 the last one (since it's at the low end of component 2). Solar
@@ -333,7 +356,7 @@ observation come. Another way to approach this is to calculate
 *percentile ranks* for everything. Let's go back to our original data frame and replace everything with its percent rank: 
 
 ```{r }
-air %>% mutate_all(~ percent_rank(.)) -> pct_rank
+air %>% mutate(across(everything(), ~ percent_rank(.))) -> pct_rank
 pct_rank
 ```
 

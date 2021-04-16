@@ -33,11 +33,12 @@ I meant "calculate" exactly rather than "estimate" (by
 simulation). Though if you want to, you can do that as well, thus:
 
 ```{r }
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(rnorm(30, 110, 20))) %>% 
+  mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+  mutate(pvals = ttest$p.value) %>% 
+  count(pvals<=0.05)
 ``` 
 
 That came out alarmingly close to the exact answer. 
@@ -80,12 +81,14 @@ In this case, we know that a sample of size 30 doesn't give quite
 enough power, so we have to up the sample size a bit. How about we try
 40? I copied and pasted my code from above and changed 30 to 40:
 
+
 ```{r }
-rerun(1000,rnorm(40,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(rnorm(40, 110, 20))) %>% 
+  mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+  mutate(pvals = ttest$p.value) %>% 
+  count(pvals<=0.05)
 ``` 
 
 Now the power is a bit too big, so we don't need a sample size quite
@@ -95,17 +98,21 @@ it first, with the sample size as input. Copy-paste once more and edit:
 
 ```{r }
 sim_power=function(n) {
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+  tibble(sim = 1:1000) %>% 
+    rowwise() %>% 
+    mutate(samples = list(rnorm(n, 110, 20))) %>% 
+    mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+    mutate(pvals = ttest$p.value) %>% 
+    ungroup() %>% 
+    count(pvals<=0.05)
 }
 ``` 
 
 In the grand scheme of things, we might want to have the null and true
 means, population SD and $\alpha$ be inputs to the function as well,
 so that we have a more general tool, but this will do for now.
+
+
 
 Let's run it with a sample size of 35:
 
@@ -128,6 +135,18 @@ that: programmer's brain cells are more valuable than computer CPU
 cycles, and you might as well save your brain cells for when you
 really need them.
 
+You might even think about automating this further. The easiest way, now that we have the function, is something like this:
 
+```{r}
+tibble(ns = seq(20, 50, 5)) %>% 
+  rowwise() %>% 
+  mutate(power_tab = list(sim_power(ns))) %>% 
+  unnest(power_tab) %>% 
+  pivot_wider(names_from = `pvals <= 0.05`, values_from = n)
+```
+
+The business end of this is happening in the first three lines. I wasn't thinking of this when I originally wrote `sim_power` to return a dataframe, so there is a  bit more fiddling after the simulations are done: I have to `unnest` to see what the list-column `power_tab` actually contains, and because of the layout of the output from unnesting `sim_power` (long format), it looks better if I pivot it wider, so that I can just cast my eye down the TRUE column and see the power increasing as the sample size increases.
+
+You might  also think of something like bisection to find the sample size that has power 0.8, but it starts getting tricky because of the randomness; just by chance, it may be that sometimes the simulated power goes *down* as the sample size goes up. With 1000 simulations each time, it seems that the power ought to hit 80% with a sample size between 30 and 35.
 
 

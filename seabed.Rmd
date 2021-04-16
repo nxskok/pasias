@@ -547,23 +547,15 @@ site_pairs
 
  
 Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
-making you think of `map`. Two details: the Bray-Curtis
-distance is a (decimal) number, and we're for-eaching over two things in
-parallel, so `map2_dbl`:
+making you think of `rowwise`:
 ```{r }
 site_pairs %>%
-  mutate(bray_curtis = map2_dbl(
-    site1, site2,
-    ~ braycurtis.spec(seabed.z, .x, .y)
-  )) -> bc
+  rowwise() %>% 
+  mutate(bray_curtis = braycurtis.spec(seabed.z, site1, site2)) -> bc
 bc
 ```
 
- 
-
-Remember that we have two "it"s to iterate over, so they get called
-`.x` and `.y` rather than just `.`, so you can
-tell them apart.
+(you might notice that this takes a noticeable time to run.)
 
 This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
 

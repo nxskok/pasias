@@ -258,24 +258,9 @@ The "inverse CDF" (the value $x$ that has this much of the probability below it)
 qnorm(0.025)
 ```
 
-   
+  
 
-Also, `qbeta` is "vectorized", so the `alpha` and
-`beta` can be entire columns rather than just numbers, and it
-will work. If you want to, you can use `map2` to do it for each
-`alpha` and `beta`, something like this (this does the lower end of the interval):
-```{r }
-crossing(alpha = 1:10, beta = 1:10) %>%
-  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0.025, .x, .y))) %>%
-  arrange(abs(lower - 0.1))
-```
-
-   
-
-Remember that there are two "it"s in `map2`, and they are called `.x` and 
-`.y`.
-
-* We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each `alpha`-`beta` combo is a way to do this; if `sse` is small, that combination of `alpha` and `beta` gave lower and upper limits close to 0.1 and 0.6.
+* We want the lower limit to be close to 0.1 *and* the upper limit to be close to 0.6. Working out the sum of squared errors for each `alpha`-`beta` combo is a way to do this; if `sse` is small, that combination of `alpha` and `beta` gave lower and upper limits close to 0.1 and 0.6.
 
 * Arrange the `sse` values smallest to largest. The top rows are the best choices of `alpha` and `beta`.
 
