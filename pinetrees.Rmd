@@ -421,20 +421,19 @@ being a bit lower as we saw before.
 
 My code is rather repetitious. There has to be a way to streamline
 it. I was determined to find out how. My solution involves putting the
-three models in a `list`, and then using `map` to
-get the `glance` output for each one, and `bind_rows`
-to glue the results together into one data frame. I was inspired to
-try this by remembering that `map_df` will work for a function
-like `glance` that outputs a data frame:
+three models in a list-column, and then using `rowwise` to
+get the `glance` output for each one.
 
-```{r }
-model_list <- list(volume.1, volume.2, volume.3)
-map_df(model_list, ~ glance(.))
+```{r}
+tibble(i = 1:3, model = list(volume.1, volume.2, volume.3)) %>% 
+  rowwise() %>% 
+  mutate(glances = list(glance(model))) %>% 
+  unnest(glances)
 ```
 
- 
+I almost got caught by forgetting the `list` on the definition of `glances`. I certainly need it, because the output from `glance` is a (one-row) dataframe, not a single number.
 
-It works. You see the three R-squared values in the first column. The
+It works. You see the three R-squared values in the first column of numbers. The
 third model is otherwise a lot different from the others because it
 has a different response variable.
 
