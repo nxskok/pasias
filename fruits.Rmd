@@ -214,28 +214,29 @@ dissim("Apple", "Orange", fruit2)
 that running it with column names gives the right answer.
 
 Now, we want to run this function for each of the pairs in
-`combos`. The "for each" is `fruit` and `other`
-in parallel, so it's `map2` rather than `map`. Also, the
-dissimilarity is a whole number each time, so we need
-`map2_int`. So we can do this:
+`combos`. This is `rowwise`, since our function takes only one `fruit` and one `other` fruit at a time, not all of them at once:
+
 
 ```{r }
-combos %>% mutate(dissim = map2_int(fruit, other, dissim, fruit2))
+combos %>% 
+  rowwise() %>% 
+  mutate(dissim = dissim(fruit, other, fruit2))
 ```
 
  
 
-This would work just as well using `fruit1` rather than
-`fruit`, since we are picking out the columns by name rather
+This would work just as well using `fruit1`, with the column of properties, rather than
+`fruit2`, since we are picking out the columns by name rather
 than number.
 
 To make this into something we can turn into a `dist` object
-later, we need to `spread` the column `other` to make a
+later, we need to pivot-wider the column `other` to make a
 square array:
 
 ```{r }
-combos %>%
-  mutate(dissim = map2_int(fruit, other, dissim, fruit2)) %>%
+combos %>% 
+  rowwise() %>% 
+  mutate(dissim = dissim(fruit, other, fruit2)) %>% 
   pivot_wider(names_from = other, values_from = dissim) -> fruit_spread
 fruit_spread
 ```

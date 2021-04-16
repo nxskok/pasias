@@ -44,68 +44,68 @@ reasonable.
 A rather more `tidyverse` way is this:
 
 ```{r }
-soc %>% summarize_all(c("min", "max"))
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.))))
 ```
 
  
 
 This gets the minimum and maximum of all the variables. I would have
 liked them arranged in a nice rectangle (`min` and `max`
-as rows, the variables as columns), but that's not how this comes out.
+as rows, the variables as columns), but that's not how this came out.
 
-Here is another:
+The code so far uses `across`. This means to do something across multiple columns. In this case, we want to do the calculation on *all* the columns, so we use the select-helper `everything`. You can use any of the other select-helpers like `starts_with`, or you could do something like `where(is.numeric)` to do your summaries only on the quantitative columns (which would also work here). The dots inside `min` and `max` mean "the variable we are looking at at the moment", and the squiggles before `min` and `max` mean "calculate", so you read the above code as "for each column, work out the smallest and largest value of it".
 
-```{r }
-soc %>% map_df(~ quantile(.))
+What, you want a nice rectangle? This is a pivot-longer, but the fancy version because the column names encode two kinds of things, a variable and a statistic:
+
+```{r}
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
+  pivot_longer(everything(), 
+               names_to = c("variable", "statistic"), 
+               names_sep = "_",
+               values_to = "value"
+               )
+```
+and then
+
+```{r}
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
+  pivot_longer(everything(), 
+               names_to = c("variable", "statistic"), 
+               names_sep = "_",
+               values_to = "value"
+               ) %>% 
+  pivot_wider(names_from = statistic, values_from = value)
 ```
 
- 
+Note the strategy: make it longer first, then figure out what to do next. This is different from `rowwise`; in fact, we are working "columnwise", doing something for each column, no matter how many there are. My go-to for this stuff is [here](https://dplyr.tidyverse.org/articles/colwise.html).
 
-These are the five-number summaries of each variable. Normally, they
-come with percentiles attached:
+Another way to work is with the five-number summary. This gives a more nuanced picture of the data values we have.
+`r tufte::margin_note("This might be overkill at this point, since we really only care about whether our data values are reasonable, and often just looking at the highest and lowest values will tell us that.")` 
 
-```{r }
-quantile(soc$experience)
-```
-
- 
-
-but the percentiles get lost in the transition to a `tibble`, and I
-haven't found out how to get them back.
-
-This almost works:
+The base-R five-number summary looks like this:
 
 ```{r }
-soc %>% map_df(~ enframe(quantile(.)))
+qq <- quantile(soc$experience)
+qq
 ```
 
+This is what's known as a "named vector". The numbers on the bottom are the summaries themselves, and the names above say which percentile you are looking at. Unfortunately, the `tidyverse` doesn't like names, so modelling after the above doesn't quite work:
 
-
-but, though we now have the percentiles, we've lost the names of the variables, so it isn't much better.
-
-In this context, `map` says 
-"do whatever is in the brackets for each column of the data frame". 
-(That's the implied "for each".) The output from `quantile` 
-is a vector that we would like to have display as a data frame, so `map_df` 
-instead of any other form of `map`.
-
-As you know, the `map` family is 
-actually very flexible: they run a function "for each" anything and
-glue the results together, like this:
-
-```{r }
-soc %>% map_dbl(median)
+```{r}
+soc %>% 
+  summarize(across(everything(), list(q = ~quantile(.))))
 ```
 
- 
+You can guess which percentile is which (they have to be in order), but this is not completely satisfactory. A workaround is to get hold of the `names` and add them to the result:
 
-which gets the median for each variable. That's the same thing as this:
-
-```{r }
-soc %>% summarize_all("median")
+```{r}
+soc %>% 
+  summarize(across(everything(), list(q = ~quantile(.)))) %>% 
+  mutate(pct = names(qq))
 ```
-
- 
 
 
 

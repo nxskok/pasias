@@ -63,9 +63,9 @@ within-cluster SS for each number of clusters from 2 to 10.
 Solution
 
  
-When I first made this problem,
+When I first made this problem (some years ago),
 I thought the obvious answer was a loop, but now that I've been
-steeped in the Tidyverse a while, I think `map` is much
+steeped in the Tidyverse a while, I think `rowwise` is much
 clearer, so I'll do that first.
 Start by making a `tibble` that has one column called `clusters` containing the numbers 2 through 10:
 
@@ -74,7 +74,7 @@ tibble(clusters = 2:10)
 ```
 
  
-Now, for each of these numbers of clusters (think `map`), calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
+Now, for each of these numbers of clusters, calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
 
 ```{r }
 kmeans(swiss.s, 3, nstart = 20)$tot.withinss
@@ -82,34 +82,31 @@ kmeans(swiss.s, 3, nstart = 20)$tot.withinss
 
  
 
-and then use that within your `map`, replacing the 3 with a dot:
+and then use that within your `rowwise`:
 ```{r }
 tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(swiss.s, ., nstart = 20)$tot.withinss)) -> wssq
+  rowwise() %>% 
+  mutate(wss = kmeans(swiss.s, clusters, nstart = 20)$tot.withinss) -> wssq
 wssq
 ```
 
  
 
-Another way is to save *all* the output from the `kmeans` and then *extract* the thing you want, thus:
+Another way is to save *all* the output from the `kmeans`, in a list-column, and then *extract* the thing you want, thus:
 ```{r }
 tibble(clusters = 2:10) %>%
-  mutate(km = map(clusters, ~ kmeans(swiss.s, ., nstart = 20))) %>%
-  mutate(wss = map_dbl(km, "tot.withinss")) -> wssq.2
+  rowwise() %>% 
+  mutate(km = list(kmeans(swiss.s, clusters, nstart = 20))) %>%
+  mutate(wss = km$tot.withinss) -> wssq.2
 wssq.2
 ```
 
- 
-The first one here is a `map` since it gets the *whole*
-`kmeans` output; the second one is a `map_dbl` since it
-pulls just one number out of that output. (I somehow got this the
-wrong way around the first time. I think I copied and pasted and
-didn't check that I had changed what I needed to change.)
+The output from `kmeans` is a collection of things, not just a single number, so when you create the column `km`, you need to put `list` around the `kmeans`, and then you'll create a list-column. `wss`, on the other hand, is a single number each time, so no `list` is needed, and `wss` is an ordinary column of numbers, labelled `dbl` at the top. 
 
-We now have an extra list-column containing everything from each
-K-means fit, which means we can extract the output from here for the number of
-clusters we eventually choose, rather than running `kmeans` again.
-If you prefer, do it as a loop, like this:        
+The most important thing in both of these is to remember the `rowwise`. Without it, everything will go horribly wrong! This is because `kmeans` expects a *single number* for the number of clusters, and `rowwise` will provide that single number (for the row you are looking at). If you forget the `rowwise`, the whole column `clusters` will get fed into `kmeans` all at once, and `kmeans` will get horribly confused.
+ 
+ 
+If you insist, do it Python-style as a loop, like this:        
 ```{r }
 clus <- 2:10
 wss.1 <- numeric(0)

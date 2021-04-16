@@ -100,17 +100,17 @@ Solution
 
 Something like this, therefore:
 
-```{r }
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ mean(.)) -> means
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(sample(aircon$hours, replace = TRUE))) %>% 
+  mutate(sample_mean = mean(sample)) -> means
+means
 ```
 
+Forgetting the `rowwise` will cause all sorts of trouble.
 
 
-I often start with `rerun(1000)`, closing the bracket, and then wonder
-why it doesn't work. In the `rerun`, you have to say two things: how
-many times to rerun, and *what* to rerun. So don't close the bracket
-on the `rerun` until you've done that.
 
 
 (d) Make a normal quantile plot of your bootstrap distribution. What do you see? Explain briefly.
@@ -121,7 +121,7 @@ Solution
 This:
 
 ```{r }
-ggplot(tibble(means), aes(sample = means)) + stat_qq() + stat_qq_line()
+ggplot(means, aes(sample = sample_mean)) + stat_qq() + stat_qq_line()
 ```
 
  

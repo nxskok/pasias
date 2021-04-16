@@ -96,8 +96,8 @@ location (which you may have to turn from a number into a factor.)
 
 Solution
 
+Note the use of the different things for `colour` and `group`, as usual for a spaghetti plot. Also, note that the locations are identified by number, but the number is only a label, and we want to use different colours for the different locations, so we need to turn `location` into a factor for this. 
 
-I hope you are thinking "pipeline":
 ```{r toofat}
 airport.long %>%
   mutate(time = parse_number(when)) %>%
@@ -121,6 +121,7 @@ can't see the ones underneath because the ones on top are overwriting
 them. The solution to that is to make the lines (partly) transparent,
 which is controlled by a parameter `alpha`:
 `r tufte::margin_note("This is  different from the 0.05 *alpha*.")`
+
 ```{r skinnier}
 airport.long %>%
   mutate(time = parse_number(when)) %>%
@@ -341,8 +342,7 @@ there to be no pattern over time. So a significant difference shows up
 as an *interaction*, which is messier to interpret than you would
 like. 
 
-Extra: the other way to analyze repeated measures data (that we, well, you, do not look
-at in this course)
+Extra: the other way to analyze repeated measures data 
 `r tufte::margin_note("This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.")` is to treat them as "mixed models", which
 requires a different kind of analysis using the `lme4`
 package. I always forget how these go, and I have to look them up when
@@ -548,15 +548,15 @@ I think I changed everything I needed to.
 There actually *is* still an effect of time. What kind of effect?
 We can look at that by finding epinephrine means at each time. That
 would be easier if we had long format, but I think we can still do
-it. The magic word is `summarize_at` (well, the magic two
-words): 
+it. The magic word is `across`:
 
 ```{r }
 airport %>%
   filter(location == 2) %>%
-  summarize_at(vars(starts_with("epi")), funs(mean))
+  summarize(across(starts_with("epi"), ~mean(.)))
 ```
 
+(in words, "for each column that starts with `epi`, find the mean of it.")
  
 
 The message here is that the mean epinephrine levels at time 2 were
@@ -567,7 +567,7 @@ new airport nearby.
 I want to try this:
 
 ```{r }
-airport %>% group_by(location) %>% nest()
+airport %>% nest_by(location)
 ```
 
  
@@ -579,7 +579,7 @@ then apply it to each of those "nested" data frames.
 
 ```{r }
 epi.means <- function(x) {
-  x %>% summarize_at(vars(starts_with("epi")), funs(mean))
+  x %>% summarize(across(starts_with("epi"), ~mean(.)))
 }
 
 epi.means(airport)
@@ -591,9 +591,9 @@ OK, and then:
 
 ```{r }
 airport %>%
-  group_by(location) %>%
-  nest() %>%
-  mutate(means = map(data, ~ epi.means(.))) %>%
+  nest_by(location) %>%
+  rowwise() %>% 
+  mutate(means = list(epi.means(data))) %>%
   unnest(means)
 ```
 
