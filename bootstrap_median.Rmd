@@ -46,8 +46,10 @@ Solution
 The usual do-it-yourself bootstrap:
 
 ```{r }
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ median(.)) -> medians
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(sample(aircon$hours, replace = TRUE))) %>% 
+  mutate(medians = median(samples)) -> meds
 ```
 
  
@@ -57,7 +59,7 @@ I actually copied and pasted my code from the previous problem, changing `mean` 
 As for a plot, well, this:
 
 ```{r }
-ggplot(tibble(medians), aes(sample = medians)) + stat_qq() + stat_qq_line()
+ggplot(meds, aes(sample = medians)) + stat_qq() + stat_qq_line()
 ```
 
  
@@ -77,7 +79,7 @@ enough bins to show the discreteness, rather than the usual thing of
 having few enough bins to show the shape.)
 
 ```{r }
-ggplot(tibble(medians), aes(x = medians)) + geom_histogram(bins = 30)
+ggplot(meds, aes(x = medians)) + geom_histogram(bins = 30)
 ```
 
  
@@ -91,7 +93,7 @@ Solution
 Also, the usual:
 
 ```{r }
-quantile(medians, c(0.025, 0.975))
+quantile(meds$medians, c(0.025, 0.975))
 ```
 
  
