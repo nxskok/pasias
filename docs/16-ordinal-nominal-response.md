@@ -716,7 +716,7 @@ detach("package:MASS", unload = T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
     
@@ -1346,7 +1346,7 @@ detach("package:MASS", unload = T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
  
@@ -3866,19 +3866,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"          ".conflicts"          "package:conflicted" 
-##  [4] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
-##  [7] "package:rpart"       "package:broom"       "package:ggrepel"    
-## [10] "package:ggbiplot"    "package:grid"        "package:scales"     
-## [13] "package:plyr"        "package:lme4"        "package:Matrix"     
-## [16] "package:car"         "package:carData"     "package:survminer"  
-## [19] "package:ggpubr"      "package:survival"    "package:nnet"       
-## [22] "package:smmr"        "package:forcats"     "package:stringr"    
-## [25] "package:dplyr"       "package:purrr"       "package:readr"      
-## [28] "package:tidyr"       "package:tibble"      "package:ggplot2"    
-## [31] "package:tidyverse"   "package:stats"       "package:graphics"   
-## [34] "package:grDevices"   "package:utils"       "package:datasets"   
-## [37] "package:methods"     "Autoloads"           "package:base"
+##  [1] ".GlobalEnv"          ".conflicts"          "package:leaps"      
+##  [4] "package:conflicted"  "package:PMCMRplus"   "package:rstan"      
+##  [7] "package:StanHeaders" "package:bootstrap"   "package:rpart"      
+## [10] "package:broom"       "package:ggrepel"     "package:ggbiplot"   
+## [13] "package:grid"        "package:scales"      "package:plyr"       
+## [16] "package:lme4"        "package:Matrix"      "package:car"        
+## [19] "package:carData"     "package:survminer"   "package:ggpubr"     
+## [22] "package:survival"    "package:nnet"        "package:smmr"       
+## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
+## [28] "package:purrr"       "package:readr"       "package:tidyr"      
+## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
+## [34] "package:stats"       "package:graphics"    "package:grDevices"  
+## [37] "package:utils"       "package:datasets"    "package:methods"    
+## [40] "Autoloads"           "package:base"
 ```
 
  

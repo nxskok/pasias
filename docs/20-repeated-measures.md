@@ -253,26 +253,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    20 control    Time0     52     0
-##  2    25 control    Time1     91     1
-##  3    27 control    Time3    139     3
-##  4    17 thiouracil Time3    104     3
-##  5    22 control    Time1     81     1
-##  6    14 thiouracil Time2     95     2
-##  7    12 thiouracil Time3    123     3
-##  8    13 thiouracil Time4    119     4
-##  9    18 control    Time2    114     2
-## 10    26 control    Time0     49     0
-## 11    21 control    Time1     67     1
-## 12    25 control    Time2    112     2
-## 13    20 control    Time2    111     2
-## 14    26 control    Time1     67     1
-## 15     5 thyroxin   Time4    144     4
-## 16     7 thyroxin   Time2    105     2
-## 17     1 thyroxin   Time3    156     3
-## 18     9 thiouracil Time4    122     4
-## 19    10 thiouracil Time0     53     0
-## 20    23 control    Time1     70     1
+##  1    12 thiouracil Time0     51     0
+##  2    18 control    Time2    114     2
+##  3    21 control    Time3    129     3
+##  4    13 thiouracil Time3    100     3
+##  5     4 thyroxin   Time2    116     2
+##  6    13 thiouracil Time1     75     1
+##  7    27 control    Time0     57     0
+##  8     3 thyroxin   Time3    151     3
+##  9    23 control    Time2    102     2
+## 10     9 thiouracil Time0     59     0
+## 11    10 thiouracil Time0     53     0
+## 12     4 thyroxin   Time1     85     1
+## 13    16 thiouracil Time4    107     4
+## 14    21 control    Time0     49     0
+## 15     8 thiouracil Time4    129     4
+## 16    17 thiouracil Time1     72     1
+## 17    25 control    Time2    112     2
+## 18     1 thyroxin   Time4    191     4
+## 19     7 thyroxin   Time1     70     1
+## 20     3 thyroxin   Time1     75     1
 ```
 
  
@@ -1377,8 +1377,8 @@ location (which you may have to turn from a number into a factor.)
 
 Solution
 
+Note the use of the different things for `colour` and `group`, as usual for a spaghetti plot. Also, note that the locations are identified by number, but the number is only a label, and we want to use different colours for the different locations, so we need to turn `location` into a factor for this. 
 
-I hope you are thinking "pipeline":
 
 ```r
 airport.long %>%
@@ -1405,6 +1405,7 @@ can't see the ones underneath because the ones on top are overwriting
 them. The solution to that is to make the lines (partly) transparent,
 which is controlled by a parameter `alpha`:
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is  different from the 0.05 *alpha*.</span>
+
 
 ```r
 airport.long %>%
@@ -1675,8 +1676,7 @@ there to be no pattern over time. So a significant difference shows up
 as an *interaction*, which is messier to interpret than you would
 like. 
 
-Extra: the other way to analyze repeated measures data (that we, well, you, do not look
-at in this course)
+Extra: the other way to analyze repeated measures data 
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This is something *I* want to  understand, so I will share my findings with you. You can read them  or not, as you choose.</span> is to treat them as "mixed models", which
 requires a different kind of analysis using the `lme4`
 package. I always forget how these go, and I have to look them up when
@@ -1986,28 +1986,13 @@ I think I changed everything I needed to.
 There actually *is* still an effect of time. What kind of effect?
 We can look at that by finding epinephrine means at each time. That
 would be easier if we had long format, but I think we can still do
-it. The magic word is `summarize_at` (well, the magic two
-words): 
+it. The magic word is `across`:
 
 
 ```r
 airport %>%
   filter(location == 2) %>%
-  summarize_at(vars(starts_with("epi")), funs(mean))
-```
-
-```
-## Warning: `funs()` was deprecated in dplyr 0.8.0.
-## Please use a list of either functions or lambdas: 
-## 
-##   # Simple named list: 
-##   list(mean = mean, median = median)
-## 
-##   # Auto named with `tibble::lst()`: 
-##   tibble::lst(mean, median)
-## 
-##   # Using lambdas
-##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+  summarize(across(starts_with("epi"), ~mean(.)))
 ```
 
 ```
@@ -2017,6 +2002,7 @@ airport %>%
 ## 1  249.  279.  251.  247.
 ```
 
+(in words, "for each column that starts with `epi`, find the mean of it.")
  
 
 The message here is that the mean epinephrine levels at time 2 were
@@ -2028,16 +2014,16 @@ I want to try this:
 
 
 ```r
-airport %>% group_by(location) %>% nest()
+airport %>% nest_by(location)
 ```
 
 ```
 ## # A tibble: 2 x 2
-## # Groups:   location [2]
-##   location data              
-##      <dbl> <list>            
-## 1        1 <tibble [100 × 5]>
-## 2        2 <tibble [100 × 5]>
+## # Rowwise:  location
+##   location           data
+##      <dbl> <list<tibble>>
+## 1        1      [100 × 5]
+## 2        2      [100 × 5]
 ```
 
  
@@ -2050,7 +2036,7 @@ then apply it to each of those "nested" data frames.
 
 ```r
 epi.means <- function(x) {
-  x %>% summarize_at(vars(starts_with("epi")), funs(mean))
+  x %>% summarize(across(starts_with("epi"), ~mean(.)))
 }
 
 epi.means(airport)
@@ -2070,19 +2056,18 @@ OK, and then:
 
 ```r
 airport %>%
-  group_by(location) %>%
-  nest() %>%
-  mutate(means = map(data, ~ epi.means(.))) %>%
+  nest_by(location) %>%
+  rowwise() %>% 
+  mutate(means = list(epi.means(data))) %>%
   unnest(means)
 ```
 
 ```
 ## # A tibble: 2 x 6
-## # Groups:   location [2]
-##   location data               epi_1 epi_2 epi_3 epi_4
-##      <dbl> <list>             <dbl> <dbl> <dbl> <dbl>
-## 1        1 <tibble [100 × 5]>  247.  340.  356.  349.
-## 2        2 <tibble [100 × 5]>  249.  279.  251.  247.
+##   location           data epi_1 epi_2 epi_3 epi_4
+##      <dbl> <list<tibble>> <dbl> <dbl> <dbl> <dbl>
+## 1        1      [100 × 5]  247.  340.  356.  349.
+## 2        2      [100 × 5]  249.  279.  251.  247.
 ```
 
  

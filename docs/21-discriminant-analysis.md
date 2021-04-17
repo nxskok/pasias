@@ -565,26 +565,25 @@ for each row separately. This also should work:
 
 ```r
 d %>%
-  mutate(max.post = map2_dbl(
-    posterior.counterfeit, posterior.genuine, ~ max(.x, .y)
-  )) %>%
+  rowwise() %>% 
+  mutate(max.post = max(posterior.counterfeit, posterior.genuine)) %>%
   filter(max.post < 0.99) %>%
   select(-c(length:diag))
 ```
 
 ```
-##     status       class posterior.counterfeit posterior.genuine        LD1
-## 70 genuine counterfeit             0.9825773        0.01742267 -0.5805239
-##     max.post
-## 70 0.9825773
+## # A tibble: 1 x 6
+## # Rowwise: 
+##   status  class       posterior.counterfeit posterior.genuine    LD1 max.post
+##   <chr>   <fct>                       <dbl>             <dbl>  <dbl>    <dbl>
+## 1 genuine counterfeit                 0.983            0.0174 -0.581    0.983
 ```
 
  
-Because we're using `map`, `max` is applied to the pairs
+Because we're using `rowwise`, `max` is applied to the pairs
 of values of `posterior.counterfeit` and `posterior.genuine`, 
-*taken one at a time.*
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The *map2* is because we are for-eaching over the corresponding values in *counterfeit* and *genuine*. In the *do this*, there can no longer be one *it*; the *.x* and *.y* refer to each of the *counterfeit* and *genuine* values in that order.</span>
- 
+*taken one row at a time.*
+
 
 
 
@@ -1947,26 +1946,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1       9     13           16     3    64 dispatcher
-##  2      21     29           12     2    81 mechanic  
-##  3      18     21           13     2     7 mechanic  
-##  4      13     20           10     2    22 mechanic  
-##  5      16     35           13     1    10 custserv  
-##  6      17     20            8     2    90 mechanic  
-##  7       9     20           12     1    64 custserv  
-##  8      17     21            9     2    10 mechanic  
-##  9      18     28            0     2    83 mechanic  
-## 10       5     25            7     1    29 custserv  
-## 11      24     22           14     2    78 mechanic  
-## 12      16     28           13     2    11 mechanic  
-## 13      16     16           17     3    14 dispatcher
-## 14      15     23            7     2    62 mechanic  
-## 15      13     21           14     1    34 custserv  
-## 16      18     16           15     3    10 dispatcher
-## 17      14     26           15     3    45 dispatcher
-## 18      17     28           13     2    34 mechanic  
-## 19      18     30            9     1    56 custserv  
-## 20      20     14           18     3    62 dispatcher
+##  1      14     19           13     2    14 mechanic  
+##  2      16     19           12     3    52 dispatcher
+##  3      22     24            6     1    54 custserv  
+##  4      11     22           11     1    38 custserv  
+##  5      11     17           20     3    26 dispatcher
+##  6      12     16           10     2    18 mechanic  
+##  7       8     28           12     1    68 custserv  
+##  8      16     22           12     3    63 dispatcher
+##  9      17     18            9     3    56 dispatcher
+## 10      18     23           15     3    54 dispatcher
+## 11      20     25           12     1     6 custserv  
+## 12      15     21            4     1    44 custserv  
+## 13      19     26            7     2    21 mechanic  
+## 14      22     22            6     1    40 custserv  
+## 15      23     20           16     2    63 mechanic  
+## 16      18     24           13     2    30 mechanic  
+## 17       8     18            8     1    36 custserv  
+## 18      10     12            9     3    38 dispatcher
+## 19      17     25            8     1    11 custserv  
+## 20      15     19            9     1    47 custserv
 ```
 
  

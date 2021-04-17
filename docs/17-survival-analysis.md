@@ -2189,52 +2189,26 @@ myeloma %>% summarize(
 ## 1      1.15      1.57    8.8     12
 ```
 
- 
+Next is the tidyverse-approved way to get both quartiles for both variables at once. Use `across` to select the variables to use, and then something with a squiggle and a dot to say "do this on each of the columns selected in the `across`". If you have a cleverer way to select those two columns without naming them, go for it. Read this in English as "for each of the columns `logbun` and `hgb`, work out the first and third quantiles of it", where the dot is read as "it":
 
-There is a `tidyverse` way to obtain the quartiles of
-*all* the columns. It lives in package `purrr`, which gets
-loaded with the `tidyverse`:
 
 ```r
-myeloma %>%
-  select(logbun, hgb) %>%
-  map(quantile, c(0.25, 0.75))
-```
-
-```
-## $logbun
-##    25%    75% 
-## 1.1461 1.5682 
-## 
-## $hgb
-##  25%  75% 
-##  8.8 12.0
-```
-
- 
-
-This is what R calls a `list`. It would look nicer as a data
-frame. There is a way to get that:
-
-```r
-myeloma %>%
-  select(logbun, hgb) %>%
-  map_df(~ quantile(., c(0.25, 0.75)))
+myeloma %>% 
+  summarize(across(c(logbun, hgb), 
+                   ~quantile(., c(0.25, 0.75))))
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `25%` `75%`
-##   <dbl> <dbl>
-## 1  1.15  1.57
-## 2  8.8  12
+##   logbun   hgb
+##    <dbl> <dbl>
+## 1   1.15   8.8
+## 2   1.57  12
 ```
 
+We have lost which quartile is which, but of course the lower one must be Q1 and the higher one Q3 for each variable. 
  
-The `25%` and `75%` have gone missing. They were
-actually the `names` of each of the components of the list,
-which I don't think we easily have access to.
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way, as we  have seen elsewhere, is to use *tidy(quantile)* or *enframe(quantile)*, which  produce a two-column data frame with the percentiles shown.</span>
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">The way, as we  have seen elsewhere, is to use {	t tidy(quantile)} or {	t enframe(quantile)}, which  produce a two-column data frame with the percentiles shown.</span>
     
 
 
@@ -2313,7 +2287,7 @@ This is easier than you think: it's just `ggsurvplot` from `survminer`:
 ggsurvplot(s, conf.int = F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-64-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-63-1.png" width="672"  />
 
      
     
@@ -2812,7 +2786,7 @@ important things like `age`. Here, that could be a boxplot:
 ggplot(ovarian, aes(x = factor(rx), y = age)) + geom_boxplot()
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-73-1.png" width="672"  />
 
  
 
@@ -2854,7 +2828,7 @@ ggcoxdiagnostics(time.1) + geom_smooth()
 ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-75-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-74-1.png" width="672"  />
 
      
 
@@ -3023,7 +2997,7 @@ Thus. The `conf.int=F` means to skip the confidence interval
 ggsurvplot(s, conf.int = F)
 ```
 
-<img src="17-survival-analysis_files/figure-html/unnamed-chunk-80-1.png" width="672"  />
+<img src="17-survival-analysis_files/figure-html/unnamed-chunk-79-1.png" width="672"  />
 
    
 

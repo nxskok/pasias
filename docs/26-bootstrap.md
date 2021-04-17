@@ -162,16 +162,34 @@ Something like this, therefore:
 
 
 ```r
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ mean(.)) -> means
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(sample(aircon$hours, replace = TRUE))) %>% 
+  mutate(sample_mean = mean(sample)) -> means
+means
 ```
 
+```
+## # A tibble: 1,000 x 3
+## # Rowwise: 
+##      sim sample     sample_mean
+##    <int> <list>           <dbl>
+##  1     1 <dbl [12]>        83.2
+##  2     2 <dbl [12]>        52.3
+##  3     3 <dbl [12]>       122. 
+##  4     4 <dbl [12]>        82.3
+##  5     5 <dbl [12]>       115. 
+##  6     6 <dbl [12]>       150. 
+##  7     7 <dbl [12]>       141. 
+##  8     8 <dbl [12]>        69.2
+##  9     9 <dbl [12]>        90  
+## 10    10 <dbl [12]>        69.4
+## # … with 990 more rows
+```
+
+Forgetting the `rowwise` will cause all sorts of trouble.
 
 
-I often start with `rerun(1000)`, closing the bracket, and then wonder
-why it doesn't work. In the `rerun`, you have to say two things: how
-many times to rerun, and *what* to rerun. So don't close the bracket
-on the `rerun` until you've done that.
 
 
 (d) Make a normal quantile plot of your bootstrap distribution. What do you see? Explain briefly.
@@ -183,7 +201,7 @@ This:
 
 
 ```r
-ggplot(tibble(means), aes(sample = means)) + stat_qq() + stat_qq_line()
+ggplot(means, aes(sample = sample_mean)) + stat_qq() + stat_qq_line()
 ```
 
 <img src="26-bootstrap_files/figure-html/unnamed-chunk-11-1.png" width="672"  />
@@ -211,7 +229,7 @@ This is the 2.5 and 97.5 percentiles of the bootstrapped sampling distribution o
 
 
 ```r
-quantile(means, c(0.025, 0.975))
+quantile(means$sample_mean, c(0.025, 0.975))
 ```
 
 ```
@@ -241,7 +259,7 @@ t_star
 ```
 
 ```r
-mean(means) + c(-1, 1) * t_star * sd(means)
+mean(means$sample_mean) + c(-1, 1) * t_star * sd(means$sample_mean)
 ```
 
 ```
@@ -256,8 +274,8 @@ you don't like that, you might prefer something like this:
 
 
 ```r
-mean <- mean(means)
-sd <- sd(means)
+mean <- mean(means$sample_mean)
+sd <- sd(means$sample_mean)
 margin <- t_star * sd
 mean - margin
 ```
@@ -437,8 +455,10 @@ The usual do-it-yourself bootstrap:
 
 
 ```r
-rerun(1000, sample(aircon$hours, replace = T)) %>%
-  map_dbl(~ median(.)) -> medians
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(sample(aircon$hours, replace = TRUE))) %>% 
+  mutate(medians = median(samples)) -> meds
 ```
 
  
@@ -449,7 +469,7 @@ As for a plot, well, this:
 
 
 ```r
-ggplot(tibble(medians), aes(sample = medians)) + stat_qq() + stat_qq_line()
+ggplot(meds, aes(sample = medians)) + stat_qq() + stat_qq_line()
 ```
 
 <img src="26-bootstrap_files/figure-html/unnamed-chunk-20-1.png" width="672"  />
@@ -472,7 +492,7 @@ having few enough bins to show the shape.)
 
 
 ```r
-ggplot(tibble(medians), aes(x = medians)) + geom_histogram(bins = 30)
+ggplot(meds, aes(x = medians)) + geom_histogram(bins = 30)
 ```
 
 <img src="26-bootstrap_files/figure-html/unnamed-chunk-21-1.png" width="672"  />
@@ -489,7 +509,7 @@ Also, the usual:
 
 
 ```r
-quantile(medians, c(0.025, 0.975))
+quantile(meds$medians, c(0.025, 0.975))
 ```
 
 ```

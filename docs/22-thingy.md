@@ -880,21 +880,18 @@ site_pairs
 
  
 Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
-making you think of `map`. Two details: the Bray-Curtis
-distance is a (decimal) number, and we're for-eaching over two things in
-parallel, so `map2_dbl`:
+making you think of `rowwise`:
 
 ```r
 site_pairs %>%
-  mutate(bray_curtis = map2_dbl(
-    site1, site2,
-    ~ braycurtis.spec(seabed.z, .x, .y)
-  )) -> bc
+  rowwise() %>% 
+  mutate(bray_curtis = braycurtis.spec(seabed.z, site1, site2)) -> bc
 bc
 ```
 
 ```
 ## # A tibble: 900 x 3
+## # Rowwise: 
 ##    site1 site2 bray_curtis
 ##    <chr> <chr>       <dbl>
 ##  1 s1    s1          0    
@@ -910,11 +907,7 @@ bc
 ## # … with 890 more rows
 ```
 
- 
-
-Remember that we have two "it"s to iterate over, so they get called
-`.x` and `.y` rather than just `.`, so you can
-tell them apart.
+(you might notice that this takes a noticeable time to run.)
 
 This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
 
@@ -1507,18 +1500,19 @@ dissim("Apple", "Orange", fruit2)
 that running it with column names gives the right answer.
 
 Now, we want to run this function for each of the pairs in
-`combos`. The "for each" is `fruit` and `other`
-in parallel, so it's `map2` rather than `map`. Also, the
-dissimilarity is a whole number each time, so we need
-`map2_int`. So we can do this:
+`combos`. This is `rowwise`, since our function takes only one `fruit` and one `other` fruit at a time, not all of them at once:
+
 
 
 ```r
-combos %>% mutate(dissim = map2_int(fruit, other, dissim, fruit2))
+combos %>% 
+  rowwise() %>% 
+  mutate(dissim = dissim(fruit, other, fruit2))
 ```
 
 ```
 ## # A tibble: 36 x 3
+## # Rowwise: 
 ##    fruit  other      dissim
 ##    <chr>  <chr>       <int>
 ##  1 Apple  Apple           0
@@ -1536,18 +1530,19 @@ combos %>% mutate(dissim = map2_int(fruit, other, dissim, fruit2))
 
  
 
-This would work just as well using `fruit1` rather than
-`fruit`, since we are picking out the columns by name rather
+This would work just as well using `fruit1`, with the column of properties, rather than
+`fruit2`, since we are picking out the columns by name rather
 than number.
 
 To make this into something we can turn into a `dist` object
-later, we need to `spread` the column `other` to make a
+later, we need to pivot-wider the column `other` to make a
 square array:
 
 
 ```r
-combos %>%
-  mutate(dissim = map2_int(fruit, other, dissim, fruit2)) %>%
+combos %>% 
+  rowwise() %>% 
+  mutate(dissim = dissim(fruit, other, fruit2)) %>% 
   pivot_wider(names_from = other, values_from = dissim) -> fruit_spread
 fruit_spread
 ```
@@ -2775,9 +2770,9 @@ within-cluster SS for each number of clusters from 2 to 10.
 Solution
 
  
-When I first made this problem,
+When I first made this problem (some years ago),
 I thought the obvious answer was a loop, but now that I've been
-steeped in the Tidyverse a while, I think `map` is much
+steeped in the Tidyverse a while, I think `rowwise` is much
 clearer, so I'll do that first.
 Start by making a `tibble` that has one column called `clusters` containing the numbers 2 through 10:
 
@@ -2802,7 +2797,7 @@ tibble(clusters = 2:10)
 ```
 
  
-Now, for each of these numbers of clusters (think `map`), calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
+Now, for each of these numbers of clusters, calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
 
 
 ```r
@@ -2815,16 +2810,18 @@ kmeans(swiss.s, 3, nstart = 20)$tot.withinss
 
  
 
-and then use that within your `map`, replacing the 3 with a dot:
+and then use that within your `rowwise`:
 
 ```r
 tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(swiss.s, ., nstart = 20)$tot.withinss)) -> wssq
+  rowwise() %>% 
+  mutate(wss = kmeans(swiss.s, clusters, nstart = 20)$tot.withinss) -> wssq
 wssq
 ```
 
 ```
 ## # A tibble: 9 x 2
+## # Rowwise: 
 ##   clusters   wss
 ##      <int> <dbl>
 ## 1        2  701.
@@ -2840,17 +2837,19 @@ wssq
 
  
 
-Another way is to save *all* the output from the `kmeans` and then *extract* the thing you want, thus:
+Another way is to save *all* the output from the `kmeans`, in a list-column, and then *extract* the thing you want, thus:
 
 ```r
 tibble(clusters = 2:10) %>%
-  mutate(km = map(clusters, ~ kmeans(swiss.s, ., nstart = 20))) %>%
-  mutate(wss = map_dbl(km, "tot.withinss")) -> wssq.2
+  rowwise() %>% 
+  mutate(km = list(kmeans(swiss.s, clusters, nstart = 20))) %>%
+  mutate(wss = km$tot.withinss) -> wssq.2
 wssq.2
 ```
 
 ```
 ## # A tibble: 9 x 3
+## # Rowwise: 
 ##   clusters km         wss
 ##      <int> <list>   <dbl>
 ## 1        2 <kmeans>  701.
@@ -2864,17 +2863,12 @@ wssq.2
 ## 9       10 <kmeans>  313.
 ```
 
- 
-The first one here is a `map` since it gets the *whole*
-`kmeans` output; the second one is a `map_dbl` since it
-pulls just one number out of that output. (I somehow got this the
-wrong way around the first time. I think I copied and pasted and
-didn't check that I had changed what I needed to change.)
+The output from `kmeans` is a collection of things, not just a single number, so when you create the column `km`, you need to put `list` around the `kmeans`, and then you'll create a list-column. `wss`, on the other hand, is a single number each time, so no `list` is needed, and `wss` is an ordinary column of numbers, labelled `dbl` at the top. 
 
-We now have an extra list-column containing everything from each
-K-means fit, which means we can extract the output from here for the number of
-clusters we eventually choose, rather than running `kmeans` again.
-If you prefer, do it as a loop, like this:        
+The most important thing in both of these is to remember the `rowwise`. Without it, everything will go horribly wrong! This is because `kmeans` expects a *single number* for the number of clusters, and `rowwise` will provide that single number (for the row you are looking at). If you forget the `rowwise`, the whole column `clusters` will get fed into `kmeans` all at once, and `kmeans` will get horribly confused.
+ 
+ 
+If you insist, do it Python-style as a loop, like this:        
 
 ```r
 clus <- 2:10
@@ -2916,8 +2910,9 @@ should use?
 Solution
 
 
-The easiest is to use the output from the `map_dbl`,
-which I called `wssq`:
+The easiest is to use the output from the `rowwise`,
+which I called `wssq`, this already being a dataframe:
+
 
 ```r
 ggplot(wssq, aes(x = clusters, y = wss)) + geom_point() + geom_line()
@@ -3004,6 +2999,7 @@ wssq.2
 
 ```
 ## # A tibble: 9 x 3
+## # Rowwise: 
 ##   clusters km         wss
 ##      <int> <list>   <dbl>
 ## 1        2 <kmeans>  701.
@@ -3589,7 +3585,7 @@ do. There are two equally good ways to tackle this part and the next:
 
 * Write a function to calculate the total within-cluster  sum
 of squares (in this part) and somehow use it in the next part,
-eg. via `map_dbl` or a loop, to get the total
+eg. via `rowwise`, to get the total
 within-cluster sum of squares for *each* number of clusters.
 
 * Skip the function-writing part and go directly to a loop in
@@ -3719,19 +3715,20 @@ say, that loops over the `nstart` runs that we're doing for
 so far for `i` clusters, we save it. Or, at least,
 `kmeans` saves it.
 
-Or, using `map_dbl`, which I like better (perhaps because I
-have mastered how it works):
+Or, using `rowwise`, which I like better:
 
 
 ```r
-wwx <- tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, wss, cars.s))
+tibble(clusters = 2:10) %>%
+  rowwise() %>% 
+  mutate(ss = wss(clusters, cars.s)) -> wwx
 wwx
 ```
 
 ```
 ## # A tibble: 9 x 2
-##   clusters   wss
+## # Rowwise: 
+##   clusters    ss
 ##      <int> <dbl>
 ## 1        2  87.3
 ## 2        3  66.1
@@ -3749,21 +3746,25 @@ wwx
 Note that `w` starts at 1, but `wwx` starts at 2. For
 this way, you *have* to define a function first to calculate the
 total within-cluster sum of squares for a given number of clusters. If
-you must, you can define the function within the `map_dbl`,
+you must, you can do the calculation in the `mutate` rather than writing a function, 
 but I find that very confusing to read, so I'd rather define the
-function first, and then use it later. 
+function first, and then use it later.  (The principle is to keep the `mutate` simple, and put the complexity in the function where it belongs.)
 
-This one is just about simple enough to define the function within the `map_dbl`:
+As I say, if you *must*:
 
 
 ```r
-wwx <- tibble(clusters = 2:10) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(cars.s, ., nstart = 20)$tot.withinss))
+tibble(clusters = 2:10) %>%
+  rowwise() %>% 
+  mutate(wss = kmeans(cars.s, 
+                      clusters, 
+                      nstart = 20)$tot.withinss) -> wwx
 wwx
 ```
 
 ```
 ## # A tibble: 9 x 2
+## # Rowwise: 
 ##   clusters   wss
 ##      <int> <dbl>
 ## 1        2  87.3
@@ -3779,16 +3780,10 @@ wwx
 
 
 
-Instead of having a function name as the second thing in the
-`map_dbl`, I have a so-called "one-sided model formula" that
-begins with a squiggle, and then the definition of what I want. The
-for-each part finds its way into here as a dot (the number of
-clusters, here); this is the equivalent of the `i` in the loop.
 
 The upshot of all of this is that if you had obtained a total
 within-cluster sum of squares for each number of clusters,
-*somehow*, and it's correct, you should have gotten the
-points
+*somehow*, and it's correct, you should have gotten some credit
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">When this was a question to hand in, which it is not any  more.</span> for this part and the last part. This is a common principle
 of mine, and works on exams as well as assignments; it goes back to
 the idea of "get the job done" that you first saw in C32.
@@ -3864,7 +3859,7 @@ This gives a warning because there is no 1-cluster `w`-value,
 but the point is properly omitted from the plot, so the plot you get
 is fine.
 
-Or plot the output from `map_dbl`, which is easier since it's
+Or plot the output from `rowwise`, which is easier since it's
 already a data frame:
 
 
@@ -4417,38 +4412,57 @@ There's nothing special about 3; any number will do.
 
 The second stage is to run this for each desired number of
 clusters, without using a loop. 
-This uses a family of functions whose
-names start with `map`. To figure out which one to
-use, take a look at your line of code above: ours returns a single number, a
-`double` in the jargon (decimal number), so the `map`
-function we need is called `map_dbl`, and it goes like
-this. You can do it inside or outside a data frame, but I prefer to do
-it inside with a `mutate`:
+There are two parts to this, in my favoured way of doing it. First, write a function that will get the total within-group sum of squares for any K-means analysis for any number of clusters (input) for any dataframe (also input):
 
 
 ```r
-tibble(clusters = 2:maxclust) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(decathlon, .,
-    nstart = 20
-  )$tot.withinss)) -> ww
-ww
+twss <- function(i, d) {
+  ans <- kmeans(d, i, nstart = 20)
+  ans$tot.withinss
+}
+```
+
+The value of doing it this way is that you only ever have to write this function once, and you can use it for any K-means analysis you ever do afterwards. Or, copy this one and use it yourself.
+
+Let's make sure it works:
+
+
+```r
+twss(3, decathlon)
+```
+
+```
+## [1] 151.0875
+```
+
+Check. 
+
+Second, use `rowwise` to work out the total within-group sum of squares for a variety of numbers of clusters. What you use depends on how much data you have, and therefore how many clusters you think it would be able to support (a smallish fraction of the total number of observations). I went from 2 to 20 before, so I'll do that again:
+
+
+```r
+tibble(clusters = 2:20) %>% 
+  rowwise() %>% 
+  mutate(wss = twss(clusters, decathlon)) -> wsss
+wsss
 ```
 
 ```
 ## # A tibble: 19 x 2
+## # Rowwise: 
 ##    clusters   wss
 ##       <int> <dbl>
 ##  1        2 175. 
 ##  2        3 151. 
 ##  3        4 131. 
 ##  4        5 114. 
-##  5        6 103. 
-##  6        7  89.6
+##  5        6 100. 
+##  6        7  89.5
 ##  7        8  78.9
 ##  8        9  69.0
 ##  9       10  60.8
 ## 10       11  54.1
-## 11       12  47.8
+## 11       12  47.6
 ## 12       13  41.4
 ## 13       14  35.4
 ## 14       15  29.5
@@ -4459,254 +4473,15 @@ ww
 ## 19       20  10.4
 ```
 
- 
-
-I have to say that I got this right the first time, but I think I
-benefitted greatly in that regard by writing out that explanation for
-you first. `wss` in `ww` has the same values as
-`w`, but without the missing one.
+This got a name that was `wss` with an extra `s`. Sometimes my imagination runs out. 
 
 There was (still is) also a function `sapply` that does the
-same thing, but the `map` functions work more uniformly. I
+same thing.
+I
 learned `sapply` and friends a long time ago, and now, with the
-arrival of purrr, I think I need to unlearn them.
+arrival of `rowwise`, I think I need to unlearn them.
 
-If the thing in the "for each" slot of a `map` is a data
-frame (or if you pipe a data frame into it), then the function is
-applied to every column of that data frame, so that if I go back to
-`decathlon0`, which was a data frame, and do this:
-
-
-
- 
-
-
-```r
-decathlon0 %>% select(-name) -> decathlon.tmp
-decathlon.tmp %>% map_dbl(~ mean(.))
-```
-
-```
-##      x100m  long.jump   shot.put  high.jump      x400m     x110mh 
-##  10.977083   7.339167  14.209583   1.997500  48.960000  14.512500 
-##     discus pole.vault    javelin     x1500m 
-##  44.288333   4.904167  62.069583 273.306667
-```
-
- 
-
-then what I get is the mean of each (numeric) column. I first get rid
-of the name column, and save the result in a new temporary data frame
-`decathlon.tmp`;
-the `name` column would be a
-pretty silly thing to take the mean of.
-
-I wrote this out a couple of years ago, and realize that I no longer
-like doing things this way; what I prefer is `summarize_at` or
-`summarize_if` or 
-`summarize_all`. These work in much
-the same way as a `map`, dot and all. The last one is easiest:
-
-
-```r
-decathlon0 %>%
-  select(-name) %>%
-  summarize_all(~ mean(.))
-```
-
-```
-## # A tibble: 1 x 10
-##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
-##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
-## 1  11.0      7.34     14.2      2.00  49.0   14.5   44.3       4.90
-## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
-```
-
- 
-
-That is, "for each column, find the mean of it". 
-
-The `_if` variant uses only those columns that have a property
-like being numeric (so that these are the only columns for which
-finding the mean makes sense):
-
-
-```r
-decathlon0 %>%
-  summarize_if(is.numeric, ~ mean(.))
-```
-
-```
-## # A tibble: 1 x 10
-##   x100m long.jump shot.put high.jump x400m x110mh discus pole.vault
-##   <dbl>     <dbl>    <dbl>     <dbl> <dbl>  <dbl>  <dbl>      <dbl>
-## 1  11.0      7.34     14.2      2.00  49.0   14.5   44.3       4.90
-## # … with 2 more variables: javelin <dbl>, x1500m <dbl>
-```
-
- 
-
-In words, "for each column that is numeric, find the mean of it". 
-This way, we no longer have to explicitly remove the names.
-
-The `_at` variant only uses the columns whose *names*
-satisfy some property, like beginning with `x`:
-
-
-```r
-decathlon0 %>%
-  summarize_at(vars(starts_with("x")), ~ mean(.))
-```
-
-```
-## # A tibble: 1 x 4
-##   x100m x400m x110mh x1500m
-##   <dbl> <dbl>  <dbl>  <dbl>
-## 1  11.0  49.0   14.5   273.
-```
-
- 
-
-In words, "for each variable whose name starts with `x`, find the mean of it."
-Now, what happens, I hear you asking, if the function returns more than one
-thing, like for example `quantile`, which returns a vector
-containing the five-number summary? Well, then you use `map_df`
-and you get this:
-
-```r
-decathlon.tmp %>% map_df(~ quantile(.))
-```
-
-```
-## # A tibble: 10 x 5
-##      `0%`  `25%`  `50%`  `75%` `100%`
-##     <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1  10.4   10.8   11.0   11.2   11.4 
-##  2   6.62   7.21   7.37   7.52   7.85
-##  3  13.2   13.8   14.2   14.6   15.9 
-##  4   1.87   1.96   1.99   2.05   2.14
-##  5  46.0   48.3   48.7   49.7   51.2 
-##  6  13.7   14.2   14.4   14.7   15.3 
-##  7  38.1   42.5   44.6   45.9   48.7 
-##  8   4.5    4.68   4.9    5.1    5.4 
-##  9  50.7   58.8   62.4   65.8   69.4 
-## 10 260.   266.   275.   278.   288.
-```
-
- 
-
-The idea is that `quantile` returns something that can be
-treated as a one-column data frame, and `map_df` says
-"`quantile` returns a data frame rather than just a number."
-The only downside is that `quantile` actually (for each
-variable) returns a vector with a name attribute (the names of the
-five percentiles that were calculated), and the `tidyverse`
-treats those like row names and discards them.
-
-Another way that might work (and might keep the quantiles) is
-
-
-```r
-decathlon.tmp %>%
-  map_df(~ enframe(quantile(.)))
-```
-
-```
-## # A tibble: 50 x 2
-##    name  value
-##    <chr> <dbl>
-##  1 0%    10.4 
-##  2 25%   10.8 
-##  3 50%   11.0 
-##  4 75%   11.2 
-##  5 100%  11.4 
-##  6 0%     6.62
-##  7 25%    7.21
-##  8 50%    7.37
-##  9 75%    7.52
-## 10 100%   7.85
-## # … with 40 more rows
-```
-
- 
-This keeps the quantiles, but loses the variable names!
-
-All right, let's make the data frame long before taking quantiles,
-since the Tidyverse likes that kind of thing better anyway. This is
-the same kind of idea that you might have seen for plotting the
-residuals against *all* the $x$-variables in a multiple regression:
-
-
-```r
-decathlon.tmp %>%
-  pivot_longer(everything(), names_to="event", values_to="performance") %>%
-  nest(-event) %>%
-  mutate(quantile = map(data, ~ enframe(quantile(.$performance),
-    name = "quantile",
-    value = "perf"
-  ))) %>%
-  unnest(quantile) -> quantiles.long
-```
-
-```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(performance)`?
-```
-
-```r
-quantiles.long
-```
-
-```
-## # A tibble: 50 x 4
-##    event     data              quantile  perf
-##    <chr>     <list>            <chr>    <dbl>
-##  1 x100m     <tibble [24 × 1]> 0%       10.4 
-##  2 x100m     <tibble [24 × 1]> 25%      10.8 
-##  3 x100m     <tibble [24 × 1]> 50%      11.0 
-##  4 x100m     <tibble [24 × 1]> 75%      11.2 
-##  5 x100m     <tibble [24 × 1]> 100%     11.4 
-##  6 long.jump <tibble [24 × 1]> 0%        6.62
-##  7 long.jump <tibble [24 × 1]> 25%       7.21
-##  8 long.jump <tibble [24 × 1]> 50%       7.37
-##  9 long.jump <tibble [24 × 1]> 75%       7.52
-## 10 long.jump <tibble [24 × 1]> 100%      7.85
-## # … with 40 more rows
-```
-
- 
-
-To follow this, run it one line at a time. The `nest(-event)`
-line creates a two-column data frame that contains a column called
-`event` and a second column `data` that contains
-everything else (just `performance` in this case). Then the big `mutate` line says "for each data frame in `data`, calculate the quantiles of the performance column in it, giving names to the columns of the output". 
-This produces a second list-column called `quantile`, which I
-then `unnest` to display all the quantiles for each event.
-
-Almost there. Now we have both the events and the quantiles, but it would be nice to put the quantiles in columns. Which seems to be `pivot_wider`:
-
-
-```r
-quantiles.long %>% pivot_wider(names_from=quantile, values_from=perf)
-```
-
-```
-## # A tibble: 10 x 7
-##    event      data                `0%`  `25%`  `50%`  `75%` `100%`
-##    <chr>      <list>             <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-##  1 x100m      <tibble [24 × 1]>  10.4   10.8   11.0   11.2   11.4 
-##  2 long.jump  <tibble [24 × 1]>   6.62   7.21   7.37   7.52   7.85
-##  3 shot.put   <tibble [24 × 1]>  13.2   13.8   14.2   14.6   15.9 
-##  4 high.jump  <tibble [24 × 1]>   1.87   1.96   1.99   2.05   2.14
-##  5 x400m      <tibble [24 × 1]>  46.0   48.3   48.7   49.7   51.2 
-##  6 x110mh     <tibble [24 × 1]>  13.7   14.2   14.4   14.7   15.3 
-##  7 discus     <tibble [24 × 1]>  38.1   42.5   44.6   45.9   48.7 
-##  8 pole.vault <tibble [24 × 1]>   4.5    4.68   4.9    5.1    5.4 
-##  9 javelin    <tibble [24 × 1]>  50.7   58.8   62.4   65.8   69.4 
-## 10 x1500m     <tibble [24 × 1]> 260.   266.   275.   278.   288.
-```
-
-and that looks nice.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">I wrote that a few years ago, and you may be pleased to learn that I have indeed completely forgotten about apply, sapply, lapply and all the others. I remember struggling through them when I first learned R, but you are in the happy position of never having to worry about them.</span>
 
 Extra: I made a post on Twitter, [link](https://twitter.com/KenButler12/status/1100133496637542401). 
 To which Malcolm Barrett replied with this: [link](https://twitter.com/malco_barrett/status/1100141130186780672) 
@@ -4717,7 +4492,7 @@ So now you know all about the Four Noble R Truths.
 
 
 (d) Using what you calculated in the previous part, draw a scree
-plot. (You may have to create a data frame first.) How does your
+plot. How does your
 scree plot tell you that 5 is a possible number of clusters? Explain
 briefly.
 
@@ -4754,13 +4529,13 @@ within-cluster sum of squares for 1 cluster, which you knew already.
 Or you can save the data frame first and then feed it into
 `ggplot`. 
 
-If you went the `map` way, you will have the `wss`
+If you went the `rowwise` way, you will have the `wss`
 values for 2 through 20 clusters already in a data
 frame, so it is a fair bit simpler:
 
 
 ```r
-ww %>%
+wsss %>%
   ggplot(aes(x = clusters, y = wss)) +
   geom_point() + geom_line()
 ```
@@ -4798,7 +4573,7 @@ find that cluster 1 has changed identity since the last time you
 knitted it. (I just remembered that for these solutions.)
 
 Running the `kmeans` itself is a piece of cake, since you have
-done it a bunch of times already (in your loop or `map`):
+done it a bunch of times already (in your loop or `rowwise`):
 
 ```r
 decathlon.1 <- kmeans(decathlon, 5, nstart = 20)
@@ -4809,18 +4584,18 @@ decathlon.1
 ## K-means clustering with 5 clusters of sizes 4, 8, 5, 6, 1
 ## 
 ## Cluster means:
-##         x100m   long.jump   shot.put     high.jump      x400m
-## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
-## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-##       x110mh     discus  pole.vault     javelin     x1500m
-## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
-## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+##         x100m   long.jump   shot.put     high.jump      x400m     x110mh     discus
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512  1.6631161 -0.2159787
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434 -0.3097414  0.6739749
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370 -0.3582955 -1.0406594
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857 -0.5934385  0.2274805
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413  1.1775755 -0.6894704
+##    pole.vault     javelin     x1500m
+## 1 -0.76236268  0.28321676  1.3477946
+## 2 -0.10890895 -0.49565010  0.3441300
+## 3  1.17932839  0.06548297 -0.1670467
+## 4 -0.07779211  0.65707285 -0.9136808
+## 5 -1.50916693 -1.43751822 -1.8269002
 ## 
 ## Clustering vector:
 ##  [1] 4 4 2 4 4 2 2 3 2 4 3 2 1 4 3 2 1 3 2 1 3 2 5 1
@@ -4831,9 +4606,8 @@ decathlon.1
 ## 
 ## Available components:
 ## 
-## [1] "cluster"      "centers"      "totss"        "withinss"    
-## [5] "tot.withinss" "betweenss"    "size"         "iter"        
-## [9] "ifault"
+## [1] "cluster"      "centers"      "totss"        "withinss"     "tot.withinss"
+## [6] "betweenss"    "size"         "iter"         "ifault"
 ```
 
    
@@ -4908,18 +4682,18 @@ decathlon.1$centers
 ```
 
 ```
-##         x100m   long.jump   shot.put     high.jump      x400m
-## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
-## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-##       x110mh     discus  pole.vault     javelin     x1500m
-## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
-## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+##         x100m   long.jump   shot.put     high.jump      x400m     x110mh     discus
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512  1.6631161 -0.2159787
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434 -0.3097414  0.6739749
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370 -0.3582955 -1.0406594
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857 -0.5934385  0.2274805
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413  1.1775755 -0.6894704
+##    pole.vault     javelin     x1500m
+## 1 -0.76236268  0.28321676  1.3477946
+## 2 -0.10890895 -0.49565010  0.3441300
+## 3  1.17932839  0.06548297 -0.1670467
+## 4 -0.07779211  0.65707285 -0.9136808
+## 5 -1.50916693 -1.43751822 -1.8269002
 ```
 
    
@@ -4995,18 +4769,18 @@ decathlon.1$centers
 ```
 
 ```
-##         x100m   long.jump   shot.put     high.jump      x400m
-## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512
-## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434
-## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370
-## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857
-## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413
-##       x110mh     discus  pole.vault     javelin     x1500m
-## 1  1.6631161 -0.2159787 -0.76236268  0.28321676  1.3477946
-## 2 -0.3097414  0.6739749 -0.10890895 -0.49565010  0.3441300
-## 3 -0.3582955 -1.0406594  1.17932839  0.06548297 -0.1670467
-## 4 -0.5934385  0.2274805 -0.07779211  0.65707285 -0.9136808
-## 5  1.1775755 -0.6894704 -1.50916693 -1.43751822 -1.8269002
+##         x100m   long.jump   shot.put     high.jump      x400m     x110mh     discus
+## 1  0.75760985 -0.53619092 -0.7922550 -1.554312e-15  1.5180512  1.6631161 -0.2159787
+## 2 -0.02051555  0.02245134  0.9034011  2.644188e-01 -0.0589434 -0.3097414  0.6739749
+## 3  0.28457995  0.07871177 -0.8288519  2.326886e-01 -0.1588370 -0.3582955 -1.0406594
+## 4 -0.97448850  0.64184430 -0.1484207 -2.467909e-01 -1.0216857 -0.5934385  0.2274805
+## 5  1.55771620 -2.27947172  0.9765949 -1.798048e+00  1.3236413  1.1775755 -0.6894704
+##    pole.vault     javelin     x1500m
+## 1 -0.76236268  0.28321676  1.3477946
+## 2 -0.10890895 -0.49565010  0.3441300
+## 3  1.17932839  0.06548297 -0.1670467
+## 4 -0.07779211  0.65707285 -0.9136808
+## 5 -1.50916693 -1.43751822 -1.8269002
 ```
 
  
@@ -5030,39 +4804,28 @@ cor(decathlon)
 ```
 
 ```
-##                  x100m   long.jump    shot.put   high.jump
-## x100m       1.00000000 -0.61351932 -0.17373396 -0.03703619
-## long.jump  -0.61351932  1.00000000  0.08369570  0.46379852
-## shot.put   -0.17373396  0.08369570  1.00000000  0.02012049
-## high.jump  -0.03703619  0.46379852  0.02012049  1.00000000
-## x400m       0.78909124 -0.54819716 -0.17251605  0.01521720
-## x110mh      0.67372152 -0.39484085 -0.28310469 -0.08356323
-## discus     -0.14989960  0.12891051  0.46449586 -0.11770266
-## pole.vault -0.12087966  0.21976890 -0.19328449  0.13565269
-## javelin     0.02363715  0.01969302 -0.11313467 -0.12454417
-## x1500m      0.14913949 -0.11672283 -0.06156793  0.27779220
-##                   x400m      x110mh      discus  pole.vault
-## x100m       0.789091241  0.67372152 -0.14989960 -0.12087966
-## long.jump  -0.548197160 -0.39484085  0.12891051  0.21976890
-## shot.put   -0.172516054 -0.28310469  0.46449586 -0.19328449
-## high.jump   0.015217204 -0.08356323 -0.11770266  0.13565269
-## x400m       1.000000000  0.80285420 -0.06877820 -0.36182359
-## x110mh      0.802854203  1.00000000 -0.13777771 -0.51871733
-## discus     -0.068778203 -0.13777771  1.00000000 -0.10045072
-## pole.vault -0.361823592 -0.51871733 -0.10045072  1.00000000
-## javelin    -0.005823468 -0.05246857  0.02097743  0.05237715
-## x1500m      0.446949386  0.39800522  0.01989086 -0.05988836
-##                 javelin       x1500m
-## x100m       0.023637150  0.149139491
-## long.jump   0.019693022 -0.116722829
-## shot.put   -0.113134672 -0.061567926
-## high.jump  -0.124544175  0.277792195
-## x400m      -0.005823468  0.446949386
-## x110mh     -0.052468568  0.398005215
-## discus      0.020977427  0.019890861
-## pole.vault  0.052377148 -0.059888360
-## javelin     1.000000000 -0.008858031
-## x1500m     -0.008858031  1.000000000
+##                  x100m   long.jump    shot.put   high.jump        x400m      x110mh
+## x100m       1.00000000 -0.61351932 -0.17373396 -0.03703619  0.789091241  0.67372152
+## long.jump  -0.61351932  1.00000000  0.08369570  0.46379852 -0.548197160 -0.39484085
+## shot.put   -0.17373396  0.08369570  1.00000000  0.02012049 -0.172516054 -0.28310469
+## high.jump  -0.03703619  0.46379852  0.02012049  1.00000000  0.015217204 -0.08356323
+## x400m       0.78909124 -0.54819716 -0.17251605  0.01521720  1.000000000  0.80285420
+## x110mh      0.67372152 -0.39484085 -0.28310469 -0.08356323  0.802854203  1.00000000
+## discus     -0.14989960  0.12891051  0.46449586 -0.11770266 -0.068778203 -0.13777771
+## pole.vault -0.12087966  0.21976890 -0.19328449  0.13565269 -0.361823592 -0.51871733
+## javelin     0.02363715  0.01969302 -0.11313467 -0.12454417 -0.005823468 -0.05246857
+## x1500m      0.14913949 -0.11672283 -0.06156793  0.27779220  0.446949386  0.39800522
+##                 discus  pole.vault      javelin       x1500m
+## x100m      -0.14989960 -0.12087966  0.023637150  0.149139491
+## long.jump   0.12891051  0.21976890  0.019693022 -0.116722829
+## shot.put    0.46449586 -0.19328449 -0.113134672 -0.061567926
+## high.jump  -0.11770266  0.13565269 -0.124544175  0.277792195
+## x400m      -0.06877820 -0.36182359 -0.005823468  0.446949386
+## x110mh     -0.13777771 -0.51871733 -0.052468568  0.398005215
+## discus      1.00000000 -0.10045072  0.020977427  0.019890861
+## pole.vault -0.10045072  1.00000000  0.052377148 -0.059888360
+## javelin     0.02097743  0.05237715  1.000000000 -0.008858031
+## x1500m      0.01989086 -0.05988836 -0.008858031  1.000000000
 ```
 
  
@@ -5252,7 +5015,7 @@ bridges0 <- read_csv(my_url, na = "?")
 
 ```
 ## 
-## ── Column specification ──────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_character(),
 ##   river = col_character(),
@@ -5276,20 +5039,19 @@ bridges0
 
 ```
 ## # A tibble: 108 x 13
-##    id    river location erected purpose  length lanes clear_g t_d    
-##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
-##  1 E1    M            3 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH
-##  2 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  3 E3    A           39 CRAFTS  AQUEDUCT <NA>       1 N       THROUGH
-##  4 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  5 E6    M           23 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH
-##  6 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
-##  7 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
-##  8 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  9 E10   A           39 CRAFTS  AQUEDUCT <NA>       1 N       DECK   
-## 10 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-## # … with 98 more rows, and 4 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>
+##    id    river location erected purpose  length lanes clear_g t_d     material span  rel_l
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>   <chr>    <chr> <chr>
+##  1 E1    M            3 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH WOOD     SHORT S    
+##  2 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  3 E3    A           39 CRAFTS  AQUEDUCT <NA>       1 N       THROUGH WOOD     <NA>  S    
+##  4 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  5 E6    M           23 CRAFTS  HIGHWAY  <NA>       2 N       THROUGH WOOD     <NA>  S    
+##  6 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH WOOD     MEDI… S    
+##  7 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH IRON     SHORT S    
+##  8 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH IRON     SHORT S    
+##  9 E10   A           39 CRAFTS  AQUEDUCT <NA>       1 N       DECK    WOOD     <NA>  S    
+## 10 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+## # … with 98 more rows, and 1 more variable: type <chr>
 ```
 
  
@@ -5323,30 +5085,22 @@ bridges0 %>%
 ```
 
 ```
-##        id      river     location         erected       purpose  
-##  E1     :  1   A:49   Min.   : 1.00   CRAFTS  :18   AQUEDUCT: 4  
-##  E10    :  1   M:41   1st Qu.:15.50   EMERGING:15   HIGHWAY :71  
-##  E100   :  1   O:15   Median :27.00   MATURE  :54   RR      :32  
-##  E101   :  1   Y: 3   Mean   :25.98   MODERN  :21   WALK    : 1  
-##  E102   :  1          3rd Qu.:37.50                              
-##  E103   :  1          Max.   :52.00                              
-##  (Other):102          NA's   :1                                  
-##     length       lanes      clear_g        t_d      material 
-##  LONG  :21   Min.   :1.00   G   :80   DECK   :15   IRON :11  
-##  MEDIUM:48   1st Qu.:2.00   N   :26   THROUGH:87   STEEL:79  
-##  SHORT :12   Median :2.00   NA's: 2   NA's   : 6   WOOD :16  
-##  NA's  :27   Mean   :2.63                          NA's : 2  
-##              3rd Qu.:4.00                                    
-##              Max.   :6.00                                    
-##              NA's   :16                                      
-##      span     rel_l          type   
-##  LONG  :30   F   :58   SIMPLE-T:44  
-##  MEDIUM:53   S   :30   WOOD    :16  
-##  SHORT : 9   S-F :15   ARCH    :13  
-##  NA's  :16   NA's: 5   CANTILEV:11  
-##                        SUSPEN  :11  
-##                        (Other) :11  
-##                        NA's    : 2
+##        id      river     location         erected       purpose      length  
+##  E1     :  1   A:49   Min.   : 1.00   CRAFTS  :18   AQUEDUCT: 4   LONG  :21  
+##  E10    :  1   M:41   1st Qu.:15.50   EMERGING:15   HIGHWAY :71   MEDIUM:48  
+##  E100   :  1   O:15   Median :27.00   MATURE  :54   RR      :32   SHORT :12  
+##  E101   :  1   Y: 3   Mean   :25.98   MODERN  :21   WALK    : 1   NA's  :27  
+##  E102   :  1          3rd Qu.:37.50                                          
+##  E103   :  1          Max.   :52.00                                          
+##  (Other):102          NA's   :1                                              
+##      lanes      clear_g        t_d      material      span     rel_l          type   
+##  Min.   :1.00   G   :80   DECK   :15   IRON :11   LONG  :30   F   :58   SIMPLE-T:44  
+##  1st Qu.:2.00   N   :26   THROUGH:87   STEEL:79   MEDIUM:53   S   :30   WOOD    :16  
+##  Median :2.00   NA's: 2   NA's   : 6   WOOD :16   SHORT : 9   S-F :15   ARCH    :13  
+##  Mean   :2.63                          NA's : 2   NA's  :16   NA's: 5   CANTILEV:11  
+##  3rd Qu.:4.00                                                           SUSPEN  :11  
+##  Max.   :6.00                                                           (Other) :11  
+##  NA's   :16                                                             NA's    : 2
 ```
 
    
@@ -5389,20 +5143,19 @@ bridges
 
 ```
 ## # A tibble: 70 x 13
-##    id    river location erected purpose  length lanes clear_g t_d    
-##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
-##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
-##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
-##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH
-## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-## # … with 60 more rows, and 4 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>
+##    id    river location erected purpose  length lanes clear_g t_d     material span  rel_l
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>   <chr>    <chr> <chr>
+##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH WOOD     MEDI… S    
+##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH IRON     SHORT S    
+##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH IRON     SHORT S    
+##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH IRON     MEDI… S-F  
+##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH IRON     SHORT S    
+## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+## # … with 60 more rows, and 1 more variable: type <chr>
 ```
 
      
@@ -5584,14 +5337,14 @@ bridges %>% slice(c(3, 4)) %>% print(width = Inf)
 
 ```
 ## # A tibble: 2 x 13
-##   id    river location erected purpose  length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
-## 1 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
-## 2 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
-##   material span   rel_l type  
-##   <chr>    <chr>  <chr> <chr> 
-## 1 WOOD     MEDIUM S     WOOD  
-## 2 IRON     SHORT  S     SUSPEN
+##   id    river location erected purpose  length lanes clear_g t_d     material span   rel_l
+##   <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>   <chr>    <chr>  <chr>
+## 1 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH WOOD     MEDIUM S    
+## 2 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH IRON     SHORT  S    
+##   type  
+##   <chr> 
+## 1 WOOD  
+## 2 SUSPEN
 ```
 
  
@@ -5630,7 +5383,7 @@ tested it with.
 
 (f) Create a matrix or data frame of pairwise dissimilarities
 between each pair of bridges (using only the ones with no missing
-values). Use loops, or `crossing` and `map2_int`, as
+values). Use loops, or `crossing` and `rowwise`, as
 you prefer. Display the first six rows of
 your matrix (using `head`) or the first few rows of your data
 frame. (The whole thing is big, so don't display it all.)
@@ -5646,20 +5399,19 @@ bridges
 
 ```
 ## # A tibble: 70 x 13
-##    id    river location erected purpose  length lanes clear_g t_d    
-##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>  
-##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH
-##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH
-##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH
-## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH
-## # … with 60 more rows, and 4 more variables: material <chr>,
-## #   span <chr>, rel_l <chr>, type <chr>
+##    id    river location erected purpose  length lanes clear_g t_d     material span  rel_l
+##    <chr> <chr>    <dbl> <chr>   <chr>    <chr>  <dbl> <chr>   <chr>   <chr>    <chr> <chr>
+##  1 E2    A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  2 E5    A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     SHORT S    
+##  3 E7    A           27 CRAFTS  HIGHWAY  SHORT      2 N       THROUGH WOOD     MEDI… S    
+##  4 E8    A           28 CRAFTS  AQUEDUCT MEDIUM     1 N       THROUGH IRON     SHORT S    
+##  5 E9    M            3 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH IRON     SHORT S    
+##  6 E11   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+##  7 E14   M            6 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+##  8 E16   A           25 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH IRON     MEDI… S-F  
+##  9 E18   A           28 CRAFTS  RR       MEDIUM     2 N       THROUGH IRON     SHORT S    
+## 10 E19   A           29 CRAFTS  HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+## # … with 60 more rows, and 1 more variable: type <chr>
 ```
 
      
@@ -5687,55 +5439,41 @@ head(m)
 ```
 
 ```
-##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-## [1,]    0    0    2    4    3    1    2    4    3     1     2     3
-## [2,]    0    0    2    4    3    1    2    4    3     1     2     3
-## [3,]    2    2    0    6    5    1    2    4    5     1     2     5
-## [4,]    4    4    6    0    3    5    6    4    3     5     6     6
-## [5,]    3    3    5    3    0    4    3    3    3     4     5     6
-## [6,]    1    1    1    5    4    0    1    3    4     0     1     4
-##      [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22]
-## [1,]     7     6     7     9     6     7     3     8     7     9
-## [2,]     7     6     7     9     6     7     3     8     7     9
-## [3,]     7     6     7     9     6     7     5     8     8     9
-## [4,]     8     8     8    10     8     8     3    10     9    10
-## [5,]     6     5     6     9     7     6     6     7     6    10
-## [6,]     6     5     6     9     5     6     4     8     7     9
-##      [,23] [,24] [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32]
-## [1,]     8     6     7     6     7     7     8     8     9     6
-## [2,]     8     6     7     6     7     7     8     8     9     6
-## [3,]     7     6     6     6     7     6     8     8     7     7
-## [4,]     9     8     9     8     8     8     9     9     9     8
-## [5,]     7     7     8     7     6     8     7     7    10     7
-## [6,]     7     5     6     5     6     6     7     7     8     6
-##      [,33] [,34] [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42]
-## [1,]     8     7     9     7     8     8     8     7     8     8
-## [2,]     8     7     9     7     8     8     8     7     8     8
-## [3,]     9     8     9     8     8     7     6     6     6     6
-## [4,]     9     9    10     8     9     9     9     8     8     8
-## [5,]     8     7     9     8     9     9     9     8     8     8
-## [6,]     8     7     9     7     8     7     7     6     7     7
-##      [,43] [,44] [,45] [,46] [,47] [,48] [,49] [,50] [,51] [,52]
-## [1,]     7     9     8     9     9     8     7     8     7     8
-## [2,]     7     9     8     9     9     8     7     8     7     8
-## [3,]     8     8     9     8     8     6     6     9     8     9
-## [4,]     9    10     9    10    11     8     9     9     8     8
-## [5,]     7     8     7    10     8     8     6     8     7     6
-## [6,]     7     8     8     8     8     7     6     8     7     8
-##      [,53] [,54] [,55] [,56] [,57] [,58] [,59] [,60] [,61] [,62]
-## [1,]     8     8     8     8     6     8     7     9    10     8
-## [2,]     8     8     8     8     6     8     7     9    10     8
-## [3,]     9     8     8     6     6     8     7     7    10     9
-## [4,]     9     9     9     9     8    10     9    10    11     9
-## [5,]     7     9     9     9     7     8     6     8     9     7
-## [6,]     8     7     7     7     5     8     6     8    10     8
-##      [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70]
-## [1,]     8     7     8     9    10     8     9     9
-## [2,]     8     7     8     9    10     8     9     9
-## [3,]     8     8     9     7    10     6     9     8
-## [4,]     9     9     9    10    11     9    10    10
-## [5,]     9     7     7    10     9     9     9     8
-## [6,]     8     7     8     8    10     7     9     9
+##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14] [,15]
+## [1,]    0    0    2    4    3    1    2    4    3     1     2     3     7     6     7
+## [2,]    0    0    2    4    3    1    2    4    3     1     2     3     7     6     7
+## [3,]    2    2    0    6    5    1    2    4    5     1     2     5     7     6     7
+## [4,]    4    4    6    0    3    5    6    4    3     5     6     6     8     8     8
+## [5,]    3    3    5    3    0    4    3    3    3     4     5     6     6     5     6
+## [6,]    1    1    1    5    4    0    1    3    4     0     1     4     6     5     6
+##      [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26] [,27] [,28] [,29]
+## [1,]     9     6     7     3     8     7     9     8     6     7     6     7     7     8
+## [2,]     9     6     7     3     8     7     9     8     6     7     6     7     7     8
+## [3,]     9     6     7     5     8     8     9     7     6     6     6     7     6     8
+## [4,]    10     8     8     3    10     9    10     9     8     9     8     8     8     9
+## [5,]     9     7     6     6     7     6    10     7     7     8     7     6     8     7
+## [6,]     9     5     6     4     8     7     9     7     5     6     5     6     6     7
+##      [,30] [,31] [,32] [,33] [,34] [,35] [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43]
+## [1,]     8     9     6     8     7     9     7     8     8     8     7     8     8     7
+## [2,]     8     9     6     8     7     9     7     8     8     8     7     8     8     7
+## [3,]     8     7     7     9     8     9     8     8     7     6     6     6     6     8
+## [4,]     9     9     8     9     9    10     8     9     9     9     8     8     8     9
+## [5,]     7    10     7     8     7     9     8     9     9     9     8     8     8     7
+## [6,]     7     8     6     8     7     9     7     8     7     7     6     7     7     7
+##      [,44] [,45] [,46] [,47] [,48] [,49] [,50] [,51] [,52] [,53] [,54] [,55] [,56] [,57]
+## [1,]     9     8     9     9     8     7     8     7     8     8     8     8     8     6
+## [2,]     9     8     9     9     8     7     8     7     8     8     8     8     8     6
+## [3,]     8     9     8     8     6     6     9     8     9     9     8     8     6     6
+## [4,]    10     9    10    11     8     9     9     8     8     9     9     9     9     8
+## [5,]     8     7    10     8     8     6     8     7     6     7     9     9     9     7
+## [6,]     8     8     8     8     7     6     8     7     8     8     7     7     7     5
+##      [,58] [,59] [,60] [,61] [,62] [,63] [,64] [,65] [,66] [,67] [,68] [,69] [,70]
+## [1,]     8     7     9    10     8     8     7     8     9    10     8     9     9
+## [2,]     8     7     9    10     8     8     7     8     9    10     8     9     9
+## [3,]     8     7     7    10     9     8     8     9     7    10     6     9     8
+## [4,]    10     9    10    11     9     9     9     9    10    11     9    10    10
+## [5,]     8     6     8     9     7     9     7     7    10     9     9     9     8
+## [6,]     8     6     8    10     8     8     7     8     8    10     7     9     9
 ```
 
  
@@ -5755,17 +5493,19 @@ mm <- crossing(i = 1:70, j = 1:70)
 
  
 
-and then use `map2_int` (since our dissimilarity function
-returns a whole number):
+and then use `rowwise`:
 
 
 ```r
-mm <- mm %>% mutate(diff = map2_int(i, j, row_diff, bridges))
+mm %>% 
+  rowwise() %>% 
+  mutate(diff = row_diff(i, j, bridges)) -> mm
 mm
 ```
 
 ```
 ## # A tibble: 4,900 x 3
+## # Rowwise: 
 ##        i     j  diff
 ##    <int> <int> <int>
 ##  1     1     1     0
@@ -5781,42 +5521,39 @@ mm
 ## # … with 4,890 more rows
 ```
 
- 
+If you forget the `rowwise`, the answers (in `diff`) will all be the same, which should make you suspicious.
 
 This is long format, though, so we need to `pivot_wider` the
 `j` column to get a square array of dissimilarities:
 
 
 ```r
-mm <- mm %>% pivot_wider(names_from=j, values_from=diff)
+mm %>% pivot_wider(names_from=j, values_from=diff) -> mm
 mm
 ```
 
 ```
 ## # A tibble: 70 x 71
-##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
-##    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
-##  1     1     0     0     2     4     3     1     2     4     3     1
-##  2     2     0     0     2     4     3     1     2     4     3     1
-##  3     3     2     2     0     6     5     1     2     4     5     1
-##  4     4     4     4     6     0     3     5     6     4     3     5
-##  5     5     3     3     5     3     0     4     3     3     3     4
-##  6     6     1     1     1     5     4     0     1     3     4     0
-##  7     7     2     2     2     6     3     1     0     4     5     1
-##  8     8     4     4     4     4     3     3     4     0     4     3
-##  9     9     3     3     5     3     3     4     5     4     0     4
-## 10    10     1     1     1     5     4     0     1     3     4     0
-## # … with 60 more rows, and 60 more variables: 11 <int>, 12 <int>,
-## #   13 <int>, 14 <int>, 15 <int>, 16 <int>, 17 <int>, 18 <int>,
-## #   19 <int>, 20 <int>, 21 <int>, 22 <int>, 23 <int>, 24 <int>,
-## #   25 <int>, 26 <int>, 27 <int>, 28 <int>, 29 <int>, 30 <int>,
-## #   31 <int>, 32 <int>, 33 <int>, 34 <int>, 35 <int>, 36 <int>,
-## #   37 <int>, 38 <int>, 39 <int>, 40 <int>, 41 <int>, 42 <int>,
-## #   43 <int>, 44 <int>, 45 <int>, 46 <int>, 47 <int>, 48 <int>,
-## #   49 <int>, 50 <int>, 51 <int>, 52 <int>, 53 <int>, 54 <int>,
-## #   55 <int>, 56 <int>, 57 <int>, 58 <int>, 59 <int>, 60 <int>,
-## #   61 <int>, 62 <int>, 63 <int>, 64 <int>, 65 <int>, 66 <int>,
-## #   67 <int>, 68 <int>, 69 <int>, 70 <int>
+##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`  `11`  `12`  `13`
+##    <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int> <int>
+##  1     1     0     0     2     4     3     1     2     4     3     1     2     3     7
+##  2     2     0     0     2     4     3     1     2     4     3     1     2     3     7
+##  3     3     2     2     0     6     5     1     2     4     5     1     2     5     7
+##  4     4     4     4     6     0     3     5     6     4     3     5     6     6     8
+##  5     5     3     3     5     3     0     4     3     3     3     4     5     6     6
+##  6     6     1     1     1     5     4     0     1     3     4     0     1     4     6
+##  7     7     2     2     2     6     3     1     0     4     5     1     2     5     5
+##  8     8     4     4     4     4     3     3     4     0     4     3     4     7     7
+##  9     9     3     3     5     3     3     4     5     4     0     4     5     6     5
+## 10    10     1     1     1     5     4     0     1     3     4     0     1     4     6
+## # … with 60 more rows, and 57 more variables: 14 <int>, 15 <int>, 16 <int>, 17 <int>,
+## #   18 <int>, 19 <int>, 20 <int>, 21 <int>, 22 <int>, 23 <int>, 24 <int>, 25 <int>,
+## #   26 <int>, 27 <int>, 28 <int>, 29 <int>, 30 <int>, 31 <int>, 32 <int>, 33 <int>,
+## #   34 <int>, 35 <int>, 36 <int>, 37 <int>, 38 <int>, 39 <int>, 40 <int>, 41 <int>,
+## #   42 <int>, 43 <int>, 44 <int>, 45 <int>, 46 <int>, 47 <int>, 48 <int>, 49 <int>,
+## #   50 <int>, 51 <int>, 52 <int>, 53 <int>, 54 <int>, 55 <int>, 56 <int>, 57 <int>,
+## #   58 <int>, 59 <int>, 60 <int>, 61 <int>, 62 <int>, 63 <int>, 64 <int>, 65 <int>,
+## #   66 <int>, 67 <int>, 68 <int>, 69 <int>, 70 <int>
 ```
 
  
@@ -5849,7 +5586,7 @@ or
 
 
 ```r
-d2 <- mm %>% select(-i) %>% as.dist()
+mm %>% select(-i) %>% as.dist() -> d2
 ```
 
  
@@ -5864,7 +5601,7 @@ mmm <- read_csv(my_url)
 
 ```
 ## 
-## ── Column specification ──────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double()
 ## )
@@ -5877,33 +5614,244 @@ mmm
 
 ```
 ## # A tibble: 70 x 71
-##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`
-##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
-##  1     1     0     0     2     4     3     1     2     4     3     1
-##  2     2     0     0     2     4     3     1     2     4     3     1
-##  3     3     2     2     0     6     5     1     2     4     5     1
-##  4     4     4     4     6     0     3     5     6     4     3     5
-##  5     5     3     3     5     3     0     4     3     3     3     4
-##  6     6     1     1     1     5     4     0     1     3     4     0
-##  7     7     2     2     2     6     3     1     0     4     5     1
-##  8     8     4     4     4     4     3     3     4     0     4     3
-##  9     9     3     3     5     3     3     4     5     4     0     4
-## 10    10     1     1     1     5     4     0     1     3     4     0
-## # … with 60 more rows, and 60 more variables: 11 <dbl>, 12 <dbl>,
-## #   13 <dbl>, 14 <dbl>, 15 <dbl>, 16 <dbl>, 17 <dbl>, 18 <dbl>,
-## #   19 <dbl>, 20 <dbl>, 21 <dbl>, 22 <dbl>, 23 <dbl>, 24 <dbl>,
-## #   25 <dbl>, 26 <dbl>, 27 <dbl>, 28 <dbl>, 29 <dbl>, 30 <dbl>,
-## #   31 <dbl>, 32 <dbl>, 33 <dbl>, 34 <dbl>, 35 <dbl>, 36 <dbl>,
-## #   37 <dbl>, 38 <dbl>, 39 <dbl>, 40 <dbl>, 41 <dbl>, 42 <dbl>,
-## #   43 <dbl>, 44 <dbl>, 45 <dbl>, 46 <dbl>, 47 <dbl>, 48 <dbl>,
-## #   49 <dbl>, 50 <dbl>, 51 <dbl>, 52 <dbl>, 53 <dbl>, 54 <dbl>,
-## #   55 <dbl>, 56 <dbl>, 57 <dbl>, 58 <dbl>, 59 <dbl>, 60 <dbl>,
-## #   61 <dbl>, 62 <dbl>, 63 <dbl>, 64 <dbl>, 65 <dbl>, 66 <dbl>,
-## #   67 <dbl>, 68 <dbl>, 69 <dbl>, 70 <dbl>
+##        i   `1`   `2`   `3`   `4`   `5`   `6`   `7`   `8`   `9`  `10`  `11`  `12`  `13`
+##    <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+##  1     1     0     0     2     4     3     1     2     4     3     1     2     3     7
+##  2     2     0     0     2     4     3     1     2     4     3     1     2     3     7
+##  3     3     2     2     0     6     5     1     2     4     5     1     2     5     7
+##  4     4     4     4     6     0     3     5     6     4     3     5     6     6     8
+##  5     5     3     3     5     3     0     4     3     3     3     4     5     6     6
+##  6     6     1     1     1     5     4     0     1     3     4     0     1     4     6
+##  7     7     2     2     2     6     3     1     0     4     5     1     2     5     5
+##  8     8     4     4     4     4     3     3     4     0     4     3     4     7     7
+##  9     9     3     3     5     3     3     4     5     4     0     4     5     6     5
+## 10    10     1     1     1     5     4     0     1     3     4     0     1     4     6
+## # … with 60 more rows, and 57 more variables: 14 <dbl>, 15 <dbl>, 16 <dbl>, 17 <dbl>,
+## #   18 <dbl>, 19 <dbl>, 20 <dbl>, 21 <dbl>, 22 <dbl>, 23 <dbl>, 24 <dbl>, 25 <dbl>,
+## #   26 <dbl>, 27 <dbl>, 28 <dbl>, 29 <dbl>, 30 <dbl>, 31 <dbl>, 32 <dbl>, 33 <dbl>,
+## #   34 <dbl>, 35 <dbl>, 36 <dbl>, 37 <dbl>, 38 <dbl>, 39 <dbl>, 40 <dbl>, 41 <dbl>,
+## #   42 <dbl>, 43 <dbl>, 44 <dbl>, 45 <dbl>, 46 <dbl>, 47 <dbl>, 48 <dbl>, 49 <dbl>,
+## #   50 <dbl>, 51 <dbl>, 52 <dbl>, 53 <dbl>, 54 <dbl>, 55 <dbl>, 56 <dbl>, 57 <dbl>,
+## #   58 <dbl>, 59 <dbl>, 60 <dbl>, 61 <dbl>, 62 <dbl>, 63 <dbl>, 64 <dbl>, 65 <dbl>,
+## #   66 <dbl>, 67 <dbl>, 68 <dbl>, 69 <dbl>, 70 <dbl>
 ```
 
 ```r
-d3 <- mmm %>% select(-i) %>% as.dist()
+mmm %>% select(-i) %>% as.dist() -> d3
+d3
+```
+
+```
+##     1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+## 2   0                                                                                    
+## 3   2  2                                                                                 
+## 4   4  4  6                                                                              
+## 5   3  3  5  3                                                                           
+## 6   1  1  1  5  4                                                                        
+## 7   2  2  2  6  3  1                                                                     
+## 8   4  4  4  4  3  3  4                                                                  
+## 9   3  3  5  3  3  4  5  4                                                               
+## 10  1  1  1  5  4  0  1  3  4                                                            
+## 11  2  2  2  6  5  1  2  4  5  1                                                         
+## 12  3  3  5  6  6  4  5  7  6  4  3                                                      
+## 13  7  7  7  8  6  6  5  7  5  6  5  6                                                   
+## 14  6  6  6  8  5  5  4  6  7  5  4  5  2                                                
+## 15  7  7  7  8  6  6  5  7  5  6  5  6  0  2                                             
+## 16  9  9  9 10  9  9  9  9  7  9  8  8  4  6  4                                          
+## 17  6  6  6  8  7  5  6  5  6  5  5  6  4  4  4  5                                       
+## 18  7  7  7  8  6  6  5  7  5  6  6  7  1  3  1  5  3                                    
+## 19  3  3  5  3  6  4  5  7  5  4  4  4  8  8  8 10  7  7                                 
+## 20  8  8  8 10  7  8  7  8  8  8  8  8  5  5  5  3  3  4  9                              
+## 21  7  7  8  9  6  7  6  7  8  7  7  7  5  3  5  5  3  4  8  2                           
+## 22  9  9  9 10 10  9 10  9  7  9  9  9  6  8  6  3  4  5  9  3  5                        
+## 23  8  8  7  9  7  7  6  8  6  7  7  8  2  4  2  4  4  1  8  3  5  4                     
+## 24  6  6  6  8  7  5  6  5  6  5  5  6  4  4  4  5  0  3  7  3  3  4  4                  
+## 25  7  7  6  9  8  6  7  6  7  6  6  7  5  5  5  4  1  4  8  2  4  3  3  1               
+## 26  6  6  6  8  7  5  6  5  7  5  5  6  5  4  5  6  1  4  7  4  3  5  5  1  2            
+## 27  7  7  7  8  6  6  5  7  5  6  6  7  1  3  1  5  3  0  7  4  4  5  1  3  4  4         
+## 28  7  7  6  8  8  6  7  7  5  6  6  7  3  5  3  4  3  2  7  4  6  3  1  3  2  4  2      
+## 29  8  8  8  9  7  7  6  7  6  7  7  8  2  4  2  4  2  1  8  3  3  4  2  2  3  3  1  3   
+## 30  8  8  8  9  7  7  6  6  6  7  7  8  2  4  2  5  3  1  8  4  4  5  2  3  4  4  1  3  1
+## 31  9  9  7  9 10  8  9  7  7  8  8  7  5  7  5  6  4  4  8  6  7  5  4  4  4  5  4  3  4
+## 32  6  6  7  8  7  6  7  6  6  6  6  6  5  5  5  4  1  4  7  2  2  3  5  1  2  2  4  4  3
+## 33  8  8  9  9  8  8  8  8  7  8  8  8  5  6  5  3  4  4  8  4  3  4  5  4  5  3  4  5  3
+## 34  7  7  8  9  7  7  7  7  8  7  7  7  6  5  6  4  3  5  8  3  2  5  6  3  4  2  5  6  4
+## 35  9  9  9 10  9  9  9  9  7  9  9  9  5  7  5  1  4  4  9  2  4  2  3  4  3  5  4  3  3
+## 36  7  7  8  8  8  7  8  7  7  7  7  5  6  6  6  5  2  5  7  3  3  4  6  2  3  3  5  5  4
+## 37  8  8  8  9  9  8  9  8  7  8  8 10  8  9  8  5  6  7  8  5  6  2  6  6  5  6  7  5  6
+## 38  8  8  7  9  9  7  8  7  6  7  7  8  4  6  4  3  2  3  8  3  5  2  2  2  1  3  3  1  2
+## 39  8  8  6  9  9  7  8  7  9  7  7  6  7  5  7  7  3  6  8  5  4  6  6  3  3  3  6  5  5
+## 40  7  7  6  8  8  6  7  7  8  6  6  5  6  4  6  7  4  5  7  5  5  6  4  4  3  4  5  3  6
+## 41  8  8  6  8  8  7  8  5  9  7  7  6  7  6  7  8  4  6  8  6  6  7  6  4  4  4  6  5  6
+## 42  8  8  6  8  8  7  8  5  9  7  7  6  7  6  7  8  4  6  8  6  6  7  6  4  4  4  6  5  6
+## 43  7  7  8  9  7  7  7  6  8  7  7  7  6  5  6  5  4  5  8  4  3  6  6  4  5  3  5  6  5
+## 44  9  9  8 10  8  8  7  7 10  8  8  9  8  7  8  9  7  7  9  6  7  7  6  7  6  6  7  7  7
+## 45  8  8  9  9  7  8  7  8  9  8  8  6  6  5  6  6  4  5  8  3  2  6  6  4  5  3  5  7  4
+## 46  9  9  8 10 10  8  9  8 10  8  8  7  8  6  8  7  4  7  9  5  5  4  6  4  3  4  7  5  6
+## 47  9  9  8 11  8  8  7  7 10  8  8  9  6  5  6  7  5  5 10  4  5  5  4  5  4  4  5  5  5
+## 48  8  8  6  8  8  7  8  5  9  7  7  6  7  6  7  8  4  6  8  6  6  7  6  4  4  4  6  5  6
+## 49  7  7  6  9  6  6  5  7  7  6  6  7  3  3  3  5  3  2  8  2  4  5  1  3  2  4  2  2  3
+## 50  8  8  9  9  8  8  8  8  9  8  8  6  7  5  7  5  4  6  8  4  2  6  7  4  5  4  6  7  5
+## 51  7  7  8  8  7  7  7  7  8  7  7  7  8  6  8  6  5  7  7  5  3  7  8  5  6  5  7  8  6
+## 52  8  8  9  8  6  8  7  7  9  8  8  6  6  5  6  6  4  5  8  3  2  6  6  4  5  4  5  7  4
+## 53  8  8  9  9  7  8  7  7  9  8  8  8  8  7  8  9  7  7  8  6  5  7  8  7  8  7  7  9  7
+## 54  8  8  8  9  9  7  8  7  9  7  7  6  7  6  7  8  3  6  8  6  5  5  7  3  4  2  6  6  5
+## 55  8  8  8  9  9  7  8  6  9  7  7  6  7  6  7  9  5  7  9  8  7  7  8  5  6  5  7  7  7
+## 56  8  8  6  9  9  7  8  6  6  7  7  8  4  6  4  5  4  4  9  6  7  5  4  4  4  5  4  3  4
+## 57  6  6  6  8  7  5  6  4  7  5  5  8  7  6  7  9  5  7  8  8  7  7  8  5  6  5  7  7  7
+## 58  8  8  8 10  8  8  8  8  9  8  8  8  7  6  7  3  5  7 10  3  4  5  6  5  4  4  7  6  6
+## 59  7  7  7  9  6  6  5  5  7  6  6  7  3  3  3  6  3  3  9  4  4  7  4  3  4  4  3  5  3
+## 60  9  9  7 10  8  8  7  8 10  8  8  7  6  5  6  7  5  6 10  5  5  8  6  5  5  5  6  7  5
+## 61 10 10 10 11  9 10  9 10 11 10 10  8  8  7  8  6  7  8 11  4  5  5  7  7  6  7  8  8  7
+## 62  8  8  9  9  7  8  7  8  9  8  8  6  6  5  6  6  5  6  9  4  3  7  7  5  6  4  6  8  5
+## 63  8  8  8  9  9  8  9  8  9  8  8  8 10  9 10  7  7 10  9  6  7  5  9  7  6  7 10  8  9
+## 64  7  7  8  9  7  7  7  7  8  7  7  7  6  5  6  4  4  6  9  4  3  6  7  4  5  4  6  7  5
+## 65  8  8  9  9  7  8  7  8  9  8  8  7  6  4  6  6  5  6  9  4  2  7  7  5  6  5  6  8  5
+## 66  9  9  7 10 10  8  9  7 10  8  8  7  8  7  8  9  6  8 10  8  8  7  8  6  6  6  8  7  8
+## 67 10 10 10 11  9 10  9 10 11 10 10  8  8  7  8  6  7  8 11  4  5  5  7  7  6  7  8  8  7
+## 68  8  8  6  9  9  7  8  7  9  7  7  7  7  5  7  7  4  7  9  6  5  7  7  4  4  4  7  6  6
+## 69  9  9  9 10  9  9  9  9 10  9  9  8  8  6  8  4  6  8 10  4  4  6  7  6  5  6  8  7  7
+## 70  9  9  8 10  8  9  8  9 10  9  9  8  7  5  7  6  6  7 10  4  3  7  7  6  6  6  7  8  6
+##    30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58
+## 2                                                                                        
+## 3                                                                                        
+## 4                                                                                        
+## 5                                                                                        
+## 6                                                                                        
+## 7                                                                                        
+## 8                                                                                        
+## 9                                                                                        
+## 10                                                                                       
+## 11                                                                                       
+## 12                                                                                       
+## 13                                                                                       
+## 14                                                                                       
+## 15                                                                                       
+## 16                                                                                       
+## 17                                                                                       
+## 18                                                                                       
+## 19                                                                                       
+## 20                                                                                       
+## 21                                                                                       
+## 22                                                                                       
+## 23                                                                                       
+## 24                                                                                       
+## 25                                                                                       
+## 26                                                                                       
+## 27                                                                                       
+## 28                                                                                       
+## 29                                                                                       
+## 30                                                                                       
+## 31  3                                                                                    
+## 32  4  5                                                                                 
+## 33  4  6  3                                                                              
+## 34  5  7  2  1                                                                           
+## 35  4  5  3  2  3                                                                        
+## 36  5  4  1  4  3  4                                                                     
+## 37  7  7  5  5  6  4  6                                                                  
+## 38  3  3  3  4  5  2  4  4                                                               
+## 39  6  3  4  6  5  6  3  7  4                                                            
+## 40  6  4  5  7  6  6  4  7  4  2                                                         
+## 41  5  2  5  7  6  7  4  8  5  2  3                                                      
+## 42  5  2  5  7  6  7  4  8  5  2  3  0                                                   
+## 43  4  6  3  2  1  4  4  7  6  6  6  5  5                                                
+## 44  6  6  8  8  7  8  7  6  7  6  5  5  5  6                                             
+## 45  5  6  3  3  2  5  2  7  6  4  5  5  5  3  5                                          
+## 46  7  5  5  7  6  6  4  5  4  2  2  4  4  7  4  5                                       
+## 47  4  6  6  6  5  6  7  6  5  6  5  5  5  4  2  5  4                                    
+## 48  5  2  5  7  6  7  4  8  5  2  3  0  0  5  5  5  4  5                                 
+## 49  3  5  4  6  5  4  5  7  3  5  3  5  5  5  5  5  5  3  5                              
+## 50  6  6  3  3  2  4  2  7  6  3  4  5  5  3  7  2  4  7  5  6                           
+## 51  7  7  4  4  3  5  3  6  7  4  5  6  6  4  6  3  5  8  6  7  1                        
+## 52  5  6  3  4  3  5  2  7  6  4  5  4  4  4  6  1  5  6  4  5  2  3                     
+## 53  6  7  6  7  6  8  5  5  9  7  7  6  6  5  3  4  6  5  6  7  5  4  4                  
+## 54  6  5  4  5  4  7  3  6  5  3  4  4  4  5  4  3  2  4  4  6  4  5  4  5               
+## 55  6  5  6  8  7  9  5  7  7  5  5  4  4  6  5  6  4  5  4  7  6  7  6  4  3            
+## 56  3  2  5  6  7  5  6  7  3  5  6  4  4  6  8  8  7  6  4  5  8  9  8  9  7  5         
+## 57  6  7  6  8  7  9  7  5  7  7  7  6  6  6  5  8  6  5  6  7  8  7  8  4  5  2  5      
+## 58  7  8  4  3  2  3  5  6  5  6  6  7  7  3  7  4  6  5  7  5  4  5  5  8  6  7  6  7   
+## 59  2  5  4  6  5  6  5  9  5  6  6  5  5  4  6  5  7  4  5  3  6  7  5  6  6  4  3  4  5
+## 60  6  5  6  7  6  7  5  8  6  3  5  4  4  7  6  4  5  6  4  5  5  6  4  6  5  4  5  6  5
+## 61  8  8  6  7  6  6  5  5  7  6  6  7  7  7  5  4  4  5  7  6  5  6  4  4  5  4  8  6  4
+## 62  6  7  4  4  3  6  3  8  7  5  6  6  6  4  6  1  6  6  6  6  3  4  2  5  4  5  7  7  3
+## 63 10  8  6  8  7  7  5  3  7  6  6  7  7  8  5  6  4  7  7  8  6  5  6  4  5  4  8  4  5
+## 64  6  8  3  3  2  4  4  6  6  6  7  7  7  3  9  4  7  7  7  6  3  4  4  6  6  5  6  5  2
+## 65  6  8  4  5  4  6  4  8  7  5  6  7  7  5  8  3  6  7  7  6  3  4  3  6  6  6  7  7  4
+## 66  7  4  7  9  8  9  6  7  7  4  5  3  3  7  5  7  4  5  3  7  7  8  7  5  4  1  4  3  7
+## 67  8  8  6  7  6  6  5  5  7  6  6  7  7  7  5  4  4  5  7  6  5  6  4  4  5  4  8  6  4
+## 68  7  5  5  7  6  7  5  8  5  2  4  4  4  7  8  6  4  7  4  6  5  6  6  9  5  5  4  6  5
+## 69  8  8  5  5  4  4  5  7  6  5  5  7  7  5  8  5  5  7  7  6  3  4  5  8  7  7  7  8  2
+## 70  7  7  5  6  5  6  5  8  7  4  6  6  6  6  8  4  6  7  6  6  4  5  4  7  7  7  6  8  4
+##    59 60 61 62 63 64 65 66 67 68 69
+## 2                                  
+## 3                                  
+## 4                                  
+## 5                                  
+## 6                                  
+## 7                                  
+## 8                                  
+## 9                                  
+## 10                                 
+## 11                                 
+## 12                                 
+## 13                                 
+## 14                                 
+## 15                                 
+## 16                                 
+## 17                                 
+## 18                                 
+## 19                                 
+## 20                                 
+## 21                                 
+## 22                                 
+## 23                                 
+## 24                                 
+## 25                                 
+## 26                                 
+## 27                                 
+## 28                                 
+## 29                                 
+## 30                                 
+## 31                                 
+## 32                                 
+## 33                                 
+## 34                                 
+## 35                                 
+## 36                                 
+## 37                                 
+## 38                                 
+## 39                                 
+## 40                                 
+## 41                                 
+## 42                                 
+## 43                                 
+## 44                                 
+## 45                                 
+## 46                                 
+## 47                                 
+## 48                                 
+## 49                                 
+## 50                                 
+## 51                                 
+## 52                                 
+## 53                                 
+## 54                                 
+## 55                                 
+## 56                                 
+## 57                                 
+## 58                                 
+## 59                                 
+## 60  4                              
+## 61  6  3                           
+## 62  4  3  3                        
+## 63  8  5  2  5                     
+## 64  4  4  4  3  5                  
+## 65  4  4  4  2  6  3               
+## 66  5  3  4  6  4  6  7            
+## 67  6  3  0  3  2  4  4  4         
+## 68  5  3  6  5  6  5  3  4  6      
+## 69  6  5  4  4  5  3  2  7  4  3   
+## 70  5  3  4  3  6  4  1  6  4  2  2
 ```
 
  
@@ -5924,7 +5872,7 @@ bridges.1 <- hclust(d1, method = "ward.D")
 plot(bridges.1, cex = 0.3)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-174-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-167-1.png" width="672"  />
 
      
 
@@ -5950,7 +5898,7 @@ plot(bridges.1, cex = 0.3)
 rect.hclust(bridges.1, 5)
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-175-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-168-1.png" width="672"  />
 
      
 
@@ -5980,13 +5928,12 @@ bridges %>% slice(c(41, 42, 48))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH
-## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH
-## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH
-## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
-## #   type <chr>
+##   id    river location erected purpose length lanes clear_g t_d     material span   rel_l
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>   <chr>    <chr>  <chr>
+## 1 E70   A           27 MATURE  HIGHWAY SHORT      4 G       THROUGH STEEL    MEDIUM S-F  
+## 2 E69   A           26 MATURE  HIGHWAY SHORT      4 G       THROUGH STEEL    MEDIUM S-F  
+## 3 E71   A           25 MATURE  HIGHWAY SHORT      4 G       THROUGH STEEL    MEDIUM S-F  
+## # … with 1 more variable: type <chr>
 ```
 
      
@@ -6005,13 +5952,12 @@ bridges %>% slice(c(10, 12, 19))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected  purpose  length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>  
-## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH
-## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH
-## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH
-## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
-## #   type <chr>
+##   id    river location erected  purpose  length lanes clear_g t_d     material span  rel_l
+##   <chr> <chr>    <dbl> <chr>    <chr>    <chr>  <dbl> <chr>   <chr>   <chr>    <chr> <chr>
+## 1 E19   A           29 CRAFTS   HIGHWAY  MEDIUM     2 N       THROUGH WOOD     MEDI… S    
+## 2 E22   A           24 EMERGING HIGHWAY  MEDIUM     4 G       THROUGH WOOD     SHORT S    
+## 3 E4    A           27 MATURE   AQUEDUCT MEDIUM     1 N       THROUGH WOOD     SHORT S    
+## # … with 1 more variable: type <chr>
 ```
 
      
@@ -6029,13 +5975,12 @@ bridges %>% slice(c(8, 24, 52))
 
 ```
 ## # A tibble: 3 x 13
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH
-## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH
-## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH
-## # … with 4 more variables: material <chr>, span <chr>, rel_l <chr>,
-## #   type <chr>
+##   id    river location erected purpose length lanes clear_g t_d     material span   rel_l
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>   <chr>    <chr>  <chr>
+## 1 E16   A           25 CRAFTS  HIGHWAY MEDIUM     2 N       THROUGH IRON     MEDIUM S-F  
+## 2 E58   A           33 MATURE  HIGHWAY MEDIUM     2 G       THROUGH STEEL    MEDIUM F    
+## 3 E76   M            6 MATURE  HIGHWAY MEDIUM     4 G       THROUGH STEEL    LONG   F    
+## # … with 1 more variable: type <chr>
 ```
 
  
@@ -6106,12 +6051,11 @@ bridges.rpart %>% slice(c(20, 29))
 
 ```
 ## # A tibble: 2 x 14
-##   id    river location erected purpose length lanes clear_g t_d    
-##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>  
-## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH
-## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH
-## # … with 5 more variables: material <chr>, span <chr>, rel_l <chr>,
-## #   type <chr>, cluster <int>
+##   id    river location erected purpose length lanes clear_g t_d     material span   rel_l
+##   <chr> <chr>    <dbl> <chr>   <chr>   <chr>  <dbl> <chr>   <chr>   <chr>    <chr>  <chr>
+## 1 E42   M            9 MATURE  HIGHWAY LONG       2 G       THROUGH STEEL    LONG   F    
+## 2 E51   M            6 MATURE  RR      MEDIUM     2 G       THROUGH STEEL    MEDIUM F    
+## # … with 2 more variables: type <chr>, cluster <int>
 ```
 
  
@@ -6198,7 +6142,7 @@ athletes <- read_tsv(my_url)
 
 ```
 ## 
-## ── Column specification ──────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────
 ## cols(
 ##   Sex = col_character(),
 ##   Sport = col_character(),
@@ -6222,19 +6166,19 @@ athletes
 
 ```
 ## # A tibble: 202 x 13
-##    Sex   Sport   RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM
-##    <chr> <chr> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl>
-##  1 fema… Netb…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1
-##  2 fema… Netb…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1
-##  3 fema… Netb…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4
-##  4 fema… Netb…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8
-##  5 fema… Netb…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0
-##  6 fema… Netb…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4
-##  7 fema… Netb…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1
-##  8 fema… Netb…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4
-##  9 fema… Netb…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0
-## 10 fema… Netb…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6
-## # … with 192 more rows, and 2 more variables: Ht <dbl>, Wt <dbl>
+##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
+##    <chr>  <chr>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>
+##  1 female Netball  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.  59.9
+##  2 female Netball  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.  63  
+##  3 female Netball  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176   66.3
+##  4 female Netball  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.  60.7
+##  5 female Netball  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183   72.9
+##  6 female Netball  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.  67.9
+##  7 female Netball  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.  67.5
+##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
+##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
+## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
+## # … with 192 more rows
 ```
 
      
@@ -6257,20 +6201,19 @@ athletes.s
 
 ```
 ## # A tibble: 202 x 11
-##    RCC[,1] WCC[,1] Hc[,1] Hg[,1] Ferr[,1] BMI[,1] SSF[,1] `%Bfat`[,1]
-##      <dbl>   <dbl>  <dbl>  <dbl>    <dbl>   <dbl>   <dbl>       <dbl>
-##  1  -0.346   3.44  -0.243 -0.709  -1.20   -1.33    -0.615      -0.358
-##  2  -1.24   -0.616 -1.39  -1.37   -0.376  -0.631    1.26        1.90 
-##  3  -1.22    0.273 -1.53  -1.66   -1.16   -0.543    0.613       0.950
-##  4  -0.870  -0.394 -1.47  -1.66   -0.987  -0.672    0.899       0.989
-##  5  -1.44   -0.727 -1.20  -1.30    0.0237 -0.414    1.63        1.55 
-##  6  -1.31   -0.560 -1.77  -2.03   -1.18   -0.550    0.656       0.542
-##  7  -1.20   -1.17  -1.55  -1.37    0.676  -0.519    1.16        1.26 
-##  8  -2.01   -0.283 -1.80  -1.59    0.529   0.522    2.69        2.11 
-##  9  -1.66   -0.893 -1.85  -1.59   -0.124  -0.114    0.985       0.714
-## 10  -0.608   1.44  -0.462 -0.342  -0.271  -0.0544   1.76        1.85 
-## # … with 192 more rows, and 3 more variables: LBM <dbl[,1]>,
-## #   Ht <dbl[,1]>, Wt <dbl[,1]>
+##    RCC[,1] WCC[,1] Hc[,1] Hg[,1] Ferr[,1] BMI[,1] SSF[,1] `%Bfat`[,1] LBM[,1] Ht[,1]
+##      <dbl>   <dbl>  <dbl>  <dbl>    <dbl>   <dbl>   <dbl>       <dbl>   <dbl>  <dbl>
+##  1  -0.346   3.44  -0.243 -0.709  -1.20   -1.33    -0.615      -0.358  -0.898 -0.339
+##  2  -1.24   -0.616 -1.39  -1.37   -0.376  -0.631    1.26        1.90   -1.36  -0.771
+##  3  -1.22    0.273 -1.53  -1.66   -1.16   -0.543    0.613       0.950  -0.875 -0.422
+##  4  -0.870  -0.394 -1.47  -1.66   -0.987  -0.672    0.899       0.989  -1.23  -1.05 
+##  5  -1.44   -0.727 -1.20  -1.30    0.0237 -0.414    1.63        1.55   -0.675  0.298
+##  6  -1.31   -0.560 -1.77  -2.03   -1.18   -0.550    0.656       0.542  -0.644 -0.196
+##  7  -1.20   -1.17  -1.55  -1.37    0.676  -0.519    1.16        1.26   -0.900 -0.288
+##  8  -2.01   -0.283 -1.80  -1.59    0.529   0.522    2.69        2.11   -0.801 -0.617
+##  9  -1.66   -0.893 -1.85  -1.59   -0.124  -0.114    0.985       0.714  -0.681 -0.668
+## 10  -0.608   1.44  -0.462 -0.342  -0.271  -0.0544   1.76        1.85   -1.01  -0.658
+## # … with 192 more rows, and 1 more variable: Wt <dbl[,1]>
 ```
 
  
@@ -6288,27 +6231,20 @@ athletes %>% select_if(is.numeric) %>% scale() %>% head()
 ```
 
 ```
-##             RCC        WCC         Hc         Hg        Ferr
-## [1,] -0.3463363  3.4385826 -0.2434034 -0.7092631 -1.19736325
-## [2,] -1.2415791 -0.6157363 -1.3900079 -1.3698371 -0.37633203
-## [3,] -1.2197439  0.2728816 -1.5265084 -1.6634256 -1.15525908
-## [4,] -0.8703809 -0.3935818 -1.4719082 -1.6634256 -0.98684242
-## [5,] -1.4380958 -0.7268135 -1.1989072 -1.2964400  0.02365754
-## [6,] -1.3070846 -0.5601977 -1.7722094 -2.0304111 -1.17631117
-##             BMI        SSF      %Bfat        LBM         Ht
-## [1,] -1.3254121 -0.6148189 -0.3582372 -0.8977457 -0.3394075
-## [2,] -0.6305634  1.2644802  1.8986922 -1.3606308 -0.7708629
-## [3,] -0.5432708  0.6134811  0.9503618 -0.8747927 -0.4215895
-## [4,] -0.6724638  0.8990609  0.9891351 -1.2313290 -1.0482270
-## [5,] -0.4140778  1.6298994  1.5513480 -0.6751017  0.2975028
-## [6,] -0.5502542  0.6564716  0.5416266 -0.6444978 -0.1955890
-##              Wt
-## [1,] -1.0849225
-## [2,] -0.8623105
-## [3,] -0.6253364
-## [4,] -1.0274742
-## [5,] -0.1513883
-## [6,] -0.5104399
+##             RCC        WCC         Hc         Hg        Ferr        BMI        SSF
+## [1,] -0.3463363  3.4385826 -0.2434034 -0.7092631 -1.19736325 -1.3254121 -0.6148189
+## [2,] -1.2415791 -0.6157363 -1.3900079 -1.3698371 -0.37633203 -0.6305634  1.2644802
+## [3,] -1.2197439  0.2728816 -1.5265084 -1.6634256 -1.15525908 -0.5432708  0.6134811
+## [4,] -0.8703809 -0.3935818 -1.4719082 -1.6634256 -0.98684242 -0.6724638  0.8990609
+## [5,] -1.4380958 -0.7268135 -1.1989072 -1.2964400  0.02365754 -0.4140778  1.6298994
+## [6,] -1.3070846 -0.5601977 -1.7722094 -2.0304111 -1.17631117 -0.5502542  0.6564716
+##           %Bfat        LBM         Ht         Wt
+## [1,] -0.3582372 -0.8977457 -0.3394075 -1.0849225
+## [2,]  1.8986922 -1.3606308 -0.7708629 -0.8623105
+## [3,]  0.9503618 -0.8747927 -0.4215895 -0.6253364
+## [4,]  0.9891351 -1.2313290 -1.0482270 -1.0274742
+## [5,]  1.5513480 -0.6751017  0.2975028 -0.1513883
+## [6,]  0.5416266 -0.6444978 -0.1955890 -0.5104399
 ```
 
  
@@ -6341,12 +6277,14 @@ Here we go:
 
 ```r
 withinss <- tibble(clusters = 2:20) %>%
-  mutate(wss = map_dbl(clusters, ~ kmeans(athletes.s, ., nstart = 20)$tot.withinss))
+  rowwise() %>% 
+  mutate(wss = kmeans(athletes.s, clusters, nstart = 20)$tot.withinss)
 withinss
 ```
 
 ```
 ## # A tibble: 19 x 2
+## # Rowwise: 
 ##    clusters   wss
 ##       <int> <dbl>
 ##  1        2 1426.
@@ -6372,15 +6310,12 @@ withinss
 
      
 
-A one-liner, kinda. The thing after the squiggle is called an
-"anonymous function"; it is what is done for each of the first
-thing, and where you want the thing you're varying to go, you put a
-dot (the notation is like the dot meaning 
-"whatever came out of the previous step"). 
+A one-liner, kinda. Remember that `kmeans` expects a single number of clusters, a value like 5, rather than a collection of possible numbers of clusters in a vector, so to do each of them, we need to work rowwise (and do one row at a time).
+
 The advantage to this is that it looks exactly like
-the `kmeans` that you would write, except for the number of
-clusters that is replaced by a dot.
-All right then, how would I expect *you* to do this? First write
+the `kmeans` that you would write.
+
+All right then, what is a better way to do this? First write
 a function to take a number of clusters and a data frame and return
 the total within-cluster sum of squares:
 
@@ -6409,8 +6344,7 @@ twss(3, athletes.s)
 
 Check (with a few extra decimals).
 
-Now, recognize that your function returns a decimal number, so that
-you will be using `map_dbl` in a moment, and then calculate
+Then calculate
 all the total within-cluster sum of squares values by making a little
 data frame with all your numbers of clusters:
 
@@ -6445,17 +6379,19 @@ tibble(clusters = 2:20)
 ```
 
  
+and then make a pipeline and save it, using `rowwise` and your function:
 
-and then make a pipeline and save it:
 
 ```r
 tibble(clusters = 2:20) %>%
-  mutate(wss = map_dbl(clusters, ~ twss(., athletes.s))) -> withinss
+  rowwise() %>% 
+  mutate(wss = twss(clusters, athletes.s)) -> withinss
 withinss
 ```
 
 ```
 ## # A tibble: 19 x 2
+## # Rowwise: 
 ##    clusters   wss
 ##       <int> <dbl>
 ##  1        2 1426.
@@ -6479,7 +6415,7 @@ withinss
 ## 19       20  489.
 ```
 
- 
+This is better because the `mutate` line is simpler; you have off-loaded the details of the thinking to your function. Read this as "for each number of clusters, work out the total within-cluster sum of squares for that number of clusters." The important thing here is what you are doing, not how you are doing it; if you care about the how-you-are-doing-it, go back and look at your function. Remember that business about how you can only keep track of seven things, plus or minus two, at once? When you write a function, you are saving some of the things you have to keep track of.
 
 
 (d) Use the data frame you just created to make a scree plot. What
@@ -6495,7 +6431,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-191-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
 
      
 
@@ -6685,8 +6621,7 @@ athletes2a %>% filter(sport == "Row", cluster == 3)
 
 ```
 ## # A tibble: 0 x 5
-## # … with 5 variables: gender <chr>, sport <chr>, ht <dbl>, wt <dbl>,
-## #   cluster <int>
+## # … with 5 variables: gender <chr>, sport <chr>, ht <dbl>, wt <dbl>, cluster <int>
 ```
 
  
@@ -6835,82 +6770,68 @@ athletes.3
 ##     LBM + Ht + Wt, data = .)
 ## 
 ## Prior probabilities of groups:
-##          1          2          3          4          5          6 
-## 0.08415842 0.02970297 0.02475248 0.11386139 0.01980198 0.04950495 
-##          7          8          9         10         11         12 
-## 0.13366337 0.12871287 0.14356436 0.15346535 0.05445545 0.06435644 
+##          1          2          3          4          5          6          7          8 
+## 0.08415842 0.02970297 0.02475248 0.11386139 0.01980198 0.04950495 0.13366337 0.12871287 
+##          9         10         11         12 
+## 0.14356436 0.15346535 0.05445545 0.06435644 
 ## 
 ## Group means:
-##         RCC      WCC       Hc       Hg      Ferr      BMI       SSF
-## 1  4.960000 9.729412 45.55294 15.51176 119.29412 25.20706  62.37059
-## 2  5.343333 6.716667 48.28333 16.63333  81.50000 29.52333  71.15000
-## 3  4.862000 7.880000 44.64000 15.48000 163.80000 30.91800 112.88000
-## 4  4.272609 6.439130 39.74783 13.43478  65.52174 19.65652  54.27391
-## 5  6.000000 8.150000 52.37500 17.87500  52.50000 23.91750  45.27500
-## 6  5.182000 7.210000 46.44000 15.93000 200.30000 22.96800  47.22000
-## 7  4.592963 7.292593 42.65926 14.35926  46.03704 22.74333  86.31111
-## 8  4.919615 6.534615 44.70385 15.13462  82.46154 23.93077  52.94231
-## 9  4.167241 5.993103 38.24828 12.68966  53.48276 22.05897  96.97241
-## 10 4.976129 6.458065 45.22903 15.38710  62.06452 22.26258  39.41935
-## 11 4.336364 8.818182 39.13636 13.21818  70.00000 25.03727 150.16364
-## 12 4.896154 7.711538 44.09231 14.62308  64.69231 19.83538  45.86923
-##      `%Bfat`      LBM       Ht        Wt
-## 1  11.151176 79.23529 188.2059  89.25588
-## 2  12.301667 93.50000 190.4000 106.73333
-## 3  19.948000 77.76800 177.3200  97.26000
-## 4  12.119565 47.23696 165.1652  53.79565
-## 5   8.655000 71.00000 180.5250  77.85000
-## 6   8.737000 68.60000 180.8200  75.27000
-## 7  18.587778 58.60296 178.0926  72.02963
-## 8   9.282308 80.88462 193.0885  89.17692
-## 9  19.652069 56.45069 178.5828  70.30862
-## 10  7.274194 68.16129 181.7484  73.47903
-## 11 26.948182 57.36364 177.1273  78.66364
-## 12  9.968462 52.68077 171.7769  58.51538
+##         RCC      WCC       Hc       Hg      Ferr      BMI       SSF   `%Bfat`      LBM
+## 1  4.960000 9.729412 45.55294 15.51176 119.29412 25.20706  62.37059 11.151176 79.23529
+## 2  5.343333 6.716667 48.28333 16.63333  81.50000 29.52333  71.15000 12.301667 93.50000
+## 3  4.862000 7.880000 44.64000 15.48000 163.80000 30.91800 112.88000 19.948000 77.76800
+## 4  4.272609 6.439130 39.74783 13.43478  65.52174 19.65652  54.27391 12.119565 47.23696
+## 5  6.000000 8.150000 52.37500 17.87500  52.50000 23.91750  45.27500  8.655000 71.00000
+## 6  5.182000 7.210000 46.44000 15.93000 200.30000 22.96800  47.22000  8.737000 68.60000
+## 7  4.592963 7.292593 42.65926 14.35926  46.03704 22.74333  86.31111 18.587778 58.60296
+## 8  4.919615 6.534615 44.70385 15.13462  82.46154 23.93077  52.94231  9.282308 80.88462
+## 9  4.167241 5.993103 38.24828 12.68966  53.48276 22.05897  96.97241 19.652069 56.45069
+## 10 4.976129 6.458065 45.22903 15.38710  62.06452 22.26258  39.41935  7.274194 68.16129
+## 11 4.336364 8.818182 39.13636 13.21818  70.00000 25.03727 150.16364 26.948182 57.36364
+## 12 4.896154 7.711538 44.09231 14.62308  64.69231 19.83538  45.86923  9.968462 52.68077
+##          Ht        Wt
+## 1  188.2059  89.25588
+## 2  190.4000 106.73333
+## 3  177.3200  97.26000
+## 4  165.1652  53.79565
+## 5  180.5250  77.85000
+## 6  180.8200  75.27000
+## 7  178.0926  72.02963
+## 8  193.0885  89.17692
+## 9  178.5828  70.30862
+## 10 181.7484  73.47903
+## 11 177.1273  78.66364
+## 12 171.7769  58.51538
 ## 
 ## Coefficients of linear discriminants:
-##                  LD1          LD2          LD3         LD4
-## RCC     -1.266192600  0.256106446  0.808206001 -1.30196446
-## WCC     -0.153469467 -0.078994605  0.205088034  0.09363755
-## Hc      -0.093307975  0.021992675 -0.012087161 -0.01815509
-## Hg      -0.309019785  0.084450036  0.152385480 -0.26948443
-## Ferr    -0.008721007 -0.004551151  0.020550808  0.01356683
-## BMI      0.545370372 -0.625999624  1.090740309 -2.75390389
-## SSF     -0.024252589 -0.023301617  0.008850497  0.03559861
-## `%Bfat`  0.242726866 -0.161393823 -0.870521195 -0.10045502
-## LBM     -0.158151567 -0.102776410 -1.156645388  0.17357076
-## Ht       0.115146729 -0.138274596  0.210937402 -0.70318391
-## Wt      -0.116874717  0.168228574  0.637666201  0.71560429
-##                 LD5          LD6           LD7          LD8
-## RCC     -0.68662990 -1.015303339 -0.2586150774  3.268658092
-## WCC      0.17439964 -0.045305705 -0.4887843649 -0.305944872
-## Hc       0.12937102  0.113636476 -0.0404556230 -0.135696729
-## Hg       0.42377099  0.255088250 -0.0274859879 -0.065936163
-## Ferr    -0.01458943  0.014299265  0.0005406742  0.004488197
-## BMI     -1.83732490 -0.121556905  0.5594732320 -1.151700601
-## SSF     -0.05001738 -0.125402412 -0.0397575804  0.034224172
-## `%Bfat`  0.15729382  1.006527655 -0.3021704980  0.267305723
-## LBM     -0.21293485  0.388650860 -0.5767730346  0.397152230
-## Ht      -0.54935153  0.008858563  0.0444158866 -0.259559694
-## Wt       0.81228509 -0.302254866  0.4257184332 -0.045388285
-##                  LD9         LD10         LD11
-## RCC      2.227417465  2.459320033 -3.223590160
-## WCC      0.045035808  0.130954678 -0.104354274
-## Hc       0.378862179 -0.244242634  0.960241443
-## Hg      -2.060308226 -0.418372348 -1.406148260
-## Ferr     0.001074682 -0.001292279  0.001923835
-## BMI     -0.099913184  0.854373979  0.112541184
-## SSF     -0.049027821 -0.005826493  0.057489341
-## `%Bfat` -0.317551405  0.611206234  0.110412501
-## LBM     -0.688630708  0.895735977  0.511088448
-## Ht      -0.025683855  0.077943962 -0.024103789
-## Wt       0.672740432 -0.963283281 -0.478482727
+##                  LD1          LD2          LD3         LD4         LD5          LD6
+## RCC     -1.266192600  0.256106446  0.808206001 -1.30196446 -0.68662990 -1.015303339
+## WCC     -0.153469467 -0.078994605  0.205088034  0.09363755  0.17439964 -0.045305705
+## Hc      -0.093307975  0.021992675 -0.012087161 -0.01815509  0.12937102  0.113636476
+## Hg      -0.309019785  0.084450036  0.152385480 -0.26948443  0.42377099  0.255088250
+## Ferr    -0.008721007 -0.004551151  0.020550808  0.01356683 -0.01458943  0.014299265
+## BMI      0.545370372 -0.625999624  1.090740309 -2.75390389 -1.83732490 -0.121556905
+## SSF     -0.024252589 -0.023301617  0.008850497  0.03559861 -0.05001738 -0.125402412
+## `%Bfat`  0.242726866 -0.161393823 -0.870521195 -0.10045502  0.15729382  1.006527655
+## LBM     -0.158151567 -0.102776410 -1.156645388  0.17357076 -0.21293485  0.388650860
+## Ht       0.115146729 -0.138274596  0.210937402 -0.70318391 -0.54935153  0.008858563
+## Wt      -0.116874717  0.168228574  0.637666201  0.71560429  0.81228509 -0.302254866
+##                   LD7          LD8          LD9         LD10         LD11
+## RCC     -0.2586150774  3.268658092  2.227417465  2.459320033 -3.223590160
+## WCC     -0.4887843649 -0.305944872  0.045035808  0.130954678 -0.104354274
+## Hc      -0.0404556230 -0.135696729  0.378862179 -0.244242634  0.960241443
+## Hg      -0.0274859879 -0.065936163 -2.060308226 -0.418372348 -1.406148260
+## Ferr     0.0005406742  0.004488197  0.001074682 -0.001292279  0.001923835
+## BMI      0.5594732320 -1.151700601 -0.099913184  0.854373979  0.112541184
+## SSF     -0.0397575804  0.034224172 -0.049027821 -0.005826493  0.057489341
+## `%Bfat` -0.3021704980  0.267305723 -0.317551405  0.611206234  0.110412501
+## LBM     -0.5767730346  0.397152230 -0.688630708  0.895735977  0.511088448
+## Ht       0.0444158866 -0.259559694 -0.025683855  0.077943962 -0.024103789
+## Wt       0.4257184332 -0.045388285  0.672740432 -0.963283281 -0.478482727
 ## 
 ## Proportion of trace:
-##    LD1    LD2    LD3    LD4    LD5    LD6    LD7    LD8    LD9   LD10 
-## 0.5493 0.1956 0.1011 0.0579 0.0404 0.0235 0.0191 0.0088 0.0033 0.0010 
-##   LD11 
-## 0.0000
+##    LD1    LD2    LD3    LD4    LD5    LD6    LD7    LD8    LD9   LD10   LD11 
+## 0.5493 0.1956 0.1011 0.0579 0.0404 0.0235 0.0191 0.0088 0.0033 0.0010 0.0000
 ```
 
  
@@ -6981,7 +6902,7 @@ ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
   scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-204-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
 
      
 
@@ -7041,7 +6962,7 @@ athletes %>%
   geom_point() + scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-205-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-198-1.png" width="672"  />
 
  
 

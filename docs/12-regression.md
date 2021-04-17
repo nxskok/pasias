@@ -2585,45 +2585,80 @@ A rather more `tidyverse` way is this:
 
 
 ```r
-soc %>% summarize_all(c("min", "max"))
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.))))
 ```
 
 ```
 ## # A tibble: 1 x 4
-##   experience_min salary_min experience_max salary_max
-##            <dbl>      <dbl>          <dbl>      <dbl>
-## 1              1      16105             28      99139
+##   experience_min experience_max salary_min salary_max
+##            <dbl>          <dbl>      <dbl>      <dbl>
+## 1              1             28      16105      99139
 ```
 
  
 
 This gets the minimum and maximum of all the variables. I would have
 liked them arranged in a nice rectangle (`min` and `max`
-as rows, the variables as columns), but that's not how this comes out.
+as rows, the variables as columns), but that's not how this came out.
 
-Here is another:
+The code so far uses `across`. This means to do something across multiple columns. In this case, we want to do the calculation on *all* the columns, so we use the select-helper `everything`. You can use any of the other select-helpers like `starts_with`, or you could do something like `where(is.numeric)` to do your summaries only on the quantitative columns (which would also work here). The dots inside `min` and `max` mean "the variable we are looking at at the moment", and the squiggles before `min` and `max` mean "calculate", so you read the above code as "for each column, work out the smallest and largest value of it".
 
-
-```r
-soc %>% map_df(~ quantile(.))
-```
-
-```
-## # A tibble: 2 x 5
-##    `0%`   `25%`  `50%`   `75%` `100%`
-##   <dbl>   <dbl>  <dbl>   <dbl>  <dbl>
-## 1     1    13.5    20     24.8     28
-## 2 16105 36990.  50948. 65204.   99139
-```
-
- 
-
-These are the five-number summaries of each variable. Normally, they
-come with percentiles attached:
+What, you want a nice rectangle? This is a pivot-longer, but the fancy version because the column names encode two kinds of things, a variable and a statistic:
 
 
 ```r
-quantile(soc$experience)
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
+  pivot_longer(everything(), 
+               names_to = c("variable", "statistic"), 
+               names_sep = "_",
+               values_to = "value"
+               )
+```
+
+```
+## # A tibble: 4 x 3
+##   variable   statistic value
+##   <chr>      <chr>     <dbl>
+## 1 experience min           1
+## 2 experience max          28
+## 3 salary     min       16105
+## 4 salary     max       99139
+```
+and then
+
+
+```r
+soc %>% 
+  summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
+  pivot_longer(everything(), 
+               names_to = c("variable", "statistic"), 
+               names_sep = "_",
+               values_to = "value"
+               ) %>% 
+  pivot_wider(names_from = statistic, values_from = value)
+```
+
+```
+## # A tibble: 2 x 3
+##   variable     min   max
+##   <chr>      <dbl> <dbl>
+## 1 experience     1    28
+## 2 salary     16105 99139
+```
+
+Note the strategy: make it longer first, then figure out what to do next. This is different from `rowwise`; in fact, we are working "columnwise", doing something for each column, no matter how many there are. My go-to for this stuff is [here](https://dplyr.tidyverse.org/articles/colwise.html).
+
+Another way to work is with the five-number summary. This gives a more nuanced picture of the data values we have.
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This might be overkill at this point, since we really only care about whether our data values are reasonable, and often just looking at the highest and lowest values will tell us that.</span> 
+
+The base-R five-number summary looks like this:
+
+
+```r
+qq <- quantile(soc$experience)
+qq
 ```
 
 ```
@@ -2631,75 +2666,44 @@ quantile(soc$experience)
 ##  1.00 13.50 20.00 24.75 28.00
 ```
 
- 
-
-but the percentiles get lost in the transition to a `tibble`, and I
-haven't found out how to get them back.
-
-This almost works:
+This is what's known as a "named vector". The numbers on the bottom are the summaries themselves, and the names above say which percentile you are looking at. Unfortunately, the `tidyverse` doesn't like names, so modelling after the above doesn't quite work:
 
 
 ```r
-soc %>% map_df(~ enframe(quantile(.)))
+soc %>% 
+  summarize(across(everything(), list(q = ~quantile(.))))
 ```
 
 ```
-## # A tibble: 10 x 2
-##    name    value
-##    <chr>   <dbl>
-##  1 0%        1  
-##  2 25%      13.5
-##  3 50%      20  
-##  4 75%      24.8
-##  5 100%     28  
-##  6 0%    16105  
-##  7 25%   36990. 
-##  8 50%   50948. 
-##  9 75%   65204. 
-## 10 100%  99139
+## # A tibble: 5 x 2
+##   experience_q salary_q
+##          <dbl>    <dbl>
+## 1          1     16105 
+## 2         13.5   36990.
+## 3         20     50948.
+## 4         24.8   65204.
+## 5         28     99139
 ```
 
-
-
-but, though we now have the percentiles, we've lost the names of the variables, so it isn't much better.
-
-In this context, `map` says 
-"do whatever is in the brackets for each column of the data frame". 
-(That's the implied "for each".) The output from `quantile` 
-is a vector that we would like to have display as a data frame, so `map_df` 
-instead of any other form of `map`.
-
-As you know, the `map` family is 
-actually very flexible: they run a function "for each" anything and
-glue the results together, like this:
+You can guess which percentile is which (they have to be in order), but this is not completely satisfactory. A workaround is to get hold of the `names` and add them to the result:
 
 
 ```r
-soc %>% map_dbl(median)
+soc %>% 
+  summarize(across(everything(), list(q = ~quantile(.)))) %>% 
+  mutate(pct = names(qq))
 ```
 
 ```
-## experience     salary 
-##       20.0    50947.5
+## # A tibble: 5 x 3
+##   experience_q salary_q pct  
+##          <dbl>    <dbl> <chr>
+## 1          1     16105  0%   
+## 2         13.5   36990. 25%  
+## 3         20     50948. 50%  
+## 4         24.8   65204. 75%  
+## 5         28     99139  100%
 ```
-
- 
-
-which gets the median for each variable. That's the same thing as this:
-
-
-```r
-soc %>% summarize_all("median")
-```
-
-```
-## # A tibble: 1 x 2
-##   experience salary
-##        <dbl>  <dbl>
-## 1         20 50948.
-```
-
- 
 
 
 
@@ -2897,19 +2901,20 @@ search()
 
 ```
 ##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
-##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
-##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
-## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
-## [13] "package:scales"      "package:plyr"        "package:lme4"       
-## [16] "package:Matrix"      "package:car"         "package:carData"    
-## [19] "package:survminer"   "package:ggpubr"      "package:survival"   
-## [22] "package:nnet"        "package:MASS"        "package:smmr"       
-## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
-## [28] "package:purrr"       "package:readr"       "package:tidyr"      
-## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
-## [34] "package:stats"       "package:graphics"    "package:grDevices"  
-## [37] "package:utils"       "package:datasets"    "package:methods"    
-## [40] "Autoloads"           "package:base"
+##  [4] "package:leaps"       "package:conflicted"  "package:PMCMRplus"  
+##  [7] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
+## [10] "package:rpart"       "package:broom"       "package:ggrepel"    
+## [13] "package:ggbiplot"    "package:grid"        "package:scales"     
+## [16] "package:plyr"        "package:lme4"        "package:Matrix"     
+## [19] "package:car"         "package:carData"     "package:survminer"  
+## [22] "package:ggpubr"      "package:survival"    "package:nnet"       
+## [25] "package:MASS"        "package:smmr"        "package:forcats"    
+## [28] "package:stringr"     "package:dplyr"       "package:purrr"      
+## [31] "package:readr"       "package:tidyr"       "package:tibble"     
+## [34] "package:ggplot2"     "package:tidyverse"   "package:stats"      
+## [37] "package:graphics"    "package:grDevices"   "package:utils"      
+## [40] "package:datasets"    "package:methods"     "Autoloads"          
+## [43] "package:base"
 ```
 
  
@@ -2923,7 +2928,7 @@ detach("package:MASS", unload = T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
  
@@ -2936,19 +2941,19 @@ search()
 
 ```
 ##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
-##  [4] "package:conflicted"  "package:rstan"       "package:StanHeaders"
-##  [7] "package:bootstrap"   "package:rpart"       "package:broom"      
-## [10] "package:ggrepel"     "package:ggbiplot"    "package:grid"       
-## [13] "package:scales"      "package:plyr"        "package:lme4"       
-## [16] "package:Matrix"      "package:car"         "package:carData"    
-## [19] "package:survminer"   "package:ggpubr"      "package:survival"   
-## [22] "package:nnet"        "package:smmr"        "package:forcats"    
-## [25] "package:stringr"     "package:dplyr"       "package:purrr"      
-## [28] "package:readr"       "package:tidyr"       "package:tibble"     
-## [31] "package:ggplot2"     "package:tidyverse"   "package:stats"      
-## [34] "package:graphics"    "package:grDevices"   "package:utils"      
-## [37] "package:datasets"    "package:methods"     "Autoloads"          
-## [40] "package:base"
+##  [4] "package:leaps"       "package:conflicted"  "package:PMCMRplus"  
+##  [7] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
+## [10] "package:rpart"       "package:broom"       "package:ggrepel"    
+## [13] "package:ggbiplot"    "package:grid"        "package:scales"     
+## [16] "package:plyr"        "package:lme4"        "package:Matrix"     
+## [19] "package:car"         "package:carData"     "package:survminer"  
+## [22] "package:ggpubr"      "package:survival"    "package:nnet"       
+## [25] "package:smmr"        "package:forcats"     "package:stringr"    
+## [28] "package:dplyr"       "package:purrr"       "package:readr"      
+## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
+## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
+## [37] "package:grDevices"   "package:utils"       "package:datasets"   
+## [40] "package:methods"     "Autoloads"           "package:base"
 ```
 
  
@@ -3814,31 +3819,31 @@ being a bit lower as we saw before.
 
 My code is rather repetitious. There has to be a way to streamline
 it. I was determined to find out how. My solution involves putting the
-three models in a `list`, and then using `map` to
-get the `glance` output for each one, and `bind_rows`
-to glue the results together into one data frame. I was inspired to
-try this by remembering that `map_df` will work for a function
-like `glance` that outputs a data frame:
+three models in a list-column, and then using `rowwise` to
+get the `glance` output for each one.
 
 
 ```r
-model_list <- list(volume.1, volume.2, volume.3)
-map_df(model_list, ~ glance(.))
+tibble(i = 1:3, model = list(volume.1, volume.2, volume.3)) %>% 
+  rowwise() %>% 
+  mutate(glances = list(glance(model))) %>% 
+  unnest(glances)
 ```
 
 ```
-## # A tibble: 3 x 12
-##   r.squared adj.r.squared  sigma statistic     p.value    df logLik   AIC   BIC
-##       <dbl>         <dbl>  <dbl>     <dbl>       <dbl> <dbl>  <dbl> <dbl> <dbl>
-## 1     0.959         0.953 20.4       185.  0.000000822     1 -43.2  92.4  93.4 
-## 2     0.953         0.947 21.7       162.  0.00000136      1 -43.8  93.7  94.6 
-## 3     0.908         0.896  0.303      78.7 0.0000206       1  -1.12  8.25  9.16
-## # … with 3 more variables: deviance <dbl>, df.residual <int>, nobs <int>
+## # A tibble: 3 x 14
+##       i model  r.squared adj.r.squared  sigma statistic     p.value    df logLik
+##   <int> <list>     <dbl>         <dbl>  <dbl>     <dbl>       <dbl> <dbl>  <dbl>
+## 1     1 <lm>       0.959         0.953 20.4       185.  0.000000822     1 -43.2 
+## 2     2 <lm>       0.953         0.947 21.7       162.  0.00000136      1 -43.8 
+## 3     3 <lm>       0.908         0.896  0.303      78.7 0.0000206       1  -1.12
+## # … with 5 more variables: AIC <dbl>, BIC <dbl>, deviance <dbl>,
+## #   df.residual <int>, nobs <int>
 ```
 
- 
+I almost got caught by forgetting the `list` on the definition of `glances`. I certainly need it, because the output from `glance` is a (one-row) dataframe, not a single number.
 
-It works. You see the three R-squared values in the first column. The
+It works. You see the three R-squared values in the first column of numbers. The
 third model is otherwise a lot different from the others because it
 has a different response variable.
 
@@ -8417,7 +8422,7 @@ detach("package:MASS", unload = T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
  

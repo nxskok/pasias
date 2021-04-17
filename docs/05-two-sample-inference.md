@@ -1196,7 +1196,8 @@ earlier to find the five-number summaries for each field:
 ```r
 pepper %>%
   nest(-field) %>%
-  mutate(qq = map(data, ~ enframe(quantile(.$water)))) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$water))))%>%
   unnest(qq) %>%
   select(-data) %>% 
   pivot_wider(names_from=name, values_from=value)

@@ -1042,7 +1042,7 @@ detach("package:MASS", unload = T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
  

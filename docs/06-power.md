@@ -158,26 +158,32 @@ Solution
 
 Once you get the hang of these, they all look almost the
 same. This one is easier than some because we don't have to do
-anything special to get a two-sided alternative hypothesis:
+anything special to get a two-sided alternative hypothesis. The initial setup is to make a dataframe with a column called something like `sim` to label the simulations, and then a `rowwise` to generate one random sample, $t$-test and P-value for each simulation:
+
 
 ```r
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 20))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `pvals <= 0.05`     n
-##   <lgl>           <int>
-## 1 FALSE             958
-## 2 TRUE               42
+## # Rowwise: 
+##   `pval <= 0.05`     n
+##   <lgl>          <int>
+## 1 FALSE            958
+## 2 TRUE              42
 ```
 
+
+    
+
 The power is about 4.2\%. This seems depressingly small, but see the
-next part.
+next part. (Are you confused about something in this one? You have a right to be.)
 
 
 
@@ -219,11 +225,12 @@ Here's the code we just used:
 
 
 ```r
-rerun(1000,rnorm(10,20,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 20))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
 ```
 
 One of those 20s needs to become 22. Not the one in the
@@ -234,27 +241,30 @@ the same:
 
 
 ```r
-rerun(1000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 22))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `pvals <= 0.05`     n
-##   <lgl>           <int>
-## 1 FALSE             202
-## 2 TRUE              798
+## # Rowwise: 
+##   `pval <= 0.05`     n
+##   <lgl>          <int>
+## 1 FALSE            192
+## 2 TRUE             808
 ```
+         
 
 This time, we *want* to reject, since the null hypothesis is
-false. So look at the `TRUE` count of 798: the power is about
-$798/1000 \simeq 80\%$. We are very likely to correctly reject a null
+false. So look at the `TRUE` count: the power is about
+$80\%$. We are very likely to correctly reject a null
 of 20 when the mean is actually 22.
 
-Another way to reason that the power should be fairly large is to
+Extra: another way to reason that the power should be fairly large is to
 think about what kind of sample you are likely to get from the true
 distribution: one with a mean around 22 and an SD around 2. Thus the
 $t$-statistic should be somewhere around this (we have a sample size
@@ -321,8 +331,9 @@ power.t.test(n=10,delta=22-20,sd=2,type="one.sample",alternative="two.sided")
 ##     alternative = two.sided
 ```
 
-This, 0.803, is very close to the 0.798 I got from my
+This, 0.803, is very close to the value I got from my
 simulation. Which makes me think I did them both right. This is not a watertight proof, though: for example, I might have made a mistake and gotten lucky somewhere. But it does at least give me confidence.
+
 Extra: when you estimate power by simulation, what you are doing is
 rejecting or not with a certain probability (which is the same for all
 simulations). So the number of times you actually *do* reject has
@@ -367,6 +378,8 @@ prop.test(42,1000,0.05)
 ## 0.042
 ```
 
+** check that the values are correct below **
+
 Looking at the P-value, we definitely fail to reject that the
 probability of (incorrectly) rejecting is the 0.05 that it should
 be. Ouch. That's true, but unnecessarily confusing. Look at the
@@ -409,21 +422,25 @@ This might be an accurate enough assessment of the power for you, but
 if not, you can do more simulations, say 10,000:
 
 
+
 ```r
-rerun(10000,rnorm(10,22,2)) %>%
-map(~t.test(.,mu=20)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
+  mutate(t_test = list(t.test(norm_sample, mu = 22))) %>% 
+  mutate(pval = t_test$p.value) %>% 
+  count(pval <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `pvals <= 0.05`     n
-##   <lgl>           <int>
-## 1 FALSE            2004
-## 2 TRUE             7996
+## # Rowwise: 
+##   `pval <= 0.05`     n
+##   <lgl>          <int>
+## 1 FALSE           1923
+## 2 TRUE            8077
 ```
+
 
 I copied and pasted my code again, which means that I'm dangerously
 close to turning it into a function, but anyway.
@@ -458,7 +475,7 @@ simulations, and thus ought to be a factor of $\sqrt{10}\simeq 3.16$
 times longer.
 
 This means that you can estimate power as accurately as you like by
-doing a large enough number of simulations. Provided, that is, that
+doing a large enough (possibly very large) number of simulations. Provided, that is, that
 you are prepared to wait a possibly long time for it to finish working!
 
 
@@ -515,15 +532,17 @@ simulation). Though if you want to, you can do that as well, thus:
 
 
 ```r
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(rnorm(30, 110, 20))) %>% 
+  mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+  mutate(pvals = ttest$p.value) %>% 
+  count(pvals<=0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
+## # Rowwise: 
 ##   `pvals <= 0.05`     n
 ##   <lgl>           <int>
 ## 1 FALSE             257
@@ -584,16 +603,19 @@ enough power, so we have to up the sample size a bit. How about we try
 40? I copied and pasted my code from above and changed 30 to 40:
 
 
+
 ```r
-rerun(1000,rnorm(40,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(samples = list(rnorm(40, 110, 20))) %>% 
+  mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+  mutate(pvals = ttest$p.value) %>% 
+  count(pvals<=0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
+## # Rowwise: 
 ##   `pvals <= 0.05`     n
 ##   <lgl>           <int>
 ## 1 FALSE             130
@@ -608,17 +630,21 @@ it first, with the sample size as input. Copy-paste once more and edit:
 
 ```r
 sim_power=function(n) {
-rerun(1000,rnorm(30,110,20)) %>%
-map(~t.test(.,mu=100)) %>%
-map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals<=0.05)
+  tibble(sim = 1:1000) %>% 
+    rowwise() %>% 
+    mutate(samples = list(rnorm(n, 110, 20))) %>% 
+    mutate(ttest = list(t.test(samples, mu= 100))) %>% 
+    mutate(pvals = ttest$p.value) %>% 
+    ungroup() %>% 
+    count(pvals<=0.05)
 }
 ```
 
 In the grand scheme of things, we might want to have the null and true
 means, population SD and $\alpha$ be inputs to the function as well,
 so that we have a more general tool, but this will do for now.
+
+
 
 Let's run it with a sample size of 35:
 
@@ -631,8 +657,8 @@ sim_power(35)
 ## # A tibble: 2 x 2
 ##   `pvals <= 0.05`     n
 ##   <lgl>           <int>
-## 1 FALSE             238
-## 2 TRUE              762
+## 1 FALSE             183
+## 2 TRUE              817
 ```
 
 and I'm going to call that good. (Because there is randomness in the
@@ -650,7 +676,33 @@ that: programmer's brain cells are more valuable than computer CPU
 cycles, and you might as well save your brain cells for when you
 really need them.
 
+You might even think about automating this further. The easiest way, now that we have the function, is something like this:
 
+
+```r
+tibble(ns = seq(20, 50, 5)) %>% 
+  rowwise() %>% 
+  mutate(power_tab = list(sim_power(ns))) %>% 
+  unnest(power_tab) %>% 
+  pivot_wider(names_from = `pvals <= 0.05`, values_from = n)
+```
+
+```
+## # A tibble: 7 x 3
+##      ns `FALSE` `TRUE`
+##   <dbl>   <int>  <int>
+## 1    20     402    598
+## 2    25     321    679
+## 3    30     258    742
+## 4    35     188    812
+## 5    40     132    868
+## 6    45     100    900
+## 7    50      89    911
+```
+
+The business end of this is happening in the first three lines. I wasn't thinking of this when I originally wrote `sim_power` to return a dataframe, so there is a  bit more fiddling after the simulations are done: I have to `unnest` to see what the list-column `power_tab` actually contains, and because of the layout of the output from unnesting `sim_power` (long format), it looks better if I pivot it wider, so that I can just cast my eye down the TRUE column and see the power increasing as the sample size increases.
+
+You might  also think of something like bisection to find the sample size that has power 0.8, but it starts getting tricky because of the randomness; just by chance, it may be that sometimes the simulated power goes *down* as the sample size goes up. With 1000 simulations each time, it seems that the power ought to hit 80% with a sample size between 30 and 35.
 
 
 
@@ -731,7 +783,7 @@ rbinom(3, 100, 0.6)
  
 
 Three random binomials, that happened to come out just below 60. We're
-going to leave the first input as 1, though, and let `rerun`
+going to leave the first input as 1, though, and let `rowwise`
 handle "lots of sampled values" later.
     
  
@@ -811,20 +863,20 @@ Yep, the same.
 
 
 
-(d) Use `rerun` to estimate the power of a test of
+(d) Estimate the power of a test of
 $H_0: p=0.5$ against $H_a: p>0.5$ when $n=500$ and $p=0.56$, using
 $\alpha=0.05$. There are three steps:
 
 
-* use `rerun` to generate random samples from binomial
+* generate random samples from binomial
 distributions with $n=500$ and $p=0.56$, repeated "many" times
 (something like 1000 or 10,000 is good)
 
-* use `map` to run `prop.test` on each of those
-random samples
+* run `prop.test` on each of those
+random samples 
 
-* use `map_dbl` to extract the P-value for each test and
-save the results (in a vector called, perhaps, `pvals`).
+* extract the P-value for each test and
+save the results (in a column called, perhaps, `pvals`).
 
 So I lied: the fourth and final step is to count how many of
 those P-values are 0.05 or less.
@@ -832,33 +884,38 @@ those P-values are 0.05 or less.
 
 Solution
 
+The first part of the first step is to create a column called something like `sim` that labels each simulated sample, and to make sure that everything happens rowwise. After that, you follow the procedure:
 
-The previous parts, using `rbinom` and `prop.test`,
-were meant to provide you with the ingredients for this part.
-The first step is to use `rbinom`. The first input is 1 since
-we only want one random binomial each time (the `rerun` will
-handle the fact that you actually want lots of them). The second step
-runs `prop.test`; the first input to that is each one of the
-numbers of successes from the first step. (This is an implied
-for-each, with each of the simulated binomials playing the role of
-"it", in turn.). The last part is to pull out all the P-values and
-make a table of them, just like the example in class.
 
 ```r
-rerun(10000, rbinom(1, 500, 0.56)) %>%
-  map(~ prop.test(., 500, 0.5, alternative = "greater")) %>%
-  map_dbl("p.value") ->
-pvals
-tibble(pvals) %>% count(pvals <= 0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = rbinom(1, 500, 0.56)) %>% 
+  mutate(test = list(prop.test(sample, 500, 0.5, alternative = "greater"))) %>% 
+  mutate(pvals = test$p.value) %>% 
+  count(pvals <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
+## # Rowwise: 
 ##   `pvals <= 0.05`     n
 ##   <lgl>           <int>
-## 1 FALSE            1491
-## 2 TRUE             8509
+## 1 FALSE             143
+## 2 TRUE              857
 ```
+
+
+
+The previous parts, using `rbinom` and `prop.test`,
+were meant to provide you with the ingredients for this part.
+The first step is to use `rbinom`. The first input is 1 since
+we only want one random binomial each time (the `rowwise` will
+handle the fact that you actually want lots of them; you only want one *per row* since you are working rowwise). The second step
+runs `prop.test`; the first input to that is each one of the
+numbers of successes from the first step. The last part is to pull out all the P-values and
+make a table of them, just like the example in lecture.
+
 
  
 

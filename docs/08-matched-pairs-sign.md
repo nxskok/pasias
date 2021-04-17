@@ -759,11 +759,13 @@ medians, and get the P-value for each of them, eg.:
 
 ```r
 d <- tibble(my.med = seq(0, 20, 2))
-d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
+d %>% rowwise() %>% 
+  mutate(pvals = pval_sign(my.med, throws, diff))
 ```
 
 ```
 ## # A tibble: 11 x 2
+## # Rowwise: 
 ##    my.med      pvals
 ##     <dbl>      <dbl>
 ##  1      0 0.0000660 
@@ -787,11 +789,13 @@ outside. Some closer investigation:
 
 ```r
 d <- tibble(my.med = seq(0, 2, 0.5))
-d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
+d %>% rowwise() %>% 
+  mutate(pvals = pval_sign(my.med, throws, diff))
 ```
 
 ```
 ## # A tibble: 5 x 2
+## # Rowwise: 
 ##   my.med     pvals
 ##    <dbl>     <dbl>
 ## 1    0   0.0000660
@@ -809,11 +813,13 @@ The bottom end of the interval actually is 2, since 2 is inside and
 
 ```r
 d <- tibble(my.med = seq(8, 10, 0.5))
-d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
+d %>% rowwise() %>% 
+  mutate(pvals = pval_sign(my.med, throws, diff))
 ```
 
 ```
 ## # A tibble: 5 x 2
+## # Rowwise: 
 ##   my.med  pvals
 ##    <dbl>  <dbl>
 ## 1    8   0.210 
@@ -822,7 +828,6 @@ d %>% mutate(pvals = map_dbl(my.med, ~ pval_sign(., throws, diff)))
 ## 4    9.5 0.0227
 ## 5   10   0.0227
 ```
-
  
 
 The top end is 9, 9 being inside and 9.5 outside.

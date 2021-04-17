@@ -1524,7 +1524,7 @@ data frame `studyhours` (or whatever you called it).
 Solution
 
 
-So, like the example in class (where the
+So, like the example in lecture (where the
 `contrasts(model)` was admittedly rather confusing):
 
 ```r

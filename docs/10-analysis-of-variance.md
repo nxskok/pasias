@@ -1503,20 +1503,19 @@ to do.
 Now we want to call our function `comp2` for each of the things
 in `first` *and* each of the things in `second`,
 and make a new column called `pval` that contains exactly
-that. This (coming fresh from page 332 of the R book, this being the
-first time I've ever used it)
-<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">This was a year ago when I first  wrote this.} is exactly what the texttt{map2</span> family of functions
-does. In our case, `comp2` returns a decimal number, a
-`dbl`, so `map2_dbl` does it.  Thus:
+that. `comp2` expects single movie ratings for each of its inputs, not a vector of each, so the way to go about this is `rowwise`:
+
 
 ```r
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
-  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies)))
+  rowwise() %>% 
+  mutate(pval = comp2(first, second, movies))
 ```
 
 ```
 ## # A tibble: 6 x 3
+## # Rowwise: 
 ##   first second      pval
 ##   <chr> <chr>      <dbl>
 ## 1 G     PG     0.00799  
@@ -1527,14 +1526,6 @@ crossing(first = the_ratings, second = the_ratings) %>%
 ## 6 PG-13 R      0.273
 ```
 
- 
-
-The logic of `map2_dbl` is 
-"for each of the things in `first`, and each of the things in `second`, taken in parallel, call the function `comp2` with those two inputs in that order, always with data frame `movies`". 
-The `.x`
-and `.y` play the role of the `.` that we usually have
-inside a map, but now we're "mapping" over two things rather than
-just one, so that they cannot both be called `.`.
 
 One more thing: we're doing 6 tests at once here, so we're giving
 ourselves 6 chances to reject a null (all medians equal) that might
@@ -1551,12 +1542,14 @@ build in another `mutate`, thus:
 ```r
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
-  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
-  mutate(reject = pval < 0.05 / 6)
+  rowwise() %>% 
+  mutate(pval = comp2(first, second, movies)) %>% 
+  mutate(reject = (pval < 0.05 / 6))
 ```
 
 ```
 ## # A tibble: 6 x 4
+## # Rowwise: 
 ##   first second      pval reject
 ##   <chr> <chr>      <dbl> <lgl> 
 ## 1 G     PG     0.00799   TRUE  
@@ -1625,14 +1618,16 @@ Here's something extremely flashy to finish with:
 ```r
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
-  mutate(pval = map2_dbl(first, second, ~ comp2(.x, .y, movies))) %>%
-  mutate(reject = pval < 0.05 / 6) %>%
+  rowwise() %>% 
+  mutate(pval = comp2(first, second, movies)) %>% 
+  mutate(reject = (pval < 0.05 / 6)) %>% 
   left_join(medians, by = c("first" = "rating")) %>%
   left_join(medians, by = c("second" = "rating"))
 ```
 
 ```
 ## # A tibble: 6 x 6
+## # Rowwise: 
 ##   first second      pval reject med.x med.y
 ##   <chr> <chr>      <dbl> <lgl>  <dbl> <dbl>
 ## 1 G     PG     0.00799   TRUE      82   100

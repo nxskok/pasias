@@ -122,33 +122,26 @@ you can).
  
 Solution
 
+I think this is the easiest way:
 
-This is cleanest, but you may not have seen the idea before:
 
 ```r
-map_df(weather, ~ quantile(.))
+weather %>% 
+  summarize(across(everything(), ~quantile(.)))
 ```
 
 ```
-## # A tibble: 6 x 5
-##    `0%` `25%` `50%` `75%` `100%`
-##   <dbl> <dbl> <dbl> <dbl>  <dbl>
-## 1   3.1   9.1  12.9  16.3   22.6
-## 2   9.8  14.4  19.1  23.3   31.5
-## 3   7.3  12    15.8  19.3   26.6
-## 4   0     0     0.3   5.3   74.9
-## 5   0     2.3   3.5   5.2   16.6
-## 6   3.2  22.5  29    38.6   86.9
+## # A tibble: 5 x 6
+##   l.temp h.temp ave.temp  rain ave.wind gust.wind
+##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
+## 1    3.1    9.8      7.3   0        0         3.2
+## 2    9.1   14.4     12     0        2.3      22.5
+## 3   12.9   19.1     15.8   0.3      3.5      29  
+## 4   16.3   23.3     19.3   5.3      5.2      38.6
+## 5   22.6   31.5     26.6  74.9     16.6      86.9
 ```
 
-     
-These are, reading down, the min, Q1, median, Q3, max of each
-variable. The rain, in particular, is very skewed: the median is near
-zero, but the maximum is much higher. (Most of the time, you get no
-rain, but if you get any, you can get a lot. The maximum is 75 mm, or
-3 inches. In one day.)
-
-The coding idea is that if you feed a `map_` a data frame, it applies the function to each *column* of the data frame. 
+This loses the actual percents of the percentiles of the five-number summary (because they are "names" of the numerical result, and the tidyverse doesn't like names.) I think you can see which percentile is which, though.
 
 Another way to do it is to make a column of column names, using
 `pivot_longer`, and then use `nest` and list-columns to find
@@ -158,28 +151,24 @@ the quantiles for each variable:
 ```r
 weather %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>%
-  nest(-xname) %>%
-  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  nest_by(xname) %>%
+  mutate(q = list(enframe(quantile(data$x)))) %>%
   unnest(q) %>%
   pivot_wider(names_from=name, values_from=value) %>%
   select(-data)
 ```
 
 ```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(x)`?
-```
-
-```
 ## # A tibble: 6 x 6
+## # Groups:   xname [6]
 ##   xname      `0%` `25%` `50%` `75%` `100%`
 ##   <chr>     <dbl> <dbl> <dbl> <dbl>  <dbl>
-## 1 l.temp      3.1   9.1  12.9  16.3   22.6
-## 2 h.temp      9.8  14.4  19.1  23.3   31.5
-## 3 ave.temp    7.3  12    15.8  19.3   26.6
-## 4 rain        0     0     0.3   5.3   74.9
-## 5 ave.wind    0     2.3   3.5   5.2   16.6
-## 6 gust.wind   3.2  22.5  29    38.6   86.9
+## 1 ave.temp    7.3  12    15.8  19.3   26.6
+## 2 ave.wind    0     2.3   3.5   5.2   16.6
+## 3 gust.wind   3.2  22.5  29    38.6   86.9
+## 4 h.temp      9.8  14.4  19.1  23.3   31.5
+## 5 l.temp      3.1   9.1  12.9  16.3   22.6
+## 6 rain        0     0     0.3   5.3   74.9
 ```
 
  
@@ -674,21 +663,22 @@ let's see if we can do that here as well:
 
 
 ```r
-map_df(weather, ~percent_rank(.)) %>%
-  mutate(day=row_number()) %>% 
-  slice(c(37, 211, 265, 47))
+weather %>% mutate(across(everything(), ~percent_rank(.))) %>% 
+    slice(c(37, 211, 265, 47))
 ```
 
 ```
-## # A tibble: 4 x 7
-##   l.temp h.temp ave.temp  rain ave.wind gust.wind   day
-##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl> <int>
-## 1  0.264 0.316     0.299 0.973    1         0.997    37
-## 2  1     0.997     1     0        0.654     0.626   211
-## 3  0.783 0.560     0.635 0.761    0         0       265
-## 4  0     0.0275    0     0.582    0.162     0.275    47
+## # A tibble: 4 x 6
+##   l.temp h.temp ave.temp  rain ave.wind gust.wind
+##    <dbl>  <dbl>    <dbl> <dbl>    <dbl>     <dbl>
+## 1  0.264 0.316     0.299 0.973    1         0.997
+## 2  1     0.997     1     0        0.654     0.626
+## 3  0.783 0.560     0.635 0.761    0         0    
+## 4  0     0.0275    0     0.582    0.162     0.275
 ```
 
+The idea here is that we want to *replace* all the data values by the percent-rank version of themselves, rather than *summarizing* them as we have done before. That's what using an `across` inside a `mutate` will do. 
+<label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">There are also options to keep the original variables, and give the new ones new names.</span>
  
 
 These are:
@@ -824,26 +814,24 @@ Solution
 
 Like this (the cleanest):
 
+
 ```r
-air %>% map_df(~ quantile(.))
+air %>% 
+  summarize(across(everything(), ~quantile(.)))
 ```
 
 ```
-## # A tibble: 7 x 5
-##    `0%` `25%` `50%` `75%` `100%`
-##   <dbl> <dbl> <dbl> <dbl>  <dbl>
-## 1     5   6     8    8.75     10
-## 2    30  68.2  76.5 84.8     107
-## 3     2   4     4    5         7
-## 4     1   1     2    3         5
-## 5     5   8     9.5 12        21
-## 6     2   6     8.5 11        25
-## 7     2   3     3    3         5
+## # A tibble: 5 x 7
+##    wind solar.radiation    CO    NO   NO2    O3    HC
+##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1  5               30       2     1   5     2       2
+## 2  6               68.2     4     1   8     6       3
+## 3  8               76.5     4     2   9.5   8.5     3
+## 4  8.75            84.8     5     3  12    11       3
+## 5 10              107       7     5  21    25       5
 ```
 
-     
 
-using `map` from `purrr`: "for each (column of) `air`, calculate the quantiles of it"..
 I have to figure out how to
 identify which number from the five number summary each of these is,
 but in this case you can easily figure it out since the min is the
@@ -855,37 +843,57 @@ Or, with some more work, this:
 ```r
 air %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>% 
-  nest(-xname) %>%
-  mutate(q = map(data, ~ enframe(quantile(.$x)))) %>%
+  nest_by(xname) %>%
+  rowwise() %>% 
+  mutate(q = list(enframe(quantile(data$x)))) %>%
   unnest(q) %>%
   pivot_wider(names_from=name, values_from=value) %>% 
   select(-data)
 ```
 
 ```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(x)`?
-```
-
-```
 ## # A tibble: 7 x 6
 ##   xname            `0%` `25%` `50%` `75%` `100%`
 ##   <chr>           <dbl> <dbl> <dbl> <dbl>  <dbl>
-## 1 wind                5   6     8    8.75     10
-## 2 solar.radiation    30  68.2  76.5 84.8     107
-## 3 CO                  2   4     4    5         7
-## 4 NO                  1   1     2    3         5
-## 5 NO2                 5   8     9.5 12        21
-## 6 O3                  2   6     8.5 11        25
-## 7 HC                  2   3     3    3         5
+## 1 CO                  2   4     4    5         7
+## 2 HC                  2   3     3    3         5
+## 3 NO                  1   1     2    3         5
+## 4 NO2                 5   8     9.5 12        21
+## 5 O3                  2   6     8.5 11        25
+## 6 solar.radiation    30  68.2  76.5 84.8     107
+## 7 wind                5   6     8    8.75     10
 ```
 
-This time, I put the percentiles in columns and variable names in rows (because it seemed to be easier that way).
- 
+There's a lot here. Run it one line at a time to see what it does:
 
-just like the weather problem (in fact, *exactly* like the weather
-problem).
+- put the names of the variables in one column and the values in a second. This is the same trick as when we want to make plots of all the variables facetted.
 
+- the `nest_by` says: for each variable (whose names are now in `xname`), make a dataframe called `data` of the observations (in `x`) for that variable
+
+- the rest of the way, work one row at a time
+
+- work out the five-number summary for each variable, using the values `x` in the data frame `data` of each row of the list-column, one at a time. This is the base R `quantile`, working on a vector (the column `x` of the data frame `data`), so it gives you back a named vector. If you are not familiar with that, try running `quantile(1:10)` and see how the output has both the percentiles and, above them, the percents that they go with. The tidyverse doesn't like names, so my favourite way of keeping them with a named vector is to run it through `enframe`. This makes a two-column dataframe, with a column called `name` that is in this case the percents, and a column called `value` that is the percentiles. This is a dataframe rather than a single number, so it needs a `list` on the front as well (to make another list-column).
+There are rather a lot of brackets to close here; if you are not sure you have enough, type another close bracket, pause, and see what it matches (R Studio will show you). If it matches nothing, you have too many close brackets.
+
+- show the values of the five-number summary for each variable (in long format, but with the percentages attached)
+
+- for human consumption, put the percentiles in columns, one row for each variable
+
+- finally, get rid of the dataframes of original values (that we don't need any more now that we have summarized them).
+
+Extra: say you wanted to make facetted histograms of each variable. You would begin the same way, with the `pivot_longer`, and at the end, `facet_wrap` with `scales = "free"` (since the variables are measured on different scales):
+
+
+```r
+air %>%
+  pivot_longer(everything(), names_to="xname", values_to="x") %>% 
+  ggplot(aes(x=x)) + geom_histogram(bins = 6) +
+  facet_wrap(~xname, scales = "free")
+```
+
+<img src="24-pcfa_files/figure-html/unnamed-chunk-27-1.png" width="672"  />
+
+Extra extra: I originally put a pipe symbol on the end of the line with the `geom_histogram` on it, and got an impenetrable error. However, googling the error message (often a good plan) gave me a first hit that told me exactly what I had done.
     
 
 
@@ -922,7 +930,7 @@ package `ggbiplot`:
 ggscreeplot(air.1)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-28-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-29-1.png" width="672"  />
 
      
 
@@ -1194,25 +1202,24 @@ and for convenience, we'll grab the quantiles again:
 
 
 ```r
-air %>% map_df(~ quantile(.))
+air %>% 
+  summarize(across(everything(), ~quantile(.)))
 ```
 
 ```
-## # A tibble: 7 x 5
-##    `0%` `25%` `50%` `75%` `100%`
-##   <dbl> <dbl> <dbl> <dbl>  <dbl>
-## 1     5   6     8    8.75     10
-## 2    30  68.2  76.5 84.8     107
-## 3     2   4     4    5         7
-## 4     1   1     2    3         5
-## 5     5   8     9.5 12        21
-## 6     2   6     8.5 11        25
-## 7     2   3     3    3         5
+## # A tibble: 5 x 7
+##    wind solar.radiation    CO    NO   NO2    O3    HC
+##   <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1  5               30       2     1   5     2       2
+## 2  6               68.2     4     1   8     6       3
+## 3  8               76.5     4     2   9.5   8.5     3
+## 4  8.75            84.8     5     3  12    11       3
+## 5 10              107       7     5  21    25       5
 ```
 
  
 
-Day 34. We said that component 2 depends (negatively) on solar
+Day 34 (at the end of the line). We said that component 2 depends (negatively) on solar
 radiation and ozone and possibly positively on nitric oxide. This
 means that day 34 ought to be *high* on the first two and low on
 the last one (since it's at the low end of component 2). Solar
@@ -1228,7 +1235,7 @@ observation come. Another way to approach this is to calculate
 
 
 ```r
-air %>% mutate_all(~ percent_rank(.)) -> pct_rank
+air %>% mutate(across(everything(), ~ percent_rank(.))) -> pct_rank
 pct_rank
 ```
 
@@ -1299,7 +1306,7 @@ Solution
 ggbiplot(air.1, labels = d$row)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-39-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-40-1.png" width="672"  />
 
  
 
@@ -1373,7 +1380,7 @@ the axes now:
 biplot(air.2$scores, air.2$loadings)
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-41-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-42-1.png" width="672"  />
 
  
 
@@ -2103,7 +2110,7 @@ pers %>%
 ## Warning: Removed 371 rows containing non-finite values (stat_count).
 ```
 
-<img src="24-pcfa_files/figure-html/unnamed-chunk-60-1.png" width="672"  />
+<img src="24-pcfa_files/figure-html/unnamed-chunk-61-1.png" width="672"  />
 
  
 

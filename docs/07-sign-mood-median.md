@@ -354,77 +354,18 @@ pval_sign(55, times, time)
 
 So, 55 is inside the interval and 58 is outside. I could investigate
 further in similar fashion, but I thought I would try a whole bunch of null
-medians all at once. That goes like this:
+medians all at once. That goes like this, `rowwise` because `pval_sign` expects *one* null-hypothesis median, not several all at once:
 
 
 ```r
-meds <- seq(55, 58, 0.25)
-meds
-```
-
-```
-##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50 57.75
-## [13] 58.00
-```
-
-```r
-pvals <- map_dbl(meds, pval_sign, times, time)
-data.frame(meds, pvals)
-```
-
-```
-##     meds      pvals
-## 1  55.00 0.66362381
-## 2  55.25 0.38331032
-## 3  55.50 0.26317596
-## 4  55.75 0.18924713
-## 5  56.00 0.18924713
-## 6  56.25 0.18924713
-## 7  56.50 0.07835388
-## 8  56.75 0.07835388
-## 9  57.00 0.07835388
-## 10 57.25 0.07835388
-## 11 57.50 0.07835388
-## 12 57.75 0.02660370
-## 13 58.00 0.02660370
-```
-
- 
-
-So values for the median all the way up to and including 57.5 are in
-the confidence interval.
-
-What `map_dbl` does is to take a vector of values, here the
-ones in `meds` (55 through 58 in steps of 0.25), feed them into
-a function, here `pval_sign`, one by one and gather together
-the results. `pval_sign` has two other inputs, `times` and
-`time`, which are added to `map_dbl` at the end. (They
-are the same no matter what median we are testing.)  So, putting the
-calculated P-values side by side with the null medians they belong to
-shows you which medians are inside the confidence interval and which
-are outside.
-
-The function is called `map_dbl` because *my* function
-called `pval_sign` that is called repeatedly returns a single
-decimal number (a `dbl`). There is also, for example,
-`map_chr` for repeatedly calling a function that returns a
-single piece of text, and plain `map` that is used when the
-repeatedly-called function returns a data frame.
-
-Since you don't know about `map_dbl`, I didn't want to confuse
-things more than necessary, but now that you *do* know what it
-does, you might be in a better position to understand this more
-Tidyverse-flavoured code, with the `map_dbl` inside a
-`mutate` and the data frame created as we go:
-
-
-```r
-tibble(meds = seq(55, 58, 0.25)) %>%
-  mutate(pvals = map_dbl(meds, pval_sign, times, time))
+tibble(meds = seq(55, 58, 0.25)) %>% 
+  rowwise() %>% 
+  mutate(pvals = pval_sign(meds, times, time))
 ```
 
 ```
 ## # A tibble: 13 x 2
+## # Rowwise: 
 ##     meds  pvals
 ##    <dbl>  <dbl>
 ##  1  55   0.664 
@@ -443,6 +384,10 @@ tibble(meds = seq(55, 58, 0.25)) %>%
 ```
 
  
+
+So values for the median all the way up to and including 57.5 are in
+the confidence interval.
+
 
 Now for the other end of the interval. I'm going to do this a
 different way: more efficient, but less transparent. The first thing I
@@ -597,37 +542,33 @@ above and one below.
 Likewise, you can use the function with a zero on its name and feed it
 a column rather than a data frame and a column name:
 
+**********************************
+
 
 ```r
-meds <- seq(55, 58, 0.25)
-meds
+tibble(meds =  seq(55, 58, 0.25)) %>% 
+  rowwise() %>% 
+  mutate(pvals =  with(times, pval_sign0(meds, time)))
 ```
 
 ```
-##  [1] 55.00 55.25 55.50 55.75 56.00 56.25 56.50 56.75 57.00 57.25 57.50 57.75
-## [13] 58.00
-```
-
-```r
-pvals <- map_dbl(meds, ~ with(times, pval_sign0(., time)))
-data.frame(meds, pvals)
-```
-
-```
-##     meds      pvals
-## 1  55.00 0.66362381
-## 2  55.25 0.38331032
-## 3  55.50 0.26317596
-## 4  55.75 0.18924713
-## 5  56.00 0.18924713
-## 6  56.25 0.18924713
-## 7  56.50 0.07835388
-## 8  56.75 0.07835388
-## 9  57.00 0.07835388
-## 10 57.25 0.07835388
-## 11 57.50 0.07835388
-## 12 57.75 0.02660370
-## 13 58.00 0.02660370
+## # A tibble: 13 x 2
+## # Rowwise: 
+##     meds  pvals
+##    <dbl>  <dbl>
+##  1  55   0.664 
+##  2  55.2 0.383 
+##  3  55.5 0.263 
+##  4  55.8 0.189 
+##  5  56   0.189 
+##  6  56.2 0.189 
+##  7  56.5 0.0784
+##  8  56.8 0.0784
+##  9  57   0.0784
+## 10  57.2 0.0784
+## 11  57.5 0.0784
+## 12  57.8 0.0266
+## 13  58   0.0266
 ```
 
  
@@ -637,7 +578,7 @@ All that was a lot of work, but I wanted you to see it all once, so that you
 know where the confidence interval is coming from. `smmr` also
 has a function `ci_median` that does all of the above without
 you having to do it. As I first wrote it, it was using the trial and
-error thing with `map_dbl`, but I chose to rewrite it with the
+error thing with `rowwise`, but I chose to rewrite it with the
 bisection idea, because I thought that would be more accurate.
 
 
@@ -1030,8 +971,8 @@ x
 ```
 
 ```
-##  [1] 61.04306 44.24529 57.87886 48.04657 41.52611 41.27977 49.94019 45.54531
-##  [9] 35.50342 17.79922
+##  [1] 75.86432 33.44626 61.85200 40.90784 33.68391 69.55128 28.66827 48.57617
+##  [9] 16.55791 38.36588
 ```
 
 
@@ -1055,8 +996,8 @@ tibble(x) %>% count(x<40)
 ## # A tibble: 2 x 2
 ##   `x < 40`     n
 ##   <lgl>    <int>
-## 1 FALSE        8
-## 2 TRUE         2
+## 1 FALSE        5
+## 2 TRUE         5
 ```
 
 2 values less (and 8 greater-or-equal).
@@ -1090,7 +1031,7 @@ mutate(is_rejected=(the_min<=1))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 This will fail sometimes. If all 10 of your sample values are greater
@@ -1110,7 +1051,7 @@ mutate(is_rejected=(the_min<=1 | the_min==10))
 ## # A tibble: 1 x 2
 ##   the_min is_rejected
 ##     <int> <lgl>      
-## 1       2 FALSE
+## 1       5 FALSE
 ```
 
 The above is almost the right thing, but not quite: we only want that value
@@ -1185,102 +1126,144 @@ STAB57), or simulating, as we have done here.
 
 
 
-(e) Use `rerun` to simulate the above process 1000 times:
-drawing a random sample from a normal distribution with mean 50 and SD
-15, counting the number of values below and above 40, rejecting if the
-minimum of those is 1 or less, then counting the number of rejections
+(e) Simulate the above process 1000 times:
+draw a random sample from a normal distribution of size 10 with mean 50 and SD
+15, count the number of values below 40, reject if the
+minimum of those is 0, 1, 9, or 10, then count the number of rejections
 out of 1000.
 
 
 
 Solution
 
+Set up a dataframe with a column (called, maybe, `sim`) that counts the number of simulations you are doing, and then use `rowwise` to take a random sample in each row and extract what you need from it.
 
-The way we've used `rerun` is to use it to select the
-random samples, and then we use `map` ideas to do what we
-want to do with each random sample, along the lines of what we did
-with the one random sample above.
-This is liable to go wrong the first few times, so make sure that
-each line works before you go on to the next. (`rerun` will
-produce you a `list` of random samples, with each of which
-you want to do something.) While you're debugging, try it with a
-small number of random samples like 5.
 I start with setting the random number seed, so it comes out the
-same each time. I discuss the results below and the code below that.
+same each time. 
+
 
 ```r
 set.seed(457299)
-rerun(1000,rnorm(10,50,15)) %>% 
-map(~tibble(x=.)) %>% 
-map(~count(.,x<40)) %>% 
-map(~summarize(.,the_min=min(n))) %>% 
-map(~mutate(.,is_rejected=(the_min<=1 | the_min==10))) %>% 
-map_lgl(~pull(.,is_rejected)) %>% 
-tibble(was_true=.) %>% 
-count(was_true)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(10, 50, 15)))
+```
+
+```
+## # A tibble: 1,000 x 2
+## # Rowwise: 
+##      sim sample    
+##    <int> <list>    
+##  1     1 <dbl [10]>
+##  2     2 <dbl [10]>
+##  3     3 <dbl [10]>
+##  4     4 <dbl [10]>
+##  5     5 <dbl [10]>
+##  6     6 <dbl [10]>
+##  7     7 <dbl [10]>
+##  8     8 <dbl [10]>
+##  9     9 <dbl [10]>
+## 10    10 <dbl [10]>
+## # … with 990 more rows
+```
+
+Each sample has 10 values in it, not just one, so you need the `list` around the `rnorm`. Note that `sample` is labelled as a list-column.
+
+Now we have to count how many of the sample values are less than 40:
+
+
+```r
+set.seed(457299)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(10, 50, 15))) %>% 
+  mutate(less = list(sample<40)) %>% 
+  mutate(counted = sum(less)) 
+```
+
+```
+## # A tibble: 1,000 x 4
+## # Rowwise: 
+##      sim sample     less       counted
+##    <int> <list>     <list>       <int>
+##  1     1 <dbl [10]> <lgl [10]>       3
+##  2     2 <dbl [10]> <lgl [10]>       4
+##  3     3 <dbl [10]> <lgl [10]>       2
+##  4     4 <dbl [10]> <lgl [10]>       1
+##  5     5 <dbl [10]> <lgl [10]>       4
+##  6     6 <dbl [10]> <lgl [10]>       2
+##  7     7 <dbl [10]> <lgl [10]>       1
+##  8     8 <dbl [10]> <lgl [10]>       1
+##  9     9 <dbl [10]> <lgl [10]>       2
+## 10    10 <dbl [10]> <lgl [10]>       5
+## # … with 990 more rows
+```
+
+This is a bit of a programmer's trick. In R, `less` contains a vector of 10 TRUE or FALSE values, according to whether the corresponding value in `sample` is less than 40 or not. In R (and many other programming languages), the numeric value of TRUE is 1 and of FALSE is 0, so you count how many TRUE values there are by adding them up. To verify that this worked, we should `unnest` `sample` and `less`:
+
+
+```r
+set.seed(457299)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(10, 50, 15))) %>% 
+  mutate(less = list(sample<40)) %>% 
+  mutate(counted = sum(less)) %>% 
+  unnest(c(sample, less))
+```
+
+```
+## # A tibble: 10,000 x 4
+##      sim sample less  counted
+##    <int>  <dbl> <lgl>   <int>
+##  1     1   74.3 FALSE       3
+##  2     1   38.8 TRUE        3
+##  3     1   46.0 FALSE       3
+##  4     1   39.5 TRUE        3
+##  5     1   53.2 FALSE       3
+##  6     1   60.6 FALSE       3
+##  7     1   33.8 TRUE        3
+##  8     1   61.9 FALSE       3
+##  9     1   50.1 FALSE       3
+## 10     1   66.4 FALSE       3
+## # … with 9,990 more rows
+```
+
+In the first sample, 38.8, 39.5, and 33.8 are less than 40, correctly identified so in `less`, and the `counted` column shows that the first sample did indeed have 3 values less than 40. You can check a few of the others as well, enough to convince yourself that this is working.
+
+Next, the sign test will reject if there are 0, 1, 9 or 10 values less than 40 (you might be guessing that the last two will be pretty unlikely), so make a column called `reject` that encapsulates that, and then count how many times you rejected in your simulations. I don't need my `unnest` any more; that was just to check that everything was working so far:
+
+
+```r
+set.seed(457299)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(10, 50, 15))) %>% 
+  mutate(less = list(sample<40)) %>% 
+  mutate(counted = sum(less)) %>% 
+  mutate(reject = (counted<=1 | counted >= 9)) %>% 
+  count(reject)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   was_true     n
-##   <lgl>    <int>
-## 1 FALSE      757
-## 2 TRUE       243
+## # Rowwise: 
+##   reject     n
+##   <lgl>  <int>
+## 1 FALSE    757
+## 2 TRUE     243
 ```
 
-The estimated power of the sign test is 0.243, since that was the
-number of times a simulated sample gave us 0 or 1 values above or
-below 40 (and the rest on the other side).
+My simulated power is 0.243
 
-All right, that code is seriously scary. Let me try to take you
-through it.
+This is all liable to go wrong the first few times, so make sure that
+each line works before you go on to the next, as I did.
+While you're debugging, try it with a
+small number of random samples like 5. (It is smart to have a variable called `nsim` which you set to a small number like 5 when you are testing, and than to 1000 when you run the real thing, so that the first line of the pipeline is then `tibble(sim = 1:nsim)`.)
 
-
-
-* The `rerun` line is the same kind of thing we had before:
-generate 1000 different random samples of size 10 from a normal
-distribution with mean 50 and SD 15.
-
-* The output from the previous step is a `list` of
-vectors. But we like data frames to count things in, so for each
-vector we turn it into a data frame, filling a column called
-`x` with whatever was in each vector (that random sample). So
-now we have 1000 data frames each containing a column called
-`x`.
-
-* Next, in each of those data frames, count up how many of the
-`x` values are less than 40. This will produce a data frame
-each time containing a column `n` that is the
-frequencies. Here and below, the `.`  is used to denote
-"it": that is, each of the elements of the list created originally
-by `rerun` that we are doing something with. Also, at the
-moment, the output for each element of the list is a data frame, so
-we stick with `map` for the time being.
-
-* Next, for each of those tables of frequencies, find the smallest
-one and call it `the_min`. (As discussed above, all the
-values might be bigger than 40, in which case `the_min` will
-be 10 rather than 0, which we handle next.)
-
-* Next, we create a new column called `is_rejected` which
-says that we should reject a median of 40 if the minimum value we
-just calculated is 1 or less, or if it happens to be 10, in which
-case that would have been the only entry in the frequency table, so
-that the missing one would have been zero.
-
-* Next, we pull out only the true-or-false value in
-`is_rejected`. At last, the answer here is not a data frame
-but a simple logical value; `map_lgl` is like
-`map_dbl` except that the thing we are doing returns a
-`TRUE` or a `FALSE` rather than a number.
-
-* At this point we have a vector of 1000 true-or-false. We want to
-count them, so we put them into a data frame (with a column called
-`was_true`), and in the last line, count them up. There are
-243 (correct) rejections and 757 (incorrect) non-rejections.
+If you were handing something like this in, I would only want to see your code for the final pipeline that does everything, though you could and should have some words that describe what you did.
 
 
-You may now breathe again. 
 
 I'm now thinking a better way to do this is to write a function that
 takes a sample (in a vector) and returns a TRUE or FALSE according to
@@ -1289,38 +1272,50 @@ whether or not a median of 40 would be rejected for that sample:
 
 ```r
 is_reject=function(x) {
-tibble(x=x) %>%
-count(x<40) %>%
-summarize(the_min=min(n)) %>%
-mutate(is_rejected=the_min<=1 | the_min==10) %>%
-pull(is_rejected)
+  tibble(x=x) %>%
+    mutate(counted = (x < 40)) %>% 
+    summarize(below = sum(counted)) %>% 
+    summarize(is_rejected = (below<=1 | below>=9)) %>% 
+    pull(is_rejected)
 }
+is_reject(c(35, 45, 55))
 ```
 
-Now, we have to use that. This function will be "mapped" over for
-each of the random samples that come out of `rerun`, but now
-there will be only one `map` because the complication of the
-multiple `maps` has been subsumed into this one function. I'll
-set my random number seed so that I get the same results as before:
+```
+## [1] TRUE
+```
+
+```r
+is_reject(c(35, 38, 45, 55))
+```
+
+```
+## [1] FALSE
+```
+
+Now, we have to use that:
 
 
 ```r
 set.seed(457299)
-rerun(1000,rnorm(10,50,15)) %>%
-map_lgl(~is_reject(.)) %>%
-tibble(rejected=.) %>%
-count(rejected)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rnorm(10, 50, 15))) %>% 
+  mutate(reject = is_reject(sample)) %>% 
+  count(reject)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   rejected     n
-##   <lgl>    <int>
-## 1 FALSE      757
-## 2 TRUE       243
+## # Rowwise: 
+##   reject     n
+##   <lgl>  <int>
+## 1 FALSE    757
+## 2 TRUE     243
 ```
 
-Same results, and yeah, I like that a lot better.
+This is a bit cleaner because the process of deciding whether each sample leads to a rejection of the median being 40 has been "outsourced" to the function, and the pipeline with the `rowwise` is a lot cleaner: take a sample, decide whether that sample leads to rejection, and count up the rejections.
+
 
 
 
@@ -1409,7 +1404,7 @@ these simulations.
 
 ```r
 library(smoothmest)
-rl=rdoublex(50,mu=0.5)
+rl <- rdoublex(50,mu=0.5)
 rl
 ```
 
@@ -1434,7 +1429,7 @@ ggplot(aes(sample=rl))+
 stat_qq()+stat_qq_line()
 ```
 
-<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-50-1.png" width="672"  />
+<img src="07-sign-mood-median_files/figure-html/unnamed-chunk-52-1.png" width="672"  />
 
 You see the long tails compared to the normal.
 
@@ -1443,7 +1438,7 @@ reject a null median of zero (at $\alpha=0.05$):
 
 
 ```r
-tt=t.test(rl)  
+tt <- t.test(rl)  
 tt
 ```
 
@@ -1465,7 +1460,7 @@ Or we can just pull out the P-value and even compare it to 0.05:
 
 
 ```r
-pval=tt$p.value  
+pval <- tt$p.value  
 pval
 ```
 
@@ -1474,14 +1469,14 @@ pval
 ```
 
 ```r
-is.reject=(pval<=0.05)
+is.reject <- (pval<=0.05)
 is.reject
 ```
 
 ```
 ## [1] TRUE
 ```
-$
+
 
 This one has a small P-value and so the null median of 0 should be
 (correctly) rejected.
@@ -1492,25 +1487,21 @@ simulation; the difference here is the true distribution:
 
 
 ```r
-rerun(1000,rdoublex(50,mu=0.5)) %>%
-map(~t.test(.,mu=0)) %>%
-map_dbl("p.value") ->
-pvals
-```
-
-and then count them:
-
-
-```r
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rdoublex(50, mu = 0.5))) %>% 
+  mutate(t_test = list(t.test(sample, mu = 0))) %>% 
+  mutate(t_pval = t_test$p.value) %>% 
+  count(t_pval <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `pvals <= 0.05`     n
-##   <lgl>           <int>
-## 1 FALSE             298
-## 2 TRUE              702
+## # Rowwise: 
+##   `t_pval <= 0.05`     n
+##   <lgl>            <int>
+## 1 FALSE              298
+## 2 TRUE               702
 ```
 
 And now we simulate the sign test. Since what we want is a P-value
@@ -1520,25 +1511,22 @@ two-sided P-value that we want, so that the procedure is a step simpler:
 
 
 ```r
-rerun(1000,rdoublex(50,mu=0.5)) %>%
-map_dbl(~pval_sign0(0,.)) ->
-pvals_sign
-```
-
-and then
-
-
-```r
-tibble(pvals_sign) %>% count(pvals_sign<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(rdoublex(50, mu = 0.5))) %>% 
+  mutate(sign_pval = pval_sign0(0, sample)) %>% 
+  count(sign_pval <= 0.05)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   `pvals_sign <= 0.05`     n
-##   <lgl>                <int>
-## 1 FALSE                  228
-## 2 TRUE                   772
+## # Rowwise: 
+##   `sign_pval <= 0.05`     n
+##   <lgl>               <int>
+## 1 FALSE                 228
+## 2 TRUE                  772
 ```
+
 
 For data from this Laplace
 distribution, the power of this $t$-test is 0.696, but the power of
@@ -1565,7 +1553,7 @@ detach(package:MASS, unload=T)
 
 ```
 ## Warning: 'MASS' namespace cannot be unloaded:
-##   namespace 'MASS' is imported by 'lme4' so cannot be unloaded
+##   namespace 'MASS' is imported by 'lme4', 'PMCMRplus' so cannot be unloaded
 ```
 
 

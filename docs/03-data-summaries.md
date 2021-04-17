@@ -1824,20 +1824,16 @@ to handle this. Here's step 1:
 
 ```r
 marks %>%
-  nest(-class)
-```
-
-```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
+  nest_by(class)
 ```
 
 ```
 ## # A tibble: 2 x 2
-##   class  data            
-##   <chr>  <list>          
-## 1 ken    <tibble [5 × 1]>
-## 2 thomas <tibble [6 × 1]>
+## # Rowwise:  class
+##   class            data
+##   <chr>  <list<tibble>>
+## 1 ken           [5 × 1]
+## 2 thomas        [6 × 1]
 ```
 
  
@@ -1849,29 +1845,25 @@ had a `score`, so 5 or 6 rows and 1 column. The column
 `data` is known in the trade as a "list-column".
 
 Now, for each of those mini-data-frames, we want to calculate the
-quantiles of `score`. 
-To do that, use `map`, which is the
-`tidyverse` version of "for each": for each of our
-mini-data-frames, calculate the five-number summary of the column called `score` in *it*:
+quantiles of `score`. This is `rowwise`:
+for each of our
+mini-data-frames `data`, calculate the five-number summary of the column called `score` in *it*:
 
 
 ```r
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ quantile(.$score)))
-```
-
-```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(quantile(data$score)))
 ```
 
 ```
 ## # A tibble: 2 x 3
-##   class  data             qq       
-##   <chr>  <list>           <list>   
-## 1 ken    <tibble [5 × 1]> <dbl [5]>
-## 2 thomas <tibble [6 × 1]> <dbl [5]>
+## # Rowwise: 
+##   class            data qq       
+##   <chr>  <list<tibble>> <list>   
+## 1 ken           [5 × 1] <dbl [5]>
+## 2 thomas        [6 × 1] <dbl [5]>
 ```
 
   
@@ -1889,30 +1881,26 @@ Now we want to display the quantiles. This is the easiest way:
 
 ```r
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ quantile(.$score))) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(quantile(data$score))) %>% 
   unnest(qq)
 ```
 
 ```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
-```
-
-```
 ## # A tibble: 10 x 3
-##    class  data                qq
-##    <chr>  <list>           <dbl>
-##  1 ken    <tibble [5 × 1]>  59  
-##  2 ken    <tibble [5 × 1]>  62  
-##  3 ken    <tibble [5 × 1]>  69  
-##  4 ken    <tibble [5 × 1]>  78  
-##  5 ken    <tibble [5 × 1]>  81  
-##  6 thomas <tibble [6 × 1]>  61  
-##  7 thomas <tibble [6 × 1]>  65.2
-##  8 thomas <tibble [6 × 1]>  74.5
-##  9 thomas <tibble [6 × 1]>  78.5
-## 10 thomas <tibble [6 × 1]>  83
+##    class            data    qq
+##    <chr>  <list<tibble>> <dbl>
+##  1 ken           [5 × 1]  59  
+##  2 ken           [5 × 1]  62  
+##  3 ken           [5 × 1]  69  
+##  4 ken           [5 × 1]  78  
+##  5 ken           [5 × 1]  81  
+##  6 thomas        [6 × 1]  61  
+##  7 thomas        [6 × 1]  65.2
+##  8 thomas        [6 × 1]  74.5
+##  9 thomas        [6 × 1]  78.5
+## 10 thomas        [6 × 1]  83
 ```
 
   
@@ -1979,21 +1967,18 @@ which quantile is which. So let's rewrite our code to use this:
 
 ```r
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score)))))
-```
-
-```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) 
 ```
 
 ```
 ## # A tibble: 2 x 3
-##   class  data             qq              
-##   <chr>  <list>           <list>          
-## 1 ken    <tibble [5 × 1]> <tibble [5 × 2]>
-## 2 thomas <tibble [6 × 1]> <tibble [5 × 2]>
+## # Rowwise: 
+##   class            data qq              
+##   <chr>  <list<tibble>> <list>          
+## 1 ken           [5 × 1] <tibble [5 × 2]>
+## 2 thomas        [6 × 1] <tibble [5 × 2]>
 ```
 
  
@@ -2006,30 +1991,26 @@ And finally `unnest` `qq`:
 
 ```r
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) %>% 
   unnest(qq)
 ```
 
 ```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
-```
-
-```
 ## # A tibble: 10 x 4
-##    class  data             name  value
-##    <chr>  <list>           <chr> <dbl>
-##  1 ken    <tibble [5 × 1]> 0%     59  
-##  2 ken    <tibble [5 × 1]> 25%    62  
-##  3 ken    <tibble [5 × 1]> 50%    69  
-##  4 ken    <tibble [5 × 1]> 75%    78  
-##  5 ken    <tibble [5 × 1]> 100%   81  
-##  6 thomas <tibble [6 × 1]> 0%     61  
-##  7 thomas <tibble [6 × 1]> 25%    65.2
-##  8 thomas <tibble [6 × 1]> 50%    74.5
-##  9 thomas <tibble [6 × 1]> 75%    78.5
-## 10 thomas <tibble [6 × 1]> 100%   83
+##    class            data name  value
+##    <chr>  <list<tibble>> <chr> <dbl>
+##  1 ken           [5 × 1] 0%     59  
+##  2 ken           [5 × 1] 25%    62  
+##  3 ken           [5 × 1] 50%    69  
+##  4 ken           [5 × 1] 75%    78  
+##  5 ken           [5 × 1] 100%   81  
+##  6 thomas        [6 × 1] 0%     61  
+##  7 thomas        [6 × 1] 25%    65.2
+##  8 thomas        [6 × 1] 50%    74.5
+##  9 thomas        [6 × 1] 75%    78.5
+## 10 thomas        [6 × 1] 100%   83
 ```
 
  
@@ -2039,25 +2020,21 @@ Success! Or even:
 
 ```r
 marks %>%
-  nest(-class) %>%
-  mutate(qq = map(data, ~ enframe((quantile(.$score))))) %>%
-  unnest(qq) %>%
+  nest_by(class) %>%
+  rowwise() %>% 
+  mutate(qq = list(enframe(quantile(data$score)))) %>% 
+  unnest(qq) %>% 
   mutate(qn = parse_number(name)) %>%
   select(-name) %>%
   pivot_wider(names_from = qn, values_from = value)
 ```
 
 ```
-## Warning: All elements of `...` must be named.
-## Did you want `data = c(score)`?
-```
-
-```
 ## # A tibble: 2 x 7
-##   class  data               `0`  `25`  `50`  `75` `100`
-##   <chr>  <list>           <dbl> <dbl> <dbl> <dbl> <dbl>
-## 1 ken    <tibble [5 × 1]>    59  62    69    78      81
-## 2 thomas <tibble [6 × 1]>    61  65.2  74.5  78.5    83
+##   class            data   `0`  `25`  `50`  `75` `100`
+##   <chr>  <list<tibble>> <dbl> <dbl> <dbl> <dbl> <dbl>
+## 1 ken           [5 × 1]    59  62    69    78      81
+## 2 thomas        [6 × 1]    61  65.2  74.5  78.5    83
 ```
 
  
