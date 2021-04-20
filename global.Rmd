@@ -13,8 +13,7 @@ the `warehouse` (A or B) that handled each shipment.
 
 
 
-(a) Read the data into R and display your data frame. How many
-rows and columns does it have?
+(a) Read the data into R and display your data frame. 
 
 
 Solution
@@ -25,6 +24,7 @@ open as a spreadsheet, which is not really very helpful, since
 then it is not clear what to do with it. You could, I suppose,
 save it and upload it to R Studio Cloud, but it requires much less
 brainpower to open it directly from the URL:
+
 ```{r }
 url <- "http://www.utsc.utoronto.ca/~butler/c32/global.csv"
 shipments <- read_csv(url)
@@ -40,131 +40,12 @@ shipments
 ```
 
  
+(b) Describe how many rows and columns your data frame has, and what they contain. 
 
-It has 10 rows and 3 columns. *You need to say this to get the mark.*
+It has 10 rows and 3 columns. *You need to say this.*
 
 That is, there were 10 shipments recorded, and for each of them, 3
 variables were noted: the size and cost of the shipment, and the
 warehouse it was handled at.
     
-
-
-(b) Make a scatterplot of the cost of handling each shipment as it
-depends on the shipment's size.
-
-
-Solution
-
-
-The wording of the question says that cost is the response and so
-belongs on the $y$-axis. To make the plot, `ggplot` with an
-`x=` and a `y=` in the `aes` (the "what to  plot" 
-part), and a `geom_point()` after (the "how to plot it"):
-```{r }
-ggplot(shipments, aes(x = size, y = cost)) + geom_point()
-```
-
-     
-
-As a matter of coding, there are usually *two* brackets to close
-after the `aes`, the one that begins the `ggplot` and
-the one that begins the `aes`. 
-    
-
-
-(c) What kind of relationship do you see on the scatterplot? Do
-you think a straight line would describe it appropriately? Explain briefly.
-
-
-Solution
-
-
-I see an upward trend: a shipment with larger `size` costs
-more to handle. 
-If you look carefully at the scatterplot, you see that the cost of
-handling a small shipment goes up fairly steeply with its size,
-but the cost of handling a large shipment, while it still
-increases with `size`, does not increase so fast. Thus
-having one straight line to describe the whole relationship would
-not work so well. 
-The relationship is actually two different
-straight lines joined end-to-end, which we will explore later, but
-if you think the relationship is curved, I'll accept that. The
-point is to get at the idea that the rate of increase is not
-constant.
-    
-
-
-(d) When a shipment comes in, the cost of handling it is not
-known. A decision is made about which warehouse to send it to, and
-then, after it is handled, the cost is recorded. What do you think
-determines which warehouse an incoming shipment goes to? Provide a
-graph to support your answer.
-
-
-Solution
-
-
-The veiled hint in the question is that the decision must depend
-on `size`, since it cannot depend on `cost`. So we
-have one quantitative variable `size` and one categorical
-variable `warehouse`, which suggests drawing boxplots:
-```{r }
-ggplot(shipments, aes(x = warehouse, y = size)) + geom_boxplot()
-```
-
-     
-
-Well, there's the answer right there. When the shipment has small
-`size`, it goes to warehouse A, and when it's large, it goes to
-Warehouse B. We know this because *all* the shipments smaller
-than about 250 (thousand parts) went to A and *all* the shipments
-larger than that went to B. (If you want to provide a number to
-delineate "small" and "large", anything between the largest A,
-about 225, and the smallest B, about 290, will do.)
-
-Another way to think about this is to add something to the scatterplot
-you drew before. The obvious thing is to make the two warehouses
-different colours:
-
-```{r }
-ggplot(shipments, aes(x = size, y = cost, colour = warehouse)) +
-  geom_point()
-```
-
-     
-
-As a point of technique, you can split lines of code to make them fit
-on your screen. You can do this as long as \emph{the code that ends
-the line must be incomplete}, so that R knows more is to
-come. Ending a line with a pipe symbol, or, as here, with one of the
-pluses in the middle of a `ggplot`, will work. If you put the
-plus on the start of the next line, you'll get a blank plot, because R
-thinks you're done plotting. Try it and see.
-
-Anyway, this plot tells exactly the same story: the small shipments
-(in size or cost) go to Warehouse A and the large ones to Warehouse
-B. But we don't know cost when the decision is made about which
-warehouse to send a shipment to, so the decision must be based on
-`size`. 
-
-In the place where I got these data, it said "larger shipments are sent to Warehouse B, since this warehouse has specialized equipment that provides greater economies of scale for larger shipments". 
-That
-is to say, very large shipments are more expensive to handle, but not
-as expensive as you might think.
-`r tufte::margin_note("This is the same idea that it  costs more to ride the GO bus from UTSC to York U than it does to  ride from UTSC to Scarborough Town, but if you work out how much it  costs per kilometre, the longer journey costs less per km. As of  when I'm writing this, $5.30 for the 7.2 km to Scarborough Town and  $6.75 for the 38 km to York. That's quite an economy of scale,  isn't it?")` 
-That makes sense with our scatterplot, because the
-*slope* for larger shipments is less than for smaller shipments.
-
-When we get to regression later, we'll see what happens if we fit a
-straight line to data like these, and how to tell whether we really
-ought to be able to do better with a different form of
-relationship. There is also a trick to fit what is called a
-"piecewise linear regression", which has one slope for small
-shipment sizes, a different (smaller) slope for large ones, and joins
-up in the middle. But that's well beyond our scope now.
-    
-
-
-
-
+We will also be making some graphs of these data later.

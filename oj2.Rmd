@@ -1,0 +1,67 @@
+##  Orange juice
+
+
+We will read in the orange juice data again,
+in [link](http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt), and make a suitable graph.
+
+
+(a) The data values are separated by a space. Use the appropriate
+Tidyverse function to read the data directly from the course website
+into a "tibble".
+
+
+Solution
+
+As before,
+
+```{r }
+url <- "http://www.utsc.utoronto.ca/~butler/c32/ojuice.txt"
+juice <- read_delim(url, " ")
+juice
+```
+
+24 runs, as we had before.
+
+
+(b) The juice manufacturer was interested in whether there was a
+relationship between sweetness and pectin. To assess this, draw a
+scatterplot.  Does it look as if there is any kind of a
+relationship? (I think `sweetness` is the outcome variable
+and `pectin` is explanatory, so draw your scatterplot
+appropriately.) 
+
+
+Solution
+
+
+This requires a `ggplot` plot. You can go back and look
+at the lecture notes to figure out how to make a scatterplot:
+the "what to plot" is the $x$-axis and $y$-axis variables,
+with the response on the $y$-axis (starting with a data frame
+to get the variables from),  and the "how to plot" is
+`geom_point` to plot the points:
+```{r }
+ggplot(juice, aes(x = pectin, y = sweetness)) + geom_point()
+```
+
+         
+
+It looks to me as if there is a negative relationship: as pectin goes
+up, sweetness tends to go *down*. The trend appears to go top
+left to bottom right. 
+
+Extra: having said that, I'm wondering how much of the
+apparent trend is caused by those two observations bottom right with
+pectin over 350. If you take those away, the trend seems to me to be a
+lot less convincing. You could add a smooth trend to the plot, thus:
+
+```{r }
+ggplot(juice, aes(x = pectin, y = sweetness)) + geom_point() + geom_smooth()
+```
+
+         
+The smooth trend is kind of downhill, but not very convincing.
+
+
+
+
