@@ -6431,7 +6431,7 @@ satisf %>%
 
  
 
-Steps: gather together the columns age through anxiety into one column
+Steps: collect together the columns age through anxiety into one column
 whose values go in `x`, with names in `xname`, then plot this new
 `x` against satisfaction score, with a separate facet for each
 different $x$ (in `xname`). 
@@ -6822,7 +6822,7 @@ quartiles %>%
  
 
 Making longer. `everything()` is a select-helper saying
-"gather up *all* the columns". 
+"pivot-longer *all* the columns". 
 
 
 

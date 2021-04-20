@@ -1039,8 +1039,8 @@ simpler way. To set this up, open a text editor (like Notepad or
 TextEdit). Go back to the web browser tab containing the data you used
 in the previous part. Copy the data from there and paste it into the
 text editor. Save it somewhere on your computer (like the
-Desktop). Follow the steps in the solution below to read the data into
-R.
+Desktop). Follow the steps in the solution below to read the data 
+into R.
 
 Solution
 

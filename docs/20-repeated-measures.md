@@ -253,26 +253,26 @@ weights2.long %>% sample_n(20)
 ## # A tibble: 20 x 5
 ##      rat drug       timex weight  time
 ##    <dbl> <chr>      <chr>  <dbl> <dbl>
-##  1    12 thiouracil Time0     51     0
-##  2    18 control    Time2    114     2
-##  3    21 control    Time3    129     3
-##  4    13 thiouracil Time3    100     3
-##  5     4 thyroxin   Time2    116     2
-##  6    13 thiouracil Time1     75     1
-##  7    27 control    Time0     57     0
-##  8     3 thyroxin   Time3    151     3
-##  9    23 control    Time2    102     2
-## 10     9 thiouracil Time0     59     0
-## 11    10 thiouracil Time0     53     0
-## 12     4 thyroxin   Time1     85     1
-## 13    16 thiouracil Time4    107     4
-## 14    21 control    Time0     49     0
-## 15     8 thiouracil Time4    129     4
-## 16    17 thiouracil Time1     72     1
-## 17    25 control    Time2    112     2
-## 18     1 thyroxin   Time4    191     4
-## 19     7 thyroxin   Time1     70     1
-## 20     3 thyroxin   Time1     75     1
+##  1     6 thyroxin   Time1     73     1
+##  2    13 thiouracil Time0     51     0
+##  3    22 control    Time0     56     0
+##  4    17 thiouracil Time0     53     0
+##  5    13 thiouracil Time2     92     2
+##  6    16 thiouracil Time2     78     2
+##  7    23 control    Time3    131     3
+##  8    18 control    Time4    172     4
+##  9    27 control    Time1     82     1
+## 10    12 thiouracil Time1     75     1
+## 11     5 thyroxin   Time0     57     0
+## 12     5 thyroxin   Time1     72     1
+## 13    12 thiouracil Time4    140     4
+## 14     7 thyroxin   Time4    171     4
+## 15    21 control    Time0     49     0
+## 16    27 control    Time2    110     2
+## 17     1 thyroxin   Time2    121     2
+## 18    20 control    Time2    111     2
+## 19    23 control    Time4    153     4
+## 20    19 control    Time1     93     1
 ```
 
  
@@ -344,7 +344,7 @@ subject-number variable. This suggests a chain of
 things. There are 27 rats altogether. First we take the original
 data frame `weights` with each row being one rat, and we
 add a variable `subject` which is 1 through 27. Then we
-gather together the columns `Time0` through
+pivot-longer the columns `Time0` through
 `Time4` that are different `time`s but all
 `weight`s, like we did before. Optionally, we can also
 `separate` `Time.x` into the `Time` part and
@@ -1327,7 +1327,7 @@ see.)
 
 
 (c) Create and save a "longer" data frame with all the epinephrine
-values gathered together into one column.
+values collected together into one column.
 
 
 Solution

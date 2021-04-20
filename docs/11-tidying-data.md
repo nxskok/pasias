@@ -2499,8 +2499,8 @@ three variables, temperature, pulse rate and species, and there
 are $14+17=31$ observations altogether. This one is tricky in that
 there are temperature and pulse rate for each of two levels of a
 factor, so I'll suggest combining the temperature and chirp rate
-together into one thing for each species, then gathering them,
-then splitting them again. Create new columns, named for  each species,
+together into one thing for each species, then pivoting them longer ("combining"),
+then pivoting them wider again ("splitting"). Create new columns, named for  each species,
 that contain the temperature and pulse rate for that species in
 that order, `unite`d together.
 For the rest of this question, start from the data frame you read
@@ -2671,9 +2671,8 @@ you'll see what happened.
 
 (d) The two columns `exclamationis` and `niveus`
 that you just created are both temperature-pulse rate combos, but
-for different species. `gather` them together into one
-column, labelled by species. (This is a straight `tidyr` `pivot_longer` or
-`gather`, even though the columns contain something odd-looking.)
+for different species. Collect them together into one
+column, labelled by species. (This is a straight `tidyr` `pivot_longer`, even though the columns contain something odd-looking.)
 
 
 Solution

@@ -467,7 +467,7 @@ d %>% count(status, class)
 This gives a "long" table, with frequencies for each of the
 combinations for which anything was observed.
 
-Frequency tables are usually wide, and we can make this one so by `spread`ing `pred`:
+Frequency tables are usually wide, and we can make this one so by pivot-wider-ing `pred`:
 
 
 ```r
@@ -1207,7 +1207,7 @@ overall misclassification rate is made bigger by the fact that C is so
 hard to predict.
 
 Find out for yourself what happens if I fail to remove the `n`
-column before doing the `spread`.
+column before doing the `pivot_wider`.
 
 A slightly more elegant look is obtained this way, by making nicer
 values than TRUE and FALSE:
@@ -1946,26 +1946,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      14     19           13     2    14 mechanic  
-##  2      16     19           12     3    52 dispatcher
-##  3      22     24            6     1    54 custserv  
-##  4      11     22           11     1    38 custserv  
+##  1      19     25           13     2    44 mechanic  
+##  2      13     27            7     1     8 custserv  
+##  3      18     20           10     3    66 dispatcher
+##  4      16     28            6     1    41 custserv  
 ##  5      11     17           20     3    26 dispatcher
-##  6      12     16           10     2    18 mechanic  
-##  7       8     28           12     1    68 custserv  
-##  8      16     22           12     3    63 dispatcher
-##  9      17     18            9     3    56 dispatcher
-## 10      18     23           15     3    54 dispatcher
-## 11      20     25           12     1     6 custserv  
-## 12      15     21            4     1    44 custserv  
-## 13      19     26            7     2    21 mechanic  
-## 14      22     22            6     1    40 custserv  
-## 15      23     20           16     2    63 mechanic  
-## 16      18     24           13     2    30 mechanic  
-## 17       8     18            8     1    36 custserv  
-## 18      10     12            9     3    38 dispatcher
-## 19      17     25            8     1    11 custserv  
-## 20      15     19            9     1    47 custserv
+##  6      21     19            7     2    69 mechanic  
+##  7      17     23           10     2    88 mechanic  
+##  8       0     27           11     1    17 custserv  
+##  9      22     22            6     1    40 custserv  
+## 10       8     28           12     1    68 custserv  
+## 11      17     17            8     2    85 mechanic  
+## 12      18     23           15     3    54 dispatcher
+## 13      23     27           11     2    31 mechanic  
+## 14      10     29           11     1    12 custserv  
+## 15      22     26           15     2    64 mechanic  
+## 16      15     14           17     3    11 dispatcher
+## 17      18     28            7     1    79 custserv  
+## 18      17     21            9     2    10 mechanic  
+## 19      10     22           13     1    14 custserv  
+## 20      16     22            2     1    59 custserv
 ```
 
  
@@ -7107,7 +7107,7 @@ d %>%
 
  
 
-This doesn't work because everything outside of the `spread` is
+This doesn't work because everything outside of the `pivot_wider` is
 tested for uniqueness; if it's unique, it gets its own row. Thus,
 `BBall_male` and 3 is different from `BBall_male` and
 9. But we only want one row of `BBall_male`. I think the
