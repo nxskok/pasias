@@ -11,10 +11,8 @@ So the kind of data you would have is a number of people that took part, and the
 Common assumptions that are made in this kind of analysis are:
 (i) the responses are independent of each other, and (ii) each respondent has the same unknown probability of agreeing. 
 You might quibble about (ii), but the assumption we are making here is that we know *nothing* about the respondents apart from whether they agreed or disagreed. 
-(In practice, we'd collect all kinds of demograhic information about each respondent, and this might give us a clue about how they'll respond, but here we're keeping it simple.)
+(In practice, we'd collect all kinds of demographic information about each respondent, and this might give us a clue about how they'll respond, but here we're keeping it simple.)
 Under our assumptions, the number of respondents that agree has a binomial distribution with $n$ being our sample size, and $p$ being the probability we are trying to estimate. Let's estimate $p$ using Stan: that is to say, let's obtain the posterior distribution of $p$.
-
-Note: I'm not sure how Stan goes in R Studio Cloud at the moment. This works better in R on your own computer.
 
 
 
@@ -31,9 +29,9 @@ This is quicker to do than to ask for. Make a guess at this:
 ```
 
 model {
-// likelihood
-x ~ binomial(n, p);
-
+  // likelihood
+  x ~ binomial(n, p);
+}
 ```
 
 
@@ -71,10 +69,10 @@ Your `model` section should now look like this:
 ```
 
 model {
-// prior
-p ~ beta(alpha, beta);
-// likelihood
-x ~ binomial(n, p);
+  // prior
+  p ~ beta(alpha, beta);
+  // likelihood
+  x ~ binomial(n, p);
 }
 
 ```
@@ -94,7 +92,7 @@ Solution
 ```
 
 parameters {
-real<lower=0, upper=1> p;
+  real<lower=0, upper=1> p;
 }
 
 ```
@@ -115,10 +113,10 @@ These two together give us this:
 ```
 
 data {
-int<lower=0> n;
-int<lower=0, upper=n> x;
-real<lower=0> alpha;
-real<lower=0> beta;
+  int<lower=0> n;
+  int<lower=0, upper=n> x;
+  real<lower=0> alpha;
+  real<lower=0> beta;
 }
 
 ```
@@ -188,7 +186,8 @@ It doesn't matter how many errors you make; what matters is that you find and co
 
 
 
-(g) Compile your model. (This may take a minute or so, depending on how fast `rstudio.cloud` or your computer is.)
+(g) Compile your model. (This may take a minute or so, depending on how fast your 
+R Studio is.) When the spinny thing stops spinning, it's done.
 
 
 Solution
@@ -196,15 +195,16 @@ Solution
 
 Go down to the console and type something like
 ```{r eval=F}
-binomial_code <- stan_model("binomial.stan")
+binomial <- cmdstan_model("binomial.stan")
 ```
 
    
 
-If it doesn't work, make sure you installed and loaded `rstan` first, with `install.packages("rstan")` and `library(rstan)` respectively.
+If it doesn't work, make sure you installed and loaded `cmdstanr` first, with `install.packages` and `library` respectively.
 
 If it sits there and does nothing for a while, this is actually a good sign. If it finds an error, it will tell you. If you get your command prompt `>` back without it saying anything, that means it worked. (This is a Unix thing: no comment means no error.)
 
+If you happen to compile it a second time, without changing anything in the Stan code, it won't make you wait while it compiles again: it will say "Model executable is up to date!".
 
 
 (h) In most surveys, the probability to be estimated is fairly close to 0.5. 
@@ -273,15 +273,11 @@ qnorm(0.025)
 Solution
 
 
-```{r include=F}
-binomial_code <- readRDS("binomial_code.rds")
-binomial_code
-```
 
    
 This is what I got:
 ```{r }
-binomial.1 <- sampling(binomial_code, binomial_data)
+binomial.1 <- binomial$sample(binomial_data)
 binomial.1
 ```
 

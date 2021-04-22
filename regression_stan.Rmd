@@ -45,12 +45,12 @@ I'm trading more typing for less confusion:
 ```
 
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 
 ```
@@ -65,9 +65,9 @@ real number, while `sigma` has to be positive:
 ```
 
 parameters {
-real a;
-real b;
-real<lower=0> sigma;
+  real a;
+  real b;
+  real<lower=0> sigma;
 }
 
 ```
@@ -79,14 +79,14 @@ Everything else is data, and we have a *lot* of data this time:
 ```
 
 data {
-int<lower=0> n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real<lower=0> prior_int_sd;
-real prior_slope_mean;
-real<lower=0> prior_slope_sd;
-real<lower=0> prior_sigma_mean;
+  int<lower=0> n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real<lower=0> prior_int_sd;
+  real prior_slope_mean;
+  real<lower=0> prior_slope_sd;
+  real<lower=0> prior_sigma_mean;
 }
 
 ```
@@ -132,7 +132,7 @@ this:
 ```
 
 for (i in 1:n) {
-y[i] ~ normal(a + b * x[i], sigma)
+  y[i] ~ normal(a + b * x[i], sigma)
 }
 
 
@@ -154,29 +154,29 @@ My code looks like this, in total:
 ```
 
 data {
-int<lower=0> n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real<lower=0> prior_int_sd;
-real prior_slope_mean;
-real<lower=0> prior_slope_sd;
-real<lower=0> prior_sigma_mean;
+  int<lower=0> n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real<lower=0> prior_int_sd;
+  real prior_slope_mean;
+  real<lower=0> prior_slope_sd;
+  real<lower=0> prior_sigma_mean;
 }
 
 parameters {
-real a;
-real b;
-real<lower=0> sigma;
+  real a;
+  real b;
+  real<lower=0> sigma;
 }
 
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 
 
@@ -196,7 +196,7 @@ code is. If it finds any errors, correct them and try again.
 To compile, the usual thing:
 
 ```{r eval=F}
-reg_code <- stan_model("reg.stan")
+reg <- cmdstan_model("reg.stan")
 ```
 
  
@@ -294,10 +294,7 @@ error SD. What is the 95\% posterior interval for the slope?
 Solution
 
 
-Two parts: set up the data, and then feed it into `sampling`:
-```{r include=F}
-reg_code <- readRDS("reg_code.rds")
-```
+Two parts: set up the data, and then sample it:
 
 
 
@@ -310,13 +307,28 @@ reg_data <- list(
   prior_slope_sd = 100,
   prior_sigma_mean = 200
 )
-reg.1 <- sampling(reg_code, reg_data)
+reg.1 <- reg$sample(reg_data)
 reg.1
 ```
 
  
 
-One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
+One line per parameter (plus the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
+
+(f) Plot a histogram of the posterior distribution of the slope. Does its shape surprise you? Explain briefly.
+
+
+Solution
+
+This is most easily `mcmc_hist` from `bayesplot`:
+
+```{r}
+mcmc_hist(reg.1$draws("b"), binwidth = 20)
+```
+
+I'm guessing you have a better intuition for `bins` as opposed to `binwidth` (the latter being what you need here), so you can try it without giving a `binwidth` at all (and getting way too many bins), and then see if you can figure out what `binwidth` should be to get you a sensible number of bins. This one looks pretty good to me. 
+
+The shape is very normal. This is because everything is normal: the prior and the data-generating process both, so it is not surprising at all that the posterior came out normal. (You may remember from your regression course that if you have a normal regression model, the slope also has a normal distribution.)
 
 
 (f) What can we say about the vocabulary size of a randomly
@@ -326,11 +338,10 @@ set)? Use an appropriate predictive distribution.
 Solution
 
 
-If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
+If you have done a regression course, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
 
 ```{r }
-reg_samples <- rstan::extract(reg.1)
-cbind(a = reg_samples$a, b = reg_samples$b, sigma = reg_samples$sigma) %>%
+as_draws_df(reg.1$draws()) %>%
   as_tibble() -> sims
 sims
 ```
@@ -340,9 +351,10 @@ sims
 and now we need to simulate some response values for our notional child of age 5. That means simulating for an `x` of 5, using each of those values of `a`, `b` and `sigma`:
 
 ```{r }
-
 sims %>%
-  mutate(sim_vocab = rnorm(nrow(sims), a + b * 5, sigma)) -> sims2
+  rowwise() %>% 
+  mutate(sim_vocab = rnorm(1, a + b * 5, sigma)) -> sims2
+sims2
 ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
 ```
 
