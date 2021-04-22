@@ -1,11 +1,13 @@
-# Bayesian Statistics with `rstan`
+# Bayesian Statistics with Stan
 
 Packages for this chapter:
 
 
 ```r
 library(tidyverse)
-library(rstan)
+library(cmdstanr)
+library(posterior)
+library(bayesplot)
 ```
 
 
@@ -26,10 +28,8 @@ So the kind of data you would have is a number of people that took part, and the
 Common assumptions that are made in this kind of analysis are:
 (i) the responses are independent of each other, and (ii) each respondent has the same unknown probability of agreeing. 
 You might quibble about (ii), but the assumption we are making here is that we know *nothing* about the respondents apart from whether they agreed or disagreed. 
-(In practice, we'd collect all kinds of demograhic information about each respondent, and this might give us a clue about how they'll respond, but here we're keeping it simple.)
+(In practice, we'd collect all kinds of demographic information about each respondent, and this might give us a clue about how they'll respond, but here we're keeping it simple.)
 Under our assumptions, the number of respondents that agree has a binomial distribution with $n$ being our sample size, and $p$ being the probability we are trying to estimate. Let's estimate $p$ using Stan: that is to say, let's obtain the posterior distribution of $p$.
-
-Note: I'm not sure how Stan goes in R Studio Cloud at the moment. This works better in R on your own computer.
 
 
 
@@ -46,9 +46,9 @@ This is quicker to do than to ask for. Make a guess at this:
 ```
 
 model {
-// likelihood
-x ~ binomial(n, p);
-
+  // likelihood
+  x ~ binomial(n, p);
+}
 ```
 
 
@@ -86,10 +86,10 @@ Your `model` section should now look like this:
 ```
 
 model {
-// prior
-p ~ beta(alpha, beta);
-// likelihood
-x ~ binomial(n, p);
+  // prior
+  p ~ beta(alpha, beta);
+  // likelihood
+  x ~ binomial(n, p);
 }
 
 ```
@@ -109,7 +109,7 @@ Solution
 ```
 
 parameters {
-real<lower=0, upper=1> p;
+  real<lower=0, upper=1> p;
 }
 
 ```
@@ -130,10 +130,10 @@ These two together give us this:
 ```
 
 data {
-int<lower=0> n;
-int<lower=0, upper=n> x;
-real<lower=0> alpha;
-real<lower=0> beta;
+  int<lower=0> n;
+  int<lower=0, upper=n> x;
+  real<lower=0> alpha;
+  real<lower=0> beta;
 }
 
 ```
@@ -203,7 +203,8 @@ It doesn't matter how many errors you make; what matters is that you find and co
 
 
 
-(g) Compile your model. (This may take a minute or so, depending on how fast `rstudio.cloud` or your computer is.)
+(g) Compile your model. (This may take a minute or so, depending on how fast your 
+R Studio is.) When the spinny thing stops spinning, it's done.
 
 
 Solution
@@ -212,15 +213,16 @@ Solution
 Go down to the console and type something like
 
 ```r
-binomial_code <- stan_model("binomial.stan")
+binomial <- cmdstan_model("binomial.stan")
 ```
 
    
 
-If it doesn't work, make sure you installed and loaded `rstan` first, with `install.packages("rstan")` and `library(rstan)` respectively.
+If it doesn't work, make sure you installed and loaded `cmdstanr` first, with `install.packages` and `library` respectively.
 
 If it sits there and does nothing for a while, this is actually a good sign. If it finds an error, it will tell you. If you get your command prompt `>` back without it saying anything, that means it worked. (This is a Unix thing: no comment means no error.)
 
+If you happen to compile it a second time, without changing anything in the Stan code, it won't make you wait while it compiles again: it will say "Model executable is up to date!".
 
 
 (h) In most surveys, the probability to be estimated is fairly close to 0.5. 
@@ -298,42 +300,9 @@ qnorm(0.025)
 ## [1] -1.959964
 ```
 
-   
+  
 
-Also, `qbeta` is "vectorized", so the `alpha` and
-`beta` can be entire columns rather than just numbers, and it
-will work. If you want to, you can use `map2` to do it for each
-`alpha` and `beta`, something like this (this does the lower end of the interval):
-
-```r
-crossing(alpha = 1:10, beta = 1:10) %>%
-  mutate(lower = map2_dbl(alpha, beta, ~ qbeta(0.025, .x, .y))) %>%
-  arrange(abs(lower - 0.1))
-```
-
-```
-## # A tibble: 100 x 3
-##    alpha  beta  lower
-##    <int> <int>  <dbl>
-##  1     4     9 0.0992
-##  2     3     5 0.0990
-##  3     2     2 0.0943
-##  4     4    10 0.0909
-##  5     4     8 0.109 
-##  6     3     6 0.0852
-##  7     3     4 0.118 
-##  8     4     7 0.122 
-##  9     3     7 0.0749
-## 10     5    10 0.128 
-## # … with 90 more rows
-```
-
-   
-
-Remember that there are two "it"s in `map2`, and they are called `.x` and 
-`.y`.
-
-* We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each `alpha`-`beta` combo is a way to do this; if `sse` is small, that combination of `alpha` and `beta` gave lower and upper limits close to 0.1 and 0.6.
+* We want the lower limit to be close to 0.1 *and* the upper limit to be close to 0.6. Working out the sum of squared errors for each `alpha`-`beta` combo is a way to do this; if `sse` is small, that combination of `alpha` and `beta` gave lower and upper limits close to 0.1 and 0.6.
 
 * Arrange the `sse` values smallest to largest. The top rows are the best choices of `alpha` and `beta`.
 
@@ -347,137 +316,122 @@ Solution
 
 
 
-
    
 This is what I got:
 
 ```r
-binomial.1 <- sampling(binomial_code, binomial_data)
+binomial_fit <- binomial$sample(binomial_data)
 ```
 
 ```
+## Running MCMC with 4 sequential chains...
 ## 
-## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 1).
-## Chain 1: 
-## Chain 1: Gradient evaluation took 5e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 1: Adjust your expectations accordingly!
-## Chain 1: 
-## Chain 1: 
-## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 1: 
-## Chain 1:  Elapsed Time: 0.007675 seconds (Warm-up)
-## Chain 1:                0.007866 seconds (Sampling)
-## Chain 1:                0.015541 seconds (Total)
-## Chain 1: 
+## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 1 finished in 0.0 seconds.
+## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 2 finished in 0.0 seconds.
+## Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 3 finished in 0.0 seconds.
+## Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 4 finished in 0.0 seconds.
 ## 
-## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 2).
-## Chain 2: 
-## Chain 2: Gradient evaluation took 4e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-## Chain 2: Adjust your expectations accordingly!
-## Chain 2: 
-## Chain 2: 
-## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 2: 
-## Chain 2:  Elapsed Time: 0.007418 seconds (Warm-up)
-## Chain 2:                0.006952 seconds (Sampling)
-## Chain 2:                0.01437 seconds (Total)
-## Chain 2: 
-## 
-## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 3).
-## Chain 3: 
-## Chain 3: Gradient evaluation took 4e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-## Chain 3: Adjust your expectations accordingly!
-## Chain 3: 
-## Chain 3: 
-## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 3: 
-## Chain 3:  Elapsed Time: 0.007519 seconds (Warm-up)
-## Chain 3:                0.006624 seconds (Sampling)
-## Chain 3:                0.014143 seconds (Total)
-## Chain 3: 
-## 
-## SAMPLING FOR MODEL 'binomial' NOW (CHAIN 4).
-## Chain 4: 
-## Chain 4: Gradient evaluation took 5e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 4: Adjust your expectations accordingly!
-## Chain 4: 
-## Chain 4: 
-## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 4: 
-## Chain 4:  Elapsed Time: 0.007503 seconds (Warm-up)
-## Chain 4:                0.007314 seconds (Sampling)
-## Chain 4:                0.014817 seconds (Total)
-## Chain 4:
+## All 4 chains finished successfully.
+## Mean chain execution time: 0.0 seconds.
+## Total execution time: 0.6 seconds.
 ```
 
 ```r
-binomial.1
+binomial_fit
 ```
 
 ```
-## Inference for Stan model: binomial.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
-## 
-##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.21    0.24    0.25    0.27    0.30  1415
-## lp__ -159.31    0.02 0.67 -161.18 -159.47 -159.05 -158.89 -158.84  1851
-##      Rhat
-## p       1
-## lp__    1
-## 
-## Samples were drawn using NUTS(diag_e) at Tue Oct 15 15:41:11 2019.
-## For each parameter, n_eff is a crude measure of effective sample size,
-## and Rhat is the potential scale reduction factor on split chains (at 
-## convergence, Rhat=1).
+##  variable    mean  median   sd  mad      q5     q95 rhat ess_bulk ess_tail
+##      lp__ -159.30 -159.05 0.67 0.29 -160.74 -158.84 1.00     2016     2457
+##      p       0.25    0.25 0.03 0.03    0.21    0.30 1.00     1448     1832
 ```
 
    
@@ -492,7 +446,7 @@ Your results should be similar, though probably not identical, to mine. (There i
 Solution
 
 
-Read off the 2.5 and 97.5 values for `p`. Mine are 0.20 and 0.31.
+Read off the 2.5 and 97.5 values for `p`. Mine are 0.21 and 0.30.
 
 
 
@@ -524,7 +478,7 @@ prop.test(69, 277)
 
    
 
-My 95\% intervals are, to two decimals, identical.
+My 95\% intervals are very close.
 
 Numerically, this is because the only (material) difference between
 them is the presence of the prior in the Bayesian approach. We have
@@ -622,12 +576,12 @@ I'm trading more typing for less confusion:
 ```
 
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 
 ```
@@ -642,9 +596,9 @@ real number, while `sigma` has to be positive:
 ```
 
 parameters {
-real a;
-real b;
-real<lower=0> sigma;
+  real a;
+  real b;
+  real<lower=0> sigma;
 }
 
 ```
@@ -656,14 +610,14 @@ Everything else is data, and we have a *lot* of data this time:
 ```
 
 data {
-int<lower=0> n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real<lower=0> prior_int_sd;
-real prior_slope_mean;
-real<lower=0> prior_slope_sd;
-real<lower=0> prior_sigma_mean;
+  int<lower=0> n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real<lower=0> prior_int_sd;
+  real prior_slope_mean;
+  real<lower=0> prior_slope_sd;
+  real<lower=0> prior_sigma_mean;
 }
 
 ```
@@ -709,7 +663,7 @@ this:
 ```
 
 for (i in 1:n) {
-y[i] ~ normal(a + b * x[i], sigma)
+  y[i] ~ normal(a + b * x[i], sigma)
 }
 
 
@@ -731,29 +685,29 @@ My code looks like this, in total:
 ```
 
 data {
-int<lower=0> n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real<lower=0> prior_int_sd;
-real prior_slope_mean;
-real<lower=0> prior_slope_sd;
-real<lower=0> prior_sigma_mean;
+  int<lower=0> n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real<lower=0> prior_int_sd;
+  real prior_slope_mean;
+  real<lower=0> prior_slope_sd;
+  real<lower=0> prior_sigma_mean;
 }
 
 parameters {
-real a;
-real b;
-real<lower=0> sigma;
+  real a;
+  real b;
+  real<lower=0> sigma;
 }
 
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 
 
@@ -774,7 +728,7 @@ To compile, the usual thing:
 
 
 ```r
-reg_code <- stan_model("reg.stan")
+reg <- cmdstan_model("reg.stan")
 ```
 
  
@@ -863,7 +817,8 @@ vocabulary <- read_delim(my_url, " ")
 ```
 
 ```
-## Parsed with column specification:
+## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   age = col_double(),
 ##   vocab = col_double()
@@ -900,8 +855,7 @@ error SD. What is the 95\% posterior interval for the slope?
 Solution
 
 
-Two parts: set up the data, and then feed it into `sampling`:
-
+Two parts: set up the data, and then sample it:
 
 
 
@@ -915,110 +869,108 @@ reg_data <- list(
   prior_slope_sd = 100,
   prior_sigma_mean = 200
 )
-reg.1 <- sampling(reg_code, reg_data)
+reg.1 <- reg$sample(reg_data)
 ```
 
 ```
+## Running MCMC with 4 sequential chains...
 ## 
-## SAMPLING FOR MODEL 'reg' NOW (CHAIN 1).
-## Chain 1: 
-## Chain 1: Gradient evaluation took 7e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
-## Chain 1: Adjust your expectations accordingly!
-## Chain 1: 
-## Chain 1: 
-## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 1: 
-## Chain 1:  Elapsed Time: 0.1085 seconds (Warm-up)
-## Chain 1:                0.022406 seconds (Sampling)
-## Chain 1:                0.130906 seconds (Total)
-## Chain 1: 
+## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 1 finished in 0.1 seconds.
+## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 2 finished in 0.1 seconds.
+## Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 3 finished in 0.1 seconds.
+## Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 4 finished in 0.1 seconds.
 ## 
-## SAMPLING FOR MODEL 'reg' NOW (CHAIN 2).
-## Chain 2: 
-## Chain 2: Gradient evaluation took 5e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 2: Adjust your expectations accordingly!
-## Chain 2: 
-## Chain 2: 
-## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 2: 
-## Chain 2:  Elapsed Time: 0.106438 seconds (Warm-up)
-## Chain 2:                0.025579 seconds (Sampling)
-## Chain 2:                0.132017 seconds (Total)
-## Chain 2: 
-## 
-## SAMPLING FOR MODEL 'reg' NOW (CHAIN 3).
-## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-## Chain 3: Adjust your expectations accordingly!
-## Chain 3: 
-## Chain 3: 
-## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 3: 
-## Chain 3:  Elapsed Time: 0.114201 seconds (Warm-up)
-## Chain 3:                0.028163 seconds (Sampling)
-## Chain 3:                0.142364 seconds (Total)
-## Chain 3: 
-## 
-## SAMPLING FOR MODEL 'reg' NOW (CHAIN 4).
-## Chain 4: 
-## Chain 4: Gradient evaluation took 5e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 4: Adjust your expectations accordingly!
-## Chain 4: 
-## Chain 4: 
-## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 4: 
-## Chain 4:  Elapsed Time: 0.099003 seconds (Warm-up)
-## Chain 4:                0.020154 seconds (Sampling)
-## Chain 4:                0.119157 seconds (Total)
-## Chain 4:
+## All 4 chains finished successfully.
+## Mean chain execution time: 0.1 seconds.
+## Total execution time: 0.5 seconds.
 ```
 
 ```r
@@ -1026,30 +978,34 @@ reg.1
 ```
 
 ```
-## Inference for Stan model: reg.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
-## 
-##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
-## a     -613.67    2.26 98.12 -801.00 -678.88 -612.75 -547.82 -419.73  1890
-## b      521.06    0.62 26.81  467.05  503.23  520.85  539.23  573.84  1849
-## sigma  189.33    0.36 19.13  153.53  176.17  188.82  201.50  228.95  2772
-## lp__   373.70    0.03  1.23  370.45  373.11  374.03  374.61  375.11  1455
-##       Rhat
-## a        1
-## b        1
-## sigma    1
-## lp__     1
-## 
-## Samples were drawn using NUTS(diag_e) at Tue Oct 15 15:41:16 2019.
-## For each parameter, n_eff is a crude measure of effective sample size,
-## and Rhat is the potential scale reduction factor on split chains (at 
-## convergence, Rhat=1).
+##  variable    mean  median     sd    mad      q5     q95 rhat ess_bulk ess_tail
+##     lp__   373.67  374.00   1.29   1.04  371.15  375.05 1.00     1566     2373
+##     a     -616.08 -616.85 100.25 100.64 -781.90 -453.01 1.00     1394     1657
+##     b      521.64  521.50  27.38  27.39  476.84  566.17 1.00     1433     1783
+##     sigma  189.23  188.40  19.41  19.25  158.77  221.84 1.00     2115     2108
 ```
 
  
 
-One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
+One line per parameter (plus the log-posterior distribution, not very useful to us). To get a 95\% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for `b`, which are 467 and 572. (This is about $520 \pm 52$, rounding crudely, while the prior distribution said $500 \pm 200$, so the data have allowed us to estimate the slope a fair bit more accurately.)
+
+(f) Plot a histogram of the posterior distribution of the slope. Does its shape surprise you? Explain briefly.
+
+
+Solution
+
+This is most easily `mcmc_hist` from `bayesplot`:
+
+
+```r
+mcmc_hist(reg.1$draws("b"), binwidth = 20)
+```
+
+<img src="27-stan_files/figure-html/unnamed-chunk-15-1.png" width="672"  />
+
+I'm guessing you have a better intuition for `bins` as opposed to `binwidth` (the latter being what you need here), so you can try it without giving a `binwidth` at all (and getting way too many bins), and then see if you can figure out what `binwidth` should be to get you a sensible number of bins. This one looks pretty good to me. 
+
+The shape is very normal. This is because everything is normal: the prior and the data-generating process both, so it is not surprising at all that the posterior came out normal. (You may remember from your regression course that if you have a normal regression model, the slope also has a normal distribution.)
 
 
 (f) What can we say about the vocabulary size of a randomly
@@ -1059,30 +1015,29 @@ set)? Use an appropriate predictive distribution.
 Solution
 
 
-If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
+If you have done a regression course, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
 
 
 ```r
-reg_samples <- rstan::extract(reg.1)
-cbind(a = reg_samples$a, b = reg_samples$b, sigma = reg_samples$sigma) %>%
+as_draws_df(reg.1$draws()) %>%
   as_tibble() -> sims
 sims
 ```
 
 ```
-## # A tibble: 4,000 x 3
-##        a     b sigma
-##    <dbl> <dbl> <dbl>
-##  1 -373.  501.  179.
-##  2 -523.  488.  160.
-##  3 -543.  518.  168.
-##  4 -778.  570.  188.
-##  5 -656.  531.  177.
-##  6 -777.  545.  189.
-##  7 -662.  533.  186.
-##  8 -604.  519.  165.
-##  9 -795.  575.  198.
-## 10 -690.  571.  179.
+## # A tibble: 4,000 x 7
+##     lp__     a     b sigma .chain .iteration .draw
+##    <dbl> <dbl> <dbl> <dbl>  <int>      <int> <int>
+##  1  375. -640.  531.  178.      1          1     1
+##  2  375. -718.  544.  182.      1          2     2
+##  3  374. -735.  563.  198.      1          3     3
+##  4  375. -595.  516.  190.      1          4     4
+##  5  375. -599.  511.  201.      1          5     5
+##  6  374. -521.  520.  193.      1          6     6
+##  7  375. -630.  529.  204.      1          7     7
+##  8  374. -573.  537.  195.      1          8     8
+##  9  374. -580.  529.  182.      1          9     9
+## 10  375. -629.  511.  180.      1         10    10
 ## # … with 3,990 more rows
 ```
 
@@ -1093,11 +1048,34 @@ and now we need to simulate some response values for our notional child of age 5
 
 ```r
 sims %>%
-  mutate(sim_vocab = rnorm(nrow(sims), a + b * 5, sigma)) -> sims2
+  rowwise() %>% 
+  mutate(sim_vocab = rnorm(1, a + b * 5, sigma)) -> sims2
+sims2
+```
+
+```
+## # A tibble: 4,000 x 8
+## # Rowwise: 
+##     lp__     a     b sigma .chain .iteration .draw sim_vocab
+##    <dbl> <dbl> <dbl> <dbl>  <int>      <int> <int>     <dbl>
+##  1  375. -640.  531.  178.      1          1     1     2218.
+##  2  375. -718.  544.  182.      1          2     2     1709.
+##  3  374. -735.  563.  198.      1          3     3     2044.
+##  4  375. -595.  516.  190.      1          4     4     1985.
+##  5  375. -599.  511.  201.      1          5     5     1905.
+##  6  374. -521.  520.  193.      1          6     6     2209.
+##  7  375. -630.  529.  204.      1          7     7     1994.
+##  8  374. -573.  537.  195.      1          8     8     2261.
+##  9  374. -580.  529.  182.      1          9     9     2320.
+## 10  375. -629.  511.  180.      1         10    10     2122.
+## # … with 3,990 more rows
+```
+
+```r
 ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
 ```
 
-<img src="27-stan_files/figure-html/unnamed-chunk-19-1.png" width="672"  />
+<img src="27-stan_files/figure-html/unnamed-chunk-17-1.png" width="672"  />
 
  
 
@@ -1110,7 +1088,7 @@ with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 
 ```
 ##     2.5%    97.5% 
-## 1587.232 2391.757
+## 1591.842 2407.195
 ```
 
  

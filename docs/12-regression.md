@@ -2900,21 +2900,21 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
-##  [4] "package:leaps"       "package:conflicted"  "package:PMCMRplus"  
-##  [7] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
-## [10] "package:rpart"       "package:broom"       "package:ggrepel"    
-## [13] "package:ggbiplot"    "package:grid"        "package:scales"     
-## [16] "package:plyr"        "package:lme4"        "package:Matrix"     
-## [19] "package:car"         "package:carData"     "package:survminer"  
-## [22] "package:ggpubr"      "package:survival"    "package:nnet"       
-## [25] "package:MASS"        "package:smmr"        "package:forcats"    
-## [28] "package:stringr"     "package:dplyr"       "package:purrr"      
-## [31] "package:readr"       "package:tidyr"       "package:tibble"     
-## [34] "package:ggplot2"     "package:tidyverse"   "package:stats"      
-## [37] "package:graphics"    "package:grDevices"   "package:utils"      
-## [40] "package:datasets"    "package:methods"     "Autoloads"          
-## [43] "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
+##  [4] "package:leaps"      "package:conflicted" "package:PMCMRplus" 
+##  [7] "package:bayesplot"  "package:posterior"  "package:cmdstanr"  
+## [10] "package:bootstrap"  "package:rpart"      "package:broom"     
+## [13] "package:ggrepel"    "package:ggbiplot"   "package:grid"      
+## [16] "package:scales"     "package:plyr"       "package:lme4"      
+## [19] "package:Matrix"     "package:car"        "package:carData"   
+## [22] "package:survminer"  "package:ggpubr"     "package:survival"  
+## [25] "package:nnet"       "package:MASS"       "package:smmr"      
+## [28] "package:forcats"    "package:stringr"    "package:dplyr"     
+## [31] "package:purrr"      "package:readr"      "package:tidyr"     
+## [34] "package:tibble"     "package:ggplot2"    "package:tidyverse" 
+## [37] "package:stats"      "package:graphics"   "package:grDevices" 
+## [40] "package:utils"      "package:datasets"   "package:methods"   
+## [43] "Autoloads"          "package:base"
 ```
 
  
@@ -2940,20 +2940,21 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"          ".conflicts"          "package:GGally"     
-##  [4] "package:leaps"       "package:conflicted"  "package:PMCMRplus"  
-##  [7] "package:rstan"       "package:StanHeaders" "package:bootstrap"  
-## [10] "package:rpart"       "package:broom"       "package:ggrepel"    
-## [13] "package:ggbiplot"    "package:grid"        "package:scales"     
-## [16] "package:plyr"        "package:lme4"        "package:Matrix"     
-## [19] "package:car"         "package:carData"     "package:survminer"  
-## [22] "package:ggpubr"      "package:survival"    "package:nnet"       
-## [25] "package:smmr"        "package:forcats"     "package:stringr"    
-## [28] "package:dplyr"       "package:purrr"       "package:readr"      
-## [31] "package:tidyr"       "package:tibble"      "package:ggplot2"    
-## [34] "package:tidyverse"   "package:stats"       "package:graphics"   
-## [37] "package:grDevices"   "package:utils"       "package:datasets"   
-## [40] "package:methods"     "Autoloads"           "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:GGally"    
+##  [4] "package:leaps"      "package:conflicted" "package:PMCMRplus" 
+##  [7] "package:bayesplot"  "package:posterior"  "package:cmdstanr"  
+## [10] "package:bootstrap"  "package:rpart"      "package:broom"     
+## [13] "package:ggrepel"    "package:ggbiplot"   "package:grid"      
+## [16] "package:scales"     "package:plyr"       "package:lme4"      
+## [19] "package:Matrix"     "package:car"        "package:carData"   
+## [22] "package:survminer"  "package:ggpubr"     "package:survival"  
+## [25] "package:nnet"       "package:smmr"       "package:forcats"   
+## [28] "package:stringr"    "package:dplyr"      "package:purrr"     
+## [31] "package:readr"      "package:tidyr"      "package:tibble"    
+## [34] "package:ggplot2"    "package:tidyverse"  "package:stats"     
+## [37] "package:graphics"   "package:grDevices"  "package:utils"     
+## [40] "package:datasets"   "package:methods"    "Autoloads"         
+## [43] "package:base"
 ```
 
  

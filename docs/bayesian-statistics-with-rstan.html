@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta property="og:title" content="Problems and Solutions in Applied Statistics" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 18 Bayesian Statistics with rstan | Problems and Solutions in Applied Statistics" />
 <meta property="og:type" content="book" />
-<meta property="og:url" content="<a href="http://ritsokiguess.site/pasias" class="uri">http://ritsokiguess.site/pasias</a>" />
+<meta property="og:url" content="http://ritsokiguess.site/pasias" />
 
 <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
 <meta name="github-repo" content="nxskok/pasias" />
@@ -24,42 +21,43 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
-<title>Problems and Solutions in Applied Statistics</title>
+<title>Chapter 18 Bayesian Statistics with rstan | Problems and Solutions in Applied Statistics</title>
 
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -68,9 +66,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -117,44 +115,59 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="TOC">
 <ul>
 <li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
-<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">3</span> Getting used to R and R Studio</a><ul>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">3.1</span> Getting an R Studio Cloud account</a></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">3.2</span> Getting started</a></li>
-<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">3.3</span> Reading data from a file</a></li>
-<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">3.4</span> Reading files different ways</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a>
+<ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
 </ul></li>
-<li class="has-sub"><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">4</span> Reading in data and drawing some graphs</a><ul>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">3</span> Reading in data and drawing some graphs</a>
+<ul>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
 </ul></li>
-<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a><ul>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">4</span> Drawing graphs</a>
+<ul>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
 <li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
 <li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+<li><a href="data-exploration.html#working-with-dataframes"><span class="toc-section-number">5.6</span> Working with dataframes</a></li>
+<li><a href="data-exploration.html#tidying-the-jays-data"><span class="toc-section-number">5.7</span> Tidying the Jays data</a></li>
+<li><a href="data-exploration.html#cars"><span class="toc-section-number">5.8</span> Cars</a></li>
 </ul></li>
-<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
 <li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
 </ul></li>
-<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
 <li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">7.4</span> Exercise and anxiety and bullying mice</a></li>
 <li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">7.5</span> Diet and growth in boys</a></li>
 </ul></li>
-<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">9</span> The sign test and Mood’s median test</a><ul>
+<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">9</span> The sign test and Mood’s median test</a>
+<ul>
 <li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -162,38 +175,41 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">9.5</span> Fear of math</a></li>
 <li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">9.6</span> Medical instructions</a></li>
 </ul></li>
-<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">10</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">10</span> Matched pairs t and sign test</a>
+<ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">10.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">10.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">10.3</span> Throwing baseballs and softballs, again</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">10.4</span> Changes in salary</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">10.5</span> Body fat revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">11</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">11</span> Normal quantile plots</a>
+<ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">11.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">11.2</span> Ferritin and normality</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">12</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">12</span> Analysis of variance</a>
+<ul>
 <li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">12.1</span> Movie ratings and lengths</a></li>
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">12.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">12.3</span> Movie ratings again</a></li>
 <li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">12.4</span> Atomic weight of carbon</a></li>
 <li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">12.5</span> Can caffeine improve your performance on a test?</a></li>
 </ul></li>
-<li class="has-sub"><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">13</span> Tidying and selecting data</a><ul>
-<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">13.1</span> Tidying the Jays data</a></li>
-<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">13.2</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">13.3</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">13.4</span> Growth of tomatoes</a></li>
-<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">13.5</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">13.6</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">13.7</span> Mating songs in crickets</a></li>
-<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">13.8</span> Cars</a></li>
-<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">13.9</span> Number 1 songs</a></li>
-<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">13.10</span> Bikes on College</a></li>
-<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">13.11</span> Feeling the heat</a></li>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">13</span> Tidying data</a>
+<ul>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">13.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">13.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">13.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">13.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">13.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">13.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">13.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">13.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">13.9</span> Feeling the heat</a></li>
 </ul></li>
-<li class="has-sub"><a href="regression.html#regression"><span class="toc-section-number">14</span> Regression</a><ul>
+<li><a href="regression.html#regression"><span class="toc-section-number">14</span> Regression</a>
+<ul>
 <li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">14.1</span> Rainfall in California</a></li>
 <li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">14.2</span> Carbon monoxide in cigarettes</a></li>
 <li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">14.3</span> Maximal oxygen uptake in young boys</a></li>
@@ -213,25 +229,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">14.17</span> Salaries of mathematicians</a></li>
 <li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">14.18</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">15</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">15</span> Dates and times</a>
+<ul>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">15.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
 <li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">15.2</span> Growth of Mizuna lettuce seeds</a></li>
 <li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">15.3</span> Types of childbirth</a></li>
 <li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">15.4</span> Wolves and caribou</a></li>
 </ul></li>
-<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">16</span> Functions</a><ul>
+<li><a href="functions.html#functions"><span class="toc-section-number">16</span> Functions</a>
+<ul>
 <li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">16.1</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">16.2</span> The Collatz sequence</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">17</span> The Bootstrap</a><ul>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">17</span> The Bootstrap</a>
+<ul>
 <li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">17.1</span> Air conditioning failures</a></li>
 <li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">17.2</span> Air conditioning failures: bootstrapping the median</a></li>
 </ul></li>
-<li class="has-sub"><a href="bayesian-statistics-with-rstan.html#bayesian-statistics-with-rstan"><span class="toc-section-number">18</span> Bayesian Statistics with <code>rstan</code></a><ul>
+<li><a href="bayesian-statistics-with-rstan.html#bayesian-statistics-with-rstan"><span class="toc-section-number">18</span> Bayesian Statistics with <code>rstan</code></a>
+<ul>
 <li><a href="bayesian-statistics-with-rstan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">18.1</span> Estimating proportion in favour from a survey</a></li>
 <li><a href="bayesian-statistics-with-rstan.html#bayesian-regression"><span class="toc-section-number">18.2</span> Bayesian regression</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">19</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">19</span> Logistic regression</a>
+<ul>
 <li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">19.1</span> Finding wolf spiders on the beach</a></li>
 <li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">19.2</span> Killing aphids</a></li>
 <li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">19.3</span> The effects of Substance A</a></li>
@@ -243,7 +264,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">19.9</span> Who needs the most intensive care?</a></li>
 <li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">19.10</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">20</span> Logistic regression with ordinal or nominal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">20</span> Logistic regression with ordinal or nominal response</a>
+<ul>
 <li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">20.1</span> Do you like your mobile phone?</a></li>
 <li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">20.2</span> Attitudes towards abortion</a></li>
 <li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">20.3</span> Finding non-missing values</a></li>
@@ -256,13 +278,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">20.10</span> High School and Beyond</a></li>
 <li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">20.11</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">21</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">21</span> Survival analysis</a>
+<ul>
 <li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">21.1</span> The Worcester survey</a></li>
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">21.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">21.3</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">21.4</span> Ovarian cancer</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">22</span> Analysis of variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">22</span> Analysis of variance revisited</a>
+<ul>
 <li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">22.1</span> Acid rain</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">22.2</span> Treating hay fever</a></li>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">22.3</span> Focused comparisons of the effect of caffeine</a></li>
@@ -272,12 +296,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">22.7</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">22.8</span> Treating leprosy</a></li>
 </ul></li>
-<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">23</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">23</span> Multivariate analysis of variance</a>
+<ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">23.1</span> Fabricated data</a></li>
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">23.2</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">23.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">24</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">24</span> Repeated measures</a>
+<ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">24.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">24.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">24.3</span> Children’s stress levels and airports</a></li>
@@ -285,7 +311,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">24.5</span> Investigating motor activity in rats</a></li>
 <li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">24.6</span> Repeated measures with no background</a></li>
 </ul></li>
-<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">25</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">25</span> Discriminant analysis</a>
+<ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">25.1</span> Telling whether a banknote is real or counterfeit</a></li>
 <li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">25.2</span> Urine and obesity: what makes a difference?</a></li>
 <li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">25.3</span> Understanding a MANOVA</a></li>
@@ -294,7 +321,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">25.6</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">25.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li class="has-sub"><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">26</span> Cluster analysis</a><ul>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">26</span> Cluster analysis</a>
+<ul>
 <li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">26.1</span> Sites on the sea bed</a></li>
 <li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">26.2</span> Dissimilarities between fruits</a></li>
 <li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">26.3</span> Similarity of species</a></li>
@@ -305,20 +333,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">26.8</span> Bridges in Pittsburgh</a></li>
 <li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">26.9</span> Clustering the Australian athletes</a></li>
 </ul></li>
-<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">27</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">27</span> Multidimensional Scaling</a>
+<ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">27.1</span> Making a map of Wisconsin</a></li>
 <li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">27.2</span> Things that feel similar to each other</a></li>
 <li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">27.3</span> Confusing letters</a></li>
 <li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">27.4</span> More beer please</a></li>
 <li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">27.5</span> Feeling similar, again</a></li>
 </ul></li>
-<li class="has-sub"><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">28</span> Principal Components and Factor Analysis</a><ul>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">28</span> Principal Components and Factor Analysis</a>
+<ul>
 <li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">28.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">28.2</span> Air pollution</a></li>
 <li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">28.3</span> A correlation matrix</a></li>
 <li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">28.4</span> The Interpersonal Circumplex</a></li>
 </ul></li>
-<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">29</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">29</span> Frequency table analysis</a>
+<ul>
 <li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">29.1</span> College plans</a></li>
 <li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">29.2</span> Predicting voting</a></li>
 </ul></li>
@@ -328,12 +359,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="bayesian-statistics-with-rstan" class="section level1">
+<div id="bayesian-statistics-with-rstan" class="section level1" number="18">
 <h1><span class="header-section-number">Chapter 18</span> Bayesian Statistics with <code>rstan</code></h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb1908"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1908-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1908-2" data-line-number="2"><span class="kw">library</span>(rstan)</a></code></pre></div>
-<div id="estimating-proportion-in-favour-from-a-survey" class="section level2">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="bayesian-statistics-with-rstan.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="bayesian-statistics-with-rstan.html#cb1-2"></a><span class="kw">library</span>(cmdstanr)</span>
+<span id="cb1-3"><a href="bayesian-statistics-with-rstan.html#cb1-3"></a><span class="kw">library</span>(posterior)</span>
+<span id="cb1-4"><a href="bayesian-statistics-with-rstan.html#cb1-4"></a><span class="kw">library</span>(bayesplot)</span></code></pre></div>
+<p>There was a problem compiling this chapter xxx</p>
+<div id="estimating-proportion-in-favour-from-a-survey" class="section level2" number="18.1">
 <h2><span class="header-section-number">18.1</span> Estimating proportion in favour from a survey</h2>
 <p>You are probably familiar with the kind of surveys where you are given a statement, like “I am the kind of person that finishes a task they start”,
 and you have to express your agreement or disagreement with it.
@@ -344,9 +378,8 @@ So the kind of data you would have is a number of people that took part, and the
 <p>Common assumptions that are made in this kind of analysis are:
 (i) the responses are independent of each other, and (ii) each respondent has the same unknown probability of agreeing.
 You might quibble about (ii), but the assumption we are making here is that we know <em>nothing</em> about the respondents apart from whether they agreed or disagreed.
-(In practice, we’d collect all kinds of demograhic information about each respondent, and this might give us a clue about how they’ll respond, but here we’re keeping it simple.)
+(In practice, we’d collect all kinds of demographic information about each respondent, and this might give us a clue about how they’ll respond, but here we’re keeping it simple.)
 Under our assumptions, the number of respondents that agree has a binomial distribution with <span class="math inline">\(n\)</span> being our sample size, and <span class="math inline">\(p\)</span> being the probability we are trying to estimate. Let’s estimate <span class="math inline">\(p\)</span> using Stan: that is to say, let’s obtain the posterior distribution of <span class="math inline">\(p\)</span>.</p>
-<p>Note: I’m not sure how Stan goes in R Studio Cloud at the moment. This works better in R on your own computer.</p>
 <ol style="list-style-type: lower-alpha">
 <li>In R Studio, open a new Stan file (with File, New File, Stan File).
 You’ll see a template file of Stan code.
@@ -356,9 +389,9 @@ Edit the <code>model</code> section to reflect that you have observed a number o
 <p>This is quicker to do than to ask for. Make a guess at this:</p>
 <pre><code>
 model {
-// likelihood
-x ~ binomial(n, p);
-</code></pre>
+  // likelihood
+  x ~ binomial(n, p);
+}</code></pre>
 <p>and then check the manual <a href="https://mc-stan.org/docs/2_18/functions-reference/binomial-distribution.html">link</a>, looking for Sampling Statement, to make sure that this is what is expected. It is.
 (I got to this page by googling “Stan binomial distribution”.)</p>
 <p>The “likelihood” line with the two slashes is a comment, C++ style.
@@ -383,10 +416,10 @@ Add to your <code>model</code> section to express that <code>p</code> has a prio
 <p>Your <code>model</code> section should now look like this:</p>
 <pre><code>
 model {
-// prior
-p ~ beta(alpha, beta);
-// likelihood
-x ~ binomial(n, p);
+  // prior
+  p ~ beta(alpha, beta);
+  // likelihood
+  x ~ binomial(n, p);
 }
 </code></pre>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -398,7 +431,7 @@ You can edit the <code>parameters</code> section that is in the template.</li>
 <p><code>p</code> is a real variable taking values between 0 and 1, so this:</p>
 <pre><code>
 parameters {
-real&lt;lower=0, upper=1&gt; p;
+  real&lt;lower=0, upper=1&gt; p;
 }
 </code></pre>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -411,10 +444,10 @@ In the data section also go the parameters <code>alpha</code> and <code>beta</co
 These two together give us this:</p>
 <pre><code>
 data {
-int&lt;lower=0&gt; n;
-int&lt;lower=0, upper=n&gt; x;
-real&lt;lower=0&gt; alpha;
-real&lt;lower=0&gt; beta;
+  int&lt;lower=0&gt; n;
+  int&lt;lower=0, upper=n&gt; x;
+  real&lt;lower=0&gt; alpha;
+  real&lt;lower=0&gt; beta;
 }
 </code></pre>
 <p>Putting in lower and upper limits, if you have them, will help because if you happen to enter data that does not respect the limits, you’ll get an error right there, and you won’t waste time sampling.</p>
@@ -459,13 +492,15 @@ If you get an error, fix it and check again. Repeat until your code is “syntac
 This process is an integral part of coding, so get used to it.
 It doesn’t matter how many errors you make; what matters is that you find and correct them all.</p>
 <ol start="7" style="list-style-type: lower-alpha">
-<li>Compile your model. (This may take a minute or so, depending on how fast <code>rstudio.cloud</code> or your computer is.)</li>
+<li>Compile your model. (This may take a minute or so, depending on how fast your
+R Studio is.) When the spinny thing stops spinning, it’s done.</li>
 </ol>
 <p>Solution</p>
 <p>Go down to the console and type something like</p>
-<div class="sourceCode" id="cb1916"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1916-1" data-line-number="1">binomial_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;binomial.stan&quot;</span>)</a></code></pre></div>
-<p>If it doesn’t work, make sure you installed and loaded <code>rstan</code> first, with <code>install.packages(&quot;rstan&quot;)</code> and <code>library(rstan)</code> respectively.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="bayesian-statistics-with-rstan.html#cb9-1"></a>binomial &lt;-<span class="st"> </span><span class="kw">cmdstan_model</span>(<span class="st">&quot;binomial.stan&quot;</span>)</span></code></pre></div>
+<p>If it doesn’t work, make sure you installed and loaded <code>cmdstanr</code> first, with <code>install.packages</code> and <code>library</code> respectively.</p>
 <p>If it sits there and does nothing for a while, this is actually a good sign. If it finds an error, it will tell you. If you get your command prompt <code>&gt;</code> back without it saying anything, that means it worked. (This is a Unix thing: no comment means no error.)</p>
+<p>If you happen to compile it a second time, without changing anything in the Stan code, it won’t make you wait while it compiles again: it will say “Model executable is up to date!”.</p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>In most surveys, the probability to be estimated is fairly close to 0.5.
 A beta prior with <span class="math inline">\(\alpha=\beta=2\)</span> expresses the idea that any value of <code>p</code> is possible, but values near 0.5 are more likely.</li>
@@ -475,19 +510,19 @@ A beta prior with <span class="math inline">\(\alpha=\beta=2\)</span> expresses 
 <p>Solution</p>
 <p>Look in your <code>data</code> section, and see what you need to provide values for.
 The order doesn’t matter; make a list with the named pieces and their values, in some order. You need values for these four things:</p>
-<div class="sourceCode" id="cb1917"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1917-1" data-line-number="1">binomial_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">277</span>, <span class="dt">x =</span> <span class="dv">69</span>, <span class="dt">alpha =</span> <span class="dv">2</span>, <span class="dt">beta =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="bayesian-statistics-with-rstan.html#cb10-1"></a>binomial_data &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">277</span>, <span class="dt">x =</span> <span class="dv">69</span>, <span class="dt">alpha =</span> <span class="dv">2</span>, <span class="dt">beta =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p>Extra: in case you are wondering where the parameters for the prior came from: in this case, I looked on the Wikipedia page for the beta distribution and saw that <span class="math inline">\(\alpha=\beta=2\)</span> is a good shape, so I used that.
 In practice, getting a reasonable prior is a more difficult problem, called “elicitation”.
 What you have to do is ask a subject matter expert what they think <code>p</code> might be, giving you a range of values such as a guessed-at 95% confidence interval, like “I think <code>p</code> is almost certainly between 0.1 and 0.6”.
 Then <em>you</em> as a statistician have to choose values for <code>alpha</code> and <code>beta</code> that match this, probably by trial and error.
 The <code>beta</code> distribution is part of R, so this is doable, for example like this:</p>
-<div class="sourceCode" id="cb1918"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1918-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1918-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb1918-3" data-line-number="3">    <span class="dt">lower =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, alpha, beta),</a>
-<a class="sourceLine" id="cb1918-4" data-line-number="4">    <span class="dt">upper =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, alpha, beta)</a>
-<a class="sourceLine" id="cb1918-5" data-line-number="5">  ) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1918-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sse =</span> (lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(upper <span class="op">-</span><span class="st"> </span><span class="fl">0.6</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1918-7" data-line-number="7"><span class="st">  </span><span class="kw">arrange</span>(sse)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="bayesian-statistics-with-rstan.html#cb11-1"></a><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-2"><a href="bayesian-statistics-with-rstan.html#cb11-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb11-3"><a href="bayesian-statistics-with-rstan.html#cb11-3"></a>    <span class="dt">lower =</span> <span class="kw">qbeta</span>(<span class="fl">0.025</span>, alpha, beta),</span>
+<span id="cb11-4"><a href="bayesian-statistics-with-rstan.html#cb11-4"></a>    <span class="dt">upper =</span> <span class="kw">qbeta</span>(<span class="fl">0.975</span>, alpha, beta)</span>
+<span id="cb11-5"><a href="bayesian-statistics-with-rstan.html#cb11-5"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb11-6"><a href="bayesian-statistics-with-rstan.html#cb11-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sse =</span> (lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>)<span class="op">^</span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span>(upper <span class="op">-</span><span class="st"> </span><span class="fl">0.6</span>)<span class="op">^</span><span class="dv">2</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-7"><a href="bayesian-statistics-with-rstan.html#cb11-7"></a><span class="st">  </span><span class="kw">arrange</span>(sse)</span></code></pre></div>
 <pre><code>## # A tibble: 100 x 5
 ##    alpha  beta  lower upper      sse
 ##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
@@ -503,40 +538,17 @@ The <code>beta</code> distribution is part of R, so this is doable, for example 
 ## 10     6    10 0.163  0.616 0.00428 
 ## # … with 90 more rows</code></pre>
 <p>This says that <span class="math inline">\(\alpha=4, \beta=8\)</span> is a pretty good choice.
-<label for="tufte-mn-129" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-129" class="margin-toggle"><span class="marginnote">Alpha and beta don’t have to be integers; you could use <em>seq</em> to create sequences of values for alpha and beta that include decimal numbers.</span></p>
+<label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">Alpha and beta don’t have to be integers; you could use <em>seq</em> to create sequences of values for alpha and beta that include decimal numbers.</span></p>
 <p>My process:</p>
 <ul>
 <li><p>Pick some values of <code>alpha</code> and <code>beta</code> to try, and make all possible combinations of them.</p></li>
 <li><p>Find the 2.5 and 97.5 percentiles of the beta distribution for each of those values.
 The “inverse CDF” (the value <span class="math inline">\(x\)</span> that has this much of the probability below it) is what we want here; this is obtained in R by putting <code>q</code> in front of the name of the distribution. For example, does this make sense to you?</p></li>
 </ul>
-<div class="sourceCode" id="cb1920"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1920-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="fl">0.025</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="bayesian-statistics-with-rstan.html#cb13-1"></a><span class="kw">qnorm</span>(<span class="fl">0.025</span>)</span></code></pre></div>
 <pre><code>## [1] -1.959964</code></pre>
-<p>Also, <code>qbeta</code> is “vectorized”, so the <code>alpha</code> and
-<code>beta</code> can be entire columns rather than just numbers, and it
-will work. If you want to, you can use <code>map2</code> to do it for each
-<code>alpha</code> and <code>beta</code>, something like this (this does the lower end of the interval):</p>
-<div class="sourceCode" id="cb1922"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1922-1" data-line-number="1"><span class="kw">crossing</span>(<span class="dt">alpha =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">beta =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1922-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lower =</span> <span class="kw">map2_dbl</span>(alpha, beta, <span class="op">~</span><span class="st"> </span><span class="kw">qbeta</span>(<span class="fl">0.025</span>, .x, .y))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1922-3" data-line-number="3"><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">abs</span>(lower <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>))</a></code></pre></div>
-<pre><code>## # A tibble: 100 x 3
-##    alpha  beta  lower
-##    &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-##  1     4     9 0.0992
-##  2     3     5 0.0990
-##  3     2     2 0.0943
-##  4     4    10 0.0909
-##  5     4     8 0.109 
-##  6     3     6 0.0852
-##  7     3     4 0.118 
-##  8     4     7 0.122 
-##  9     3     7 0.0749
-## 10     5    10 0.128 
-## # … with 90 more rows</code></pre>
-<p>Remember that there are two “it”s in <code>map2</code>, and they are called <code>.x</code> and
-<code>.y</code>.</p>
 <ul>
-<li><p>We want the lower limit to be close to 0.1 and the upper limit to be close to 0.6. Working out the sum of squared errors for each <code>alpha</code>-<code>beta</code> combo is a way to do this; if <code>sse</code> is small, that combination of <code>alpha</code> and <code>beta</code> gave lower and upper limits close to 0.1 and 0.6.</p></li>
+<li><p>We want the lower limit to be close to 0.1 <em>and</em> the upper limit to be close to 0.6. Working out the sum of squared errors for each <code>alpha</code>-<code>beta</code> combo is a way to do this; if <code>sse</code> is small, that combination of <code>alpha</code> and <code>beta</code> gave lower and upper limits close to 0.1 and 0.6.</p></li>
 <li><p>Arrange the <code>sse</code> values smallest to largest. The top rows are the best choices of <code>alpha</code> and <code>beta</code>.</p></li>
 </ul>
 <ol style="list-style-type: lower-roman">
@@ -544,123 +556,109 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 </ol>
 <p>Solution</p>
 <p>This is what I got:</p>
-<div class="sourceCode" id="cb1924"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1924-1" data-line-number="1">binomial<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(binomial_code, binomial_data)</a></code></pre></div>
-<pre><code>## 
-## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 1).
-## Chain 1: 
-## Chain 1: Gradient evaluation took 5e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 1: Adjust your expectations accordingly!
-## Chain 1: 
-## Chain 1: 
-## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 1: 
-## Chain 1:  Elapsed Time: 0.007675 seconds (Warm-up)
-## Chain 1:                0.007866 seconds (Sampling)
-## Chain 1:                0.015541 seconds (Total)
-## Chain 1: 
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="bayesian-statistics-with-rstan.html#cb15-1"></a>binomial_fit &lt;-<span class="st"> </span>binomial<span class="op">$</span><span class="kw">sample</span>(binomial_data)</span></code></pre></div>
+<pre><code>## Running MCMC with 4 sequential chains...
 ## 
-## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 2).
-## Chain 2: 
-## Chain 2: Gradient evaluation took 4e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-## Chain 2: Adjust your expectations accordingly!
-## Chain 2: 
-## Chain 2: 
-## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 2: 
-## Chain 2:  Elapsed Time: 0.007418 seconds (Warm-up)
-## Chain 2:                0.006952 seconds (Sampling)
-## Chain 2:                0.01437 seconds (Total)
-## Chain 2: 
+## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 1 finished in 0.0 seconds.
+## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 2 finished in 0.0 seconds.
+## Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 3 finished in 0.0 seconds.
+## Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 4 finished in 0.0 seconds.
 ## 
-## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 3).
-## Chain 3: 
-## Chain 3: Gradient evaluation took 4e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.04 seconds.
-## Chain 3: Adjust your expectations accordingly!
-## Chain 3: 
-## Chain 3: 
-## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 3: 
-## Chain 3:  Elapsed Time: 0.007519 seconds (Warm-up)
-## Chain 3:                0.006624 seconds (Sampling)
-## Chain 3:                0.014143 seconds (Total)
-## Chain 3: 
-## 
-## SAMPLING FOR MODEL &#39;binomial&#39; NOW (CHAIN 4).
-## Chain 4: 
-## Chain 4: Gradient evaluation took 5e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 4: Adjust your expectations accordingly!
-## Chain 4: 
-## Chain 4: 
-## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 4: 
-## Chain 4:  Elapsed Time: 0.007503 seconds (Warm-up)
-## Chain 4:                0.007314 seconds (Sampling)
-## Chain 4:                0.014817 seconds (Total)
-## Chain 4:</code></pre>
-<div class="sourceCode" id="cb1926"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1926-1" data-line-number="1">binomial<span class="fl">.1</span></a></code></pre></div>
-<pre><code>## Inference for Stan model: binomial.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
-## 
-##         mean se_mean   sd    2.5%     25%     50%     75%   97.5% n_eff
-## p       0.25    0.00 0.03    0.21    0.24    0.25    0.27    0.30  1415
-## lp__ -159.31    0.02 0.67 -161.18 -159.47 -159.05 -158.89 -158.84  1851
-##      Rhat
-## p       1
-## lp__    1
-## 
-## Samples were drawn using NUTS(diag_e) at Tue Oct 15 15:41:11 2019.
-## For each parameter, n_eff is a crude measure of effective sample size,
-## and Rhat is the potential scale reduction factor on split chains (at 
-## convergence, Rhat=1).</code></pre>
+## All 4 chains finished successfully.
+## Mean chain execution time: 0.0 seconds.
+## Total execution time: 0.6 seconds.</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="bayesian-statistics-with-rstan.html#cb17-1"></a>binomial_fit</span></code></pre></div>
+<pre><code>##  variable    mean  median   sd  mad      q5     q95 rhat ess_bulk ess_tail
+##      lp__ -159.33 -159.06 0.72 0.30 -160.82 -158.84 1.00     2074     2709
+##      p       0.25    0.25 0.03 0.03    0.21    0.30 1.00     1414     1921</code></pre>
 <p>Your results should be similar, though probably not identical, to mine. (There is a lot of randomness involved here.)</p>
 <ol start="10" style="list-style-type: lower-alpha">
 <li>Obtain a 95% posterior interval for the probability that a randomly chosen adult female shopper will request a raincheck.</li>
@@ -672,7 +670,7 @@ will work. If you want to, you can use <code>map2</code> to do it for each
 </ol>
 <p>Solution</p>
 <p>If you remember this well enough, you can do it by hand, but there’s no need:</p>
-<div class="sourceCode" id="cb1928"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1928-1" data-line-number="1"><span class="kw">prop.test</span>(<span class="dv">69</span>, <span class="dv">277</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="bayesian-statistics-with-rstan.html#cb19-1"></a><span class="kw">prop.test</span>(<span class="dv">69</span>, <span class="dv">277</span>)</span></code></pre></div>
 <pre><code>## 
 ##  1-sample proportions test with continuity correction
 ## 
@@ -716,7 +714,7 @@ intelligence (and luck, often), or writing code to sample from the
 posterior. I know what I prefer!</p>
 <p>Extra: one of the people behind Stan is on Twitter with handle <code>@betanalpha</code>.</p>
 </div>
-<div id="bayesian-regression" class="section level2">
+<div id="bayesian-regression" class="section level2" number="18.2">
 <h2><span class="header-section-number">18.2</span> Bayesian regression</h2>
 <p>In this question, we will develop Stan code to run a simple
 linear regression, and later apply it to some data (and do a bit of
@@ -752,12 +750,12 @@ parameters of these prior distributions longish names, so I hope
 I’m trading more typing for less confusion:</p>
 <pre><code>
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 </code></pre>
 <p>The chi-squared distribution is written that way in Stan, and has
@@ -767,22 +765,22 @@ only one parameter, a degrees of freedom that is also its mean.</p>
 real number, while <code>sigma</code> has to be positive:</p>
 <pre><code>
 parameters {
-real a;
-real b;
-real&lt;lower=0&gt; sigma;
+  real a;
+  real b;
+  real&lt;lower=0&gt; sigma;
 }
 </code></pre>
 <p>Everything else is data, and we have a <em>lot</em> of data this time:</p>
 <pre><code>
 data {
-int&lt;lower=0&gt; n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real&lt;lower=0&gt; prior_int_sd;
-real prior_slope_mean;
-real&lt;lower=0&gt; prior_slope_sd;
-real&lt;lower=0&gt; prior_sigma_mean;
+  int&lt;lower=0&gt; n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real&lt;lower=0&gt; prior_int_sd;
+  real prior_slope_mean;
+  real&lt;lower=0&gt; prior_slope_sd;
+  real&lt;lower=0&gt; prior_sigma_mean;
 }
 </code></pre>
 <p>The five things at the bottom are the prior distribution parameters,
@@ -814,7 +812,7 @@ a loop to get <em>each</em> y from its corresponding <code>x</code>, like
 this:</p>
 <pre><code>
 for (i in 1:n) {
-y[i] ~ normal(a + b * x[i], sigma)
+  y[i] ~ normal(a + b * x[i], sigma)
 }
 
 </code></pre>
@@ -828,29 +826,29 @@ noticeable difference.</p>
 <p>My code looks like this, in total:</p>
 <pre><code>
 data {
-int&lt;lower=0&gt; n;
-vector[n] x;
-vector[n] y;
-real prior_int_mean;
-real&lt;lower=0&gt; prior_int_sd;
-real prior_slope_mean;
-real&lt;lower=0&gt; prior_slope_sd;
-real&lt;lower=0&gt; prior_sigma_mean;
+  int&lt;lower=0&gt; n;
+  vector[n] x;
+  vector[n] y;
+  real prior_int_mean;
+  real&lt;lower=0&gt; prior_int_sd;
+  real prior_slope_mean;
+  real&lt;lower=0&gt; prior_slope_sd;
+  real&lt;lower=0&gt; prior_sigma_mean;
 }
 
 parameters {
-real a;
-real b;
-real&lt;lower=0&gt; sigma;
+  real a;
+  real b;
+  real&lt;lower=0&gt; sigma;
 }
 
 model {
-// prior
-a ~ normal(prior_int_mean, prior_int_sd);
-b ~ normal(prior_slope_mean, prior_slope_sd);
-sigma ~ chi_square(prior_sigma_mean);
-// likelihood
-y ~ normal(a+b*x, sigma);
+  // prior
+  a ~ normal(prior_int_mean, prior_int_sd);
+  b ~ normal(prior_slope_mean, prior_slope_sd);
+  sigma ~ chi_square(prior_sigma_mean);
+  // likelihood
+  y ~ normal(a+b*x, sigma);
 }
 
 </code></pre>
@@ -862,7 +860,7 @@ correct, compile it.</li>
 <p>Click the Check button top right of the window where your Stan
 code is. If it finds any errors, correct them and try again.</p>
 <p>To compile, the usual thing:</p>
-<div class="sourceCode" id="cb1937"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1937-1" data-line-number="1">reg_code &lt;-<span class="st"> </span><span class="kw">stan_model</span>(<span class="st">&quot;reg.stan&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="bayesian-statistics-with-rstan.html#cb28-1"></a>reg &lt;-<span class="st"> </span><span class="kw">cmdstan_model</span>(<span class="st">&quot;reg.stan&quot;</span>)</span></code></pre></div>
 <p>and wait for it to do its thing. With luck, Check will have found all
 the errors and this will quietly (eventually) do its job.</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -923,14 +921,15 @@ in and display the data; the values are separated by single spaces.</li>
 </ol>
 <p>Solution</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb1938"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1938-1" data-line-number="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt&quot;</span></a>
-<a class="sourceLine" id="cb1938-2" data-line-number="2">vocabulary &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="bayesian-statistics-with-rstan.html#cb29-1"></a>my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt&quot;</span></span>
+<span id="cb29-2"><a href="bayesian-statistics-with-rstan.html#cb29-2"></a>vocabulary &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   age = col_double(),
 ##   vocab = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1940"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1940-1" data-line-number="1">vocabulary</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="bayesian-statistics-with-rstan.html#cb31-1"></a>vocabulary</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ##      age vocab
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -950,177 +949,186 @@ above, to obtain posterior distributions for intercept, slope and
 error SD. What is the 95% posterior interval for the slope?</li>
 </ol>
 <p>Solution</p>
-<p>Two parts: set up the data, and then feed it into <code>sampling</code>:</p>
-<div class="sourceCode" id="cb1942"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1942-1" data-line-number="1">reg_data &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
-<a class="sourceLine" id="cb1942-2" data-line-number="2">  <span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">x =</span> vocabulary<span class="op">$</span>age, <span class="dt">y =</span> vocabulary<span class="op">$</span>vocab,</a>
-<a class="sourceLine" id="cb1942-3" data-line-number="3">  <span class="dt">prior_int_mean =</span> <span class="dv">-500</span>,</a>
-<a class="sourceLine" id="cb1942-4" data-line-number="4">  <span class="dt">prior_int_sd =</span> <span class="dv">125</span>,</a>
-<a class="sourceLine" id="cb1942-5" data-line-number="5">  <span class="dt">prior_slope_mean =</span> <span class="dv">500</span>,</a>
-<a class="sourceLine" id="cb1942-6" data-line-number="6">  <span class="dt">prior_slope_sd =</span> <span class="dv">100</span>,</a>
-<a class="sourceLine" id="cb1942-7" data-line-number="7">  <span class="dt">prior_sigma_mean =</span> <span class="dv">200</span></a>
-<a class="sourceLine" id="cb1942-8" data-line-number="8">)</a>
-<a class="sourceLine" id="cb1942-9" data-line-number="9">reg<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">sampling</span>(reg_code, reg_data)</a></code></pre></div>
-<pre><code>## 
-## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 1).
-## Chain 1: 
-## Chain 1: Gradient evaluation took 7e-06 seconds
-## Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.07 seconds.
-## Chain 1: Adjust your expectations accordingly!
-## Chain 1: 
-## Chain 1: 
-## Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 1: 
-## Chain 1:  Elapsed Time: 0.1085 seconds (Warm-up)
-## Chain 1:                0.022406 seconds (Sampling)
-## Chain 1:                0.130906 seconds (Total)
-## Chain 1: 
+<p>Two parts: set up the data, and then sample it:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="bayesian-statistics-with-rstan.html#cb33-1"></a>reg_data &lt;-<span class="st"> </span><span class="kw">list</span>(</span>
+<span id="cb33-2"><a href="bayesian-statistics-with-rstan.html#cb33-2"></a>  <span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">x =</span> vocabulary<span class="op">$</span>age, <span class="dt">y =</span> vocabulary<span class="op">$</span>vocab,</span>
+<span id="cb33-3"><a href="bayesian-statistics-with-rstan.html#cb33-3"></a>  <span class="dt">prior_int_mean =</span> <span class="dv">-500</span>,</span>
+<span id="cb33-4"><a href="bayesian-statistics-with-rstan.html#cb33-4"></a>  <span class="dt">prior_int_sd =</span> <span class="dv">125</span>,</span>
+<span id="cb33-5"><a href="bayesian-statistics-with-rstan.html#cb33-5"></a>  <span class="dt">prior_slope_mean =</span> <span class="dv">500</span>,</span>
+<span id="cb33-6"><a href="bayesian-statistics-with-rstan.html#cb33-6"></a>  <span class="dt">prior_slope_sd =</span> <span class="dv">100</span>,</span>
+<span id="cb33-7"><a href="bayesian-statistics-with-rstan.html#cb33-7"></a>  <span class="dt">prior_sigma_mean =</span> <span class="dv">200</span></span>
+<span id="cb33-8"><a href="bayesian-statistics-with-rstan.html#cb33-8"></a>)</span>
+<span id="cb33-9"><a href="bayesian-statistics-with-rstan.html#cb33-9"></a>reg<span class="fl">.1</span> &lt;-<span class="st"> </span>reg<span class="op">$</span><span class="kw">sample</span>(reg_data)</span></code></pre></div>
+<pre><code>## Running MCMC with 4 sequential chains...
 ## 
-## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 2).
-## Chain 2: 
-## Chain 2: Gradient evaluation took 5e-06 seconds
-## Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 2: Adjust your expectations accordingly!
-## Chain 2: 
-## Chain 2: 
-## Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 2: 
-## Chain 2:  Elapsed Time: 0.106438 seconds (Warm-up)
-## Chain 2:                0.025579 seconds (Sampling)
-## Chain 2:                0.132017 seconds (Total)
-## Chain 2: 
+## Chain 1 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 1 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 1 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 1 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 1 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 1 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 1 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 1 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 1 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 1 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 1 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 1 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 1 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 1 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 1 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 1 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 1 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 1 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 1 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 1 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 1 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 1 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 1 finished in 0.1 seconds.
+## Chain 2 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 2 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 2 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 2 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 2 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 2 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 2 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 2 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 2 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 2 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 2 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 2 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 2 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 2 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 2 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 2 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 2 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 2 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 2 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 2 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 2 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 2 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 2 finished in 0.1 seconds.
+## Chain 3 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 3 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 3 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 3 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 3 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 3 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 3 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 3 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 3 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 3 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 3 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 3 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 3 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 3 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 3 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 3 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 3 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 3 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 3 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 3 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 3 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 3 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 3 finished in 0.1 seconds.
+## Chain 4 Iteration:    1 / 2000 [  0%]  (Warmup) 
+## Chain 4 Iteration:  100 / 2000 [  5%]  (Warmup) 
+## Chain 4 Iteration:  200 / 2000 [ 10%]  (Warmup) 
+## Chain 4 Iteration:  300 / 2000 [ 15%]  (Warmup) 
+## Chain 4 Iteration:  400 / 2000 [ 20%]  (Warmup) 
+## Chain 4 Iteration:  500 / 2000 [ 25%]  (Warmup) 
+## Chain 4 Iteration:  600 / 2000 [ 30%]  (Warmup) 
+## Chain 4 Iteration:  700 / 2000 [ 35%]  (Warmup) 
+## Chain 4 Iteration:  800 / 2000 [ 40%]  (Warmup) 
+## Chain 4 Iteration:  900 / 2000 [ 45%]  (Warmup) 
+## Chain 4 Iteration: 1000 / 2000 [ 50%]  (Warmup) 
+## Chain 4 Iteration: 1001 / 2000 [ 50%]  (Sampling) 
+## Chain 4 Iteration: 1100 / 2000 [ 55%]  (Sampling) 
+## Chain 4 Iteration: 1200 / 2000 [ 60%]  (Sampling) 
+## Chain 4 Iteration: 1300 / 2000 [ 65%]  (Sampling) 
+## Chain 4 Iteration: 1400 / 2000 [ 70%]  (Sampling) 
+## Chain 4 Iteration: 1500 / 2000 [ 75%]  (Sampling) 
+## Chain 4 Iteration: 1600 / 2000 [ 80%]  (Sampling) 
+## Chain 4 Iteration: 1700 / 2000 [ 85%]  (Sampling) 
+## Chain 4 Iteration: 1800 / 2000 [ 90%]  (Sampling) 
+## Chain 4 Iteration: 1900 / 2000 [ 95%]  (Sampling) 
+## Chain 4 Iteration: 2000 / 2000 [100%]  (Sampling) 
+## Chain 4 finished in 0.1 seconds.
 ## 
-## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 3).
-## Chain 3: 
-## Chain 3: Gradient evaluation took 6e-06 seconds
-## Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.06 seconds.
-## Chain 3: Adjust your expectations accordingly!
-## Chain 3: 
-## Chain 3: 
-## Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 3: 
-## Chain 3:  Elapsed Time: 0.114201 seconds (Warm-up)
-## Chain 3:                0.028163 seconds (Sampling)
-## Chain 3:                0.142364 seconds (Total)
-## Chain 3: 
-## 
-## SAMPLING FOR MODEL &#39;reg&#39; NOW (CHAIN 4).
-## Chain 4: 
-## Chain 4: Gradient evaluation took 5e-06 seconds
-## Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.05 seconds.
-## Chain 4: Adjust your expectations accordingly!
-## Chain 4: 
-## Chain 4: 
-## Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-## Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-## Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-## Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-## Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-## Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-## Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-## Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-## Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-## Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-## Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-## Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-## Chain 4: 
-## Chain 4:  Elapsed Time: 0.099003 seconds (Warm-up)
-## Chain 4:                0.020154 seconds (Sampling)
-## Chain 4:                0.119157 seconds (Total)
-## Chain 4:</code></pre>
-<div class="sourceCode" id="cb1944"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1944-1" data-line-number="1">reg<span class="fl">.1</span></a></code></pre></div>
-<pre><code>## Inference for Stan model: reg.
-## 4 chains, each with iter=2000; warmup=1000; thin=1; 
-## post-warmup draws per chain=1000, total post-warmup draws=4000.
-## 
-##          mean se_mean    sd    2.5%     25%     50%     75%   97.5% n_eff
-## a     -613.67    2.26 98.12 -801.00 -678.88 -612.75 -547.82 -419.73  1890
-## b      521.06    0.62 26.81  467.05  503.23  520.85  539.23  573.84  1849
-## sigma  189.33    0.36 19.13  153.53  176.17  188.82  201.50  228.95  2772
-## lp__   373.70    0.03  1.23  370.45  373.11  374.03  374.61  375.11  1455
-##       Rhat
-## a        1
-## b        1
-## sigma    1
-## lp__     1
-## 
-## Samples were drawn using NUTS(diag_e) at Tue Oct 15 15:41:16 2019.
-## For each parameter, n_eff is a crude measure of effective sample size,
-## and Rhat is the potential scale reduction factor on split chains (at 
-## convergence, Rhat=1).</code></pre>
-<p>One line per parameter (plus the last one, which is the log-posterior distribution, not very useful to us). To get a 95% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for <code>b</code>, which are 467 and 572. (This is about <span class="math inline">\(520 \pm 52\)</span>, rounding crudely, while the prior distribution said <span class="math inline">\(500 \pm 200\)</span>, so the data have allowed us to estimate the slope a fair bit more accurately.)</p>
+## All 4 chains finished successfully.
+## Mean chain execution time: 0.1 seconds.
+## Total execution time: 0.5 seconds.</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="bayesian-statistics-with-rstan.html#cb35-1"></a>reg<span class="fl">.1</span></span></code></pre></div>
+<pre><code>##  variable    mean  median    sd   mad      q5     q95 rhat ess_bulk ess_tail
+##     lp__   373.73  374.07  1.23  0.95  371.33  375.04 1.01     1259     1921
+##     a     -612.32 -613.99 95.10 97.15 -766.40 -456.38 1.00     1707     1862
+##     b      520.44  520.00 25.91 26.04  478.94  563.44 1.00     1671     1890
+##     sigma  189.45  188.68 19.07 18.71  158.60  222.17 1.00     2107     1961</code></pre>
+<p>One line per parameter (plus the log-posterior distribution, not very useful to us). To get a 95% posterior interval for the slope, use the 2.5 and 97.5 percentiles of the posterior for <code>b</code>, which are 467 and 572. (This is about <span class="math inline">\(520 \pm 52\)</span>, rounding crudely, while the prior distribution said <span class="math inline">\(500 \pm 200\)</span>, so the data have allowed us to estimate the slope a fair bit more accurately.)</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Plot a histogram of the posterior distribution of the slope. Does its shape surprise you? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>This is most easily <code>mcmc_hist</code> from <code>bayesplot</code>:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="bayesian-statistics-with-rstan.html#cb37-1"></a><span class="kw">mcmc_hist</span>(reg<span class="fl">.1</span><span class="op">$</span><span class="kw">draws</span>(<span class="st">&quot;b&quot;</span>), <span class="dt">binwidth =</span> <span class="dv">20</span>)</span></code></pre></div>
+<p><img src="27-stan_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
+<p>I’m guessing you have a better intuition for <code>bins</code> as opposed to <code>binwidth</code> (the latter being what you need here), so you can try it without giving a <code>binwidth</code> at all (and getting way too many bins), and then see if you can figure out what <code>binwidth</code> should be to get you a sensible number of bins. This one looks pretty good to me.</p>
+<p>The shape is very normal. This is because everything is normal: the prior and the data-generating process both, so it is not surprising at all that the posterior came out normal. (You may remember from your regression course that if you have a normal regression model, the slope also has a normal distribution.)</p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>What can we say about the vocabulary size of a randomly
 selected child of age 5 (a new one, not the one in the original data
 set)? Use an appropriate predictive distribution.</li>
 </ol>
 <p>Solution</p>
-<p>If you have done STAC67, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:</p>
-<div class="sourceCode" id="cb1946"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1946-1" data-line-number="1">reg_samples &lt;-<span class="st"> </span>rstan<span class="op">::</span><span class="kw">extract</span>(reg<span class="fl">.1</span>)</a>
-<a class="sourceLine" id="cb1946-2" data-line-number="2"><span class="kw">cbind</span>(<span class="dt">a =</span> reg_samples<span class="op">$</span>a, <span class="dt">b =</span> reg_samples<span class="op">$</span>b, <span class="dt">sigma =</span> reg_samples<span class="op">$</span>sigma) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1946-3" data-line-number="3"><span class="st">  </span><span class="kw">as_tibble</span>() -&gt;<span class="st"> </span>sims</a>
-<a class="sourceLine" id="cb1946-4" data-line-number="4">sims</a></code></pre></div>
-<pre><code>## # A tibble: 4,000 x 3
-##        a     b sigma
-##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 -373.  501.  179.
-##  2 -523.  488.  160.
-##  3 -543.  518.  168.
-##  4 -778.  570.  188.
-##  5 -656.  531.  177.
-##  6 -777.  545.  189.
-##  7 -662.  533.  186.
-##  8 -604.  519.  165.
-##  9 -795.  575.  198.
-## 10 -690.  571.  179.
+<p>If you have done a regression course, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="bayesian-statistics-with-rstan.html#cb38-1"></a><span class="kw">as_draws_df</span>(reg<span class="fl">.1</span><span class="op">$</span><span class="kw">draws</span>()) <span class="op">%&gt;%</span></span>
+<span id="cb38-2"><a href="bayesian-statistics-with-rstan.html#cb38-2"></a><span class="st">  </span><span class="kw">as_tibble</span>() -&gt;<span class="st"> </span>sims</span>
+<span id="cb38-3"><a href="bayesian-statistics-with-rstan.html#cb38-3"></a>sims</span></code></pre></div>
+<pre><code>## # A tibble: 4,000 x 7
+##     lp__     a     b sigma .chain .iteration .draw
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;      &lt;int&gt; &lt;int&gt;
+##  1  374. -549.  486.  204.      1          1     1
+##  2  374. -482.  498.  205.      1          2     2
+##  3  373. -395.  467.  191.      1          3     3
+##  4  372. -363.  461.  187.      1          4     4
+##  5  373. -456.  479.  220.      1          5     5
+##  6  374. -541.  502.  209.      1          6     6
+##  7  374. -651.  528.  208.      1          7     7
+##  8  373. -767.  540.  200.      1          8     8
+##  9  375. -564.  496.  196.      1          9     9
+## 10  374. -549.  488.  195.      1         10    10
 ## # … with 3,990 more rows</code></pre>
 <p>and now we need to simulate some response values for our notional child of age 5. That means simulating for an <code>x</code> of 5, using each of those values of <code>a</code>, <code>b</code> and <code>sigma</code>:</p>
-<div class="sourceCode" id="cb1948"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1948-1" data-line-number="1">sims <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb1948-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim_vocab =</span> <span class="kw">rnorm</span>(<span class="kw">nrow</span>(sims), a <span class="op">+</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, sigma)) -&gt;<span class="st"> </span>sims2</a>
-<a class="sourceLine" id="cb1948-3" data-line-number="3"><span class="kw">ggplot</span>(sims2, <span class="kw">aes</span>(<span class="dt">x =</span> sim_vocab)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>)</a></code></pre></div>
-<p><img src="27-stan_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="bayesian-statistics-with-rstan.html#cb40-1"></a>sims <span class="op">%&gt;%</span></span>
+<span id="cb40-2"><a href="bayesian-statistics-with-rstan.html#cb40-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-3"><a href="bayesian-statistics-with-rstan.html#cb40-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim_vocab =</span> <span class="kw">rnorm</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>b <span class="op">*</span><span class="st"> </span><span class="dv">5</span>, sigma)) -&gt;<span class="st"> </span>sims2</span>
+<span id="cb40-4"><a href="bayesian-statistics-with-rstan.html#cb40-4"></a>sims2</span></code></pre></div>
+<pre><code>## # A tibble: 4,000 x 8
+## # Rowwise: 
+##     lp__     a     b sigma .chain .iteration .draw sim_vocab
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;int&gt;      &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
+##  1  374. -549.  486.  204.      1          1     1     1931.
+##  2  374. -482.  498.  205.      1          2     2     2010.
+##  3  373. -395.  467.  191.      1          3     3     1897.
+##  4  372. -363.  461.  187.      1          4     4     1808.
+##  5  373. -456.  479.  220.      1          5     5     1933.
+##  6  374. -541.  502.  209.      1          6     6     1744.
+##  7  374. -651.  528.  208.      1          7     7     2060.
+##  8  373. -767.  540.  200.      1          8     8     2233.
+##  9  375. -564.  496.  196.      1          9     9     2345.
+## 10  374. -549.  488.  195.      1         10    10     2252.
+## # … with 3,990 more rows</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="bayesian-statistics-with-rstan.html#cb42-1"></a><span class="kw">ggplot</span>(sims2, <span class="kw">aes</span>(<span class="dt">x =</span> sim_vocab)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>)</span></code></pre></div>
+<p><img src="27-stan_files/figure-html/unnamed-chunk-17-1.png" width="672"  /></p>
 <p>That’s the distribution of the vocabulary size of children aged 5. We can get a 95% interval from this the usual way: find the 2.5 and 97.5 percentiles:</p>
-<div class="sourceCode" id="cb1949"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1949-1" data-line-number="1"><span class="kw">with</span>(sims2, <span class="kw">quantile</span>(sim_vocab, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="bayesian-statistics-with-rstan.html#cb43-1"></a><span class="kw">with</span>(sims2, <span class="kw">quantile</span>(sim_vocab, <span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>)))</span></code></pre></div>
 <pre><code>##     2.5%    97.5% 
-## 1587.232 2391.757</code></pre>
+## 1578.608 2394.119</code></pre>
 <p>The actual child of age 5 that we observed had a vocabulary of 2060
 words, squarely in the middle of this interval.</p>
 <p>Is the posterior predictive interval like the prediction interval?</p>
-<div class="sourceCode" id="cb1951"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1951-1" data-line-number="1">vocabulary<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(vocab <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> vocabulary)</a>
-<a class="sourceLine" id="cb1951-2" data-line-number="2">new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb1951-3" data-line-number="3"><span class="kw">predict</span>(vocabulary<span class="fl">.1</span>, new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="bayesian-statistics-with-rstan.html#cb45-1"></a>vocabulary<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(vocab <span class="op">~</span><span class="st"> </span>age, <span class="dt">data =</span> vocabulary)</span>
+<span id="cb45-2"><a href="bayesian-statistics-with-rstan.html#cb45-2"></a>new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">5</span>)</span>
+<span id="cb45-3"><a href="bayesian-statistics-with-rstan.html#cb45-3"></a><span class="kw">predict</span>(vocabulary<span class="fl">.1</span>, new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</span></code></pre></div>
 <pre><code>##        fit      lwr      upr
 ## 1 2027.939 1818.223 2237.656</code></pre>
 <p>It seems a bit wider.</p>

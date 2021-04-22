@@ -3866,20 +3866,20 @@ search()
 ```
 
 ```
-##  [1] ".GlobalEnv"          ".conflicts"          "package:leaps"      
-##  [4] "package:conflicted"  "package:PMCMRplus"   "package:rstan"      
-##  [7] "package:StanHeaders" "package:bootstrap"   "package:rpart"      
-## [10] "package:broom"       "package:ggrepel"     "package:ggbiplot"   
-## [13] "package:grid"        "package:scales"      "package:plyr"       
-## [16] "package:lme4"        "package:Matrix"      "package:car"        
-## [19] "package:carData"     "package:survminer"   "package:ggpubr"     
-## [22] "package:survival"    "package:nnet"        "package:smmr"       
-## [25] "package:forcats"     "package:stringr"     "package:dplyr"      
-## [28] "package:purrr"       "package:readr"       "package:tidyr"      
-## [31] "package:tibble"      "package:ggplot2"     "package:tidyverse"  
-## [34] "package:stats"       "package:graphics"    "package:grDevices"  
-## [37] "package:utils"       "package:datasets"    "package:methods"    
-## [40] "Autoloads"           "package:base"
+##  [1] ".GlobalEnv"         ".conflicts"         "package:leaps"     
+##  [4] "package:conflicted" "package:PMCMRplus"  "package:bayesplot" 
+##  [7] "package:posterior"  "package:cmdstanr"   "package:bootstrap" 
+## [10] "package:rpart"      "package:broom"      "package:ggrepel"   
+## [13] "package:ggbiplot"   "package:grid"       "package:scales"    
+## [16] "package:plyr"       "package:lme4"       "package:Matrix"    
+## [19] "package:car"        "package:carData"    "package:survminer" 
+## [22] "package:ggpubr"     "package:survival"   "package:nnet"      
+## [25] "package:smmr"       "package:forcats"    "package:stringr"   
+## [28] "package:dplyr"      "package:purrr"      "package:readr"     
+## [31] "package:tidyr"      "package:tibble"     "package:ggplot2"   
+## [34] "package:tidyverse"  "package:stats"      "package:graphics"  
+## [37] "package:grDevices"  "package:utils"      "package:datasets"  
+## [40] "package:methods"    "Autoloads"          "package:base"
 ```
 
  
