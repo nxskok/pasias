@@ -26,7 +26,7 @@ The usual. This one is aligned columns.
 I'm using a "temporary" name for my read-in data
 frame, since I'm going to create the proper one in a moment.
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/jobs.txt"
 jobs0 <- read_table(my_url)
 jobs0
 ```
@@ -665,7 +665,7 @@ Let's round them to three decimals, and then display only some of the columns:
 
 ```{r }
 all %>% filter(class.x != class.y) %>% 
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior"))
 ```
 
@@ -673,7 +673,7 @@ And then, because I can, let's re-format that to make it easier to read, `x` bei
 
 ```{r}
 all %>% filter(class.x != class.y) %>% 
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior")) %>% 
   pivot_longer(starts_with("posterior"), names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", values_to = "prob") %>% 
   pivot_wider(names_from = method, values_from = prob)
@@ -712,7 +712,7 @@ the number of columns to look at:
 set.seed(457299)
 all.mis %>%
   filter(is_correct == "wrong") %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(
     id, job, class.x, outdoor, social, conservative,
     starts_with("posterior")

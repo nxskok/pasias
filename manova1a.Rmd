@@ -18,7 +18,7 @@ Solution
 
 This is an exact repeat of what you did before:
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/simple-manova.txt"
 simple <- read_delim(my_url, " ")
 simple
 response <- with(simple, cbind(y1, y2))
@@ -298,12 +298,11 @@ display them, eg. to 3 decimals here:
 ```{r }
 d %>%
   select(y1, y2, group, class, starts_with("posterior")) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3))
+  mutate(across(starts_with("posterior"), ~ round(., 3)))
 ```
 
  
 
-The repetition annoys me.
 
 You see that the posterior probability of an observation being in the
 group it actually *was* in is close to 1 all the way down. The

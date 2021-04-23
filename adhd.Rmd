@@ -28,7 +28,7 @@ Solution
 
 As ever:
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/adhd-parents.txt"
 adhd <- read_delim(my_url, " ")
 adhd
 ```
@@ -263,17 +263,17 @@ The ones with a 1 on the end are the cross-validated ones. We need the posterior
 ```{r error=T, fred}
 all %>%
   select(parent, starts_with("posterior"), LD1) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
-  rename_at(
-    vars(starts_with("posterior")),
-    ~ str_replace(., "posterior", "p")
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  rename_with(
+    ~ str_replace(., "posterior", "p"),
+    starts_with("posterior"),
   ) %>%
   arrange(LD1)
 ```
 
  
 
-The `rename_at` changes the names of the columns that start
+The `rename` changes the names of the columns that start
 with `posterior` to start with `p` instead (shorter). I
 learned about this today (having wondered whether it existed or not),
 and it took about three goes for me to get it right.
@@ -339,10 +339,10 @@ scores on `q1` through `q4`:
 ```{r }
 all %>%
   select(q1:q4, parent, starts_with("posterior"), LD1) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
-  rename_at(
-    vars(starts_with("posterior")),
-    ~ str_replace(., "posterior", "p")
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  rename_with(
+    ~ str_replace(., "posterior", "p"),
+    starts_with("posterior"),
   ) %>%
   arrange(LD1)
 ```

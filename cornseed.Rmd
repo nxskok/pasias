@@ -22,7 +22,7 @@ Solution
 
 The usual:
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/cornseed.csv"
 cornseed <- read_csv(my_url)
 cornseed
 ```
@@ -386,7 +386,7 @@ the posterior probabilities to a small number of decimals.
 Then, we can fire away with this:
 ```{r error=T}
 d %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```
