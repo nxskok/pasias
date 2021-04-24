@@ -1288,7 +1288,7 @@ Solution
 This is an exact repeat of what you did before:
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/simple-manova.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/simple-manova.txt"
 simple <- read_delim(my_url, " ")
 ```
 
@@ -1706,7 +1706,7 @@ display them, eg. to 3 decimals here:
 ```r
 d %>%
   select(y1, y2, group, class, starts_with("posterior")) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3))
+  mutate(across(starts_with("posterior"), ~ round(., 3)))
 ```
 
 ```
@@ -1727,7 +1727,6 @@ d %>%
 
  
 
-The repetition annoys me.
 
 You see that the posterior probability of an observation being in the
 group it actually *was* in is close to 1 all the way down. The
@@ -1800,7 +1799,7 @@ I'm using a "temporary" name for my read-in data
 frame, since I'm going to create the proper one in a moment.
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/jobs.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/jobs.txt"
 jobs0 <- read_table(my_url)
 ```
 
@@ -1946,26 +1945,26 @@ jobs0 %>%
 ## # A tibble: 20 x 6
 ##    outdoor social conservative   job    id jobname   
 ##      <dbl>  <dbl>        <dbl> <dbl> <dbl> <chr>     
-##  1      19     13            7     2    33 mechanic  
-##  2      21     29           11     2    49 mechanic  
-##  3       5     22           15     1    66 custserv  
-##  4      19     23           12     2    55 mechanic  
-##  5      20     24            5     2    35 mechanic  
-##  6      14     13           12     3    59 dispatcher
-##  7      14     29            8     1    80 custserv  
-##  8      19     26           12     2    60 mechanic  
-##  9      14     27            6     1    72 custserv  
-## 10      20     13           19     3    36 dispatcher
-## 11       4     12           11     3    34 dispatcher
-## 12       9     21           12     1    83 custserv  
-## 13      18     20           10     3    66 dispatcher
-## 14      21     15           10     2     2 mechanic  
-## 15       6     18            6     1    62 custserv  
-## 16      15     27           12     2     3 mechanic  
-## 17      15     21           10     1    49 custserv  
-## 18       9     13           16     3    64 dispatcher
-## 19       4     10           15     3    57 dispatcher
-## 20      18     11           19     3    47 dispatcher
+##  1      11     17           20     3    26 dispatcher
+##  2      21     24           12     2    58 mechanic  
+##  3      14     26           15     3    45 dispatcher
+##  4      17     21            9     2    10 mechanic  
+##  5      13     21           11     1    25 custserv  
+##  6      23     16           10     2    80 mechanic  
+##  7      21     12            9     2    76 mechanic  
+##  8      16     14           13     3    22 dispatcher
+##  9      15     23            7     2    62 mechanic  
+## 10      16     16           17     3    14 dispatcher
+## 11      22     19           10     2    54 mechanic  
+## 12      12     22            9     1    28 custserv  
+## 13      25     29           11     2    66 mechanic  
+## 14      22     24           14     2    72 mechanic  
+## 15       7     28           12     1    52 custserv  
+## 16       8     18            8     1    36 custserv  
+## 17      18     24            5     2    40 mechanic  
+## 18      15     25           10     1    71 custserv  
+## 19      14     13           12     3    59 dispatcher
+## 20      18     19            9     2    20 mechanic
 ```
 
  
@@ -4528,7 +4527,7 @@ Let's round them to three decimals, and then display only some of the columns:
 
 ```r
 all %>% filter(class.x != class.y) %>% 
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior"))
 ```
 
@@ -4549,7 +4548,7 @@ And then, because I can, let's re-format that to make it easier to read, `x` bei
 
 ```r
 all %>% filter(class.x != class.y) %>% 
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior")) %>% 
   pivot_longer(starts_with("posterior"), names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", values_to = "prob") %>% 
   pivot_wider(names_from = method, values_from = prob)
@@ -4608,7 +4607,7 @@ the number of columns to look at:
 set.seed(457299)
 all.mis %>%
   filter(is_correct == "wrong") %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(
     id, job, class.x, outdoor, social, conservative,
     starts_with("posterior")
@@ -4731,7 +4730,7 @@ Solution
 As ever:
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/adhd-parents.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/adhd-parents.txt"
 adhd <- read_delim(my_url, " ")
 ```
 
@@ -5117,10 +5116,10 @@ The ones with a 1 on the end are the cross-validated ones. We need the posterior
 ```r
 all %>%
   select(parent, starts_with("posterior"), LD1) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
-  rename_at(
-    vars(starts_with("posterior")),
-    ~ str_replace(., "posterior", "p")
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  rename_with(
+    ~ str_replace(., "posterior", "p"),
+    starts_with("posterior"),
   ) %>%
   arrange(LD1)
 ```
@@ -5160,7 +5159,7 @@ all %>%
 
  
 
-The `rename_at` changes the names of the columns that start
+The `rename` changes the names of the columns that start
 with `posterior` to start with `p` instead (shorter). I
 learned about this today (having wondered whether it existed or not),
 and it took about three goes for me to get it right.
@@ -5227,10 +5226,10 @@ scores on `q1` through `q4`:
 ```r
 all %>%
   select(q1:q4, parent, starts_with("posterior"), LD1) %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
-  rename_at(
-    vars(starts_with("posterior")),
-    ~ str_replace(., "posterior", "p")
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  rename_with(
+    ~ str_replace(., "posterior", "p"),
+    starts_with("posterior"),
   ) %>%
   arrange(LD1)
 ```
@@ -5322,7 +5321,7 @@ Solution
 The usual:
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/cornseed.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/cornseed.csv"
 cornseed <- read_csv(my_url)
 ```
 
@@ -5867,7 +5866,7 @@ Then, we can fire away with this:
 
 ```r
 d %>%
-  mutate_at(vars(starts_with("posterior")), ~ round(., 3)) %>%
+  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```
@@ -6084,7 +6083,7 @@ understand that, we need to do discriminant analysis, which is the
 purpose of this question.
 
 The data can be found at
-[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt). 
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt). 
 
 
 
@@ -6099,7 +6098,7 @@ Nothing new here:
 
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 ```
 
@@ -6241,53 +6240,28 @@ columns we want to `unite` are the only two text ones:
 
 
 ```r
-athletes %>%
-  unite(combo, select_if(is.character)) %>%
-  select(combo, Ht, Wt)
+athletes %>% 
+  unite(combo, where(is.character))
 ```
 
 ```
-## Error: argument ".predicate" is missing, with no default
-```
-
- 
-
-Not this, but there must be something like this.
-
-(later)
-
-I posted a question on the R Studio community site:
-[link](https://community.rstudio.com/t/combining-unite-and-select-if/6033/2)
-and got an answer! This is how it goes:
-
-
-```r
-athletes %>%
-  unite(combo, names(select_if(., is.character))) %>%
-  select(combo, Ht, Wt)
-```
-
-```
-## # A tibble: 202 x 3
-##    combo             Ht    Wt
-##    <chr>          <dbl> <dbl>
-##  1 female_Netball  177.  59.9
-##  2 female_Netball  173.  63  
-##  3 female_Netball  176   66.3
-##  4 female_Netball  170.  60.7
-##  5 female_Netball  183   72.9
-##  6 female_Netball  178.  67.9
-##  7 female_Netball  177.  67.5
-##  8 female_Netball  174.  74.1
-##  9 female_Netball  174.  68.2
-## 10 female_Netball  174.  68.8
+## # A tibble: 202 x 12
+##    combo       RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
+##    <chr>     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>   <dbl> <dbl> <dbl> <dbl>
+##  1 female_N…  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.  59.9
+##  2 female_N…  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.  63  
+##  3 female_N…  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176   66.3
+##  4 female_N…  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.  60.7
+##  5 female_N…  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183   72.9
+##  6 female_N…  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.  67.9
+##  7 female_N…  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.  67.5
+##  8 female_N…  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
+##  9 female_N…  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
+## 10 female_N…  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
 ## # … with 192 more rows
 ```
 
- 
-
-The key was the `names`, and the extra dot 
-("output from previous step") in `select_if`.
+I wasn't expecting that to work! 
 
 
 (c) Run a discriminant analysis "predicting" sport-gender
@@ -6560,7 +6534,7 @@ And so, to the graph:
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + geom_point()
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-130-1.png" width="672"  />
 
  
 If you can distinguish seventeen different colours, your eyes are
@@ -6573,7 +6547,7 @@ ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() +
   scale_shape_manual(values = 1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-132-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-131-1.png" width="672"  />
 
      
 
@@ -6589,7 +6563,7 @@ ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point
   scale_shape_manual(values = 1:17)
 ```
 
-<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-133-1.png" width="672"  />
+<img src="21-discriminant-analysis_files/figure-html/unnamed-chunk-132-1.png" width="672"  />
 
  
 Perhaps having colours *and* shapes makes the combos easier to

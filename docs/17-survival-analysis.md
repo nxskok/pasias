@@ -20,7 +20,7 @@ all myocardial-infarction
 Worcester, Massachusetts area.
 <label for="tufte-mn-" class="margin-toggle">&#8853;</label><input type="checkbox" id="tufte-mn-" class="margin-toggle"><span class="marginnote">Worcester is pronounced, by locals, *Woo-stuh*.</span> 
 The data have been well studied, and can be found in
-the file [link](http://www.utsc.utoronto.ca/~butler/d29/whas100.csv).
+the file [link](https://raw.githubusercontent.com/nxskok/datafiles/master/whas100.csv).
 
 
 
@@ -55,7 +55,7 @@ Solution
 
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/whas100.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/whas100.csv"
 whas100 <- read_csv(my_url)
 ```
 
@@ -368,7 +368,7 @@ Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after
 ```r
 whas100 %>%
   select(age, bmi) %>%
-  summarize_all(~ list(quantile(.))) %>%
+  summarize(across(everything(), ~list(quantile(.)))) %>%
   unnest()
 ```
 
@@ -501,7 +501,7 @@ This is actually easy once you work out what to do:
 
 
 ```r
-ggsurvplot(pp2, conf.int = F)
+ggsurvplot(pp2, conf.int = FALSE)
 ```
 
 <img src="17-survival-analysis_files/figure-html/unnamed-chunk-16-1.png" width="672"  />

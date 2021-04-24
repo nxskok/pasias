@@ -1863,7 +1863,7 @@ This also works, to select only the numerical columns:
 
 ```r
 species %>%
-  select_if(is.numeric) %>%
+  select(where(is.numeric)) %>%
   as.dist()
 ```
 
@@ -1941,8 +1941,6 @@ plot(species.2)
 
   
 
-Fewer points this time since you're doing much of the same stuff over again.
-
 Don't forget to take care with the `method`: it has to be
 `ward` in lowercase (even though it's someone's name) followed
 by a D in uppercase.
@@ -2005,7 +2003,7 @@ rect.hclust(species.2, 2)
 
  
 
-This one is "mould and fungus vs.\ everything else". (My red boxes
+This one is "mould and fungus vs. everything else". (My red boxes
 seem to have gone off the side, sorry.)
 
 Or we could go to the other end of the scale:
@@ -3186,7 +3184,7 @@ counterfeit.
 
 
  The file
-[link](http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv) contains
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/car-cluster.csv) contains
 information on seven variables 
 for 32 different cars. The variables are:
 
@@ -3213,7 +3211,7 @@ for 32 different cars. The variables are:
 right number of cars and variables?
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/car-cluster.csv"
 cars <- read_csv(my_url)
 ```
 
@@ -3280,7 +3278,7 @@ Another way is like this:
 
 
 ```r
-cars %>% select_if(is.numeric) %>% scale() -> h
+cars %>% select(where(is.numeric)) %>% scale() -> h
 ```
 
  
@@ -3359,7 +3357,7 @@ means). To get *that*, *this*:
 
 ```r
 as_tibble(cars.s) %>%
-  summarize_all(~ sd(.))
+  summarize(across(everything(), ~ sd(.)))
 ```
 
 ```
@@ -3379,7 +3377,7 @@ As you realize now, the same idea will get the mean of each column too:
 
 ```r
 as_tibble(cars.s) %>%
-  summarize_all(~ mean(.))
+  summarize(across(everything(), ~ mean(.)))
 ```
 
 ```
@@ -4936,7 +4934,7 @@ It has long been important to build bridges there,
 to enable its residents to cross the rivers safely. See
 [link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
 a listing (with pictures) of the bridges. The data at
-[link](http://www.utsc.utoronto.ca/~butler/d29/bridges.csv) contains
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv) contains
 detail for a large number of past and present bridges in
 Pittsburgh. All the variables we will use are categorical. Here they
 are:
@@ -5009,7 +5007,7 @@ This sort of thing:
 
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv"
 bridges0 <- read_csv(my_url, na = "?")
 ```
 
@@ -5070,7 +5068,7 @@ finished organizing it.
 
 (b) Verify that there are missing values in this dataset. To see
 them, convert the text columns temporarily to `factor`s using
-`mutate_if`, and pass the resulting data frame into
+`mutate`, and pass the resulting data frame into
 `summary`.
 
 Solution
@@ -5080,7 +5078,7 @@ I called my data frame `bridges0`, so this:
 
 ```r
 bridges0 %>%
-  mutate_if(is.character, ~ factor(.)) %>%
+  mutate(across(where(is.character), ~ factor(.))) %>%
   summary()
 ```
 
@@ -5108,7 +5106,7 @@ bridges0 %>%
 There are missing values all over the place. `length` has the
 most, but `lanes` and `span` also have a fair few.
 
-`mutate_if` requires a logical condition, something that is true or false, about the column and then something to do with it.
+`mutate` requires `across` and a logical condition, something that is true or false, about each column, and then something to do with it.
 In words, "for each column that is text, replace it (temporarily) with the factor version of itself."
 
 Extra: I think the reason `summary` doesn't handle text stuff very
@@ -5431,7 +5429,7 @@ for (i in 1:70) {
  
 
 Even just the top six rows (of all 70 columns) takes up a lot of
-space. The grader will only check that it looks about right:
+space. The grader would only check that it looks about right:
 
 
 ```r
@@ -5565,7 +5563,7 @@ variables.
 (g) Turn your matrix or data frame into a `dist`
 object. (If you couldn't create a matrix or data frame of
 dissimilarities, read them in from
-[link](http://www.utsc.utoronto.ca/~butler/d29/mm.csv).) Do not
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/mm.csv).) Do not
 display your distance object.
 
 Solution
@@ -6126,7 +6124,7 @@ up in the same cluster.
 
 
 (a) Read in the data from
-[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt), recalling
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt), recalling
 that the data values are separated by tabs. Display (some of) the
 data set.
 
@@ -6136,7 +6134,7 @@ Solution
 So, `read_tsv`. 
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 ```
 
@@ -6191,11 +6189,42 @@ code. Display what you get.
 
 Solution
 
+This first one is a bit *too* slick:
+
+
+```r
+athletes %>% mutate(across(where(is.numeric), ~scale(.)))
+```
+
+```
+## # A tibble: 202 x 13
+##    Sex    Sport RCC[,1] WCC[,1] Hc[,1] Hg[,1] Ferr[,1] BMI[,1] SSF[,1] `%Bfat`[,1] LBM[,1]
+##    <chr>  <chr>   <dbl>   <dbl>  <dbl>  <dbl>    <dbl>   <dbl>   <dbl>       <dbl>   <dbl>
+##  1 female Netb…  -0.346   3.44  -0.243 -0.709  -1.20   -1.33    -0.615      -0.358  -0.898
+##  2 female Netb…  -1.24   -0.616 -1.39  -1.37   -0.376  -0.631    1.26        1.90   -1.36 
+##  3 female Netb…  -1.22    0.273 -1.53  -1.66   -1.16   -0.543    0.613       0.950  -0.875
+##  4 female Netb…  -0.870  -0.394 -1.47  -1.66   -0.987  -0.672    0.899       0.989  -1.23 
+##  5 female Netb…  -1.44   -0.727 -1.20  -1.30    0.0237 -0.414    1.63        1.55   -0.675
+##  6 female Netb…  -1.31   -0.560 -1.77  -2.03   -1.18   -0.550    0.656       0.542  -0.644
+##  7 female Netb…  -1.20   -1.17  -1.55  -1.37    0.676  -0.519    1.16        1.26   -0.900
+##  8 female Netb…  -2.01   -0.283 -1.80  -1.59    0.529   0.522    2.69        2.11   -0.801
+##  9 female Netb…  -1.66   -0.893 -1.85  -1.59   -0.124  -0.114    0.985       0.714  -0.681
+## 10 female Netb…  -0.608   1.44  -0.462 -0.342  -0.271  -0.0544   1.76        1.85   -1.01 
+## # … with 192 more rows, and 2 more variables: Ht <dbl[,1]>, Wt <dbl[,1]>
+```
+
+It standardizes all the columns that are numeric all right, but any other columns it finds it leaves as they are, while we want to get rid of them first. So do it in two steps: get the numeric columns, and standardize *all* of those:
+
+
+```r
+athletes %>% select(where(is.numeric)) %>% 
+  mutate(across(everything(), ~scale(.))) -> athletes.s
+```
+
 
 This, in fact:
 
 ```r
-athletes %>% select_if(is.numeric) %>% mutate_all(~ scale(.)) -> athletes.s
 athletes.s
 ```
 
@@ -6216,9 +6245,8 @@ athletes.s
 ## # … with 192 more rows, and 1 more variable: Wt <dbl[,1]>
 ```
 
- 
 
-The columns have weird names, possibly because `scale` expects
+The columns might have weird names, possibly because `scale` expects
 a matrix or data frame (to standardize each column), and here it's
 getting the columns one at a time.
 
@@ -6227,7 +6255,7 @@ Elsewhere, I stuck `scale()` on the end, which produces a
 
 
 ```r
-athletes %>% select_if(is.numeric) %>% scale() %>% head()
+athletes %>% select(where(is.numeric)) %>% scale() %>% head()
 ```
 
 ```
@@ -6247,13 +6275,13 @@ athletes %>% select_if(is.numeric) %>% scale() %>% head()
 ## [6,]  0.5416266 -0.6444978 -0.1955890 -0.5104399
 ```
 
- 
 
-I (at this moment) like the first one better, but these preferences
-tend to change over time (as will yours).
-
-The first athlete has a `WCC` value that is very large compared
+The first athlete has a `WCC` value that is *very* large compared
 to the others.
+
+Extra: for those keeping track, sometimes you need an `across` and sometimes you don't. The place where you need `across` is when you want to apply something to a bunch of columns all at once. `select` doesn't need it, but something like `mutate` or `summarize` does, because you are changing the values in or summarizing several columns all at once. 
+
+One more: if the columns you are acting on in `across` are selected using a select helper (or by naming them or in some other way that depends on their *names*), you put that directly inside `across` (as in `across(everything())` above), but if you are choosing the columns to act on by a *property* of them (eg. that they are numbers), you have a `where` inside the `across`, as in `across(where(is.numeric))`. You typically will be closing several brackets at the end. In R Studio, when you type a close-bracket, it briefly shows you the matching open-bracket so that you can keep track. 
 
 
 (c) Make a data frame that contains the total within-cluster sum
@@ -6431,7 +6459,7 @@ plot directly, with the points joined by lines:
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-184-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-186-1.png" width="672"  />
 
      
 
@@ -6899,10 +6927,10 @@ distinguishable using `scale_colour_brewer` from the
 
 ```r
 ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
-  scale_colour_brewer(palette = "Paired")
+  scale_colour_brewer(palette = "Set3")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-197-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-199-1.png" width="672"  />
 
      
 
@@ -6962,7 +6990,7 @@ athletes %>%
   geom_point() + scale_colour_brewer(palette = "Paired")
 ```
 
-<img src="22-thingy_files/figure-html/unnamed-chunk-198-1.png" width="672"  />
+<img src="22-thingy_files/figure-html/unnamed-chunk-200-1.png" width="672"  />
 
  
 

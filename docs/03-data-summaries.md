@@ -1131,8 +1131,8 @@ Solution
 Read in and display the data. This, I think, is the easiest way.
 
 ```r
-url="http://www.utsc.utoronto.ca/~butler/c32/compatt.txt"
-anxiety=read_delim(url," ")
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/compatt.txt"
+anxiety=read_delim(my_url," ")
 ```
 
 ```
@@ -1283,77 +1283,70 @@ it's harder to be sure there).
 Solution
 
 
-Without naming them explicitly means using some other way to pick them out of the data frame, either `summarize\_if` or `summarize\_at`. To do it the first way, ask what these two columns have in common: they are the only two numeric (quantitative) columns:
+Without naming them explicitly means using some other way to pick them out of the data frame, `summarize` with `across`. 
+
+The basic `across` comes from asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
+
 
 ```r
-anxiety %>% summarize_if(is.numeric,funs(mean,sd))
-```
-
-```
-## Warning: `funs()` was deprecated in dplyr 0.8.0.
-## Please use a list of either functions or lambdas: 
-## 
-##   # Simple named list: 
-##   list(mean = mean, median = median)
-## 
-##   # Auto named with `tibble::lst()`: 
-##   tibble::lst(mean, median)
-## 
-##   # Using lambdas
-##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+anxiety %>% summarize(across(starts_with("C"), list(m = mean, s =sd)))
 ```
 
 ```
 ## # A tibble: 1 x 4
-##   CAS_mean CARS_mean CAS_sd CARS_sd
-##      <dbl>     <dbl>  <dbl>   <dbl>
-## 1     2.82      2.77  0.484   0.671
+##   CAS_m CAS_s CARS_m CARS_s
+##   <dbl> <dbl>  <dbl>  <dbl>
+## 1  2.82 0.484   2.77  0.671
 ```
 
-Or the second way, asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
+
+Another way is to ask what *property* these two columns have in common: they are the only two numeric (quantitative) columns. This means using an `across` with a `where` inside it, thus:
 
 
 ```r
-anxiety %>% summarize_at(vars(starts_with("C")),funs(mean,sd))
+anxiety %>% summarize(across(where(is.numeric), list(m = mean, s = sd)))
 ```
 
 ```
 ## # A tibble: 1 x 4
-##   CAS_mean CARS_mean CAS_sd CARS_sd
-##      <dbl>     <dbl>  <dbl>   <dbl>
-## 1     2.82      2.77  0.484   0.671
+##   CAS_m CAS_s CARS_m CARS_s
+##   <dbl> <dbl>  <dbl>  <dbl>
+## 1  2.82 0.484   2.77  0.671
 ```
+
+Read the first one as "across all the columnns whose names start with S, find the mean and SD of them." The second one is a little clunkier: "acrosss all the columns for which `is.numeric` is true, find the mean and SD of them". A shorter way for the second one is "across all the numeric (quantitative) columns, find their mean and SD", but then you have to remember exactly how to code that. The reason for the `list` is that we are calculating two statistics for each column that we find. I am using a "named list" so that the mean gets labelled with an `m` on the end of the column name, and the SD gets an `s` on the end.
 
 Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
 
 ```r
-anxiety %>% summarize_at(vars(ends_with("S")),funs(mean,sd))
+anxiety %>% summarize(across(ends_with("S"), list(m = mean, s = sd)))
 ```
 
 ```
 ## # A tibble: 1 x 4
-##   CAS_mean CARS_mean CAS_sd CARS_sd
-##      <dbl>     <dbl>  <dbl>   <dbl>
-## 1     2.82      2.77  0.484   0.671
+##   CAS_m CAS_s CARS_m CARS_s
+##   <dbl> <dbl>  <dbl>  <dbl>
+## 1  2.82 0.484   2.77  0.671
 ```
 
 Because I didn't say otherwise, you should tell me what the means and SDs are, rounding off suitably: the CAS scores have mean 2.82 and SD 0.48, and the CARS scores have mean 2.77 and SD 0.67.
 
 Yet another way to do it is to select the columns you want first (which
 you can do by number so as not to name them), and then find the mean
-and SD of all of them. This uses two tools that we haven't seen yet:
+and SD of all of them:
 
 
 ```r
-anxiety %>% select(2:3) %>% summarize_all(funs(mean,sd))
+anxiety %>% select(2:3) %>% 
+    summarize(across(everything(), list(m = mean, s = sd)))
 ```
 
 ```
 ## # A tibble: 1 x 4
-##   CAS_mean CARS_mean CAS_sd CARS_sd
-##      <dbl>     <dbl>  <dbl>   <dbl>
-## 1     2.82      2.77  0.484   0.671
+##   CAS_m CAS_s CARS_m CARS_s
+##   <dbl> <dbl>  <dbl>  <dbl>
+## 1  2.82 0.484   2.77  0.671
 ```
 
 This doesn't work:
@@ -1385,15 +1378,15 @@ In case you were wondering about how to do this separately by gender, well, put 
 
 ```r
 anxiety %>% group_by(gender) %>%
-summarize_if(is.numeric,funs(mean,sd))
+summarize(across(where(is.numeric), list(m = mean, s = sd)))
 ```
 
 ```
 ## # A tibble: 2 x 5
-##   gender CAS_mean CARS_mean CAS_sd CARS_sd
-##   <chr>     <dbl>     <dbl>  <dbl>   <dbl>
-## 1 female     2.64      2.51  0.554   0.773
-## 2 male       2.94      2.96  0.390   0.525
+##   gender CAS_m CAS_s CARS_m CARS_s
+##   <chr>  <dbl> <dbl>  <dbl>  <dbl>
+## 1 female  2.64 0.554   2.51  0.773
+## 2 male    2.94 0.390   2.96  0.525
 ```
 
 or
@@ -1401,15 +1394,15 @@ or
 
 ```r
 anxiety %>% group_by(gender) %>%
-summarize_at(vars(starts_with("C")),funs(mean,sd))
+summarize(across(starts_with("C"), list(m = mean, s = sd)))
 ```
 
 ```
 ## # A tibble: 2 x 5
-##   gender CAS_mean CARS_mean CAS_sd CARS_sd
-##   <chr>     <dbl>     <dbl>  <dbl>   <dbl>
-## 1 female     2.64      2.51  0.554   0.773
-## 2 male       2.94      2.96  0.390   0.525
+##   gender CAS_m CAS_s CARS_m CARS_s
+##   <chr>  <dbl> <dbl>  <dbl>  <dbl>
+## 1 female  2.64 0.554   2.51  0.773
+## 2 male    2.94 0.390   2.96  0.525
 ```
 
 The male means are slightly higher on both tests, but the male

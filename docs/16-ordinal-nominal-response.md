@@ -3019,7 +3019,7 @@ that the respondent lives in (five values).
 
 
 The data are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/steak.csv). 
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/steak.csv). 
 
 
 
@@ -3033,7 +3033,7 @@ The usual:
 
 
 ```r
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/steak.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/steak.csv"
 steak0 <- read_csv(my_url)
 ```
 
@@ -3320,7 +3320,7 @@ up unless we turn them into a factor first:
 
 ```r
 steak0 %>%
-  mutate_if(is.character, factor) %>%
+  mutate(across(where(is.character), ~factor(.))) %>%
   summary()
 ```
 
@@ -3369,8 +3369,8 @@ steak0 %>%
 
      
 
-There are missing values everywhere. What the `_if` functions
-do is to do something for each column where the first thing is true:
+There are missing values everywhere. What the `where` 
+does is to do something for each column where the first thing is true:
 here, if the column is text, then replace it by the factor version of
 itself. This makes for a better summary, one that shows how many
 observations are in each category, and, more important for us, how
@@ -3475,7 +3475,7 @@ For proof, this is the easiest way I know:
 
 ```r
 steak.complete %>%
-  mutate_if(is.character, factor) %>%
+  mutate(across(where(is.character), ~factor(.))) %>%
   summary()
 ```
 
