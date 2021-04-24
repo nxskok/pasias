@@ -9,7 +9,7 @@ up in the same cluster.
 
 
 (a) Read in the data from
-[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt), recalling
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt), recalling
 that the data values are separated by tabs. Display (some of) the
 data set.
 
@@ -18,7 +18,7 @@ Solution
 
 So, `read_tsv`. 
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
 ```
@@ -33,16 +33,27 @@ code. Display what you get.
 
 Solution
 
+This first one is a bit *too* slick:
+
+```{r}
+athletes %>% mutate(across(where(is.numeric), ~scale(.)))
+```
+
+It standardizes all the columns that are numeric all right, but any other columns it finds it leaves as they are, while we want to get rid of them first. So do it in two steps: get the numeric columns, and standardize *all* of those:
+
+```{r}
+athletes %>% select(where(is.numeric)) %>% 
+  mutate(across(everything(), ~scale(.))) -> athletes.s
+```
+
 
 This, in fact:
 ```{r }
-athletes %>% select_if(is.numeric) %>% mutate_all(~ scale(.)) -> athletes.s
 athletes.s
 ```
 
- 
 
-The columns have weird names, possibly because `scale` expects
+The columns might have weird names, possibly because `scale` expects
 a matrix or data frame (to standardize each column), and here it's
 getting the columns one at a time.
 
@@ -50,16 +61,16 @@ Elsewhere, I stuck `scale()` on the end, which produces a
 *matrix*, which I should then display the top of (it has 200-plus rows):
 
 ```{r }
-athletes %>% select_if(is.numeric) %>% scale() %>% head()
+athletes %>% select(where(is.numeric)) %>% scale() %>% head()
 ```
 
- 
 
-I (at this moment) like the first one better, but these preferences
-tend to change over time (as will yours).
-
-The first athlete has a `WCC` value that is very large compared
+The first athlete has a `WCC` value that is *very* large compared
 to the others.
+
+Extra: for those keeping track, sometimes you need an `across` and sometimes you don't. The place where you need `across` is when you want to apply something to a bunch of columns all at once. `select` doesn't need it, but something like `mutate` or `summarize` does, because you are changing the values in or summarizing several columns all at once. 
+
+One more: if the columns you are acting on in `across` are selected using a select helper (or by naming them or in some other way that depends on their *names*), you put that directly inside `across` (as in `across(everything())` above), but if you are choosing the columns to act on by a *property* of them (eg. that they are numbers), you have a `where` inside the `across`, as in `across(where(is.numeric))`. You typically will be closing several brackets at the end. In R Studio, when you type a close-bracket, it briefly shows you the matching open-bracket so that you can keep track. 
 
 
 (c) Make a data frame that contains the total within-cluster sum
@@ -399,7 +410,7 @@ distinguishable using `scale_colour_brewer` from the
 `RColorBrewer` package (loaded at the beginning):
 ```{r }
 ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
-  scale_colour_brewer(palette = "Paired")
+  scale_colour_brewer(palette = "Set3")
 ```
 
      

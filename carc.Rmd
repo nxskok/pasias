@@ -2,7 +2,7 @@
 
 
  The file
-[link](http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv) contains
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/car-cluster.csv) contains
 information on seven variables 
 for 32 different cars. The variables are:
 
@@ -28,7 +28,7 @@ for 32 different cars. The variables are:
 (a) Read in the data and display its structure. Do you have the
 right number of cars and variables?
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/car-cluster.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/car-cluster.csv"
 cars <- read_csv(my_url)
 cars
 ```
@@ -59,7 +59,7 @@ This is a `matrix`, as we've seen before.
 Another way is like this:
 
 ```{r }
-cars %>% select_if(is.numeric) %>% scale() -> h
+cars %>% select(where(is.numeric)) %>% scale() -> h
 ```
 
  
@@ -97,7 +97,7 @@ means). To get *that*, *this*:
 
 ```{r }
 as_tibble(cars.s) %>%
-  summarize_all(~ sd(.))
+  summarize(across(everything(), ~ sd(.)))
 ```
 
  
@@ -109,7 +109,7 @@ As you realize now, the same idea will get the mean of each column too:
 
 ```{r }
 as_tibble(cars.s) %>%
-  summarize_all(~ mean(.))
+  summarize(across(everything(), ~ mean(.)))
 ```
 
  

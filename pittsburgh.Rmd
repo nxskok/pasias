@@ -9,7 +9,7 @@ It has long been important to build bridges there,
 to enable its residents to cross the rivers safely. See
 [link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
 a listing (with pictures) of the bridges. The data at
-[link](http://www.utsc.utoronto.ca/~butler/d29/bridges.csv) contains
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv) contains
 detail for a large number of past and present bridges in
 Pittsburgh. All the variables we will use are categorical. Here they
 are:
@@ -81,7 +81,7 @@ Solution
 This sort of thing:
 
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/bridges.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv"
 bridges0 <- read_csv(my_url, na = "?")
 bridges0
 ```
@@ -102,7 +102,7 @@ finished organizing it.
 
 (b) Verify that there are missing values in this dataset. To see
 them, convert the text columns temporarily to `factor`s using
-`mutate_if`, and pass the resulting data frame into
+`mutate`, and pass the resulting data frame into
 `summary`.
 
 Solution
@@ -111,7 +111,7 @@ Solution
 I called my data frame `bridges0`, so this:
 ```{r }
 bridges0 %>%
-  mutate_if(is.character, ~ factor(.)) %>%
+  mutate(across(where(is.character), ~ factor(.))) %>%
   summary()
 ```
 
@@ -120,7 +120,7 @@ bridges0 %>%
 There are missing values all over the place. `length` has the
 most, but `lanes` and `span` also have a fair few.
 
-`mutate_if` requires a logical condition, something that is true or false, about the column and then something to do with it.
+`mutate` requires `across` and a logical condition, something that is true or false, about each column, and then something to do with it.
 In words, "for each column that is text, replace it (temporarily) with the factor version of itself."
 
 Extra: I think the reason `summary` doesn't handle text stuff very
@@ -361,7 +361,7 @@ for (i in 1:70) {
  
 
 Even just the top six rows (of all 70 columns) takes up a lot of
-space. The grader will only check that it looks about right:
+space. The grader would only check that it looks about right:
 
 ```{r size="scriptsize"}
 head(m)
@@ -411,7 +411,7 @@ variables.
 (g) Turn your matrix or data frame into a `dist`
 object. (If you couldn't create a matrix or data frame of
 dissimilarities, read them in from
-[link](http://www.utsc.utoronto.ca/~butler/d29/mm.csv).) Do not
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/mm.csv).) Do not
 display your distance object.
 
 Solution

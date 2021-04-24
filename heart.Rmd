@@ -43,7 +43,7 @@ I don't know what most of those are, but we will not let that stand in
 our way. Our aim is to find out what variables are associated with
 heart disease, and what values of those variables give high
 probabilities of heart disease being present. The data are in
-[link](http://www.utsc.utoronto.ca/~butler/d29/heartf.csv).
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/heartf.csv).
 
 
 
@@ -56,7 +56,7 @@ Solution
 
 A `.csv` file, so:
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/heartf.csv"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/heartf.csv"
 heart <- read_csv(my_url)
 heart
 ```
@@ -313,29 +313,24 @@ summary(heart)
          
 This is the old-fashioned "base R" way of doing it. The
 `tidyverse` way is to get the Q1 and Q3 of just the variables
-that are numeric. To that, we'll write little functions to get Q1 and
-Q3 of anything, and then use `summarize_if` to apply those to
-the quantitative variables:
+that are numeric. We are doing something to (summarizing) these variables, so we need the `across(where())` idea to get just the numeric ones. We also need a `list` at the end because we are computing two summaries for each variable, Q1 and Q3, rather than just one. Finally, something that's easy to mess up (I do it all the time) is the closing bracket of the `across`: this goes *right at the end*, because the calculation is inside the `across` as well:
 
 ```{r }
-q1 <- function(x) quantile(x, 0.25)
-q3 <- function(x) quantile(x, 0.75)
-heart %>% summarize_if(is.numeric, funs(q1, q3))
+heart %>% summarize(across(where(is.numeric), 
+                           list(q1 = ~quantile(., 0.25),
+                                q3 = ~quantile(., 0.75))))
 ```
 
- 
-
-These are actually all the Q1s followed by all the Q3s, but it's hard
-to see that because you only see a few columns. On yours, click the
-little right-arrow to see more columns.  
+These are the Q1 and Q3 for each variable in turn; we already had quite a lot of variables, and now we have twice as many columns as we had before.  Click the right-arrow to see everything. 
 
 One way to see all the results is
 to "transpose" the result with the variable-quartile combinations in
 a column and the actual quartile values in another:
 
 ```{r }
-heart %>%
-  summarize_if(is.numeric, funs(q1, q3)) %>%
+heart %>% summarize(across(where(is.numeric), 
+                           list(q1 = ~quantile(., 0.25),
+                                q3 = ~quantile(., 0.75)))) %>% 
   pivot_longer(everything(), names_to="vq", values_to="quartile") -> heart2
 heart2
 ```
@@ -345,13 +340,15 @@ heart2
 If you want to be really fancy:
 
 ```{r }
-heart %>%
-  summarize_if(is.numeric, funs(q1, q3)) %>%
-  pivot_longer(everything(), names_to=c("variable", "which_quartile"), names_sep="_", values_to="quartile") %>% 
+heart %>% summarize(across(where(is.numeric), 
+                           list(q1 = ~quantile(., 0.25),
+                                q3 = ~quantile(., 0.75)))) %>% 
+  pivot_longer(everything(), names_to=c("variable", "which_quartile"), 
+               names_sep="_", values_to="quartile") %>% 
   pivot_wider(names_from=which_quartile, values_from=quartile)
 ```
 
-You would *definitely* benefit from running this pipeline one line at a time to see how it works! The `summarize_if` produces columns with names like `age_q1`, which are then split up into a variable name and a "which quartile" by the fancy version of `pivot_longer`. (If you prefer, this is the vanilla version of `pivot_longer` followed by `separate`. For yourself, do it the way that makes sense to you.) Finally, I put Q1 and Q3 in their own columns so that you can see them side by side.
+You would *definitely* benefit from running this pipeline one line at a time to see how it works! The `summarize` produces columns with names like `age_q1`, which are then split up into a variable name and a "which quartile" by the fancy version of `pivot_longer`. (If you prefer, this is the vanilla version of `pivot_longer` followed by `separate`. For yourself, do it the way that makes sense to you.) Finally, I put Q1 and Q3 in their own columns so that you can see them side by side.
  
 
 The categorical variables are a bit trickier, because they will have
@@ -359,8 +356,8 @@ different numbers of possible values. Here's my idea:
 
 ```{r }
 heart %>%
-  select_if(is.character) %>%
-  mutate_all(~factor(.)) %>%
+  select(where(is.character)) %>%
+  mutate(across(everything(), ~factor(.))) %>%
   summary()
 ```
 
@@ -371,7 +368,7 @@ My thought was that if you pass a genuine factor into `summary`
 its "levels" (different categories). So, to get to that point, I had
 to select all the categorical-as-text variables (which is actually all
 the ones that are not numeric), and then make a factor out of each of
-them. `mutate_all` does the same thing to all the columns: "for
+them. `mutate` with `across(everything())` does the same thing to all the columns: "for
 each column, run `factor` on it", and saves the results back in variables
 of the same name as they were before. Using `summary` also
 shows how many observations we had in each category.
@@ -382,7 +379,7 @@ combinations. My go at that:
 
 ```{r }
 heart %>%
-  select_if(is.character) %>%
+  select(where(is.character)) %>%
   pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
   distinct() %>% 
   arrange(variable_name, value) -> heart3
@@ -402,7 +399,7 @@ Hmm, another way would be to count everything:
 
 ```{r }
 heart %>%
-  select_if(is.character) %>%
+  select(where(is.character)) %>%
   pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
   count(variable_name, value) -> heart3
 heart3 

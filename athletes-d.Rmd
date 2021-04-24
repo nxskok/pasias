@@ -10,7 +10,7 @@ understand that, we need to do discriminant analysis, which is the
 purpose of this question.
 
 The data can be found at
-[link](http://www.utsc.utoronto.ca/~butler/c32/ais.txt). 
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt). 
 
 
 
@@ -24,7 +24,7 @@ Solution
 Nothing new here:
 
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/c32/ais.txt"
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
 ```
@@ -89,31 +89,11 @@ I have a feeling we can also take advantage of the fact that the two
 columns we want to `unite` are the only two text ones:
 
 ```{r error=T}
-athletes %>%
-  unite(combo, select_if(is.character)) %>%
-  select(combo, Ht, Wt)
+athletes %>% 
+  unite(combo, where(is.character))
 ```
 
- 
-
-Not this, but there must be something like this.
-
-(later)
-
-I posted a question on the R Studio community site:
-[link](https://community.rstudio.com/t/combining-unite-and-select-if/6033/2)
-and got an answer! This is how it goes:
-
-```{r }
-athletes %>%
-  unite(combo, names(select_if(., is.character))) %>%
-  select(combo, Ht, Wt)
-```
-
- 
-
-The key was the `names`, and the extra dot 
-("output from previous step") in `select_if`.
+I wasn't expecting that to work! 
 
 
 (c) Run a discriminant analysis "predicting" sport-gender
