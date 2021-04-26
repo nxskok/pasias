@@ -44,200 +44,153 @@ wisc %>%
 wisc
 ```
 
-(I checked that in this question I didn't need the road distances for anything, so I saved it back into the original dataframe.) 
+(I checked that in this question I didn't need the road distances for anything, so I saved it back into the original dataframe. Also, the `select` is unnecessarily fancy: I could have just selected the `location` column, but this one says "don't select any of the columns that are numeric".) 
 
-Now we have to fix up the states of the last three places,
+Now we have to fix up the states of the last three places, which is where the base R seems to come in (but see the Extra):
+
+```{r}
+wisc$state[10] <- "IA"
+wisc$state[11] <- "MN"
+wisc$state[12] <- "IL"
+wisc
+```
+
+The states of the last three locations are now correct.
+
+Extra: I didn't know about this until literally just now, but there is a `tidyverse` way to do this as well (that may look familiar to those of you that know about SQL). Let's start by pretending again that everything is in Wisconsin:
+
+```{r}
+wisc %>% 
+  mutate(state = "WI") -> wisc2
+wisc2
+```
+
+and then change the ones that need changing. What you do is to make a little dataframe of the ones that need changing:
+
+```{r}
+changes <- tribble(
+  ~location, ~state,
+  "Dubuque", "IA",
+  "St.Paul", "MN",
+  "Chicago", "IL"
+)
+changes
+```
+
+Note that the columns in here have *exactly* the same names as the ones in the original dataframe where everything was in Wisconsin. 
 
 
-(f) Obtain a Leaflet map of the area containing these
+I did this by copy-pasting the city names whose states needed changing out of the display of my `wisc2`. You might think that a left join is what we need now, and it almost is. Note that I want to match the locations but *not* the states:
+
+```{r}
+wisc2 %>% left_join(changes, by = "location")
+```
+
+and the story here is that if `state.y` has a value, use that, otherwise use  the value in `state.x`. This can even be done: there is a function `coalesce` that will do exactly that:
+
+`r tufte::margin_note("I knew this existed, but I couldn't remember what it was called, which made it hard to search for. My first port of call was {\tt na-if}", which converts values to NA, the opposite of what I wanted. But from See Also I got {\tt na-replace}, and from the See Also of {\em that} I found out what {\tt coalesce} does.")`
+
+```{r}
+wisc2 %>% left_join(changes, by = "location") %>% 
+  mutate(state=coalesce(state.y, state.x))
+```
+
+The idea behind `coalesce` is that you give it a list of columns, and the first one of those that is *not missing* gives its value to the new column. So I feed it `state.y` *first*, and then `state.x`, and the new `state` contains the right things. (Can you explain what happens if you do it the other way around?)
+
+But, there is a better way. Let's go back to our all-Wisconsin dataframe:
+
+```{r}
+wisc2
+```
+
+and our dataframe of corrections to make:
+
+```{r}
+changes
+```
+
+We can make those changes in one step, thus:
+
+```{r}
+wisc2 %>% 
+  rows_update(changes) -> wisc
+wisc
+```
+
+This works because the *first* column of `changes`, namely `location`, is the one that is looked up in `wisc2`. (`rows_update` has a `by` in the same way that `left_join` does if you want to change this.) So all three locations in `changes` are looked up in `wisc2`, and any that match have their `state` changed to the one in `changes`.
+
+Magic. Now that I have learned about this, I will be using it a lot.
+
+(c) Create a new column in which the abbreviation for the state is glued on to the end of each `location`, separated by a space.
+
+Solution
+
+A couple of ways: a literal gluing, using `paste`:
+
+```{r}
+wisc %>% 
+  mutate(lookup = paste(location, state))
+```
+
+or the same idea using `str_c` from `stringr` (part of the tidyverse), only this time you have to supply the space yourself:
+
+```{r}
+wisc %>% 
+  mutate(lookup = str_c(location, " ", state))
+```
+
+or a way you might have forgotten, using `unite` (which is the inverse of `separate`):
+
+```{r}
+wisc %>% 
+  unite(lookup, c(location, state), sep = " ") -> wisc
+wisc
+```
+
+This last one is my favourite, because it gets rid of the two constituent columns `location` and `state` that we don't need any more. The syntax is the name of the new column, a vector of columns to unite together, and (optionally) what to separate the joined-together values with. The default for that is an underscore, but here we want a space because that's what the geocoder (coming up) expects.
+
+(d) Look up the latitudes and longitudes of these twelve places.
+
+Solution
+
+```{r}
+wisc %>% 
+  rowwise() %>% 
+  mutate(ll = list(geocode_OSM(lookup))) %>% 
+  unnest_wider(ll) %>% 
+  unnest_wider(coords) -> wisc
+wisc
+```
+
+Yes, I forgot the `rowwise` as well the first time.
+
+(e) Obtain a Leaflet map of the area containing these
 twelve cities. 
  
 Solution
 
-First add the state names to the cities, to make sure Google Maps
-looks up the right ones.  I am first making a vector with 12 copies of the
-abbreviation for Wisconsin, and then overwriting the last three with
-the states they are actually in:
+The usual:
 
-```{r }
-states <- rep("WI", 12)
-states[10] <- "IA"
-states[11] <- "MN"
-states[12] <- "IL"
-cst <- str_c(cities, " ", states)
-cst
+```{r}
+leaflet(data = wisc) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~x, lat = ~y) -> locs
+locs
 ```
 
- 
+The nice thing about this map is that you can play with it: zoom it (using the plus/minus on the map or your mouse wheel), or move it around by clicking and dragging. To identify the cities: well, the big ones are obvious, and you can zoom in to identify the others. (You have to zoom in quite a long way to find Monroe, and the geocoder seems to have found its airport, which is not actually in the city.)
 
-And then I look them up. I don't want Google to tell me that I have
-done too many lookups, so I look them up first and save the results,
-like this:
+I like identifying the cities with circles, but there are other possibilities, such as "icon markers" that look like Google map pins:
 
-```{r } 
-tibble(cst) %>%
-  ggmap::mutate_geocode(cst) -> g
-g
+```{r}
+leaflet(data = wisc) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~x, lat = ~y) -> locs
+locs
 ```
 
- 
-What are the extreme corners of these?
-
-```{r }
-range(g$lon)
-range(g$lat)
-```
-
- 
-
-or even
-
-```{r }
-g %>%
-  select(lat, lon) %>%
-  map_df(range)
-```
-
- 
-
-(`range` in R produces the two extreme values, not the
-difference between the highest and lowest, which is what you might
-think of as a "range".)
-
-We don't
-get exactly the corners we ask for, since the map always comes out in the same
-proportions (we could ask for a long skinny map, but we'll always get
-a rectangular one that fills the page), and also Google Maps converts
-the corners into a centre and zoom. I had to tinker with the numbers
-below, since on my first attempt the map zoomed in too much.
-I also asked for a "roadmap" to maximize the number of places marked
-on there.
-
-So:
-
-```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F}
-wisc.map.2 <- get_map(location = c(-94, 41.8, -87, 46.8), maptype = "roadmap")
-ggmap(wisc.map.2)
-```
-
- 
-
-This came out about right. 
-
-Now we need to mark our 12 cities on the map. This is a
-`ggplot` map, so the right syntax is as below.
-
-```{r sldkhdlf,echo=-1,message=F, cache=T}
-library(ggmap)
-ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, y = lat))
-```
-
- 
-
-There's a slight weirdness in that `ggmap` only takes a map,
-not a data frame or an `aes`, so those go in
-`geom_point` or whatever you're using.
-
-We *just* squeezed all our cities onto the map. The city
-southwest of Wausau is Marshfield, the one between Madison and
-Milwaukee is Fort Atkinson, and the two east of Dubuque along the
-southern border of Wisconsin are Monroe and Beloit. The one *way*
-up at the top is Superior.
-
-After that long diversion, we come to:
-
- 
+You can even attach text to the markers that appears when you click on them, but that's farther than I would go here.
 
 
-(g) Discuss how the map that came out of the multidimensional
-scaling corresponds to the actual (Google) map.
-
- 
-Solution
-
-
-Let's pick a few places from the actual map, and make a table of
-where they are on the actual map and the `cmdscale` map:
-
-```
-
- Place        Real              Cmdscale       
-----------------------------------------------
- Superior     northwest         central east   
- St. Paul     central west      southeast      
- Dubuque      central south     central south  
- Chicago      southeast         central west   
- Appleton     central east      central north  
-
-
-```
-
-
-This is a bit tricky. Dubuque is the only one in the right place, and
-the others that were west have become east and vice versa. So I think
-there is a flipping across a line going through Dubuque. That seems to
-be the most important thing; if you imagine the other points being
-flipped across a line going north-south through Dubuque, they all end
-up in about the right place. There might be a little rotation as well,
-but I'll call that close enough.
-
-(For you, any comment along the lines of "flipped around this line"
-or "rotated about this much" that seems to describe what has happened, is
-fine.)
- 
-
-
-(h) Calculate something that demonstrates that a one-dimensional
-map of the cities is a much worse representation than the
-two-dimensional one that we made before. (I'm planning to get to this
-in class, but if we skip it, don't worry about this part.)
-
- 
-Solution
-
-
-Run again with `eig=T` and take a look at `GOF` (uppercase):
-```{r }
-cmdscale(d, 2, eig = T)$GOF
-cmdscale(d, 1, eig = T)$GOF
-```
-
-   
-
-The goodness-of-fit of the two-dimensional solution is pretty
-good,
-`r tufte::margin_note("As it ought to be, since there is a real answer  here: the cities do} exist as locations in two dimensions, if you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.")`
-but that of the one-dimensional solution (which arranges all the
-cities along a line) is pretty awful in comparison.
-
-How awful? Let's find out. I should have saved it from just above, but
-now I have to do it again. For the plot, `ones` is a string of
-ones, as many as there are cities.
-
-```{r kashklsahl0}
-ones <- rep(1, 12)
-v <- cmdscale(d, 1, eig = T)
-ddd <- as_tibble(v$points) %>%
-  mutate(one = ones, city = cities)
-ddd
-```
-
- 
-
-(the one-column matrix of points didn't have a name, so it acquired
-the name `V1`), and the plot:
-
-```{r }
-ggplot(ddd, aes(x = one, y = V1, label = city)) +
-  geom_point() + geom_text_repel()
-```
-
- 
-
-The cities get mapped onto a line that goes northwest (top) to
-southeast (bottom). This is not completely terrible, since there
-aren't really any cities in the northeast of the state, but it *is*
-pretty awful.
- 
 
 
