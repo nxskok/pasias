@@ -693,99 +693,89 @@ not shown here.)
 
 There is actually a *town* called Catbrain. It's in England,
 near Bristol, and seems to be home to a street of car dealerships.
-Just to show that you can do *anything* in R (but first I need a Google API key and some packages):
+Just to show that you can do *anything* in R:
+
 
 ```{r }
-library(ggmap)
-library(ggrepel)
+library(leaflet)
+library(tmaptools)
 ```
 
- 
+First we need to find the latitude and longitude of Catbrain:
 
-```{r echo=F}
-api_key <- "AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
+```{r}
+catbrain <- tibble(place = "Catbrain UK")
+catbrain %>% mutate(ll = list(geocode_OSM(place))) %>% 
+  unnest_wider(ll) %>% 
+  unnest_wider(coords) -> catbrain
+catbrain
 ```
 
- 
+All right, and then make a map of it:
 
-```{r }
-register_google(api_key)
-has_google_key()
+```{r}
+leaflet(data = catbrain) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~x, lat = ~y) -> catbrain_map
+catbrain_map
+
 ```
 
- 
-
-My Google API key is hidden in a variable called `api_key` that I am not showing you. You can get your own!
-
-```{r cache=T}
-gg <- get_map("Catbrain", zoom = 14, maptype = "roadmap")
-ggmap(gg)
-```
 
  
-The car dealerships are along Lysander Road. Change the `zoom`
-to a bigger number to see them. Evidently, there is no other Catbrain
-anywhere in the world, since this is the only one that Google Maps
-knows about.
+ 
+The car dealerships are along Lysander Road. Zoom in
+to see them. 
+
 
 The name, according to
 [link](http://www.bristolpost.co.uk/news/history/name-catbrain-hill-came-825247),
 means "rough stony soil", from Middle English, and has nothing to do
 with cats or their brains at all.
 
-This picture is actually a `ggplot`, so you can do things like
-plotting points on the map as well:
 
-```{r }
-lons <- c(-2.60, -2.62)
-lats <- c(51.51, 51.52, 51.53)
-points <- crossing(lon = lons, lat = lats)
-ggmap(gg) + geom_point(data = points, aes(x = lon, y = lat))
-```
+I was actually surprised that this worked at all, because with only one point, how does it know what scale to draw the map? Also, unless your UK geography is really good, you won't have any clue about exactly where this is. So let's add some other places, some of which you might have heard of:
 
- 
-
-Note the unusual way in which you specify the points to
-plot. `ggmap` replaces the usual `ggplot` which is where
-the default data frame and `aes` for the plot would normally
-live, so you have to specify them in `geom_point` as shown.
-
-I have no idea why you'd want to plot those points. Normally, on a
-map, you'd find the longitude and latitude of some named points (a
-process known as "geocoding"):
 
 ```{r cache=T}
-places <- tribble(
+catbrain2 <- tribble(
   ~where,
   "Catbrain UK",
   "Bristol UK",
   "Taunton UK",
   "Newport UK",
-  "Gloucester UK"
+  "Gloucester UK",
+  "Cardiff UK",
+  "Birmingham UK",
+  "London UK",
+  "Caldicot UK"
 )
-places %>%
-  mutate_geocode(where) %>%
-  mutate(plotname = ifelse(where == "Catbrain UK", where, "")) -> places
-places
+catbrain2 %>%
+  rowwise() %>% 
+  mutate(ll = list(geocode_OSM(where))) %>% 
+  unnest_wider(ll) %>% 
+  unnest_wider(coords) -> catbrain2
+catbrain2
 ```
 
- 
+The first time I did this, I forgot the `rowwise`, which we didn't need the first time (there was only one place), but here, it causes odd problems if you omit it. 
 
-Now to plot them on a map. I'll need to zoom out a bit, so I'll get another map:
+A map, then:
 
-```{r error=T}
-gg <- get_map("Catbrain", zoom = 9, maptype = "roadmap")
-ggmap(gg) + geom_point(data = places, aes(x = lon, y = lat)) +
-  geom_point(data = places, colour = "red") +
-  geom_text_repel(data = places, aes(label = plotname))
+```{r}
+leaflet(data = catbrain2) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~x, lat = ~y)
 ```
 
  
 
 Now, if you have any sense of the geography of the UK, you know where
-you are. The places on the top left of the map are in Wales, including
+you are. The places on the left and top of the map are in Wales, including
 Caldicot (see question about pottery). The big river (the Severn) is
 the border between England and Wales.
+
+
 
 More irrelevant extra: the M5 is one of the English "motorways" (like 400-series highways
 or US Interstates). The M5 goes from Birmingham to Exeter. You can
