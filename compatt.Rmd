@@ -113,14 +113,14 @@ Without naming them explicitly means using some other way to pick them out of th
 The basic `across` comes from asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
 
 ```{r }
-anxiety %>% summarize(across(starts_with("C"), list(m = mean, s =sd)))
+anxiety %>% summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 
 Another way is to ask what *property* these two columns have in common: they are the only two numeric (quantitative) columns. This means using an `across` with a `where` inside it, thus:
 
 ```{r }
-anxiety %>% summarize(across(where(is.numeric), list(m = mean, s = sd)))
+anxiety %>% summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
 ```     
 
 Read the first one as "across all the columnns whose names start with S, find the mean and SD of them." The second one is a little clunkier: "acrosss all the columns for which `is.numeric` is true, find the mean and SD of them". A shorter way for the second one is "across all the numeric (quantitative) columns, find their mean and SD", but then you have to remember exactly how to code that. The reason for the `list` is that we are calculating two statistics for each column that we find. I am using a "named list" so that the mean gets labelled with an `m` on the end of the column name, and the SD gets an `s` on the end.
@@ -128,7 +128,7 @@ Read the first one as "across all the columnns whose names start with S, find th
 Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
 ```{r }
-anxiety %>% summarize(across(ends_with("S"), list(m = mean, s = sd)))
+anxiety %>% summarize(across(ends_with("S"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 Because I didn't say otherwise, you should tell me what the means and SDs are, rounding off suitably: the CAS scores have mean 2.82 and SD 0.48, and the CARS scores have mean 2.77 and SD 0.67.
@@ -139,7 +139,7 @@ and SD of all of them:
 
 ```{r }
 anxiety %>% select(2:3) %>% 
-    summarize(across(everything(), list(m = mean, s = sd)))
+    summarize(across(everything(), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 This doesn't work:
@@ -159,14 +159,14 @@ In case you were wondering about how to do this separately by gender, well, put 
 
 ```{r }
 anxiety %>% group_by(gender) %>%
-summarize(across(where(is.numeric), list(m = mean, s = sd)))
+summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 or
 
 ```{r }
 anxiety %>% group_by(gender) %>%
-summarize(across(starts_with("C"), list(m = mean, s = sd)))
+summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 The male means are slightly higher on both tests, but the male
