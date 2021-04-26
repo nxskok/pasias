@@ -5,7 +5,7 @@
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Chapter 12 Analysis of variance | Problems and Solutions in Applied Statistics" />
+<meta property="og:title" content="Chapter 13 Analysis of variance | Problems and Solutions in Applied Statistics" />
 <meta property="og:type" content="book" />
 <meta property="og:url" content="http://ritsokiguess.site/pasias" />
 
@@ -25,16 +25,23 @@ MathJax.Hub.Config({
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
-<title>Chapter 12 Analysis of variance | Problems and Solutions in Applied Statistics</title>
+<title>Chapter 13 Analysis of variance | Problems and Solutions in Applied Statistics</title>
 
-<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -116,8 +123,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="logistic-regression-redux.html#logistic-regression-redux"><span class="toc-section-number">2</span> Logistic regression redux</a>
+<ul>
+<li><a href="logistic-regression-redux.html#the-brain-of-a-cat"><span class="toc-section-number">2.1</span> The brain of a cat</a></li>
+</ul></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">3</span> Getting used to R and R Studio</a>
 <ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">3.1</span> Getting an R Studio Cloud account</a></li>
@@ -125,224 +138,236 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">3.3</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">3.4</span> Reading files different ways</a></li>
 </ul></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">4</span> Reading in data and drawing some graphs</a>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">4</span> Reading in data</a>
 <ul>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">5</span> Drawing graphs</a>
 <ul>
-<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
-<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
-<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
-<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
-<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">5.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">5.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">5.3</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">6</span> Data exploration</a>
 <ul>
-<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
-<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
-<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
-<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">6.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">6.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">6.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">6.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">6.5</span> Test scores in two classes</a></li>
+<li><a href="data-exploration.html#working-with-dataframes"><span class="toc-section-number">6.6</span> Working with dataframes</a></li>
+<li><a href="data-exploration.html#tidying-the-jays-data"><span class="toc-section-number">6.7</span> Tidying the Jays data</a></li>
+<li><a href="data-exploration.html#cars"><span class="toc-section-number">6.8</span> Cars</a></li>
 </ul></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a>
 <ul>
-<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
-<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
-<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
-<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">7.4</span> Exercise and anxiety and bullying mice</a></li>
-<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">7.5</span> Diet and growth in boys</a></li>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
 </ul></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a>
 <ul>
-<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
-<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
-<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
 </ul></li>
-<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">9</span> The sign test and Mood’s median test</a>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a>
 <ul>
-<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">9.4</span> Sugar in breakfast cereals</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">9.5</span> Fear of math</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">9.6</span> Medical instructions</a></li>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
 </ul></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">10</span> Matched pairs t and sign test</a>
+<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">10</span> The sign test and Mood’s median test</a>
 <ul>
-<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">10.1</span> Measuring body fat</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">10.2</span> Throwing baseballs and softballs</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">10.3</span> Throwing baseballs and softballs, again</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">10.4</span> Changes in salary</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">10.5</span> Body fat revisited</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">10.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">10.6</span> Medical instructions</a></li>
 </ul></li>
-<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">11</span> Normal quantile plots</a>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
 <ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">11.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">11.2</span> Ferritin and normality</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">11.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">11.5</span> Body fat revisited</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">12</span> Analysis of variance</a>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
 <ul>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">12.1</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">12.2</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">12.3</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">12.4</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">12.5</span> Can caffeine improve your performance on a test?</a></li>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">13</span> Tidying and selecting data</a>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
 <ul>
-<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">13.1</span> Tidying the Jays data</a></li>
-<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">13.2</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">13.3</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">13.4</span> Growth of tomatoes</a></li>
-<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">13.5</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">13.6</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">13.7</span> Mating songs in crickets</a></li>
-<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">13.8</span> Cars</a></li>
-<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">13.9</span> Number 1 songs</a></li>
-<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">13.10</span> Bikes on College</a></li>
-<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">13.11</span> Feeling the heat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
 </ul></li>
-<li><a href="regression.html#regression"><span class="toc-section-number">14</span> Regression</a>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">14</span> Tidying data</a>
 <ul>
-<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">14.1</span> Rainfall in California</a></li>
-<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">14.2</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">14.3</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">14.4</span> Facebook friends and grey matter</a></li>
-<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">14.5</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">14.6</span> Sparrowhawks</a></li>
-<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">14.7</span> Salaries of social workers</a></li>
-<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">14.8</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">14.9</span> Tortoise shells and eggs</a></li>
-<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">14.10</span> Crickets revisited</a></li>
-<li><a href="regression.html#roller-coasters"><span class="toc-section-number">14.11</span> Roller coasters</a></li>
-<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">14.12</span> Running and blood sugar</a></li>
-<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">14.13</span> Calories and fat in pizza</a></li>
-<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">14.14</span> Where should the fire stations be?</a></li>
-<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">14.15</span> Being satisfied with hospital</a></li>
-<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">14.16</span> Handling shipments of chemicals</a></li>
-<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">14.17</span> Salaries of mathematicians</a></li>
-<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">14.18</span> Predicting GPA of computer science students</a></li>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">14.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">14.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">14.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">14.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">14.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">14.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">14.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">14.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">14.9</span> Feeling the heat</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">15</span> Dates and times</a>
+<li><a href="regression.html#regression"><span class="toc-section-number">15</span> Regression</a>
 <ul>
-<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">15.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
-<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">15.2</span> Growth of Mizuna lettuce seeds</a></li>
-<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">15.3</span> Types of childbirth</a></li>
-<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">15.4</span> Wolves and caribou</a></li>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">15.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">15.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">15.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">15.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">15.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">15.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">15.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">15.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">15.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">15.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">15.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">15.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">15.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">15.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">15.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">15.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">15.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">15.18</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">16</span> Functions</a>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">16</span> Dates and times</a>
 <ul>
-<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">16.1</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">16.2</span> The Collatz sequence</a></li>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">16.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">16.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">16.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">16.4</span> Wolves and caribou</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">17</span> The Bootstrap</a>
+<li><a href="functions.html#functions"><span class="toc-section-number">17</span> Functions</a>
 <ul>
-<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">17.1</span> Air conditioning failures</a></li>
-<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">17.2</span> Air conditioning failures: bootstrapping the median</a></li>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">17.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">17.2</span> The Collatz sequence</a></li>
 </ul></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">18</span> Logistic regression</a>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">18</span> The Bootstrap</a>
 <ul>
-<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">18.1</span> Finding wolf spiders on the beach</a></li>
-<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">18.2</span> Killing aphids</a></li>
-<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">18.3</span> The effects of Substance A</a></li>
-<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">18.4</span> What makes an animal get infected?</a></li>
-<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">18.5</span> The brain of a cat</a></li>
-<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">18.6</span> How not to get heart disease</a></li>
-<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">18.7</span> Successful breastfeeding</a></li>
-<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">18.8</span> Making it over the mountains</a></li>
-<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">18.9</span> Who needs the most intensive care?</a></li>
-<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">18.10</span> Go away and don’t come back!</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">18.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">18.2</span> Air conditioning failures: bootstrapping the median</a></li>
 </ul></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">19</span> Logistic regression with ordinal or nominal response</a>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">19</span> Bayesian Statistics with Stan</a>
 <ul>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">19.1</span> Do you like your mobile phone?</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">19.2</span> Attitudes towards abortion</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">19.3</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">19.4</span> European Social Survey and voting</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">19.5</span> Alligator food</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">19.6</span> How do you like your steak – the data</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">19.7</span> Crimes in San Francisco – the data</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">19.8</span> How do you like your steak?</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">19.9</span> Crimes in San Francisco</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">19.10</span> High School and Beyond</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">19.11</span> What sports do these athletes play?</a></li>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">19.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">19.2</span> Bayesian regression</a></li>
 </ul></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">20</span> Survival analysis</a>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">20</span> Logistic regression</a>
 <ul>
-<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">20.1</span> The Worcester survey</a></li>
-<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">20.2</span> Drug treatment programs</a></li>
-<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">20.3</span> Multiple myeloma</a></li>
-<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">20.4</span> Ovarian cancer</a></li>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">20.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">20.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">20.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">20.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat-1"><span class="toc-section-number">20.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">20.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">20.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">20.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">20.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">20.10</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">21</span> Analysis of variance revisited</a>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">21</span> Logistic regression with ordinal or nominal response</a>
 <ul>
-<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">21.1</span> Acid rain</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">21.2</span> Treating hay fever</a></li>
-<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">21.3</span> Focused comparisons of the effect of caffeine</a></li>
-<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">21.4</span> Who studies the most outside class?</a></li>
-<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">21.5</span> Mental context</a></li>
-<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">21.6</span> Trying on shirts</a></li>
-<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">21.7</span> Productivity and research-and-development</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">21.8</span> Treating leprosy</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">21.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">21.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">21.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">21.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">21.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">21.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">21.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">21.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">21.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">21.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">21.11</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">22</span> Multivariate analysis of variance</a>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">22</span> Survival analysis</a>
 <ul>
-<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">22.1</span> Fabricated data</a></li>
-<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">22.2</span> Do characteristics of urine depend on obesity?</a></li>
-<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">22.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">22.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">22.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">22.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">22.4</span> Ovarian cancer</a></li>
 </ul></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">23</span> Repeated measures</a>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">23</span> Analysis of variance revisited</a>
 <ul>
-<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">23.1</span> Effect of drug on rat weight</a></li>
-<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">23.2</span> Social interaction among old people</a></li>
-<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">23.3</span> Children’s stress levels and airports</a></li>
-<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">23.4</span> Body fat as repeated measures</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">23.5</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">23.6</span> Repeated measures with no background</a></li>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">23.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">23.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">23.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">23.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">23.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">23.6</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">23.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">23.8</span> Treating leprosy</a></li>
 </ul></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">24</span> Discriminant analysis</a>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">24</span> Multivariate analysis of variance</a>
 <ul>
-<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">24.1</span> Telling whether a banknote is real or counterfeit</a></li>
-<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">24.2</span> Urine and obesity: what makes a difference?</a></li>
-<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">24.3</span> Understanding a MANOVA</a></li>
-<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">24.4</span> What distinguishes people who do different jobs?</a></li>
-<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">24.5</span> Observing children with ADHD</a></li>
-<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">24.6</span> Growing corn</a></li>
-<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">24.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">24.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">24.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">24.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">25</span> Cluster analysis</a>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">25</span> Repeated measures</a>
 <ul>
-<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">25.1</span> Sites on the sea bed</a></li>
-<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">25.2</span> Dissimilarities between fruits</a></li>
-<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">25.3</span> Similarity of species</a></li>
-<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">25.4</span> Rating beer</a></li>
-<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">25.5</span> Clustering the Swiss bills</a></li>
-<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">25.6</span> Grouping similar cars</a></li>
-<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">25.7</span> Running, jumping, and throwing</a></li>
-<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">25.8</span> Bridges in Pittsburgh</a></li>
-<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">25.9</span> Clustering the Australian athletes</a></li>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">25.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">25.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">25.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">25.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">25.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">25.6</span> Repeated measures with no background</a></li>
 </ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">26</span> Multidimensional Scaling</a>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">26</span> Discriminant analysis</a>
 <ul>
-<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">26.1</span> Making a map of Wisconsin</a></li>
-<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">26.2</span> Things that feel similar to each other</a></li>
-<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">26.3</span> Confusing letters</a></li>
-<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">26.4</span> More beer please</a></li>
-<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">26.5</span> Feeling similar, again</a></li>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">26.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">26.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">26.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">26.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">26.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">26.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">26.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">27</span> Principal Components and Factor Analysis</a>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">27</span> Cluster analysis</a>
 <ul>
-<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">27.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">27.2</span> Air pollution</a></li>
-<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">27.3</span> A correlation matrix</a></li>
-<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">27.4</span> The Interpersonal Circumplex</a></li>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">27.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">27.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">27.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">27.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">27.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">27.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">27.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">27.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">27.9</span> Clustering the Australian athletes</a></li>
 </ul></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">28</span> Frequency table analysis</a>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">28</span> Multidimensional Scaling</a>
 <ul>
-<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">28.1</span> College plans</a></li>
-<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">28.2</span> Predicting voting</a></li>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">28.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">28.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">28.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">28.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">28.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">29</span> Principal Components and Factor Analysis</a>
+<ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">29.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">29.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">29.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">29.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">30</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">30.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">30.2</span> Predicting voting</a></li>
 </ul></li>
 </ul>
 </div>
@@ -350,11 +375,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="analysis-of-variance" class="section level1" number="12">
-<h1><span class="header-section-number">Chapter 12</span> Analysis of variance</h1>
-<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="analysis-of-variance.html#cb728-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
-<div id="movie-ratings-and-lengths" class="section level2" number="12.1">
-<h2><span class="header-section-number">12.1</span> Movie ratings and lengths</h2>
+<div id="analysis-of-variance" class="section level1" number="13">
+<h1><span class="header-section-number">Chapter 13</span> Analysis of variance</h1>
+<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb836-1"><a href="analysis-of-variance.html#cb836-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="movie-ratings-and-lengths" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> Movie ratings and lengths</h2>
 <p>Before a movie is shown in theatres, it
 receives a “rating” that says what kind of material it
 contains. <a href="https://en.wikipedia.org/wiki/Motion_Picture_Association_of_America_film_rating_system">link</a>
@@ -369,14 +394,15 @@ all the movies released that year. The data are at
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb729"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb729-1"><a href="analysis-of-variance.html#cb729-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></span>
-<span id="cb729-2"><a href="analysis-of-variance.html#cb729-2"></a>movies &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="analysis-of-variance.html#cb837-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></span>
+<span id="cb837-2"><a href="analysis-of-variance.html#cb837-2"></a>movies &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   rating = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb731-1"><a href="analysis-of-variance.html#cb731-1"></a>movies</span></code></pre></div>
+<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb839-1"><a href="analysis-of-variance.html#cb839-1"></a>movies</span></code></pre></div>
 <pre><code>## # A tibble: 60 x 2
 ##    length rating
 ##     &lt;dbl&gt; &lt;chr&gt; 
@@ -396,7 +422,7 @@ all the movies released that year. The data are at
 <li>Count how many movies there are of each rating.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb733-1"><a href="analysis-of-variance.html#cb733-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rating)</span></code></pre></div>
+<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb841-1"><a href="analysis-of-variance.html#cb841-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(rating)</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating     n
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -412,8 +438,8 @@ analysis (if warranted).</li>
 </ol>
 <p>Solution</p>
 <p>ANOVA first:</p>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="analysis-of-variance.html#cb735-1"></a>length<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(length <span class="op">~</span><span class="st"> </span>rating, <span class="dt">data =</span> movies)</span>
-<span id="cb735-2"><a href="analysis-of-variance.html#cb735-2"></a><span class="kw">summary</span>(length<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb843-1"><a href="analysis-of-variance.html#cb843-1"></a>length<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(length <span class="op">~</span><span class="st"> </span>rating, <span class="dt">data =</span> movies)</span>
+<span id="cb843-2"><a href="analysis-of-variance.html#cb843-2"></a><span class="kw">summary</span>(length<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## rating       3  14624    4875   11.72 4.59e-06 ***
 ## Residuals   56  23295     416                     
@@ -422,7 +448,7 @@ analysis (if warranted).</li>
 <p>This P-value is 0.00000459, which is way less than 0.05.</p>
 <p>Having rejected the null (which said “all means equal”), we now need to
 do Tukey, thus:</p>
-<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="analysis-of-variance.html#cb737-1"></a><span class="kw">TukeyHSD</span>(length<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb845-1"><a href="analysis-of-variance.html#cb845-1"></a><span class="kw">TukeyHSD</span>(length<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -441,10 +467,9 @@ that are significant, here the first three. These are all comparisons
 with the G (“general”) movies, which are shorter on average than the
 others (which are not significantly different from each other).</p>
 <p>If you like, you can make a table of means to verify that:</p>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="analysis-of-variance.html#cb739-1"></a>movies <span class="op">%&gt;%</span></span>
-<span id="cb739-2"><a href="analysis-of-variance.html#cb739-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
-<span id="cb739-3"><a href="analysis-of-variance.html#cb739-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(length))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb847-1"><a href="analysis-of-variance.html#cb847-1"></a>movies <span class="op">%&gt;%</span></span>
+<span id="cb847-2"><a href="analysis-of-variance.html#cb847-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
+<span id="cb847-3"><a href="analysis-of-variance.html#cb847-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(length))</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating  mean
 ##   &lt;chr&gt;  &lt;dbl&gt;
@@ -460,8 +485,8 @@ trustworthy. Discuss your graph and its implications briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The obvious graph is a boxplot:</p>
-<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb742-1"><a href="analysis-of-variance.html#cb742-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-9-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="analysis-of-variance.html#cb849-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-494-1.png" width="672"  /></p>
 <p>For ANOVA, we are looking for approximately normal distributions
 within each group and approximately equal spreads. Without the
 outliers, I would be more or less happy with that, but the G movies
@@ -475,8 +500,8 @@ be significant.</p>
 <p>Extra: the way to go if you don’t trust the ANOVA is (as for the
 two-sample <span class="math inline">\(t\)</span>) the Mood’s median test. This applies to any number of
 groups, and works in the same way as before:</p>
-<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="analysis-of-variance.html#cb743-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb743-2"><a href="analysis-of-variance.html#cb743-2"></a><span class="kw">median_test</span>(movies, length, rating)</span></code></pre></div>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb850-1"><a href="analysis-of-variance.html#cb850-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb850-2"><a href="analysis-of-variance.html#cb850-2"></a><span class="kw">median_test</span>(movies, length, rating)</span></code></pre></div>
 <pre><code>## $table
 ##        above
 ## group   above below
@@ -501,7 +526,7 @@ What you can do is to do all the pairwise Mood’s median tests, between
 each pair of groups, and then adjust to allow for your having done
 several tests at once. I thought this was generally useful enough that
 I put it into <code>smmr</code> under the name <code>pairwise_median_test</code>:</p>
-<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="analysis-of-variance.html#cb745-1"></a><span class="kw">pairwise_median_test</span>(movies, length, rating)</span></code></pre></div>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb852-1"><a href="analysis-of-variance.html#cb852-1"></a><span class="kw">pairwise_median_test</span>(movies, length, rating)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2      p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -523,14 +548,14 @@ movies are significantly shorter than the PG movies, but not
 significantly shorter than the R movies, ? In Tukey, if the
 difference in means is bigger, the P-value is
 smaller.
-<label for="tufte-mn-39" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-39" class="margin-toggle"><span class="marginnote">Actually, this doesn’t always work if the sample sizes in each group are different. If you’re comparing two small groups, it takes a <em>very large</em> difference in means to get a small P-value. But in this case the sample sizes are all the same.</span>
+<label for="tufte-mn-46" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-46" class="margin-toggle"><span class="marginnote">Actually, this doesn’t always work if the sample sizes in each group are different. If you’re comparing two small groups, it takes a <em>very large</em> difference in means to get a small P-value. But in this case the sample sizes are all the same.</span>
 The resolution to this puzzle, such as it is, is that Mood’s median
 test is not directly comparing the medians of the groups (despite its
 name); it’s counting values above and below a <em>joint</em> median,
 which might be a different story.</p>
 </div>
-<div id="deer-and-how-much-they-eat" class="section level2" number="12.2">
-<h2><span class="header-section-number">12.2</span> Deer and how much they eat</h2>
+<div id="deer-and-how-much-they-eat" class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> Deer and how much they eat</h2>
 <p>Do adult deer eat different amounts of food at different
 times of the year? The data in
 <a href="http://www.utsc.utoronto.ca/~butler/c32/deer.txt">link</a> are the weights
@@ -549,19 +574,19 @@ eaten each month.</li>
 </ol>
 <p>Solution</p>
 <p>The usual stuff for data values separated by spaces:</p>
-<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb747-1"><a href="analysis-of-variance.html#cb747-1"></a>myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/deer.txt&quot;</span></span>
-<span id="cb747-2"><a href="analysis-of-variance.html#cb747-2"></a>deer &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb854-1"><a href="analysis-of-variance.html#cb854-1"></a>myurl &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/deer.txt&quot;</span></span>
+<span id="cb854-2"><a href="analysis-of-variance.html#cb854-2"></a>deer &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   month = col_character(),
 ##   food = col_double()
 ## )</code></pre>
 <p>and then, recalling that <code>n()</code> is the handy way of getting the
 number of observations in each group:</p>
-<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb749-1"><a href="analysis-of-variance.html#cb749-1"></a>deer <span class="op">%&gt;%</span></span>
-<span id="cb749-2"><a href="analysis-of-variance.html#cb749-2"></a><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span></span>
-<span id="cb749-3"><a href="analysis-of-variance.html#cb749-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(food))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb856"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb856-1"><a href="analysis-of-variance.html#cb856-1"></a>deer <span class="op">%&gt;%</span></span>
+<span id="cb856-2"><a href="analysis-of-variance.html#cb856-2"></a><span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span></span>
+<span id="cb856-3"><a href="analysis-of-variance.html#cb856-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(food))</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   month     n   med
 ##   &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;
@@ -582,8 +607,8 @@ and May a bit lower.</p>
 month. Comment briefly on what you see.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb752-1"><a href="analysis-of-variance.html#cb752-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-14-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb858-1"><a href="analysis-of-variance.html#cb858-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-499-1.png" width="672"  /></p>
 <p>This offers the suggestion that maybe November will be significantly
 higher than the rest and May significantly lower, or at least they
 will be significantly different from each other.</p>
@@ -598,8 +623,8 @@ are quite similar.</p>
 sizes, is a “dot plot”: instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
 scatterplot:</p>
-<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb753-1"><a href="analysis-of-variance.html#cb753-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-15-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb859-1"><a href="analysis-of-variance.html#cb859-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-500-1.png" width="672"  /></p>
 <p>Wait a minute. There were five deer in February and six in
 August. Where did they go?</p>
 <p>The problem is <em>overplotting</em>: more than one of the deer plotted
@@ -608,8 +633,8 @@ only given to one decimal place and there were some duplicated values.
 One way to solve this is to randomly
 move the points around so that no two of them plot in the same
 place. This is called <em>jittering</em>, and is done like this:</p>
-<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb754-1"><a href="analysis-of-variance.html#cb754-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">height =</span> <span class="fl">0.05</span>)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-16-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb860"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb860-1"><a href="analysis-of-variance.html#cb860-1"></a><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">height =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-501-1.png" width="672"  /></p>
 <p>Now you see all the deer, and you can see that two pairs of points in
 August and one pair of points in February are close enough on the
 jittered plot that they would have been the same to one decimal place.</p>
@@ -639,18 +664,18 @@ the Mood’s median test, and so should be preferred.)</p>
 <p>Solution</p>
 <p>To give you some practice with the mechanics, first find the
 overall median:</p>
-<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb755-1"><a href="analysis-of-variance.html#cb755-1"></a>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(food))</span></code></pre></div>
+<div class="sourceCode" id="cb861"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb861-1"><a href="analysis-of-variance.html#cb861-1"></a>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(food))</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1   4.7</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb757-1"><a href="analysis-of-variance.html#cb757-1"></a><span class="kw">median</span>(deer<span class="op">$</span>food)</span></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="analysis-of-variance.html#cb863-1"></a><span class="kw">median</span>(deer<span class="op">$</span>food)</span></code></pre></div>
 <pre><code>## [1] 4.7</code></pre>
 <p>I like the first way because it’s the same idea as we did before, just
 not differentiating by month. I think there are some observations
 exactly equal to the median, which will mess things up later:</p>
-<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb759-1"><a href="analysis-of-variance.html#cb759-1"></a>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">==</span><span class="st"> </span><span class="fl">4.7</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="analysis-of-variance.html#cb865-1"></a>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">==</span><span class="st"> </span><span class="fl">4.7</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   month  food
 ##   &lt;chr&gt; &lt;dbl&gt;
@@ -661,8 +686,8 @@ exactly equal to the median, which will mess things up later:</p>
 <p>There are, two in February and two in August.</p>
 <p>Next, make (and save) a table of the observations within each month
 that are above and below this median:</p>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="analysis-of-variance.html#cb761-1"></a>tab1 &lt;-<span class="st"> </span><span class="kw">with</span>(deer, <span class="kw">table</span>(month, food <span class="op">&lt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
-<span id="cb761-2"><a href="analysis-of-variance.html#cb761-2"></a>tab1</span></code></pre></div>
+<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb867-1"><a href="analysis-of-variance.html#cb867-1"></a>tab1 &lt;-<span class="st"> </span><span class="kw">with</span>(deer, <span class="kw">table</span>(month, food <span class="op">&lt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
+<span id="cb867-2"><a href="analysis-of-variance.html#cb867-2"></a>tab1</span></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     4    2
@@ -670,8 +695,8 @@ that are above and below this median:</p>
 ##   May     0    6
 ##   Nov     5    0</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb763-1"><a href="analysis-of-variance.html#cb763-1"></a>tab2 &lt;-<span class="st"> </span><span class="kw">with</span>(deer, <span class="kw">table</span>(month, food <span class="op">&gt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
-<span id="cb763-2"><a href="analysis-of-variance.html#cb763-2"></a>tab2</span></code></pre></div>
+<div class="sourceCode" id="cb869"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb869-1"><a href="analysis-of-variance.html#cb869-1"></a>tab2 &lt;-<span class="st"> </span><span class="kw">with</span>(deer, <span class="kw">table</span>(month, food <span class="op">&gt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
+<span id="cb869-2"><a href="analysis-of-variance.html#cb869-2"></a>tab2</span></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     4    2
@@ -684,19 +709,17 @@ February observations (the ones that were exactly 4.7) have
 and (look carefully) two of the August ones also. Hence the
 test results will be different, and <code>smmr</code> (later) will give
 different results again:</p>
-<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb765-1"><a href="analysis-of-variance.html#cb765-1"></a><span class="kw">chisq.test</span>(tab1, <span class="dt">correct =</span> F)</span></code></pre></div>
-<pre><code>## Warning in chisq.test(tab1, correct = F): Chi-squared approximation may be
-## incorrect</code></pre>
+<div class="sourceCode" id="cb871"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb871-1"><a href="analysis-of-variance.html#cb871-1"></a><span class="kw">chisq.test</span>(tab1, <span class="dt">correct =</span> F)</span></code></pre></div>
+<pre><code>## Warning in chisq.test(tab1, correct = F): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
-## 	Pearson&#39;s Chi-squared test
+##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab1
 ## X-squared = 16.238, df = 3, p-value = 0.001013</code></pre>
-<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="analysis-of-variance.html#cb768-1"></a><span class="kw">chisq.test</span>(tab2, <span class="dt">correct =</span> F)</span></code></pre></div>
-<pre><code>## Warning in chisq.test(tab2, correct = F): Chi-squared approximation may be
-## incorrect</code></pre>
+<div class="sourceCode" id="cb874"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb874-1"><a href="analysis-of-variance.html#cb874-1"></a><span class="kw">chisq.test</span>(tab2, <span class="dt">correct =</span> F)</span></code></pre></div>
+<pre><code>## Warning in chisq.test(tab2, correct = F): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
-## 	Pearson&#39;s Chi-squared test
+##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab2
 ## X-squared = 11.782, df = 3, p-value = 0.008168</code></pre>
@@ -723,8 +746,8 @@ results with the previous part.</li>
 </ol>
 <p>Solution</p>
 <p>Off we go:</p>
-<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb771-1"><a href="analysis-of-variance.html#cb771-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb771-2"><a href="analysis-of-variance.html#cb771-2"></a><span class="kw">median_test</span>(deer, food, month)</span></code></pre></div>
+<div class="sourceCode" id="cb877"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb877-1"><a href="analysis-of-variance.html#cb877-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb877-2"><a href="analysis-of-variance.html#cb877-2"></a><span class="kw">median_test</span>(deer, food, month)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -745,34 +768,34 @@ out <em>why</em> the animals eat different amounts in the different months.</p>
 <p>You might be wondering how you could get rid of the equal-to-median
 values in the build-it-yourself way. This is <code>filter</code> from
 <code>dplyr</code>, which you use first:</p>
-<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb773-1"><a href="analysis-of-variance.html#cb773-1"></a>deer2 &lt;-<span class="st"> </span>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">!=</span><span class="st"> </span><span class="fl">4.7</span>)</span>
-<span id="cb773-2"><a href="analysis-of-variance.html#cb773-2"></a>tab3 &lt;-<span class="st"> </span><span class="kw">with</span>(deer2, <span class="kw">table</span>(month, food <span class="op">&lt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
-<span id="cb773-3"><a href="analysis-of-variance.html#cb773-3"></a>tab3</span></code></pre></div>
+<div class="sourceCode" id="cb879"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb879-1"><a href="analysis-of-variance.html#cb879-1"></a>deer2 &lt;-<span class="st"> </span>deer <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(food <span class="op">!=</span><span class="st"> </span><span class="fl">4.7</span>)</span>
+<span id="cb879-2"><a href="analysis-of-variance.html#cb879-2"></a>tab3 &lt;-<span class="st"> </span><span class="kw">with</span>(deer2, <span class="kw">table</span>(month, food <span class="op">&lt;</span><span class="st"> </span><span class="fl">4.7</span>))</span>
+<span id="cb879-3"><a href="analysis-of-variance.html#cb879-3"></a>tab3</span></code></pre></div>
 <pre><code>##      
 ## month FALSE TRUE
 ##   Aug     2    2
 ##   Feb     3    0
 ##   May     0    6
 ##   Nov     5    0</code></pre>
-<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb775-1"><a href="analysis-of-variance.html#cb775-1"></a><span class="kw">chisq.test</span>(tab3)</span></code></pre></div>
+<div class="sourceCode" id="cb881"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb881-1"><a href="analysis-of-variance.html#cb881-1"></a><span class="kw">chisq.test</span>(tab3)</span></code></pre></div>
 <pre><code>## Warning in chisq.test(tab3): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
-## 	Pearson&#39;s Chi-squared test
+##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab3
 ## X-squared = 13.95, df = 3, p-value = 0.002974</code></pre>
 <p>which is exactly what <code>smmr</code> does, so the answer is
 identical.
-<label for="tufte-mn-40" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-40" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I should not use equals or not-equals to compare a decimal floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my <em>food != 4.7</em> does exactly what I want, but in something like C, it <em>does not</em>, and you have to be more careful: <em>abs(food-4.7)&gt;1e-8</em>, or something like that. The small number <em>1e-8</em> is typically equal to <strong>machine epsilon</strong>, the smallest number on a computer that is distinguishable from zero.</span>
+<label for="tufte-mn-47" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-47" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I should not use equals or not-equals to compare a decimal floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do food not equal to 4.7, it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my <em>food != 4.7</em> does exactly what I want, but in something like C, it <em>does not</em>, and you have to be more careful: <em>abs(food-4.7)&gt;1e-8</em>, or something like that. The small number <em>1e-8</em> is typically equal to <strong>machine epsilon</strong>, the smallest number on a computer that is distinguishable from zero.</span>
 How would an ANOVA come out here? My guess is, very similarly:</p>
-<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="analysis-of-variance.html#cb778-1"></a>deer<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(food <span class="op">~</span><span class="st"> </span>month, <span class="dt">data =</span> deer)</span>
-<span id="cb778-2"><a href="analysis-of-variance.html#cb778-2"></a><span class="kw">summary</span>(deer<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb884"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb884-1"><a href="analysis-of-variance.html#cb884-1"></a>deer<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(food <span class="op">~</span><span class="st"> </span>month, <span class="dt">data =</span> deer)</span>
+<span id="cb884-2"><a href="analysis-of-variance.html#cb884-2"></a><span class="kw">summary</span>(deer<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## month        3 2.3065  0.7688   22.08 2.94e-06 ***
 ## Residuals   18 0.6267  0.0348                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="analysis-of-variance.html#cb780-1"></a><span class="kw">TukeyHSD</span>(deer<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb886"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb886-1"><a href="analysis-of-variance.html#cb886-1"></a><span class="kw">TukeyHSD</span>(deer<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -801,7 +824,7 @@ the answer you <em>really</em> want, discussing your results briefly.</li>
 <p>Solution</p>
 <p>That’s rather a lot, so let’s take those things one at a
 time.
-<label for="tufte-mn-41" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-41" class="margin-toggle"><span class="marginnote">Most of these parts are old from assignment questions that I actually asked a previous class to do, but not this part. I added it later.</span></p>
+<label for="tufte-mn-48" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-48" class="margin-toggle"><span class="marginnote">Most of these parts are old from assignment questions that I actually asked a previous class to do, but not this part. I added it later.</span></p>
 <p>Mood’s median test is really like the <span class="math inline">\(F\)</span>-test in ANOVA: it’s testing
 the null hypothesis
 that the groups (months) all have the same median (of food eaten),
@@ -814,7 +837,7 @@ adjusting for doing (here) six tests at once, look at the adjusted
 P-values to see how the months differ in terms of food eaten.</p>
 <p>This is accomplished in <code>smmr</code> via <code>pairwise_median_test</code>,
 thus:</p>
-<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="analysis-of-variance.html#cb782-1"></a><span class="kw">pairwise_median_test</span>(deer, food, month)</span></code></pre></div>
+<div class="sourceCode" id="cb888"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb888-1"><a href="analysis-of-variance.html#cb888-1"></a><span class="kw">pairwise_median_test</span>(deer, food, month)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2    p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;   &lt;dbl&gt;       &lt;dbl&gt;
@@ -839,8 +862,8 @@ Bonferroni (here, multiply the P-values by 6), which is known to be
 safe but conservative. This is why the Tukey produced more significant
 differences among the months than the pairwise median tests did.</p>
 </div>
-<div id="movie-ratings-again" class="section level2" number="12.3">
-<h2><span class="header-section-number">12.3</span> Movie ratings again</h2>
+<div id="movie-ratings-again" class="section level2" number="13.3">
+<h2><span class="header-section-number">13.3</span> Movie ratings again</h2>
 <p>This question again uses the movie rating data at
 <a href="http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv">link</a>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -850,14 +873,15 @@ each rating and the <em>median</em> length of movies of each rating.</li>
 <p>Solution</p>
 <p>Reading in is as in the other question using these data (just copy
 your code, or mine). No credit for that, since you’ve done it before.</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb784-1"><a href="analysis-of-variance.html#cb784-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></span>
-<span id="cb784-2"><a href="analysis-of-variance.html#cb784-2"></a>movies &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb890"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb890-1"><a href="analysis-of-variance.html#cb890-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/movie-lengths.csv&quot;</span></span>
+<span id="cb890-2"><a href="analysis-of-variance.html#cb890-2"></a>movies &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   length = col_double(),
 ##   rating = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="analysis-of-variance.html#cb786-1"></a>movies</span></code></pre></div>
+<div class="sourceCode" id="cb892"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb892-1"><a href="analysis-of-variance.html#cb892-1"></a>movies</span></code></pre></div>
 <pre><code>## # A tibble: 60 x 2
 ##    length rating
 ##     &lt;dbl&gt; &lt;chr&gt; 
@@ -874,10 +898,9 @@ your code, or mine). No credit for that, since you’ve done it before.</p>
 ## # … with 50 more rows</code></pre>
 <p>Now, the actual for-credit part, which is a <code>group_by</code> and
 <code>summarize</code>:</p>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="analysis-of-variance.html#cb788-1"></a>movies <span class="op">%&gt;%</span></span>
-<span id="cb788-2"><a href="analysis-of-variance.html#cb788-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
-<span id="cb788-3"><a href="analysis-of-variance.html#cb788-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb894"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb894-1"><a href="analysis-of-variance.html#cb894-1"></a>movies <span class="op">%&gt;%</span></span>
+<span id="cb894-2"><a href="analysis-of-variance.html#cb894-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
+<span id="cb894-3"><a href="analysis-of-variance.html#cb894-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   rating count   med
 ##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt;
@@ -894,8 +917,8 @@ briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The graph would seem to be a boxplot, side by side for each group:</p>
-<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="analysis-of-variance.html#cb791-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-29-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb896"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb896-1"><a href="analysis-of-variance.html#cb896-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-514-1.png" width="672"  /></p>
 <p>We are looking for approximate normal distributions with approximately
 equal spreads, which I don’t think we have: there are outliers, at the
 low end for G movies, and at the high end for PG and PG-13
@@ -917,10 +940,10 @@ all the data together, regardless of group, and then at the last
 minute, you throw in a <code>facet_wrap</code>. I’ve written the code out
 on three lines, so that you can see the pieces: the “what to plot”,
 then the normal quantile plot part, then the facetting:</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb792-1"><a href="analysis-of-variance.html#cb792-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">sample =</span> length)) <span class="op">+</span></span>
-<span id="cb792-2"><a href="analysis-of-variance.html#cb792-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
-<span id="cb792-3"><a href="analysis-of-variance.html#cb792-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>rating)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-30-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb897"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb897-1"><a href="analysis-of-variance.html#cb897-1"></a><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">sample =</span> length)) <span class="op">+</span></span>
+<span id="cb897-2"><a href="analysis-of-variance.html#cb897-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb897-3"><a href="analysis-of-variance.html#cb897-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>rating)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-515-1.png" width="672"  /></p>
 <p>Since there are four movie ratings, <code>facet_wrap</code> has arranged
 them into a <span class="math inline">\(2\times 2\)</span> grid, which satisfyingly means that each
 normal quantile plot is more or less square and thus easy to
@@ -970,8 +993,8 @@ like). What do you conclude, in the context of the data?</li>
 </ol>
 <p>Solution</p>
 <p>The smart way is to use <code>smmr</code>, since it is much easier:</p>
-<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="analysis-of-variance.html#cb793-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb793-2"><a href="analysis-of-variance.html#cb793-2"></a><span class="kw">median_test</span>(movies, length, rating)</span></code></pre></div>
+<div class="sourceCode" id="cb898"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb898-1"><a href="analysis-of-variance.html#cb898-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb898-2"><a href="analysis-of-variance.html#cb898-2"></a><span class="kw">median_test</span>(movies, length, rating)</span></code></pre></div>
 <pre><code>## $table
 ##        above
 ## group   above below
@@ -997,7 +1020,7 @@ are different from means.)</p>
 <p>The easiest way to see which movie types really differ in length from
 which is to do all the pairwise median tests, which is in
 <code>smmr</code> thus:</p>
-<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="analysis-of-variance.html#cb795-1"></a><span class="kw">pairwise_median_test</span>(movies, length, rating)</span></code></pre></div>
+<div class="sourceCode" id="cb900"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb900-1"><a href="analysis-of-variance.html#cb900-1"></a><span class="kw">pairwise_median_test</span>(movies, length, rating)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
 ##   g1    g2      p_value adj_p_value
 ##   &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;       &lt;dbl&gt;
@@ -1012,10 +1035,9 @@ which is to do all the pairwise median tests, which is in
 <em>I</em> would never have been able to remember how to run these!)
 Only the first two of these are significant (look in the last
 column). We can remind ourselves of the sample medians:</p>
-<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="analysis-of-variance.html#cb797-1"></a>movies <span class="op">%&gt;%</span></span>
-<span id="cb797-2"><a href="analysis-of-variance.html#cb797-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
-<span id="cb797-3"><a href="analysis-of-variance.html#cb797-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb902"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb902-1"><a href="analysis-of-variance.html#cb902-1"></a>movies <span class="op">%&gt;%</span></span>
+<span id="cb902-2"><a href="analysis-of-variance.html#cb902-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
+<span id="cb902-3"><a href="analysis-of-variance.html#cb902-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>(), <span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##   rating count   med
 ##   &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt;
@@ -1034,25 +1056,25 @@ table tabulating the number of values above and below the overall
 median for each group, (iii) test the table for association, (iv)
 draw a conclusion.
 Thus (i):</p>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="analysis-of-variance.html#cb800-1"></a><span class="kw">median</span>(movies<span class="op">$</span>length)</span></code></pre></div>
+<div class="sourceCode" id="cb904"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb904-1"><a href="analysis-of-variance.html#cb904-1"></a><span class="kw">median</span>(movies<span class="op">$</span>length)</span></code></pre></div>
 <pre><code>## [1] 100</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="analysis-of-variance.html#cb802-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
+<div class="sourceCode" id="cb906"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb906-1"><a href="analysis-of-variance.html#cb906-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(length))</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
 ## 1   100</code></pre>
 <p>or store it in a variable,
 and then (ii):</p>
-<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="analysis-of-variance.html#cb804-1"></a>tab1 &lt;-<span class="st"> </span><span class="kw">with</span>(movies, <span class="kw">table</span>(length <span class="op">&lt;</span><span class="st"> </span><span class="dv">100</span>, rating))</span>
-<span id="cb804-2"><a href="analysis-of-variance.html#cb804-2"></a>tab1</span></code></pre></div>
+<div class="sourceCode" id="cb908"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb908-1"><a href="analysis-of-variance.html#cb908-1"></a>tab1 &lt;-<span class="st"> </span><span class="kw">with</span>(movies, <span class="kw">table</span>(length <span class="op">&lt;</span><span class="st"> </span><span class="dv">100</span>, rating))</span>
+<span id="cb908-2"><a href="analysis-of-variance.html#cb908-2"></a>tab1</span></code></pre></div>
 <pre><code>##        rating
 ##          G PG PG-13  R
 ##   FALSE  2  8    12  9
 ##   TRUE  13  7     3  6</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb806-1"><a href="analysis-of-variance.html#cb806-1"></a>tab2 &lt;-<span class="st"> </span><span class="kw">with</span>(movies, <span class="kw">table</span>(length <span class="op">&gt;</span><span class="st"> </span><span class="dv">100</span>, rating))</span>
-<span id="cb806-2"><a href="analysis-of-variance.html#cb806-2"></a>tab2</span></code></pre></div>
+<div class="sourceCode" id="cb910"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb910-1"><a href="analysis-of-variance.html#cb910-1"></a>tab2 &lt;-<span class="st"> </span><span class="kw">with</span>(movies, <span class="kw">table</span>(length <span class="op">&gt;</span><span class="st"> </span><span class="dv">100</span>, rating))</span>
+<span id="cb910-2"><a href="analysis-of-variance.html#cb910-2"></a>tab2</span></code></pre></div>
 <pre><code>##        rating
 ##          G PG PG-13  R
 ##   FALSE 13  8     3  7
@@ -1061,7 +1083,7 @@ and then (ii):</p>
 100 minutes, and it matters whether you count <span class="math inline">\(&lt;\)</span> and <span class="math inline">\(\ge\)</span> (as in
 <code>tab1</code>) or <span class="math inline">\(&gt;\)</span> and <span class="math inline">\(le\)</span> (<code>tab2</code>). Either is good.</p>
 <p>Was I right about movies of length exactly 100 minutes?</p>
-<div class="sourceCode" id="cb808"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb808-1"><a href="analysis-of-variance.html#cb808-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(length <span class="op">==</span><span class="st"> </span><span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb912"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb912-1"><a href="analysis-of-variance.html#cb912-1"></a>movies <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(length <span class="op">==</span><span class="st"> </span><span class="dv">100</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   length rating
 ##    &lt;dbl&gt; &lt;chr&gt; 
@@ -1074,21 +1096,21 @@ because the False and True switch roles between <code>tab1</code> and
 You
 need to store your table in a variable because it has to get passed on
 to <code>chisq.test</code> below, (iii):</p>
-<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb810-1"><a href="analysis-of-variance.html#cb810-1"></a><span class="kw">chisq.test</span>(tab1, <span class="dt">correct =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb914"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb914-1"><a href="analysis-of-variance.html#cb914-1"></a><span class="kw">chisq.test</span>(tab1, <span class="dt">correct =</span> F)</span></code></pre></div>
 <pre><code>## 
-## 	Pearson&#39;s Chi-squared test
+##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab1
 ## X-squared = 14.082, df = 3, p-value = 0.002795</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb812"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb812-1"><a href="analysis-of-variance.html#cb812-1"></a><span class="kw">chisq.test</span>(tab2, <span class="dt">correct =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb916"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb916-1"><a href="analysis-of-variance.html#cb916-1"></a><span class="kw">chisq.test</span>(tab2, <span class="dt">correct =</span> F)</span></code></pre></div>
 <pre><code>## 
-## 	Pearson&#39;s Chi-squared test
+##  Pearson&#39;s Chi-squared test
 ## 
 ## data:  tab2
 ## X-squared = 13.548, df = 3, p-value = 0.003589</code></pre>
 <p>Either is correct, or, actually, without the <code>correct=F</code>.
-<label for="tufte-mn-42" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-42" class="margin-toggle"><span class="marginnote">see discussion elsewhere about Yates’ Correction and fixed margins.</span></p>
+<label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">see discussion elsewhere about Yates’ Correction and fixed margins.</span></p>
 <p>The conclusion (iv) is the same either way: the null of no association
 is clearly rejected (with a P-value of 0.0028 or 0.0036 as
 appropriate), and therefore whether a movie is longer or shorter than
@@ -1104,9 +1126,9 @@ differences (that is, what’s lurking in the background of
 to pull out just those, and then compare them using
 <code>smmr</code>. Because the first input to <code>median_test</code> is a
 data frame, it fits neatly into a pipe (with the data frame omitted):</p>
-<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb814-1"><a href="analysis-of-variance.html#cb814-1"></a>movies <span class="op">%&gt;%</span></span>
-<span id="cb814-2"><a href="analysis-of-variance.html#cb814-2"></a><span class="st">  </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> &quot;G&quot;</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> &quot;PG&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb814-3"><a href="analysis-of-variance.html#cb814-3"></a><span class="st">  </span><span class="kw">median_test</span>(length, rating)</span></code></pre></div>
+<div class="sourceCode" id="cb918"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb918-1"><a href="analysis-of-variance.html#cb918-1"></a>movies <span class="op">%&gt;%</span></span>
+<span id="cb918-2"><a href="analysis-of-variance.html#cb918-2"></a><span class="st">  </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> &quot;G&quot;</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> &quot;PG&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb918-3"><a href="analysis-of-variance.html#cb918-3"></a><span class="st">  </span><span class="kw">median_test</span>(length, rating)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1123,11 +1145,11 @@ of two rating groups to compare out of the four — so we should have a
 function to do it. I think the input to the function should be a data
 frame that has a column called <code>rating</code>, and two names of
 ratings to compare:</p>
-<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb816-1"><a href="analysis-of-variance.html#cb816-1"></a>comp2 &lt;-<span class="st"> </span><span class="cf">function</span>(rat_<span class="dv">1</span>, rat_<span class="dv">2</span>, d) {</span>
-<span id="cb816-2"><a href="analysis-of-variance.html#cb816-2"></a>  d <span class="op">%&gt;%</span></span>
-<span id="cb816-3"><a href="analysis-of-variance.html#cb816-3"></a><span class="st">    </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></span>
-<span id="cb816-4"><a href="analysis-of-variance.html#cb816-4"></a><span class="st">    </span><span class="kw">median_test</span>(length, rating)</span>
-<span id="cb816-5"><a href="analysis-of-variance.html#cb816-5"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb920"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb920-1"><a href="analysis-of-variance.html#cb920-1"></a>comp2 &lt;-<span class="st"> </span><span class="cf">function</span>(rat_<span class="dv">1</span>, rat_<span class="dv">2</span>, d) {</span>
+<span id="cb920-2"><a href="analysis-of-variance.html#cb920-2"></a>  d <span class="op">%&gt;%</span></span>
+<span id="cb920-3"><a href="analysis-of-variance.html#cb920-3"></a><span class="st">    </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></span>
+<span id="cb920-4"><a href="analysis-of-variance.html#cb920-4"></a><span class="st">    </span><span class="kw">median_test</span>(length, rating)</span>
+<span id="cb920-5"><a href="analysis-of-variance.html#cb920-5"></a>}</span></code></pre></div>
 <p>The way I wrote this function is that you have to specify the movie
 ratings in quotes. It is <em>possible</em> to write it in such a way
 that you input them without quotes, <code>tidyverse</code> style, but that
@@ -1139,7 +1161,7 @@ to make it work in <code>smmr</code> (note that you specify column names
 without quotes there). There are tutorials on this kind of thing if
 you’re interested.</p>
 <p>Anyway, testing:</p>
-<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="analysis-of-variance.html#cb817-1"></a><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>, <span class="st">&quot;PG&quot;</span>, movies)</span></code></pre></div>
+<div class="sourceCode" id="cb921"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb921-1"><a href="analysis-of-variance.html#cb921-1"></a><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>, <span class="st">&quot;PG&quot;</span>, movies)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1154,13 +1176,13 @@ you’re interested.</p>
 <p>That works, but I really only want to pick out the P-value, which is
 in the list item <code>test</code> in the column <code>value</code>, the third
 entry. So let’s rewrite the function to return just that:</p>
-<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb819-1"><a href="analysis-of-variance.html#cb819-1"></a>comp2 &lt;-<span class="st"> </span><span class="cf">function</span>(rat_<span class="dv">1</span>, rat_<span class="dv">2</span>, d) {</span>
-<span id="cb819-2"><a href="analysis-of-variance.html#cb819-2"></a>  d <span class="op">%&gt;%</span></span>
-<span id="cb819-3"><a href="analysis-of-variance.html#cb819-3"></a><span class="st">    </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></span>
-<span id="cb819-4"><a href="analysis-of-variance.html#cb819-4"></a><span class="st">    </span><span class="kw">median_test</span>(length, rating) <span class="op">%&gt;%</span></span>
-<span id="cb819-5"><a href="analysis-of-variance.html#cb819-5"></a><span class="st">    </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</span>
-<span id="cb819-6"><a href="analysis-of-variance.html#cb819-6"></a>}</span>
-<span id="cb819-7"><a href="analysis-of-variance.html#cb819-7"></a><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>, <span class="st">&quot;PG&quot;</span>, movies)</span></code></pre></div>
+<div class="sourceCode" id="cb923"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb923-1"><a href="analysis-of-variance.html#cb923-1"></a>comp2 &lt;-<span class="st"> </span><span class="cf">function</span>(rat_<span class="dv">1</span>, rat_<span class="dv">2</span>, d) {</span>
+<span id="cb923-2"><a href="analysis-of-variance.html#cb923-2"></a>  d <span class="op">%&gt;%</span></span>
+<span id="cb923-3"><a href="analysis-of-variance.html#cb923-3"></a><span class="st">    </span><span class="kw">filter</span>(rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>rating <span class="op">==</span><span class="st"> </span>rat_<span class="dv">2</span>) <span class="op">%&gt;%</span></span>
+<span id="cb923-4"><a href="analysis-of-variance.html#cb923-4"></a><span class="st">    </span><span class="kw">median_test</span>(length, rating) <span class="op">%&gt;%</span></span>
+<span id="cb923-5"><a href="analysis-of-variance.html#cb923-5"></a><span class="st">    </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</span>
+<span id="cb923-6"><a href="analysis-of-variance.html#cb923-6"></a>}</span>
+<span id="cb923-7"><a href="analysis-of-variance.html#cb923-7"></a><span class="kw">comp2</span>(<span class="st">&quot;G&quot;</span>, <span class="st">&quot;PG&quot;</span>, movies)</span></code></pre></div>
 <pre><code>## [1] 0.007989183</code></pre>
 <p>Gosh.</p>
 <p>What <code>median_test</code> returns is an R <code>list</code> that has two
@@ -1184,25 +1206,25 @@ function and not returning it. Ooops. The nice thing about
 <code>pluck</code> is that I can put it on the end of the pipeline and and
 it will pull out (and return) whatever I want it to.</p>
 <p>Let’s grab a hold of the different rating groups we have:</p>
-<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb821-1"><a href="analysis-of-variance.html#cb821-1"></a>the_ratings &lt;-<span class="st"> </span><span class="kw">unique</span>(movies<span class="op">$</span>rating)</span>
-<span id="cb821-2"><a href="analysis-of-variance.html#cb821-2"></a>the_ratings</span></code></pre></div>
+<div class="sourceCode" id="cb925"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb925-1"><a href="analysis-of-variance.html#cb925-1"></a>the_ratings &lt;-<span class="st"> </span><span class="kw">unique</span>(movies<span class="op">$</span>rating)</span>
+<span id="cb925-2"><a href="analysis-of-variance.html#cb925-2"></a>the_ratings</span></code></pre></div>
 <pre><code>## [1] &quot;G&quot;     &quot;PG-13&quot; &quot;PG&quot;    &quot;R&quot;</code></pre>
 <p>The Pythonisti among you will know how to finish this off: do a
 loop-inside-a-loop over the rating groups, and get the P-value for
 each pair. You can do that in R, if you must. It’s not pretty at all,
 but it works:</p>
-<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb823-1"><a href="analysis-of-variance.html#cb823-1"></a>ii &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="dv">0</span>)</span>
-<span id="cb823-2"><a href="analysis-of-variance.html#cb823-2"></a>jj &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="dv">0</span>)</span>
-<span id="cb823-3"><a href="analysis-of-variance.html#cb823-3"></a>pp &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="dv">0</span>)</span>
-<span id="cb823-4"><a href="analysis-of-variance.html#cb823-4"></a><span class="cf">for</span> (i <span class="cf">in</span> the_ratings) {</span>
-<span id="cb823-5"><a href="analysis-of-variance.html#cb823-5"></a>  <span class="cf">for</span> (j <span class="cf">in</span> the_ratings) {</span>
-<span id="cb823-6"><a href="analysis-of-variance.html#cb823-6"></a>    pval &lt;-<span class="st"> </span><span class="kw">comp2</span>(i, j, movies)</span>
-<span id="cb823-7"><a href="analysis-of-variance.html#cb823-7"></a>    ii &lt;-<span class="st"> </span><span class="kw">c</span>(ii, i)</span>
-<span id="cb823-8"><a href="analysis-of-variance.html#cb823-8"></a>    jj &lt;-<span class="st"> </span><span class="kw">c</span>(jj, j)</span>
-<span id="cb823-9"><a href="analysis-of-variance.html#cb823-9"></a>    pp &lt;-<span class="st"> </span><span class="kw">c</span>(pp, pval)</span>
-<span id="cb823-10"><a href="analysis-of-variance.html#cb823-10"></a>  }</span>
-<span id="cb823-11"><a href="analysis-of-variance.html#cb823-11"></a>}</span>
-<span id="cb823-12"><a href="analysis-of-variance.html#cb823-12"></a><span class="kw">tibble</span>(ii, jj, pp)</span></code></pre></div>
+<div class="sourceCode" id="cb927"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb927-1"><a href="analysis-of-variance.html#cb927-1"></a>ii &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="dv">0</span>)</span>
+<span id="cb927-2"><a href="analysis-of-variance.html#cb927-2"></a>jj &lt;-<span class="st"> </span><span class="kw">character</span>(<span class="dv">0</span>)</span>
+<span id="cb927-3"><a href="analysis-of-variance.html#cb927-3"></a>pp &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="dv">0</span>)</span>
+<span id="cb927-4"><a href="analysis-of-variance.html#cb927-4"></a><span class="cf">for</span> (i <span class="cf">in</span> the_ratings) {</span>
+<span id="cb927-5"><a href="analysis-of-variance.html#cb927-5"></a>  <span class="cf">for</span> (j <span class="cf">in</span> the_ratings) {</span>
+<span id="cb927-6"><a href="analysis-of-variance.html#cb927-6"></a>    pval &lt;-<span class="st"> </span><span class="kw">comp2</span>(i, j, movies)</span>
+<span id="cb927-7"><a href="analysis-of-variance.html#cb927-7"></a>    ii &lt;-<span class="st"> </span><span class="kw">c</span>(ii, i)</span>
+<span id="cb927-8"><a href="analysis-of-variance.html#cb927-8"></a>    jj &lt;-<span class="st"> </span><span class="kw">c</span>(jj, j)</span>
+<span id="cb927-9"><a href="analysis-of-variance.html#cb927-9"></a>    pp &lt;-<span class="st"> </span><span class="kw">c</span>(pp, pval)</span>
+<span id="cb927-10"><a href="analysis-of-variance.html#cb927-10"></a>  }</span>
+<span id="cb927-11"><a href="analysis-of-variance.html#cb927-11"></a>}</span>
+<span id="cb927-12"><a href="analysis-of-variance.html#cb927-12"></a><span class="kw">tibble</span>(ii, jj, pp)</span></code></pre></div>
 <pre><code>## # A tibble: 16 x 3
 ##    ii    jj           pp
 ##    &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt;
@@ -1229,7 +1251,7 @@ calculation of the P-value, and that’s almost hidden by all the
 book-keeping. (It’s also slow and inefficient, though the slowness
 doesn’t matter too much here since it’s not a very big problem.)</p>
 <p>Let’s try another way:</p>
-<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb825-1"><a href="analysis-of-variance.html#cb825-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings)</span></code></pre></div>
+<div class="sourceCode" id="cb929"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb929-1"><a href="analysis-of-variance.html#cb929-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings)</span></code></pre></div>
 <pre><code>## # A tibble: 16 x 2
 ##    first second
 ##    &lt;chr&gt; &lt;chr&gt; 
@@ -1255,8 +1277,8 @@ one is (alphabetically) strictly less than the second one. This is
 because we’re never comparing a rating with itself, and each pair of
 ratings appears twice, once in alphabetical order, and once the other
 way around. The ones we need are these:</p>
-<div class="sourceCode" id="cb827"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb827-1"><a href="analysis-of-variance.html#cb827-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
-<span id="cb827-2"><a href="analysis-of-variance.html#cb827-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second)</span></code></pre></div>
+<div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb931-1"><a href="analysis-of-variance.html#cb931-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
+<span id="cb931-2"><a href="analysis-of-variance.html#cb931-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second)</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 2
 ##   first second
 ##   &lt;chr&gt; &lt;chr&gt; 
@@ -1275,15 +1297,13 @@ to do.</p>
 <p>Now we want to call our function <code>comp2</code> for each of the things
 in <code>first</code> <em>and</em> each of the things in <code>second</code>,
 and make a new column called <code>pval</code> that contains exactly
-that. This (coming fresh from page 332 of the R book, this being the
-first time I’ve ever used it)
-<label for="tufte-mn-43" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-43" class="margin-toggle"><span class="marginnote">This was a year ago when I first wrote this.} is exactly what the texttt{map2</span> family of functions
-does. In our case, <code>comp2</code> returns a decimal number, a
-<code>dbl</code>, so <code>map2_dbl</code> does it. Thus:</p>
-<div class="sourceCode" id="cb829"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb829-1"><a href="analysis-of-variance.html#cb829-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
-<span id="cb829-2"><a href="analysis-of-variance.html#cb829-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
-<span id="cb829-3"><a href="analysis-of-variance.html#cb829-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">map2_dbl</span>(first, second, <span class="op">~</span><span class="st"> </span><span class="kw">comp2</span>(.x, .y, movies)))</span></code></pre></div>
+that. <code>comp2</code> expects single movie ratings for each of its inputs, not a vector of each, so the way to go about this is <code>rowwise</code>:</p>
+<div class="sourceCode" id="cb933"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb933-1"><a href="analysis-of-variance.html#cb933-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
+<span id="cb933-2"><a href="analysis-of-variance.html#cb933-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
+<span id="cb933-3"><a href="analysis-of-variance.html#cb933-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb933-4"><a href="analysis-of-variance.html#cb933-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">comp2</span>(first, second, movies))</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 3
+## # Rowwise: 
 ##   first second      pval
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
 ## 1 G     PG     0.00799  
@@ -1292,12 +1312,6 @@ does. In our case, <code>comp2</code> returns a decimal number, a
 ## 4 PG    PG-13  0.0106   
 ## 5 PG    R      0.715    
 ## 6 PG-13 R      0.273</code></pre>
-<p>The logic of <code>map2_dbl</code> is
-“for each of the things in <code>first</code>, and each of the things in <code>second</code>, taken in parallel, call the function <code>comp2</code> with those two inputs in that order, always with data frame <code>movies</code>”.
-The <code>.x</code>
-and <code>.y</code> play the role of the <code>.</code> that we usually have
-inside a map, but now we’re “mapping” over two things rather than
-just one, so that they cannot both be called <code>.</code>.</p>
 <p>One more thing: we’re doing 6 tests at once here, so we’re giving
 ourselves 6 chances to reject a null (all medians equal) that might
 have been true. So the true probability of a type I error is no longer
@@ -1307,12 +1321,14 @@ adjustment: instead of rejecting if the P-value is less than 0.05, we
 only reject if it is less than <span class="math inline">\(0.05/6\)</span>, since we are doing 6
 tests. This is a fiddly calculation to do by hand, but it’s easy to
 build in another <code>mutate</code>, thus:
-<label for="tufte-mn-44" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-44" class="margin-toggle"><span class="marginnote">In the pairwise median test in <em>smmr</em>, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I flip it around so that you adjust the P-values by <em>multiplying</em> them by 6, and then comparing the adjusted P-values with the usual 0.05. It comes to the same place in the end, except that this way you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.</span></p>
-<div class="sourceCode" id="cb831"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb831-1"><a href="analysis-of-variance.html#cb831-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
-<span id="cb831-2"><a href="analysis-of-variance.html#cb831-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
-<span id="cb831-3"><a href="analysis-of-variance.html#cb831-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">map2_dbl</span>(first, second, <span class="op">~</span><span class="st"> </span><span class="kw">comp2</span>(.x, .y, movies))) <span class="op">%&gt;%</span></span>
-<span id="cb831-4"><a href="analysis-of-variance.html#cb831-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">reject =</span> pval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</span></code></pre></div>
+<label for="tufte-mn-50" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-50" class="margin-toggle"><span class="marginnote">In the pairwise median test in <em>smmr</em>, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I flip it around so that you adjust the P-values by <em>multiplying</em> them by 6, and then comparing the adjusted P-values with the usual 0.05. It comes to the same place in the end, except that this way you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.</span></p>
+<div class="sourceCode" id="cb935"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb935-1"><a href="analysis-of-variance.html#cb935-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
+<span id="cb935-2"><a href="analysis-of-variance.html#cb935-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
+<span id="cb935-3"><a href="analysis-of-variance.html#cb935-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb935-4"><a href="analysis-of-variance.html#cb935-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">comp2</span>(first, second, movies)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb935-5"><a href="analysis-of-variance.html#cb935-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">reject =</span> (pval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 4
+## # Rowwise: 
 ##   first second      pval reject
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt; 
 ## 1 G     PG     0.00799   TRUE  
@@ -1339,12 +1355,11 @@ adjustment, we only reject if the P-value is less than
 with.)</p>
 <p>Listing the rating groups sorted by median would give you an idea of
 how far different the medians have to be to be significantly different:</p>
-<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb833-1"><a href="analysis-of-variance.html#cb833-1"></a>medians &lt;-<span class="st"> </span>movies <span class="op">%&gt;%</span></span>
-<span id="cb833-2"><a href="analysis-of-variance.html#cb833-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
-<span id="cb833-3"><a href="analysis-of-variance.html#cb833-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(length)) <span class="op">%&gt;%</span></span>
-<span id="cb833-4"><a href="analysis-of-variance.html#cb833-4"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(med))</span></code></pre></div>
-<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
-<div class="sourceCode" id="cb835"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb835-1"><a href="analysis-of-variance.html#cb835-1"></a>medians</span></code></pre></div>
+<div class="sourceCode" id="cb937"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb937-1"><a href="analysis-of-variance.html#cb937-1"></a>medians &lt;-<span class="st"> </span>movies <span class="op">%&gt;%</span></span>
+<span id="cb937-2"><a href="analysis-of-variance.html#cb937-2"></a><span class="st">  </span><span class="kw">group_by</span>(rating) <span class="op">%&gt;%</span></span>
+<span id="cb937-3"><a href="analysis-of-variance.html#cb937-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(length)) <span class="op">%&gt;%</span></span>
+<span id="cb937-4"><a href="analysis-of-variance.html#cb937-4"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(med))</span>
+<span id="cb937-5"><a href="analysis-of-variance.html#cb937-5"></a>medians</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 2
 ##   rating   med
 ##   &lt;chr&gt;  &lt;dbl&gt;
@@ -1359,13 +1374,15 @@ the Mood median test is not actually literally comparing the sample
 medians, but only assessing the splits of values above and below the
 median of the combined sample. A subtlety, rather than an error, I’d say.</p>
 <p>Here’s something extremely flashy to finish with:</p>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="analysis-of-variance.html#cb837-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
-<span id="cb837-2"><a href="analysis-of-variance.html#cb837-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
-<span id="cb837-3"><a href="analysis-of-variance.html#cb837-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">map2_dbl</span>(first, second, <span class="op">~</span><span class="st"> </span><span class="kw">comp2</span>(.x, .y, movies))) <span class="op">%&gt;%</span></span>
-<span id="cb837-4"><a href="analysis-of-variance.html#cb837-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">reject =</span> pval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">%&gt;%</span></span>
-<span id="cb837-5"><a href="analysis-of-variance.html#cb837-5"></a><span class="st">  </span><span class="kw">left_join</span>(medians, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;first&quot;</span> =<span class="st"> &quot;rating&quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb837-6"><a href="analysis-of-variance.html#cb837-6"></a><span class="st">  </span><span class="kw">left_join</span>(medians, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;second&quot;</span> =<span class="st"> &quot;rating&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb939"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb939-1"><a href="analysis-of-variance.html#cb939-1"></a><span class="kw">crossing</span>(<span class="dt">first =</span> the_ratings, <span class="dt">second =</span> the_ratings) <span class="op">%&gt;%</span></span>
+<span id="cb939-2"><a href="analysis-of-variance.html#cb939-2"></a><span class="st">  </span><span class="kw">filter</span>(first <span class="op">&lt;</span><span class="st"> </span>second) <span class="op">%&gt;%</span></span>
+<span id="cb939-3"><a href="analysis-of-variance.html#cb939-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb939-4"><a href="analysis-of-variance.html#cb939-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> <span class="kw">comp2</span>(first, second, movies)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb939-5"><a href="analysis-of-variance.html#cb939-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">reject =</span> (pval <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb939-6"><a href="analysis-of-variance.html#cb939-6"></a><span class="st">  </span><span class="kw">left_join</span>(medians, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;first&quot;</span> =<span class="st"> &quot;rating&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb939-7"><a href="analysis-of-variance.html#cb939-7"></a><span class="st">  </span><span class="kw">left_join</span>(medians, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;second&quot;</span> =<span class="st"> &quot;rating&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 6 x 6
+## # Rowwise: 
 ##   first second      pval reject med.x med.y
 ##   &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;lgl&gt;  &lt;dbl&gt; &lt;dbl&gt;
 ## 1 G     PG     0.00799   TRUE      82   100
@@ -1382,8 +1399,8 @@ are definitely not different, and ones differing by about 20 could go
 either way.</p>
 <p>I think that’s <em>quite</em> enough of that.</p>
 </div>
-<div id="atomic-weight-of-carbon" class="section level2" number="12.4">
-<h2><span class="header-section-number">12.4</span> Atomic weight of carbon</h2>
+<div id="atomic-weight-of-carbon" class="section level2" number="13.4">
+<h2><span class="header-section-number">13.4</span> Atomic weight of carbon</h2>
 <p>The atomic weight of the chemical element
 carbon is 12. Two methods of measuring the atomic weight of samples of
 carbon were compared. The results are shown in
@@ -1452,14 +1469,15 @@ read the data into R and display the results.</li>
 </ol>
 <p>Solution</p>
 <p>Values separated by spaces:</p>
-<div class="sourceCode" id="cb839"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb839-1"><a href="analysis-of-variance.html#cb839-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/carbon.txt&quot;</span></span>
-<span id="cb839-2"><a href="analysis-of-variance.html#cb839-2"></a>carbon &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb941"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb941-1"><a href="analysis-of-variance.html#cb941-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/carbon.txt&quot;</span></span>
+<span id="cb941-2"><a href="analysis-of-variance.html#cb941-2"></a>carbon &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   method = col_double(),
 ##   weight = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb841-1"><a href="analysis-of-variance.html#cb841-1"></a>carbon</span></code></pre></div>
+<div class="sourceCode" id="cb943"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb943-1"><a href="analysis-of-variance.html#cb943-1"></a>carbon</span></code></pre></div>
 <pre><code>## # A tibble: 15 x 2
 ##    method weight
 ##     &lt;dbl&gt;  &lt;dbl&gt;
@@ -1481,7 +1499,7 @@ read the data into R and display the results.</li>
 <p>I would expect you to include, without being told to include it, some
 text in your report indicating that you have sensible data: two
 methods labelled 1 and 2 as promised, and a bunch
-<label for="tufte-mn-45" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-45" class="margin-toggle"><span class="marginnote">It’s probably better in a report to use language a bit more formal than <em>a bunch</em>. Something like <em>a number</em> would be better.</span>
+<label for="tufte-mn-51" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-51" class="margin-toggle"><span class="marginnote">It’s probably better in a report to use language a bit more formal than <em>a bunch</em>. Something like <em>a number</em> would be better.</span>
 of atomic
 weights close to the nominal figure of 12.</p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -1497,12 +1515,12 @@ weight, is something like a boxplot. If you’re not careful,
 <code>method</code> will get treated as a quantitative variable,
 which you don’t want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:</p>
-<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb843-1"><a href="analysis-of-variance.html#cb843-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(method), <span class="dt">y =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb945"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb945-1"><a href="analysis-of-variance.html#cb945-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(method), <span class="dt">y =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-539-1.png" width="672"  /></p>
 <p>If you insist, you could do a faceted histogram (above and below, for preference):</p>
-<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb844-1"><a href="analysis-of-variance.html#cb844-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></span>
-<span id="cb844-2"><a href="analysis-of-variance.html#cb844-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-55-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb946"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb946-1"><a href="analysis-of-variance.html#cb946-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></span>
+<span id="cb946-2"><a href="analysis-of-variance.html#cb946-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-540-1.png" width="672"  /></p>
 <p>There are really not enough data values for a histogram to be of much
 help, so I don’t like this as much.</p>
 <p>If you are thinking ahead (we are going to be doing a <span class="math inline">\(t\)</span>-test), then
@@ -1510,10 +1528,10 @@ you’ll realize that normality is the kind of thing we’re looking for,
 in which case normal quantile plots would be the thing. However, we
 might have to be rather forgiving for method 2 since there are only 5
 observations:</p>
-<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb845-1"><a href="analysis-of-variance.html#cb845-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">sample =</span> weight)) <span class="op">+</span></span>
-<span id="cb845-2"><a href="analysis-of-variance.html#cb845-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
-<span id="cb845-3"><a href="analysis-of-variance.html#cb845-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-56-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb947"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb947-1"><a href="analysis-of-variance.html#cb947-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">sample =</span> weight)) <span class="op">+</span></span>
+<span id="cb947-2"><a href="analysis-of-variance.html#cb947-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb947-3"><a href="analysis-of-variance.html#cb947-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-541-1.png" width="672"  /></p>
 <p>I don’t mind these coming out side by side, though I would rather have
 them squarer.</p>
 <p>I would say, boxplots are the best, normal quantile plots are also
@@ -1556,9 +1574,9 @@ begin another new section in your report here.)</li>
 <p>Solution</p>
 <p>This would be the Welch-Satterthwaite version of the two-sample
 <span class="math inline">\(t\)</span>-test, since the two groups do appear to have different spreads:</p>
-<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb846-1"><a href="analysis-of-variance.html#cb846-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
+<div class="sourceCode" id="cb948"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb948-1"><a href="analysis-of-variance.html#cb948-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
 <pre><code>## 
-## 	Welch Two Sample t-test
+##  Welch Two Sample t-test
 ## 
 ## data:  weight by method
 ## t = -1.817, df = 5.4808, p-value = 0.1238
@@ -1573,9 +1591,9 @@ to defend your choice of the Welch-Satterthwaite test (as I did
 above), and not just do the default <span class="math inline">\(t\)</span>-test without comment.</p>
 <p>If, in your discussion above, you thought the spreads were equal
 enough, then you should do the pooled <span class="math inline">\(t\)</span>-test here, which goes like this:</p>
-<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb848-1"><a href="analysis-of-variance.html#cb848-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon, <span class="dt">var.equal =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb950"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb950-1"><a href="analysis-of-variance.html#cb950-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon, <span class="dt">var.equal =</span> T)</span></code></pre></div>
 <pre><code>## 
-## 	Two Sample t-test
+##  Two Sample t-test
 ## 
 ## data:  weight by method
 ## t = -2.1616, df = 13, p-value = 0.04989
@@ -1602,9 +1620,9 @@ variances, given that you might be pondering that. There are
 several that I can think of, that R can do, of which I mention two.</p>
 <p>The first is the <span class="math inline">\(F\)</span>-test for variances that you might have learned in
 B57 (that is the basis for the ANOVA <span class="math inline">\(F\)</span>-test):</p>
-<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb850-1"><a href="analysis-of-variance.html#cb850-1"></a><span class="kw">var.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
+<div class="sourceCode" id="cb952"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb952-1"><a href="analysis-of-variance.html#cb952-1"></a><span class="kw">var.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
 <pre><code>## 
-## 	F test to compare two variances
+##  F test to compare two variances
 ## 
 ## data:  weight by method
 ## F = 0.35768, num df = 9, denom df = 4, p-value = 0.1845
@@ -1622,8 +1640,8 @@ large). Since the ANOVA <span class="math inline">\(F\)</span>-test is based on 
 why normality is also more important in ANOVA than it is in a <span class="math inline">\(t\)</span>-test.</p>
 <p>The second is Levene’s test. This doesn’t depend on normality (at
 least, not nearly so much), so I like it better in general:</p>
-<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb852-1"><a href="analysis-of-variance.html#cb852-1"></a><span class="kw">library</span>(car)</span>
-<span id="cb852-2"><a href="analysis-of-variance.html#cb852-2"></a><span class="kw">leveneTest</span>(weight <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(method), <span class="dt">data =</span> carbon)</span></code></pre></div>
+<div class="sourceCode" id="cb954"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb954-1"><a href="analysis-of-variance.html#cb954-1"></a><span class="kw">library</span>(car)</span>
+<span id="cb954-2"><a href="analysis-of-variance.html#cb954-2"></a><span class="kw">leveneTest</span>(weight <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(method), <span class="dt">data =</span> carbon)</span></code></pre></div>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
 ##       Df F value Pr(&gt;F)
 ## group  1  0.9887 0.3382
@@ -1633,14 +1651,14 @@ differences from the group medians are calculated, and then an ANOVA
 is run on the absolute differences. If, say, one of the groups has a
 larger spread than the other(s), its absolute differences from the
 median will tend to be bigger.
-<label for="tufte-mn-46" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-46" class="margin-toggle"><span class="marginnote">The use of absolute differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
+<label for="tufte-mn-52" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-52" class="margin-toggle"><span class="marginnote">The use of absolute differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
 As for what we conclude here, well, neither of the variance tests show
 any significance at all, so from that point of view there is no
 evidence against using the pooled <span class="math inline">\(t\)</span>-test. Having said that, the
 samples are small, and so it would be difficult to <em>prove</em> that
 the two methods have different variance, even if they actually
 did.
-<label for="tufte-mn-47" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-47" class="margin-toggle"><span class="marginnote">This is coming back to the <em>power</em> of something like Levene’s test; the power of any test is not going to be very big if the sample sizes are small.</span></p>
+<label for="tufte-mn-53" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-53" class="margin-toggle"><span class="marginnote">This is coming back to the <em>power</em> of something like Levene’s test; the power of any test is not going to be very big if the sample sizes are small.</span></p>
 <p>Things are never as clear-cut as you would like. In the end, it all
 comes down to making a call and defending it.</p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -1650,8 +1668,8 @@ normally-distributed data.</li>
 <p>Solution</p>
 <p>That would be Mood’s median test. Since I didn’t say anything
 about building it yourself, feel free to use <code>smmr</code>:</p>
-<div class="sourceCode" id="cb854"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb854-1"><a href="analysis-of-variance.html#cb854-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb854-2"><a href="analysis-of-variance.html#cb854-2"></a><span class="kw">median_test</span>(carbon, weight, method)</span></code></pre></div>
+<div class="sourceCode" id="cb956"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb956-1"><a href="analysis-of-variance.html#cb956-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb956-2"><a href="analysis-of-variance.html#cb956-2"></a><span class="kw">median_test</span>(carbon, weight, method)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1668,7 +1686,7 @@ Mann-Whitney or Kruskal-Wallis that applies in this situation, be
 careful about using it here, because they have additional assumptions
 that you may not want to trust. Mann-Whitney started life as a test for
 “equal distributions”.
-<label for="tufte-mn-48" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-48" class="margin-toggle"><span class="marginnote">The test goes back to the 1940s.</span> This
+<label for="tufte-mn-54" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-54" class="margin-toggle"><span class="marginnote">The test goes back to the 1940s.</span> This
 means that the null is equal location <em>and</em> equal spread, and if
 you reject the null, one of those has failed. But here, we suspect that
 equal spread will fail, so that the Mann-Whitney test may end up
@@ -1729,12 +1747,12 @@ not being considered, but I think it’s good practice to draw a
 picture and make a call about which test is appropriate.
 I loaded package <code>car</code> above; I’d better be tidy and
 unload it before I go on:</p>
-<div class="sourceCode" id="cb856"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb856-1"><a href="analysis-of-variance.html#cb856-1"></a><span class="kw">detach</span>(package<span class="op">:</span>car, <span class="dt">unload =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb958"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb958-1"><a href="analysis-of-variance.html#cb958-1"></a><span class="kw">detach</span>(package<span class="op">:</span>car, <span class="dt">unload =</span> T)</span></code></pre></div>
 <pre><code>## Warning: &#39;car&#39; namespace cannot be unloaded:
 ##   namespace &#39;car&#39; is imported by &#39;rstatix&#39; so cannot be unloaded</code></pre>
 </div>
-<div id="can-caffeine-improve-your-performance-on-a-test" class="section level2" number="12.5">
-<h2><span class="header-section-number">12.5</span> Can caffeine improve your performance on a test?</h2>
+<div id="can-caffeine-improve-your-performance-on-a-test" class="section level2" number="13.5">
+<h2><span class="header-section-number">13.5</span> Can caffeine improve your performance on a test?</h2>
 <p>Does caffeine help students do better on a certain test? To
 find out, 36 students were randomly allocated to three groups (12 in
 each group). Each student received a fixed number of cups of coffee
@@ -1750,16 +1768,17 @@ test. The data are in
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code> because it’s a <code>.csv</code> file:</p>
-<div class="sourceCode" id="cb858"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb858-1"><a href="analysis-of-variance.html#cb858-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv&quot;</span></span>
-<span id="cb858-2"><a href="analysis-of-variance.html#cb858-2"></a>caffeine.untidy &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb960"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb960-1"><a href="analysis-of-variance.html#cb960-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/caffeine.csv&quot;</span></span>
+<span id="cb960-2"><a href="analysis-of-variance.html#cb960-2"></a>caffeine.untidy &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   Sub = col_double(),
 ##   High = col_double(),
 ##   Moderate = col_double(),
 ##   None = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb860"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb860-1"><a href="analysis-of-variance.html#cb860-1"></a>caffeine.untidy</span></code></pre></div>
+<div class="sourceCode" id="cb962"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb962-1"><a href="analysis-of-variance.html#cb962-1"></a>caffeine.untidy</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 4
 ##      Sub  High Moderate  None
 ##    &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
@@ -1798,12 +1817,12 @@ column of group labels <code>amount</code>. Is it a <code>factor</code>?</li>
 </ol>
 <p>Solution</p>
 <p>We are combining several columns into one, so this is <code>pivot_longer</code>:</p>
-<div class="sourceCode" id="cb862"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb862-1"><a href="analysis-of-variance.html#cb862-1"></a>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb862-2"><a href="analysis-of-variance.html#cb862-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>Sub, <span class="dt">names_to =</span> <span class="st">&quot;amount&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;score&quot;</span>) -&gt;<span class="st"> </span>caffeine</span></code></pre></div>
+<div class="sourceCode" id="cb964"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb964-1"><a href="analysis-of-variance.html#cb964-1"></a>caffeine.untidy <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb964-2"><a href="analysis-of-variance.html#cb964-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>Sub, <span class="dt">names_to =</span> <span class="st">&quot;amount&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;score&quot;</span>) -&gt;<span class="st"> </span>caffeine</span></code></pre></div>
 <p>I didn’t ask you to list the resulting data frame, but it is smart to
 at least look for yourself, to make sure <code>pivot_longer</code> has done
 what you expected.</p>
-<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="analysis-of-variance.html#cb863-1"></a>caffeine</span></code></pre></div>
+<div class="sourceCode" id="cb965"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb965-1"><a href="analysis-of-variance.html#cb965-1"></a>caffeine</span></code></pre></div>
 <pre><code>## # A tibble: 36 x 3
 ##      Sub amount   score
 ##    &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;
@@ -1821,7 +1840,7 @@ what you expected.</p>
 <p>A column of amounts of caffeine, and a column of test scores. This is
 what we expected. There should be 12 each of the <code>amount</code>s,
 which you can check if you like:</p>
-<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="analysis-of-variance.html#cb865-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
+<div class="sourceCode" id="cb967"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb967-1"><a href="analysis-of-variance.html#cb967-1"></a>caffeine <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(amount)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ##   amount       n
 ##   &lt;chr&gt;    &lt;int&gt;
@@ -1836,8 +1855,8 @@ so get used to seeing where it will be useful.</p>
 <li>Obtain side-by-side boxplots of test scores by amount of caffeine.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb867"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb867-1"><a href="analysis-of-variance.html#cb867-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">x =</span> amount, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-67-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb969"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb969-1"><a href="analysis-of-variance.html#cb969-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">x =</span> amount, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-552-1.png" width="672"  /></p>
 <p>Note that this is <em>much more difficult</em> if you don’t have a tidy data frame. (Try it and see.)</p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Does caffeine amount seem to have an effect? If so, what
@@ -1858,8 +1877,8 @@ do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>Something like this:</p>
-<div class="sourceCode" id="cb868"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb868-1"><a href="analysis-of-variance.html#cb868-1"></a>caff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
-<span id="cb868-2"><a href="analysis-of-variance.html#cb868-2"></a><span class="kw">summary</span>(caff<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb970"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb970-1"><a href="analysis-of-variance.html#cb970-1"></a>caff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(score <span class="op">~</span><span class="st"> </span>amount, <span class="dt">data =</span> caffeine)</span>
+<span id="cb970-2"><a href="analysis-of-variance.html#cb970-2"></a><span class="kw">summary</span>(caff<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)  
 ## amount       2  477.7  238.86   3.986 0.0281 *
 ## Residuals   33 1977.5   59.92                 
@@ -1885,8 +1904,8 @@ there are differences to find that we don’t know about yet.</p>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb870"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb870-1"><a href="analysis-of-variance.html#cb870-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</span>
-<span id="cb870-2"><a href="analysis-of-variance.html#cb870-2"></a>caff<span class="fl">.3</span></span></code></pre></div>
+<div class="sourceCode" id="cb972"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb972-1"><a href="analysis-of-variance.html#cb972-1"></a>caff<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">TukeyHSD</span>(caff<span class="fl">.1</span>)</span>
+<span id="cb972-2"><a href="analysis-of-variance.html#cb972-2"></a>caff<span class="fl">.3</span></span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -1907,18 +1926,18 @@ however, is away from zero, so this is the significant one. As is
 usual, we are pretty sure that the difference in means (this way
 around) is negative, but we are not at all clear about how big it is,
 because the confidence interval is rather long.
-<label for="tufte-mn-49" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-49" class="margin-toggle"><span class="marginnote">We’d need a lot more students to make it narrower, but this is not surprising since students vary in a lot of other ways that were not measured here.</span></p>
+<label for="tufte-mn-55" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-55" class="margin-toggle"><span class="marginnote">We’d need a lot more students to make it narrower, but this is not surprising since students vary in a lot of other ways that were not measured here.</span></p>
 <p>Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don’t think there’s any reason to consider any other test. You might like to assess that with normal quantile plots:</p>
-<div class="sourceCode" id="cb872"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb872-1"><a href="analysis-of-variance.html#cb872-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">sample=</span>score)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></span>
-<span id="cb872-2"><a href="analysis-of-variance.html#cb872-2"></a><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>amount, <span class="dt">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="10-analysis-of-variance_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb974-1"><a href="analysis-of-variance.html#cb974-1"></a><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">sample=</span>score)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></span>
+<span id="cb974-2"><a href="analysis-of-variance.html#cb974-2"></a><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>amount, <span class="dt">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-555-1.png" width="672"  /></p>
 <p>There’s nothing to worry about there normality-wise. If anything, there’s a little evidence of <em>short</em> tails (in the None group especially), but you’ll recall that short tails don’t affect the mean and thus pose no problems for the ANOVA. Those three lines also have pretty much the same slope, indicating very similar spreads. Regular ANOVA is the best test here. (Running eg. Mood’s median test would be a mistake here, because it doesn’t use the data as efficiently (counting only aboves and belows) as the ANOVA does, and so the ANOVA will give a better picture of what differs from what.)</p>
 
 </div>
 </div>
 <p style="text-align: center;">
 <a href="normal-quantile-plots.html"><button class="btn btn-default">Previous</button></a>
-<a href="tidying-and-selecting-data.html"><button class="btn btn-default">Next</button></a>
+<a href="tidying-data.html"><button class="btn btn-default">Next</button></a>
 </p>
 </div>
 </div>

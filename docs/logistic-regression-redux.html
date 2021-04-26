@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 2 Logistic regression redux | Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2019-01-07" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Chapter 2 Logistic regression redux | Problems and Solutions in Applied Statistics</title>
+
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="logistic-regression-redux.html#logistic-regression-redux"><span class="toc-section-number">2</span> Logistic regression redux</a>
+<ul>
+<li><a href="logistic-regression-redux.html#the-brain-of-a-cat"><span class="toc-section-number">2.1</span> The brain of a cat</a></li>
+</ul></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">3</span> Getting used to R and R Studio</a>
+<ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">3.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">3.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">3.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">3.4</span> Reading files different ways</a></li>
+</ul></li>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">4</span> Reading in data</a>
+<ul>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">5</span> Drawing graphs</a>
+<ul>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">5.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">5.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">5.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">6</span> Data exploration</a>
+<ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">6.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">6.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">6.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">6.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">6.5</span> Test scores in two classes</a></li>
+<li><a href="data-exploration.html#working-with-dataframes"><span class="toc-section-number">6.6</span> Working with dataframes</a></li>
+<li><a href="data-exploration.html#tidying-the-jays-data"><span class="toc-section-number">6.7</span> Tidying the Jays data</a></li>
+<li><a href="data-exploration.html#cars"><span class="toc-section-number">6.8</span> Cars</a></li>
+</ul></li>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a>
+<ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a>
+<ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a>
+<ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">10</span> The sign test and Mood’s median test</a>
+<ul>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">10.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">10.6</span> Medical instructions</a></li>
+</ul></li>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
+<ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">11.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">11.5</span> Body fat revisited</a></li>
+</ul></li>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
+<ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">14</span> Tidying data</a>
+<ul>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">14.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">14.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">14.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">14.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">14.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">14.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">14.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">14.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">14.9</span> Feeling the heat</a></li>
+</ul></li>
+<li><a href="regression.html#regression"><span class="toc-section-number">15</span> Regression</a>
+<ul>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">15.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">15.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">15.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">15.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">15.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">15.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">15.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">15.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">15.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">15.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">15.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">15.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">15.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">15.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">15.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">15.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">15.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">15.18</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">16</span> Dates and times</a>
+<ul>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">16.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">16.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">16.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">16.4</span> Wolves and caribou</a></li>
+</ul></li>
+<li><a href="functions.html#functions"><span class="toc-section-number">17</span> Functions</a>
+<ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">17.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">17.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">18</span> The Bootstrap</a>
+<ul>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">18.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">18.2</span> Air conditioning failures: bootstrapping the median</a></li>
+</ul></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">19</span> Bayesian Statistics with Stan</a>
+<ul>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">19.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">19.2</span> Bayesian regression</a></li>
+</ul></li>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">20</span> Logistic regression</a>
+<ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">20.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">20.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">20.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">20.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat-1"><span class="toc-section-number">20.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">20.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">20.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">20.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">20.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">20.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">21</span> Logistic regression with ordinal or nominal response</a>
+<ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">21.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">21.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">21.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">21.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">21.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">21.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">21.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">21.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">21.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">21.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">21.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">22</span> Survival analysis</a>
+<ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">22.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">22.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">22.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">22.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">23</span> Analysis of variance revisited</a>
+<ul>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">23.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">23.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">23.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">23.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">23.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">23.6</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">23.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">23.8</span> Treating leprosy</a></li>
+</ul></li>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">24</span> Multivariate analysis of variance</a>
+<ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">24.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">24.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">24.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">25</span> Repeated measures</a>
+<ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">25.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">25.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">25.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">25.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">25.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">25.6</span> Repeated measures with no background</a></li>
+</ul></li>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">26</span> Discriminant analysis</a>
+<ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">26.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">26.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">26.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">26.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">26.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">26.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">26.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">27</span> Cluster analysis</a>
+<ul>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">27.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">27.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">27.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">27.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">27.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">27.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">27.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">27.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">27.9</span> Clustering the Australian athletes</a></li>
+</ul></li>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">28</span> Multidimensional Scaling</a>
+<ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">28.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">28.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">28.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">28.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">28.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">29</span> Principal Components and Factor Analysis</a>
+<ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">29.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">29.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">29.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">29.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">30</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">30.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">30.2</span> Predicting voting</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="logistic-regression-redux" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Logistic regression redux</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="logistic-regression-redux.html#cb2-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="the-brain-of-a-cat" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> The brain of a cat</h2>
+<p>A large number (315) of psychology students were asked to
+imagine that they were serving on a university ethics committee
+hearing a complaint against animal research being done by a member of
+the faculty. The students were told that the surgery consisted of
+implanting a device called a cannula in each cat’s brain, through
+which chemicals were introduced into the brain and the cats were then
+given psychological tests. At the end of the study, the cats’ brains
+were subjected to histological analysis. The complaint asked that the
+researcher’s authorization to carry out the study should be withdrawn,
+and the cats should be handed over to the animal rights group that
+filed the complaint. It was suggested that the research could just as
+well be done with computer simulations.</p>
+<p>All of the psychology students in the survey were told all of this. In
+addition, they read a statement by the researcher that no animal felt
+much pain at any time, and that computer simulation was <em>not</em> an
+adequate substitute for animal research. Each student was also given
+<em>one</em> of the following scenarios that explained the benefit of
+the research:</p>
+<ul>
+<li><p>“cosmetic”: testing the toxicity of chemicals to be used in
+new lines of hair care products.</p></li>
+<li><p>“theory”: evaluating two competing theories about the function
+of a particular nucleus in the brain.</p></li>
+<li><p>“meat”: testing a synthetic growth hormone said to potentially
+increase meat production.</p></li>
+<li><p>“veterinary”: attempting to find a cure for a brain disease
+that is killing domesticated cats and endangered species of wild cats.</p></li>
+<li><p>“medical”: evaluating a potential cure for a debilitating
+disease that afflicts many young adult humans.</p></li>
+</ul>
+<p>Finally, each student completed two questionnaires: one that would assess their
+“relativism”: whether or not they believe in universal moral
+principles (low score) or whether they believed that the appropriate
+action depends on the person and situation (high score). The second
+questionnaire assessed “idealism”: a high score reflects a belief
+that ethical behaviour will always lead to good consequences (and thus
+that if a behaviour leads to any bad consequences at all, it is
+unethical).
+<label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">I get confused about the difference between morals and ethics. This is a very short description of that difference: <a href="http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html" class="uri">http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html</a>. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That’s why the students had to play the role of an ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.</span></p>
+<p>After being exposed to all of that, each student stated their decision
+about whether the research should continue or stop.</p>
+<p>I should perhaps stress at this point that no actual cats were harmed
+in the collection of these data (which can be found as a <code>.csv</code>
+file at
+<a href="https://raw.githubusercontent.com/nxskok/datafiles/master/decision.csv">link</a>). The
+variables in the data set are these:</p>
+<ul>
+<li><p><code>decision</code>: whether the research should continue or stop (response)</p></li>
+<li><p><code>idealism</code>: score on idealism questionnaire</p></li>
+<li><p><code>relativism</code>: score on relativism questionnaire</p></li>
+<li><p><code>gender</code> of student</p></li>
+<li><p><code>scenario</code> of research benefits that the student read.</p></li>
+</ul>
+<p>A more detailed discussion
+<label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote">If you can believe it.</span> of this
+study is at
+<a href="http://core.ecu.edu/psyc/wuenschk/MV/Multreg/Logistic-SPSS.PDF">link</a>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check by looking at the structure of
+your data frame that you have something sensible. <em>Do not</em> call
+your data frame <code>decision</code>, since that’s the name of one of
+the variables in it.</li>
+</ol>
+<p>Solution</p>
+<p>So, like this, using the name <code>decide</code> in my case:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="logistic-regression-redux.html#cb3-1"></a>my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/datafiles/master/decision.csv&quot;</span></span>
+<span id="cb3-2"><a href="logistic-regression-redux.html#cb3-2"></a>decide &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
+## cols(
+##   decision = col_character(),
+##   idealism = col_double(),
+##   relativism = col_double(),
+##   gender = col_character(),
+##   scenario = col_character()
+## )</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="logistic-regression-redux.html#cb5-1"></a>decide</span></code></pre></div>
+<pre><code>## # A tibble: 315 x 5
+##    decision idealism relativism gender scenario
+##    &lt;chr&gt;       &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   
+##  1 stop          8.2        5.1 Female cosmetic
+##  2 continue      6.8        5.3 Male   cosmetic
+##  3 continue      8.2        6   Female cosmetic
+##  4 stop          7.4        6.2 Female cosmetic
+##  5 continue      1.7        3.1 Female cosmetic
+##  6 continue      5.6        7.7 Male   cosmetic
+##  7 stop          7.2        6.7 Female cosmetic
+##  8 stop          7.8        4   Male   cosmetic
+##  9 stop          7.8        4.7 Female cosmetic
+## 10 stop          8          7.6 Female cosmetic
+## # … with 305 more rows</code></pre>
+<p>The variables are all the right things and of the right types: the
+decision, gender and the scenario are all text (representing
+categorical variables), and idealism and relativism, which were scores
+on a test, are quantitative (numerical). There are, as promised, 315
+observations.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a logistic regression predicting
+<code>decision</code> from <code>gender</code>. Is there an effect of gender?</li>
+</ol>
+<p>Solution</p>
+<p>Turn the response into a <code>factor</code> somehow, either by
+creating a new variable in the data frame or like this:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="logistic-regression-redux.html#cb7-1"></a>decide<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">factor</span>(decision) <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> decide, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
+<span id="cb7-2"><a href="logistic-regression-redux.html#cb7-2"></a><span class="kw">summary</span>(decide<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = factor(decision) ~ gender, family = &quot;binomial&quot;, 
+##     data = decide)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -1.5518  -1.0251   0.8446   0.8446   1.3377  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)   0.8473     0.1543   5.491 3.99e-08 ***
+## genderMale   -1.2167     0.2445  -4.976 6.50e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 425.57  on 314  degrees of freedom
+## Residual deviance: 399.91  on 313  degrees of freedom
+## AIC: 403.91
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The P-value for gender is <span class="math inline">\(6.5 \times 10^{-7}\)</span>, which is very
+small, so there is definitely an effect of gender. It’s not
+immediately clear what kind of effect it is: that’s the reason for
+the next part, and we’ll revisit this slope coefficient in a moment.
+Categorical <em>explanatory</em> variables are perfectly all right
+as text.
+Should I have used <code>drop1</code> to assess the significance? Maybe:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="logistic-regression-redux.html#cb9-1"></a><span class="kw">drop1</span>(decide<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender
+##        Df Deviance    AIC    LRT  Pr(&gt;Chi)    
+## &lt;none&gt;      399.91 403.91                     
+## gender  1   425.57 427.57 25.653 4.086e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The thing is, this gives us a P-value but not a slope, which we might
+have wanted to try to interpret. Also, the P-value in <code>summary</code>
+is so small that it is likely to be still significant in
+<code>drop1</code> as well.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>To investigate the effect (or non-effect) of
+<code>gender</code>, create a contingency table by feeding
+<code>decision</code> and <code>gender</code> into <code>table</code>. What does
+this tell you?</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="logistic-regression-redux.html#cb11-1"></a><span class="kw">with</span>(decide, <span class="kw">table</span>(decision, gender))</span></code></pre></div>
+<pre><code>##           gender
+## decision   Female Male
+##   continue     60   68
+##   stop        140   47</code></pre>
+<p>Females are more likely to say that the study should stop (a clear
+majority), while males are more evenly split, with a small majority in
+favour of the study continuing.</p>
+<p>If you want the column percents as well, you can use
+<code>prop.table</code>. Two steps: save the table from above into a
+variable, then feed <em>that</em> into <code>prop.table</code>, calling for
+column percentages rather than row percentages:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="logistic-regression-redux.html#cb13-1"></a>tab &lt;-<span class="st"> </span><span class="kw">with</span>(decide, <span class="kw">table</span>(decision, gender))</span>
+<span id="cb13-2"><a href="logistic-regression-redux.html#cb13-2"></a><span class="kw">prop.table</span>(tab, <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>##           gender
+## decision      Female      Male
+##   continue 0.3000000 0.5913043
+##   stop     0.7000000 0.4086957</code></pre>
+<p>Why column percentages? Well, thinking back to STAB22 or some such
+place, when one of your variables is acting like a response or outcome
+(<code>decision</code> here), make the percentages out of the <em>other</em>
+one. Given that a student is a female, how likely are they to call for
+the research to stop? The other way around makes less sense: given
+that a person wanted the research to stop, how likely are they to be
+female?</p>
+<p>About 70% of females and 40% of males want the research to
+stop. That’s a giant-sized difference. No wonder it was significant.</p>
+<p>The other way of making the table is to use <code>xtabs</code>, with the
+same result:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="logistic-regression-redux.html#cb15-1"></a><span class="kw">xtabs</span>(<span class="op">~</span><span class="st"> </span>decision <span class="op">+</span><span class="st"> </span>gender, <span class="dt">data =</span> decide)</span></code></pre></div>
+<pre><code>##           gender
+## decision   Female Male
+##   continue     60   68
+##   stop        140   47</code></pre>
+<p>In this one, the frequency variable goes on the left side of the
+squiggle. We don’t have one here (each row of the data frame
+represents one student), so we leave the left side blank. I tried
+putting a <code>.</code> there, but that doesn’t work since there is no
+“whatever was there before” as there is, for example, in
+<code>update</code>.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><a name="part:whichprob">*</a> Is your slope for <code>gender</code> in the previous logistic
+regression positive or negative? Is it applying to males or to females?
+Looking at the conclusions from your
+contingency table, what probability does that mean your logistic
+regression is actually modelling?</li>
+</ol>
+<p>Solution</p>
+<p>My slope is <span class="math inline">\(-1.2167\)</span>, negative, and it is attached to males (note
+that the slope is called <code>gendermale</code>: because “female”
+is before “male” alphabetically, females are used as the
+baseline and this slope says how males compare to them).
+This negative male coefficient means that the probability of
+whatever is being modelled is <em>less</em> for males than it is for
+females. Looking at the contingency table for the last part, the
+probability of “stop” should be less for males, so the logistic
+regression is actually modelling the probability of
+“stop”. Another way to reason that this must be the right answer
+is that the two values of <code>decision</code> are <code>continue</code>
+and <code>stop</code>; <code>continue</code> is first alphabetically, so
+it’s the baseline, and the <em>other</em> one, <code>stop</code>, is the
+one whose probability is being modelled.
+That’s why I made you do that contingency table. Another way to
+think about
+this is to do a prediction, which would go like this:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="logistic-regression-redux.html#cb17-1"></a>genders &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>)</span>
+<span id="cb17-2"><a href="logistic-regression-redux.html#cb17-2"></a>new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">gender =</span> genders)</span>
+<span id="cb17-3"><a href="logistic-regression-redux.html#cb17-3"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(decide<span class="fl">.1</span>, new, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb17-4"><a href="logistic-regression-redux.html#cb17-4"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<pre><code>##   gender         p
+## 1 Female 0.7000000
+## 2   Male 0.4086957</code></pre>
+<p>The probability of whatever-it-is is exactly 70% for females and
+about 40% for males. A quick look at the contingency table shows
+that exactly 70% (<span class="math inline">\(140/200\)</span>) of the females think the research should
+stop, and a bit less than 50% of the males think the same thing. So
+the model is predicting the probability of “stop”.</p>
+<p>There’s a logic to this: it’s not just this way “because it is”.
+It’s the same idea of the first category, now of the response
+factor, being a “baseline”, and what actually gets modelled is the
+<em>second</em> category, relative to the baseline.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Add the two variables <code>idealism</code> and
+<code>relativism</code> to your logistic regression. Do either or both of them add
+significantly to your model? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The obvious way of doing this is to type out the entire model,
+with the two new variables on the end. You have to remember to
+turn <code>decision</code> into a <code>factor</code> again:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="logistic-regression-redux.html#cb19-1"></a>decide<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(<span class="kw">factor</span>(decision) <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>idealism <span class="op">+</span><span class="st"> </span>relativism,</span>
+<span id="cb19-2"><a href="logistic-regression-redux.html#cb19-2"></a>  <span class="dt">data =</span> decide, <span class="dt">family =</span> <span class="st">&quot;binomial&quot;</span></span>
+<span id="cb19-3"><a href="logistic-regression-redux.html#cb19-3"></a>)</span>
+<span id="cb19-4"><a href="logistic-regression-redux.html#cb19-4"></a><span class="kw">summary</span>(decide<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = factor(decision) ~ gender + idealism + relativism, 
+##     family = &quot;binomial&quot;, data = decide)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2226  -0.9891   0.4798   0.8748   2.0442  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -1.4876     0.9787  -1.520  0.12849    
+## genderMale   -1.1710     0.2679  -4.372 1.23e-05 ***
+## idealism      0.6893     0.1115   6.180 6.41e-10 ***
+## relativism   -0.3432     0.1245  -2.757  0.00584 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 425.57  on 314  degrees of freedom
+## Residual deviance: 346.50  on 311  degrees of freedom
+## AIC: 354.5
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>This is not so bad, copying and pasting. But
+the way I like better, when you’re making a smallish change to a
+longish model, is to use <code>update</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="logistic-regression-redux.html#cb21-1"></a>decide<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(decide<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>idealism <span class="op">+</span><span class="st"> </span>relativism)</span>
+<span id="cb21-2"><a href="logistic-regression-redux.html#cb21-2"></a><span class="kw">summary</span>(decide<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = factor(decision) ~ gender + idealism + relativism, 
+##     family = &quot;binomial&quot;, data = decide)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.2226  -0.9891   0.4798   0.8748   2.0442  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)  -1.4876     0.9787  -1.520  0.12849    
+## genderMale   -1.1710     0.2679  -4.372 1.23e-05 ***
+## idealism      0.6893     0.1115   6.180 6.41e-10 ***
+## relativism   -0.3432     0.1245  -2.757  0.00584 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 425.57  on 314  degrees of freedom
+## Residual deviance: 346.50  on 311  degrees of freedom
+## AIC: 354.5
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>Either way is good. The conclusion you need to draw is that they both
+have something to add, because their P-values are both less than 0.05.</p>
+<p>Or (and perhaps better) you can look at <code>drop1</code> of either of these:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="logistic-regression-redux.html#cb23-1"></a><span class="kw">drop1</span>(decide<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender + idealism + relativism
+##            Df Deviance    AIC    LRT  Pr(&gt;Chi)    
+## &lt;none&gt;          346.50 354.50                     
+## gender      1   366.27 372.27 19.770 8.734e-06 ***
+## idealism    1   393.22 399.22 46.720 8.188e-12 ***
+## relativism  1   354.46 360.46  7.956  0.004792 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Add the variable <code>scenario</code> to your model. That is,
+fit a new model with that variable plus all the others.</li>
+</ol>
+<p>Solution</p>
+<p>To my mind, <code>update</code> wins hands down here:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="logistic-regression-redux.html#cb25-1"></a>decide<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(decide<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>scenario)</span></code></pre></div>
+<p>You can display the summary here if you like, but we’re not going to
+look at it yet.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Use <code>anova</code> to compare the models with and without
+<code>scenario</code>. You’ll have to add a <code>test="Chisq"</code> to your
+<code>anova</code>, to make sure that the test gets done.
+Does <code>scenario</code> make a difference or not, at <span class="math inline">\(\alpha=0.10\)</span>?
+Explain briefly.
+(The reason we have to do it this way is that
+<code>scenario</code> is a factor with five levels, so it has four slope
+coefficients. To test them all at once, which is what we need to make
+an overall test for <code>scenario</code>, this is the way it has to be
+done.)</li>
+</ol>
+<p>Solution</p>
+<p>These are the models that you fit in the last two parts:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="logistic-regression-redux.html#cb26-1"></a><span class="kw">anova</span>(decide<span class="fl">.2</span>, decide<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: factor(decision) ~ gender + idealism + relativism
+## Model 2: factor(decision) ~ gender + idealism + relativism + scenario
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)  
+## 1       311     346.50                       
+## 2       307     338.06  4   8.4431  0.07663 .
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The P-value is not less than 0.05, but it <em>is</em> less than 0.10,
+which is what I implied to assess it with, so the scenario does make some
+kind of difference.</p>
+<p>Extra: another way to do this, which I like better (but the
+<code>anova</code> way was what I asked in the original question), is to
+look at <code>decide.3</code> and ask “what can I get rid of”, in such a
+way that categorical variables stay or go as a whole. This is done
+using <code>drop1</code>. It’s a little different from the corresponding
+thing in regression because the right way to do the test is not an F
+test, but now a chi-squared test (this is true for all generalized
+linear models of which logistic regression is one):</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="logistic-regression-redux.html#cb28-1"></a><span class="kw">drop1</span>(decide<span class="fl">.3</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Single term deletions
+## 
+## Model:
+## factor(decision) ~ gender + idealism + relativism + scenario
+##            Df Deviance    AIC    LRT  Pr(&gt;Chi)    
+## &lt;none&gt;          338.06 354.06                     
+## gender      1   359.61 373.61 21.546 3.454e-06 ***
+## idealism    1   384.40 398.40 46.340 9.943e-12 ***
+## relativism  1   344.97 358.97  6.911  0.008567 ** 
+## scenario    4   346.50 354.50  8.443  0.076630 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The test for <code>scenario</code> has four degrees of freedom (since
+there are five scenarios), and is in fact exactly the same test as in
+<code>anova</code>, significant at <span class="math inline">\(\alpha=0.10\)</span>.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Look at the <code>summary</code> of your model that contained
+<code>scenario</code>. Bearing in mind that the slope coefficient for
+<code>scenariocosmetic</code> is zero (since this is the first scenario
+alphabetically), which scenarios have the most positive and most
+negative slope coefficients? What does that tell you about those
+scenarios’ effects?</li>
+</ol>
+<p>Solution</p>
+<p>All right. This is the model I called <code>decide.3</code>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="logistic-regression-redux.html#cb30-1"></a><span class="kw">summary</span>(decide<span class="fl">.3</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = factor(decision) ~ gender + idealism + relativism + 
+##     scenario, family = &quot;binomial&quot;, data = decide)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.3350  -0.9402   0.4645   0.8266   2.1564  
+## 
+## Coefficients:
+##                    Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept)         -1.5694     1.0426  -1.505   0.1322    
+## genderMale          -1.2551     0.2766  -4.537 5.70e-06 ***
+## idealism             0.7012     0.1139   6.156 7.48e-10 ***
+## relativism          -0.3264     0.1267  -2.576   0.0100 *  
+## scenariomeat         0.1565     0.4283   0.365   0.7149    
+## scenariomedical     -0.7095     0.4202  -1.688   0.0914 .  
+## scenariotheory       0.4501     0.4271   1.054   0.2919    
+## scenarioveterinary  -0.1672     0.4159  -0.402   0.6878    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 425.57  on 314  degrees of freedom
+## Residual deviance: 338.06  on 307  degrees of freedom
+## AIC: 354.06
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The most positive coefficient is for <code>theory</code> and the most
+negative one is for <code>medical</code>. (The zero coefficient is in the
+middle.) Since we are modelling the probability of saying that the
+research should <em>stop</em> (part (<a href="#part:whichprob">here</a>)), this means that:</p>
+<ul>
+<li><p>the “theory” scenario (evaluating theories about brain function)
+is most likely to lead to someone saying that the research should stop
+(other things being equal)</p></li>
+<li><p>the “medical” scenario (finding a
+cure for a human disease) is most likely to lead to someone saying
+that the research should continue (or least likely to say that it
+should stop), again, other things being equal.</p></li>
+</ul>
+<p>These make some kind of sense because being exposed to a scenario
+where there are tangible benefits later ought to be most favourable to
+the research continuing, and people are not going to be impressed by
+something that is “only theoretical” without any clear benefits.
+This also lends itself to a <code>predict</code> solution, but it’s a
+little fiddly. I need some “average” values for the other variables,
+and I don’t know what they are yet:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="logistic-regression-redux.html#cb32-1"></a>decide <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">across</span>(<span class="kw">where</span>(is.numeric), <span class="op">~</span><span class="kw">median</span>(.)))</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##   idealism relativism
+##      &lt;dbl&gt;      &lt;dbl&gt;
+## 1      6.5        6.1</code></pre>
+<p>(“if the variable is numeric, get me its median”.)</p>
+<p>The other thing we need is a list of all the scenarios. Here’s a cute
+way to do that:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="logistic-regression-redux.html#cb34-1"></a>scenarios &lt;-<span class="st"> </span>decide <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(scenario) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(scenario)</span>
+<span id="cb34-2"><a href="logistic-regression-redux.html#cb34-2"></a>scenarios</span></code></pre></div>
+<pre><code>## [1] &quot;cosmetic&quot;   &quot;meat&quot;       &quot;medical&quot;    &quot;theory&quot;     &quot;veterinary&quot;</code></pre>
+<p>I didn’t really need to know how many observations there were for each
+scenario, but it was a handy way to find out which scenarios there
+were without listing them all (and then having to pick out the unique
+ones).</p>
+<p>So now let’s make a data frame to predict from that has all
+scenarios for, let’s say, females. (We don’t have an interaction, so
+according to the model, the pattern is the same for males and
+females. So I could just as well have looked at males.)</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="logistic-regression-redux.html#cb36-1"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">idealism =</span> <span class="fl">6.5</span>, <span class="dt">relativism =</span> <span class="fl">6.1</span>, <span class="dt">gender =</span> <span class="st">&quot;Female&quot;</span>, <span class="dt">scenario =</span> scenarios)</span>
+<span id="cb36-2"><a href="logistic-regression-redux.html#cb36-2"></a>new</span></code></pre></div>
+<pre><code>## # A tibble: 5 x 4
+##   idealism relativism gender scenario  
+##      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     
+## 1      6.5        6.1 Female cosmetic  
+## 2      6.5        6.1 Female meat      
+## 3      6.5        6.1 Female medical   
+## 4      6.5        6.1 Female theory    
+## 5      6.5        6.1 Female veterinary</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="logistic-regression-redux.html#cb38-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(decide<span class="fl">.3</span>, new, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb38-2"><a href="logistic-regression-redux.html#cb38-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<pre><code>##   idealism relativism gender   scenario         p
+## 1      6.5        6.1 Female   cosmetic 0.7304565
+## 2      6.5        6.1 Female       meat 0.7601305
+## 3      6.5        6.1 Female    medical 0.5713725
+## 4      6.5        6.1 Female     theory 0.8095480
+## 5      6.5        6.1 Female veterinary 0.6963099</code></pre>
+<p>This echoes what we found before: the probability of saying that the
+research should stop is highest for “theory” and the lowest for “medical”.</p>
+<p>I assumed in my model that the effect of the scenarios was the same for males and
+females. If I wanted to test that, I’d have to add an interaction and
+test that. This works most nicely using <code>update</code> and then
+<code>anova</code>, to fit the model with interaction and compare it with
+the model without:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="logistic-regression-redux.html#cb40-1"></a>decide<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">update</span>(decide<span class="fl">.3</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>gender <span class="op">*</span><span class="st"> </span>scenario)</span>
+<span id="cb40-2"><a href="logistic-regression-redux.html#cb40-2"></a><span class="kw">anova</span>(decide<span class="fl">.3</span>, decide<span class="fl">.4</span>, <span class="dt">test =</span> <span class="st">&quot;Chisq&quot;</span>)</span></code></pre></div>
+<pre><code>## Analysis of Deviance Table
+## 
+## Model 1: factor(decision) ~ gender + idealism + relativism + scenario
+## Model 2: factor(decision) ~ gender + idealism + relativism + scenario + 
+##     gender:scenario
+##   Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)
+## 1       307     338.06                     
+## 2       303     337.05  4   1.0122   0.9079</code></pre>
+<p>No evidence at all that the scenarios have different effects for the
+different genders. The appropriate <code>predict</code> should show that too:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="logistic-regression-redux.html#cb42-1"></a>genders &lt;-<span class="st"> </span>decide <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(gender)</span>
+<span id="cb42-2"><a href="logistic-regression-redux.html#cb42-2"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">idealism =</span> <span class="fl">6.5</span>, <span class="dt">relativism =</span> <span class="fl">6.1</span>, <span class="dt">gender =</span> genders, <span class="dt">scenario =</span> scenarios)</span>
+<span id="cb42-3"><a href="logistic-regression-redux.html#cb42-3"></a>new</span></code></pre></div>
+<pre><code>## # A tibble: 10 x 4
+##    idealism relativism gender scenario  
+##       &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;     
+##  1      6.5        6.1 Female cosmetic  
+##  2      6.5        6.1 Female meat      
+##  3      6.5        6.1 Female medical   
+##  4      6.5        6.1 Female theory    
+##  5      6.5        6.1 Female veterinary
+##  6      6.5        6.1 Male   cosmetic  
+##  7      6.5        6.1 Male   meat      
+##  8      6.5        6.1 Male   medical   
+##  9      6.5        6.1 Male   theory    
+## 10      6.5        6.1 Male   veterinary</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="logistic-regression-redux.html#cb44-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(decide<span class="fl">.4</span>, new, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb44-2"><a href="logistic-regression-redux.html#cb44-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<pre><code>##    idealism relativism gender   scenario         p
+## 1       6.5        6.1 Female   cosmetic 0.7670133
+## 2       6.5        6.1 Female       meat 0.7290272
+## 3       6.5        6.1 Female    medical 0.5666034
+## 4       6.5        6.1 Female     theory 0.8251472
+## 5       6.5        6.1 Female veterinary 0.6908189
+## 6       6.5        6.1   Male   cosmetic 0.3928582
+## 7       6.5        6.1   Male       meat 0.5438679
+## 8       6.5        6.1   Male    medical 0.2860504
+## 9       6.5        6.1   Male     theory 0.5237310
+## 10      6.5        6.1   Male veterinary 0.4087458</code></pre>
+<p>The probability of “stop” is a lot higher for females than for males
+(that is the strong <code>gender</code> effect we found earlier), but the
+<em>pattern</em> is about the same for males and females: the difference in
+probabilities
+<label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote">Strictly, we should look at the difference in log-odds.</span>
+is about the same, and also both genders have almost the highest predicted
+probability for <code>theory</code> (the highest male one is actually for
+<code>meat</code> but there’s not much in it)
+and the lowest one for
+<code>medical</code>, as we found before. The pattern is not
+<em>exactly</em> the same because these predictions came from the model
+with interaction. If you use the model without interaction, you get this:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="logistic-regression-redux.html#cb46-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(decide<span class="fl">.3</span>, new, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb46-2"><a href="logistic-regression-redux.html#cb46-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<pre><code>##    idealism relativism gender   scenario         p
+## 1       6.5        6.1 Female   cosmetic 0.7304565
+## 2       6.5        6.1 Female       meat 0.7601305
+## 3       6.5        6.1 Female    medical 0.5713725
+## 4       6.5        6.1 Female     theory 0.8095480
+## 5       6.5        6.1 Female veterinary 0.6963099
+## 6       6.5        6.1   Male   cosmetic 0.4358199
+## 7       6.5        6.1   Male       meat 0.4745996
+## 8       6.5        6.1   Male    medical 0.2753530
+## 9       6.5        6.1   Male     theory 0.5478510
+## 10      6.5        6.1   Male veterinary 0.3952499</code></pre>
+<p>and the scenarios are ranked in <em>exactly</em> the same order by males
+and females. The probabilities from the two models are very close
+(compare them), so there is no value in adding the interaction, as we
+found before.</p>
+<p>So fitting an interaction was a
+waste of time, but it was worth checking whether it was.</p>
+<ol style="list-style-type: lower-roman">
+<li>Describe the effects that having (i) a higher idealism score
+and (ii) a higher relativity score have on a person’s probability of
+saying that the research should stop. Do each of these increase or decrease
+that probability? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>Look back at the summary for the model that I called
+<code>decide.3</code>. (Or <code>decide.2</code>: the slope coefficients
+are very similar.) The one for <code>idealism</code> is positive, so
+that a higher idealism score goes with a greater likelihood of
+saying that the research should stop. The slope coefficient for
+<code>relativity</code> is negative, so it’s the other way around: a
+higher relativity score goes with a <em>lower</em> chance of saying
+that the research should stop.
+That’s all I needed, but as an extra, we can look back at the
+description of these scales in the question.
+The <code>relativism</code> one was that a person believed that the
+most moral action depends on the situation (as opposed to a person
+having something like religious faith that asserts universal moral
+principles that are always true. That would be a low score on the
+relativism scale). Somebody with a low score on this scale might
+believe something like
+“it is always wrong to experiment on animals”, whereas somebody with a high relativism score might
+say that it was sometimes justified. Thus, other things being
+equal, a low relativism score would go with “stop” and a high
+relativism score would (or might) go with “continue”. This
+would mean a <em>negative</em> slope coefficient for
+<code>relativism</code>, which is what we observed. (Are you still
+with me? There was some careful thinking there.)</p>
+<p>What about <code>idealism</code>? This is a belief that ethical behaviour
+will always lead to good consequences, and thus, if the
+consequences are bad, the behaviour must not have been ethical. A
+person who scores high on idealism is likely to look at the
+consequences (experimentation on animals), see that as a bad
+thing, and thus conclude that the research should be stopped. The
+<code>idealism</code> slope coefficient, by that argument, should be
+positive, and is.</p>
+<p>This will also lead to a <code>predict</code>. We need “low” and
+“high” scores on the idealism and relativism tests. Let’s use
+the quartiles:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="logistic-regression-redux.html#cb48-1"></a>decide <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(</span>
+<span id="cb48-2"><a href="logistic-regression-redux.html#cb48-2"></a>  <span class="dt">i_q1 =</span> <span class="kw">quantile</span>(idealism, <span class="fl">0.25</span>),</span>
+<span id="cb48-3"><a href="logistic-regression-redux.html#cb48-3"></a>  <span class="dt">i_q3 =</span> <span class="kw">quantile</span>(idealism, <span class="fl">0.75</span>),</span>
+<span id="cb48-4"><a href="logistic-regression-redux.html#cb48-4"></a>  <span class="dt">r_q1 =</span> <span class="kw">quantile</span>(relativism, <span class="fl">0.25</span>),</span>
+<span id="cb48-5"><a href="logistic-regression-redux.html#cb48-5"></a>  <span class="dt">r_q3 =</span> <span class="kw">quantile</span>(relativism, <span class="fl">0.75</span>)</span>
+<span id="cb48-6"><a href="logistic-regression-redux.html#cb48-6"></a>)</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 4
+##    i_q1  i_q3  r_q1  r_q3
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   5.6   7.5   5.4   6.8</code></pre>
+<p>There is a more elegant way, but this works.
+Let’s use the scenario <code>cosmetic</code> that was middling in its
+effects, and think about females:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="logistic-regression-redux.html#cb50-1"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(</span>
+<span id="cb50-2"><a href="logistic-regression-redux.html#cb50-2"></a>  <span class="dt">idealism =</span> <span class="kw">c</span>(<span class="fl">5.6</span>, <span class="fl">7.5</span>), <span class="dt">relativism =</span> <span class="kw">c</span>(<span class="fl">5.4</span>, <span class="fl">6.8</span>),</span>
+<span id="cb50-3"><a href="logistic-regression-redux.html#cb50-3"></a>  <span class="dt">gender =</span> <span class="st">&quot;Female&quot;</span>, <span class="dt">scenario =</span> <span class="st">&quot;cosmetic&quot;</span></span>
+<span id="cb50-4"><a href="logistic-regression-redux.html#cb50-4"></a>)</span>
+<span id="cb50-5"><a href="logistic-regression-redux.html#cb50-5"></a>new</span></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   idealism relativism gender scenario
+##      &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;   
+## 1      5.6        5.4 Female cosmetic
+## 2      5.6        6.8 Female cosmetic
+## 3      7.5        5.4 Female cosmetic
+## 4      7.5        6.8 Female cosmetic</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="logistic-regression-redux.html#cb52-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(decide<span class="fl">.3</span>, new, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</span>
+<span id="cb52-2"><a href="logistic-regression-redux.html#cb52-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<pre><code>##   idealism relativism gender scenario         p
+## 1      5.6        5.4 Female cosmetic 0.6443730
+## 2      5.6        6.8 Female cosmetic 0.5342955
+## 3      7.5        5.4 Female cosmetic 0.8728724
+## 4      7.5        6.8 Female cosmetic 0.8129966</code></pre>
+<p>For both of the idealism scores, the higher relativism score went with
+a lower probability of “stop” (the “negative” effect), and for
+both of the relativism scores, the higher idealism score went with a
+<em>higher</em> probability of “stop” (the positive effect).</p>
+<p>That’s quite enough discussion of the question, except that the data
+didn’t come to me in the form that you see them, so I figured I would
+like to share the story of the data processing as well. I think this
+is important because in your future work you are likely to spend a lot
+of your time getting data from how you receive it to something
+suitable for analysis.</p>
+<p>These data came from a psychology study (with, probably, the students
+in a class serving as experimental subjects). Social scientists like
+to use SPSS software, so the data came to me as an SPSS <code>.sav</code>
+file.
+<label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote">If you took STAB23, you’ll have used PSPP, which is a free version of SPSS.</span> The least-fuss way of handling this that I
+could think of was to use <code>import</code> from the <code>rio</code>
+package, which I think I mentioned before:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="logistic-regression-redux.html#cb54-1"></a><span class="kw">library</span>(rio)</span>
+<span id="cb54-2"><a href="logistic-regression-redux.html#cb54-2"></a>x &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&quot;/home/ken/Downloads/Logistic.sav&quot;</span>)</span>
+<span id="cb54-3"><a href="logistic-regression-redux.html#cb54-3"></a><span class="kw">str</span>(x)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    315 obs. of  11 variables:
+##  $ decision   : num  0 1 1 0 1 1 0 0 0 0 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##   ..- attr(*, &quot;labels&quot;)= Named num [1:2] 0 1
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;stop&quot; &quot;continue&quot;
+##  $ idealism   : num  8.2 6.8 8.2 7.4 1.7 5.6 7.2 7.8 7.8 8 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F12.4&quot;
+##  $ relatvsm   : num  5.1 5.3 6 6.2 3.1 7.7 6.7 4 4.7 7.6 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F12.4&quot;
+##  $ gender     : num  0 1 0 0 0 1 0 1 0 0 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##   ..- attr(*, &quot;labels&quot;)= Named num [1:2] 0 1
+##   .. ..- attr(*, &quot;names&quot;)= chr [1:2] &quot;Female&quot; &quot;Male&quot;
+##  $ cosmetic   : num  1 1 1 1 1 1 1 1 1 1 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##  $ theory     : num  0 0 0 0 0 0 0 0 0 0 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##  $ meat       : num  0 0 0 0 0 0 0 0 0 0 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##  $ veterin    : num  0 0 0 0 0 0 0 0 0 0 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F1.0&quot;
+##  $ idealism_LN: num  2.104 1.917 2.104 2.001 0.531 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F8.2&quot;
+##   ..- attr(*, &quot;display_width&quot;)= int 13
+##  $ relatvsm_LN: num  1.63 1.67 1.79 1.82 1.13 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F8.2&quot;
+##   ..- attr(*, &quot;display_width&quot;)= int 13
+##  $ scenario   : num  1 1 1 1 1 1 1 1 1 1 ...
+##   ..- attr(*, &quot;format.spss&quot;)= chr &quot;F8.2&quot;
+##   ..- attr(*, &quot;display_width&quot;)= int 10</code></pre>
+<p>The last line <code>str</code> displays the “structure” of the data
+frame that was obtained. Normally a data frame read into R has a much
+simpler structure than this, but this is R trying to interpret how
+SPSS does things. Here, each column (listed on the lines beginning
+with a dollar sign) has some values, listed after <code>num</code>; they
+are all numeric, even the categorical ones. What happened to the
+categorical variables is that they got turned into numbers, and they
+have a <code>names</code> “attribute” further down that says what those
+numbers actually represent.
+Thus, on
+the <code>gender</code> line, the subjects are a female (0), then a male
+(1), then three females, then a male, and so on. Variables like
+<code>gender</code> are thus so far neither really factors nor text
+variables, and so we’ll have to do a bit of processing before we can
+use them: we want to replace the numerical values by the appropriate
+“level”.</p>
+<p>To turn a numeric variable into text depending on the value, we can
+use <code>ifelse</code>, but this gets unwieldy if there are more than two
+values to translate. For that kind of job, I think <code>case_when</code>
+is a lot easier to read. It also lets us have a catch-all for catching
+errors — “impossible” values occur distressingly often in real data:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="logistic-regression-redux.html#cb56-1"></a>xx &lt;-<span class="st"> </span>x <span class="op">%&gt;%</span></span>
+<span id="cb56-2"><a href="logistic-regression-redux.html#cb56-2"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb56-3"><a href="logistic-regression-redux.html#cb56-3"></a>    <span class="dt">decision =</span> <span class="kw">case_when</span>(</span>
+<span id="cb56-4"><a href="logistic-regression-redux.html#cb56-4"></a>      decision <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> &quot;stop&quot;</span>,</span>
+<span id="cb56-5"><a href="logistic-regression-redux.html#cb56-5"></a>      decision <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;continue&quot;</span>,</span>
+<span id="cb56-6"><a href="logistic-regression-redux.html#cb56-6"></a>      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;error&quot;</span></span>
+<span id="cb56-7"><a href="logistic-regression-redux.html#cb56-7"></a>    ),</span>
+<span id="cb56-8"><a href="logistic-regression-redux.html#cb56-8"></a>    <span class="dt">gender =</span> <span class="kw">case_when</span>(</span>
+<span id="cb56-9"><a href="logistic-regression-redux.html#cb56-9"></a>      gender <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> &quot;Female&quot;</span>,</span>
+<span id="cb56-10"><a href="logistic-regression-redux.html#cb56-10"></a>      gender <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;Male&quot;</span>,</span>
+<span id="cb56-11"><a href="logistic-regression-redux.html#cb56-11"></a>      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;error&quot;</span></span>
+<span id="cb56-12"><a href="logistic-regression-redux.html#cb56-12"></a>    ),</span>
+<span id="cb56-13"><a href="logistic-regression-redux.html#cb56-13"></a>    <span class="dt">scenario =</span> <span class="kw">case_when</span>(</span>
+<span id="cb56-14"><a href="logistic-regression-redux.html#cb56-14"></a>      scenario <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> &quot;cosmetic&quot;</span>,</span>
+<span id="cb56-15"><a href="logistic-regression-redux.html#cb56-15"></a>      scenario <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> &quot;theory&quot;</span>,</span>
+<span id="cb56-16"><a href="logistic-regression-redux.html#cb56-16"></a>      scenario <span class="op">==</span><span class="st"> </span><span class="dv">3</span> <span class="op">~</span><span class="st"> &quot;meat&quot;</span>,</span>
+<span id="cb56-17"><a href="logistic-regression-redux.html#cb56-17"></a>      scenario <span class="op">==</span><span class="st"> </span><span class="dv">4</span> <span class="op">~</span><span class="st"> &quot;veterinary&quot;</span>,</span>
+<span id="cb56-18"><a href="logistic-regression-redux.html#cb56-18"></a>      scenario <span class="op">==</span><span class="st"> </span><span class="dv">5</span> <span class="op">~</span><span class="st"> &quot;medical&quot;</span>,</span>
+<span id="cb56-19"><a href="logistic-regression-redux.html#cb56-19"></a>      <span class="ot">TRUE</span> <span class="op">~</span><span class="st"> &quot;error&quot;</span></span>
+<span id="cb56-20"><a href="logistic-regression-redux.html#cb56-20"></a>    )</span>
+<span id="cb56-21"><a href="logistic-regression-redux.html#cb56-21"></a>  )</span>
+<span id="cb56-22"><a href="logistic-regression-redux.html#cb56-22"></a>xx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>(cosmetic<span class="op">:</span>veterin))</span></code></pre></div>
+<pre><code>## # A tibble: 315 x 7
+##    decision idealism relatvsm gender idealism_LN relatvsm_LN scenario
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;   
+##  1 stop          8.2      5.1 Female       2.10         1.63 cosmetic
+##  2 continue      6.8      5.3 Male         1.92         1.67 cosmetic
+##  3 continue      8.2      6   Female       2.10         1.79 cosmetic
+##  4 stop          7.4      6.2 Female       2.00         1.82 cosmetic
+##  5 continue      1.7      3.1 Female       0.531        1.13 cosmetic
+##  6 continue      5.6      7.7 Male         1.72         2.04 cosmetic
+##  7 stop          7.2      6.7 Female       1.97         1.90 cosmetic
+##  8 stop          7.8      4   Male         2.05         1.39 cosmetic
+##  9 stop          7.8      4.7 Female       2.05         1.55 cosmetic
+## 10 stop          8        7.6 Female       2.08         2.03 cosmetic
+## # … with 305 more rows</code></pre>
+<p><code>xx</code> is a “real” <code>data.frame</code> (that’s what
+<code>rio</code> reads in), and has some extra columns that we don’t want
+to see right now.</p>
+<p>I have three new variables being created in one <code>mutate</code>. Each
+is being created using a <code>case_when</code>. The thing on the left of
+each squiggle is a logical condition being tested; the first of these
+logical conditions to come out <code>TRUE</code> provides the value for
+the new variable on the right of the squiggle. Thus, if the (old)
+<code>scenario</code> is 2, the new <code>scenario</code> will be
+<code>theory</code>. The <code>TRUE</code> lines in each case provide
+something that is guaranteed to be true, even if all the other lines
+are false (eg. if <code>scenario</code> is actually recorded as 7, which
+would be an error).</p>
+<p>I overwrote the old variable values with the new ones, which is a bit
+risky, but then I’d have more things to get rid of later.</p>
+<p>My next step is to check that I don’t actually have any errors:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="logistic-regression-redux.html#cb58-1"></a>xx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(scenario, gender, decision)</span></code></pre></div>
+<pre><code>##      scenario gender decision  n
+## 1    cosmetic Female continue  8
+## 2    cosmetic Female     stop 26
+## 3    cosmetic   Male continue 17
+## 4    cosmetic   Male     stop 11
+## 5        meat Female continue 11
+## 6        meat Female     stop 31
+## 7        meat   Male continue 12
+## 8        meat   Male     stop  9
+## 9     medical Female continue 19
+## 10    medical Female     stop 24
+## 11    medical   Male continue 15
+## 12    medical   Male     stop  5
+## 13     theory Female continue  8
+## 14     theory Female     stop 30
+## 15     theory   Male continue 12
+## 16     theory   Male     stop 14
+## 17 veterinary Female continue 14
+## 18 veterinary Female     stop 29
+## 19 veterinary   Male continue 12
+## 20 veterinary   Male     stop  8</code></pre>
+<p>Don’t see any errors there.</p>
+<p>So now let’s write what we have to a file. I think a <code>.csv</code>
+would be smart:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="logistic-regression-redux.html#cb60-1"></a>xx <span class="op">%&gt;%</span></span>
+<span id="cb60-2"><a href="logistic-regression-redux.html#cb60-2"></a><span class="st">  </span><span class="kw">select</span>(decision, idealism, relatvsm, gender, scenario) <span class="op">%&gt;%</span></span>
+<span id="cb60-3"><a href="logistic-regression-redux.html#cb60-3"></a><span class="st">  </span><span class="kw">write_csv</span>(<span class="st">&quot;decision.csv&quot;</span>)</span></code></pre></div>
+<p>There is one more tiny detail: in SPSS, variable names can have a
+maximum of eight letters. “Relativism” has 10. So the original data
+file had the name “relativism” minus the two “i”s. I changed that
+so you would be dealing with a proper English word. (That change is
+not shown here.)</p>
+<p>There is actually a <em>town</em> called Catbrain. It’s in England,
+near Bristol, and seems to be home to a street of car dealerships.
+Just to show that you can do <em>anything</em> in R:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="logistic-regression-redux.html#cb61-1"></a><span class="kw">library</span>(leaflet)</span>
+<span id="cb61-2"><a href="logistic-regression-redux.html#cb61-2"></a><span class="kw">library</span>(tmaptools)</span></code></pre></div>
+<p>First we need to find the latitude and longitude of Catbrain:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="logistic-regression-redux.html#cb62-1"></a>catbrain &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">place =</span> <span class="st">&quot;Catbrain UK&quot;</span>)</span>
+<span id="cb62-2"><a href="logistic-regression-redux.html#cb62-2"></a>catbrain <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">ll =</span> <span class="kw">list</span>(<span class="kw">geocode_OSM</span>(place))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-3"><a href="logistic-regression-redux.html#cb62-3"></a><span class="st">  </span><span class="kw">unnest_wider</span>(ll) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb62-4"><a href="logistic-regression-redux.html#cb62-4"></a><span class="st">  </span><span class="kw">unnest_wider</span>(coords) -&gt;<span class="st"> </span>catbrain</span>
+<span id="cb62-5"><a href="logistic-regression-redux.html#cb62-5"></a>catbrain</span></code></pre></div>
+<pre><code>## # A tibble: 1 x 5
+##   place       query           x     y bbox      
+##   &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
+## 1 Catbrain UK Catbrain UK -2.61  51.5 &lt;bbox [4]&gt;</code></pre>
+<p>All right, and then make a map of it:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="logistic-regression-redux.html#cb64-1"></a><span class="kw">leaflet</span>(<span class="dt">data =</span> catbrain) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-2"><a href="logistic-regression-redux.html#cb64-2"></a><span class="st">  </span><span class="kw">addTiles</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb64-3"><a href="logistic-regression-redux.html#cb64-3"></a><span class="st">  </span><span class="kw">addCircleMarkers</span>(<span class="dt">lng =</span> <span class="op">~</span>x, <span class="dt">lat =</span> <span class="op">~</span>y) -&gt;<span class="st"> </span>catbrain_map</span>
+<span id="cb64-4"><a href="logistic-regression-redux.html#cb64-4"></a>catbrain_map</span></code></pre></div>
+<div id="htmlwidget-081e86fdb6c07a22e3f2" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-081e86fdb6c07a22e3f2">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[51.5228823,-2.6124662,10,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[51.5228823,51.5228823],"lng":[-2.6124662,-2.6124662]}},"evals":[],"jsHooks":[]}</script>
+<p>The car dealerships are along Lysander Road. Zoom in
+to see them.</p>
+<p>The name, according to
+<a href="http://www.bristolpost.co.uk/news/history/name-catbrain-hill-came-825247">link</a>,
+means “rough stony soil”, from Middle English, and has nothing to do
+with cats or their brains at all.</p>
+<p>I was actually surprised that this worked at all, because with only one point, how does it know what scale to draw the map? Also, unless your UK geography is really good, you won’t have any clue about exactly where this is. So let’s add some other places, some of which you might have heard of:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="logistic-regression-redux.html#cb65-1"></a>catbrain2 &lt;-<span class="st"> </span><span class="kw">tribble</span>(</span>
+<span id="cb65-2"><a href="logistic-regression-redux.html#cb65-2"></a>  <span class="op">~</span>where,</span>
+<span id="cb65-3"><a href="logistic-regression-redux.html#cb65-3"></a>  <span class="st">&quot;Catbrain UK&quot;</span>,</span>
+<span id="cb65-4"><a href="logistic-regression-redux.html#cb65-4"></a>  <span class="st">&quot;Bristol UK&quot;</span>,</span>
+<span id="cb65-5"><a href="logistic-regression-redux.html#cb65-5"></a>  <span class="st">&quot;Taunton UK&quot;</span>,</span>
+<span id="cb65-6"><a href="logistic-regression-redux.html#cb65-6"></a>  <span class="st">&quot;Newport UK&quot;</span>,</span>
+<span id="cb65-7"><a href="logistic-regression-redux.html#cb65-7"></a>  <span class="st">&quot;Gloucester UK&quot;</span>,</span>
+<span id="cb65-8"><a href="logistic-regression-redux.html#cb65-8"></a>  <span class="st">&quot;Cardiff UK&quot;</span>,</span>
+<span id="cb65-9"><a href="logistic-regression-redux.html#cb65-9"></a>  <span class="st">&quot;Birmingham UK&quot;</span>,</span>
+<span id="cb65-10"><a href="logistic-regression-redux.html#cb65-10"></a>  <span class="st">&quot;London UK&quot;</span>,</span>
+<span id="cb65-11"><a href="logistic-regression-redux.html#cb65-11"></a>  <span class="st">&quot;Caldicot UK&quot;</span></span>
+<span id="cb65-12"><a href="logistic-regression-redux.html#cb65-12"></a>)</span>
+<span id="cb65-13"><a href="logistic-regression-redux.html#cb65-13"></a>catbrain2 <span class="op">%&gt;%</span></span>
+<span id="cb65-14"><a href="logistic-regression-redux.html#cb65-14"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-15"><a href="logistic-regression-redux.html#cb65-15"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ll =</span> <span class="kw">list</span>(<span class="kw">geocode_OSM</span>(where))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-16"><a href="logistic-regression-redux.html#cb65-16"></a><span class="st">  </span><span class="kw">unnest_wider</span>(ll) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-17"><a href="logistic-regression-redux.html#cb65-17"></a><span class="st">  </span><span class="kw">unnest_wider</span>(coords) -&gt;<span class="st"> </span>catbrain2</span>
+<span id="cb65-18"><a href="logistic-regression-redux.html#cb65-18"></a>catbrain2</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 5
+##   where         query              x     y bbox      
+##   &lt;chr&gt;         &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
+## 1 Catbrain UK   Catbrain UK   -2.61   51.5 &lt;bbox [4]&gt;
+## 2 Bristol UK    Bristol UK    -2.60   51.5 &lt;bbox [4]&gt;
+## 3 Taunton UK    Taunton UK    -3.10   51.0 &lt;bbox [4]&gt;
+## 4 Newport UK    Newport UK    -3.00   51.6 &lt;bbox [4]&gt;
+## 5 Gloucester UK Gloucester UK -2.25   51.9 &lt;bbox [4]&gt;
+## 6 Cardiff UK    Cardiff UK    -3.18   51.5 &lt;bbox [4]&gt;
+## 7 Birmingham UK Birmingham UK -1.90   52.5 &lt;bbox [4]&gt;
+## 8 London UK     London UK     -0.128  51.5 &lt;bbox [4]&gt;
+## 9 Caldicot UK   Caldicot UK   -2.75   51.6 &lt;bbox [4]&gt;</code></pre>
+<p>The first time I did this, I forgot the <code>rowwise</code>, which we didn’t need the first time (there was only one place), but here, it causes odd problems if you omit it.</p>
+<p>A map, then:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="logistic-regression-redux.html#cb67-1"></a><span class="kw">leaflet</span>(<span class="dt">data =</span> catbrain2) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb67-2"><a href="logistic-regression-redux.html#cb67-2"></a><span class="st">  </span><span class="kw">addTiles</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb67-3"><a href="logistic-regression-redux.html#cb67-3"></a><span class="st">  </span><span class="kw">addCircleMarkers</span>(<span class="dt">lng =</span> <span class="op">~</span>x, <span class="dt">lat =</span> <span class="op">~</span>y)</span></code></pre></div>
+<div id="htmlwidget-e6ddd5c433e393a58134" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e6ddd5c433e393a58134">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addCircleMarkers","args":[[51.5228823,51.4538022,51.0147895,51.5882332,51.8653705,51.4816546,52.4796992,51.5073219,51.5912466],[-2.6124662,-2.5972985,-3.1029086,-2.9974967,-2.2458192,-3.1791934,-1.9026911,-0.1276474,-2.7517629],10,null,null,{"interactive":true,"className":"","stroke":true,"color":"#03F","weight":5,"opacity":0.5,"fill":true,"fillColor":"#03F","fillOpacity":0.2},null,null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[51.0147895,52.4796992],"lng":[-3.1791934,-0.1276474]}},"evals":[],"jsHooks":[]}</script>
+<p>Now, if you have any sense of the geography of the UK, you know where
+you are. The places on the left and top of the map are in Wales, including
+Caldicot (see question about pottery). The big river (the Severn) is
+the border between England and Wales.</p>
+<p>More irrelevant extra: the M5 is one of the English “motorways” (like 400-series highways
+or US Interstates). The M5 goes from Birmingham to Exeter. You can
+tell that this is England because of the huge number of traffic
+circles, known there as “roundabouts”. One of the first things they
+teach you in British driving schools is how to handle roundabouts:
+which lane to approach them in, which (stick-shift) gear to be in, and
+when you’re supposed to signal where you’re going. I hope I still
+remember all that for when I next drive in England!</p>
+
+</div>
+</div>
+<p style="text-align: center;">
+<a href="index.html"><button class="btn btn-default">Previous</button></a>
+<a href="getting-used-to-r-and-r-studio.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>

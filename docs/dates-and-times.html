@@ -5,7 +5,7 @@
 <meta charset="utf-8" />
 <meta name="generator" content="pandoc" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Chapter 15 Dates and times | Problems and Solutions in Applied Statistics" />
+<meta property="og:title" content="Chapter 16 Dates and times | Problems and Solutions in Applied Statistics" />
 <meta property="og:type" content="book" />
 <meta property="og:url" content="http://ritsokiguess.site/pasias" />
 
@@ -25,16 +25,23 @@ MathJax.Hub.Config({
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
-<title>Chapter 15 Dates and times | Problems and Solutions in Applied Statistics</title>
+<title>Chapter 16 Dates and times | Problems and Solutions in Applied Statistics</title>
 
-<script src="libs/header-attrs-2.5/header-attrs.js"></script>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
 <script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
-<link href="libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -116,8 +123,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="packages-used-somewhere-in-this-book.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">2</span> Packages used somewhere in this book</a></li>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="logistic-regression-redux.html#logistic-regression-redux"><span class="toc-section-number">2</span> Logistic regression redux</a>
+<ul>
+<li><a href="logistic-regression-redux.html#the-brain-of-a-cat"><span class="toc-section-number">2.1</span> The brain of a cat</a></li>
+</ul></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">3</span> Getting used to R and R Studio</a>
 <ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">3.1</span> Getting an R Studio Cloud account</a></li>
@@ -125,224 +138,236 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">3.3</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">3.4</span> Reading files different ways</a></li>
 </ul></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#reading-in-data-and-drawing-some-graphs"><span class="toc-section-number">4</span> Reading in data and drawing some graphs</a>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">4</span> Reading in data</a>
 <ul>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
-<li><a href="reading-in-data-and-drawing-some-graphs.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">5</span> Drawing graphs</a>
 <ul>
-<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
-<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
-<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
-<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
-<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">5.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">5.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">5.3</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">6</span> Data exploration</a>
 <ul>
-<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
-<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
-<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
-<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">6.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">6.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">6.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">6.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">6.5</span> Test scores in two classes</a></li>
+<li><a href="data-exploration.html#working-with-dataframes"><span class="toc-section-number">6.6</span> Working with dataframes</a></li>
+<li><a href="data-exploration.html#tidying-the-jays-data"><span class="toc-section-number">6.7</span> Tidying the Jays data</a></li>
+<li><a href="data-exploration.html#cars"><span class="toc-section-number">6.8</span> Cars</a></li>
 </ul></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a>
 <ul>
-<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
-<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
-<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
-<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">7.4</span> Exercise and anxiety and bullying mice</a></li>
-<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">7.5</span> Diet and growth in boys</a></li>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
 </ul></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a>
 <ul>
-<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
-<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
-<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
 </ul></li>
-<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">9</span> The sign test and Mood’s median test</a>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a>
 <ul>
-<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">9.4</span> Sugar in breakfast cereals</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">9.5</span> Fear of math</a></li>
-<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">9.6</span> Medical instructions</a></li>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
 </ul></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">10</span> Matched pairs t and sign test</a>
+<li><a href="the-sign-test-and-moods-median-test.html#the-sign-test-and-moods-median-test"><span class="toc-section-number">10</span> The sign test and Mood’s median test</a>
 <ul>
-<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">10.1</span> Measuring body fat</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">10.2</span> Throwing baseballs and softballs</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">10.3</span> Throwing baseballs and softballs, again</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">10.4</span> Changes in salary</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">10.5</span> Body fat revisited</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.4</span> Sugar in breakfast cereals</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#fear-of-math"><span class="toc-section-number">10.5</span> Fear of math</a></li>
+<li><a href="the-sign-test-and-moods-median-test.html#medical-instructions"><span class="toc-section-number">10.6</span> Medical instructions</a></li>
 </ul></li>
-<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">11</span> Normal quantile plots</a>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
 <ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">11.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">11.2</span> Ferritin and normality</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">11.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">11.5</span> Body fat revisited</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">12</span> Analysis of variance</a>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
 <ul>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">12.1</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">12.2</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">12.3</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">12.4</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">12.5</span> Can caffeine improve your performance on a test?</a></li>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="tidying-and-selecting-data.html#tidying-and-selecting-data"><span class="toc-section-number">13</span> Tidying and selecting data</a>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
 <ul>
-<li><a href="tidying-and-selecting-data.html#tidying-the-jays-data"><span class="toc-section-number">13.1</span> Tidying the Jays data</a></li>
-<li><a href="tidying-and-selecting-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">13.2</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-and-selecting-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">13.3</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-and-selecting-data.html#growth-of-tomatoes"><span class="toc-section-number">13.4</span> Growth of tomatoes</a></li>
-<li><a href="tidying-and-selecting-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">13.5</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-and-selecting-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">13.6</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-and-selecting-data.html#mating-songs-in-crickets"><span class="toc-section-number">13.7</span> Mating songs in crickets</a></li>
-<li><a href="tidying-and-selecting-data.html#cars"><span class="toc-section-number">13.8</span> Cars</a></li>
-<li><a href="tidying-and-selecting-data.html#number-1-songs"><span class="toc-section-number">13.9</span> Number 1 songs</a></li>
-<li><a href="tidying-and-selecting-data.html#bikes-on-college"><span class="toc-section-number">13.10</span> Bikes on College</a></li>
-<li><a href="tidying-and-selecting-data.html#feeling-the-heat"><span class="toc-section-number">13.11</span> Feeling the heat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
 </ul></li>
-<li><a href="regression.html#regression"><span class="toc-section-number">14</span> Regression</a>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">14</span> Tidying data</a>
 <ul>
-<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">14.1</span> Rainfall in California</a></li>
-<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">14.2</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">14.3</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">14.4</span> Facebook friends and grey matter</a></li>
-<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">14.5</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">14.6</span> Sparrowhawks</a></li>
-<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">14.7</span> Salaries of social workers</a></li>
-<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">14.8</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">14.9</span> Tortoise shells and eggs</a></li>
-<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">14.10</span> Crickets revisited</a></li>
-<li><a href="regression.html#roller-coasters"><span class="toc-section-number">14.11</span> Roller coasters</a></li>
-<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">14.12</span> Running and blood sugar</a></li>
-<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">14.13</span> Calories and fat in pizza</a></li>
-<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">14.14</span> Where should the fire stations be?</a></li>
-<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">14.15</span> Being satisfied with hospital</a></li>
-<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">14.16</span> Handling shipments of chemicals</a></li>
-<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">14.17</span> Salaries of mathematicians</a></li>
-<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">14.18</span> Predicting GPA of computer science students</a></li>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">14.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">14.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">14.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">14.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">14.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">14.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">14.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">14.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">14.9</span> Feeling the heat</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">15</span> Dates and times</a>
+<li><a href="regression.html#regression"><span class="toc-section-number">15</span> Regression</a>
 <ul>
-<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">15.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
-<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">15.2</span> Growth of Mizuna lettuce seeds</a></li>
-<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">15.3</span> Types of childbirth</a></li>
-<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">15.4</span> Wolves and caribou</a></li>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">15.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">15.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">15.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">15.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">15.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#sparrowhawks"><span class="toc-section-number">15.6</span> Sparrowhawks</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">15.7</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">15.8</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">15.9</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">15.10</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">15.11</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">15.12</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">15.13</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">15.14</span> Where should the fire stations be?</a></li>
+<li><a href="regression.html#being-satisfied-with-hospital"><span class="toc-section-number">15.15</span> Being satisfied with hospital</a></li>
+<li><a href="regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">15.16</span> Handling shipments of chemicals</a></li>
+<li><a href="regression.html#salaries-of-mathematicians"><span class="toc-section-number">15.17</span> Salaries of mathematicians</a></li>
+<li><a href="regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">15.18</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">16</span> Functions</a>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">16</span> Dates and times</a>
 <ul>
-<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">16.1</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">16.2</span> The Collatz sequence</a></li>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">16.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">16.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">16.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">16.4</span> Wolves and caribou</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">17</span> The Bootstrap</a>
+<li><a href="functions.html#functions"><span class="toc-section-number">17</span> Functions</a>
 <ul>
-<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">17.1</span> Air conditioning failures</a></li>
-<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">17.2</span> Air conditioning failures: bootstrapping the median</a></li>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">17.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">17.2</span> The Collatz sequence</a></li>
 </ul></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">18</span> Logistic regression</a>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">18</span> The Bootstrap</a>
 <ul>
-<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">18.1</span> Finding wolf spiders on the beach</a></li>
-<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">18.2</span> Killing aphids</a></li>
-<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">18.3</span> The effects of Substance A</a></li>
-<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">18.4</span> What makes an animal get infected?</a></li>
-<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">18.5</span> The brain of a cat</a></li>
-<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">18.6</span> How not to get heart disease</a></li>
-<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">18.7</span> Successful breastfeeding</a></li>
-<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">18.8</span> Making it over the mountains</a></li>
-<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">18.9</span> Who needs the most intensive care?</a></li>
-<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">18.10</span> Go away and don’t come back!</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">18.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">18.2</span> Air conditioning failures: bootstrapping the median</a></li>
 </ul></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">19</span> Logistic regression with ordinal or nominal response</a>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">19</span> Bayesian Statistics with Stan</a>
 <ul>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">19.1</span> Do you like your mobile phone?</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">19.2</span> Attitudes towards abortion</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">19.3</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">19.4</span> European Social Survey and voting</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">19.5</span> Alligator food</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">19.6</span> How do you like your steak – the data</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">19.7</span> Crimes in San Francisco – the data</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">19.8</span> How do you like your steak?</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">19.9</span> Crimes in San Francisco</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">19.10</span> High School and Beyond</a></li>
-<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">19.11</span> What sports do these athletes play?</a></li>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">19.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">19.2</span> Bayesian regression</a></li>
 </ul></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">20</span> Survival analysis</a>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">20</span> Logistic regression</a>
 <ul>
-<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">20.1</span> The Worcester survey</a></li>
-<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">20.2</span> Drug treatment programs</a></li>
-<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">20.3</span> Multiple myeloma</a></li>
-<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">20.4</span> Ovarian cancer</a></li>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">20.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">20.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">20.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">20.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat-1"><span class="toc-section-number">20.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">20.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">20.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">20.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">20.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">20.10</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">21</span> Analysis of variance revisited</a>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">21</span> Logistic regression with ordinal or nominal response</a>
 <ul>
-<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">21.1</span> Acid rain</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">21.2</span> Treating hay fever</a></li>
-<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">21.3</span> Focused comparisons of the effect of caffeine</a></li>
-<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">21.4</span> Who studies the most outside class?</a></li>
-<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">21.5</span> Mental context</a></li>
-<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">21.6</span> Trying on shirts</a></li>
-<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">21.7</span> Productivity and research-and-development</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">21.8</span> Treating leprosy</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">21.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">21.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">21.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">21.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">21.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">21.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">21.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">21.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">21.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">21.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">21.11</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">22</span> Multivariate analysis of variance</a>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">22</span> Survival analysis</a>
 <ul>
-<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">22.1</span> Fabricated data</a></li>
-<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">22.2</span> Do characteristics of urine depend on obesity?</a></li>
-<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">22.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">22.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">22.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">22.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">22.4</span> Ovarian cancer</a></li>
 </ul></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">23</span> Repeated measures</a>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">23</span> Analysis of variance revisited</a>
 <ul>
-<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">23.1</span> Effect of drug on rat weight</a></li>
-<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">23.2</span> Social interaction among old people</a></li>
-<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">23.3</span> Children’s stress levels and airports</a></li>
-<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">23.4</span> Body fat as repeated measures</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">23.5</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">23.6</span> Repeated measures with no background</a></li>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">23.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">23.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">23.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">23.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">23.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">23.6</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">23.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">23.8</span> Treating leprosy</a></li>
 </ul></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">24</span> Discriminant analysis</a>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">24</span> Multivariate analysis of variance</a>
 <ul>
-<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">24.1</span> Telling whether a banknote is real or counterfeit</a></li>
-<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">24.2</span> Urine and obesity: what makes a difference?</a></li>
-<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">24.3</span> Understanding a MANOVA</a></li>
-<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">24.4</span> What distinguishes people who do different jobs?</a></li>
-<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">24.5</span> Observing children with ADHD</a></li>
-<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">24.6</span> Growing corn</a></li>
-<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">24.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">24.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">24.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">24.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">25</span> Cluster analysis</a>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">25</span> Repeated measures</a>
 <ul>
-<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">25.1</span> Sites on the sea bed</a></li>
-<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">25.2</span> Dissimilarities between fruits</a></li>
-<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">25.3</span> Similarity of species</a></li>
-<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">25.4</span> Rating beer</a></li>
-<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">25.5</span> Clustering the Swiss bills</a></li>
-<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">25.6</span> Grouping similar cars</a></li>
-<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">25.7</span> Running, jumping, and throwing</a></li>
-<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">25.8</span> Bridges in Pittsburgh</a></li>
-<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">25.9</span> Clustering the Australian athletes</a></li>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">25.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">25.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">25.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">25.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">25.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">25.6</span> Repeated measures with no background</a></li>
 </ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">26</span> Multidimensional Scaling</a>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">26</span> Discriminant analysis</a>
 <ul>
-<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">26.1</span> Making a map of Wisconsin</a></li>
-<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">26.2</span> Things that feel similar to each other</a></li>
-<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">26.3</span> Confusing letters</a></li>
-<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">26.4</span> More beer please</a></li>
-<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">26.5</span> Feeling similar, again</a></li>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">26.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">26.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">26.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">26.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">26.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">26.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">26.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">27</span> Principal Components and Factor Analysis</a>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">27</span> Cluster analysis</a>
 <ul>
-<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">27.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">27.2</span> Air pollution</a></li>
-<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">27.3</span> A correlation matrix</a></li>
-<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">27.4</span> The Interpersonal Circumplex</a></li>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">27.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">27.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">27.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">27.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">27.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">27.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">27.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">27.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">27.9</span> Clustering the Australian athletes</a></li>
 </ul></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">28</span> Frequency table analysis</a>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">28</span> Multidimensional Scaling</a>
 <ul>
-<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">28.1</span> College plans</a></li>
-<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">28.2</span> Predicting voting</a></li>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin"><span class="toc-section-number">28.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">28.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">28.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">28.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">28.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">29</span> Principal Components and Factor Analysis</a>
+<ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">29.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">29.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">29.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">29.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">30</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">30.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">30.2</span> Predicting voting</a></li>
 </ul></li>
 </ul>
 </div>
@@ -350,12 +375,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="dates-and-times" class="section level1" number="15">
-<h1><span class="header-section-number">Chapter 15</span> Dates and times</h1>
+<div id="dates-and-times" class="section level1" number="16">
+<h1><span class="header-section-number">Chapter 16</span> Dates and times</h1>
 <p>The usual to begin with:</p>
-<div class="sourceCode" id="cb1678"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1678-1"><a href="dates-and-times.html#cb1678-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
-<div id="dealing-with-dates-in-the-worcester-heart-attack-study" class="section level2" number="15.1">
-<h2><span class="header-section-number">15.1</span> Dealing with dates in the Worcester Heart Attack study</h2>
+<div class="sourceCode" id="cb1718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1718-1"><a href="dates-and-times.html#cb1718-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="dealing-with-dates-in-the-worcester-heart-attack-study" class="section level2" number="16.1">
+<h2><span class="header-section-number">16.1</span> Dealing with dates in the Worcester Heart Attack study</h2>
 <p>The Worcester Heart Attack Study is an ongoing study of
 heart attacks in the Worcester, MA area. The main purpose of the study
 is to investigate changes over time in incidence and death rates, and also
@@ -370,33 +395,34 @@ that what it should be?</li>
 </ol>
 <p>Solution</p>
 <p>This is <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb1679"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1679-1"><a href="dates-and-times.html#cb1679-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></span>
-<span id="cb1679-2"><a href="dates-and-times.html#cb1679-2"></a>whas &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb1719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1719-1"><a href="dates-and-times.html#cb1719-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/whas500.txt&quot;</span></span>
+<span id="cb1719-2"><a href="dates-and-times.html#cb1719-2"></a>whas &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double(),
 ##   admitdate = col_character(),
 ##   disdate = col_character(),
 ##   fdate = col_character()
-## )</code></pre>
-<pre><code>## See spec(...) for full column specifications.</code></pre>
-<div class="sourceCode" id="cb1682"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1682-1"><a href="dates-and-times.html#cb1682-1"></a>whas</span></code></pre></div>
+## )
+## ℹ Use `spec()` for the full column specifications.</code></pre>
+<div class="sourceCode" id="cb1721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1721-1"><a href="dates-and-times.html#cb1721-1"></a>whas</span></code></pre></div>
 <pre><code>## # A tibble: 500 x 22
-##       id   age gender    hr sysbp diasbp   bmi   cvd   afb   sho   chf   av3
-##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1     1    83      0    89   152     78  25.5     1     1     0     0     0
-##  2     2    49      0    84   120     60  24.0     1     0     0     0     0
-##  3     3    70      1    83   147     88  22.1     0     0     0     0     0
-##  4     4    70      0    65   123     76  26.6     1     0     0     1     0
-##  5     5    70      0    63   135     85  24.4     1     0     0     0     0
-##  6     6    70      0    76    83     54  23.2     1     0     0     0     1
-##  7     7    57      0    73   191    116  39.5     1     0     0     0     0
-##  8     8    55      0    91   147     95  27.1     1     0     0     0     0
-##  9     9    88      1    63   209    100  27.4     1     0     0     1     0
-## 10    10    54      0   104   166    106  25.5     1     0     0     0     0
-## # … with 490 more rows, and 10 more variables: miord &lt;dbl&gt;, mitype &lt;dbl&gt;,
-## #   year &lt;dbl&gt;, admitdate &lt;chr&gt;, disdate &lt;chr&gt;, fdate &lt;chr&gt;, los &lt;dbl&gt;,
-## #   dstat &lt;dbl&gt;, lenfol &lt;dbl&gt;, fstat &lt;dbl&gt;</code></pre>
+##       id   age gender    hr sysbp diasbp   bmi   cvd   afb   sho   chf   av3 miord
+##    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1     1    83      0    89   152     78  25.5     1     1     0     0     0     1
+##  2     2    49      0    84   120     60  24.0     1     0     0     0     0     0
+##  3     3    70      1    83   147     88  22.1     0     0     0     0     0     0
+##  4     4    70      0    65   123     76  26.6     1     0     0     1     0     0
+##  5     5    70      0    63   135     85  24.4     1     0     0     0     0     0
+##  6     6    70      0    76    83     54  23.2     1     0     0     0     1     0
+##  7     7    57      0    73   191    116  39.5     1     0     0     0     0     0
+##  8     8    55      0    91   147     95  27.1     1     0     0     0     0     0
+##  9     9    88      1    63   209    100  27.4     1     0     0     1     0     0
+## 10    10    54      0   104   166    106  25.5     1     0     0     0     0     0
+## # … with 490 more rows, and 9 more variables: mitype &lt;dbl&gt;, year &lt;dbl&gt;,
+## #   admitdate &lt;chr&gt;, disdate &lt;chr&gt;, fdate &lt;chr&gt;, los &lt;dbl&gt;, dstat &lt;dbl&gt;, lenfol &lt;dbl&gt;,
+## #   fstat &lt;dbl&gt;</code></pre>
 <p>To see what type everything is, note that when you display a
 <code>tibble</code>, the type of all the columns on the screen is
 displayed at the top. Click the little right-arrow to see more columns
@@ -418,42 +444,42 @@ demonstrate that it worked.</li>
 </ol>
 <p>Solution</p>
 <p>Load <code>lubridate</code> first:</p>
-<div class="sourceCode" id="cb1684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1684-1"><a href="dates-and-times.html#cb1684-1"></a><span class="kw">library</span>(lubridate)</span></code></pre></div>
+<div class="sourceCode" id="cb1723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1723-1"><a href="dates-and-times.html#cb1723-1"></a><span class="kw">library</span>(lubridate)</span></code></pre></div>
 <p>These dates are day-month-year, so we need <code>dmy</code> from
 <code>lubridate</code>:</p>
-<div class="sourceCode" id="cb1685"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1685-1"><a href="dates-and-times.html#cb1685-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
-<span id="cb1685-2"><a href="dates-and-times.html#cb1685-2"></a>  <span class="dt">admit =</span> <span class="kw">dmy</span>(admitdate),</span>
-<span id="cb1685-3"><a href="dates-and-times.html#cb1685-3"></a>  <span class="dt">dis =</span> <span class="kw">dmy</span>(disdate),</span>
-<span id="cb1685-4"><a href="dates-and-times.html#cb1685-4"></a>  <span class="dt">f =</span> <span class="kw">dmy</span>(fdate)</span>
-<span id="cb1685-5"><a href="dates-and-times.html#cb1685-5"></a>) -&gt;<span class="st"> </span>whas2</span>
-<span id="cb1685-6"><a href="dates-and-times.html#cb1685-6"></a><span class="kw">glimpse</span>(whas2)</span></code></pre></div>
+<div class="sourceCode" id="cb1724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1724-1"><a href="dates-and-times.html#cb1724-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb1724-2"><a href="dates-and-times.html#cb1724-2"></a>  <span class="dt">admit =</span> <span class="kw">dmy</span>(admitdate),</span>
+<span id="cb1724-3"><a href="dates-and-times.html#cb1724-3"></a>  <span class="dt">dis =</span> <span class="kw">dmy</span>(disdate),</span>
+<span id="cb1724-4"><a href="dates-and-times.html#cb1724-4"></a>  <span class="dt">f =</span> <span class="kw">dmy</span>(fdate)</span>
+<span id="cb1724-5"><a href="dates-and-times.html#cb1724-5"></a>) -&gt;<span class="st"> </span>whas2</span>
+<span id="cb1724-6"><a href="dates-and-times.html#cb1724-6"></a><span class="kw">glimpse</span>(whas2)</span></code></pre></div>
 <pre><code>## Rows: 500
 ## Columns: 25
-## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
-## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
-## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
-## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
-## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
-## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
-## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
-## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
-## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
-## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
-## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ admitdate &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;01…
-## $ disdate   &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;07…
-## $ fdate     &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;31…
-## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ admit     &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
-## $ dis       &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
-## $ f         &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…</code></pre>
+## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2…
+## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67, 61, 70, …
+## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,…
+## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 93, 63, 95…
+## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, 149, 150,…
+## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65, 84, 92,…
+## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236, 39.49046…
+## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1,…
+## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0,…
+## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
+## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1,…
+## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
+## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ admitdate &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;01-03-1997&quot;…
+## $ disdate   &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;07-03-1997&quot;…
+## $ fdate     &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;31-12-2002&quot;…
+## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, 6, 17, 5,…
+## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173, 1671, 2…
+## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0,…
+## $ admit     &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01, 1997-03…
+## $ dis       &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07, 1997-03…
+## $ f         &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31, 1997-03…</code></pre>
 <p>There are a lot of columns, so I used <code>glimpse</code>. The three new
 variables we created are at the end of the list. They are correctly
 <code>Date</code>s, and they have the right values, the ones we can see at
@@ -472,31 +498,31 @@ these columns’ names all end in <code>date</code> and they are the only
 ones that do, so we can use a “select helper” to select only them,
 and then submit all of them to a <code>mutate</code> via <code>across</code>,
 which goes like this:</p>
-<div class="sourceCode" id="cb1687"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1687-1"><a href="dates-and-times.html#cb1687-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="kw">across</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>), <span class="op">~</span><span class="kw">dmy</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1726"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1726-1"><a href="dates-and-times.html#cb1726-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="kw">across</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>), <span class="op">~</span><span class="kw">dmy</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</span></code></pre></div>
 <pre><code>## Rows: 500
 ## Columns: 22
-## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
-## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
-## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
-## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
-## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
-## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
-## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
-## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
-## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
-## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
-## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ admitdate &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
-## $ disdate   &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
-## $ fdate     &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…
-## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…</code></pre>
+## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2…
+## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67, 61, 70, …
+## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,…
+## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 93, 63, 95…
+## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, 149, 150,…
+## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65, 84, 92,…
+## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236, 39.49046…
+## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1,…
+## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0,…
+## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
+## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1,…
+## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
+## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ admitdate &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01, 1997-03…
+## $ disdate   &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07, 1997-03…
+## $ fdate     &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31, 1997-03…
+## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, 6, 17, 5,…
+## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173, 1671, 2…
+## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0,…</code></pre>
 <p>One line, as you see, not three. The English-language version of this reads “for each of the columns whose
 name ends with <code>date</code>, work out <code>dmy</code> of it”, that is to say, convert it into a date.
 We can use any of the
@@ -504,34 +530,34 @@ select-helpers in this, including listing the column numbers or
 names; in this case our date variables all ended with
 <code>date</code>.</p>
 <p>This overwrites the original date columns (you can see that they are now <code>date</code>s), but you can give them new names thus. This is inside the <code>across</code> inside the <code>mutate</code>, so it needs two close-brackets after (the probable reason for the error if you get one):</p>
-<div class="sourceCode" id="cb1689"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1689-1"><a href="dates-and-times.html#cb1689-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="kw">across</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>), <span class="op">~</span><span class="kw">dmy</span>(.), <span class="dt">.names =</span> <span class="st">&quot;{.col}_d&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1728-1"><a href="dates-and-times.html#cb1728-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="kw">across</span>(<span class="kw">ends_with</span>(<span class="st">&quot;date&quot;</span>), <span class="op">~</span><span class="kw">dmy</span>(.), <span class="dt">.names =</span> <span class="st">&quot;{.col}_d&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">glimpse</span>()</span></code></pre></div>
 <pre><code>## Rows: 500
 ## Columns: 25
-## $ id          &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17…
-## $ age         &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 6…
-## $ gender      &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, …
-## $ hr          &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95,…
-## $ sysbp       &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193…
-## $ diasbp      &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, …
-## $ bmi         &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.2423…
-## $ cvd         &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, …
-## $ afb         &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, …
-## $ sho         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ chf         &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, …
-## $ av3         &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ miord       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, …
-## $ mitype      &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, …
-## $ year        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-## $ admitdate   &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;…
-## $ disdate     &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;…
-## $ fdate       &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;…
-## $ los         &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14…
-## $ dstat       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-## $ lenfol      &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 21…
-## $ fstat       &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, …
-## $ admitdate_d &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-…
-## $ disdate_d   &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-…
-## $ fdate_d     &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-…</code></pre>
+## $ id          &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,…
+## $ age         &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67, 61, 70…
+## $ gender      &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, …
+## $ hr          &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 93, 63, …
+## $ sysbp       &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, 149, 15…
+## $ diasbp      &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65, 84, 9…
+## $ bmi         &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236, 39.490…
+## $ cvd         &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, …
+## $ afb         &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ sho         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ chf         &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, …
+## $ av3         &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, …
+## $ miord       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, …
+## $ mitype      &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, …
+## $ year        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ admitdate   &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;01-03-199…
+## $ disdate     &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;07-03-199…
+## $ fdate       &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;31-12-200…
+## $ los         &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, 6, 17, …
+## $ dstat       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ lenfol      &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173, 1671,…
+## $ fstat       &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, …
+## $ admitdate_d &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01, 1997-…
+## $ disdate_d   &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07, 1997-…
+## $ fdate_d     &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31, 1997-…</code></pre>
 <p>The three columns on the end are the new actual-dates we created. To give them new names, use <code>.names</code> inside <code>across</code>, and in <em>that</em> is a recipe that says how to make the new names. <code>{.col}</code> means the name the column had before, and the <code>_d</code> after that means to add that to the old name to make the new one.</p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Create three new variables <code>diff1, diff2, diff3</code> that
@@ -545,42 +571,42 @@ what R’s internal storage is for dates (it might be seconds or
 milliseconds or anything, not necessarily days),
 so subtracting them requires care; you have to divide by the
 length of a day (in whatever units), thus:</p>
-<div class="sourceCode" id="cb1691"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1691-1"><a href="dates-and-times.html#cb1691-1"></a>whas3 &lt;-<span class="st"> </span>whas2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
-<span id="cb1691-2"><a href="dates-and-times.html#cb1691-2"></a>  <span class="dt">diff1 =</span> (dis <span class="op">-</span><span class="st"> </span>admit) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>),</span>
-<span id="cb1691-3"><a href="dates-and-times.html#cb1691-3"></a>  <span class="dt">diff2 =</span> (f <span class="op">-</span><span class="st"> </span>admit) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>),</span>
-<span id="cb1691-4"><a href="dates-and-times.html#cb1691-4"></a>  <span class="dt">diff3 =</span> (f <span class="op">-</span><span class="st"> </span>dis) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>)</span>
-<span id="cb1691-5"><a href="dates-and-times.html#cb1691-5"></a>)</span>
-<span id="cb1691-6"><a href="dates-and-times.html#cb1691-6"></a><span class="kw">glimpse</span>(whas3)</span></code></pre></div>
+<div class="sourceCode" id="cb1730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1730-1"><a href="dates-and-times.html#cb1730-1"></a>whas3 &lt;-<span class="st"> </span>whas2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(</span>
+<span id="cb1730-2"><a href="dates-and-times.html#cb1730-2"></a>  <span class="dt">diff1 =</span> (dis <span class="op">-</span><span class="st"> </span>admit) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>),</span>
+<span id="cb1730-3"><a href="dates-and-times.html#cb1730-3"></a>  <span class="dt">diff2 =</span> (f <span class="op">-</span><span class="st"> </span>admit) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>),</span>
+<span id="cb1730-4"><a href="dates-and-times.html#cb1730-4"></a>  <span class="dt">diff3 =</span> (f <span class="op">-</span><span class="st"> </span>dis) <span class="op">/</span><span class="st"> </span><span class="kw">ddays</span>(<span class="dv">1</span>)</span>
+<span id="cb1730-5"><a href="dates-and-times.html#cb1730-5"></a>)</span>
+<span id="cb1730-6"><a href="dates-and-times.html#cb1730-6"></a><span class="kw">glimpse</span>(whas3)</span></code></pre></div>
 <pre><code>## Rows: 500
 ## Columns: 28
-## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
-## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67,…
-## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0,…
-## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 9…
-## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, …
-## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65…
-## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236,…
-## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1,…
-## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0,…
-## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,…
-## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
-## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1,…
-## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ admitdate &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;01…
-## $ disdate   &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;07…
-## $ fdate     &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;31…
-## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1,…
-## $ admit     &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01…
-## $ dis       &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07…
-## $ f         &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31…
-## $ diff1     &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, …
-## $ diff2     &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173…
-## $ diff3     &lt;dbl&gt; 2173, 2167, 2185, 287, 2125, 0, 2117, 1492, 916, 2170, 2168…</code></pre>
+## $ id        &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2…
+## $ age       &lt;dbl&gt; 83, 49, 70, 70, 70, 70, 57, 55, 88, 54, 48, 75, 48, 54, 67, 61, 70, …
+## $ gender    &lt;dbl&gt; 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,…
+## $ hr        &lt;dbl&gt; 89, 84, 83, 65, 63, 76, 73, 91, 63, 104, 95, 154, 85, 95, 93, 63, 95…
+## $ sysbp     &lt;dbl&gt; 152, 120, 147, 123, 135, 83, 191, 147, 209, 166, 160, 193, 149, 150,…
+## $ diasbp    &lt;dbl&gt; 78, 60, 88, 76, 85, 54, 116, 95, 100, 106, 110, 123, 80, 65, 84, 92,…
+## $ bmi       &lt;dbl&gt; 25.54051, 24.02398, 22.14290, 26.63187, 24.41255, 23.24236, 39.49046…
+## $ cvd       &lt;dbl&gt; 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1,…
+## $ afb       &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ sho       &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ chf       &lt;dbl&gt; 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0,…
+## $ av3       &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,…
+## $ miord     &lt;dbl&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1,…
+## $ mitype    &lt;dbl&gt; 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0,…
+## $ year      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ admitdate &lt;chr&gt; &quot;13-01-1997&quot;, &quot;19-01-1997&quot;, &quot;01-01-1997&quot;, &quot;17-02-1997&quot;, &quot;01-03-1997&quot;…
+## $ disdate   &lt;chr&gt; &quot;18-01-1997&quot;, &quot;24-01-1997&quot;, &quot;06-01-1997&quot;, &quot;27-02-1997&quot;, &quot;07-03-1997&quot;…
+## $ fdate     &lt;chr&gt; &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;31-12-2002&quot;, &quot;11-12-1997&quot;, &quot;31-12-2002&quot;…
+## $ los       &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, 6, 17, 5,…
+## $ dstat     &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ lenfol    &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173, 1671, 2…
+## $ fstat     &lt;dbl&gt; 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0,…
+## $ admit     &lt;date&gt; 1997-01-13, 1997-01-19, 1997-01-01, 1997-02-17, 1997-03-01, 1997-03…
+## $ dis       &lt;date&gt; 1997-01-18, 1997-01-24, 1997-01-06, 1997-02-27, 1997-03-07, 1997-03…
+## $ f         &lt;date&gt; 2002-12-31, 2002-12-31, 2002-12-31, 1997-12-11, 2002-12-31, 1997-03…
+## $ diff1     &lt;dbl&gt; 5, 5, 5, 10, 6, 1, 5, 4, 4, 5, 5, 10, 7, 21, 4, 1, 13, 14, 6, 17, 5,…
+## $ diff2     &lt;dbl&gt; 2178, 2172, 2190, 297, 2131, 1, 2122, 1496, 920, 2175, 2173, 1671, 2…
+## $ diff3     &lt;dbl&gt; 2173, 2167, 2185, 287, 2125, 0, 2117, 1492, 916, 2170, 2168, 1661, 2…</code></pre>
 <p>The extra <code>d</code> on the front of <code>ddays</code> indicates that
 these are what is known to <code>lubridate</code> as “durations”: a
 period of time 1 day long that could be any day (as opposed to
@@ -595,24 +621,24 @@ compare all 500 values, and it would be best to do it in such a way
 that R is comparing all 500 values for us, since it would be a lot
 more reliable than the human eye. R has a function <code>all.equal</code>
 which does exactly that. By way of warmup:</p>
-<div class="sourceCode" id="cb1693"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1693-1"><a href="dates-and-times.html#cb1693-1"></a>x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></span>
-<span id="cb1693-2"><a href="dates-and-times.html#cb1693-2"></a>y &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></span>
-<span id="cb1693-3"><a href="dates-and-times.html#cb1693-3"></a>z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>)</span>
-<span id="cb1693-4"><a href="dates-and-times.html#cb1693-4"></a><span class="kw">all.equal</span>(x, y)</span></code></pre></div>
+<div class="sourceCode" id="cb1732"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1732-1"><a href="dates-and-times.html#cb1732-1"></a>x &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></span>
+<span id="cb1732-2"><a href="dates-and-times.html#cb1732-2"></a>y &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">4</span></span>
+<span id="cb1732-3"><a href="dates-and-times.html#cb1732-3"></a>z &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>)</span>
+<span id="cb1732-4"><a href="dates-and-times.html#cb1732-4"></a><span class="kw">all.equal</span>(x, y)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1695"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1695-1"><a href="dates-and-times.html#cb1695-1"></a><span class="kw">all.equal</span>(x, z)</span></code></pre></div>
+<div class="sourceCode" id="cb1734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1734-1"><a href="dates-and-times.html#cb1734-1"></a><span class="kw">all.equal</span>(x, z)</span></code></pre></div>
 <pre><code>## [1] &quot;Mean relative difference: 0.25&quot;</code></pre>
 <p>I thought the second one was just going to say <code>FALSE</code>, but it
 gave us a message instead, saying how close <code>x</code> and <code>z</code>
 were on average, so that we could decide whether they were close
 enough to call equal, or, as in this case, not.</p>
 <p>Anyway:</p>
-<div class="sourceCode" id="cb1697"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1697-1"><a href="dates-and-times.html#cb1697-1"></a><span class="kw">with</span>(whas3, <span class="kw">all.equal</span>(lenfol, diff2))</span></code></pre></div>
+<div class="sourceCode" id="cb1736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1736-1"><a href="dates-and-times.html#cb1736-1"></a><span class="kw">with</span>(whas3, <span class="kw">all.equal</span>(lenfol, diff2))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb1699"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1699-1"><a href="dates-and-times.html#cb1699-1"></a><span class="kw">with</span>(whas3, <span class="kw">all.equal</span>(los, diff1))</span></code></pre></div>
+<div class="sourceCode" id="cb1738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1738-1"><a href="dates-and-times.html#cb1738-1"></a><span class="kw">with</span>(whas3, <span class="kw">all.equal</span>(los, diff1))</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>so they really are all equal, all 500 of them.
-<label for="tufte-mn-112" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-112" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I shouldn’t have done this, because <em>diff1</em> through <em>diff3</em> are double-precision decimal numbers, so I should have tested their equality with <em>lenfol</em> and <em>los</em> by working out the absolute differences and testing whether they were all <em>small</em>. On consulting the help for <em>all.equal</em>, though, I find that it <em>does</em> work properly, because it actually tests whether the things being compared differ by less than a quantity <em>tolerance</em> which defaults to 0.000000015, and if they do it calls them equal. This is all tied in with the difference between integers and decimal numbers as they are represented on a computer: exactly and approximately, respectively. A double-precision number has about 16 significant digits of accuracy; equal things won’t have all 16 digits equal, most likely, but they would be expected to have at least 8 of those digits the same. CSCA08 stuff, I imagine. This is where you can casually toss around terms like <em>machine epsilon</em>. Oh! I just realized something. You know how very very small P-values are shown in R as <em>&lt;2.2e-16</em>? <em>That’s</em> the machine epsilon. Anything smaller than that is indistinguishable from zero, and you can’t have a P-value be <em>exactly</em> zero. The default <em>tolerance</em> I mentioned above is the square root of this, which is normally used for such things.</span></p>
+<label for="tufte-mn-116" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-116" class="margin-toggle"><span class="marginnote">The computer scientists among you will note that I shouldn’t have done this, because <em>diff1</em> through <em>diff3</em> are double-precision decimal numbers, so I should have tested their equality with <em>lenfol</em> and <em>los</em> by working out the absolute differences and testing whether they were all <em>small</em>. On consulting the help for <em>all.equal</em>, though, I find that it <em>does</em> work properly, because it actually tests whether the things being compared differ by less than a quantity <em>tolerance</em> which defaults to 0.000000015, and if they do it calls them equal. This is all tied in with the difference between integers and decimal numbers as they are represented on a computer: exactly and approximately, respectively. A double-precision number has about 16 significant digits of accuracy; equal things won’t have all 16 digits equal, most likely, but they would be expected to have at least 8 of those digits the same. CSCA08 stuff, I imagine. This is where you can casually toss around terms like <em>machine epsilon</em>. Oh! I just realized something. You know how very very small P-values are shown in R as <em>&lt;2.2e-16</em>? <em>That’s</em> the machine epsilon. Anything smaller than that is indistinguishable from zero, and you can’t have a P-value be <em>exactly</em> zero. The default <em>tolerance</em> I mentioned above is the square root of this, which is normally used for such things.</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Construct side-by-side boxplots of the length of followup by
 each followup status. You’ll need to make sure
@@ -622,26 +648,26 @@ that the followup status, as it gets fed into <code>ggplot</code>, is a
 <p>Solution</p>
 <p>The easiest way to make a factor is to wrap <code>fstat</code>, which
 is a numeric 0 or 1, in <code>factor()</code>:</p>
-<div class="sourceCode" id="cb1701"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1701-1"><a href="dates-and-times.html#cb1701-1"></a><span class="kw">ggplot</span>(whas3, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(fstat), <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-12-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1740-1"><a href="dates-and-times.html#cb1740-1"></a><span class="kw">ggplot</span>(whas3, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(fstat), <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-933-1.png" width="672"  /></p>
 <p>Or create a factor version of <code>fstat</code> first:</p>
-<div class="sourceCode" id="cb1702"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1702-1"><a href="dates-and-times.html#cb1702-1"></a>whas3 <span class="op">%&gt;%</span></span>
-<span id="cb1702-2"><a href="dates-and-times.html#cb1702-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ffstat =</span> <span class="kw">factor</span>(fstat)) <span class="op">%&gt;%</span></span>
-<span id="cb1702-3"><a href="dates-and-times.html#cb1702-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> ffstat, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-13-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1741"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1741-1"><a href="dates-and-times.html#cb1741-1"></a>whas3 <span class="op">%&gt;%</span></span>
+<span id="cb1741-2"><a href="dates-and-times.html#cb1741-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ffstat =</span> <span class="kw">factor</span>(fstat)) <span class="op">%&gt;%</span></span>
+<span id="cb1741-3"><a href="dates-and-times.html#cb1741-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> ffstat, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-934-1.png" width="672"  /></p>
 <p>I think the second way looks better, because you
 get a cleaner <span class="math inline">\(x\)</span>-axis on your plot. But if you’re doing this for
 exploration, rather than as something that’s going to appear in a
 report for your boss, the first way is fine.</p>
 <p><code>ggplot</code> also treats text stuff as categorical where needed, so
 this also works:</p>
-<div class="sourceCode" id="cb1703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1703-1"><a href="dates-and-times.html#cb1703-1"></a>whas3 <span class="op">%&gt;%</span></span>
-<span id="cb1703-2"><a href="dates-and-times.html#cb1703-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cfstat =</span> <span class="kw">as.character</span>(fstat)) <span class="op">%&gt;%</span></span>
-<span id="cb1703-3"><a href="dates-and-times.html#cb1703-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cfstat, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-14-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1742-1"><a href="dates-and-times.html#cb1742-1"></a>whas3 <span class="op">%&gt;%</span></span>
+<span id="cb1742-2"><a href="dates-and-times.html#cb1742-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cfstat =</span> <span class="kw">as.character</span>(fstat)) <span class="op">%&gt;%</span></span>
+<span id="cb1742-3"><a href="dates-and-times.html#cb1742-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> cfstat, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-935-1.png" width="672"  /></p>
 <p>Extra: this is an example of what’s called “survival data”: the purpose of the study was to see what affected how long a person survived after a heart attack. Each patient was followed up for the number of days in <code>lenfol</code>, but followup could have stopped for two (or more) reasons: the patient died (indicated by <code>fstat</code> being 1), or something else happened to them (<code>fstat</code> is 0), such as moving away from where the study was conducted, getting another disease, the funding for this study running out, or simply losing touch with the people doing the study. Such a patient is called “lost to followup” or “censored”, and all we know about their survival is that they were still alive when last seen, but we don’t know how long they lived after that.</p>
 <p>For example:</p>
-<div class="sourceCode" id="cb1704"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1704-1"><a href="dates-and-times.html#cb1704-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(id, lenfol, fstat)</span></code></pre></div>
+<div class="sourceCode" id="cb1743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1743-1"><a href="dates-and-times.html#cb1743-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(id, lenfol, fstat)</span></code></pre></div>
 <pre><code>## # A tibble: 500 x 3
 ##       id lenfol fstat
 ##    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
@@ -657,7 +683,7 @@ this also works:</p>
 ## 10    10   2175     0
 ## # … with 490 more rows</code></pre>
 <p>The patient with id 4 died after 297 days, but patients 1 through 3 lived for over 2000 days and were still alive when last seen. My guess for patients 1 through 3 is that the study ended and they were still alive:</p>
-<div class="sourceCode" id="cb1706"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1706-1"><a href="dates-and-times.html#cb1706-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">maxfol =</span> <span class="kw">max</span>(lenfol)<span class="op">/</span><span class="fl">365.25</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1745-1"><a href="dates-and-times.html#cb1745-1"></a>whas <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">maxfol =</span> <span class="kw">max</span>(lenfol)<span class="op">/</span><span class="fl">365.25</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##   maxfol
 ##    &lt;dbl&gt;
@@ -665,28 +691,28 @@ this also works:</p>
 <p>The longest time anyone was followed up was six and a half years. Studies like this are funded for some number of years (say 10), and people can join after the beginning. (If they happen to join near the end, they won’t get followed up for very long.)</p>
 <p>We’re not going to analyze these data, but if we were, we would want to take advantage of the information in the patient who lived for “at least 2178 days”. Looking only at the patients who we knew to have died would be wasteful and might introduce a bias; for example, if we were comparing several treatments, and one of the treatments was so good that almost everybody on it was still alive at the end, we would want to have a strong inference that this treatment was the best.</p>
 <p>With that in mind, let’s redraw our boxplot with better labels for the followup status:</p>
-<div class="sourceCode" id="cb1708"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1708-1"><a href="dates-and-times.html#cb1708-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1708-2"><a href="dates-and-times.html#cb1708-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1708-3"><a href="dates-and-times.html#cb1708-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> followup_status, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-17-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1747-1"><a href="dates-and-times.html#cb1747-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1747-2"><a href="dates-and-times.html#cb1747-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1747-3"><a href="dates-and-times.html#cb1747-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> followup_status, <span class="dt">y =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-938-1.png" width="672"  /></p>
 <p>Now we have a clearer sense of what is going on. Out of the patients who died, some of them survived a long time, but most of them died fairly quickly. Out of the patients who were censored, the times they were observed were all over the place, which suggests that (at least for the ones still in the study at the end) they joined the study at all kinds of different times.</p>
 <p>Another graph that is possible here is a facetted histogram:</p>
-<div class="sourceCode" id="cb1709"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1709-1"><a href="dates-and-times.html#cb1709-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1709-2"><a href="dates-and-times.html#cb1709-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1709-3"><a href="dates-and-times.html#cb1709-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>) <span class="op">+</span></span>
-<span id="cb1709-4"><a href="dates-and-times.html#cb1709-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>followup_status)</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-18-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1748"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1748-1"><a href="dates-and-times.html#cb1748-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1748-2"><a href="dates-and-times.html#cb1748-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1748-3"><a href="dates-and-times.html#cb1748-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> lenfol)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>) <span class="op">+</span></span>
+<span id="cb1748-4"><a href="dates-and-times.html#cb1748-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>followup_status)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-939-1.png" width="672"  /></p>
 <p>The right-skewed distribution of times to death is what we saw from the boxplot, but what is that periodic thing on the left? Let’s convert the days to years and draw again:</p>
-<div class="sourceCode" id="cb1710"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1710-1"><a href="dates-and-times.html#cb1710-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1710-2"><a href="dates-and-times.html#cb1710-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1710-3"><a href="dates-and-times.html#cb1710-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_years =</span> lenfol<span class="op">/</span><span class="fl">365.25</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb1710-4"><a href="dates-and-times.html#cb1710-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> followup_years)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>) <span class="op">+</span></span>
-<span id="cb1710-5"><a href="dates-and-times.html#cb1710-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>followup_status)</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-19-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1749-1"><a href="dates-and-times.html#cb1749-1"></a>whas3 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1749-2"><a href="dates-and-times.html#cb1749-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_status =</span> <span class="kw">ifelse</span>(fstat <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;died&quot;</span>, <span class="st">&quot;censored&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1749-3"><a href="dates-and-times.html#cb1749-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">followup_years =</span> lenfol<span class="op">/</span><span class="fl">365.25</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1749-4"><a href="dates-and-times.html#cb1749-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> followup_years)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">20</span>) <span class="op">+</span></span>
+<span id="cb1749-5"><a href="dates-and-times.html#cb1749-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>followup_status)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-940-1.png" width="672"  /></p>
 <p>That’s odd. On the left, it looks as if there were bursts of patients admitted to the study at around 1.5, 3.5, and 5.5 years from the end. (These are, remember, all people who survived and mostly people who survived to the end.) Not what I would have expected – I would have expected a steady stream of patients, the heart attack victims as they happened to come in.</p>
 </div>
-<div id="growth-of-mizuna-lettuce-seeds" class="section level2" number="15.2">
-<h2><span class="header-section-number">15.2</span> Growth of Mizuna lettuce seeds</h2>
+<div id="growth-of-mizuna-lettuce-seeds" class="section level2" number="16.2">
+<h2><span class="header-section-number">16.2</span> Growth of Mizuna lettuce seeds</h2>
 <p>In 2010, a group of students planted some Mizuna lettuce
 seeds, and recorded how they grew. The data were saved in an Excel
 spreadsheet, which is at
@@ -708,25 +734,25 @@ download it and save it on your computer, then upload it to
 <code>rstudio.cloud</code>), possibly using <code>file.choose</code> to
 help R find it. I put my copy in the same project folder as I was
 working in, so I just need the file name:</p>
-<div class="sourceCode" id="cb1711"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1711-1"><a href="dates-and-times.html#cb1711-1"></a><span class="kw">library</span>(readxl)</span>
-<span id="cb1711-2"><a href="dates-and-times.html#cb1711-2"></a>mizuna &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;mizuna.xlsx&quot;</span>)</span>
-<span id="cb1711-3"><a href="dates-and-times.html#cb1711-3"></a>mizuna</span></code></pre></div>
+<div class="sourceCode" id="cb1750"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1750-1"><a href="dates-and-times.html#cb1750-1"></a><span class="kw">library</span>(readxl)</span>
+<span id="cb1750-2"><a href="dates-and-times.html#cb1750-2"></a>mizuna &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;mizuna.xlsx&quot;</span>)</span>
+<span id="cb1750-3"><a href="dates-and-times.html#cb1750-3"></a>mizuna</span></code></pre></div>
 <pre><code>## # A tibble: 13 x 5
-##    date                height water temperature notes                           
-##    &lt;dttm&gt;               &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;                           
-##  1 2010-02-16 00:00:00    0     400        21   planted seeds; water soaked up …
-##  2 2010-02-18 00:00:00    0       0        22.5 2 of 6 seeds not appeared; soil…
-##  3 2010-02-19 00:00:00    0     200        20.9 4 of 6 plants broken surface    
-##  4 2010-02-22 00:00:00    3.2   100        20.8 Last seed hasn’t broken surface 
-##  5 2010-02-23 00:00:00    4.5   100        22.9 Plants growing well.            
-##  6 2010-02-25 00:00:00    6     100        21.8 Last seed sprouted; plants look…
-##  7 2010-02-26 00:00:00    6.5   200        21.2 &lt;NA&gt;                            
-##  8 2010-03-01 00:00:00    9.5   200        21.8 &lt;NA&gt;                            
-##  9 2010-03-03 00:00:00   11.1   200        21.7 Plants needing more water       
-## 10 2010-03-05 00:00:00   13     250        21.9 &lt;NA&gt;                            
-## 11 2010-03-08 00:00:00   14.5   500        22.5 No water left, leaves droopy. A…
-## 12 2010-03-10 00:00:00   16     200        21.2 Plants green and healthy        
-## 13 2010-03-17 00:00:00   18.5   800        20.8 Harvest. Tips of plants turning…</code></pre>
+##    date                height water temperature notes                                   
+##    &lt;dttm&gt;               &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt; &lt;chr&gt;                                   
+##  1 2010-02-16 00:00:00    0     400        21   planted seeds; water soaked up rapidly  
+##  2 2010-02-18 00:00:00    0       0        22.5 2 of 6 seeds not appeared; soil still m…
+##  3 2010-02-19 00:00:00    0     200        20.9 4 of 6 plants broken surface            
+##  4 2010-02-22 00:00:00    3.2   100        20.8 Last seed hasn’t broken surface         
+##  5 2010-02-23 00:00:00    4.5   100        22.9 Plants growing well.                    
+##  6 2010-02-25 00:00:00    6     100        21.8 Last seed sprouted; plants looking gree…
+##  7 2010-02-26 00:00:00    6.5   200        21.2 &lt;NA&gt;                                    
+##  8 2010-03-01 00:00:00    9.5   200        21.8 &lt;NA&gt;                                    
+##  9 2010-03-03 00:00:00   11.1   200        21.7 Plants needing more water               
+## 10 2010-03-05 00:00:00   13     250        21.9 &lt;NA&gt;                                    
+## 11 2010-03-08 00:00:00   14.5   500        22.5 No water left, leaves droopy. Added wat…
+## 12 2010-03-10 00:00:00   16     200        21.2 Plants green and healthy                
+## 13 2010-03-17 00:00:00   18.5   800        20.8 Harvest. Tips of plants turning brown.</code></pre>
 <p>The dates <em>did</em> get read properly. <code>dttm</code> is
 “date-time”, so I guess it’s allowing for the possibility that my
 dates had times attached as well. Unlike with SAS (as we see later),
@@ -736,8 +762,8 @@ the years came out right.</p>
 dates, with the points joined by lines.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1713"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1713-1"><a href="dates-and-times.html#cb1713-1"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-21-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1752-1"><a href="dates-and-times.html#cb1752-1"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-942-1.png" width="672"  /></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Label each point on the plot with the
 amount of water added up to that point.</li>
@@ -747,17 +773,17 @@ amount of water added up to that point.</li>
 <code>ggrepel</code>, then add <code>geom_text_repel</code> to the
 plot, by adding <code>label=water</code> to the <em>original</em>
 <code>aes</code>:</p>
-<div class="sourceCode" id="cb1714"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1714-1"><a href="dates-and-times.html#cb1714-1"></a><span class="kw">library</span>(ggrepel)</span>
-<span id="cb1714-2"><a href="dates-and-times.html#cb1714-2"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height, <span class="dt">label =</span> water)) <span class="op">+</span></span>
-<span id="cb1714-3"><a href="dates-and-times.html#cb1714-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-22-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1753-1"><a href="dates-and-times.html#cb1753-1"></a><span class="kw">library</span>(ggrepel)</span>
+<span id="cb1753-2"><a href="dates-and-times.html#cb1753-2"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height, <span class="dt">label =</span> water)) <span class="op">+</span></span>
+<span id="cb1753-3"><a href="dates-and-times.html#cb1753-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-943-1.png" width="672"  /></p>
 <p>I made the text red, so that you can see it more easily. It “repels”
 away from the points, but not from the lines joining them. Which makes
 me wonder whether this would work better (I explain <code>alpha</code> afterwards):</p>
-<div class="sourceCode" id="cb1715"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1715-1"><a href="dates-and-times.html#cb1715-1"></a><span class="kw">library</span>(ggrepel)</span>
-<span id="cb1715-2"><a href="dates-and-times.html#cb1715-2"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height, <span class="dt">label =</span> water)) <span class="op">+</span></span>
-<span id="cb1715-3"><a href="dates-and-times.html#cb1715-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_label_repel</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>)</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-23-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1754-1"><a href="dates-and-times.html#cb1754-1"></a><span class="kw">library</span>(ggrepel)</span>
+<span id="cb1754-2"><a href="dates-and-times.html#cb1754-2"></a><span class="kw">ggplot</span>(mizuna, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> height, <span class="dt">label =</span> water)) <span class="op">+</span></span>
+<span id="cb1754-3"><a href="dates-and-times.html#cb1754-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_label_repel</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-944-1.png" width="672"  /></p>
 <p>The difference between <code>text</code> and <code>label</code> is that
 <code>text</code> just uses the text of the variable to mark the point,
 while <code>label</code> puts that text in a box.</p>
@@ -787,8 +813,8 @@ points that would otherwise overprint each other exactly, and you
 wouldn’t know how many of them there were, like the outliers on the
 boxplots of German children near the new airport.</p>
 </div>
-<div id="types-of-childbirth" class="section level2" number="15.3">
-<h2><span class="header-section-number">15.3</span> Types of childbirth</h2>
+<div id="types-of-childbirth" class="section level2" number="16.3">
+<h2><span class="header-section-number">16.3</span> Types of childbirth</h2>
 <p>Childbirths can be of two types: a
 “vaginal” birth in which the child is born through the mother’s
 vagina in the normal fashion, and a “cesarean section” where a
@@ -810,15 +836,16 @@ are typical of the kind of thing you would observe.)</p>
 </ol>
 <p>Solution</p>
 <p>This is a space-delimited text file, which means:</p>
-<div class="sourceCode" id="cb1716"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1716-1"><a href="dates-and-times.html#cb1716-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt&quot;</span></span>
-<span id="cb1716-2"><a href="dates-and-times.html#cb1716-2"></a>births &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb1755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1755-1"><a href="dates-and-times.html#cb1755-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/birthtypes.txt&quot;</span></span>
+<span id="cb1755-2"><a href="dates-and-times.html#cb1755-2"></a>births &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   month = col_character(),
 ##   cesarean = col_double(),
 ##   vaginal = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1718"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1718-1"><a href="dates-and-times.html#cb1718-1"></a>births</span></code></pre></div>
+<div class="sourceCode" id="cb1757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1757-1"><a href="dates-and-times.html#cb1757-1"></a>births</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 3
 ##    month cesarean vaginal
 ##    &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;
@@ -853,12 +880,12 @@ does this automatically. (The next question is whether
 exploring that.)
 The cesarean rate is <code>cesarean</code> divided by
 <code>cesarean</code> plus <code>vaginal</code>:</p>
-<div class="sourceCode" id="cb1720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1720-1"><a href="dates-and-times.html#cb1720-1"></a><span class="kw">library</span>(lubridate)</span>
-<span id="cb1720-2"><a href="dates-and-times.html#cb1720-2"></a>b2 &lt;-<span class="st"> </span>births <span class="op">%&gt;%</span></span>
-<span id="cb1720-3"><a href="dates-and-times.html#cb1720-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">datestr =</span> <span class="kw">str_c</span>(<span class="st">&quot;2012&quot;</span>, month, <span class="st">&quot;1&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb1720-4"><a href="dates-and-times.html#cb1720-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">thedate =</span> <span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></span>
-<span id="cb1720-5"><a href="dates-and-times.html#cb1720-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cesarean_rate =</span> cesarean <span class="op">/</span><span class="st"> </span>(cesarean <span class="op">+</span><span class="st"> </span>vaginal))</span>
-<span id="cb1720-6"><a href="dates-and-times.html#cb1720-6"></a>b2</span></code></pre></div>
+<div class="sourceCode" id="cb1759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1759-1"><a href="dates-and-times.html#cb1759-1"></a><span class="kw">library</span>(lubridate)</span>
+<span id="cb1759-2"><a href="dates-and-times.html#cb1759-2"></a>b2 &lt;-<span class="st"> </span>births <span class="op">%&gt;%</span></span>
+<span id="cb1759-3"><a href="dates-and-times.html#cb1759-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">datestr =</span> <span class="kw">str_c</span>(<span class="st">&quot;2012&quot;</span>, month, <span class="st">&quot;1&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1759-4"><a href="dates-and-times.html#cb1759-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">thedate =</span> <span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></span>
+<span id="cb1759-5"><a href="dates-and-times.html#cb1759-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cesarean_rate =</span> cesarean <span class="op">/</span><span class="st"> </span>(cesarean <span class="op">+</span><span class="st"> </span>vaginal))</span>
+<span id="cb1759-6"><a href="dates-and-times.html#cb1759-6"></a>b2</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 6
 ##    month cesarean vaginal datestr    thedate    cesarean_rate
 ##    &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;date&gt;             &lt;dbl&gt;
@@ -877,8 +904,8 @@ The cesarean rate is <code>cesarean</code> divided by
 <p>If you don’t like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
 single value gets repeated the right number of times:
-<label for="tufte-mn-113" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-113" class="margin-toggle"><span class="marginnote">This is an example of R’s so-called <em>recycling rules</em>.</span></p>
-<div class="sourceCode" id="cb1722"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1722-1"><a href="dates-and-times.html#cb1722-1"></a>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="dv">2012</span>, <span class="dt">day =</span> <span class="dv">1</span>)</span></code></pre></div>
+<label for="tufte-mn-117" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-117" class="margin-toggle"><span class="marginnote">This is an example of R’s so-called <em>recycling rules</em>.</span></p>
+<div class="sourceCode" id="cb1761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1761-1"><a href="dates-and-times.html#cb1761-1"></a>births <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="dv">2012</span>, <span class="dt">day =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    month cesarean vaginal  year   day
 ##    &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -898,12 +925,12 @@ single value gets repeated the right number of times:
 <code>unite</code> <em>only</em> works on columns. It also “swallows up”
 the columns that it is made out of; in this case, the original year,
 month and day disappear:</p>
-<div class="sourceCode" id="cb1724"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1724-1"><a href="dates-and-times.html#cb1724-1"></a>b3 &lt;-<span class="st"> </span>births <span class="op">%&gt;%</span></span>
-<span id="cb1724-2"><a href="dates-and-times.html#cb1724-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="dv">2012</span>, <span class="dt">day =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
-<span id="cb1724-3"><a href="dates-and-times.html#cb1724-3"></a><span class="st">  </span><span class="kw">unite</span>(datestr, year, month, day) <span class="op">%&gt;%</span></span>
-<span id="cb1724-4"><a href="dates-and-times.html#cb1724-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">thedate =</span> <span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></span>
-<span id="cb1724-5"><a href="dates-and-times.html#cb1724-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cesarean_rate =</span> cesarean <span class="op">/</span><span class="st"> </span>(cesarean <span class="op">+</span><span class="st"> </span>vaginal))</span>
-<span id="cb1724-6"><a href="dates-and-times.html#cb1724-6"></a>b3</span></code></pre></div>
+<div class="sourceCode" id="cb1763"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1763-1"><a href="dates-and-times.html#cb1763-1"></a>b3 &lt;-<span class="st"> </span>births <span class="op">%&gt;%</span></span>
+<span id="cb1763-2"><a href="dates-and-times.html#cb1763-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="dv">2012</span>, <span class="dt">day =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1763-3"><a href="dates-and-times.html#cb1763-3"></a><span class="st">  </span><span class="kw">unite</span>(datestr, year, month, day) <span class="op">%&gt;%</span></span>
+<span id="cb1763-4"><a href="dates-and-times.html#cb1763-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">thedate =</span> <span class="kw">ymd</span>(datestr)) <span class="op">%&gt;%</span></span>
+<span id="cb1763-5"><a href="dates-and-times.html#cb1763-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cesarean_rate =</span> cesarean <span class="op">/</span><span class="st"> </span>(cesarean <span class="op">+</span><span class="st"> </span>vaginal))</span>
+<span id="cb1763-6"><a href="dates-and-times.html#cb1763-6"></a>b3</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    datestr    cesarean vaginal thedate    cesarean_rate
 ##    &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt; &lt;date&gt;             &lt;dbl&gt;
@@ -929,15 +956,15 @@ something else?</li>
 </ol>
 <p>Solution</p>
 <p>This is a scatterplot with time on the <span class="math inline">\(x\)</span> axis:</p>
-<div class="sourceCode" id="cb1726"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1726-1"><a href="dates-and-times.html#cb1726-1"></a><span class="kw">ggplot</span>(b2, <span class="kw">aes</span>(<span class="dt">x =</span> thedate, <span class="dt">y =</span> cesarean_rate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1765-1"><a href="dates-and-times.html#cb1765-1"></a><span class="kw">ggplot</span>(b2, <span class="kw">aes</span>(<span class="dt">x =</span> thedate, <span class="dt">y =</span> cesarean_rate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-28-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-949-1.png" width="672"  /></p>
 <p>I like this better than joining the points by lines, since we already
 have a trend on the plot, but you can do that in some contrasting way:</p>
-<div class="sourceCode" id="cb1728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1728-1"><a href="dates-and-times.html#cb1728-1"></a><span class="kw">ggplot</span>(b2, <span class="kw">aes</span>(<span class="dt">x =</span> thedate, <span class="dt">y =</span> cesarean_rate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb1728-2"><a href="dates-and-times.html#cb1728-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb1767"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1767-1"><a href="dates-and-times.html#cb1767-1"></a><span class="kw">ggplot</span>(b2, <span class="kw">aes</span>(<span class="dt">x =</span> thedate, <span class="dt">y =</span> cesarean_rate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1767-2"><a href="dates-and-times.html#cb1767-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-29-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-950-1.png" width="672"  /></p>
 <p>I see a downward trend. (“A downward trend with a wiggle” if you
 like.) I didn’t ask for any explanation. There is a certain unevenness
 in the trend of the actual data, but the overall picture appears to be
@@ -948,14 +975,14 @@ correlation. What goes wrong? How can you fix it?</li>
 </ol>
 <p>Solution</p>
 <p>Something like this is the obvious guess:</p>
-<div class="sourceCode" id="cb1730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1730-1"><a href="dates-and-times.html#cb1730-1"></a><span class="kw">with</span>(b2, <span class="kw">cor</span>(thedate, cesarean_rate))</span></code></pre></div>
+<div class="sourceCode" id="cb1769"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1769-1"><a href="dates-and-times.html#cb1769-1"></a><span class="kw">with</span>(b2, <span class="kw">cor</span>(thedate, cesarean_rate))</span></code></pre></div>
 <pre><code>## Error in cor(thedate, cesarean_rate): &#39;x&#39; must be numeric</code></pre>
 <p>This fails because <code>thedate</code> is not of itself a number. But
 lurking in the background is how the date is actually
 <em>represented</em>: as a number of days since Jan 1, 1970. Thus,
 passing it through <code>as.numeric</code> might turn it into that:</p>
-<div class="sourceCode" id="cb1732"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1732-1"><a href="dates-and-times.html#cb1732-1"></a>b2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">numeric_date =</span> <span class="kw">as.numeric</span>(thedate)) -&gt;<span class="st"> </span>b5</span>
-<span id="cb1732-2"><a href="dates-and-times.html#cb1732-2"></a>b5</span></code></pre></div>
+<div class="sourceCode" id="cb1771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1771-1"><a href="dates-and-times.html#cb1771-1"></a>b2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">numeric_date =</span> <span class="kw">as.numeric</span>(thedate)) -&gt;<span class="st"> </span>b5</span>
+<span id="cb1771-2"><a href="dates-and-times.html#cb1771-2"></a>b5</span></code></pre></div>
 <pre><code>## # A tibble: 12 x 7
 ##    month cesarean vaginal datestr    thedate    cesarean_rate numeric_date
 ##    &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;date&gt;             &lt;dbl&gt;        &lt;dbl&gt;
@@ -975,13 +1002,13 @@ passing it through <code>as.numeric</code> might turn it into that:</p>
 bit over 40 years, that is <span class="math inline">\(40 \times 365 \simeq 14000\)</span> days, since
 the “zero” date of Jan 1, 1970, and so it turns out. This suggests
 that we can calculate a correlation with the numeric dates:</p>
-<div class="sourceCode" id="cb1734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1734-1"><a href="dates-and-times.html#cb1734-1"></a><span class="kw">with</span>(b5, <span class="kw">cor</span>(numeric_date, cesarean_rate))</span></code></pre></div>
+<div class="sourceCode" id="cb1773"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1773-1"><a href="dates-and-times.html#cb1773-1"></a><span class="kw">with</span>(b5, <span class="kw">cor</span>(numeric_date, cesarean_rate))</span></code></pre></div>
 <pre><code>## [1] -0.7091219</code></pre>
 <p>and we can make a test of the null hypothesis that the correlation is
 zero (against a two-sided alternative) thus:</p>
-<div class="sourceCode" id="cb1736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1736-1"><a href="dates-and-times.html#cb1736-1"></a><span class="kw">with</span>(b5, <span class="kw">cor.test</span>(numeric_date, cesarean_rate))</span></code></pre></div>
+<div class="sourceCode" id="cb1775"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1775-1"><a href="dates-and-times.html#cb1775-1"></a><span class="kw">with</span>(b5, <span class="kw">cor.test</span>(numeric_date, cesarean_rate))</span></code></pre></div>
 <pre><code>## 
-## 	Pearson&#39;s product-moment correlation
+##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  numeric_date and cesarean_rate
 ## t = -3.1804, df = 10, p-value = 0.009813
@@ -1012,24 +1039,24 @@ assessing climate change, you want to think about long-term
 trends in snowfall, after allowing for which month you’re
 looking at.)</p>
 </div>
-<div id="wolves-and-caribou" class="section level2" number="15.4">
-<h2><span class="header-section-number">15.4</span> Wolves and caribou</h2>
+<div id="wolves-and-caribou" class="section level2" number="16.4">
+<h2><span class="header-section-number">16.4</span> Wolves and caribou</h2>
 <p>In Denali National Park, Alaska, the size of the wolf
 population depends on the size of the caribou population (since
 wolves hunt and kill caribou). This is a large national park, so
 caribou are found in very large herds, so big, in fact, that the
 well-being of the entire herd is not threatened by wolf
 attacks.
-<label for="tufte-mn-114" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-114" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
+<label for="tufte-mn-118" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-118" class="margin-toggle"><span class="marginnote">In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.</span>
 Can the size of the caribou population
 be used to predict the size of the wolf population?
 The data can be found at
 <a href="http://www.utsc.utoronto.ca/~butler/c32/caribou.txt">link</a>. The
 columns
 are: the date of the survey,
-<label for="tufte-mn-115" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-115" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
+<label for="tufte-mn-119" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-119" class="margin-toggle"><span class="marginnote">The survey is always taken in the fall, but the date varies.</span>
 the name of the park employee in charge of the survey, the caribou population (in hundreds) and the wolf population (actual count).
-<label for="tufte-mn-116" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-116" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
+<label for="tufte-mn-120" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-120" class="margin-toggle"><span class="marginnote">Counting animals in a region, especially rare, hard-to-find animals, is a whole science in itself. These numbers are probably estimates (with some uncertainty).</span></p>
 <ol style="list-style-type: lower-alpha">
 <li>Take a look at the data file. How would you describe its
 format? Read it into R, and check that you got something sensible.</li>
@@ -1042,17 +1069,18 @@ space. If you look further, you’ll see that the values are
 the top. This is exactly the kind of thing that
 <code>read_table</code> will read. We start with the usual
 <code>library(tidyverse)</code>:</p>
-<div class="sourceCode" id="cb1738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1738-1"><a href="dates-and-times.html#cb1738-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb1738-2"><a href="dates-and-times.html#cb1738-2"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/caribou.txt&quot;</span></span>
-<span id="cb1738-3"><a href="dates-and-times.html#cb1738-3"></a>denali &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
-<pre><code>## Parsed with column specification:
+<div class="sourceCode" id="cb1777"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1777-1"><a href="dates-and-times.html#cb1777-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1777-2"><a href="dates-and-times.html#cb1777-2"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/caribou.txt&quot;</span></span>
+<span id="cb1777-3"><a href="dates-and-times.html#cb1777-3"></a>denali &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ────────────────────────────────────────────────────────────────
 ## cols(
 ##   date = col_character(),
 ##   name = col_character(),
 ##   caribou = col_double(),
 ##   wolf = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1740-1"><a href="dates-and-times.html#cb1740-1"></a>denali</span></code></pre></div>
+<div class="sourceCode" id="cb1779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1779-1"><a href="dates-and-times.html#cb1779-1"></a>denali</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 4
 ##   date       name          caribou  wolf
 ##   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
@@ -1094,7 +1122,7 @@ line that goes all the way down. Thus four columns, <code>date</code>,
 <code>name</code>, <code>caribou</code> and <code>wolf</code>. This means that the
 spaces within the names don’t cause any problems at all, since the
 spaces aren’t in the same place in <em>every</em> line.
-<label for="tufte-mn-117" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-117" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
+<label for="tufte-mn-121" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-121" class="margin-toggle"><span class="marginnote">The only way this would fail is if <em>every</em> first name had the same number of letters in it; then the space between first name and initial of last name <em>would</em> be in the same place in every line.</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Create a new data frame where the column labelled
 <code>date</code> is now a genuine R <code>Date</code>, using something
@@ -1104,11 +1132,11 @@ from <code>lubridate</code>.</li>
 <p>What you do is to look at the format of the dates as they are
 now. They appear to be month-day-year, American
 style.
-<label for="tufte-mn-118" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-118" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
+<label for="tufte-mn-122" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-122" class="margin-toggle"><span class="marginnote">Not a surprise since Denali National Park is in Alaska.</span><br />
 Thus the function needed is <code>mdy</code>. It doesn’t matter
 whether the months are names or numbers:</p>
-<div class="sourceCode" id="cb1743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1743-1"><a href="dates-and-times.html#cb1743-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy</span>(date)) -&gt;<span class="st"> </span>denali</span>
-<span id="cb1743-2"><a href="dates-and-times.html#cb1743-2"></a>denali</span></code></pre></div>
+<div class="sourceCode" id="cb1782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1782-1"><a href="dates-and-times.html#cb1782-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">date =</span> <span class="kw">mdy</span>(date)) -&gt;<span class="st"> </span>denali</span>
+<span id="cb1782-2"><a href="dates-and-times.html#cb1782-2"></a>denali</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 4
 ##   date       name          caribou  wolf
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt;
@@ -1121,7 +1149,7 @@ whether the months are names or numbers:</p>
 ## 7 2001-10-06 David S.           20    60</code></pre>
 <p>I lived on the edge and overwrote both my column and the whole data
 frame.
-<label for="tufte-mn-119" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-119" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
+<label for="tufte-mn-123" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-123" class="margin-toggle"><span class="marginnote">It’s actually not <em>really</em> living on the edge, because if it doesn’t work, you go back and read the data in from the file again.</span></p>
 <p>The dates are displayed in ISO format, year-month-day. You see at the
 top of the column that they now really <em>are</em> dates, not just
 pieces of text that look like dates.</p>
@@ -1131,7 +1159,7 @@ the week and the month names for the dates.</li>
 </ol>
 <p>Solution</p>
 <p>This involves digging in the <code>lubridate</code> help to find out how to extract things from a date. It turns out that <code>wday</code> extracts the day of the week from a date, by default as a number, and <code>month</code> gets the month, also by default as a number:</p>
-<div class="sourceCode" id="cb1745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1745-1"><a href="dates-and-times.html#cb1745-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date), <span class="dt">wd =</span> <span class="kw">wday</span>(date))</span></code></pre></div>
+<div class="sourceCode" id="cb1784"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1784-1"><a href="dates-and-times.html#cb1784-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date), <span class="dt">wd =</span> <span class="kw">wday</span>(date))</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 6
 ##   date       name          caribou  wolf   mon    wd
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -1144,7 +1172,7 @@ the week and the month names for the dates.</li>
 ## 7 2001-10-06 David S.           20    60    10     7</code></pre>
 <p>This is not what we wanted, though; we wanted the names of the months
 and of the days. To fix that, add <code>label=T</code> to both functions:</p>
-<div class="sourceCode" id="cb1747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1747-1"><a href="dates-and-times.html#cb1747-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> T), <span class="dt">wd =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> T))</span></code></pre></div>
+<div class="sourceCode" id="cb1786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1786-1"><a href="dates-and-times.html#cb1786-1"></a>denali <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> T), <span class="dt">wd =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> T))</span></code></pre></div>
 <pre><code>## # A tibble: 7 x 6
 ##   date       name          caribou  wolf mon   wd   
 ##   &lt;date&gt;     &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt;
@@ -1162,9 +1190,9 @@ this later.</p>
 since these are categorical variables with a natural order. This means
 that you could do something like counting the number of surveys in
 each month like this:</p>
-<div class="sourceCode" id="cb1749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1749-1"><a href="dates-and-times.html#cb1749-1"></a>denali <span class="op">%&gt;%</span></span>
-<span id="cb1749-2"><a href="dates-and-times.html#cb1749-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> T), <span class="dt">wd =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> T)) <span class="op">%&gt;%</span></span>
-<span id="cb1749-3"><a href="dates-and-times.html#cb1749-3"></a><span class="st">  </span><span class="kw">count</span>(mon)</span></code></pre></div>
+<div class="sourceCode" id="cb1788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1788-1"><a href="dates-and-times.html#cb1788-1"></a>denali <span class="op">%&gt;%</span></span>
+<span id="cb1788-2"><a href="dates-and-times.html#cb1788-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mon =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> T), <span class="dt">wd =</span> <span class="kw">wday</span>(date, <span class="dt">label =</span> T)) <span class="op">%&gt;%</span></span>
+<span id="cb1788-3"><a href="dates-and-times.html#cb1788-3"></a><span class="st">  </span><span class="kw">count</span>(mon)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   mon       n
 ##   &lt;ord&gt; &lt;int&gt;
@@ -1177,13 +1205,13 @@ caribou population (explanatory) against wolf population
 </ol>
 <p>Solution</p>
 <p>Nothing terribly surprising here:</p>
-<div class="sourceCode" id="cb1751"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1751-1"><a href="dates-and-times.html#cb1751-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-39-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1790-1"><a href="dates-and-times.html#cb1790-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-960-1.png" width="672"  /></p>
 <p>If you like, add a smooth trend to it:
-<label for="tufte-mn-120" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-120" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
-<div class="sourceCode" id="cb1752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1752-1"><a href="dates-and-times.html#cb1752-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F)</span></code></pre></div>
+<label for="tufte-mn-124" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-124" class="margin-toggle"><span class="marginnote">This wiggles more than I would like, with such a small number of observations. Try putting someting like <em>span=2</em> in the smooth to make it less wiggly.</span></p>
+<div class="sourceCode" id="cb1791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1791-1"><a href="dates-and-times.html#cb1791-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">se =</span> F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-40-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-961-1.png" width="672"  /></p>
 <p>This is an upward trend: when one population is large, the other one
 is large too. This is typical for predator-prey relationships: when
 there is more to eat (more caribou) the wolf population goes up, and
@@ -1198,23 +1226,23 @@ for the points on the plot.</li>
 <p>I’m going to use <code>geom_text_repel</code> for the labels from package
 <code>ggrepel</code>. The year values are gotten using the
 <code>lubridate</code> function <code>year</code>:</p>
-<div class="sourceCode" id="cb1754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1754-1"><a href="dates-and-times.html#cb1754-1"></a>denali <span class="op">%&gt;%</span></span>
-<span id="cb1754-2"><a href="dates-and-times.html#cb1754-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span></span>
-<span id="cb1754-3"><a href="dates-and-times.html#cb1754-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf, <span class="dt">label =</span> year)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-41-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1793-1"><a href="dates-and-times.html#cb1793-1"></a>denali <span class="op">%&gt;%</span></span>
+<span id="cb1793-2"><a href="dates-and-times.html#cb1793-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span></span>
+<span id="cb1793-3"><a href="dates-and-times.html#cb1793-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf, <span class="dt">label =</span> year)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-962-1.png" width="672"  /></p>
 <p>I thought about joining up the points in year order. This is actually
 <em>not</em> <code>geom_line</code> as you would have guessed, since what that
 does is to join points in the order of the variable on the
 <span class="math inline">\(x\)</span>-axis.
-<label for="tufte-mn-121" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-121" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
+<label for="tufte-mn-125" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-125" class="margin-toggle"><span class="marginnote">I have to say that I didn’t know that until just now.</span>
 To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead
 <code>geom_path</code>:</p>
-<div class="sourceCode" id="cb1755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1755-1"><a href="dates-and-times.html#cb1755-1"></a>denali <span class="op">%&gt;%</span></span>
-<span id="cb1755-2"><a href="dates-and-times.html#cb1755-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span></span>
-<span id="cb1755-3"><a href="dates-and-times.html#cb1755-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf, <span class="dt">label =</span> year)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb1755-4"><a href="dates-and-times.html#cb1755-4"></a><span class="st">  </span><span class="kw">geom_text_repel</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_path</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-42-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1794"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1794-1"><a href="dates-and-times.html#cb1794-1"></a>denali <span class="op">%&gt;%</span></span>
+<span id="cb1794-2"><a href="dates-and-times.html#cb1794-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span></span>
+<span id="cb1794-3"><a href="dates-and-times.html#cb1794-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> caribou, <span class="dt">y =</span> wolf, <span class="dt">label =</span> year)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1794-4"><a href="dates-and-times.html#cb1794-4"></a><span class="st">  </span><span class="kw">geom_text_repel</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_path</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-963-1.png" width="672"  /></p>
 <p>In 1996, both populations were large, and both showed a steady decline
 until 1999. In 2000 and 2001, both populations seemed to be on the way
 up again, and you can imagine that in a couple of years, things would
@@ -1228,8 +1256,8 @@ population over time?</li>
 <p>Make a scatterplot, with the survey date as explanatory
 variable, and caribou population as response (since time always
 goes on the <span class="math inline">\(x\)</span>-axis):</p>
-<div class="sourceCode" id="cb1756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1756-1"><a href="dates-and-times.html#cb1756-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-43-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1795-1"><a href="dates-and-times.html#cb1795-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-964-1.png" width="672"  /></p>
 <p>I used an ordinary <code>geom_line</code> this time, to connect neighbouring
 years, as is often done with a time series. The overall trend is
 downward, though the 1999 value might be a low from which the
@@ -1249,11 +1277,11 @@ populations, just of different animals. One way of plotting both
 populations is to <code>pivot_longer</code> them up into one longer column, and
 then plot them against time, with the two animals distinguished
 by colour:</p>
-<div class="sourceCode" id="cb1757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1757-1"><a href="dates-and-times.html#cb1757-1"></a>denali <span class="op">%&gt;%</span></span>
-<span id="cb1757-2"><a href="dates-and-times.html#cb1757-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(caribou<span class="op">:</span>wolf, <span class="dt">names_to=</span><span class="st">&quot;animal&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;population&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb1757-3"><a href="dates-and-times.html#cb1757-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> population, <span class="dt">colour =</span> animal)) <span class="op">+</span></span>
-<span id="cb1757-4"><a href="dates-and-times.html#cb1757-4"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1796"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1796-1"><a href="dates-and-times.html#cb1796-1"></a>denali <span class="op">%&gt;%</span></span>
+<span id="cb1796-2"><a href="dates-and-times.html#cb1796-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(caribou<span class="op">:</span>wolf, <span class="dt">names_to=</span><span class="st">&quot;animal&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;population&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1796-3"><a href="dates-and-times.html#cb1796-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> population, <span class="dt">colour =</span> animal)) <span class="op">+</span></span>
+<span id="cb1796-4"><a href="dates-and-times.html#cb1796-4"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-965-1.png" width="672"  /></p>
 <p>This is not quite the story, though, because the caribou and wolf
 populations are on different scales. The caribou population is
 numbered in hundreds, while the wolf population is an actual count.</p>
@@ -1264,39 +1292,39 @@ there were two <span class="math inline">\(y\)</span>-scales, one for each anima
 manipulate, though (you can change either scale and get a very
 different-looking graph), so we ought to be careful.</p>
 <p>All right, so let’s put the caribou on the left:</p>
-<div class="sourceCode" id="cb1758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1758-1"><a href="dates-and-times.html#cb1758-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-45-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1797-1"><a href="dates-and-times.html#cb1797-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-966-1.png" width="672"  /></p>
 <p>Or we can add a <code>colour</code> aesthetic to distinguish the caribou
 from the wolf populations, that we’re going to add in a moment. This looks rather odd at first:</p>
-<div class="sourceCode" id="cb1759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1759-1"><a href="dates-and-times.html#cb1759-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1798-1"><a href="dates-and-times.html#cb1798-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-967-1.png" width="672"  /></p>
 <p>Now we think about adding the wolf numbers. This is done by adding a
 second <code>geom_line</code>, overriding the <code>y</code> and the
 <code>colour</code> to specify that this is wolf now:</p>
-<div class="sourceCode" id="cb1760"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1760-1"><a href="dates-and-times.html#cb1760-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
-<span id="cb1760-2"><a href="dates-and-times.html#cb1760-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb1760-3"><a href="dates-and-times.html#cb1760-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-47-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1799-1"><a href="dates-and-times.html#cb1799-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
+<span id="cb1799-2"><a href="dates-and-times.html#cb1799-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb1799-3"><a href="dates-and-times.html#cb1799-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-968-1.png" width="672"  /></p>
 <p>What has happened is that we get lines of different colour for each
 animal, with a legend. So far so good. The problem is that the wolf
 numbers are about 2.5 times bigger than the caribou
 numbers,
-<label for="tufte-mn-122" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-122" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
+<label for="tufte-mn-126" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-126" class="margin-toggle"><span class="marginnote">Which means, if you stop to think about it, that there are <em>actually</em> about 40 times more caribou than wolves.</span>
 so that
 we don’t get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:</p>
-<div class="sourceCode" id="cb1761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1761-1"><a href="dates-and-times.html#cb1761-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
-<span id="cb1761-2"><a href="dates-and-times.html#cb1761-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb1761-3"><a href="dates-and-times.html#cb1761-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-48-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1800-1"><a href="dates-and-times.html#cb1800-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
+<span id="cb1800-2"><a href="dates-and-times.html#cb1800-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb1800-3"><a href="dates-and-times.html#cb1800-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-969-1.png" width="672"  /></p>
 <p>Now we get to the secondary <span class="math inline">\(y\)</span>-axis. We want to label this
 <code>wolf</code> and have it reflect that we actually made the graph by
 dividing the wolf values by 2.5:</p>
-<div class="sourceCode" id="cb1762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1762-1"><a href="dates-and-times.html#cb1762-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
-<span id="cb1762-2"><a href="dates-and-times.html#cb1762-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb1762-3"><a href="dates-and-times.html#cb1762-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>)) <span class="op">+</span></span>
-<span id="cb1762-4"><a href="dates-and-times.html#cb1762-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">sec.axis =</span> <span class="kw">sec_axis</span>(<span class="op">~</span><span class="st"> </span>. <span class="op">*</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">name =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
-<p><img src="13-dates-and-times_files/figure-html/unnamed-chunk-49-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1801"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1801-1"><a href="dates-and-times.html#cb1801-1"></a><span class="kw">ggplot</span>(denali, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> caribou, <span class="dt">colour =</span> <span class="st">&quot;caribou&quot;</span>)) <span class="op">+</span></span>
+<span id="cb1801-2"><a href="dates-and-times.html#cb1801-2"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb1801-3"><a href="dates-and-times.html#cb1801-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> wolf <span class="op">/</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">colour =</span> <span class="st">&quot;wolf&quot;</span>)) <span class="op">+</span></span>
+<span id="cb1801-4"><a href="dates-and-times.html#cb1801-4"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">sec.axis =</span> <span class="kw">sec_axis</span>(<span class="op">~</span><span class="st"> </span>. <span class="op">*</span><span class="st"> </span><span class="fl">2.5</span>, <span class="dt">name =</span> <span class="st">&quot;wolf&quot;</span>))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-970-1.png" width="672"  /></p>
 <p>Woo, and, very possibly, hoo. I got most of these ideas from
 <a href="https://rpubs.com/MarkusLoew/226759">link</a>.</p>
 <p>Now we see how the populations vary over time, and also that they vary
@@ -1308,7 +1336,7 @@ one population was much bigger than the other, or varied much more
 than the other. Lies and statistics.</p>
 <p>In my opinion, too many people just plot series against time, possibly
 with a second <span class="math inline">\(y\)</span>-axis.
-<label for="tufte-mn-123" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-123" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit).</span>
+<label for="tufte-mn-127" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-127" class="margin-toggle"><span class="marginnote">And all too often with Excel (spit).</span>
 Variables that vary together, like the wolf
 and caribou populations here, ought to be plotted  on a scatterplot, possibly with the time points labelled.</p>
 <p>The ambitious among you may like to compare the graphs here with
