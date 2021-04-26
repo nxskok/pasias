@@ -1,0 +1,381 @@
+##  Making a map of Wisconsin
+
+
+ The file
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/wisconsin.txt) contains
+the road distances (in miles) between 12 cities in Wisconsin and
+neighbouring states. We are going to try to reproduce a map of the
+area using multidimensional scaling.
+
+
+(a) Read in the data and create a `dist` object,
+bearing in mind that the data in the file are already
+distances. Display your `dist` object. Probably, displaying
+the data that you read in is a good idea also.
+ 
+Solution
+
+
+```{r }
+my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/wisconsin.txt"
+wisc <- read_table(my_url)
+wisc
+```
+
+       
+
+The first time I did this, I had a blank line on the end of the data
+file, so I had a blank `location` and missing values for all
+the distances for it. I tidied that up before sharing the file with
+you, though.
+
+So, the first column is the names of the places, which we should get
+rid of before we make a `dist` object using `as.dist`
+(since what we read in is already distances). The columns are also the
+names  of the places, so we won't lose anything by getting rid of the
+`location` column:
+
+```{r }
+d <- wisc %>%
+  select(-location) %>%
+  as.dist()
+d
+```
+
+ 
+ 
+
+(b) Obtain a vector containing the city names. (This is easy,
+and not really necessary, but it was here before when I did things
+a different way.)
+ 
+Solution
+
+
+The `location` column of the data frame you read in
+from the file:
+```{r }
+cities <- wisc$location
+cities
+```
+
+       
+ 
+
+(c) Run a (metric) multidimensional scaling on the data, to
+obtain a two-dimensional representation of the cities. (You
+don't need to look at the results yet.)
+ 
+Solution
+
+
+```{r }
+wisc.1 <- cmdscale(d)
+```
+
+       
+ 
+
+(d) Plot the results of the multidimensional scaling,
+labelling the cities with their names. Use your judgement to
+decide where to place the city names, and how to  make sure the
+whole city names are shown on the map.
+ 
+Solution
+
+
+Let's see what `wisc.1` has in it, and make a data
+frame of the right thing:
+```{r }
+head(wisc.1)
+```
+
+         
+Two unnamed columns (the display indicates that it's a `matrix`
+rather than a data frame). As we saw in class, if we make a data frame
+out of this, the columns will get names `X1` and
+`X2`. Those are perfectly good names for coordinates. The city
+names on the left of `wisc.1` are actually row names rather
+than an actual genuine column. It's probably best *not* to assume
+that they will make it through the transition to a data frame, so
+we'll explicitly create a column called `city` with the city
+names (that we saved before):
+
+```{r }
+dd <- data.frame(wisc.1, city = cities)
+dd
+```
+
+ 
+
+There are only 12 rows, so it's fine to display them all.
+
+I'm calling this one `dd` since I have another `d`
+elsewhere that I want to keep. I should use better names.
+
+I think the best use of your judgement is to go straight to
+`geom_text_repel` from package `ggrepel`:
+
+```{r }
+ggplot(dd, aes(x = X1, y = X2, label = city)) +
+  geom_point() +
+  geom_text_repel() +
+  coord_fixed()
+```
+
+ 
+
+Your map may come out different from mine, but subject to the usual
+stuff about rotation and reflection it should be equivalent to
+mine. You should include the `coord_fixed` to get the scales
+the same (a corresponding distance on the two scales should take the
+same space). This one didn't come out quite square because the MDS
+says the points should be in a rectangle (stretching further one way
+than the other). 
+ 
+
+(e) Are cities close together on your map also close together
+in real life? Give an example or two.
+ 
+Solution
+
+
+On the map, the trio of cities Madison, Beloit and Fort Atkinson
+are closest together. How far apart are they actually? Well, you
+can go back to the original file (or display of what I called
+`d`) and find them, or you can do this:
+```{r }
+cities
+```
+
+     
+
+Cities 2, 3 and 4, so:
+
+```{r }
+wisc %>% slice(2:4) %>% select(c(1, 3:5))
+```
+
+ 
+
+The column numbers are off by one, since the first column is the names
+of the cities, which I decided to display here. It came out right, anyway.
+
+These are all less than 50 miles or less apart. There are some others
+this close in the original data: Monroe and Madison are 47 miles
+apart, Wausau and Marshfield are 45 miles apart, but these appear
+further apart on the map.
+Extra: the slice-select thing doesn't work on `d` because that is not
+a data frame. It is actually stored internally as a
+*one*-dimensional vector that displays nicely, but if you want to
+pull things out of it you have to figure out where in the vector they are:
+
+```{r }
+print.default(d)
+```
+
+ 
+
+If you compare that with the usual display of `d`, this way
+goes all the way down the first column ending at 130, then all the way
+down the second column (which has one fewer entry), ending at 467, and
+so on. Thus the three entries we picked out are at $11+1=12$,
+$11+2=13$, and $11+10+1=22$:
+
+```{r }
+d[12]
+d[13]
+d[22]
+```
+
+ 
+
+It's very easy to be off by one in this sort of calculation. There are
+12 cities altogether, so *11* distances in the first column, 10
+in the second, and so on. This was about my third attempt.
+
+I don't much care which cities you look at. Finding some cities that
+are reasonably close on the map and doing some kind of critical
+ assessment of their actual distances apart is all I want. 
+ 
+
+
+(f) Obtain a Google (or other) map of the area containing these
+twelve cities. (The way I expected you to do this when this was a
+hand-in problem was to take a screenshot or similar and include that
+in your document.)
+
+ 
+Solution
+
+
+Since I like to show off, let me show you how you can do this in R,
+using the package `leaflet`. (Of course, you can just open the
+appropriate map in your browser and copy-paste it, taking a
+screenshot if necessary):
+```{r }
+library(leaflet)
+library(tmaptools)
+```
+
+   
+First thing is to get our cities, and find where they are, latitude and longitude-wise.
+
+To begin, add the state names to the cities, to make sure our geocoder
+looks up the right ones. All of them are in Wisconsin, except for the
+last three: Dubuque is in Iowa, St. Paul is in Minnesota and Chicago
+is in Illinois. I am making a dataframe with the cities and a fake state of Wisconsin for all of them,
+and then overwriting the last three with
+the states they are actually in:
+
+```{r}
+tibble(city = cities) %>% 
+  mutate(state = "WI") -> city1
+city1$state[10] <- "IA"
+city1$state[11] <- "MN"
+city1$state[12] <- "IL"
+city1
+```
+
+There was a bit of base R in there, to access the individual elements of `city1` that I wanted to change.
+
+Next, I glue these together, and then look these up, or "geocode" them. This works best rowwise, since we want each place looked up one at a time. Our geocoder comes from `tmaptools`, which is why we needed to load it:
+
+```{r}
+city1 %>%
+  unite(place, c(city, state), sep = " ") %>% 
+  rowwise() %>% 
+  mutate(ll = list(geocode_OSM(place))) -> city1
+city1
+```
+
+`ll` contains a list of three things:
+
+```{r}
+city1 %>% unnest_wider(ll) %>% 
+  unnest_wider(coords) -> city2
+city2
+```
+
+`x` is longitude (minus because these are degrees west) and `y` is latitude. This seems to have worked even though Fort Atkinson has a dot in its name. The reason for the two `unnest_wider` is that the geocoding produces a list of three things, that are all different features of the same place; an ordinary `unnest` would have *one* column of values, and the place names would be repeated three times (which we would then have to pivot-wider). The two unnests happen because the first time, it unnests into the "bounding box" that you see here plus a list-column called `coords` with two numbers in it for each city, so I unnest *them* wider to get a column of longs and a column of lats.
+ 
+All right, let's make a map with those twelve cities on it. Leaflet makes this easy, because it figures out where to centre the map based on the lats and longs of the places on it. (There is a package called `ggmap` that uses Google Maps, but that requires you to choose a centre and a zoom level. You'll see shortly that these are irrelevant in a leaflet map.)
+
+```{r}
+leaflet(data = city2) %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = ~x, lat = ~y) -> locs
+locs
+```
+
+The nice thing about this map is that you can play with it: zoom it (using the plus/minus on the map or your mouse wheel), or move it around by clicking and dragging. To identify the cities: well, the big ones are obvious, and you can zoom in to identify the others. (You have to zoom in quite a long way to find Monroe, and the geocoder seems to have found its airport, which is not actually in the city.)
+
+I like identifying the cities with circles, but there are other possibilities, such as "icon markers" that look like Google map pins:
+
+```{r}
+leaflet(data = city2) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~x, lat = ~y) -> locs
+locs
+```
+
+You can even attach text to the markers that appears when you click on them, but that's farther than I would go here.
+
+
+After that long diversion, we come to:
+
+ 
+
+
+(g) Discuss how the map that came out of the multidimensional
+scaling corresponds to the actual (Google) map.
+
+ 
+Solution
+
+
+Let's pick a few places from the actual map, and make a table of
+where they are on the actual map and the `cmdscale` map:
+
+```
+
+ Place        Real              Cmdscale       
+----------------------------------------------
+ Superior     northwest         central east   
+ St. Paul     central west      southeast      
+ Dubuque      central south     central south  
+ Chicago      southeast         central west   
+ Appleton     central east      central north  
+
+
+```
+
+
+This is a bit tricky. Dubuque is the only one in the right place, and
+the others that were west have become east and vice versa. So I think
+there is a flipping across a line going through Dubuque. That seems to
+be the most important thing; if you imagine the other points being
+flipped across a line going north-south through Dubuque, they all end
+up in about the right place. There might be a little rotation as well,
+but I'll call that close enough.
+
+(For you, any comment along the lines of "flipped around this line"
+or "rotated about this much" that seems to describe what has happened, is
+fine.)
+ 
+
+
+(h) Calculate something that demonstrates that a one-dimensional
+map of the cities is a much worse representation than the
+two-dimensional one that we made before. (I'm planning to get to this
+in class, but if we skip it, don't worry about this part.)
+
+ 
+Solution
+
+
+Run again with `eig=T` and take a look at `GOF` (uppercase):
+```{r }
+cmdscale(d, 2, eig = T)$GOF
+cmdscale(d, 1, eig = T)$GOF
+```
+
+   
+
+The goodness-of-fit of the two-dimensional solution is pretty
+good,
+`r tufte::margin_note("As it ought to be, since there is a real answer  here: the cities do} exist as locations in two dimensions, if you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.")`
+but that of the one-dimensional solution (which arranges all the
+cities along a line) is pretty awful in comparison.
+
+How awful? Let's find out. I should have saved it from just above, but
+now I have to do it again. For the plot, `ones` is a string of
+ones, as many as there are cities.
+
+```{r kashklsahl0}
+ones <- rep(1, 12)
+v <- cmdscale(d, 1, eig = T)
+ddd <- as_tibble(v$points) %>%
+  mutate(one = ones, city = cities)
+ddd
+```
+
+ 
+
+(the one-column matrix of points didn't have a name, so it acquired
+the name `V1`), and the plot:
+
+```{r }
+ggplot(ddd, aes(x = one, y = V1, label = city)) +
+  geom_point() + geom_text_repel()
+```
+
+ 
+
+The cities get mapped onto a line that goes northwest (top) to
+southeast (bottom). This is not completely terrible, since there
+aren't really any cities in the northeast of the state, but it *is*
+pretty awful.
+ 
+
+

@@ -1,0 +1,243 @@
+##  Making a map of Wisconsin
+
+
+ The file
+[link](http://ritsokiguess.site/datafiles/wisconsin.txt) contains
+the road distances (in miles) between 12 cities in Wisconsin and
+neighbouring states. We are going to try to draw a map of the
+area using Leaflet.
+
+
+(a) Read in the data, displaying
+the data that you read in.
+
+
+Solution
+
+
+```{r }
+my_url <- "http://ritsokiguess.site/datafiles/wisconsin.txt"
+wisc <- read_table(my_url)
+wisc
+```
+
+       
+
+The first time I did this, I had a blank line on the end of the data
+file, so I had a blank `location` and missing values for all
+the distances for it. I tidied that up before sharing the file with
+you, though.
+
+
+(b) Make a dataframe containing the names of the locations (get rid of the columns containing distances), and add a column of the abbreviations of the states they are in. All of them are in Wisconsin (WI), except for the
+last three: Dubuque is in Iowa (IA), St.\ Paul is in Minnesota (MN) and Chicago
+is in Illinois (IL).
+
+Solution
+
+There seems to be a bit of base R attached to this, however you do it. I am going to create a dataframe pretending they are all in Wisconsin, and then fix it up afterwards:
+
+```{r}
+wisc %>% 
+  select(!where(is.numeric)) %>% 
+  mutate(state = "WI") -> wisc
+wisc
+```
+
+(I checked that in this question I didn't need the road distances for anything, so I saved it back into the original dataframe.) 
+
+Now we have to fix up the states of the last three places,
+
+
+(f) Obtain a Leaflet map of the area containing these
+twelve cities. 
+ 
+Solution
+
+First add the state names to the cities, to make sure Google Maps
+looks up the right ones.  I am first making a vector with 12 copies of the
+abbreviation for Wisconsin, and then overwriting the last three with
+the states they are actually in:
+
+```{r }
+states <- rep("WI", 12)
+states[10] <- "IA"
+states[11] <- "MN"
+states[12] <- "IL"
+cst <- str_c(cities, " ", states)
+cst
+```
+
+ 
+
+And then I look them up. I don't want Google to tell me that I have
+done too many lookups, so I look them up first and save the results,
+like this:
+
+```{r } 
+tibble(cst) %>%
+  ggmap::mutate_geocode(cst) -> g
+g
+```
+
+ 
+What are the extreme corners of these?
+
+```{r }
+range(g$lon)
+range(g$lat)
+```
+
+ 
+
+or even
+
+```{r }
+g %>%
+  select(lat, lon) %>%
+  map_df(range)
+```
+
+ 
+
+(`range` in R produces the two extreme values, not the
+difference between the highest and lowest, which is what you might
+think of as a "range".)
+
+We don't
+get exactly the corners we ask for, since the map always comes out in the same
+proportions (we could ask for a long skinny map, but we'll always get
+a rectangular one that fills the page), and also Google Maps converts
+the corners into a centre and zoom. I had to tinker with the numbers
+below, since on my first attempt the map zoomed in too much.
+I also asked for a "roadmap" to maximize the number of places marked
+on there.
+
+So:
+
+```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F}
+wisc.map.2 <- get_map(location = c(-94, 41.8, -87, 46.8), maptype = "roadmap")
+ggmap(wisc.map.2)
+```
+
+ 
+
+This came out about right. 
+
+Now we need to mark our 12 cities on the map. This is a
+`ggplot` map, so the right syntax is as below.
+
+```{r sldkhdlf,echo=-1,message=F, cache=T}
+library(ggmap)
+ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, y = lat))
+```
+
+ 
+
+There's a slight weirdness in that `ggmap` only takes a map,
+not a data frame or an `aes`, so those go in
+`geom_point` or whatever you're using.
+
+We *just* squeezed all our cities onto the map. The city
+southwest of Wausau is Marshfield, the one between Madison and
+Milwaukee is Fort Atkinson, and the two east of Dubuque along the
+southern border of Wisconsin are Monroe and Beloit. The one *way*
+up at the top is Superior.
+
+After that long diversion, we come to:
+
+ 
+
+
+(g) Discuss how the map that came out of the multidimensional
+scaling corresponds to the actual (Google) map.
+
+ 
+Solution
+
+
+Let's pick a few places from the actual map, and make a table of
+where they are on the actual map and the `cmdscale` map:
+
+```
+
+ Place        Real              Cmdscale       
+----------------------------------------------
+ Superior     northwest         central east   
+ St. Paul     central west      southeast      
+ Dubuque      central south     central south  
+ Chicago      southeast         central west   
+ Appleton     central east      central north  
+
+
+```
+
+
+This is a bit tricky. Dubuque is the only one in the right place, and
+the others that were west have become east and vice versa. So I think
+there is a flipping across a line going through Dubuque. That seems to
+be the most important thing; if you imagine the other points being
+flipped across a line going north-south through Dubuque, they all end
+up in about the right place. There might be a little rotation as well,
+but I'll call that close enough.
+
+(For you, any comment along the lines of "flipped around this line"
+or "rotated about this much" that seems to describe what has happened, is
+fine.)
+ 
+
+
+(h) Calculate something that demonstrates that a one-dimensional
+map of the cities is a much worse representation than the
+two-dimensional one that we made before. (I'm planning to get to this
+in class, but if we skip it, don't worry about this part.)
+
+ 
+Solution
+
+
+Run again with `eig=T` and take a look at `GOF` (uppercase):
+```{r }
+cmdscale(d, 2, eig = T)$GOF
+cmdscale(d, 1, eig = T)$GOF
+```
+
+   
+
+The goodness-of-fit of the two-dimensional solution is pretty
+good,
+`r tufte::margin_note("As it ought to be, since there is a real answer  here: the cities do} exist as locations in two dimensions, if you ignore the curvature of the earth. The goodness of fit isn't  100% because the roads bend a bit.")`
+but that of the one-dimensional solution (which arranges all the
+cities along a line) is pretty awful in comparison.
+
+How awful? Let's find out. I should have saved it from just above, but
+now I have to do it again. For the plot, `ones` is a string of
+ones, as many as there are cities.
+
+```{r kashklsahl0}
+ones <- rep(1, 12)
+v <- cmdscale(d, 1, eig = T)
+ddd <- as_tibble(v$points) %>%
+  mutate(one = ones, city = cities)
+ddd
+```
+
+ 
+
+(the one-column matrix of points didn't have a name, so it acquired
+the name `V1`), and the plot:
+
+```{r }
+ggplot(ddd, aes(x = one, y = V1, label = city)) +
+  geom_point() + geom_text_repel()
+```
+
+ 
+
+The cities get mapped onto a line that goes northwest (top) to
+southeast (bottom). This is not completely terrible, since there
+aren't really any cities in the northeast of the state, but it *is*
+pretty awful.
+ 
+
+
