@@ -23,8 +23,12 @@ catbrain <- tibble(place = "Catbrain UK")
 catbrain %>% mutate(ll = list(geocode_OSM(place))) %>% 
   unnest_wider(ll) %>% 
   unnest_wider(coords) -> catbrain
+```
+
+```{r}
 catbrain
 ```
+
 
 Remember that the output from `geocode_OSM` is a list, and it has in it a thing called `coords` that is the longitude and latitude together, and another thing called `bbox` that we don't use. So we have to `unnest` *twice* to get the longitude (as `x`) and the latitude (as `y`) out for drawing in a moment.
 
@@ -40,7 +44,6 @@ leaflet(data = catbrain) %>%
   addTiles() %>% 
   addCircleMarkers(lng = ~x, lat = ~y) -> catbrain_map
 catbrain_map
-
 ```
 
 
@@ -83,8 +86,12 @@ catbrain2 %>%
   mutate(ll = list(geocode_OSM(where))) %>% 
   unnest_wider(ll) %>% 
   unnest_wider(coords) -> catbrain2
+```
+
+```{r}
 catbrain2
 ```
+
 
 The first time I did this, I forgot the `rowwise`, which we didn't need the first time (there was only one place), but here, it causes odd problems if you omit it. 
 
