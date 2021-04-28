@@ -2,7 +2,7 @@
 
 
  The file
-[link](http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt) contains
+[link](http://ritsokiguess.site/datafiles/wisconsin.txt) contains
 the road distances (in miles) between 12 cities in Wisconsin and
 neighbouring states. We are going to try to reproduce a map of the
 area using multidimensional scaling.
@@ -17,7 +17,7 @@ Solution
 
 
 ```{r }
-my_url <- "http://www.utsc.utoronto.ca/~butler/d29/wisconsin.txt"
+my_url <- "http://ritsokiguess.site/datafiles/wisconsin.txt"
 wisc <- read_table(my_url)
 wisc
 ```
@@ -209,141 +209,7 @@ in your document.)
 Solution
 
 
-Since I like to show off, let me show you how you can do this in R,
-using the package `ggmap`. (Of course, you can just open the
-appropriate map in your browser and copy-paste it, taking a
-screenshot if necessary):
-```{r }
-library(ggmap)
-```
-
-   
-
-```{r echo=F}
-api_key <- "AIzaSyC7eVXz84-Mj1-zNBW4GTnXNAYdGQJDNXU"
-register_google(api_key)
-```
-
- 
-```{r laskhsal,cache=TRUE,fig.width=6,fig.height=6}
-library(ggmap)
-wisc.map <- get_map(location = "Milwaukee, WI", zoom = 6)
-ggmap(wisc.map)
-```
-
-   
-
-I centred this map around Milwaukee (a guess), which is not quite
-where the centre should be, since Milwaukee is in southeastern
-Wisconsin. The `zoom` option is how zoomed-in the map should be
-(a higher number is more zoomed-in). Likewise, 6 was a guess, and it
-seems that I need to zoom in a bit more.
-
-The other way of specifying a location, instead of the name or
-lat-long of the centre of the map, is to specify the **corners**
-of the map in degrees of latitude or longitude. We have to give four
-numbers: lower left longitude and latitude, upper right longitude and
-latitude. (Degrees west are *negative*, as you see on the
-`lon` scale of the above map.) This comes out as west, south,
-east and north limits of the map.
-Where are the 12 points we want to put on the map? We can get their
-latitudes and longitudes, which is called "geocoding", and a
-function `geocode` is included in `ggmap`.
-
-First add the state names to the cities, to make sure Google Maps
-looks up the right ones. All of them are in Wisconsin, except for the
-last three: Dubuque is in Iowa, St.\ Paul is in Minnesota and Chicago
-is in Illinois. I am first making a vector with 12 copies of the
-abbreviation for Wisconsin, and then overwriting the last three with
-the states they are actually in:
-
-```{r }
-states <- rep("WI", 12)
-states[10] <- "IA"
-states[11] <- "MN"
-states[12] <- "IL"
-cst <- str_c(cities, " ", states)
-cst
-```
-
- 
-
-And then I look them up. I don't want Google to tell me that I have
-done too many lookups, so I look them up first and save the results,
-like this:
-
-```{r } 
-tibble(cst) %>%
-  ggmap::mutate_geocode(cst) -> g
-g
-```
-
- 
-What are the extreme corners of these?
-
-```{r }
-range(g$lon)
-range(g$lat)
-```
-
- 
-
-or even
-
-```{r }
-g %>%
-  select(lat, lon) %>%
-  map_df(range)
-```
-
- 
-
-(`range` in R produces the two extreme values, not the
-difference between the highest and lowest, which is what you might
-think of as a "range".)
-
-We don't
-get exactly the corners we ask for, since the map always comes out in the same
-proportions (we could ask for a long skinny map, but we'll always get
-a rectangular one that fills the page), and also Google Maps converts
-the corners into a centre and zoom. I had to tinker with the numbers
-below, since on my first attempt the map zoomed in too much.
-I also asked for a "roadmap" to maximize the number of places marked
-on there.
-
-So:
-
-```{r lhsdljhadkfj,fig.width=6,fig.height=6,cache=T,message=F}
-wisc.map.2 <- get_map(location = c(-94, 41.8, -87, 46.8), maptype = "roadmap")
-ggmap(wisc.map.2)
-```
-
- 
-
-This came out about right. 
-
-Now we need to mark our 12 cities on the map. This is a
-`ggplot` map, so the right syntax is as below.
-
-```{r sldkhdlf,echo=-1,message=F, cache=T}
-library(ggmap)
-ggmap(wisc.map.2) + geom_point(data = g, aes(x = lon, y = lat))
-```
-
- 
-
-There's a slight weirdness in that `ggmap` only takes a map,
-not a data frame or an `aes`, so those go in
-`geom_point` or whatever you're using.
-
-We *just* squeezed all our cities onto the map. The city
-southwest of Wausau is Marshfield, the one between Madison and
-Milwaukee is Fort Atkinson, and the two east of Dubuque along the
-southern border of Wisconsin are Monroe and Beloit. The one *way*
-up at the top is Superior.
-
-After that long diversion, we come to:
-
+I do this using R in the maps chapter. See there for how to do it this way.
  
 
 
