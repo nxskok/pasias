@@ -392,7 +392,7 @@ were on a so-called Likert scale of “very unsatisfied”,
 each customer’s gender and age group (under 18, 18–24, 25–30, 31 or
 older). (A survey of this kind does not ask its respondents for their
 exact age, only which age group they fall in.) The data, as
-frequencies of people falling into each category combination, are in <a href="http://www.utsc.utoronto.ca/~butler/d29/mobile.txt">link</a>.</p>
+frequencies of people falling into each category combination, are in <a href="http://ritsokiguess.site/datafiles/mobile.txt">link</a>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><a name="part:gather"><em></a> Read in the data and take a look at the format. Use a tool
 that you know about to arrange the frequencies in </em>one* column,
@@ -401,10 +401,10 @@ frequencies belong to. Save the new data frame. (Take a look at it
 if you like.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1841-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1841-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/mobile.txt&quot;</span></span>
+<div class="sourceCode" id="cb1841"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1841-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1841-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/mobile.txt&quot;</span></span>
 <span id="cb1841-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1841-2"></a>mobile &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   gender = col_character(),
 ##   age.group = col_character(),
@@ -767,7 +767,7 @@ interfering with the <code>dplyr</code> one:</p>
 particularly among Christians, some of whom believe that abortion is
 absolutely forbidden by the Bible. Do attitudes towards abortion
 differ among Christian denominations? The data in
-<a href="http://www.utsc.utoronto.ca/~butler/d29/abortion.txt">link</a> come from
+<a href="http://ritsokiguess.site/datafiles/abortion.txt">link</a> come from
 the American Social Survey for the years 1972–1974. The variables
 are:</p>
 <ul>
@@ -798,10 +798,10 @@ things?</li>
 <p>Solution</p>
 <p>The columns are aligned with each other but not with the headings,
 so <code>read_table2</code> it has to be:</p>
-<div class="sourceCode" id="cb1875"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1875-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1875-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/abortion.txt&quot;</span></span>
+<div class="sourceCode" id="cb1875"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1875-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1875-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/abortion.txt&quot;</span></span>
 <span id="cb1875-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1875-2"></a>abortion &lt;-<span class="st"> </span><span class="kw">read_table2</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   year = col_double(),
 ##   religion = col_character(),
@@ -1213,7 +1213,7 @@ and tell you how many rows and columns you have:</p>
 <div class="sourceCode" id="cb1905"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1905-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1905-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ess.csv&quot;</span></span>
 <span id="cb1905-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1905-2"></a>ess &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   cntry = col_character(),
 ##   cname = col_character(),
@@ -1508,13 +1508,20 @@ from. <code>crossing</code> is our friend. You can use
 only had <code>agea</code> and <code>eduyrs</code> left, having decided
 that interview time really ought to come out:</p>
 <div class="sourceCode" id="cb1929"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1929-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1929-1"></a><span class="kw">summary</span>(ess.major)</span></code></pre></div>
-<pre><code>##     prtvtgb           gndr            agea           eduyrs          inwtm       party  
-##  Min.   :1.000   Min.   :1.000   Min.   :18.00   Min.   : 0.00   Min.   :  7.0   1:484  
-##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:44.00   1st Qu.:11.00   1st Qu.: 35.0   2:496  
-##  Median :2.000   Median :2.000   Median :58.00   Median :13.00   Median : 41.0   3:243  
-##  Mean   :1.803   Mean   :1.574   Mean   :57.19   Mean   :13.45   Mean   : 43.7          
-##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:71.00   3rd Qu.:16.00   3rd Qu.: 50.0          
-##  Max.   :3.000   Max.   :2.000   Max.   :94.00   Max.   :33.00   Max.   :160.0</code></pre>
+<pre><code>##     prtvtgb           gndr            agea           eduyrs          inwtm      
+##  Min.   :1.000   Min.   :1.000   Min.   :18.00   Min.   : 0.00   Min.   :  7.0  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:44.00   1st Qu.:11.00   1st Qu.: 35.0  
+##  Median :2.000   Median :2.000   Median :58.00   Median :13.00   Median : 41.0  
+##  Mean   :1.803   Mean   :1.574   Mean   :57.19   Mean   :13.45   Mean   : 43.7  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:71.00   3rd Qu.:16.00   3rd Qu.: 50.0  
+##  Max.   :3.000   Max.   :2.000   Max.   :94.00   Max.   :33.00   Max.   :160.0  
+##  party  
+##  1:484  
+##  2:496  
+##  3:243  
+##         
+##         
+## </code></pre>
 <p>Quartiles for age are 44 and 71, and for years of education are 11 and 16:</p>
 <div class="sourceCode" id="cb1931"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1931-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1931-1"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">agea =</span> <span class="kw">c</span>(<span class="dv">44</span>, <span class="dv">71</span>), <span class="dt">eduyrs =</span> <span class="kw">c</span>(<span class="dv">11</span>, <span class="dv">16</span>))</span>
 <span id="cb1931-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1931-2"></a>new</span></code></pre></div>
@@ -1619,7 +1626,7 @@ how the data are not “tidy”.</li>
 <div class="sourceCode" id="cb1937"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1937-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1937-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/alligator.txt&quot;</span></span>
 <span id="cb1937-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1937-2"></a>gators.orig &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   profile = col_double(),
 ##   Gender = col_character(),
@@ -2009,7 +2016,7 @@ that the respondent lives in (five values).</p></li>
 <div class="sourceCode" id="cb1966"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1966-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1966-1"></a>my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/datafiles/master/steak.csv&quot;</span></span>
 <span id="cb1966-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1966-2"></a>steak0 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   respondent_id = col_double(),
 ##   lottery_a = col_logical(),
@@ -2055,12 +2062,19 @@ Running the data frame through <code>summary</code> gives this, either as <code>
 ##  NA&#39;s :12        NA&#39;s :11        NA&#39;s :11        NA&#39;s :11                          
 ##                                                                                    
 ##                                                                                    
-##    female            age            hhold_income           educ              region         
-##  Mode :logical   Length:550         Length:550         Length:550         Length:550        
-##  FALSE:246       Class :character   Class :character   Class :character   Class :character  
-##  TRUE :268       Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##  NA&#39;s :36                                                                                   
-##                                                                                             
+##    female            age            hhold_income           educ          
+##  Mode :logical   Length:550         Length:550         Length:550        
+##  FALSE:246       Class :character   Class :character   Class :character  
+##  TRUE :268       Mode  :character   Mode  :character   Mode  :character  
+##  NA&#39;s :36                                                                
+##                                                                          
+##                                                                          
+##     region         
+##  Length:550        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
 ## </code></pre>
 <p>Make a call about whether you think that’s a lot of missing values or only a few. This might not be all of them, because missing text doesn’t show here (we see later how to make it show up).</p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -2083,12 +2097,19 @@ Running the data frame through <code>summary</code> gives this, either as <code>
 ##                                                                                   
 ##                                                                                   
 ##                                                                                   
-##    female            age            hhold_income           educ              region         
-##  Mode :logical   Length:331         Length:331         Length:331         Length:331        
-##  FALSE:174       Class :character   Class :character   Class :character   Class :character  
-##  TRUE :157       Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-##                                                                                             
-##                                                                                             
+##    female            age            hhold_income           educ          
+##  Mode :logical   Length:331         Length:331         Length:331        
+##  FALSE:174       Class :character   Class :character   Class :character  
+##  TRUE :157       Mode  :character   Mode  :character   Mode  :character  
+##                                                                          
+##                                                                          
+##                                                                          
+##     region         
+##  Length:331        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
 ## </code></pre>
 <p>The missing values, the ones we can see anyway, have all gone. Precisely, <code>drop_na</code>, as its
 name suggests, drops all the rows that have missing values in them
@@ -2107,43 +2128,49 @@ columns.</p>
 <p>Extra extra: below we see how we used to have to do this, for your information.</p>
 <p>First, we run <code>complete.cases</code> on the data frame:</p>
 <div class="sourceCode" id="cb1974"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1974-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1974-1"></a><span class="kw">complete.cases</span>(steak0)</span></code></pre></div>
-<pre><code>##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [16]  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-##  [31]  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE
-##  [46]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-##  [61] FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE
-##  [76] FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE
-##  [91]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE
-## [106]  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [121]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [136] FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
-## [151]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
-## [166] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE
-## [181] FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [196]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE
-## [211] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE
-## [226] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [241]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
-## [256]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE
-## [271]  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
-## [286]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
-## [301] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [316]  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE
-## [331]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE
-## [346] FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [361] FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE
-## [376] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-## [391] FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-## [406]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE
-## [421]  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE
-## [436]  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
-## [451]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
-## [466]  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
-## [481] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE
-## [496]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE
-## [511] FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE
-## [526]  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
-## [541] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE</code></pre>
+<pre><code>##   [1] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##  [14]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+##  [27]  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
+##  [40] FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+##  [53]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+##  [66]  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE
+##  [79]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
+##  [92]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+## [105]  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE
+## [118] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE
+## [131]  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE
+## [144]  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE
+## [157]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE
+## [170] FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE
+## [183] FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
+## [196]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE
+## [209] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
+## [222]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+## [235]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE FALSE
+## [248]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [261]  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+## [274]  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+## [287]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [300]  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [313]  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE
+## [326] FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE
+## [339]  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE
+## [352]  TRUE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
+## [365]  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE
+## [378]  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
+## [391] FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+## [404] FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE
+## [417] FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
+## [430] FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+## [443]  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE
+## [456]  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE
+## [469]  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE
+## [482] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE
+## [495]  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE
+## [508]  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+## [521]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE
+## [534]  TRUE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE
+## [547] FALSE  TRUE FALSE FALSE</code></pre>
 <p>You might be able to guess what this does, in the light of what we
 just did, but if not, you can investigate. Let’s pick three rows where
 <code>complete.cases</code> is
@@ -2190,22 +2217,22 @@ up unless we turn them into a factor first:</p>
 ##                                                                  Well       : 36  
 ##                                                                  NA&#39;s       :118  
 ##                                                                                   
-##    female           age                   hhold_income                               educ    
-##  Mode :logical   &gt;60  :131   $0 - $24,999       : 51   Bachelor degree                 :174  
-##  FALSE:246       18-29:110   $100,000 - $149,999: 76   Graduate degree                 :133  
-##  TRUE :268       30-44:133   $150,000+          : 54   High school degree              : 39  
-##  NA&#39;s :36        45-60:140   $25,000 - $49,999  : 77   Less than high school degree    :  2  
-##                  NA&#39;s : 36   $50,000 - $99,999  :172   Some college or Associate degree:164  
-##                              NA&#39;s               :120   NA&#39;s                            : 38  
-##                                                                                              
-##                 region   
-##  Pacific           : 91  
-##  South Atlantic    : 88  
-##  East North Central: 86  
-##  Middle Atlantic   : 72  
-##  West North Central: 42  
-##  (Other)           :133  
-##  NA&#39;s              : 38</code></pre>
+##    female           age                   hhold_income
+##  Mode :logical   &gt;60  :131   $0 - $24,999       : 51  
+##  FALSE:246       18-29:110   $100,000 - $149,999: 76  
+##  TRUE :268       30-44:133   $150,000+          : 54  
+##  NA&#39;s :36        45-60:140   $25,000 - $49,999  : 77  
+##                  NA&#39;s : 36   $50,000 - $99,999  :172  
+##                              NA&#39;s               :120  
+##                                                       
+##                                educ                    region   
+##  Bachelor degree                 :174   Pacific           : 91  
+##  Graduate degree                 :133   South Atlantic    : 88  
+##  High school degree              : 39   East North Central: 86  
+##  Less than high school degree    :  2   Middle Atlantic   : 72  
+##  Some college or Associate degree:164   West North Central: 42  
+##  NA&#39;s                            : 38   (Other)           :133  
+##                                         NA&#39;s              : 38</code></pre>
 <p>There are missing values everywhere. What the <code>where</code>
 does is to do something for each column where the first thing is true:
 here, if the column is text, then replace it by the factor version of
@@ -2270,22 +2297,22 @@ least it suggests that we might be good.</p>
 ##                                                                 Well       : 20  
 ##                                                                                  
 ##                                                                                  
-##    female           age                  hhold_income                               educ    
-##  Mode :logical   &gt;60  :82   $0 - $24,999       : 37   Bachelor degree                 :120  
-##  FALSE:174       18-29:70   $100,000 - $149,999: 66   Graduate degree                 : 86  
-##  TRUE :157       30-44:93   $150,000+          : 39   High school degree              : 20  
-##                  45-60:86   $25,000 - $49,999  : 55   Less than high school degree    :  1  
-##                             $50,000 - $99,999  :134   Some college or Associate degree:104  
-##                                                                                             
-##                                                                                             
-##                 region  
-##  South Atlantic    :68  
-##  Pacific           :57  
-##  East North Central:48  
-##  Middle Atlantic   :46  
-##  West North Central:29  
-##  Mountain          :24  
-##  (Other)           :59</code></pre>
+##    female           age                  hhold_income
+##  Mode :logical   &gt;60  :82   $0 - $24,999       : 37  
+##  FALSE:174       18-29:70   $100,000 - $149,999: 66  
+##  TRUE :157       30-44:93   $150,000+          : 39  
+##                  45-60:86   $25,000 - $49,999  : 55  
+##                             $50,000 - $99,999  :134  
+##                                                      
+##                                                      
+##                                educ                    region  
+##  Bachelor degree                 :120   South Atlantic    :68  
+##  Graduate degree                 : 86   Pacific           :57  
+##  High school degree              : 20   East North Central:48  
+##  Less than high school degree    :  1   Middle Atlantic   :46  
+##  Some college or Associate degree:104   West North Central:29  
+##                                         Mountain          :24  
+##                                         (Other)           :59</code></pre>
 <p>If there were any missing values, they would be listed on the end of
 the counts of observations for each level, or on the bottom of the
 five-number sumamries. But there aren’t. So here’s your proof.</p>
@@ -2303,7 +2330,7 @@ all the right columns, and, scrolling down, no visible missing values.</p>
 </div>
 <div id="crimes-in-san-francisco-the-data" class="section level2" number="20.7">
 <h2><span class="header-section-number">20.7</span> Crimes in San Francisco – the data</h2>
-<p>The data in <a href="http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv">link</a> is a huge dataset of crimes committed in San
+<p>The data in <a href="http://utsc.utoronto.ca/~butler/d29/sfcrime.csv">link</a> is a huge dataset of crimes committed in San
 Francisco between 2003 and 2015. The variables are:</p>
 <ul>
 <li><p><code>Dates</code>: the date and time of the crime</p></li>
@@ -2327,10 +2354,10 @@ lot of crime categories, so we will focus on the top four
 lot of rows. (The data may take a moment to read in. You will see why.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb1988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1988-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1988-1"></a>my_url=<span class="st">&quot;http://www.utsc.utoronto.ca/~butler/d29/sfcrime.csv&quot;</span></span>
+<div class="sourceCode" id="cb1988"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1988-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1988-1"></a>my_url=<span class="st">&quot;http://utsc.utoronto.ca/~butler/d29/sfcrime.csv&quot;</span></span>
 <span id="cb1988-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1988-2"></a>sfcrime=<span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   Dates = col_datetime(format = &quot;&quot;),
 ##   Category = col_character(),
@@ -2436,7 +2463,7 @@ these into a vector <code>v</code> and explain briefly why
 <p>This is the ultimate “try it and see”:</p>
 <div class="sourceCode" id="cb1995"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1995-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1995-1"></a>v=<span class="kw">c</span>(<span class="st">&#39;a&#39;</span>,<span class="st">&#39;m&#39;</span>,<span class="dv">3</span>,<span class="st">&#39;Q&#39;</span>)</span>
 <span id="cb1995-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb1995-2"></a>v <span class="op">%in%</span><span class="st"> </span>letters</span></code></pre></div>
-<pre><code>## [1] FALSE FALSE FALSE FALSE</code></pre>
+<pre><code>## [1]  TRUE  TRUE FALSE FALSE</code></pre>
 <p>The first two elements of the answer are <code>TRUE</code> because
 lowercase-a and lowercase-m can be found in the lowercase letters
 somewhere. The other two are false because the number 3 and the
@@ -2469,20 +2496,24 @@ at a time for membership in the set in <code>my.crimes</code>, so this:</p>
 </div>
 <p>That didn’t work. Remember what this was? This is because <code>MASS</code> is still loaded:</p>
 <div class="sourceCode" id="cb2000"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2000-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2000-1"></a><span class="kw">search</span>()</span></code></pre></div>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;         &quot;package:ggmap&quot;      &quot;package:MASS&quot;       &quot;.conflicts&quot;        
-##  [5] &quot;package:car&quot;        &quot;package:rio&quot;        &quot;package:GGally&quot;     &quot;package:readxl&quot;    
-##  [9] &quot;package:lubridate&quot;  &quot;package:leaps&quot;      &quot;package:conflicted&quot; &quot;package:leaflet&quot;   
-## [13] &quot;package:tmaptools&quot;  &quot;package:PMCMRplus&quot;  &quot;package:bayesplot&quot;  &quot;package:posterior&quot; 
-## [17] &quot;package:cmdstanr&quot;   &quot;package:bootstrap&quot;  &quot;package:rpart&quot;      &quot;package:broom&quot;     
-## [21] &quot;package:ggrepel&quot;    &quot;package:ggbiplot&quot;   &quot;package:grid&quot;       &quot;package:scales&quot;    
-## [25] &quot;package:plyr&quot;       &quot;package:lme4&quot;       &quot;package:Matrix&quot;     &quot;package:carData&quot;   
-## [29] &quot;package:survminer&quot;  &quot;package:ggpubr&quot;     &quot;package:survival&quot;   &quot;package:nnet&quot;      
-## [33] &quot;package:smmr&quot;       &quot;package:forcats&quot;    &quot;package:stringr&quot;    &quot;package:dplyr&quot;     
-## [37] &quot;package:purrr&quot;      &quot;package:readr&quot;      &quot;package:tidyr&quot;      &quot;package:tibble&quot;    
-## [41] &quot;package:ggplot2&quot;    &quot;package:tidyverse&quot;  &quot;package:bookdown&quot;   &quot;tools:rstudio&quot;     
-## [45] &quot;package:stats&quot;      &quot;package:graphics&quot;   &quot;package:grDevices&quot;  &quot;package:utils&quot;     
-## [49] &quot;package:datasets&quot;   &quot;package:devtools&quot;   &quot;package:usethis&quot;    &quot;package:methods&quot;   
-## [53] &quot;Autoloads&quot;          &quot;package:base&quot;</code></pre>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;         &quot;package:MASS&quot;       &quot;.conflicts&quot;        
+##  [4] &quot;package:car&quot;        &quot;package:ggmap&quot;      &quot;package:rio&quot;       
+##  [7] &quot;package:GGally&quot;     &quot;package:readxl&quot;     &quot;package:lubridate&quot; 
+## [10] &quot;package:leaps&quot;      &quot;package:conflicted&quot; &quot;package:leaflet&quot;   
+## [13] &quot;package:tmaptools&quot;  &quot;package:PMCMRplus&quot;  &quot;package:bayesplot&quot; 
+## [16] &quot;package:posterior&quot;  &quot;package:cmdstanr&quot;   &quot;package:bootstrap&quot; 
+## [19] &quot;package:rpart&quot;      &quot;package:broom&quot;      &quot;package:ggrepel&quot;   
+## [22] &quot;package:ggbiplot&quot;   &quot;package:grid&quot;       &quot;package:scales&quot;    
+## [25] &quot;package:plyr&quot;       &quot;package:lme4&quot;       &quot;package:Matrix&quot;    
+## [28] &quot;package:carData&quot;    &quot;package:survminer&quot;  &quot;package:ggpubr&quot;    
+## [31] &quot;package:survival&quot;   &quot;package:nnet&quot;       &quot;package:smmr&quot;      
+## [34] &quot;package:forcats&quot;    &quot;package:stringr&quot;    &quot;package:dplyr&quot;     
+## [37] &quot;package:purrr&quot;      &quot;package:readr&quot;      &quot;package:tidyr&quot;     
+## [40] &quot;package:tibble&quot;     &quot;package:ggplot2&quot;    &quot;package:tidyverse&quot; 
+## [43] &quot;package:bookdown&quot;   &quot;tools:rstudio&quot;      &quot;package:stats&quot;     
+## [46] &quot;package:graphics&quot;   &quot;package:grDevices&quot;  &quot;package:utils&quot;     
+## [49] &quot;package:datasets&quot;   &quot;package:devtools&quot;   &quot;package:usethis&quot;   
+## [52] &quot;package:methods&quot;    &quot;Autoloads&quot;          &quot;package:base&quot;</code></pre>
 <p>so we need to get rid of <code>MASS</code>:</p>
 <div class="sourceCode" id="cb2002"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2002-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2002-1"></a><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload=</span>T)</span></code></pre></div>
 <pre><code>## Warning: &#39;MASS&#39; namespace cannot be unloaded:
@@ -2560,7 +2591,7 @@ to $150,000+.</p></li>
 that the respondent lives in (five values).</p></li>
 </ul>
 <p>The data are in
-<a href="http://www.utsc.utoronto.ca/~butler/d29/steak1.csv">link</a>. This is the
+<a href="http://ritsokiguess.site/datafiles/steak1.csv">link</a>. This is the
 cleaned-up data from a previous question, with the missing values removed.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Read in the data and display the first few lines.</li>
@@ -2569,7 +2600,7 @@ cleaned-up data from a previous question, with the missing values removed.</p>
 <p>The usual:</p>
 <div class="sourceCode" id="cb2007"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2007-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2007-1"></a>steak &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;steak1.csv&quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   respondent_id = col_double(),
 ##   lottery_a = col_logical(),
@@ -2902,7 +2933,7 @@ but we don’t care about <em>that</em> here).</p>
 <div id="crimes-in-san-francisco" class="section level2" number="20.9">
 <h2><span class="header-section-number">20.9</span> Crimes in San Francisco</h2>
 <p>The data in
-<a href="http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv">link</a> is a subset
+<a href="http://ritsokiguess.site/datafiles/sfcrime1.csv">link</a> is a subset
 of a huge
 dataset of crimes committed in San Francisco between 2003 and
 2015. The variables are:</p>
@@ -2937,16 +2968,21 @@ part of it).</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb2039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2039-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2039-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/sfcrime1.csv&quot;</span></span>
+<div class="sourceCode" id="cb2039"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2039-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2039-1"></a>my_url &lt;-<span class="st"> &quot;http://utsc.utoronto.ca/~butler/d29/sfcrime1.csv&quot;</span></span>
 <span id="cb2039-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2039-2"></a>sfcrime &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────
+## ── Column specification ───────────────────────────────────────────────────────────────
 ## cols(
 ##   Category = col_character(),
 ##   DayOfWeek = col_character(),
 ##   PdDistrict = col_character()
 ## )</code></pre>
 <div class="sourceCode" id="cb2041"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2041-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2041-1"></a>sfcrime</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Category"],"name":[1],"type":["chr"],"align":["left"]},{"label":["DayOfWeek"],"name":[2],"type":["chr"],"align":["left"]},{"label":["PdDistrict"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"ASSAULT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"ASSAULT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Wednesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"PARK"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Wednesday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Wednesday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Wednesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Wednesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Wednesday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"INGLESIDE"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"ASSAULT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Wednesday","3":"MISSION"},{"1":"ASSAULT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"MISSION"},{"1":"ASSAULT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TENDERLOIN"},{"1":"DRUG/NARCOTIC","2":"Wednesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Wednesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Wednesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Wednesday","3":"RICHMOND"},{"1":"ASSAULT","2":"Wednesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"RICHMOND"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"RICHMOND"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"TENDERLOIN"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Tuesday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"MISSION"},{"1":"ASSAULT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"RICHMOND"},{"1":"ASSAULT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"ASSAULT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Tuesday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"MISSION"},{"1":"ASSAULT","2":"Tuesday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TARAVAL"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Tuesday","3":"MISSION"},{"1":"ASSAULT","2":"Tuesday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Tuesday","3":"CENTRAL"},{"1":"ASSAULT","2":"Tuesday","3":"INGLESIDE"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"INGLESIDE"},{"1":"DRUG/NARCOTIC","2":"Tuesday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"PARK"},{"1":"ASSAULT","2":"Monday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"ASSAULT","2":"Monday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Monday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Monday","3":"PARK"},{"1":"VEHICLE THEFT","2":"Monday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"ASSAULT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"ASSAULT","2":"Monday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"ASSAULT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Monday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Monday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Monday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"TARAVAL"},{"1":"ASSAULT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"CENTRAL"},{"1":"DRUG/NARCOTIC","2":"Monday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Monday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Monday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Monday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Monday","3":"PARK"},{"1":"ASSAULT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"NORTHERN"},{"1":"ASSAULT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"ASSAULT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Sunday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"MISSION"},{"1":"ASSAULT","2":"Sunday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Sunday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"DRUG/NARCOTIC","2":"Sunday","3":"TENDERLOIN"},{"1":"DRUG/NARCOTIC","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Sunday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Sunday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Sunday","3":"TARAVAL"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"RICHMOND"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Sunday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"NORTHERN"},{"1":"ASSAULT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Sunday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"ASSAULT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"MISSION"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Sunday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"ASSAULT","2":"Sunday","3":"MISSION"},{"1":"ASSAULT","2":"Sunday","3":"INGLESIDE"},{"1":"ASSAULT","2":"Sunday","3":"CENTRAL"},{"1":"ASSAULT","2":"Sunday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Sunday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Sunday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"ASSAULT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"RICHMOND"},{"1":"ASSAULT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Sunday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Sunday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Sunday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Sunday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Saturday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"ASSAULT","2":"Saturday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Saturday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Saturday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"PARK"},{"1":"ASSAULT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"CENTRAL"},{"1":"ASSAULT","2":"Saturday","3":"TENDERLOIN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Saturday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"RICHMOND"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"PARK"},{"1":"ASSAULT","2":"Saturday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"ASSAULT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"ASSAULT","2":"Saturday","3":"NORTHERN"},{"1":"ASSAULT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"TARAVAL"},{"1":"ASSAULT","2":"Saturday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"ASSAULT","2":"Saturday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Saturday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"ASSAULT","2":"Saturday","3":"PARK"},{"1":"ASSAULT","2":"Saturday","3":"PARK"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"CENTRAL"},{"1":"ASSAULT","2":"Saturday","3":"MISSION"},{"1":"VEHICLE THEFT","2":"Saturday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"ASSAULT","2":"Saturday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Saturday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Saturday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"INGLESIDE"},{"1":"VEHICLE THEFT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"PARK"},{"1":"ASSAULT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Friday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Friday","3":"BAYVIEW"},{"1":"DRUG/NARCOTIC","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"VEHICLE THEFT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Friday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"DRUG/NARCOTIC","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"VEHICLE THEFT","2":"Friday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Friday","3":"PARK"},{"1":"VEHICLE THEFT","2":"Friday","3":"PARK"},{"1":"ASSAULT","2":"Friday","3":"CENTRAL"},{"1":"ASSAULT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"ASSAULT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"ASSAULT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"VEHICLE THEFT","2":"Friday","3":"TARAVAL"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TENDERLOIN"},{"1":"ASSAULT","2":"Friday","3":"TARAVAL"},{"1":"ASSAULT","2":"Friday","3":"BAYVIEW"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"ASSAULT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"ASSAULT","2":"Friday","3":"NORTHERN"},{"1":"ASSAULT","2":"Friday","3":"NORTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"BAYVIEW"},{"1":"LARCENY/THEFT","2":"Friday","3":"TENDERLOIN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"ASSAULT","2":"Friday","3":"CENTRAL"},{"1":"ASSAULT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"VEHICLE THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"BAYVIEW"},{"1":"VEHICLE THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"DRUG/NARCOTIC","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"INGLESIDE"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"PARK"},{"1":"LARCENY/THEFT","2":"Friday","3":"MISSION"},{"1":"ASSAULT","2":"Friday","3":"PARK"},{"1":"ASSAULT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"CENTRAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"RICHMOND"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"ASSAULT","2":"Friday","3":"RICHMOND"},{"1":"ASSAULT","2":"Friday","3":"RICHMOND"},{"1":"ASSAULT","2":"Friday","3":"PARK"},{"1":"VEHICLE THEFT","2":"Friday","3":"TARAVAL"},{"1":"ASSAULT","2":"Friday","3":"MISSION"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"NORTHERN"},{"1":"LARCENY/THEFT","2":"Friday","3":"TARAVAL"},{"1":"LARCENY/THEFT","2":"Friday","3":"SOUTHERN"},{"1":"ASSAULT","2":"Friday","3":"NORTHERN"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
 <p>This is a tidied-up version of the data, with only the variables we’ll
 look at, and only the observations from one of the “big four”
 crimes, a mere 300,000 of them. This is the data set we created earlier.</p>
@@ -3543,7 +3579,7 @@ was the nicest example I could find of an ordinal response data set.</p>
 <div id="what-sports-do-these-athletes-play" class="section level2" number="20.11">
 <h2><span class="header-section-number">20.11</span> What sports do these athletes play?</h2>
 <p>The data at
-<a href="http://www.utsc.utoronto.ca/~butler/c32/ais.txt">link</a> are physical
+<a href="http://ritsokiguess.site/datafiles/ais.txt">link</a> are physical
 and physiological measurements of 202 male and female Australian elite
 athletes. The data values are separated by <em>tabs</em>. We are going
 to see whether we can predict the sport an athlete plays from their
@@ -3558,7 +3594,7 @@ gymnastics, netball, rowing, swimming, 400m running, tennis, sprinting
 <p>Solution</p>
 <p>The data values are separated by tabs, so <code>read_tsv</code> is
 the thing:</p>
-<div class="sourceCode" id="cb2088"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2088-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2088-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/c32/ais.txt&quot;</span></span>
+<div class="sourceCode" id="cb2088"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2088-1"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2088-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ais.txt&quot;</span></span>
 <span id="cb2088-2"><a href="logistic-regression-with-ordinal-or-nominal-response.html#cb2088-2"></a>athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────

@@ -1287,7 +1287,7 @@ amount indicates illness of some kind.</p></li>
 <li><p><code>scalc</code>: serum calcium at diagnosis.</p></li>
 </ul>
 <p>The data, on 65 patients with multiple myeloma, are in
-<a href="http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv">link</a>. Some of the
+<a href="http://ritsokiguess.site/datafiles/myeloma.csv">link</a>. Some of the
 variables are logs because they could take very large values.</p>
 <p>There are a lot of parts here, but each part is supposed to be short.</p>
 <ol style="list-style-type: lower-alpha">
@@ -1296,7 +1296,7 @@ you have the right number of observations and the right variables.</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb2177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2177-1"><a href="survival-analysis.html#cb2177-1"></a>my_url &lt;-<span class="st"> &quot;http://www.utsc.utoronto.ca/~butler/d29/myeloma.csv&quot;</span></span>
+<div class="sourceCode" id="cb2177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2177-1"><a href="survival-analysis.html#cb2177-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/myeloma.csv&quot;</span></span>
 <span id="cb2177-2"><a href="survival-analysis.html#cb2177-2"></a>myeloma &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────
@@ -1770,6 +1770,9 @@ loading the package and typing the data set’s name.</li>
 <code>tibble</code>, so you see the whole thing, in case you were
 expecting something like this:</p>
 <div class="sourceCode" id="cb2212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2212-1"><a href="survival-analysis.html#cb2212-1"></a>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.tibble</span>()</span></code></pre></div>
+<pre><code>## Warning: `as.tibble()` was deprecated in tibble 2.0.0.
+## Please use `as_tibble()` instead.
+## The signature and semantics have changed, see `?as_tibble`.</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["futime"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["fustat"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["resid.ds"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["rx"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["ecog.ps"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"59","2":"1","3":"72.3315","4":"2","5":"1","6":"1"},{"1":"115","2":"1","3":"74.4932","4":"2","5":"1","6":"1"},{"1":"156","2":"1","3":"66.4658","4":"2","5":"1","6":"2"},{"1":"421","2":"0","3":"53.3644","4":"2","5":"2","6":"1"},{"1":"431","2":"1","3":"50.3397","4":"2","5":"1","6":"1"},{"1":"448","2":"0","3":"56.4301","4":"1","5":"1","6":"2"},{"1":"464","2":"1","3":"56.9370","4":"2","5":"2","6":"2"},{"1":"475","2":"1","3":"59.8548","4":"2","5":"2","6":"2"},{"1":"477","2":"0","3":"64.1753","4":"2","5":"1","6":"1"},{"1":"563","2":"1","3":"55.1781","4":"1","5":"2","6":"2"},{"1":"638","2":"1","3":"56.7562","4":"1","5":"1","6":"2"},{"1":"744","2":"0","3":"50.1096","4":"1","5":"2","6":"1"},{"1":"769","2":"0","3":"59.6301","4":"2","5":"2","6":"2"},{"1":"770","2":"0","3":"57.0521","4":"2","5":"2","6":"1"},{"1":"803","2":"0","3":"39.2712","4":"1","5":"1","6":"1"},{"1":"855","2":"0","3":"43.1233","4":"1","5":"1","6":"2"},{"1":"1040","2":"0","3":"38.8932","4":"2","5":"1","6":"2"},{"1":"1106","2":"0","3":"44.6000","4":"1","5":"1","6":"1"},{"1":"1129","2":"0","3":"53.9068","4":"1","5":"2","6":"1"},{"1":"1206","2":"0","3":"44.2055","4":"2","5":"2","6":"1"},{"1":"1227","2":"0","3":"59.5890","4":"1","5":"2","6":"2"},{"1":"268","2":"1","3":"74.5041","4":"2","5":"1","6":"2"},{"1":"329","2":"1","3":"43.1370","4":"2","5":"1","6":"1"},{"1":"353","2":"1","3":"63.2192","4":"1","5":"2","6":"2"},{"1":"365","2":"1","3":"64.4247","4":"2","5":"2","6":"1"},{"1":"377","2":"0","3":"58.3096","4":"1","5":"2","6":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1805,17 +1808,17 @@ I always forget whether the second thing in <code>Surv</code> has to
 be 1 or 0 if the event happened. The help says that it needs to be
 1 or <code>TRUE</code> if the event (death) happened, which is what
 <code>fustat</code> is, so we can use it as it is:</p>
-<div class="sourceCode" id="cb2213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2213-1"><a href="survival-analysis.html#cb2213-1"></a>y &lt;-<span class="st"> </span><span class="kw">with</span>(ovarian, <span class="kw">Surv</span>(futime, fustat))</span>
-<span id="cb2213-2"><a href="survival-analysis.html#cb2213-2"></a>y</span></code></pre></div>
+<div class="sourceCode" id="cb2214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2214-1"><a href="survival-analysis.html#cb2214-1"></a>y &lt;-<span class="st"> </span><span class="kw">with</span>(ovarian, <span class="kw">Surv</span>(futime, fustat))</span>
+<span id="cb2214-2"><a href="survival-analysis.html#cb2214-2"></a>y</span></code></pre></div>
 <pre><code>##  [1]   59   115   156   421+  431   448+  464   475   477+  563   638   744+  769+  770+
 ## [15]  803+  855+ 1040+ 1106+ 1129+ 1206+ 1227+  268   329   353   365   377+</code></pre>
 <p>This creates a separate variable <code>y</code> outside of any data
 frame. This is how it has to be done, because although <code>y</code>
 looks as if it is 26 long (one per patient), it’s actually more
 complicated than that:</p>
-<div class="sourceCode" id="cb2215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2215-1"><a href="survival-analysis.html#cb2215-1"></a>ov2 &lt;-<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">Surv</span>(futime, fustat))</span></code></pre></div>
+<div class="sourceCode" id="cb2216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2216-1"><a href="survival-analysis.html#cb2216-1"></a>ov2 &lt;-<span class="st"> </span>ovarian <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">Surv</span>(futime, fustat))</span></code></pre></div>
 <p>This doesn’t work, because internally <code>y</code> is a <code>matrix</code> with two columns:</p>
-<div class="sourceCode" id="cb2216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2216-1"><a href="survival-analysis.html#cb2216-1"></a><span class="kw">print.default</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb2217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2217-1"><a href="survival-analysis.html#cb2217-1"></a><span class="kw">print.default</span>(y)</span></code></pre></div>
 <pre><code>##       time status
 ##  [1,]   59      1
 ##  [2,]  115      1
@@ -1901,8 +1904,8 @@ results.</li>
 </ol>
 <p>Solution</p>
 <p>The hint suggests something like this:</p>
-<div class="sourceCode" id="cb2218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2218-1"><a href="survival-analysis.html#cb2218-1"></a>time<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coxph</span>(y <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(rx), <span class="dt">data =</span> ovarian)</span>
-<span id="cb2218-2"><a href="survival-analysis.html#cb2218-2"></a><span class="kw">summary</span>(time<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2219-1"><a href="survival-analysis.html#cb2219-1"></a>time<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">coxph</span>(y <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(rx), <span class="dt">data =</span> ovarian)</span>
+<span id="cb2219-2"><a href="survival-analysis.html#cb2219-2"></a><span class="kw">summary</span>(time<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + factor(rx), data = ovarian)
 ## 
@@ -1924,10 +1927,10 @@ results.</li>
 ## Score (logrank) test = 18.56  on 2 df,   p=9e-05</code></pre>
 <p>Alternatively, define the factor version of <code>rx</code> in the data
 frame first. This is the slick way to do that:</p>
-<div class="sourceCode" id="cb2220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2220-1"><a href="survival-analysis.html#cb2220-1"></a>time<span class="fl">.1</span>a &lt;-<span class="st"> </span>ovarian <span class="op">%&gt;%</span></span>
-<span id="cb2220-2"><a href="survival-analysis.html#cb2220-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rxf =</span> <span class="kw">factor</span>(rx)) <span class="op">%&gt;%</span></span>
-<span id="cb2220-3"><a href="survival-analysis.html#cb2220-3"></a><span class="st">  </span><span class="kw">coxph</span>(y <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>rxf, <span class="dt">data =</span> .)</span>
-<span id="cb2220-4"><a href="survival-analysis.html#cb2220-4"></a><span class="kw">summary</span>(time<span class="fl">.1</span>a)</span></code></pre></div>
+<div class="sourceCode" id="cb2221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2221-1"><a href="survival-analysis.html#cb2221-1"></a>time<span class="fl">.1</span>a &lt;-<span class="st"> </span>ovarian <span class="op">%&gt;%</span></span>
+<span id="cb2221-2"><a href="survival-analysis.html#cb2221-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rxf =</span> <span class="kw">factor</span>(rx)) <span class="op">%&gt;%</span></span>
+<span id="cb2221-3"><a href="survival-analysis.html#cb2221-3"></a><span class="st">  </span><span class="kw">coxph</span>(y <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>rxf, <span class="dt">data =</span> .)</span>
+<span id="cb2221-4"><a href="survival-analysis.html#cb2221-4"></a><span class="kw">summary</span>(time<span class="fl">.1</span>a)</span></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + rxf, data = .)
 ## 
@@ -1997,8 +2000,8 @@ is why I talk about “hazard of death”, since that guides us to
 the correct interpretation.)</p>
 <p>Extra: I was curious about what would happen if I just included
 <code>rx</code> in the model:</p>
-<div class="sourceCode" id="cb2222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2222-1"><a href="survival-analysis.html#cb2222-1"></a>time<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(time<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>age)</span>
-<span id="cb2222-2"><a href="survival-analysis.html#cb2222-2"></a><span class="kw">summary</span>(time<span class="fl">.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2223-1"><a href="survival-analysis.html#cb2223-1"></a>time<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(time<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>age)</span>
+<span id="cb2223-2"><a href="survival-analysis.html#cb2223-2"></a><span class="kw">summary</span>(time<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ factor(rx), data = ovarian)
 ## 
@@ -2029,7 +2032,7 @@ treatments.</p>
 <p>What you often see early on in a paper on this kind of stuff is a
 graph showing that the treatment groups are similar in terms of
 important things like <code>age</code>. Here, that could be a boxplot:</p>
-<div class="sourceCode" id="cb2224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2224-1"><a href="survival-analysis.html#cb2224-1"></a><span class="kw">ggplot</span>(ovarian, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(rx), <span class="dt">y =</span> age)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2225-1"><a href="survival-analysis.html#cb2225-1"></a><span class="kw">ggplot</span>(ovarian, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(rx), <span class="dt">y =</span> age)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-1411-1.png" width="672"  /></p>
 <p>I needed to do <code>factor(rx)</code> because <code>geom_boxplot</code>
 needs a genuine categorical variable, not just a numerical variable
@@ -2052,7 +2055,7 @@ any problems? Explain briefly.</li>
 <p>Solution</p>
 <p>The plot is just the same idea as the one in the notes. Make sure
 you have <code>survminer</code> installed and loaded:</p>
-<div class="sourceCode" id="cb2225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2225-1"><a href="survival-analysis.html#cb2225-1"></a><span class="kw">ggcoxdiagnostics</span>(time<span class="fl">.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb2226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2226-1"><a href="survival-analysis.html#cb2226-1"></a><span class="kw">ggcoxdiagnostics</span>(time<span class="fl">.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/unnamed-chunk-1412-1.png" width="672"  /></p>
@@ -2083,15 +2086,15 @@ hand, rather than trying to save them and use them.)</li>
 predictions, so we’ll call the data frame <code>new</code> when we get
 there.
 Quartiles first:</p>
-<div class="sourceCode" id="cb2228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2228-1"><a href="survival-analysis.html#cb2228-1"></a><span class="kw">quantile</span>(ovarian<span class="op">$</span>age)</span></code></pre></div>
+<div class="sourceCode" id="cb2229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2229-1"><a href="survival-analysis.html#cb2229-1"></a><span class="kw">quantile</span>(ovarian<span class="op">$</span>age)</span></code></pre></div>
 <pre><code>##       0%      25%      50%      75%     100% 
 ## 38.89320 50.16712 56.84660 62.37810 74.50410</code></pre>
 <p>or, if you prefer,</p>
-<div class="sourceCode" id="cb2230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2230-1"><a href="survival-analysis.html#cb2230-1"></a>ovarian <span class="op">%&gt;%</span></span>
-<span id="cb2230-2"><a href="survival-analysis.html#cb2230-2"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
-<span id="cb2230-3"><a href="survival-analysis.html#cb2230-3"></a>    <span class="dt">q1 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.25</span>),</span>
-<span id="cb2230-4"><a href="survival-analysis.html#cb2230-4"></a>    <span class="dt">q3 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.75</span>)</span>
-<span id="cb2230-5"><a href="survival-analysis.html#cb2230-5"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb2231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2231-1"><a href="survival-analysis.html#cb2231-1"></a>ovarian <span class="op">%&gt;%</span></span>
+<span id="cb2231-2"><a href="survival-analysis.html#cb2231-2"></a><span class="st">  </span><span class="kw">summarize</span>(</span>
+<span id="cb2231-3"><a href="survival-analysis.html#cb2231-3"></a>    <span class="dt">q1 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.25</span>),</span>
+<span id="cb2231-4"><a href="survival-analysis.html#cb2231-4"></a>    <span class="dt">q3 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.75</span>)</span>
+<span id="cb2231-5"><a href="survival-analysis.html#cb2231-5"></a>  )</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["q1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["q3"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"50.16712","2":"62.3781","_row":"25%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -2101,10 +2104,10 @@ Quartiles first:</p>
 <p>Either way is good.</p>
 <p>Then follow my standard procedure (or one of your own devising),
 remembering that “treatment” is called <code>rx</code> here:</p>
-<div class="sourceCode" id="cb2231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2231-1"><a href="survival-analysis.html#cb2231-1"></a>ages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">50.17</span>, <span class="fl">62.38</span>)</span>
-<span id="cb2231-2"><a href="survival-analysis.html#cb2231-2"></a>rxs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
-<span id="cb2231-3"><a href="survival-analysis.html#cb2231-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">age =</span> ages, <span class="dt">rx =</span> rxs)</span>
-<span id="cb2231-4"><a href="survival-analysis.html#cb2231-4"></a>new</span></code></pre></div>
+<div class="sourceCode" id="cb2232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2232-1"><a href="survival-analysis.html#cb2232-1"></a>ages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">50.17</span>, <span class="fl">62.38</span>)</span>
+<span id="cb2232-2"><a href="survival-analysis.html#cb2232-2"></a>rxs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb2232-3"><a href="survival-analysis.html#cb2232-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">age =</span> ages, <span class="dt">rx =</span> rxs)</span>
+<span id="cb2232-4"><a href="survival-analysis.html#cb2232-4"></a>new</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rx"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"50.17","2":"1"},{"1":"50.17","2":"2"},{"1":"62.38","2":"1"},{"1":"62.38","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -2118,8 +2121,8 @@ times. (This is only one thing, despite it sounding like a lot.)</li>
 <p>Solution</p>
 <p>The magic word here is <code>survfit</code>. The structure is the same
 as for <code>predict</code>:</p>
-<div class="sourceCode" id="cb2232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2232-1"><a href="survival-analysis.html#cb2232-1"></a>s &lt;-<span class="st"> </span><span class="kw">survfit</span>(time<span class="fl">.1</span>, new, <span class="dt">data =</span> ovarian)</span>
-<span id="cb2232-2"><a href="survival-analysis.html#cb2232-2"></a><span class="kw">summary</span>(s)</span></code></pre></div>
+<div class="sourceCode" id="cb2233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2233-1"><a href="survival-analysis.html#cb2233-1"></a>s &lt;-<span class="st"> </span><span class="kw">survfit</span>(time<span class="fl">.1</span>, new, <span class="dt">data =</span> ovarian)</span>
+<span id="cb2233-2"><a href="survival-analysis.html#cb2233-2"></a><span class="kw">summary</span>(s)</span></code></pre></div>
 <pre><code>## Call: survfit(formula = time.1, newdata = new, data = ovarian)
 ## 
 ##  time n.risk n.event survival1 survival2 survival3 survival4
@@ -2157,7 +2160,7 @@ different times.</li>
 <p>Solution</p>
 <p>Thus. The <code>conf.int=F</code> means to skip the confidence interval
 “envelopes” that I find make the plot rather messy:</p>
-<div class="sourceCode" id="cb2234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2234-1"><a href="survival-analysis.html#cb2234-1"></a><span class="kw">ggsurvplot</span>(s, <span class="dt">conf.int =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb2235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2235-1"><a href="survival-analysis.html#cb2235-1"></a><span class="kw">ggsurvplot</span>(s, <span class="dt">conf.int =</span> F)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-1417-1.png" width="672"  /></p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>According to your plot, how would you describe the effects of
@@ -2169,7 +2172,7 @@ the right, so the green one is best and the blue one is
 worst.
 <label for="tufte-mn-176" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-176" class="margin-toggle"><span class="marginnote">In other cases, having the event happen sooner is better. For example, you might be poisoning rats, in which case you want them to die quicker. Or the event might be something desirable like becoming qualified to fly an airplane. In those cases, down and to the left is better.</span> To figure out which those
 are, we have to go back to the data frame we created:</p>
-<div class="sourceCode" id="cb2235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2235-1"><a href="survival-analysis.html#cb2235-1"></a>new</span></code></pre></div>
+<div class="sourceCode" id="cb2236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2236-1"><a href="survival-analysis.html#cb2236-1"></a>new</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rx"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"50.17","2":"1"},{"1":"50.17","2":"2"},{"1":"62.38","2":"1"},{"1":"62.38","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -2192,7 +2195,7 @@ not significant).</p>
 which, and one each for saying something about the effects of age and
 of treatment, including which one is better.</p>
 <p>Extra: recall the output from the Cox model:</p>
-<div class="sourceCode" id="cb2236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2236-1"><a href="survival-analysis.html#cb2236-1"></a><span class="kw">summary</span>(time<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2237-1"><a href="survival-analysis.html#cb2237-1"></a><span class="kw">summary</span>(time<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## Call:
 ## coxph(formula = y ~ age + factor(rx), data = ovarian)
 ## 
