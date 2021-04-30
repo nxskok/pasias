@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 10 Mood’s median test | Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2021-04-26" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Chapter 10 Mood’s median test | Problems and Solutions in Applied Statistics</title>
+
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a>
+<ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
+</ul></li>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">3</span> Reading in data</a>
+<ul>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">4</span> Drawing graphs</a>
+<ul>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+<li><a href="data-exploration.html#working-with-dataframes"><span class="toc-section-number">5.6</span> Working with dataframes</a></li>
+<li><a href="data-exploration.html#tidying-the-jays-data"><span class="toc-section-number">5.7</span> Tidying the Jays data</a></li>
+<li><a href="data-exploration.html#cars"><span class="toc-section-number">5.8</span> Cars</a></li>
+</ul></li>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">7.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">7.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
+<ul>
+<li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
+<li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
+</ul></li>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
+<ul>
+<li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
+<li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
+<li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
+</ul></li>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
+<ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">11.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">11.5</span> Body fat revisited</a></li>
+</ul></li>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
+<ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
+<ul>
+<li><a href="writing-reports.html#atomic-weight-of-carbon-1"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
+<li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
+</ul></li>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
+<ul>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">15.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">15.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">15.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">15.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">15.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">15.9</span> Feeling the heat</a></li>
+</ul></li>
+<li><a href="regression.html#regression"><span class="toc-section-number">16</span> Regression</a>
+<ul>
+<li><a href="regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
+<li><a href="regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">16.4</span> Facebook friends and grey matter</a></li>
+<li><a href="regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">16.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="regression.html#salaries-of-social-workers"><span class="toc-section-number">16.6</span> Salaries of social workers</a></li>
+<li><a href="regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">16.7</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">16.8</span> Tortoise shells and eggs</a></li>
+<li><a href="regression.html#crickets-revisited"><span class="toc-section-number">16.9</span> Crickets revisited</a></li>
+<li><a href="regression.html#roller-coasters"><span class="toc-section-number">16.10</span> Roller coasters</a></li>
+<li><a href="regression.html#running-and-blood-sugar"><span class="toc-section-number">16.11</span> Running and blood sugar</a></li>
+<li><a href="regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">16.12</span> Calories and fat in pizza</a></li>
+<li><a href="regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">16.13</span> Where should the fire stations be?</a></li>
+</ul></li>
+<li><a href="regression-1.html#regression-1"><span class="toc-section-number">17</span> Regression</a>
+<ul>
+<li><a href="regression-1.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
+<li><a href="regression-1.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
+<li><a href="regression-1.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
+<li><a href="regression-1.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">17.4</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">18</span> Dates and times</a>
+<ul>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">18.1</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">18.2</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">18.3</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">18.4</span> Wolves and caribou</a></li>
+</ul></li>
+<li><a href="functions.html#functions"><span class="toc-section-number">19</span> Functions</a>
+<ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">19.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">19.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">20</span> The Bootstrap</a>
+<ul>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">20.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">20.2</span> Air conditioning failures: bootstrapping the median</a></li>
+</ul></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">21</span> Bayesian Statistics with Stan</a>
+<ul>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">21.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">21.2</span> Bayesian regression</a></li>
+</ul></li>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">22</span> Logistic regression</a>
+<ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">22.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">22.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">22.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">22.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">22.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">22.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">22.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">22.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">22.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">22.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">23</span> Logistic regression with ordinal or nominal response</a>
+<ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">23.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">23.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">23.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">23.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">23.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">23.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">23.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">23.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">23.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">23.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">23.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">24</span> Survival analysis</a>
+<ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">24.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">24.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">24.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">24.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">25</span> Analysis of variance revisited</a>
+<ul>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">25.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">25.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">25.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">25.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">25.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">25.6</span> Trying on shirts</a></li>
+<li><a href="analysis-of-variance-revisited.html#productivity-and-research-and-development"><span class="toc-section-number">25.7</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-leprosy"><span class="toc-section-number">25.8</span> Treating leprosy</a></li>
+</ul></li>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">26</span> Multivariate analysis of variance</a>
+<ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">26.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">26.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">26.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">27</span> Repeated measures</a>
+<ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">27.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">27.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">27.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">27.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">27.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">27.6</span> Repeated measures with no background</a></li>
+</ul></li>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">28</span> Discriminant analysis</a>
+<ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">28.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">28.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">28.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">28.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">28.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">28.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">28.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">29</span> Cluster analysis</a>
+<ul>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">29.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">29.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">29.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">29.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">29.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">29.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">29.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">29.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">29.9</span> Clustering the Australian athletes</a></li>
+</ul></li>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">30</span> Drawing maps with Leaflet</a>
+<ul>
+<li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">30.1</span> The brain of a cat, revisited</a></li>
+<li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">30.2</span> Making a map of Wisconsin</a></li>
+</ul></li>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">31</span> Multidimensional Scaling</a>
+<ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">31.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">31.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">31.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">31.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">31.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">32</span> Principal Components and Factor Analysis</a>
+<ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">32.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">32.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">32.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">32.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">33</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">33.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">33.2</span> Predicting voting</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="moods-median-test" class="section level1" number="10">
+<h1><span class="header-section-number">Chapter 10</span> Mood’s median test</h1>
+<div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="moods-median-test.html#cb493-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb493-2"><a href="moods-median-test.html#cb493-2"></a><span class="kw">library</span>(smmr)</span></code></pre></div>
+<div id="sugar-in-breakfast-cereals" class="section level2" number="10.1">
+<h2><span class="header-section-number">10.1</span> Sugar in breakfast cereals</h2>
+<p>The data for this question are in
+<a href="http://ritsokiguess.site/datafiles/cereal-sugar.txt">http://ritsokiguess.site/datafiles/cereal-sugar.txt</a>. The
+story here is whether breakfast cereals marketed to children have a
+lot of sugar in them; in particular, whether they have more sugar on
+average than cereals marketed to adults.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data (to R) and display the data set. Do you have
+a variable that distinguishes the children’s cereals from the
+adults’ cereals, and another that contains the amount of sugar?</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb494"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb494-1"><a href="moods-median-test.html#cb494-1"></a>my_url=<span class="st">&quot;http://ritsokiguess.site/datafiles/cereal-sugar.txt&quot;</span></span>
+<span id="cb494-2"><a href="moods-median-test.html#cb494-2"></a>cereals=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ─────────────────────────────────────
+## cols(
+##   who = col_character(),
+##   sugar = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb496"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb496-1"><a href="moods-median-test.html#cb496-1"></a>cereals</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["who"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sugar"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"children","2":"40.3"},{"1":"children","2":"55.0"},{"1":"children","2":"45.7"},{"1":"children","2":"43.3"},{"1":"children","2":"50.3"},{"1":"children","2":"45.9"},{"1":"children","2":"53.5"},{"1":"children","2":"43.0"},{"1":"children","2":"44.2"},{"1":"children","2":"44.0"},{"1":"children","2":"47.4"},{"1":"children","2":"44.0"},{"1":"children","2":"20.0"},{"1":"children","2":"55.1"},{"1":"children","2":"48.8"},{"1":"children","2":"50.4"},{"1":"children","2":"37.8"},{"1":"children","2":"70.3"},{"1":"children","2":"46.6"},{"1":"adults","2":"20.0"},{"1":"adults","2":"40.2"},{"1":"adults","2":"2.2"},{"1":"adults","2":"7.5"},{"1":"adults","2":"4.4"},{"1":"adults","2":"37.2"},{"1":"adults","2":"16.6"},{"1":"adults","2":"14.5"},{"1":"adults","2":"4.1"},{"1":"adults","2":"15.8"},{"1":"adults","2":"4.1"},{"1":"adults","2":"2.4"},{"1":"adults","2":"3.5"},{"1":"adults","2":"8.5"},{"1":"adults","2":"10.0"},{"1":"adults","2":"1.0"},{"1":"adults","2":"4.4"},{"1":"adults","2":"1.3"},{"1":"adults","2":"8.1"},{"1":"adults","2":"4.7"},{"1":"adults","2":"18.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The variable <code>who</code> is a categorical variable saying who the
+cereal is intended for, and the variable <code>sugar</code> says how much
+sugar each cereal has.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Calculate the mean sugar content for each group of cereals (the
+adults’ ones and the children’s ones). Do they look similar or different?</li>
+</ol>
+<p>Solution</p>
+<p><code>group_by</code> and <code>summarize</code>:</p>
+<div class="sourceCode" id="cb497"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb497-1"><a href="moods-median-test.html#cb497-1"></a>cereals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(who) <span class="op">%&gt;%</span></span>
+<span id="cb497-2"><a href="moods-median-test.html#cb497-2"></a><span class="kw">summarize</span>(<span class="dt">sugar_mean=</span><span class="kw">mean</span>(sugar))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["who"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sugar_mean"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"adults","2":"10.90000"},{"1":"children","2":"46.61053"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These means look very different, though it would be better to look at
+a boxplot (coming up in a moment).</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Make side-by-side boxplots of the sugar contents of the two
+types of cereal. What do you see that is out of the ordinary?</li>
+</ol>
+<p>Solution</p>
+<p>The usual:</p>
+<div class="sourceCode" id="cb498"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb498-1"><a href="moods-median-test.html#cb498-1"></a><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-396-1.png" width="672"  /></p>
+<p>I see outliers: two high ones on the adults’ cereals, and one high and
+one low on the children’s cereals.</p>
+<p>My thought above about the means being very different is definitely supported by the medians being very different on the boxplots. We should have no trouble declaring that the “typical” amounts of sugar in the adults’ and children’s cereals are different.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Explain briefly why you would not trust a two-sample <span class="math inline">\(t\)</span>-test
+with these data. (That is, say what the problem is, and why it’s a
+problem.)</li>
+</ol>
+<p>Solution</p>
+<p>The problem is the outliers (which is rather a giveaway), but the
+reason it’s a problem is that the two-sample <span class="math inline">\(t\)</span>-test assumes
+(approximately) normal data, and a normal distribution doesn’t
+have outliers.
+Not only do you need to note the outliers, but you also need to
+say why the outliers cause a problem <em>in this case</em>. Anything
+less than that is not a complete answer.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run a suitable test to see whether the “typical” amount of
+sugar differs between adult’s and children’s cereals. Justify the test
+that you run. (You can use the version of your test that lives in a
+package, if that is easier for you.) What do you conclude, in the
+context of the data?</li>
+</ol>
+<p>Solution</p>
+<p>Having ruled out the two-sample <span class="math inline">\(t\)</span>-test, we are left with Mood’s
+median test. I didn’t need you to build it yourself, so you can
+use package <code>smmr</code> to run it with:</p>
+<div class="sourceCode" id="cb499"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb499-1"><a href="moods-median-test.html#cb499-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb499-2"><a href="moods-median-test.html#cb499-2"></a><span class="kw">median_test</span>(cereals,sugar,who)</span></code></pre></div>
+<pre><code>## $table
+##           above
+## group      above below
+##   adults       2    19
+##   children    18     1
+## 
+## $test
+##        what        value
+## 1 statistic 2.897243e+01
+## 2        df 1.000000e+00
+## 3   P-value 7.341573e-08</code></pre>
+<p>We conclude that there <em>is</em> a difference between the median
+amounts of sugar between the two groups of cereals, the P-value of 0.00000007
+being extremely small.</p>
+<p>Why did it come out so small? Because the amount of sugar was smaller
+than the overall median for almost all the adult cereals, and larger
+than the overall median for almost all the children’s ones. That is,
+the children’s cereals really do have more sugar.</p>
+<p>Mood’s median test doesn’t come with a confidence interval (for the
+difference in population medians), because whether or not a certain
+difference in medians is rejected depends on what those medians
+actually are, and the idea of the duality of the test and CI doesn’t
+carry over as we would like.</p>
+<p>My daughter likes chocolate Cheerios, but she also likes Shredded
+Wheat and <em>Bran Flakes</em>. Go figure. (Her current favourite is
+Raisin Bran, even though she doesn’t like raisins by themselves.)</p>
+<p>Mood’s median test is the test we should trust, but you might be
+curious about how the <span class="math inline">\(t\)</span>-test stacks up here:</p>
+<div class="sourceCode" id="cb501"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb501-1"><a href="moods-median-test.html#cb501-1"></a><span class="kw">t.test</span>(sugar<span class="op">~</span>who,<span class="dt">data=</span>cereals)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  sugar by who
+## t = -11.002, df = 37.968, p-value = 2.278e-13
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -42.28180 -29.13925
+## sample estimates:
+##   mean in group adults mean in group children 
+##               10.90000               46.61053</code></pre>
+<p>The P-value is <em>even smaller</em>, and we have the advantage of
+getting a confidence interval for the difference in means: from about
+30 to about 40 units less sugar in the adult cereals. Whatever the
+units were.</p>
+</div>
+<div id="fear-of-math" class="section level2" number="10.2">
+<h2><span class="header-section-number">10.2</span> Fear of math</h2>
+<p>Two new short courses have been proposed for helping
+students who suffer from severe math phobia. The courses are labelled
+A and B. Ten students were randomly allocated to one of these two
+courses, and each student’s score on a math phobia test was recorded
+after they completed their course. The math phobia test produces
+whole-number scores between 0 and 10, with a higher score indicating a
+greater fear of mathematics. The data can be found in
+<a href="http://ritsokiguess.site/datafiles/mathphobia.txt">link</a>. We start
+with R for this question.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check, however you like, that you have 10
+observations, 5 from each course.</li>
+</ol>
+<p>Solution</p>
+<p>This doesn’t need much comment:</p>
+<div class="sourceCode" id="cb503"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb503-1"><a href="moods-median-test.html#cb503-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/mathphobia.txt&quot;</span></span>
+<span id="cb503-2"><a href="moods-median-test.html#cb503-2"></a>math &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ─────────────────────────────────────
+## cols(
+##   course = col_character(),
+##   phobia = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb505"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb505-1"><a href="moods-median-test.html#cb505-1"></a>math</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["phobia"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"a","2":"8"},{"1":"a","2":"7"},{"1":"a","2":"7"},{"1":"a","2":"6"},{"1":"a","2":"6"},{"1":"b","2":"9"},{"1":"b","2":"8"},{"1":"b","2":"7"},{"1":"b","2":"2"},{"1":"b","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This will do, counting the <code>a</code> and <code>b</code>. Or, to save
+yourself that trouble:</p>
+<div class="sourceCode" id="cb506"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb506-1"><a href="moods-median-test.html#cb506-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(course)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"5"},{"1":"b","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Five each. The story is to get the computer to do the grunt work for
+you, if you can make it do so. Other ways:</p>
+<div class="sourceCode" id="cb507"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb507-1"><a href="moods-median-test.html#cb507-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(course) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"5"},{"1":"b","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>and this:</p>
+<div class="sourceCode" id="cb508"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb508-1"><a href="moods-median-test.html#cb508-1"></a><span class="kw">with</span>(math, <span class="kw">table</span>(course))</span></code></pre></div>
+<pre><code>## course
+## a b 
+## 5 5</code></pre>
+<p>giving the same answer. Lots of ways.</p>
+<p>Extra: there is an experimental design issue here. You might have noticed that each student did only <em>one</em> of the courses. Couldn’t students do both, in a matched-pairs kind of way? Well, it’s a bit like the kids learning to read in that if the first of the courses reduces a student’s anxiety, the second course won’t appear to do much good (even if it actually would have been helpful had the student done that one first). This is the same idea as the kids learning to read: once you’ve learned to read, you’ve learned to read, and learning to read a second way won’t help much. The place where matched pairs scores is when you can “wipe out” the effect of one treatment before a subject gets the other one. We have an example of kids throwing baseballs and softballs that is like that: if you throw one kind of ball, that won’t affect how far you can throw the other kind.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Do a two-sample <span class="math inline">\(t\)</span>-test to assess whether there is a
+difference in mean phobia scores after the students have taken the two
+courses. What do you conclude? (You have no 
+<label for="tufte-mn-34" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-34" class="margin-toggle"><span class="marginnote">That is, before looking at the data. This is Latin. It’s also the place that the Bayesian <em>prior distribution</em> comes from. The <em>posterior distribution</em> comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
+reason to
+suppose that a particular one of the tests will produce a higher mean
+than the other, so do a two-sided test.)</li>
+</ol>
+<p>Solution</p>
+<p>A two-sided test is the default, so there is not much to do here:</p>
+<div class="sourceCode" id="cb510"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb510-1"><a href="moods-median-test.html#cb510-1"></a><span class="kw">t.test</span>(phobia <span class="op">~</span><span class="st"> </span>course, <span class="dt">data =</span> math)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  phobia by course
+## t = 0.83666, df = 4.4199, p-value = 0.4456
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -3.076889  5.876889
+## sample estimates:
+## mean in group a mean in group b 
+##             6.8             5.4</code></pre>
+<p>The P-value of 0.4456 is nowhere near less than 0.05, so there is no
+evidence at all that the<br />
+mean math phobia scores are different between the two courses.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Draw boxplots of the math phobia scores for each group (one
+line of code). What is the most striking thing that you notice?</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb512"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb512-1"><a href="moods-median-test.html#cb512-1"></a><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">x =</span> course, <span class="dt">y =</span> phobia)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-404-1.png" width="672"  /></p>
+<p>Boxplot <code>a</code> is just weird. The bar across the middle is
+actually at the top, and it has no bottom. (Noting something sensible
+like this is enough.) Boxplot <code>b</code> is hugely spread
+out.
+<label for="tufte-mn-35" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-35" class="margin-toggle"><span class="marginnote">The two groups have very different spreads, but that is not a problem as long as we remember to do the Welch-Satterthwaite test that does not assume equal spreads. This is the default in R, so we are good, at least with that.</span></p>
+<p>By way of explanation: the course <code>a</code> scores have a number of
+values equal so that the 3rd quartile and the median are the name, and
+also that the first quartile and the minimum value are the same:</p>
+<div class="sourceCode" id="cb513"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb513-1"><a href="moods-median-test.html#cb513-1"></a>tmp &lt;-<span class="st"> </span>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(course <span class="op">==</span><span class="st"> &quot;a&quot;</span>)</span>
+<span id="cb513-2"><a href="moods-median-test.html#cb513-2"></a>tmp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["phobia"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"6","2":"2"},{"1":"7","2":"2"},{"1":"8","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb514"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb514-1"><a href="moods-median-test.html#cb514-1"></a><span class="kw">summary</span>(tmp)</span></code></pre></div>
+<pre><code>##     course              phobia   
+##  Length:5           Min.   :6.0  
+##  Class :character   1st Qu.:6.0  
+##  Mode  :character   Median :7.0  
+##                     Mean   :6.8  
+##                     3rd Qu.:7.0  
+##                     Max.   :8.0</code></pre>
+<p>The phobia scores from course A are two 6’s, two 7’s and an 8. The
+median and third quartile are both 7, and the first quartile is the
+same as the lowest value, 6.</p>
+<p>Technique note: I wanted to do two things with the phobia scores from
+course A: count up how many of each score, and show you what the
+five-number summary looks like. One pipe won’t do this (the pipe
+“branches”), so I saved what I needed to use, before it branched,
+into a data frame <code>tmp</code> and then used <code>tmp</code> twice. Pipes
+are powerful, but not <em>all</em>-powerful.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Explain briefly why a <span class="math inline">\(t\)</span>-test would not be good for these
+data. (There are two things that you need to say.)</li>
+</ol>
+<p>Solution</p>
+<p>The easiest way to structure this is to ask yourself first what the
+<span class="math inline">\(t\)</span>-test needs, and second whether you have it.
+The <span class="math inline">\(t\)</span>-test assumes (approximately) normal data. The boxplot for
+group <code>a</code> doesn’t even look symmetric, and the one for group
+<code>b</code> has an oddly asymmetric box. So I think the normality is
+in question here, and therefore another test would be
+better. (This is perhaps a bit glib of an answer, since there are
+only 5 values in each group, and so they can certainly look
+non-normal even if they actually are normal, but these values are
+all integers, so it is perhaps wise to be cautious.)
+We have the machinery to assess the normality for these, in one shot:</p>
+<div class="sourceCode" id="cb516"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb516-1"><a href="moods-median-test.html#cb516-1"></a><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">sample =</span> phobia)) <span class="op">+</span></span>
+<span id="cb516-2"><a href="moods-median-test.html#cb516-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb516-3"><a href="moods-median-test.html#cb516-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>course, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-406-1.png" width="672"  /></p>
+<p>I don’t know what <em>you</em> make of those, but they both look pretty
+straight to me (and there are only five observations, so it’s hard to
+judge). Course <code>b</code> maybe has a “hole” in it (three large
+values and two small ones). Maybe. I dunno. What I would <em>really</em>
+be worried about is outliers, and at least we don’t have those.
+I mentioned in class that the <span class="math inline">\(t\)</span>-tests are robust to non-normality. I
+ought to have expanded on that a bit: what really makes the <span class="math inline">\(t\)</span>-test
+still behave itself with non-normality is when you have <em>large</em>
+samples, that is, when the Central Limit Theorem has had a chance to
+take hold. (That’s what drives the normality not really being
+necessary in most cases.) But, even with small samples, exact
+normality doesn’t matter so much. Here, we have two tiny samples, and
+so we have to insist a bit more, but only a bit more, on a
+more-or-less normal shape in each group. (It’s kind of a double
+jeopardy in that the situation where normality matters most, namely
+with small samples, is where it’s the hardest to judge, because
+samples of size 5 even from a normal distribution can look very
+non-normal.)
+But, the biggest threats to the <span class="math inline">\(t\)</span>-test are big-time skewness and
+outliers, and we are not suffering too badly from those.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run a suitable test to compare the “typical” scores for the
+two courses. (You can use the version from a package rather than
+building your own.) What do you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>This is an invite to use <code>smmr</code>:</p>
+<div class="sourceCode" id="cb517"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb517-1"><a href="moods-median-test.html#cb517-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb517-2"><a href="moods-median-test.html#cb517-2"></a><span class="kw">median_test</span>(math, phobia, course)</span></code></pre></div>
+<pre><code>## $table
+##      above
+## group above below
+##     a     1     2
+##     b     2     2
+## 
+## $test
+##        what     value
+## 1 statistic 0.1944444
+## 2        df 1.0000000
+## 3   P-value 0.6592430</code></pre>
+<p>We are nowhere near rejecting equal medians; in fact, both courses are
+very close to 50–50 above and below the overall median.</p>
+<p>If you look at the frequency table, you might be confused by
+something: there were 10 observations, but there are only <span class="math inline">\(1+2+2+2=7\)</span>
+in the table. This is because three of the observations were equal to
+the overall median, and had to be thrown away:</p>
+<div class="sourceCode" id="cb519"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb519-1"><a href="moods-median-test.html#cb519-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(phobia))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["med"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb520"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb520-1"><a href="moods-median-test.html#cb520-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["phobia"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"1"},{"1":"2","2":"1"},{"1":"6","2":"2"},{"1":"7","2":"3"},{"1":"8","2":"2"},{"1":"9","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The overall median was 7. Because the actual data were really discrete
+(the phobia scores could only be whole numbers), we risked losing a
+lot of our data when we did this test (and we didn’t have much to
+begin with). The other thing to say is that with small sample sizes,
+the frequencies in the table have to be <em>very</em> lopsided for you
+to have a chance of rejecting the null. Something like this is what
+you’d need:</p>
+<div class="sourceCode" id="cb521"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb521-1"><a href="moods-median-test.html#cb521-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
+<span id="cb521-2"><a href="moods-median-test.html#cb521-2"></a>g &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb521-3"><a href="moods-median-test.html#cb521-3"></a>d &lt;-<span class="st"> </span><span class="kw">tibble</span>(x, g)</span>
+<span id="cb521-4"><a href="moods-median-test.html#cb521-4"></a><span class="kw">median_test</span>(d, x, g)</span></code></pre></div>
+<pre><code>## $table
+##      above
+## group above below
+##     1     0     3
+##     2     4     0
+## 
+## $test
+##        what       value
+## 1 statistic 7.000000000
+## 2        df 1.000000000
+## 3   P-value 0.008150972</code></pre>
+<p>I faked it up so that we had 10 observations, three of which were
+equal to the overall median. Of the rest, all the small ones were in
+group 1 and all the large ones were in group 2. This is lopsided
+enough to reject with, though, because of the small frequencies, there
+actually was a warning about
+“chi-squared approximation may be inaccurate”.
+<label for="tufte-mn-36" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-36" class="margin-toggle"><span class="marginnote">There <em>was</em>, in the <em>chisq.test</em> inside <em>median-test</em>, but in <em>smmr</em> I didn’t pass that warning back to the outside world.</span></p>
+</div>
+<div id="medical-instructions" class="section level2" number="10.3">
+<h2><span class="header-section-number">10.3</span> Medical instructions</h2>
+<p>Do people understand medical instructions better at certain
+times of the day? In a study, students in a grade 12 class are
+randomly divided into two groups, A and B. All students see a video
+describing how to use an infant forehead thermometer. The students in
+Group A see the video at 8:30 am, while the students in Group B see
+the same video at 3:00 pm (on the same day). The next day, all the
+students are given a test on the material in the video (graded out of
+100). The observed scores are in
+<a href="http://ritsokiguess.site/datafiles/forehead.txt">link</a> (values
+separated by spaces).</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read the data into R and display the (first ten) values.</li>
+</ol>
+<p>Solution</p>
+<p>Separated by spaces, so <code>read_delim</code>:</p>
+<div class="sourceCode" id="cb523"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb523-1"><a href="moods-median-test.html#cb523-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/forehead.txt&quot;</span></span>
+<span id="cb523-2"><a href="moods-median-test.html#cb523-2"></a>instr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ─────────────────────────────────────
+## cols(
+##   group = col_character(),
+##   score = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb525"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb525-1"><a href="moods-median-test.html#cb525-1"></a>instr</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["group"],"name":[1],"type":["chr"],"align":["left"]},{"label":["score"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"88"},{"1":"A","2":"89"},{"1":"A","2":"79"},{"1":"A","2":"100"},{"1":"A","2":"98"},{"1":"A","2":"89"},{"1":"A","2":"65"},{"1":"A","2":"94"},{"1":"A","2":"95"},{"1":"A","2":"91"},{"1":"B","2":"87"},{"1":"B","2":"69"},{"1":"B","2":"78"},{"1":"B","2":"79"},{"1":"B","2":"83"},{"1":"B","2":"90"},{"1":"B","2":"85"},{"1":"B","2":"58"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Obtain a suitable plot that will enable you to assess the
+assumptions for a two-sample <span class="math inline">\(t\)</span>-test.</li>
+</ol>
+<p>Solution</p>
+<p>We need the values in each group to be approximately normally
+distributed. Side-by-side boxplots will do it:</p>
+<div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb526-1"><a href="moods-median-test.html#cb526-1"></a><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">x =</span> group, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-411-1.png" width="672"  /></p>
+<p>or, if you like, separate (facetted) normal quantile plots, which I
+would do this way:</p>
+<div class="sourceCode" id="cb527"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb527-1"><a href="moods-median-test.html#cb527-1"></a><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">sample =</span> score)) <span class="op">+</span></span>
+<span id="cb527-2"><a href="moods-median-test.html#cb527-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb527-3"><a href="moods-median-test.html#cb527-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-412-1.png" width="672"  /></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Why might you have doubts about using a two-sample <span class="math inline">\(t\)</span>-test here?</li>
+</ol>
+<p>Solution</p>
+<p>We are looking for non-normality in at least one of the
+groups. Here, both groups have an outlier at the low end that
+would be expected to pull the mean downward. I don’t think there
+is left-skewness here, since there is no particular evidence of
+the high-end values being bunched up: the problem in both cases
+with normality is at the low end.
+One way or another, I’m expecting you to have noticed the outliers.
+Extra: last year, when I first drew the normal quantile plots,
+there was no <code>stat_qq_line</code>, so you had to imagine where
+the line went if you did it this way. Without the line, these
+plots look somewhat curved, which would have pointed to
+left-skewness, but now we see that the lowest observation is too
+low, and maybe the second-lowest one as well, while the other
+observations are just fine.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Run Mood’s median test as in class (<em>without</em> using
+<code>smmr</code>). What do you conclude, in the context of the data?
+What recommendation would you make about the time of day to see the
+video? (You might get a warning about “chisquared approximation being incorrect”,
+which you can ignore here.)</li>
+</ol>
+<p>Solution</p>
+<p>The overall median first:</p>
+<div class="sourceCode" id="cb528"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb528-1"><a href="moods-median-test.html#cb528-1"></a>instr <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(score))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["med"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"87.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>87.5, which is not equal to any of the data values (they are all
+integers). This will avoid any issues with values-equal-to-median later.</p>
+<p>Then, create and save a table of the value by group and above/below
+median. You can count either above or below (it comes out equivalently
+either way):</p>
+<div class="sourceCode" id="cb529"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb529-1"><a href="moods-median-test.html#cb529-1"></a>tab &lt;-<span class="st"> </span><span class="kw">with</span>(instr, <span class="kw">table</span>(group, score <span class="op">&gt;</span><span class="st"> </span><span class="fl">87.5</span>))</span>
+<span id="cb529-2"><a href="moods-median-test.html#cb529-2"></a>tab</span></code></pre></div>
+<pre><code>##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1</code></pre>
+<p>Then, chi-squared test for independence (the null) or association of
+some kind (the alternative). The <code>correct=F</code> is saying not to
+do Yates’s correction, so that it would come out the same if you were
+doing it by hand (“observed minus expected, squared, divided by expected”
+and all that stuff).</p>
+<div class="sourceCode" id="cb531"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb531-1"><a href="moods-median-test.html#cb531-1"></a><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</span></code></pre></div>
+<pre><code>## Warning in chisq.test(tab, correct = F): Chi-squared
+## approximation may be incorrect</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  tab
+## X-squared = 8.1, df = 1, p-value = 0.004427</code></pre>
+<p>The P-value is 0.0044, which is (much) smaller than 0.05, and
+therefore you can reject independence and conclude association: that
+is, whether a student scores above or below the median depends on
+which group they are in, or, that the median scores are different for
+the two groups.</p>
+<p>The warning is because the expected frequencies are on the small side
+(if you have done this kind of problem by hand, you might remember
+something about “expected frequencies less than 5”. This is that.)
+Here, the P-value is so small that we can afford to have it be
+inaccurate by a bit and still not affect the conclusion, so I think we
+are safe.</p>
+<p>As for which group is better, well, the easiest way is to go back to
+your boxplots and see that the median for group A (8:30 am) is
+substantially higher than for group B (3:00pm). But you can also see
+it from your frequency table, if you displayed it:</p>
+<div class="sourceCode" id="cb534"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb534-1"><a href="moods-median-test.html#cb534-1"></a>tab</span></code></pre></div>
+<pre><code>##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1</code></pre>
+<p>Most of the people in the 8:30 am group scored above the median, and
+most of the people in the 3:00 pm group scored below the median. So
+the scores at 8:30 am were better overall.</p>
+<p>As I write this, it is just after 3:00 pm and I am about to make
+myself a pot of tea!</p>
+<p>Extra: about that <code>correct=F</code> thing. There was a point of view for a
+long time that when you are dealing with a <span class="math inline">\(2 \times 2\)</span> table, you can
+get better P-values by, before squaring “observed minus expected”,
+taking 0.5 away from the absolute value of the difference. This is
+called Yates’s correction. It is in the same spirit as the
+“continuity correction” that you might have encountered in the
+normal approximation to the binomial, where in the binomial you have
+to have a whole number of successes, but the normal allows fractional
+values as well. In about the 1960s, the usefulness of Yates’s
+correction was shot down, for general contingency tables. There is,
+however, one case where it <em>is</em> useful, and that is the case
+where the row totals and column totals are <em>fixed</em>.</p>
+<p>What do I mean by that? Well, first let’s look at a case where the
+totals are <em>not</em> all fixed. Consider a survey in which you want
+to see whether males and females agree or disagree on some burning
+issue of the day. You collect random samples of, say, 500 males and
+500 females, and you count how many of them say Yes or No to your
+statement.
+<label for="tufte-mn-37" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-37" class="margin-toggle"><span class="marginnote">To simplify things, we’ll assume that everyone gave a Yes or a No answer, though you could add a column like <em>No answer</em> if you wanted to make it more realistic.</span>
+You might get results like this:</p>
+<pre><code>
+Yes  No  Total
+Males    197 303   500
+Females  343 157   500
+Total    540 460  1000
+</code></pre>
+<p>In this table, the row totals must be 500, because you asked this many
+males and this many females, and each one must have answered
+something. The column totals, however, are not fixed: you didn’t know,
+ahead of time, that 540 people would answer “yes”. That was just the
+way the data turned out, and if you did another survey with the same
+design, you’d probably get a different number of people saying
+“yes”.</p>
+<p>For another example, let’s go back to Fisher (yes, <em>that</em>
+Fisher). A “lady” of his acquaintance claimed to be able, by
+drinking a cup of tea with milk and sugar in it, whether the milk or
+the sugar had been added first. Fisher, or, more likely, his
+housekeeper, prepared 8 cups of tea, 4 with milk first and 4 with
+sugar first. The lady knew that four of the cups had milk first, and
+her job was to say which four. The results might have been like this:</p>
+<pre><code>
+Actual 
+Milk first  sugar first  Total
+Lady   Milk first        3            1         4
+says   sugar first       1            3         4
+Total             4            4         8
+</code></pre>
+<p>This time, all of the row totals and all of the column totals must be
+4, regardless of what the lady thinks. Even if she thinks 5 of the
+cups of tea actually had milk first, she is going to pick 4 of them to
+say that they have milk first, since she knows there are only 4. In
+this case, all of the row and column totals are fixed at 4, and the
+right analysis is called Fisher’s Exact Test, based on the
+hypergeometric distribution. In a <span class="math inline">\(2\times 2\)</span> table like this one,
+there is only one “degree of freedom”, since as soon as you specify
+one of the frequencies, say the number of cups where the lady said
+milk first and they actually were milk first, you can work out the
+others. But, leaving that aside, the usual chi-squared analysis is a
+perfectly good approximation, especially if the frequencies are large,
+and especially if you use Yates’s correction.</p>
+<p>It is clear that Fisher must have been English, since he was able to
+get a publication out of drinking tea.</p>
+<p>How does that apply to Mood’s median test? Well, let’s remind
+ourselves of the table we had:</p>
+<div class="sourceCode" id="cb538"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb538-1"><a href="moods-median-test.html#cb538-1"></a>tab</span></code></pre></div>
+<pre><code>##      
+## group FALSE TRUE
+##     A     2    8
+##     B     7    1</code></pre>
+<p>We know how many students were in each group: 10 in group A and 8 in
+B. So the row totals are fixed. What about the columns? These are
+whether each observation was above or below the overall median. There
+were 18 observations altogether, so there <em>must</em> be 9 above and 9
+below.
+<label for="tufte-mn-38" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-38" class="margin-toggle"><span class="marginnote">Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span>
+So the column totals are fixed as well. All
+totals fixed, so we should be using Yates’s correction. I didn’t,
+because I wanted to keep things simple, but I should have done.</p>
+<p>R’s <code>chisq.test</code> by default <em>always</em> uses Yates’s
+correction, and if you don’t want it, you have to say
+<code>correct=F</code>. Which is why I have been doing so all through.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run Mood’s median test on these data using my <code>smmr</code>
+package, and verify that you get the same answer.</li>
+</ol>
+<p>Solution</p>
+<p>Not much to it, since the data is already read in:</p>
+<div class="sourceCode" id="cb540"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb540-1"><a href="moods-median-test.html#cb540-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb540-2"><a href="moods-median-test.html#cb540-2"></a><span class="kw">median_test</span>(instr, score, group)</span></code></pre></div>
+<pre><code>## $table
+##      above
+## group above below
+##     A     8     2
+##     B     1     7
+## 
+## $test
+##        what       value
+## 1 statistic 8.100000000
+## 2        df 1.000000000
+## 3   P-value 0.004426526</code></pre>
+<p>Identical, test statistic, degrees of freedom and P-value. The table
+of frequencies is also the same, just with columns rearranged. (In
+<code>smmr</code> I counted the number of values below the overall median,
+whereas in my build-it-yourself I counted the number of
+values above.)</p>
+
+</div>
+</div>
+<p style="text-align: center;">
+<a href="the-sign-test.html"><button class="btn btn-default">Previous</button></a>
+<a href="matched-pairs-t-and-sign-test.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
