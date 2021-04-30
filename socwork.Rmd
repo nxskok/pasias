@@ -243,55 +243,12 @@ and `MASS` second, as I have done here, when you mean to run
 the column-selection `select`, it will actually run the
 `select` that comes from `MASS`, and give you an error
 that you will have a terrible time debugging. That's what that
-"masked" message was when you loaded `MASS`.
-
-So I'm going to be tidy and get rid of `MASS`, now that I'm
-finished with it. Let's first see which packages are loaded, rather a
-lot in my case:
-`r tufte::margin_note("The packages before *tidyverse* other than *MASS* are all loaded by the *tidyverse*, which  is why there are so many.")`
-
-```{r }
-search()
-```
-
- 
-
-then get rid of `MASS`:
-
-```{r }
-detach("package:MASS", unload = T)
-```
-
- 
-Now check that it has gone:
-
-```{r }
-search()
-```
-
- 
-It has. Now any calls to `select` will use the right one. We hope.
-
-The output of `search` is called the **search list**, and
-it tells you where R will go looking for things. The first one
-`.GlobalEnv` is where all
-`r tufte::margin_note("All the ones that are part of  this project, anyway.")` 
-your
-variables, data frames etc.\ get stored, and that is what gets
-searched first.
-`r tufte::margin_note("That means that if you write a function with  the same name as one that is built into R or a package, yours is the  one that will get called. This is probably a bad idea, since you  won't be able to get at R's function by that name.")` 
-Then R will go
-looking in each thing in turn until it finds what it is looking
-for. When you load a package with `library()`, it gets added to
-the list *in second place*, behind `.GlobalEnv`. So, when
-we had `MASS` loaded (the first `search()`), if we
-called `select`, then it would find the one in `MASS`
-first.
+"masked" message was when you loaded `MASS`. This is a great place to learn about the `conflicted` package. See [here](https://github.com/r-lib/conflicted) for how it works. (Scroll down to under the list of files.)
 
 If you want to insist on something like "the `select` that lives in `dplyr`", 
 you can do that by saying
 `dplyr::select`. But this is kind of cumbersome if you don't
-need to do it, which is why I got rid of `MASS` here.
+need to do it.
 
 
 
