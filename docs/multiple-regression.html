@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 18 Multiple regression | Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2021-04-26" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Chapter 18 Multiple regression | Problems and Solutions in Applied Statistics</title>
+
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a>
+<ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
+</ul></li>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">3</span> Reading in data</a>
+<ul>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">4</span> Drawing graphs</a>
+<ul>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+</ul></li>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">6</span> Working with dataframes</a>
+<ul>
+<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">6.1</span> Tidying the Jays data</a></li>
+<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">6.2</span> Cars</a></li>
+</ul></li>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a>
+<ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a>
+<ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a>
+<ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">10</span> The sign test</a>
+<ul>
+<li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+</ul></li>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">11</span> Mood’s median test</a>
+<ul>
+<li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">11.1</span> Sugar in breakfast cereals</a></li>
+<li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">11.2</span> Fear of math</a></li>
+<li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">11.3</span> Medical instructions</a></li>
+</ul></li>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">12</span> Matched pairs t and sign test</a>
+<ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">12.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">12.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">12.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">12.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">12.5</span> Body fat revisited</a></li>
+</ul></li>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">13</span> Normal quantile plots</a>
+<ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">13.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">13.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">14</span> Analysis of variance</a>
+<ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">14.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">14.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">14.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">14.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">14.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">15</span> Writing reports</a>
+<ul>
+<li><a href="writing-reports.html#atomic-weight-of-carbon-1"><span class="toc-section-number">15.1</span> Atomic weight of carbon</a></li>
+<li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">15.2</span> Sparrowhawks</a></li>
+</ul></li>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">16</span> Tidying data</a>
+<ul>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">16.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">16.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">16.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">16.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">16.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">16.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">16.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">16.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">16.9</span> Feeling the heat</a></li>
+</ul></li>
+<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">17</span> Simple regression</a>
+<ul>
+<li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">17.1</span> Rainfall in California</a></li>
+<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">17.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">17.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="simple-regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">17.4</span> Facebook friends and grey matter</a></li>
+<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">17.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="simple-regression.html#salaries-of-social-workers"><span class="toc-section-number">17.6</span> Salaries of social workers</a></li>
+<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">17.7</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="simple-regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">17.8</span> Tortoise shells and eggs</a></li>
+<li><a href="simple-regression.html#roller-coasters"><span class="toc-section-number">17.9</span> Roller coasters</a></li>
+<li><a href="simple-regression.html#running-and-blood-sugar"><span class="toc-section-number">17.10</span> Running and blood sugar</a></li>
+<li><a href="simple-regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">17.11</span> Calories and fat in pizza</a></li>
+<li><a href="simple-regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">17.12</span> Where should the fire stations be?</a></li>
+</ul></li>
+<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">18</span> Multiple regression</a>
+<ul>
+<li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">18.1</span> Being satisfied with hospital</a></li>
+<li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">18.2</span> Handling shipments of chemicals</a></li>
+<li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">18.3</span> Salaries of mathematicians</a></li>
+<li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">18.4</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
+<ul>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">19.4</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+</ul></li>
+<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
+<ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">21</span> The Bootstrap</a>
+<ul>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">21.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">21.2</span> Air conditioning failures: bootstrapping the median</a></li>
+</ul></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">22</span> Bayesian Statistics with Stan</a>
+<ul>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">22.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">22.2</span> Bayesian regression</a></li>
+</ul></li>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">23</span> Logistic regression</a>
+<ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">23.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">23.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">23.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">23.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">23.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">23.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">23.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">23.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">23.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">23.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">24</span> Logistic regression with ordinal or nominal response</a>
+<ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">24.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#attitudes-towards-abortion"><span class="toc-section-number">24.2</span> Attitudes towards abortion</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">24.3</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">24.4</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#alligator-food"><span class="toc-section-number">24.5</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">24.6</span> How do you like your steak – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">24.7</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">24.8</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">24.9</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">24.10</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">24.11</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">25</span> Survival analysis</a>
+<ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">25.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">25.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">25.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">25.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">26</span> Analysis of variance revisited</a>
+<ul>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">26.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">26.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">26.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">26.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">26.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">26.6</span> Trying on shirts</a></li>
+</ul></li>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">27</span> Multivariate analysis of variance</a>
+<ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">27.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">27.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">27.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">28</span> Repeated measures</a>
+<ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">28.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">28.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">28.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">28.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">28.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">28.6</span> Repeated measures with no background</a></li>
+</ul></li>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">29</span> Discriminant analysis</a>
+<ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">29.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">29.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">29.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">29.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">29.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">29.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">29.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li><a href="cluster-analysis.html#cluster-analysis"><span class="toc-section-number">30</span> Cluster analysis</a>
+<ul>
+<li><a href="cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">30.1</span> Sites on the sea bed</a></li>
+<li><a href="cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">30.2</span> Dissimilarities between fruits</a></li>
+<li><a href="cluster-analysis.html#similarity-of-species"><span class="toc-section-number">30.3</span> Similarity of species</a></li>
+<li><a href="cluster-analysis.html#rating-beer"><span class="toc-section-number">30.4</span> Rating beer</a></li>
+<li><a href="cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">30.5</span> Clustering the Swiss bills</a></li>
+<li><a href="cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">30.6</span> Grouping similar cars</a></li>
+<li><a href="cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">30.7</span> Running, jumping, and throwing</a></li>
+<li><a href="cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">30.8</span> Bridges in Pittsburgh</a></li>
+<li><a href="cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">30.9</span> Clustering the Australian athletes</a></li>
+</ul></li>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">31</span> Drawing maps with Leaflet</a>
+<ul>
+<li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">31.1</span> The brain of a cat, revisited</a></li>
+<li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">31.2</span> Making a map of Wisconsin</a></li>
+</ul></li>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">32</span> Multidimensional Scaling</a>
+<ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">32.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">32.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">32.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">32.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">32.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components-and-factor-analysis.html#principal-components-and-factor-analysis"><span class="toc-section-number">33</span> Principal Components and Factor Analysis</a>
+<ul>
+<li><a href="principal-components-and-factor-analysis.html#the-weather-somewhere"><span class="toc-section-number">33.1</span> The weather, somewhere</a></li>
+<li><a href="principal-components-and-factor-analysis.html#air-pollution"><span class="toc-section-number">33.2</span> Air pollution</a></li>
+<li><a href="principal-components-and-factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">33.3</span> A correlation matrix</a></li>
+<li><a href="principal-components-and-factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">33.4</span> The Interpersonal Circumplex</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">34</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">34.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">34.2</span> Predicting voting</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="multiple-regression" class="section level1" number="18">
+<h1><span class="header-section-number">Chapter 18</span> Multiple regression</h1>
+<div class="sourceCode" id="cb1213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1213-1"><a href="multiple-regression.html#cb1213-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="being-satisfied-with-hospital" class="section level2" number="18.1">
+<h2><span class="header-section-number">18.1</span> Being satisfied with hospital</h2>
+<p>A hospital administrator collects data to study the
+effect, if any, of a patient’s age, the severity of their
+illness, and their anxiety level, on the patient’s satisfaction with
+their hospital experience. The data, in the file
+<a href="http://ritsokiguess.site/datafiles/satisfaction.txt">link</a>, are
+for 46 patients in a survey. The columns are: patient’s satisfaction
+score <code>satis</code>, on a scale of 0 to 100; the patient’s <code>age</code> (in
+years), the <code>severity</code> of the patient’s illness (also on a
+0–100 scale), and the patient’s <code>anxiety</code> score on a standard
+anxiety test (scale of 0–5). Higher scores mean greater satisfaction,
+increased severity of illness and more anxiety.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have four columns in
+your data frame, one for each of your variables.</li>
+</ol>
+<p>Solution</p>
+<p>This one requires a little thought
+first. The data values are aligned in columns, and so are the
+column headers. Thus, <code>read_table</code> is what we need:</p>
+<div class="sourceCode" id="cb1214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1214-1"><a href="multiple-regression.html#cb1214-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/satisfaction.txt&quot;</span></span>
+<span id="cb1214-2"><a href="multiple-regression.html#cb1214-2"></a>satisf &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ───────────────────────────────────────────────────────────
+## cols(
+##   satis = col_double(),
+##   age = col_double(),
+##   severity = col_double(),
+##   anxiety = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb1216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1216-1"><a href="multiple-regression.html#cb1216-1"></a>satisf</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["satis"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"48","2":"50","3":"51","4":"2.3"},{"1":"57","2":"36","3":"46","4":"2.3"},{"1":"66","2":"40","3":"48","4":"2.2"},{"1":"70","2":"41","3":"44","4":"1.8"},{"1":"89","2":"28","3":"43","4":"1.8"},{"1":"36","2":"49","3":"54","4":"2.9"},{"1":"46","2":"42","3":"50","4":"2.2"},{"1":"54","2":"45","3":"48","4":"2.4"},{"1":"26","2":"52","3":"62","4":"2.9"},{"1":"77","2":"29","3":"50","4":"2.1"},{"1":"89","2":"29","3":"48","4":"2.4"},{"1":"67","2":"43","3":"53","4":"2.4"},{"1":"47","2":"38","3":"55","4":"2.2"},{"1":"51","2":"34","3":"51","4":"2.3"},{"1":"57","2":"53","3":"54","4":"2.2"},{"1":"66","2":"36","3":"49","4":"2.0"},{"1":"79","2":"33","3":"56","4":"2.5"},{"1":"88","2":"29","3":"46","4":"1.9"},{"1":"60","2":"33","3":"49","4":"2.1"},{"1":"49","2":"55","3":"51","4":"2.4"},{"1":"77","2":"29","3":"52","4":"2.3"},{"1":"52","2":"44","3":"58","4":"2.9"},{"1":"60","2":"43","3":"50","4":"2.3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>46 rows and 4 columns: satisfaction score (response), age, severity
+and anxiety (explanatory).</p>
+<p>There is a small question about what to call the data
+frame. Basically, anything other than <code>satis</code> will do, since
+there will be confusion if your data frame has the same name as one of
+its columns.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><a name="part:scatmat">*</a> Obtain scatterplots of the response variable
+<code>satis</code> against each of the other variables.</li>
+</ol>
+<p>Solution</p>
+<p>The obvious way is to do these one after the other:</p>
+<div class="sourceCode" id="cb1217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1217-1"><a href="multiple-regression.html#cb1217-1"></a><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-824-1.png" width="384"  /></p>
+<div class="sourceCode" id="cb1218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1218-1"><a href="multiple-regression.html#cb1218-1"></a><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> severity, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-824-2.png" width="384"  /></p>
+<div class="sourceCode" id="cb1219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1219-1"><a href="multiple-regression.html#cb1219-1"></a><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> anxiety, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-824-3.png" width="384"  /></p>
+<p>This is fine, but there is also a way of getting all three plots with
+<em>one</em> <code>ggplot</code>. This uses the <code>facet_wrap</code> trick,
+but to set <em>that</em> up, we have to have all the <span class="math inline">\(x\)</span>-variables in
+<em>one</em> column, with an extra column labelling which <span class="math inline">\(x\)</span>-variable
+that value was. This uses <code>pivot_longer</code>. The right way to do this is
+in a pipeline:</p>
+<div class="sourceCode" id="cb1220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1220-1"><a href="multiple-regression.html#cb1220-1"></a>satisf <span class="op">%&gt;%</span></span>
+<span id="cb1220-2"><a href="multiple-regression.html#cb1220-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>satis, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1220-3"><a href="multiple-regression.html#cb1220-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1220-4"><a href="multiple-regression.html#cb1220-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-825-1.png" width="672"  /></p>
+<p>Steps: collect together the columns age through anxiety into one column
+whose values go in <code>x</code>, with names in <code>xname</code>, then plot this new
+<code>x</code> against satisfaction score, with a separate facet for each
+different <span class="math inline">\(x\)</span> (in <code>xname</code>).</p>
+<p>What’s the difference
+between <code>facet_grid</code> and <code>facet_wrap</code>? The difference is that with
+<code>facet_wrap</code>, we are letting <code>ggplot</code> arrange the
+facets how it wants to. In this case, we didn’t care which explanatory
+variable went on which facet, just as long as we saw all of them
+somewhere. Inside <code>facet_wrap</code> there are <em>no dots</em>: a
+squiggle, followed by the name(s) of the variable(s) that
+distinguish(es) the facets.
+<label for="tufte-mn-100" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-100" class="margin-toggle"><span class="marginnote">If there are more than one, they should be separated by plus signs as in lm. Each facet then has as many labels as variables. I haven’t actually done this myself, but from looking at examples, I think this is the way it works.</span>
+The only “design” decision I made here was that the facets
+should be arranged somehow in two columns, but I didn’t care which
+ones should be where.</p>
+<p>In <code>facet_grid</code>, you have a variable that you want to be
+displayed in rows or in columns (not just in “different facets”).
+I’ll show you how that works here. Since I am going to draw
+two plots, I should save the long data frame first and re-use it,
+rather than calculating it twice (so that I ought now to go back and
+do the other one using the saved data frame, really):</p>
+<div class="sourceCode" id="cb1221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1221-1"><a href="multiple-regression.html#cb1221-1"></a>satisf <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1221-2"><a href="multiple-regression.html#cb1221-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(age<span class="op">:</span>anxiety, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, </span>
+<span id="cb1221-3"><a href="multiple-regression.html#cb1221-3"></a>               <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) -&gt;<span class="st"> </span>satisf.long</span>
+<span id="cb1221-4"><a href="multiple-regression.html#cb1221-4"></a>satisf.long</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["satis"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["xname"],"name":[2],"type":["chr"],"align":["left"]},{"label":["x"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"48","2":"age","3":"50.0"},{"1":"48","2":"severity","3":"51.0"},{"1":"48","2":"anxiety","3":"2.3"},{"1":"57","2":"age","3":"36.0"},{"1":"57","2":"severity","3":"46.0"},{"1":"57","2":"anxiety","3":"2.3"},{"1":"66","2":"age","3":"40.0"},{"1":"66","2":"severity","3":"48.0"},{"1":"66","2":"anxiety","3":"2.2"},{"1":"70","2":"age","3":"41.0"},{"1":"70","2":"severity","3":"44.0"},{"1":"70","2":"anxiety","3":"1.8"},{"1":"89","2":"age","3":"28.0"},{"1":"89","2":"severity","3":"43.0"},{"1":"89","2":"anxiety","3":"1.8"},{"1":"36","2":"age","3":"49.0"},{"1":"36","2":"severity","3":"54.0"},{"1":"36","2":"anxiety","3":"2.9"},{"1":"46","2":"age","3":"42.0"},{"1":"46","2":"severity","3":"50.0"},{"1":"46","2":"anxiety","3":"2.2"},{"1":"54","2":"age","3":"45.0"},{"1":"54","2":"severity","3":"48.0"},{"1":"54","2":"anxiety","3":"2.4"},{"1":"26","2":"age","3":"52.0"},{"1":"26","2":"severity","3":"62.0"},{"1":"26","2":"anxiety","3":"2.9"},{"1":"77","2":"age","3":"29.0"},{"1":"77","2":"severity","3":"50.0"},{"1":"77","2":"anxiety","3":"2.1"},{"1":"89","2":"age","3":"29.0"},{"1":"89","2":"severity","3":"48.0"},{"1":"89","2":"anxiety","3":"2.4"},{"1":"67","2":"age","3":"43.0"},{"1":"67","2":"severity","3":"53.0"},{"1":"67","2":"anxiety","3":"2.4"},{"1":"47","2":"age","3":"38.0"},{"1":"47","2":"severity","3":"55.0"},{"1":"47","2":"anxiety","3":"2.2"},{"1":"51","2":"age","3":"34.0"},{"1":"51","2":"severity","3":"51.0"},{"1":"51","2":"anxiety","3":"2.3"},{"1":"57","2":"age","3":"53.0"},{"1":"57","2":"severity","3":"54.0"},{"1":"57","2":"anxiety","3":"2.2"},{"1":"66","2":"age","3":"36.0"},{"1":"66","2":"severity","3":"49.0"},{"1":"66","2":"anxiety","3":"2.0"},{"1":"79","2":"age","3":"33.0"},{"1":"79","2":"severity","3":"56.0"},{"1":"79","2":"anxiety","3":"2.5"},{"1":"88","2":"age","3":"29.0"},{"1":"88","2":"severity","3":"46.0"},{"1":"88","2":"anxiety","3":"1.9"},{"1":"60","2":"age","3":"33.0"},{"1":"60","2":"severity","3":"49.0"},{"1":"60","2":"anxiety","3":"2.1"},{"1":"49","2":"age","3":"55.0"},{"1":"49","2":"severity","3":"51.0"},{"1":"49","2":"anxiety","3":"2.4"},{"1":"77","2":"age","3":"29.0"},{"1":"77","2":"severity","3":"52.0"},{"1":"77","2":"anxiety","3":"2.3"},{"1":"52","2":"age","3":"44.0"},{"1":"52","2":"severity","3":"58.0"},{"1":"52","2":"anxiety","3":"2.9"},{"1":"60","2":"age","3":"43.0"},{"1":"60","2":"severity","3":"50.0"},{"1":"60","2":"anxiety","3":"2.3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>If, at this or any stage, you get confused, the way to un-confuse
+yourself is to <em>fire up R Studio and do this yourself</em>. You have
+all the data and code you need. If you do it yourself, you can run
+pipes one line at a time, inspect things, and so on.</p>
+<p>First, making a <em>row</em> of plots, so that <code>xname</code> is the <span class="math inline">\(x\)</span>
+of the facets:</p>
+<div class="sourceCode" id="cb1222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1222-1"><a href="multiple-regression.html#cb1222-1"></a><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1222-2"><a href="multiple-regression.html#cb1222-2"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-827-1.png" width="672"  /></p>
+<p>I find these too tall and skinny to see the trends, as on the first
+<code>facet_wrap</code> plot.</p>
+<p>And now, making a <em>column</em> of plots, with <code>xname</code> as <span class="math inline">\(y\)</span>:</p>
+<div class="sourceCode" id="cb1223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1223-1"><a href="multiple-regression.html#cb1223-1"></a><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1223-2"><a href="multiple-regression.html#cb1223-2"></a><span class="st">  </span><span class="kw">facet_grid</span>(xname <span class="op">~</span><span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-828-1.png" width="672"  /></p>
+<p>This one looks weird because the three <span class="math inline">\(x\)</span>-variables are on different
+scales. The effect of the <code>scales="free"</code> is to allow the
+<code>satis</code> scale to vary, but the <code>x</code> scale cannot because
+the facets are all in a line. Compare this:</p>
+<div class="sourceCode" id="cb1224"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1224-1"><a href="multiple-regression.html#cb1224-1"></a><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1224-2"><a href="multiple-regression.html#cb1224-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-829-1.png" width="672"  /></p>
+<p>This time, the <span class="math inline">\(x\)</span> scales came out different (and suitable), but I
+still like squarer plots better for judging relationships.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>In your scatterplots of (<a href="#part:scatmat">here</a>), which
+relationship appears to be the strongest one?</li>
+</ol>
+<p>Solution</p>
+<p>All the trends appear to be downward ones, but
+I think <code>satis</code> and <code>age</code> is the strongest
+trend. The other ones look more scattered to me.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><a name="part:corrmat">*</a> Create a correlation matrix for all four
+variables. Does your strongest trend of the previous part have the
+strongest correlation?</li>
+</ol>
+<p>Solution</p>
+<p>This is a matter of running the whole data frame through <code>cor</code>:</p>
+<div class="sourceCode" id="cb1225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1225-1"><a href="multiple-regression.html#cb1225-1"></a><span class="kw">cor</span>(satisf)</span></code></pre></div>
+<pre><code>##               satis        age   severity    anxiety
+## satis     1.0000000 -0.7736828 -0.5874444 -0.6023105
+## age      -0.7736828  1.0000000  0.4666091  0.4976945
+## severity -0.5874444  0.4666091  1.0000000  0.7945275
+## anxiety  -0.6023105  0.4976945  0.7945275  1.0000000</code></pre>
+<p>Ignoring the correlations of variables with themselves, the
+correlation of <code>satisf</code> with <code>age</code>, the one I picked
+out, is the strongest (the most negative trend). If you picked one of
+the other trends as the strongest, you need to note how close it is to
+the maximum correlation: for example, if you picked <code>satis</code>
+and <code>severity</code>, that’s the second highest correlation (in
+size).</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Run a regression predicting satisfaction from the other
+three variables, and display the output.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb1227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1227-1"><a href="multiple-regression.html#cb1227-1"></a>satisf<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(satis <span class="op">~</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>severity <span class="op">+</span><span class="st"> </span>anxiety, <span class="dt">data =</span> satisf)</span>
+<span id="cb1227-2"><a href="multiple-regression.html#cb1227-2"></a><span class="kw">summary</span>(satisf<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = satis ~ age + severity + anxiety, data = satisf)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -16.954  -7.154   1.550   6.599  14.888 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 162.8759    25.7757   6.319 4.59e-06 ***
+## age          -1.2103     0.3015  -4.015  0.00074 ***
+## severity     -0.6659     0.8210  -0.811  0.42736    
+## anxiety      -8.6130    12.2413  -0.704  0.49021    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.29 on 19 degrees of freedom
+## Multiple R-squared:  0.6727, Adjusted R-squared:  0.621 
+## F-statistic: 13.01 on 3 and 19 DF,  p-value: 7.482e-05</code></pre>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Does the regression fit well overall? How can you tell?</li>
+</ol>
+<p>Solution</p>
+<p>For this, look at R-squared, which is 0.682 (68.2%). This is one
+of those things to have an opinion about. I’d say this is good but
+not great. I would not call it “poor”, since there definitely
+<em>is</em> a relationship, even if it’s not a stupendously good one.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Test the null hypothesis that none of your explanatory
+variables help, against the alternative that one or more of them
+do. (You’ll need an appropriate P-value. Which one is it?) What do
+you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>This one is the (global) <span class="math inline">\(F\)</span>-test, whose P-value is at the
+bottom. It translates to 0.000000000154, so this is
+<em>definitely</em> small, and we reject the null. Thus, one or more
+of <code>age</code>, <code>severity</code> and <code>anxiety</code> helps to
+predict satisfaction. (I would like to see this last sentence,
+rather than just “reject the null”.)</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>The correlation between <code>severity</code> and
+<code>satis</code> is not small, but in my regression I found that
+<code>severity</code> was nowhere near significant. Why is this? Explain briefly.
+</li>
+</ol>
+<p>Solution</p>
+<p>The key thing to observe is that the <span class="math inline">\(t\)</span>-test in the regression
+says how important a variable is , or, if you prefer, how much that
+variable <em>adds</em> to the regression, on top of the ones that
+are already there. So here, we are saying
+that <code>severity</code> has nothing to add, given that the
+regression already includes the others. (That is, high correlation
+and strong significance don’t always go together.)
+For a little more insight, look at the correlation matrix of
+(<a href="#part:corrmat">here</a>) again. The strongest trend with
+<code>satis</code> is with <code>age</code>, and indeed <code>age</code> is
+the one obviously significant variable in the regression. The
+trend of <code>severity</code> with <code>satis</code> is somewhat
+downward, and you might otherwise have guessed that this is strong
+enough to be significant. But see that <code>severity</code>
+<em>also</em> has a clear relationship with <code>age</code>. A patient
+with low severity of disease is probably also younger, and we know
+that younger patients are likely to be more satisfied. Thus
+severity has nothing (much) to add.
+The multiple regression is actually doing something clever
+here. Just looking at the correlations, it appears that all three
+variables are helpful, but the regression is saying that once you
+have looked at <code>age</code> (“controlled for age”),
+severity of illness does not have an impact: the correlation of
+<code>severity</code> with <code>satis</code> is as big as it is almost
+entirely because of <code>age</code>.
+This gets into the domain of “partial correlation”. If you like videos, you can
+see <a href="https://www.youtube.com/watch?v=LF0WAVBIhNA">link</a> for
+this. I prefer regression, myself, since I find it clearer.
+<code>anxiety</code>
+tells a different story: this is close to significant (or
+<em>is</em> significant at the <span class="math inline">\(\alpha=0.10\)</span> level), so the
+regression is saying that <code>anxiety</code> <em>does</em> appear to
+have something to say about <code>satis</code> over and above
+<code>age</code>. This is rather odd, to my mind, since
+<code>anxiety</code> has only a slightly stronger correlation with
+<code>satis</code> and about the same with <code>age</code> as
+<code>severity</code> does. But the regression is telling the story to
+believe, because it handles all the inter-correlations, not just
+the ones between pairs of variables.
+I thought it would be rather interesting to do some predictions
+here. Let’s predict satisfaction for all combinations of high and
+low age, severity and anxiety. I’ll use the quartiles for high and
+low. There is a straightforward but ugly way:</p>
+<div class="sourceCode" id="cb1229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1229-1"><a href="multiple-regression.html#cb1229-1"></a>quartiles &lt;-<span class="st"> </span>satisf <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(</span>
+<span id="cb1229-2"><a href="multiple-regression.html#cb1229-2"></a>  <span class="dt">age_q1 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.25</span>),</span>
+<span id="cb1229-3"><a href="multiple-regression.html#cb1229-3"></a>  <span class="dt">age_q3 =</span> <span class="kw">quantile</span>(age, <span class="fl">0.75</span>),</span>
+<span id="cb1229-4"><a href="multiple-regression.html#cb1229-4"></a>  <span class="dt">severity_q1 =</span> <span class="kw">quantile</span>(severity, <span class="fl">0.25</span>),</span>
+<span id="cb1229-5"><a href="multiple-regression.html#cb1229-5"></a>  <span class="dt">severity_q3 =</span> <span class="kw">quantile</span>(severity, <span class="fl">0.75</span>),</span>
+<span id="cb1229-6"><a href="multiple-regression.html#cb1229-6"></a>  <span class="dt">anxiety_q1 =</span> <span class="kw">quantile</span>(anxiety, <span class="fl">0.25</span>),</span>
+<span id="cb1229-7"><a href="multiple-regression.html#cb1229-7"></a>  <span class="dt">anxiety_q3 =</span> <span class="kw">quantile</span>(anxiety, <span class="fl">0.75</span>)</span>
+<span id="cb1229-8"><a href="multiple-regression.html#cb1229-8"></a>)</span></code></pre></div>
+<p>This is ugly because of all the repetition (same quantiles of
+different variables), and the programmer in you should be offended by
+the ugliness. Anyway, it gives what we want:</p>
+<div class="sourceCode" id="cb1230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1230-1"><a href="multiple-regression.html#cb1230-1"></a>quartiles</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age_q1"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age_q3"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity_q1"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["severity_q3"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["anxiety_q1"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["anxiety_q3"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"33","2":"44.5","3":"48","4":"53.5","5":"2.15","6":"2.4","_row":"25%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb1231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1231-1"><a href="multiple-regression.html#cb1231-1"></a>quartiles <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1231-2"><a href="multiple-regression.html#cb1231-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="kw">c</span>(<span class="st">&quot;.value&quot;</span>, <span class="st">&quot;which_q&quot;</span>), <span class="dt">names_sep=</span><span class="st">&quot;_&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["which_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"q1","2":"33.0","3":"48.0","4":"2.15","_row":"25%"},{"1":"q3","2":"44.5","3":"53.5","4":"2.40","_row":"75%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>You can copy the numbers from here to below, or you can do some
+cleverness to get them in the right places:</p>
+<div class="sourceCode" id="cb1232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1232-1"><a href="multiple-regression.html#cb1232-1"></a>quartiles <span class="op">%&gt;%</span></span>
+<span id="cb1232-2"><a href="multiple-regression.html#cb1232-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;var_q&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;quartile&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1232-3"><a href="multiple-regression.html#cb1232-3"></a><span class="st">  </span><span class="kw">separate</span>(var_q, <span class="kw">c</span>(<span class="st">&quot;var_name&quot;</span>, <span class="st">&quot;which_q&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1232-4"><a href="multiple-regression.html#cb1232-4"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>var_name, <span class="dt">values_from=</span>quartile)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["which_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"q1","2":"33.0","3":"48.0","4":"2.15"},{"1":"q3","2":"44.5","3":"53.5","4":"2.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This combo of <code>pivot_longer</code> and <code>separate</code> can be shortened further by specifying <em>two</em> names in <code>names_to</code>, and also specifying a <code>names_sep</code> to say what they’re separated by:</p>
+<div class="sourceCode" id="cb1233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1233-1"><a href="multiple-regression.html#cb1233-1"></a>quartiles <span class="op">%&gt;%</span></span>
+<span id="cb1233-2"><a href="multiple-regression.html#cb1233-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="kw">c</span>(<span class="st">&quot;var_q&quot;</span>, <span class="st">&quot;which_q&quot;</span>), </span>
+<span id="cb1233-3"><a href="multiple-regression.html#cb1233-3"></a>               <span class="dt">names_sep=</span><span class="st">&quot;_&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;quartile&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1233-4"><a href="multiple-regression.html#cb1233-4"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>var_q, <span class="dt">values_from=</span>quartile)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["which_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"q1","2":"33.0","3":"48.0","4":"2.15"},{"1":"q3","2":"44.5","3":"53.5","4":"2.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Believe it or not, this can be shortened even further, thus:</p>
+<div class="sourceCode" id="cb1234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1234-1"><a href="multiple-regression.html#cb1234-1"></a>quartiles <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1234-2"><a href="multiple-regression.html#cb1234-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="kw">c</span>(<span class="st">&quot;.value&quot;</span>, <span class="st">&quot;which_q&quot;</span>), <span class="dt">names_sep=</span><span class="st">&quot;_&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["which_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"q1","2":"33.0","3":"48.0","4":"2.15","_row":"25%"},{"1":"q3","2":"44.5","3":"53.5","4":"2.40","_row":"75%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The place where this approach gains is when <code>pivot_longer</code> goes too far, making <em>everything</em> longer, when you want some of it to be wider and thus you needed a <code>pivot_wider</code> at the end. Once again, you use two things in the <code>names_to</code>, but this time instead of giving both variables names, you use the special name <code>.value</code> for the thing you want to end up in columns. The original data frame <code>quartiles</code> had columns with names like <code>severity_q1</code>, so here that is the first thing: <code>age</code> and <code>severity</code> and <code>anxiety</code> will be used as column names, and filled automatically with the values for <code>q1</code> and <code>q3</code>, so you don’t specify a <code>values_to</code>.</p>
+<p>This is one of those very dense pieces of coding, where you accomplish a lot in a small space. If it is too dense for you, you can go back to one of the two previous ways of doing it, eg. the simple <code>pivot_longer</code> followed by <code>separate</code> followed by <code>pivot_wider</code>. Sometimes there is value in using a larger number of simpler tools to get where you want.</p>
+<p>Those data frames above are we want for below. Let’s test the first way of coding it line by line to see exactly
+what it did: (The second way does the first two lines in one, and the third way does all three.)</p>
+<div class="sourceCode" id="cb1235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1235-1"><a href="multiple-regression.html#cb1235-1"></a>quartiles <span class="op">%&gt;%</span></span>
+<span id="cb1235-2"><a href="multiple-regression.html#cb1235-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;var_q&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;quartile&quot;</span>) </span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["var_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["quartile"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"age_q1","2":"33.00"},{"1":"age_q3","2":"44.50"},{"1":"severity_q1","2":"48.00"},{"1":"severity_q3","2":"53.50"},{"1":"anxiety_q1","2":"2.15"},{"1":"anxiety_q3","2":"2.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Making longer. <code>everything()</code> is a select-helper saying
+“pivot-longer <em>all</em> the columns”.</p>
+<div class="sourceCode" id="cb1236"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1236-1"><a href="multiple-regression.html#cb1236-1"></a>quartiles <span class="op">%&gt;%</span></span>
+<span id="cb1236-2"><a href="multiple-regression.html#cb1236-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;var_q&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;quartile&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1236-3"><a href="multiple-regression.html#cb1236-3"></a><span class="st">  </span><span class="kw">separate</span>(var_q, <span class="kw">c</span>(<span class="st">&quot;var_name&quot;</span>, <span class="st">&quot;which_q&quot;</span>)) </span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["var_name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["which_q"],"name":[2],"type":["chr"],"align":["left"]},{"label":["quartile"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"age","2":"q1","3":"33.00"},{"1":"age","2":"q3","3":"44.50"},{"1":"severity","2":"q1","3":"48.00"},{"1":"severity","2":"q3","3":"53.50"},{"1":"anxiety","2":"q1","3":"2.15"},{"1":"anxiety","2":"q3","3":"2.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The column <code>var_q</code> above encodes a variable <em>and</em> a
+quartile, so split them up. By default, <code>separate</code> splits at an
+underscore, which is why the things in <code>quartiles</code> were named
+with underscores.
+<label for="tufte-mn-101" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-101" class="margin-toggle"><span class="marginnote">I’d like to claim that I was clever enough to think of this in advance, but I wasn’t; originally the variable name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.</span></p>
+<p>Now put the variable names back in the columns:</p>
+<div class="sourceCode" id="cb1237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1237-1"><a href="multiple-regression.html#cb1237-1"></a>quartiles <span class="op">%&gt;%</span></span>
+<span id="cb1237-2"><a href="multiple-regression.html#cb1237-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;var_q&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;quartile&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1237-3"><a href="multiple-regression.html#cb1237-3"></a><span class="st">  </span><span class="kw">separate</span>(var_q, <span class="kw">c</span>(<span class="st">&quot;var_name&quot;</span>, <span class="st">&quot;which_q&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1237-4"><a href="multiple-regression.html#cb1237-4"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>var_name, <span class="dt">values_from=</span>quartile) -&gt;<span class="st"> </span>qq</span>
+<span id="cb1237-5"><a href="multiple-regression.html#cb1237-5"></a>qq</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["which_q"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"q1","2":"33.0","3":"48.0","4":"2.15"},{"1":"q3","2":"44.5","3":"53.5","4":"2.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>I make <code>var_name</code> wider, carrying along the values in
+<code>quartile</code> (which means that the rows will get matched up by
+<code>which_q</code>).</p>
+<p>Now, let’s think about why we were doing that. We want to do
+predictions of all possible combinations of those values of age and
+anxiety and severity.
+Doing “all possible combinations” calls for <code>crossing</code>,
+which looks like this. It uses the output from one of the above pipelines, which I saved in <code>qq</code>:</p>
+<div class="sourceCode" id="cb1238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1238-1"><a href="multiple-regression.html#cb1238-1"></a>satisf.new &lt;-<span class="st"> </span><span class="kw">with</span>(qq, <span class="kw">crossing</span>(age, anxiety, severity))</span>
+<span id="cb1238-2"><a href="multiple-regression.html#cb1238-2"></a>satisf.new</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"33.0","2":"2.15","3":"48.0"},{"1":"33.0","2":"2.15","3":"53.5"},{"1":"33.0","2":"2.40","3":"48.0"},{"1":"33.0","2":"2.40","3":"53.5"},{"1":"44.5","2":"2.15","3":"48.0"},{"1":"44.5","2":"2.15","3":"53.5"},{"1":"44.5","2":"2.40","3":"48.0"},{"1":"44.5","2":"2.40","3":"53.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>There are two possibilities for each variable, so there are <span class="math inline">\(2^3=8\)</span>
+“all possible combinations”. You can check that <code>crossing</code> got
+them all.</p>
+<p>This is a data frame containing all the values we want to predict for,
+with columns having names that are the same as the variables in the
+regression, so it’s ready to go into <code>predict</code>. I’ll do
+prediction intervals, just because:</p>
+<div class="sourceCode" id="cb1239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1239-1"><a href="multiple-regression.html#cb1239-1"></a>pp &lt;-<span class="st"> </span><span class="kw">predict</span>(satisf<span class="fl">.1</span>, satisf.new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</span>
+<span id="cb1239-2"><a href="multiple-regression.html#cb1239-2"></a><span class="kw">cbind</span>(satisf.new, pp)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["fit"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["lwr"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["upr"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"33.0","2":"2.15","3":"48.0","4":"72.45391","5":"50.11023","6":"94.79759","_rn_":"1"},{"1":"33.0","2":"2.15","3":"53.5","4":"68.79143","5":"45.11580","6":"92.46706","_rn_":"2"},{"1":"33.0","2":"2.40","3":"48.0","4":"70.30065","5":"46.84885","6":"93.75246","_rn_":"3"},{"1":"33.0","2":"2.40","3":"53.5","4":"66.63817","5":"43.77908","6":"89.49727","_rn_":"4"},{"1":"44.5","2":"2.15","3":"48.0","4":"58.53525","5":"35.87346","6":"81.19705","_rn_":"5"},{"1":"44.5","2":"2.15","3":"53.5","4":"54.87277","5":"31.28639","6":"78.45915","_rn_":"6"},{"1":"44.5","2":"2.40","3":"48.0","4":"56.38200","5":"33.09400","6":"79.66999","_rn_":"7"},{"1":"44.5","2":"2.40","3":"53.5","4":"52.71951","5":"30.44067","6":"74.99836","_rn_":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Looking at the predictions themselves (in <code>fit</code>), you can see
+that <code>age</code> has a huge effect. If you compare the 1st and 5th
+lines (or the 2nd and 6th, 3rd and 7th, ) you see that
+increasing age by 13.5 years, while leaving the other variables the
+same, decreases the satisfaction score by over 15 on
+average. Changing <code>severity</code>, while leaving everything else the
+same, has in comparison a tiny effect, just over 2 points. (Compare
+eg. 1st and 2nd lines.) Anxiety has an in-between effect: increasing
+anxiety from 2.1 to 2.475, leaving everything else fixed, decreases
+satisfaction by about 5 points on average.</p>
+<p>I chose the quartiles on purpose: to demonstrate the change in average
+satisfaction by changing the explanatory variable by an appreciable
+fraction of its range of values. That is, I changed <code>severity</code>
+by “a fair bit”, and still the effect on satisfaction scores was small.</p>
+<p>Are any of these prediction intervals longer or shorter? We can calculate how
+long they are. Look at the predictions:</p>
+<div class="sourceCode" id="cb1240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1240-1"><a href="multiple-regression.html#cb1240-1"></a>pp</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 72.45391 50.11023 94.79759
+## 2 68.79143 45.11580 92.46706
+## 3 70.30065 46.84885 93.75246
+## 4 66.63817 43.77908 89.49727
+## 5 58.53525 35.87346 81.19705
+## 6 54.87277 31.28639 78.45915
+## 7 56.38200 33.09400 79.66999
+## 8 52.71951 30.44067 74.99836</code></pre>
+<p>This is unfortunately not a data frame:</p>
+<div class="sourceCode" id="cb1242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1242-1"><a href="multiple-regression.html#cb1242-1"></a><span class="kw">class</span>(pp)</span></code></pre></div>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
+<p>so we make it one before calculating the lengths.
+We want <code>upr</code> minus <code>lwr</code>:</p>
+<div class="sourceCode" id="cb1244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1244-1"><a href="multiple-regression.html#cb1244-1"></a>pp <span class="op">%&gt;%</span></span>
+<span id="cb1244-2"><a href="multiple-regression.html#cb1244-2"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
+<span id="cb1244-3"><a href="multiple-regression.html#cb1244-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">pi.length =</span> upr <span class="op">-</span><span class="st"> </span>lwr)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["pi.length"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"44.68736"},{"1":"47.35126"},{"1":"46.90361"},{"1":"45.71819"},{"1":"45.32359"},{"1":"47.17276"},{"1":"46.57599"},{"1":"44.55769"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Now, I don’t want to keep the other stuff from <code>pp</code>, so I used
+<code>transmute</code> instead of <code>mutate</code>; <code>transmute</code>
+keeps <em>only</em> the new variable(s) that I calculate and throws away
+the others.
+<label for="tufte-mn-102" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-102" class="margin-toggle"><span class="marginnote">Usually you want to keep the other variables around as well, which is why you don’t see transmute very often.</span></p>
+<p>Then I put that side by side with the values being predicted for:</p>
+<div class="sourceCode" id="cb1245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1245-1"><a href="multiple-regression.html#cb1245-1"></a>pp <span class="op">%&gt;%</span></span>
+<span id="cb1245-2"><a href="multiple-regression.html#cb1245-2"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span></span>
+<span id="cb1245-3"><a href="multiple-regression.html#cb1245-3"></a><span class="st">  </span><span class="kw">transmute</span>(<span class="dt">pi.length =</span> upr <span class="op">-</span><span class="st"> </span>lwr) <span class="op">%&gt;%</span></span>
+<span id="cb1245-4"><a href="multiple-regression.html#cb1245-4"></a><span class="st">  </span><span class="kw">bind_cols</span>(satisf.new) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1245-5"><a href="multiple-regression.html#cb1245-5"></a><span class="st">  </span><span class="kw">arrange</span>(pi.length)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["pi.length"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["anxiety"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["severity"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"44.55769","2":"44.5","3":"2.40","4":"53.5"},{"1":"44.68736","2":"33.0","3":"2.15","4":"48.0"},{"1":"45.32359","2":"44.5","3":"2.15","4":"48.0"},{"1":"45.71819","2":"33.0","3":"2.40","4":"53.5"},{"1":"46.57599","2":"44.5","3":"2.40","4":"48.0"},{"1":"46.90361","2":"33.0","3":"2.40","4":"48.0"},{"1":"47.17276","2":"44.5","3":"2.15","4":"53.5"},{"1":"47.35126","2":"33.0","3":"2.15","4":"53.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Two of these are noticeably shorter than the others. These are high-everything and low-everything. If you
+look back at the scatterplot matrix of (<a href="#part:scatmat">here</a>), you’ll
+see that the explanatory variables have positive correlations with
+each other. This means that when one of them is low, the other ones
+will tend to be low as well (and correspondingly high with high). That
+is, most of the data is at or near the low-low-low end or the
+high-high-high end, and so those values will be easiest to predict for.</p>
+<p>I was actually expecting more of an effect, but what I expected is
+actually there.</p>
+<p>In the backward elimination part (coming up), I found that only
+<code>age</code> and <code>anxiety</code> had a significant impact on
+satisfaction, so I can plot these two explanatory variables against
+each other to see where most of the values are:</p>
+<div class="sourceCode" id="cb1246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1246-1"><a href="multiple-regression.html#cb1246-1"></a><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> anxiety)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-847-1.png" width="672"  /></p>
+<p>There is basically <em>no</em> data with low age and high anxiety, or
+with high age and low anxiety, so these combinations will be difficult
+to predict satisfaction for (and thus their prediction intervals will
+be longer).</p>
+<ol style="list-style-type: lower-roman">
+<li>Carry out a backward elimination to determine which of
+<code>age</code>, <code>severity</code> and <code>anxiety</code> are needed to
+predict satisfaction. What do you get?</li>
+</ol>
+<p>Solution</p>
+<p>This means starting with the regression containing all the explanatory
+variables, which is the one I called <code>satisf.1</code>:</p>
+<div class="sourceCode" id="cb1247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1247-1"><a href="multiple-regression.html#cb1247-1"></a><span class="kw">summary</span>(satisf<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = satis ~ age + severity + anxiety, data = satisf)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -16.954  -7.154   1.550   6.599  14.888 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 162.8759    25.7757   6.319 4.59e-06 ***
+## age          -1.2103     0.3015  -4.015  0.00074 ***
+## severity     -0.6659     0.8210  -0.811  0.42736    
+## anxiety      -8.6130    12.2413  -0.704  0.49021    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.29 on 19 degrees of freedom
+## Multiple R-squared:  0.6727, Adjusted R-squared:  0.621 
+## F-statistic: 13.01 on 3 and 19 DF,  p-value: 7.482e-05</code></pre>
+<p>Pull out the least-significant (highest P-value) variable, which here
+is <code>severity</code>. We already decided that this had nothing to add:</p>
+<div class="sourceCode" id="cb1249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1249-1"><a href="multiple-regression.html#cb1249-1"></a>satisf<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(satisf<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>severity)</span>
+<span id="cb1249-2"><a href="multiple-regression.html#cb1249-2"></a><span class="kw">summary</span>(satisf<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = satis ~ age + anxiety, data = satisf)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -17.868  -6.649   2.506   6.445  16.120 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 147.0751    16.7334   8.789 2.64e-08 ***
+## age          -1.2434     0.2961  -4.199 0.000442 ***
+## anxiety     -15.8906     8.2556  -1.925 0.068593 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 10.2 on 20 degrees of freedom
+## Multiple R-squared:  0.6613, Adjusted R-squared:  0.6275 
+## F-statistic: 19.53 on 2 and 20 DF,  p-value: 1.985e-05</code></pre>
+<p>If you like, copy and paste the first <code>lm</code>, edit it to get rid
+of <code>severity</code>, and run it again. But when I have a
+“small change” to make to a model, I like to use <code>update</code>.</p>
+<p>Having taken <code>severity</code> out, <code>anxiety</code> has become
+strongly significant. Since all of the explanatory variables are now
+significant, this is where we stop. If we’re predicting satisfaction,
+we need to know both a patient’s age and their anxiety score: being
+older or more anxious is associated with a <em>decrease</em> in satisfaction.</p>
+<p>There is also a function <code>step</code> that will do this for you:</p>
+<div class="sourceCode" id="cb1251"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1251-1"><a href="multiple-regression.html#cb1251-1"></a><span class="kw">step</span>(satisf<span class="fl">.1</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<pre><code>## Start:  AIC=110.84
+## satis ~ age + severity + anxiety
+## 
+##            Df Sum of Sq    RSS    AIC F value    Pr(&gt;F)    
+## - anxiety   1     52.41 2064.0 109.43  0.4951 0.4902110    
+## - severity  1     69.65 2081.2 109.62  0.6579 0.4273559    
+## &lt;none&gt;                  2011.6 110.84                      
+## - age       1   1706.67 3718.3 122.97 16.1200 0.0007404 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Step:  AIC=109.43
+## satis ~ age + severity
+## 
+##            Df Sum of Sq    RSS    AIC F value    Pr(&gt;F)    
+## &lt;none&gt;                  2064.0 109.43                      
+## - severity  1    402.78 2466.8 111.53  3.9029 0.0621629 .  
+## - age       1   1960.56 4024.6 122.79 18.9977 0.0003042 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = satis ~ age + severity, data = satisf)
+## 
+## Coefficients:
+## (Intercept)          age     severity  
+##     166.591       -1.260       -1.089</code></pre>
+<p>with the same result. This function doesn’t actually use P-values;
+instead it uses a thing called AIC. At each step, the variable with
+the lowest AIC comes out, and when <code>&lt;none&gt;</code> bubbles up to the
+top, that’s when you stop. The <code>test="F"</code> means
+“include an <span class="math inline">\(F\)</span>-test”, but the procedure still uses AIC (it just shows you an
+<span class="math inline">\(F\)</span>-test each time as well). In this case, the other variables were
+in the same order throughout, but they don’t have to be (in the same
+way that removing one variable from a multiple regression can
+dramatically change the P-values of the ones that remain). Here, at
+the first step, <code>&lt;none&gt;</code> and <code>anxiety</code> were pretty
+close, but when <code>severity</code> came out, taking out nothing was a
+<em>lot</em> better than taking out <code>anxiety</code>.</p>
+<p>The <code>test="F"</code> on the end gets you the P-values. Using the
+<span class="math inline">\(F\)</span>-test is right for regressions; for things like logistic regression
+that we see later, <code>test="Chisq"</code> is the right one to
+use.
+<label for="tufte-mn-103" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-103" class="margin-toggle"><span class="marginnote">This is F in quotes, meaning F-test, not F without quotes, meaning FALSE.</span></p>
+</div>
+<div id="handling-shipments-of-chemicals" class="section level2" number="18.2">
+<h2><span class="header-section-number">18.2</span> Handling shipments of chemicals</h2>
+<p>The data in
+<a href="http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt">link</a>
+are on shipments of chemicals in drums that arrive at a warehouse. In
+order, the variables are:</p>
+<ul>
+<li><p>the number of minutes required to handle the shipment</p></li>
+<li><p>the number of drums in the shipment</p></li>
+<li><p>the total weight of the shipment, in hundreds of pounds.</p></li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li>The data set has two features: <em>no</em> column names, and
+data aligned in columns (that is, more than one space between data
+values). Read the data in, giving the columns suitable names. To do
+this, you may have to consult an appropriate help file, or do some
+searching, perhaps of one of the other questions on this assignment.</li>
+</ol>
+<p>Solution</p>
+<p>The alignment of columns means that we need to use
+<code>read_table</code>. Once you’ve figured <em>that</em> out, you can
+search for help by typing <code>?read_table</code> in the Console
+window (the help will appear bottom right), or you can put the
+same thing into an R Notebook code chunk, and when you run the
+chunk, the help will be displayed. (Press control-shift-1 to go
+back to the notebook.)
+Or you can Google it, of course.
+The key observation is that you need to supply some column names
+in <code>col_names</code>, like this:</p>
+<div class="sourceCode" id="cb1254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1254-1"><a href="multiple-regression.html#cb1254-1"></a>my_url &lt;-<span class="st"> &quot;http://statweb.lsu.edu/EXSTWeb/StatLab/DataSets/NKNWData/CH06PR09.txt&quot;</span></span>
+<span id="cb1254-2"><a href="multiple-regression.html#cb1254-2"></a>cols &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;minutes&quot;</span>, <span class="st">&quot;drums&quot;</span>, <span class="st">&quot;weight&quot;</span>)</span>
+<span id="cb1254-3"><a href="multiple-regression.html#cb1254-3"></a>chemicals &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url, <span class="dt">col_names =</span> cols)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ───────────────────────────────────────────────────────────
+## cols(
+##   minutes = col_double(),
+##   drums = col_double(),
+##   weight = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb1256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1256-1"><a href="multiple-regression.html#cb1256-1"></a>chemicals</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["minutes"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["drums"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"58","2":"7","3":"5.11"},{"1":"152","2":"18","3":"16.72"},{"1":"41","2":"5","3":"3.20"},{"1":"93","2":"14","3":"7.03"},{"1":"101","2":"11","3":"10.98"},{"1":"38","2":"5","3":"4.04"},{"1":"203","2":"23","3":"22.07"},{"1":"78","2":"9","3":"7.03"},{"1":"117","2":"16","3":"10.62"},{"1":"44","2":"5","3":"4.76"},{"1":"121","2":"17","3":"11.02"},{"1":"112","2":"12","3":"9.51"},{"1":"50","2":"6","3":"3.79"},{"1":"82","2":"12","3":"6.45"},{"1":"48","2":"8","3":"4.60"},{"1":"127","2":"15","3":"13.86"},{"1":"140","2":"17","3":"13.03"},{"1":"155","2":"21","3":"15.21"},{"1":"39","2":"6","3":"3.64"},{"1":"90","2":"11","3":"9.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>I like to define my URL and column names up front. You can define
+either of them in the <code>read_table</code>, but it makes that line
+longer. Up to you.</p>
+<p>There is no <code>skip</code> here, because the data file starts right
+away with the data and we want to use all the values: we are
+<em>adding</em> names to what’s in the data file. If you used
+<code>skip</code>, you will be one observation short all the way through,
+and your output will be slightly different from mine all the way
+through.</p>
+<p>Use any names you like, but they should resemble what the columns
+actually represent.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Fit a regression predicting the number of minutes required
+to handle a shipment from the other two variables. Display the results.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb1257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1257-1"><a href="multiple-regression.html#cb1257-1"></a>minutes<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(minutes <span class="op">~</span><span class="st"> </span>drums <span class="op">+</span><span class="st"> </span>weight, <span class="dt">data =</span> chemicals)</span>
+<span id="cb1257-2"><a href="multiple-regression.html#cb1257-2"></a><span class="kw">summary</span>(minutes<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = minutes ~ drums + weight, data = chemicals)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -8.8353 -3.5591 -0.0533  2.4018 15.1515 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.3243     3.1108   1.069      0.3    
+## drums         3.7681     0.6142   6.135 1.10e-05 ***
+## weight        5.0796     0.6655   7.632 6.89e-07 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 5.618 on 17 degrees of freedom
+## Multiple R-squared:  0.9869, Adjusted R-squared:  0.9854 
+## F-statistic: 641.6 on 2 and 17 DF,  p-value: &lt; 2.2e-16</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Explain carefully but briefly what the slope coefficients
+for the two explanatory variables represent. Do their signs
+(positive or negative) make practical sense in the context of
+handling shipments of chemicals?</li>
+</ol>
+<p>Solution</p>
+<p>The slope coefficient for <code>drums</code> is 3.77; this means that
+a shipment with one extra drum (but the same total weight) would
+take on average 3.77 minutes longer to handle. Likewise, the slope
+coefficient for <code>weight</code> is 5.08, so a shipment that
+weighs 1 hundred more pounds but has the same number of drums
+will take 5.08 more minutes to handle.
+Or “each additional drum, all else equal, will take 3.77 more minutes to handle”, or similar wording. You have to get at two
+things: a one-unit increase in the explanatory variable going with
+a certain increase in the response, and <em>also</em> the “all else equal” part. How you say it is up to you, but you need to say it.
+That was two marks. The third one comes from noting that both
+slope coefficients are positive, so making a shipment either
+contain more drums or weigh more makes the handling time longer as
+well. This makes perfect sense, since either kind of increase
+would make the shipment more difficult to handle, and thus take
+longer.
+I was <em>not</em> asking about P-values. There isn’t really much to
+say about those: they’re both significant, so the handling time
+depends on both the total weight and the number of drums. Removing
+either from the regression would be a mistake.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Obtain plots of residuals against fitted values, residuals
+against explanatory variables, and a normal quantile plot of the residuals.</li>
+</ol>
+<p>Solution</p>
+<p>These are the standard plots from a multiple regression. The
+second one requires care, but the first and last should be straightforward.
+Residuals against fitted values:</p>
+<div class="sourceCode" id="cb1259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1259-1"><a href="multiple-regression.html#cb1259-1"></a><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-853-1.png" width="672"  /></p>
+<p>The tricky part about the second one is that the <span class="math inline">\(x\)</span>-values and the
+residuals come from different data frames, which has to get expressed
+in the <code>ggplot</code>. The obvious way is to do the two plots (one
+for each explanatory variable) one at a time:</p>
+<div class="sourceCode" id="cb1260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1260-1"><a href="multiple-regression.html#cb1260-1"></a><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> chemicals<span class="op">$</span>drums, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-854-1.png" width="672"  /></p>
+<p>and</p>
+<div class="sourceCode" id="cb1261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1261-1"><a href="multiple-regression.html#cb1261-1"></a><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> chemicals<span class="op">$</span>weight, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-855-1.png" width="672"  /></p>
+<p>What would also work is to make a data frame first with the things to plot:</p>
+<div class="sourceCode" id="cb1262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1262-1"><a href="multiple-regression.html#cb1262-1"></a>dd &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">weight =</span> chemicals<span class="op">$</span>weight, <span class="dt">drums =</span> chemicals<span class="op">$</span>drums, <span class="dt">res =</span> <span class="kw">resid</span>(minutes<span class="fl">.1</span>))</span></code></pre></div>
+<p>and then:</p>
+<div class="sourceCode" id="cb1263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1263-1"><a href="multiple-regression.html#cb1263-1"></a><span class="kw">ggplot</span>(dd, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> res)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-857-1.png" width="672"  /></p>
+<p>and similarly for <code>drums</code>. The <code>resid</code> with the model
+name in brackets seems to be necessary.</p>
+<p>Another way to approach this is <code>augment</code> from
+<code>broom</code>. That does this:</p>
+<div class="sourceCode" id="cb1264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1264-1"><a href="multiple-regression.html#cb1264-1"></a><span class="kw">library</span>(broom)</span>
+<span id="cb1264-2"><a href="multiple-regression.html#cb1264-2"></a>d &lt;-<span class="st"> </span>minutes<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(chemicals)</span>
+<span id="cb1264-3"><a href="multiple-regression.html#cb1264-3"></a><span class="kw">as_tibble</span>(d)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["minutes"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["drums"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".fitted"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".resid"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".hat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":[".sigma"],"name":[7],"type":["dbl"],"align":["right"]},{"label":[".cooksd"],"name":[8],"type":["dbl"],"align":["right"]},{"label":[".std.resid"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"58","2":"7","3":"5.11","4":"55.65775","5":"2.3422471","6":"0.09133349","7":"5.757770","8":"0.0064101777","9":"0.4374042"},{"1":"152","2":"18","3":"16.72","4":"156.08097","5":"-4.0809706","6":"0.19376540","7":"5.677870","8":"0.0524401531","9":"-0.8090683"},{"1":"41","2":"5","3":"3.20","4":"38.41952","5":"2.5804787","6":"0.13099986","7":"5.748943","8":"0.0122015599","9":"0.4927684"},{"1":"93","2":"14","3":"7.03","4":"91.78733","5":"1.2126695","6":"0.26847934","7":"5.779587","8":"0.0077933871","9":"0.2523955"},{"1":"101","2":"11","3":"10.98","4":"100.54737","5":"0.4526301","6":"0.14900387","7":"5.789147","8":"0.0004452592","9":"0.0873438"},{"1":"38","2":"5","3":"4.04","4":"42.68637","5":"-4.6863746","6":"0.14056367","7":"5.650853","8":"0.0441472158","9":"-0.8998758"},{"1":"203","2":"23","3":"22.07","4":"202.09731","5":"0.9026878","6":"0.42868587","7":"5.782744","8":"0.0113044124","9":"0.2125947"},{"1":"78","2":"9","3":"7.03","4":"72.94678","5":"5.0532196","6":"0.06651639","7":"5.640887","8":"0.0205890007","9":"0.9310377"},{"1":"117","2":"16","3":"10.62","4":"117.55927","5":"-0.5592686","6":"0.13453992","7":"5.788495","8":"0.0005934465","9":"-0.1070162"},{"1":"44","2":"5","3":"4.76","4":"46.34368","5":"-2.3436774","6":"0.16452717","7":"5.754855","8":"0.0136757853","9":"-0.4564404"},{"1":"121","2":"17","3":"11.02","4":"123.35921","5":"-2.3592135","6":"0.17857817","7":"5.753761","8":"0.0155601581","9":"-0.4633792"},{"1":"112","2":"12","3":"9.51","4":"96.84849","5":"15.1515133","6":"0.05138802","7":"4.289987","8":"0.1384778737","9":"2.7692627"},{"1":"50","2":"6","3":"3.79","4":"45.18459","5":"4.8154122","6":"0.11031467","7":"5.648035","8":"0.0341358732","9":"0.9087987"},{"1":"82","2":"12","3":"6.45","4":"81.30495","5":"0.6950502","6":"0.15597401","7":"5.787356","8":"0.0011172659","9":"0.1346761"},{"1":"48","2":"8","3":"4.60","4":"56.83527","5":"-8.8352734","6":"0.09537424","7":"5.304339","8":"0.0960985497","9":"-1.6536286"},{"1":"127","2":"15","3":"13.86","4":"130.24902","5":"-3.2490211","6":"0.12815463","7":"5.724729","8":"0.0187994039","9":"-0.6194200"},{"1":"140","2":"17","3":"13.03","4":"133.56918","5":"6.4308162","6":"0.09698045","7":"5.537776","8":"0.0519524153","9":"1.2046752"},{"1":"155","2":"21","3":"15.21","4":"159.71512","5":"-4.7151240","6":"0.23049569","7":"5.632364","8":"0.0914135514","9":"-0.9568416"},{"1":"39","2":"6","3":"3.64","4":"44.42265","5":"-5.4226497","6":"0.11180602","7":"5.608930","8":"0.0440206341","9":"-1.0242597"},{"1":"90","2":"11","3":"9.57","4":"93.38515","5":"-3.3851519","6":"0.07251911","7":"5.723379","8":"0.0102042828","9":"-0.6257173"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>and then you can use <code>d</code> as the “base” data frame from which
+everything comes:</p>
+<div class="sourceCode" id="cb1265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1265-1"><a href="multiple-regression.html#cb1265-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-859-1.png" width="672"  /></p>
+<p>and</p>
+<div class="sourceCode" id="cb1266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1266-1"><a href="multiple-regression.html#cb1266-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-860-1.png" width="672"  /></p>
+<p>or you can even do that trick to put the two plots on facets:</p>
+<div class="sourceCode" id="cb1267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1267-1"><a href="multiple-regression.html#cb1267-1"></a>d <span class="op">%&gt;%</span></span>
+<span id="cb1267-2"><a href="multiple-regression.html#cb1267-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(drums<span class="op">:</span>weight, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1267-3"><a href="multiple-regression.html#cb1267-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1267-4"><a href="multiple-regression.html#cb1267-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-861-1.png" width="672"  /></p>
+<p>Last, the normal quantile plot:</p>
+<div class="sourceCode" id="cb1268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1268-1"><a href="multiple-regression.html#cb1268-1"></a><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-862-1.png" width="672"  /></p>
+<p>As a check for the grader, there should be four plots, obtained
+somehow: residuals against fitted values, normal quantile plot of
+residuals, residuals against <code>drums</code>, residuals against<br />
+<code>weight</code>.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Do you have any concerns, looking at the residual plots?
+Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The (only) concern I have, looking at those four plots, is the one very
+positive residual, the one around 15. Take that away, and I think
+all of the plots are then acceptable.
+Alternatively, I will take something like “I have no concerns about the form of the relationship”, saying that the <em>kind</em>
+of model being fitted here is OK (no evidence of non-linearity,
+fanning out, that kind of stuff). It’s up to you to decide whether
+you think “concerns” extends to outliers, high-influence points,
+etc.
+The normal quantile plot reveals that the most negative residual,
+the one around <span class="math inline">\(-9\)</span>, is in fact almost exactly as negative as you
+would expect the most negative residual to be, so it is not an
+outlier at all. The residuals are almost exactly normally
+distributed, <em>except</em> for the most positive one.
+I don’t think you can justify fanning-in, since the evidence for
+that is mostly from the single point on the right. The other
+points do not really have residuals closer to zero as you move
+left to right.</p>
+<p>Do <em>not</em> be tempted to pick out everything you can think of wrong
+with these plots. The grader can, and will, take away points if you
+start naming things that are not concerns.</p>
+<p>Extra: what else can I find out about that large-positive-residual
+point? This is where having the “augmented” data frame is a plus:</p>
+<div class="sourceCode" id="cb1269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1269-1"><a href="multiple-regression.html#cb1269-1"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(.resid <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["minutes"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["drums"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":[".fitted"],"name":[4],"type":["dbl"],"align":["right"]},{"label":[".resid"],"name":[5],"type":["dbl"],"align":["right"]},{"label":[".hat"],"name":[6],"type":["dbl"],"align":["right"]},{"label":[".sigma"],"name":[7],"type":["dbl"],"align":["right"]},{"label":[".cooksd"],"name":[8],"type":["dbl"],"align":["right"]},{"label":[".std.resid"],"name":[9],"type":["dbl"],"align":["right"]}],"data":[{"1":"112","2":"12","3":"9.51","4":"96.84849","5":"15.15151","6":"0.05138802","7":"4.289987","8":"0.1384779","9":"2.769263"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>As shown. The predicted number of minutes is 96.8, but the actual
+number of minutes it took is 112. Hence the residual of 15.2.
+Can we find “similar” numbers of <code>drums</code> and
+<code>weight</code> and compare the <code>minutes</code>? Try this:</p>
+<div class="sourceCode" id="cb1270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1270-1"><a href="multiple-regression.html#cb1270-1"></a>chemicals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(</span>
+<span id="cb1270-2"><a href="multiple-regression.html#cb1270-2"></a>  <span class="kw">between</span>(weight, <span class="dv">8</span>, <span class="dv">11</span>),</span>
+<span id="cb1270-3"><a href="multiple-regression.html#cb1270-3"></a>  <span class="kw">between</span>(drums, <span class="dv">10</span>, <span class="dv">14</span>)</span>
+<span id="cb1270-4"><a href="multiple-regression.html#cb1270-4"></a>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["minutes"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["drums"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"101","2":"11","3":"10.98"},{"1":"112","2":"12","3":"9.51"},{"1":"90","2":"11","3":"9.57"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>You might not have seen <code>between</code> before, but it works the way
+you’d expect.
+<label for="tufte-mn-104" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-104" class="margin-toggle"><span class="marginnote">weight between 8 and 11, for example, returning TRUE or FALSE.</span> Two other shipments with similar numbers of drums and
+total weight took around 90–100 minutes to handle, so the 112 does
+look about 15 minutes too long. This was actually an average-sized shipment:</p>
+<div class="sourceCode" id="cb1271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1271-1"><a href="multiple-regression.html#cb1271-1"></a><span class="kw">library</span>(ggrepel)</span>
+<span id="cb1271-2"><a href="multiple-regression.html#cb1271-2"></a>d <span class="op">%&gt;%</span></span>
+<span id="cb1271-3"><a href="multiple-regression.html#cb1271-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_label =</span> <span class="kw">ifelse</span>(.resid <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, <span class="st">&quot;residual +&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1271-4"><a href="multiple-regression.html#cb1271-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> weight, <span class="dt">colour =</span> minutes, <span class="dt">label =</span> my_label)) <span class="op">+</span></span>
+<span id="cb1271-5"><a href="multiple-regression.html#cb1271-5"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-865-1.png" width="672"  /></p>
+<p>so it’s a bit of a mystery why it took so long to handle.</p>
+<p>I had some fun with the graph: if you set <code>colour</code> equal to a
+continuous variable (as <code>minutes</code> is here), you get a
+continuous colour scale, by default from dark blue (small) to light
+blue (large). The number of minutes tends to get larger (lighter) as
+you go up and to the right with bigger shipments. The point labelled
+“residual +” is the one with the large residual; it is a
+noticeably lighter blue than the points around it, meaning that it
+took longer to handle than those points. I used the trick from C32 to
+label “some” (here one) of the points: create a new label variable
+with a <code>mutate</code> and an <code>ifelse</code>, leaving all of the
+other labels blank so you don’t see them.</p>
+<p>The blue colour scheme is a little hard to judge values on. Here’s
+another way to do that:</p>
+<div class="sourceCode" id="cb1272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1272-1"><a href="multiple-regression.html#cb1272-1"></a>d <span class="op">%&gt;%</span></span>
+<span id="cb1272-2"><a href="multiple-regression.html#cb1272-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_label =</span> <span class="kw">ifelse</span>(.resid <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, <span class="st">&quot;residual +&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb1272-3"><a href="multiple-regression.html#cb1272-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> weight, <span class="dt">colour =</span> minutes, <span class="dt">label =</span> my_label)) <span class="op">+</span></span>
+<span id="cb1272-4"><a href="multiple-regression.html#cb1272-4"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>() <span class="op">+</span></span>
+<span id="cb1272-5"><a href="multiple-regression.html#cb1272-5"></a><span class="st">  </span><span class="kw">scale_colour_gradient</span>(<span class="dt">low =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-866-1.png" width="672"  /></p>
+<p>The labelled point is a little more blue (purplish) than the more
+clearly red points near it.</p>
+<p>The other thing to see is that there is also a positive correlation
+between the number of drums and the total weight, which is what you’d
+expect. Unlike with some of our other examples, this wasn’t strong
+enough to cause problems; the separate effects of <code>drums</code> and
+<code>weight</code> on <code>minutes</code> were distinguishable enough to
+allow both explanatory variables to have a strongly significant effect
+on <code>minutes</code>.</p>
+<p>Post scriptum: the “drums” here are not concert-band-type drums, but
+something like this:</p>
+<p><img src="Chemical-Drums-200x200.png" /></p>
+</div>
+<div id="salaries-of-mathematicians" class="section level2" number="18.3">
+<h2><span class="header-section-number">18.3</span> Salaries of mathematicians</h2>
+<p>A researcher in a scientific
+foundation wanted to evaluate the relationship between annual salaries
+of mathematicians and three explanatory variables:</p>
+<ul>
+<li><p>an index of work quality</p></li>
+<li><p>number of years of experience</p></li>
+<li><p>an index of publication success.</p></li>
+</ul>
+<p>The data can be found at
+<a href="http://ritsokiguess.site/datafiles/mathsal.txt">link</a>. Data from
+only a relatively small number of mathematicians were available.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have a sensible number
+of rows and the right number of columns. (What does “a sensible number of rows” mean here?)</li>
+</ol>
+<p>Solution</p>
+<p>This is a tricky one. There are aligned columns, but <em>the column headers are not aligned with them</em>.
+Thus <code>read_table2</code> is what you need.</p>
+<div class="sourceCode" id="cb1273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1273-1"><a href="multiple-regression.html#cb1273-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/mathsal.txt&quot;</span></span>
+<span id="cb1273-2"><a href="multiple-regression.html#cb1273-2"></a>salaries &lt;-<span class="st"> </span><span class="kw">read_table2</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ───────────────────────────────────────────────────────────
+## cols(
+##   salary = col_double(),
+##   workqual = col_double(),
+##   experience = col_double(),
+##   pubsucc = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb1275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1275-1"><a href="multiple-regression.html#cb1275-1"></a>salaries</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["salary"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["workqual"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["experience"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["pubsucc"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"33.2","2":"3.5","3":"9","4":"6.1"},{"1":"40.3","2":"5.3","3":"20","4":"6.4"},{"1":"38.7","2":"5.1","3":"18","4":"7.4"},{"1":"46.8","2":"5.8","3":"33","4":"6.7"},{"1":"41.4","2":"4.2","3":"31","4":"7.5"},{"1":"37.5","2":"6.0","3":"13","4":"5.9"},{"1":"39.0","2":"6.8","3":"25","4":"6.0"},{"1":"40.7","2":"5.5","3":"30","4":"4.0"},{"1":"30.1","2":"3.1","3":"5","4":"5.8"},{"1":"52.9","2":"7.2","3":"47","4":"8.3"},{"1":"38.2","2":"4.5","3":"25","4":"5.0"},{"1":"31.8","2":"4.9","3":"11","4":"6.4"},{"1":"43.3","2":"8.0","3":"23","4":"7.6"},{"1":"44.1","2":"6.5","3":"35","4":"7.0"},{"1":"42.8","2":"6.6","3":"39","4":"5.0"},{"1":"33.6","2":"3.7","3":"21","4":"4.4"},{"1":"34.2","2":"6.2","3":"7","4":"5.5"},{"1":"48.0","2":"7.0","3":"40","4":"7.0"},{"1":"38.0","2":"4.0","3":"35","4":"6.0"},{"1":"35.9","2":"4.5","3":"23","4":"3.5"},{"1":"40.4","2":"5.9","3":"33","4":"4.9"},{"1":"36.8","2":"5.6","3":"27","4":"4.3"},{"1":"45.2","2":"4.8","3":"34","4":"8.0"},{"1":"35.1","2":"3.9","3":"15","4":"5.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>24 observations (“only a relatively small number”) and 4 columns,
+one for the response and one each for the explanatory variables.</p>
+<p>Or, if you like,</p>
+<div class="sourceCode" id="cb1276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1276-1"><a href="multiple-regression.html#cb1276-1"></a><span class="kw">dim</span>(salaries)</span></code></pre></div>
+<pre><code>## [1] 24  4</code></pre>
+<p>for the second part: 24 rows and 4 columns again.
+I note, with only 24 observations, that we don’t really have enough
+data to investigate the effects of three explanatory variables, but
+we’ll do the best we can. If the pattern, whatever it is, is clear
+enough, we should be OK.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Make scatterplots of <code>salary</code> against each of the three explanatory variables. If you can, do this with <em>one</em> <code>ggplot</code>.</li>
+</ol>
+<p>Solution</p>
+<p>The obvious way to do this is as three separate scatterplots,
+and that will definitely work. But you can do it in one go if
+you think about facets, and about having all the <span class="math inline">\(x\)</span>-values in
+one column (and the names of the <span class="math inline">\(x\)</span>-variables in another
+column):</p>
+<div class="sourceCode" id="cb1278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1278-1"><a href="multiple-regression.html#cb1278-1"></a>salaries <span class="op">%&gt;%</span></span>
+<span id="cb1278-2"><a href="multiple-regression.html#cb1278-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>salary, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1278-3"><a href="multiple-regression.html#cb1278-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> salary)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1278-4"><a href="multiple-regression.html#cb1278-4"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/ivybridge-1.png" width="672"  /></p>
+<p>If you don’t see how that works, run it yourself, one line at a time.</p>
+<p>I was thinking ahead a bit while I was coding that: I wanted the three
+plots to come out about square, and I wanted the plots to have their
+own scales. The last thing in the <code>facet_wrap</code> does the latter,
+and arranging the plots in two columns (thinking of the plots as a set
+of four with one missing) gets them more or less square.</p>
+<p>If you don’t think of those, try it without, and then fix up what you
+don’t like.</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Comment briefly on the direction and strength of each
+relationship with <code>salary</code>.</li>
+</ol>
+<p>Solution</p>
+<p>To my mind, all of the three relationships are going uphill (that’s the “direction” part). <code>experience</code> is the
+strongest, and <code>pubsucc</code> looks the weakest (that’s the
+“strength” part). If you want to say there is no relationship
+with <code>pubsucc</code>, that’s fine too. This is a judgement
+call.
+Note that all the relationships are more or less linear (no
+obvious curves here). We could also investigate the relationships
+among the explanatory variables:</p>
+<div class="sourceCode" id="cb1279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1279-1"><a href="multiple-regression.html#cb1279-1"></a><span class="kw">cor</span>(salaries)</span></code></pre></div>
+<pre><code>##               salary  workqual experience   pubsucc
+## salary     1.0000000 0.6670958  0.8585582 0.5581960
+## workqual   0.6670958 1.0000000  0.4669511 0.3227612
+## experience 0.8585582 0.4669511  1.0000000 0.2537530
+## pubsucc    0.5581960 0.3227612  0.2537530 1.0000000</code></pre>
+<p>Mentally cut off the first row and column (<code>salary</code> is the
+response). None of the remaining correlations are all that high, so we
+ought not to have any multicollinearity problems.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><a name="regone">*</a> Fit a regression predicting salary from the other three
+variables, and obtain a <code>summary</code> of the results.</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb1281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1281-1"><a href="multiple-regression.html#cb1281-1"></a>salaries<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(salary <span class="op">~</span><span class="st"> </span>workqual <span class="op">+</span><span class="st"> </span>experience <span class="op">+</span><span class="st"> </span>pubsucc, <span class="dt">data =</span> salaries)</span>
+<span id="cb1281-2"><a href="multiple-regression.html#cb1281-2"></a><span class="kw">summary</span>(salaries<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = salary ~ workqual + experience + pubsucc, data = salaries)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -3.2463 -0.9593  0.0377  1.1995  3.3089 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 17.84693    2.00188   8.915 2.10e-08 ***
+## workqual     1.10313    0.32957   3.347 0.003209 ** 
+## experience   0.32152    0.03711   8.664 3.33e-08 ***
+## pubsucc      1.28894    0.29848   4.318 0.000334 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.753 on 20 degrees of freedom
+## Multiple R-squared:  0.9109, Adjusted R-squared:  0.8975 
+## F-statistic: 68.12 on 3 and 20 DF,  p-value: 1.124e-10</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>How can we justify the statement
+“one or more of the explanatory variables helps to predict salary”? How is this
+consistent with the value of R-squared?</li>
+</ol>
+<p>Solution</p>
+<p>“One or more of the explanatory variables helps” is an
+invitation to consider the (global) <span class="math inline">\(F\)</span>-test for the whole
+regression. This has the very small P-value of <span class="math inline">\(1.124\times 10^{-10}\)</span> (from the bottom line of the output): very small, so
+one or more of the explanatory variables <em>does</em> help, and
+the statement is correct.
+The idea that something helps to predict salary suggests
+(especially with such a small number of observations) that we
+should have a high R-squared. In this case, R-squared is 0.9109,
+which is indeed high.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Would you consider removing any of the variables from this
+regression? Why, or why not?</li>
+</ol>
+<p>Solution</p>
+<p>Look at the P-values attached to each variable. These are all
+very small: 0.003, 0.00000003 and 0.0003, way smaller than
+0.05. So it would be a mistake to
+take any, even one, of the variables out: doing so would make the
+regression much worse.
+If you need convincing of that, see what happens when we take
+the variable with the highest P-value out — this is <code>workqual</code>:</p>
+<div class="sourceCode" id="cb1283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1283-1"><a href="multiple-regression.html#cb1283-1"></a>salaries<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(salary <span class="op">~</span><span class="st"> </span>experience <span class="op">+</span><span class="st"> </span>pubsucc, <span class="dt">data =</span> salaries)</span>
+<span id="cb1283-2"><a href="multiple-regression.html#cb1283-2"></a><span class="kw">summary</span>(salaries<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = salary ~ experience + pubsucc, data = salaries)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -5.2723 -0.7865 -0.3983  1.7277  3.2060 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 21.02546    2.14819   9.788 2.82e-09 ***
+## experience   0.37376    0.04104   9.107 9.70e-09 ***
+## pubsucc      1.52753    0.35331   4.324    3e-04 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 2.137 on 21 degrees of freedom
+## Multiple R-squared:  0.8609, Adjusted R-squared:  0.8477 
+## F-statistic:    65 on 2 and 21 DF,  p-value: 1.01e-09</code></pre>
+<p>R-squared has gone down from 91% to 86%: maybe not so much in the
+grand scheme of things, but it is noticeably less. Perhaps better,
+since we are comparing models with different numbers of explanatory
+variables, is to compare the <em>adjusted</em> R-squared: this has gone
+down from 90% to 85%. The fact that this has gone down <em>at all</em>
+is enough to say that taking out <code>workqual</code> was a
+mistake.
+<label for="tufte-mn-105" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-105" class="margin-toggle"><span class="marginnote">Adjusted R-squareds are easier to compare in this context, since you don’t have to make a judgement about whether it has changed substantially, whatever you think substantially means.</span></p>
+<p>Another way of seeing whether a variable has anything to add in a
+regression containing the others is a <strong>partial regression plot</strong>.
+We take the residuals from <code>salaries.2</code> above and plot
+them against the variable we removed, namely
+<code>workqual</code>.
+<label for="tufte-mn-106" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-106" class="margin-toggle"><span class="marginnote">The residuals have to be the ones from a regression <em>not</em> including the <span class="math inline">\(x\)</span>-variable you’re testing.</span> If
+<code>workqual</code> has nothing to add, there will be no pattern; if it
+<em>does</em> have something to add, there will be a trend. Like
+this. I use <code>augment</code> from <code>broom</code>:</p>
+<div class="sourceCode" id="cb1285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1285-1"><a href="multiple-regression.html#cb1285-1"></a><span class="kw">library</span>(broom)</span>
+<span id="cb1285-2"><a href="multiple-regression.html#cb1285-2"></a>salaries<span class="fl">.2</span> <span class="op">%&gt;%</span></span>
+<span id="cb1285-3"><a href="multiple-regression.html#cb1285-3"></a><span class="st">  </span><span class="kw">augment</span>(salaries) <span class="op">%&gt;%</span></span>
+<span id="cb1285-4"><a href="multiple-regression.html#cb1285-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> workqual, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/dartington-1.png" width="672"  /></p>
+<p>This is a mostly straight upward trend. So we
+need to add a linear term in <code>workqual</code> to the
+regression.
+<label for="tufte-mn-107" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-107" class="margin-toggle"><span class="marginnote">Or not take it out in the first place.</span></p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Do you think it would be a mistake to take <em>both</em> of
+<code>workqual</code> and <code>pubsucc</code> out of the regression? Do a
+suitable test. Was your guess right?</li>
+</ol>
+<p>Solution</p>
+<p>I think it would be a big mistake. Taking even one of these
+variables out of the regression is a bad idea (from the
+<span class="math inline">\(t\)</span>-tests), so taking out more than one would be a <em>really</em> bad idea.
+To perform a test, fit the model without these two explanatory variables:</p>
+<div class="sourceCode" id="cb1286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1286-1"><a href="multiple-regression.html#cb1286-1"></a>salaries<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(salary <span class="op">~</span><span class="st"> </span>experience, <span class="dt">data =</span> salaries)</span></code></pre></div>
+<p>and then use <code>anova</code> to compare the two regressions, smaller
+model first:</p>
+<div class="sourceCode" id="cb1287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1287-1"><a href="multiple-regression.html#cb1287-1"></a><span class="kw">anova</span>(salaries<span class="fl">.3</span>, salaries<span class="fl">.1</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Res.Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Df"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"22","2":"181.1912","3":"NA","4":"NA","5":"NA","6":"NA","_rn_":"1"},{"1":"20","2":"61.4430","3":"2","4":"119.7482","5":"19.48931","6":"2.010732e-05","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The P-value is extremely small, so the bigger model is definitely
+better than the smaller one: we really do need all three
+variables. Which is what we guessed.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Back in part (<a href="#regone">here</a>), you fitted a regression with all
+three explanatory variables. By making suitable plots, assess
+whether there is any evidence that (i) that the linear model should
+be a curve, (ii) that the residuals are not normally
+distributed, (iii) that there is “fan-out”, where the residuals are getting
+bigger <em>in size</em> as the fitted values get bigger? Explain
+briefly how you came to your conclusions in each case.</li>
+</ol>
+<p>Solution</p>
+<p>I intended that (i) should just be a matter of looking at residuals
+vs. fitted values:</p>
+<div class="sourceCode" id="cb1288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1288-1"><a href="multiple-regression.html#cb1288-1"></a><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-874-1.png" width="672"  /></p>
+<p>There is no appreciable pattern on here, so no evidence of a curve (or
+apparently of any other problems).</p>
+<p>Extra: you might read this that we should check residuals against the
+<span class="math inline">\(x\)</span>-variables as well, which is a similar trick to the above one for
+plotting response against each of the explanatories. There is one step
+first, though: use <code>augment</code> from <code>broom</code> first to get a
+dataframe with the original <span class="math inline">\(x\)</span>-variables <em>and</em> the residuals in
+it. The following thus looks rather complicated, and if it confuses
+you, run the code a piece at a time to see what it’s doing:</p>
+<div class="sourceCode" id="cb1289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1289-1"><a href="multiple-regression.html#cb1289-1"></a>salaries<span class="fl">.1</span> <span class="op">%&gt;%</span></span>
+<span id="cb1289-2"><a href="multiple-regression.html#cb1289-2"></a><span class="st">  </span><span class="kw">augment</span>(salaries) <span class="op">%&gt;%</span></span>
+<span id="cb1289-3"><a href="multiple-regression.html#cb1289-3"></a><span class="st">  </span><span class="kw">pivot_longer</span>(workqual<span class="op">:</span>pubsucc, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1289-4"><a href="multiple-regression.html#cb1289-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1289-5"><a href="multiple-regression.html#cb1289-5"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-875-1.png" width="672"  /></p>
+<p>These three residual plots are also pretty much textbook random, so no problems here either.</p>
+<p>For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:</p>
+<div class="sourceCode" id="cb1290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1290-1"><a href="multiple-regression.html#cb1290-1"></a><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-876-1.png" width="672"  /></p>
+<p>That is really pretty good. Maybe the <em>second</em> smallest point is
+a bit far off the line, but otherwise there’s nothing to worry about. A
+quick place to look for problems is the extreme observations, and the
+largest and smallest residuals are almost exactly the size we’d expect
+them to be.</p>
+<p>Our graph for assessing fan-in or fan-out is to plot the <em>absolute</em> values of the residuals against the fitted values. The plot from (i) suggests that we won’t have any problems here, but to investigate:</p>
+<div class="sourceCode" id="cb1291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1291-1"><a href="multiple-regression.html#cb1291-1"></a><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-877-1.png" width="672"  /></p>
+<p>This is pretty nearly straight across. You might think it increases a
+bit at the beginning, but most of the evidence for that comes from the
+one observation with fitted value near 30 that happens to have a
+residual near zero. Conclusions based on one observation are not to be
+trusted!
+In summary, I’m happy with this linear multiple regression, and I
+don’t see any need to do anything more with it. I am, however, willing
+to have some sympathy with opinions that differ from mine, if they are
+supported by those graphs above.</p>
+</div>
+<div id="predicting-gpa-of-computer-science-students" class="section level2" number="18.4">
+<h2><span class="header-section-number">18.4</span> Predicting GPA of computer science students</h2>
+<p>The file
+<a href="http://ritsokiguess.site/datafiles/gpa.txt">link</a> contains some
+measurements of academic achievement for a number of university
+students studying computer science:</p>
+<ul>
+<li><p>High school grade point average</p></li>
+<li><p>Math SAT score</p></li>
+<li><p>Verbal SAT score</p></li>
+<li><p>Computer Science grade point average</p></li>
+<li><p>Overall university grade point average.</p></li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and display it (or at least the first ten lines).</li>
+</ol>
+<p>Solution</p>
+<p>The usual:</p>
+<div class="sourceCode" id="cb1293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1293-1"><a href="multiple-regression.html#cb1293-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/gpa.txt&quot;</span></span>
+<span id="cb1293-2"><a href="multiple-regression.html#cb1293-2"></a>gpa &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ───────────────────────────────────────────────────────────
+## cols(
+##   high_GPA = col_double(),
+##   math_SAT = col_double(),
+##   verb_SAT = col_double(),
+##   comp_GPA = col_double(),
+##   univ_GPA = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb1295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1295-1"><a href="multiple-regression.html#cb1295-1"></a>gpa</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["high_GPA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["math_SAT"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["verb_SAT"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["comp_GPA"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["univ_GPA"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.45","2":"643","3":"589","4":"3.76","5":"3.52"},{"1":"2.78","2":"558","3":"512","4":"2.87","5":"2.91"},{"1":"2.52","2":"583","3":"503","4":"2.54","5":"2.40"},{"1":"3.67","2":"685","3":"602","4":"3.83","5":"3.47"},{"1":"3.24","2":"592","3":"538","4":"3.29","5":"3.47"},{"1":"2.10","2":"562","3":"486","4":"2.64","5":"2.37"},{"1":"2.82","2":"573","3":"548","4":"2.86","5":"2.40"},{"1":"2.36","2":"559","3":"536","4":"2.03","5":"2.24"},{"1":"2.42","2":"552","3":"583","4":"2.81","5":"3.02"},{"1":"3.51","2":"617","3":"591","4":"3.41","5":"3.32"},{"1":"3.48","2":"684","3":"649","4":"3.61","5":"3.59"},{"1":"2.14","2":"568","3":"592","4":"2.48","5":"2.54"},{"1":"2.59","2":"604","3":"582","4":"3.21","5":"3.19"},{"1":"3.46","2":"619","3":"624","4":"3.52","5":"3.71"},{"1":"3.51","2":"642","3":"619","4":"3.41","5":"3.58"},{"1":"3.68","2":"683","3":"642","4":"3.52","5":"3.40"},{"1":"3.91","2":"703","3":"684","4":"3.84","5":"3.73"},{"1":"3.72","2":"712","3":"652","4":"3.64","5":"3.49"},{"1":"2.15","2":"564","3":"501","4":"2.14","5":"2.25"},{"1":"2.48","2":"557","3":"549","4":"2.21","5":"2.37"},{"1":"3.09","2":"591","3":"584","4":"3.17","5":"3.29"},{"1":"2.71","2":"599","3":"562","4":"3.01","5":"3.19"},{"1":"2.46","2":"607","3":"619","4":"3.17","5":"3.28"},{"1":"3.32","2":"619","3":"558","4":"3.01","5":"3.37"},{"1":"3.61","2":"700","3":"721","4":"3.72","5":"3.61"},{"1":"3.82","2":"718","3":"732","4":"3.78","5":"3.81"},{"1":"2.64","2":"580","3":"538","4":"2.51","5":"2.40"},{"1":"2.19","2":"562","3":"507","4":"2.10","5":"2.21"},{"1":"3.34","2":"683","3":"648","4":"3.21","5":"3.58"},{"1":"3.48","2":"717","3":"724","4":"3.68","5":"3.51"},{"1":"3.56","2":"701","3":"714","4":"3.48","5":"3.62"},{"1":"3.81","2":"691","3":"684","4":"3.71","5":"3.60"},{"1":"3.92","2":"714","3":"706","4":"3.81","5":"3.65"},{"1":"4.00","2":"689","3":"673","4":"3.84","5":"3.76"},{"1":"2.52","2":"554","3":"507","4":"2.09","5":"2.27"},{"1":"2.71","2":"564","3":"543","4":"2.17","5":"2.35"},{"1":"3.15","2":"668","3":"604","4":"2.98","5":"3.17"},{"1":"3.22","2":"691","3":"662","4":"3.28","5":"3.47"},{"1":"2.29","2":"573","3":"591","4":"2.74","5":"3.00"},{"1":"2.03","2":"568","3":"517","4":"2.19","5":"2.74"},{"1":"3.14","2":"607","3":"624","4":"3.28","5":"3.37"},{"1":"3.52","2":"651","3":"683","4":"3.68","5":"3.54"},{"1":"2.91","2":"604","3":"583","4":"3.17","5":"3.28"},{"1":"2.83","2":"560","3":"542","4":"3.17","5":"3.39"},{"1":"2.65","2":"604","3":"617","4":"3.31","5":"3.28"},{"1":"2.41","2":"574","3":"548","4":"3.07","5":"3.19"},{"1":"2.54","2":"564","3":"500","4":"2.38","5":"2.52"},{"1":"2.66","2":"607","3":"528","4":"2.94","5":"3.08"},{"1":"3.21","2":"619","3":"573","4":"2.84","5":"3.01"},{"1":"3.34","2":"647","3":"608","4":"3.17","5":"3.42"},{"1":"3.68","2":"651","3":"683","4":"3.72","5":"3.60"},{"1":"2.84","2":"571","3":"543","4":"2.17","5":"2.40"},{"1":"2.74","2":"583","3":"510","4":"2.42","5":"2.83"},{"1":"2.71","2":"554","3":"538","4":"2.49","5":"2.38"},{"1":"2.24","2":"568","3":"519","4":"3.38","5":"3.21"},{"1":"2.48","2":"574","3":"602","4":"2.07","5":"2.24"},{"1":"3.14","2":"605","3":"619","4":"3.22","5":"3.40"},{"1":"2.83","2":"591","3":"584","4":"2.71","5":"3.07"},{"1":"3.44","2":"642","3":"608","4":"3.31","5":"3.52"},{"1":"2.89","2":"608","3":"573","4":"3.28","5":"3.47"},{"1":"2.67","2":"574","3":"538","4":"3.19","5":"3.08"},{"1":"3.24","2":"643","3":"607","4":"3.24","5":"3.38"},{"1":"3.29","2":"608","3":"649","4":"3.53","5":"3.41"},{"1":"3.87","2":"709","3":"688","4":"3.72","5":"3.64"},{"1":"3.94","2":"691","3":"645","4":"3.98","5":"3.71"},{"1":"3.42","2":"667","3":"583","4":"3.09","5":"3.01"},{"1":"3.52","2":"656","3":"609","4":"3.42","5":"3.37"},{"1":"2.24","2":"554","3":"542","4":"2.07","5":"2.34"},{"1":"3.29","2":"692","3":"563","4":"3.17","5":"3.29"},{"1":"3.41","2":"684","3":"672","4":"3.51","5":"3.40"},{"1":"3.56","2":"717","3":"649","4":"3.49","5":"3.38"},{"1":"3.61","2":"712","3":"708","4":"3.51","5":"3.28"},{"1":"3.28","2":"641","3":"608","4":"3.40","5":"3.31"},{"1":"3.21","2":"675","3":"632","4":"3.38","5":"3.42"},{"1":"3.48","2":"692","3":"698","4":"3.54","5":"3.39"},{"1":"3.62","2":"684","3":"609","4":"3.48","5":"3.51"},{"1":"2.92","2":"564","3":"591","4":"3.09","5":"3.17"},{"1":"2.81","2":"554","3":"509","4":"3.14","5":"3.20"},{"1":"3.11","2":"685","3":"694","4":"3.28","5":"3.41"},{"1":"3.28","2":"671","3":"609","4":"3.41","5":"3.29"},{"1":"2.70","2":"571","3":"503","4":"3.02","5":"3.17"},{"1":"2.62","2":"582","3":"591","4":"2.97","5":"3.12"},{"1":"3.72","2":"621","3":"589","4":"4.00","5":"3.71"},{"1":"3.42","2":"651","3":"642","4":"3.34","5":"3.50"},{"1":"3.51","2":"673","3":"681","4":"3.28","5":"3.34"},{"1":"3.28","2":"651","3":"640","4":"3.32","5":"3.48"},{"1":"3.42","2":"672","3":"607","4":"3.51","5":"3.44"},{"1":"3.90","2":"591","3":"587","4":"3.68","5":"3.59"},{"1":"3.12","2":"582","3":"612","4":"3.07","5":"3.28"},{"1":"2.83","2":"609","3":"555","4":"2.78","5":"3.00"},{"1":"2.09","2":"554","3":"480","4":"3.68","5":"3.42"},{"1":"3.17","2":"612","3":"590","4":"3.30","5":"3.41"},{"1":"3.28","2":"628","3":"580","4":"3.34","5":"3.49"},{"1":"3.02","2":"567","3":"602","4":"3.17","5":"3.28"},{"1":"3.42","2":"619","3":"623","4":"3.07","5":"3.17"},{"1":"3.06","2":"691","3":"683","4":"3.19","5":"3.24"},{"1":"2.76","2":"564","3":"549","4":"2.15","5":"2.34"},{"1":"3.19","2":"650","3":"684","4":"3.11","5":"3.28"},{"1":"2.23","2":"551","3":"554","4":"2.17","5":"2.29"},{"1":"2.48","2":"568","3":"541","4":"2.14","5":"2.08"},{"1":"3.76","2":"605","3":"590","4":"3.74","5":"3.64"},{"1":"3.49","2":"692","3":"683","4":"3.27","5":"3.42"},{"1":"3.07","2":"680","3":"692","4":"3.19","5":"3.25"},{"1":"2.19","2":"617","3":"503","4":"2.98","5":"2.76"},{"1":"3.46","2":"516","3":"528","4":"3.28","5":"3.41"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Two SAT scores and three GPAs, as promised.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><a name="part:hsu-scatter">*</a> Make a scatterplot of high school GPA against university
+GPA. Which variable should be the response and which
+explanatory? Explain briefly. Add a smooth trend to your plot.</li>
+</ol>
+<p>Solution</p>
+<p>High school comes before university, so high school should be
+explanatory and university should be the response. (High school
+grades are used as an admission criterion to university, so we
+would hope they would have some predictive value.)</p>
+<div class="sourceCode" id="cb1296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1296-1"><a href="multiple-regression.html#cb1296-1"></a><span class="kw">ggplot</span>(gpa, <span class="kw">aes</span>(<span class="dt">x =</span> high_GPA, <span class="dt">y =</span> univ_GPA)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb1296-2"><a href="multiple-regression.html#cb1296-2"></a><span class="st">  </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-879-1.png" width="672"  /></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Describe any relationship on your scatterplot: its direction, its
+strength and its shape. Justify your description briefly.</li>
+</ol>
+<p>Solution</p>
+<p>Taking these points one at a time:</p>
+<ul>
+<li><p>direction: upward (a higher high-school GPA generally goes
+with a higher university GPA as well. Or you can say that the
+lowest high-school GPAs go with the lowest university GPAs,
+and high with high, at least most of the time).</p></li>
+<li><p>strength: something like moderately strong, since while
+the trend is upward, there is quite a lot of scatter. (This is
+a judgement call: something that indicates that you are basing
+your description on something reasonable is fine.)</p></li>
+<li><p>shape: I’d call this “approximately linear” since there
+is no clear curve here. The smooth trend wiggles a bit, but
+not enough to make me doubt a straight line.</p></li>
+</ul>
+<p>Looking ahead, I also notice that when high-school GPA is high,
+university GPA is also consistently high, but when high-school
+GPA is low, the university GPA is sometimes low and sometimes
+high, a lot more variable. (This suggests problems with fan-in
+later.) In a practical sense, what this seems to show is that
+people who do well at university usually did well in high-school
+as well, but sometimes their high-school grades were not
+that good. This is especially true for people with university
+GPAs around 3.25.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li><a name="part:highonly">*</a> Fit a linear regression for predicting university GPA
+from high-school GPA and display the results.</li>
+</ol>
+<p>Solution</p>
+<p>Just this, therefore:</p>
+<div class="sourceCode" id="cb1298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1298-1"><a href="multiple-regression.html#cb1298-1"></a>gpa<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(univ_GPA <span class="op">~</span><span class="st"> </span>high_GPA, <span class="dt">data =</span> gpa)</span>
+<span id="cb1298-2"><a href="multiple-regression.html#cb1298-2"></a><span class="kw">summary</span>(gpa<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.69040 -0.11922  0.03274  0.17397  0.91278 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.09682    0.16663   6.583 1.98e-09 ***
+## high_GPA     0.67483    0.05342  12.632  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2814 on 103 degrees of freedom
+## Multiple R-squared:  0.6077, Adjusted R-squared:  0.6039 
+## F-statistic: 159.6 on 1 and 103 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Extra: this question goes on too long, so I didn’t ask you to look at the
+residuals from this model, but my comments earlier suggested that we
+might have had some problems with fanning-in (the variability of
+predictions getting less as the high-school GPA increases). In case
+you are interested, I’ll look at this here. First, residuals against
+fitted values:</p>
+<div class="sourceCode" id="cb1300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1300-1"><a href="multiple-regression.html#cb1300-1"></a><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-881-1.png" width="672"  /></p>
+<p>Is that evidence of a trend in the residuals? Dunno. I’m inclined to
+call this an “inconsequential wiggle” and say it’s OK. Note that the
+grey envelope includes zero all the way across.</p>
+<p>Normal quantile plot of residuals:</p>
+<div class="sourceCode" id="cb1302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1302-1"><a href="multiple-regression.html#cb1302-1"></a><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-882-1.png" width="672"  /></p>
+<p>A somewhat long-tailed distribution: compared to a normal
+distribution, the residuals are a bit too big in size, both on the
+positive and negative end.</p>
+<p>The problem I was really worried about was the potential of
+fanning-in, which we can assess by looking at the absolute residuals:</p>
+<div class="sourceCode" id="cb1303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1303-1"><a href="multiple-regression.html#cb1303-1"></a><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-883-1.png" width="672"  /></p>
+<p>That is definitely a downward trend in the size of the residuals, and
+I think I was right to be worried before. The residuals should be of
+similar size all the way across.</p>
+<p>The usual problem of this kind is fanning-<em>out</em>, where the
+residuals get <em>bigger</em> in size as the fitted values increase. The
+bigger values equals more spread is the kind of thing that a
+transformation like taking logs will handle: the bigger values are all
+brought downwards, so they will be both smaller and less variable than
+they were. This one, though, goes the other way, so the only kind of
+transformation that might help is one at the other end of the scale
+(think of the Box-Cox lambda scale), something like maybe reciprocal,
+<span class="math inline">\(\lambda=-1\)</span> maybe.</p>
+<p>The other thought I had was that there is this kind of break around a
+high-school GPA of 3 (go back to the scatterplot of (<a href="#part:hsu-scatter">here</a>)): when the
+high-school GPA is higher than 3, the university GPA is very
+consistent (and shows a clear upward trend), but when the high-school
+GPA is less than 3, the university GPA is very variable and there
+doesn’t seem to be any trend at all. So maybe two separate analyses
+would be the way to go.</p>
+<p>All right, how does Box-Cox work out here, if at all?</p>
+<div class="sourceCode" id="cb1305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1305-1"><a href="multiple-regression.html#cb1305-1"></a><span class="kw">library</span>(MASS)</span>
+<span id="cb1305-2"><a href="multiple-regression.html#cb1305-2"></a><span class="kw">boxcox</span>(univ_GPA <span class="op">~</span><span class="st"> </span>high_GPA, <span class="dt">data =</span> gpa)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-884-1.png" width="672"  /></p>
+<p>It doesn’t. All right, that answers <em>that</em> question.</p>
+<p>When I loaded <code>MASS</code>, I also loaded its <code>select</code>
+function,
+<label for="tufte-mn-108" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-108" class="margin-toggle"><span class="marginnote">That is what that masked message above was about.</span> and I might want to use the
+<code>tidyverse</code> <code>select</code>
+function later, and things could get confused. So let’s “unload”
+<code>MASS</code> now:</p>
+<div class="sourceCode" id="cb1306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1306-1"><a href="multiple-regression.html#cb1306-1"></a><span class="kw">detach</span>(<span class="st">&quot;package:MASS&quot;</span>, <span class="dt">unload =</span> T)</span></code></pre></div>
+<pre><code>## Warning: &#39;MASS&#39; namespace cannot be unloaded:
+##   namespace &#39;MASS&#39; is imported by &#39;PMCMRplus&#39;, &#39;lme4&#39; so cannot be unloaded</code></pre>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Two students have been admitted to university. One has
+a high school GPA of 3.0 and the other a high school GPA of<br />
+3.5. Obtain suitable intervals that summarize the GPAs that each of these
+two students might obtain in university.</li>
+</ol>
+<p>Solution</p>
+<p>Since we are talking about individual students, rather than
+the mean of <em>all</em> students with these GPAs, prediction
+intervals are called for. The first step is to make a data
+frame to predict from. This has to contain columns for all the
+explanatory variables, just <code>high_GPA</code> in this case:</p>
+<div class="sourceCode" id="cb1308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1308-1"><a href="multiple-regression.html#cb1308-1"></a>gpa.new &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">high_GPA =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="fl">3.5</span>))</span>
+<span id="cb1308-2"><a href="multiple-regression.html#cb1308-2"></a>gpa.new</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["high_GPA"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.0"},{"1":"3.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>and then feed that into <code>predict</code>:</p>
+<div class="sourceCode" id="cb1309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1309-1"><a href="multiple-regression.html#cb1309-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(gpa<span class="fl">.1</span>, gpa.new, <span class="dt">interval =</span> <span class="st">&quot;p&quot;</span>)</span>
+<span id="cb1309-2"><a href="multiple-regression.html#cb1309-2"></a>preds</span></code></pre></div>
+<pre><code>##        fit      lwr      upr
+## 1 3.121313 2.560424 3.682202
+## 2 3.458728 2.896105 4.021351</code></pre>
+<p>and display that side by side with the values it was predicted from:</p>
+<div class="sourceCode" id="cb1311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1311-1"><a href="multiple-regression.html#cb1311-1"></a><span class="kw">cbind</span>(gpa.new, preds)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["high_GPA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["fit"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lwr"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["upr"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.0","2":"3.121313","3":"2.560424","4":"3.682202","_rn_":"1"},{"1":"3.5","2":"3.458728","3":"2.896105","4":"4.021351","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>or this way, if you like it better:</p>
+<div class="sourceCode" id="cb1312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1312-1"><a href="multiple-regression.html#cb1312-1"></a><span class="kw">as_tibble</span>(preds) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_cols</span>(gpa.new) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(high_GPA, <span class="kw">everything</span>())</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["high_GPA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["fit"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lwr"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["upr"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.0","2":"3.121313","3":"2.560424","4":"3.682202"},{"1":"3.5","2":"3.458728","3":"2.896105","4":"4.021351"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Thus the predicted university GPA for the student with high school GPA
+3.0 is between 2.6 and 3.7, and for the student with high school GPA
+3.5 is between 2.9 and 4.0. (I think this is a good number of decimals
+to give, but in any case, you should actually <em>say</em> what the
+intervals are.)</p>
+<p>I observe that these intervals are almost exactly the same
+length. This surprises me a bit, since I would have said that 3.0 is
+close to the average high-school GPA and 3.5 is noticeably higher. If
+that’s the case, the prediction interval for 3.5 should be longer
+(since there is less “nearby data”). Was I right about that?</p>
+<div class="sourceCode" id="cb1313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1313-1"><a href="multiple-regression.html#cb1313-1"></a>gpa <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(</span>
+<span id="cb1313-2"><a href="multiple-regression.html#cb1313-2"></a>  <span class="dt">mean =</span> <span class="kw">mean</span>(high_GPA),</span>
+<span id="cb1313-3"><a href="multiple-regression.html#cb1313-3"></a>  <span class="dt">med =</span> <span class="kw">median</span>(high_GPA),</span>
+<span id="cb1313-4"><a href="multiple-regression.html#cb1313-4"></a>  <span class="dt">q1 =</span> <span class="kw">quantile</span>(high_GPA, <span class="fl">0.25</span>),</span>
+<span id="cb1313-5"><a href="multiple-regression.html#cb1313-5"></a>  <span class="dt">q3 =</span> <span class="kw">quantile</span>(high_GPA, <span class="fl">0.75</span>)</span>
+<span id="cb1313-6"><a href="multiple-regression.html#cb1313-6"></a>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["mean"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["med"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["q1"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["q3"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.076381","2":"3.17","3":"2.67","4":"3.48","_row":"25%"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>More or less: the mean is close to 3, and 3.5 is close to the third
+quartile. So the thing about the length of the prediction interval is
+a bit of a mystery. Maybe it works better for the confidence interval
+for the mean:</p>
+<div class="sourceCode" id="cb1314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1314-1"><a href="multiple-regression.html#cb1314-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(gpa<span class="fl">.1</span>, gpa.new, <span class="dt">interval =</span> <span class="st">&quot;c&quot;</span>)</span>
+<span id="cb1314-2"><a href="multiple-regression.html#cb1314-2"></a><span class="kw">cbind</span>(gpa.new, preds)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["high_GPA"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["fit"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["lwr"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["upr"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"3.0","2":"3.121313","3":"3.066243","4":"3.176383","_rn_":"1"},{"1":"3.5","2":"3.458728","3":"3.388147","4":"3.529309","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These intervals are a lot shorter, since we are talking about
+<em>all</em> students with the high-school GPAs in question, and we
+therefore no longer have to worry about variation from student to
+student (which is considerable). But my supposition about length is
+now correct: the interval for 3.5, which is further from the mean, is
+a little longer than the interval for 3.0. Thinking about it, it seems
+that the individual-to-individual variation, which is large, is
+dominating things for our prediction interval above.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li><a name="part:all">*</a> Now obtain a regression predicting university GPA from
+high-school GPA as well as the two SAT scores. Display your results.</li>
+</ol>
+<p>Solution</p>
+<p>Create a new regression with all the explanatory variables you want in it:</p>
+<div class="sourceCode" id="cb1315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1315-1"><a href="multiple-regression.html#cb1315-1"></a>gpa<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(univ_GPA <span class="op">~</span><span class="st"> </span>high_GPA <span class="op">+</span><span class="st"> </span>math_SAT <span class="op">+</span><span class="st"> </span>verb_SAT, <span class="dt">data =</span> gpa)</span>
+<span id="cb1315-2"><a href="multiple-regression.html#cb1315-2"></a><span class="kw">summary</span>(gpa<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + math_SAT + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68186 -0.13189  0.01289  0.16186  0.93994 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.5793478  0.3422627   1.693   0.0936 .  
+## high_GPA    0.5454213  0.0850265   6.415  4.6e-09 ***
+## math_SAT    0.0004893  0.0010215   0.479   0.6330    
+## verb_SAT    0.0010202  0.0008123   1.256   0.2120    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2784 on 101 degrees of freedom
+## Multiple R-squared:  0.6236, Adjusted R-squared:  0.6124 
+## F-statistic: 55.77 on 3 and 101 DF,  p-value: &lt; 2.2e-16</code></pre>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Test whether adding the two SAT scores has improved the
+prediction of university GPA. What do you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>Since we added <em>two</em> explanatory variables, the <span class="math inline">\(t\)</span>-tests in
+<code>gpa.2</code> don’t apply (they tell us whether we can take out
+<em>one</em> <span class="math inline">\(x\)</span>-variable). We might have some suspicions, but that’s
+all they are. So we have to do <code>anova</code>:</p>
+<div class="sourceCode" id="cb1317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1317-1"><a href="multiple-regression.html#cb1317-1"></a><span class="kw">anova</span>(gpa<span class="fl">.1</span>, gpa<span class="fl">.2</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Res.Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Df"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"103","2":"8.158723","3":"NA","4":"NA","5":"NA","6":"NA","_rn_":"1"},{"1":"101","2":"7.828840","3":"2","4":"0.329883","5":"2.127913","6":"0.1243939","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>If you put the models the other way around, you’ll get a negative
+<span class="math inline">\(F\)</span>-statistic and degrees of freedom, which doesn’t make
+much sense (although the test will still work).</p>
+<p>The null hypothesis here is that the two models fit equally
+well. Since the P-value is not small, we do not reject that null
+hypothesis, and therefore we conclude that the two models <em>do</em>
+fit equally well, and therefore we prefer the smaller one, the one
+that predicts university GPA from just high-school GPA. (Or,
+equivalently, we conclude that those two SAT scores don’t add anything
+to the prediction of how well a student will do at university, once
+you know their high-school GPA.)</p>
+<p>This might surprise you, given what the SATs are supposed to be
+<em>for</em>. But that’s what the data say.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Carry out a backward elimination starting out from your
+model in part (<a href="#part:all">here</a>). Which model do you end up with?
+Is it the same model as you fit in (<a href="#part:highonly">here</a>)?</li>
+</ol>
+<p>Solution</p>
+<p>In the model of (<a href="#part:all">here</a>), <code>math_SAT</code> was the
+least significant, so that comes out first. (I use
+<code>update</code> but I’m not insisting that you do:)</p>
+<div class="sourceCode" id="cb1318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1318-1"><a href="multiple-regression.html#cb1318-1"></a>gpa<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">update</span>(gpa<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>math_SAT)</span>
+<span id="cb1318-2"><a href="multiple-regression.html#cb1318-2"></a><span class="kw">summary</span>(gpa<span class="fl">.3</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68430 -0.11268  0.01802  0.14901  0.95239 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2774 on 102 degrees of freedom
+## Multiple R-squared:  0.6227, Adjusted R-squared:  0.6153 
+## F-statistic: 84.18 on 2 and 102 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Here is where we have to stop, since both high-school GPA and
+verbal SAT score are significant, and so taking either of them
+out would be a bad idea.
+This is a <em>different</em> model than the one of
+(<a href="#part:highonly">here</a>). This is the case, even though the model
+with high-school GPA only was not significantly worse than the
+model containing everything. (This goes to show that
+model-building doesn’t always have nice clear answers.)
+In the model I called <code>gpa.2</code>, neither of the SAT
+scores were anywhere near significant (considered singly), but
+as soon as we took out one of the SAT scores (my model
+<code>gpa.3</code>), the other one became significant. This goes
+to show that you shouldn’t take out more than one explanatory
+variable based on the results of the <span class="math inline">\(t\)</span>-tests, and even if
+you test to see whether you should have taken out both of the SAT,
+you won’t necessarily get consistent
+results. Admittedly, it’s a close decision whether to
+keep or remove <code>verb_SAT</code>, since its P-value is
+close to 0.05.
+The other way of tackling this one is via <code>step</code>, which
+does the backward elimination for you (not that it was much
+work here):</p>
+<div class="sourceCode" id="cb1320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1320-1"><a href="multiple-regression.html#cb1320-1"></a><span class="kw">step</span>(gpa<span class="fl">.2</span>, <span class="dt">direction =</span> <span class="st">&quot;backward&quot;</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<pre><code>## Start:  AIC=-264.6
+## univ_GPA ~ high_GPA + math_SAT + verb_SAT
+## 
+##            Df Sum of Sq     RSS     AIC F value    Pr(&gt;F)    
+## - math_SAT  1    0.0178  7.8466 -266.36  0.2294     0.633    
+## - verb_SAT  1    0.1223  7.9511 -264.97  1.5777     0.212    
+## &lt;none&gt;                   7.8288 -264.60                      
+## - high_GPA  1    3.1896 11.0184 -230.71 41.1486 4.601e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Step:  AIC=-266.36
+## univ_GPA ~ high_GPA + verb_SAT
+## 
+##            Df Sum of Sq     RSS     AIC F value    Pr(&gt;F)    
+## &lt;none&gt;                   7.8466 -266.36                      
+## - verb_SAT  1    0.3121  8.1587 -264.26  4.0571   0.04662 *  
+## - high_GPA  1    4.1562 12.0028 -223.73 54.0268 5.067e-11 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Coefficients:
+## (Intercept)     high_GPA     verb_SAT  
+##    0.683872     0.562833     0.001265</code></pre>
+<p>This gives the same result as we did from our backward
+elimination. The tables with AIC in them are each step of
+the elimination, and the variable at the top is the one that comes out
+next. (When <code>&lt;none&gt;</code> gets to the top, that’s when you stop.)
+What happened is that the two SAT scores started off highest, but once
+we removed <code>math_SAT</code>, <code>verb_SAT</code> jumped below
+<code>&lt;none&gt;</code> and so the verbal SAT score had to stay.</p>
+<p>Both the P-value and the AIC say that the decision about keeping or
+removing <code>verb_SAT</code> is very close.</p>
+<ol style="list-style-type: lower-roman">
+<li>These students were studying computer science at
+university. Do you find your backward-elimination result
+sensible or surprising, given this? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>I would expect computer science students to be strong students
+generally, good at math and possibly not so good with
+words. So it is not surprising that high-school GPA figures
+into the prediction, but I would expect math SAT score to have
+an impact also, and it does not. It is also rather surprising
+that verbal SAT score predicts success at university for these
+computer science students; you wouldn’t think that having
+better skills with words would be helpful. So I’m surprised.
+Here, I’m looking for some kind of discussion about what’s in
+the final backward-elimination model, and what you would
+expect to be true of computer science students.
+Let’s look at the final model from the backward elimination again:</p>
+<div class="sourceCode" id="cb1323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1323-1"><a href="multiple-regression.html#cb1323-1"></a><span class="kw">summary</span>(gpa<span class="fl">.3</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + verb_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68430 -0.11268  0.01802  0.14901  0.95239 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.6838723  0.2626724   2.604   0.0106 *  
+## high_GPA    0.5628331  0.0765729   7.350 5.07e-11 ***
+## verb_SAT    0.0012654  0.0006283   2.014   0.0466 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2774 on 102 degrees of freedom
+## Multiple R-squared:  0.6227, Adjusted R-squared:  0.6153 
+## F-statistic: 84.18 on 2 and 102 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The two slope estimates are both positive, meaning that, all else
+equal, a higher value for each explanatory variable goes with a higher
+university GPA. This indicates that a higher verbal SAT score goes
+with a higher university GPA: this is across all the university
+courses that a student takes, which you would expect to be math and
+computer science courses for a Comp Sci student, but might include
+a few electives or writing courses. Maybe what is happening is that
+the math SAT score is telling the same story as the high-school GPA
+for these students, and the verbal SAT score is saying something
+different. (For example, prospective computer science students are
+mostly likely to have high math SAT scores, so there’s not much
+information there.)</p>
+<p>I think I need to look at the correlations:</p>
+<div class="sourceCode" id="cb1325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1325-1"><a href="multiple-regression.html#cb1325-1"></a><span class="kw">cor</span>(gpa)</span></code></pre></div>
+<pre><code>##           high_GPA  math_SAT  verb_SAT  comp_GPA  univ_GPA
+## high_GPA 1.0000000 0.7681423 0.7261478 0.7914721 0.7795631
+## math_SAT 0.7681423 1.0000000 0.8352272 0.6877209 0.6627837
+## verb_SAT 0.7261478 0.8352272 1.0000000 0.6387512 0.6503012
+## comp_GPA 0.7914721 0.6877209 0.6387512 1.0000000 0.9390459
+## univ_GPA 0.7795631 0.6627837 0.6503012 0.9390459 1.0000000</code></pre>
+<p>We’ll ignore <code>comp_GPA</code> (i) because we haven’t been thinking
+about it and (ii) because it’s highly correlated with the university
+GPA anyway. (There isn’t a sense that one of the two university GPAs
+is explanatory and the other is a response, since students are taking
+the courses that contribute to them at the same time.)</p>
+<p>The highest correlation with university GPA of what remains is
+high-school GPA, so it’s not at all surprising that this features in
+all our regressions. The correlations between university GPA and the
+two SAT scores are about equal, so there appears to be no reason to
+favour one of the SAT scores over the other. But, the two SAT scores
+are highly correlated with <em>each other</em> (0.835), which suggests
+that if you have one, you don’t need the other, because they are
+telling more or less the same story.</p>
+<p>That makes me wonder how a regression with the SAT math score and
+<em>not</em> the SAT verbal score would look:</p>
+<div class="sourceCode" id="cb1327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1327-1"><a href="multiple-regression.html#cb1327-1"></a>gpa<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(univ_GPA <span class="op">~</span><span class="st"> </span>high_GPA <span class="op">+</span><span class="st"> </span>math_SAT, <span class="dt">data =</span> gpa)</span>
+<span id="cb1327-2"><a href="multiple-regression.html#cb1327-2"></a><span class="kw">summary</span>(gpa<span class="fl">.4</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = univ_GPA ~ high_GPA + math_SAT, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.68079 -0.12264  0.00741  0.16579  0.90010 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 0.6072916  0.3425047   1.773   0.0792 .  
+## high_GPA    0.5710745  0.0827705   6.899  4.5e-10 ***
+## math_SAT    0.0012980  0.0007954   1.632   0.1058    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2792 on 102 degrees of freedom
+## Multiple R-squared:  0.6177, Adjusted R-squared:  0.6102 
+## F-statistic:  82.4 on 2 and 102 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Math SAT does not quite significantly add anything to the prediction,
+which confirms that we do better to use the verbal SAT score
+(surprising though it seems). Though, the two regressions with the
+single SAT scores, <code>gpa.3</code> and <code>gpa.4</code>, have almost the
+same R-squared values. It’s not clear-cut at all. In the end, you have
+to make a call and stand by it.</p>
+
+</div>
+</div>
+<p style="text-align: center;">
+<a href="simple-regression.html"><button class="btn btn-default">Previous</button></a>
+<a href="dates-and-times.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
