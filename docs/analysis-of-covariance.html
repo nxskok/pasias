@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 29 Analysis of covariance | Problems and Solutions in Applied Statistics" />
+<meta property="og:type" content="book" />
+<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+
+<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+<meta name="github-repo" content="nxskok/pasias" />
+
+<meta name="author" content="Ken Butler" />
+
+<meta name="date" content="2021-04-26" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+
+<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+
+<title>Chapter 29 Analysis of covariance | Problems and Solutions in Applied Statistics</title>
+
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
+<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="toc.css" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div class="row">
+<div class="col-sm-12">
+<div id="TOC">
+<ul>
+<li><a href="index.html#introduction"><span class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="index.html#packages-used-somewhere-in-this-book"><span class="toc-section-number">1.1</span> Packages used somewhere in this book</a></li>
+</ul></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">2</span> Getting used to R and R Studio</a>
+<ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">2.1</span> Getting an R Studio Cloud account</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">2.2</span> Getting started</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">2.3</span> Reading data from a file</a></li>
+<li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><span class="toc-section-number">2.4</span> Reading files different ways</a></li>
+</ul></li>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">3</span> Reading in data</a>
+<ul>
+<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">3.1</span> Orange juice</a></li>
+<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">3.2</span> Making soap</a></li>
+<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">4</span> Drawing graphs</a>
+<ul>
+<li><a href="drawing-graphs.html#orange-juice-1"><span class="toc-section-number">4.1</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-1"><span class="toc-section-number">4.2</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-1"><span class="toc-section-number">4.3</span> Handling shipments</a></li>
+</ul></li>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">5</span> Data exploration</a>
+<ul>
+<li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">5.1</span> North Carolina births</a></li>
+<li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">5.2</span> More about the NC births</a></li>
+<li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">5.3</span> Nenana, Alaska</a></li>
+<li><a href="data-exploration.html#computerized-accounting"><span class="toc-section-number">5.4</span> Computerized accounting</a></li>
+<li><a href="data-exploration.html#test-scores-in-two-classes"><span class="toc-section-number">5.5</span> Test scores in two classes</a></li>
+</ul></li>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">6</span> Working with dataframes</a>
+<ul>
+<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">6.1</span> Tidying the Jays data</a></li>
+<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">6.2</span> Cars</a></li>
+</ul></li>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">7</span> One-sample inference</a>
+<ul>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">7.1</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">7.2</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">7.3</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">7.4</span> Inferring ice break-up in Nenana</a></li>
+</ul></li>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">8</span> Two-sample inference</a>
+<ul>
+<li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">8.1</span> Children and electronic devices</a></li>
+<li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">8.2</span> Parking close to the curb</a></li>
+<li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">8.3</span> Bell peppers and too much water</a></li>
+<li><a href="two-sample-inference.html#exercise-and-anxiety-and-bullying-mice"><span class="toc-section-number">8.4</span> Exercise and anxiety and bullying mice</a></li>
+<li><a href="two-sample-inference.html#diet-and-growth-in-boys"><span class="toc-section-number">8.5</span> Diet and growth in boys</a></li>
+</ul></li>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">9</span> Power and sample size</a>
+<ul>
+<li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">9.1</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">9.2</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">9.3</span> Simulating power for proportions</a></li>
+</ul></li>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">10</span> The sign test</a>
+<ul>
+<li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">10.1</span> Running a maze</a></li>
+<li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">10.2</span> Chocolate chips</a></li>
+<li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">10.3</span> The power of the sign test</a></li>
+</ul></li>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">11</span> Mood’s median test</a>
+<ul>
+<li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">11.1</span> Sugar in breakfast cereals</a></li>
+<li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">11.2</span> Fear of math</a></li>
+<li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">11.3</span> Medical instructions</a></li>
+</ul></li>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">12</span> Matched pairs t and sign test</a>
+<ul>
+<li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">12.1</span> Measuring body fat</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">12.2</span> Throwing baseballs and softballs</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">12.3</span> Throwing baseballs and softballs, again</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#changes-in-salary"><span class="toc-section-number">12.4</span> Changes in salary</a></li>
+<li><a href="matched-pairs-t-and-sign-test.html#body-fat-revisited"><span class="toc-section-number">12.5</span> Body fat revisited</a></li>
+</ul></li>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">13</span> Normal quantile plots</a>
+<ul>
+<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">13.1</span> Lengths of heliconia flowers</a></li>
+<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">13.2</span> Ferritin and normality</a></li>
+</ul></li>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">14</span> Analysis of variance</a>
+<ul>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">14.1</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">14.2</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">14.3</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">14.4</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">14.5</span> Can caffeine improve your performance on a test?</a></li>
+</ul></li>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">15</span> Writing reports</a>
+<ul>
+<li><a href="writing-reports.html#atomic-weight-of-carbon-1"><span class="toc-section-number">15.1</span> Atomic weight of carbon</a></li>
+<li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">15.2</span> Sparrowhawks</a></li>
+</ul></li>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">16</span> Tidying data</a>
+<ul>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">16.1</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">16.2</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">16.3</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">16.4</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">16.5</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">16.6</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">16.7</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">16.8</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">16.9</span> Feeling the heat</a></li>
+</ul></li>
+<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">17</span> Simple regression</a>
+<ul>
+<li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">17.1</span> Rainfall in California</a></li>
+<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">17.2</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">17.3</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="simple-regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">17.4</span> Facebook friends and grey matter</a></li>
+<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">17.5</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="simple-regression.html#salaries-of-social-workers"><span class="toc-section-number">17.6</span> Salaries of social workers</a></li>
+<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">17.7</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="simple-regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">17.8</span> Tortoise shells and eggs</a></li>
+<li><a href="simple-regression.html#roller-coasters"><span class="toc-section-number">17.9</span> Roller coasters</a></li>
+<li><a href="simple-regression.html#running-and-blood-sugar"><span class="toc-section-number">17.10</span> Running and blood sugar</a></li>
+<li><a href="simple-regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">17.11</span> Calories and fat in pizza</a></li>
+<li><a href="simple-regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">17.12</span> Where should the fire stations be?</a></li>
+</ul></li>
+<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">18</span> Multiple regression</a>
+<ul>
+<li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">18.1</span> Being satisfied with hospital</a></li>
+<li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">18.2</span> Handling shipments of chemicals</a></li>
+<li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">18.3</span> Salaries of mathematicians</a></li>
+<li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">18.4</span> Predicting GPA of computer science students</a></li>
+</ul></li>
+<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">19</span> Regression with categorical variables</a>
+<ul>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">19.1</span> Crickets revisited</a></li>
+</ul></li>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">20</span> Dates and times</a>
+<ul>
+<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">20.1</span> Growth of Mizuna lettuce seeds</a></li>
+<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">20.2</span> Types of childbirth</a></li>
+<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">20.3</span> Wolves and caribou</a></li>
+<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">20.4</span> Dealing with dates in the Worcester Heart Attack study</a></li>
+</ul></li>
+<li><a href="functions.html#functions"><span class="toc-section-number">21</span> Functions</a>
+<ul>
+<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">21.1</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">21.2</span> The Collatz sequence</a></li>
+</ul></li>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
+<ul>
+<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
+<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
+</ul></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
+<ul>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
+</ul></li>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
+<ul>
+<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
+<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
+<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
+<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">24.4</span> What makes an animal get infected?</a></li>
+<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">24.5</span> The brain of a cat</a></li>
+<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">24.6</span> How not to get heart disease</a></li>
+<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">24.7</span> Successful breastfeeding</a></li>
+<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">24.8</span> Making it over the mountains</a></li>
+<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">24.9</span> Who needs the most intensive care?</a></li>
+<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">24.10</span> Go away and don’t come back!</a></li>
+</ul></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#logistic-regression-with-ordinal-or-nominal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal or nominal response</a>
+<ul>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">25.4</span> How do you like your steak?</a></li>
+<li><a href="logistic-regression-with-ordinal-or-nominal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">25.5</span> How do you like your steak – the data</a></li>
+</ul></li>
+<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">26</span> Logistic regression with ordinal response</a>
+<ul>
+<li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values-1"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
+<li><a href="logistic-regression-with-ordinal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
+<li><a href="logistic-regression-with-ordinal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
+<li><a href="logistic-regression-with-ordinal-response.html#crimes-in-san-francisco"><span class="toc-section-number">26.4</span> Crimes in San Francisco</a></li>
+<li><a href="logistic-regression-with-ordinal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">26.5</span> Crimes in San Francisco – the data</a></li>
+<li><a href="logistic-regression-with-ordinal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">26.6</span> What sports do these athletes play?</a></li>
+</ul></li>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
+<ul>
+<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
+<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
+<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
+<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">27.4</span> Ovarian cancer</a></li>
+</ul></li>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
+<ul>
+<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
+<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
+<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
+<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">28.4</span> Who studies the most outside class?</a></li>
+<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">28.5</span> Mental context</a></li>
+<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">28.6</span> Trying on shirts</a></li>
+</ul></li>
+<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
+<ul>
+<li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
+<li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
+</ul></li>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
+<ul>
+<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
+<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
+<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
+</ul></li>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
+<ul>
+<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
+<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
+<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
+<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">31.4</span> Body fat as repeated measures</a></li>
+<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">31.5</span> Investigating motor activity in rats</a></li>
+<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">31.6</span> Repeated measures with no background</a></li>
+</ul></li>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
+<ul>
+<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
+<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
+<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
+<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">32.4</span> What distinguishes people who do different jobs?</a></li>
+<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">32.5</span> Observing children with ADHD</a></li>
+<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">32.6</span> Growing corn</a></li>
+<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">32.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
+</ul></li>
+<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
+<ul>
+<li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
+<li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
+<li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
+<li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">33.4</span> Bridges in Pittsburgh</a></li>
+</ul></li>
+<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
+<ul>
+<li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
+<li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
+<li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
+<li><a href="k-means-cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">34.4</span> Grouping similar cars</a></li>
+<li><a href="k-means-cluster-analysis.html#rating-beer"><span class="toc-section-number">34.5</span> Rating beer</a></li>
+</ul></li>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
+<ul>
+<li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
+<li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
+</ul></li>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
+<ul>
+<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
+<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
+<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
+<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">36.4</span> More beer please</a></li>
+<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">36.5</span> Feeling similar, again</a></li>
+</ul></li>
+<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
+<ul>
+<li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
+</ul></li>
+<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
+<ul>
+<li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
+<li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
+<li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
+</ul></li>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
+<ul>
+<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="analysis-of-covariance" class="section level1" number="29">
+<h1><span class="header-section-number">Chapter 29</span> Analysis of covariance</h1>
+<p>Packages for this chapter:</p>
+<div class="sourceCode" id="cb2366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2366-1"><a href="analysis-of-covariance.html#cb2366-1"></a><span class="kw">library</span>(MASS)</span>
+<span id="cb2366-2"><a href="analysis-of-covariance.html#cb2366-2"></a><span class="kw">library</span>(car)</span>
+<span id="cb2366-3"><a href="analysis-of-covariance.html#cb2366-3"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="productivity-and-research-and-development" class="section level2" number="29.1">
+<h2><span class="header-section-number">29.1</span> Productivity and research-and-development</h2>
+<p>An economist compiled data on productivity improvements for
+a sample of companies that produce electronic equipment. The companies
+were classified according to their expenditures on research and
+development in the last three years (classified as low, moderate,
+high). Productivity improvement is measured on a 0–100 scale, with
+most values being between 0 and 10. The economist also thought that
+last year’s productivity improvement would be relevant, and so
+recorded this as well.</p>
+<p>The data set can be found at
+<a href="http://ritsokiguess.site/datafiles/productivity.txt">link</a>.</p>
+<p>Feel free to use “R&amp;D” as an abbreviation for
+“research and development” in your answers below.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in and display at least some of the data.</li>
+</ol>
+<p>Solution</p>
+<p>The data values are separated by one space, so let’s use
+<code>read_delim</code> and display whatever displays (probably the
+first ten lines):</p>
+<div class="sourceCode" id="cb2367"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2367-1"><a href="analysis-of-covariance.html#cb2367-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/productivity.txt&quot;</span></span>
+<span id="cb2367-2"><a href="analysis-of-covariance.html#cb2367-2"></a>productivity &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## cols(
+##   expenditure = col_character(),
+##   improvement = col_double(),
+##   last = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb2369"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2369-1"><a href="analysis-of-covariance.html#cb2369-1"></a>productivity</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["expenditure"],"name":[1],"type":["chr"],"align":["left"]},{"label":["improvement"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["last"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"low","2":"7.6","3":"8.2"},{"1":"low","2":"8.2","3":"7.9"},{"1":"low","2":"6.8","3":"7.0"},{"1":"low","2":"5.8","3":"5.7"},{"1":"low","2":"6.9","3":"7.2"},{"1":"low","2":"6.6","3":"7.0"},{"1":"low","2":"6.3","3":"6.5"},{"1":"low","2":"7.7","3":"7.9"},{"1":"low","2":"6.0","3":"6.3"},{"1":"moderate","2":"6.7","3":"8.8"},{"1":"moderate","2":"8.1","3":"10.0"},{"1":"moderate","2":"9.4","3":"10.7"},{"1":"moderate","2":"8.6","3":"10.0"},{"1":"moderate","2":"7.8","3":"9.7"},{"1":"moderate","2":"7.7","3":"9.4"},{"1":"moderate","2":"8.9","3":"10.6"},{"1":"moderate","2":"7.9","3":"9.8"},{"1":"moderate","2":"8.3","3":"10.0"},{"1":"moderate","2":"8.7","3":"10.3"},{"1":"moderate","2":"7.1","3":"8.9"},{"1":"moderate","2":"8.4","3":"10.0"},{"1":"high","2":"8.5","3":"11.5"},{"1":"high","2":"9.7","3":"12.2"},{"1":"high","2":"10.1","3":"12.8"},{"1":"high","2":"7.8","3":"11.0"},{"1":"high","2":"9.6","3":"12.3"},{"1":"high","2":"9.5","3":"12.1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>There is a column classifying expenditure along with numerical values
+for productivity improvement for this year and last year (labelled
+<code>improvement</code> and <code>last</code>), so it looks as if we are
+good.</p>
+<p>You are free to give the data frame a shorter name to make it easier
+to keep typing it!</p>
+<p>Extra: those expenditure levels (that are currently text) will get
+sorted into alphabetical order unless we stop them. They are actually
+in the right order in the data file, so maybe we should turn them into
+a factor (with the levels in the right order) now:</p>
+<div class="sourceCode" id="cb2370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2370-1"><a href="analysis-of-covariance.html#cb2370-1"></a>productivity <span class="op">%&gt;%</span></span>
+<span id="cb2370-2"><a href="analysis-of-covariance.html#cb2370-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">expenditure =</span> <span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</span></code></pre></div>
+<p>If you don’t do this, your answers below will be different from
+mine. Probably not in any kind of consequential way, but different
+nonetheless.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Plot productivity improvement for this year against last
+year, identifying the points by the level of
+research-and-development expenditure. On your plot, add regression
+lines for each expenditure group.</li>
+</ol>
+<p>Solution</p>
+<p>Two quantitative and one categorical variable, so plot the
+categorical variable using colour (or <code>shape</code> etc., if you
+know about that, but colour is the most obvious thing):</p>
+<div class="sourceCode" id="cb2371"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2371-1"><a href="analysis-of-covariance.html#cb2371-1"></a><span class="kw">ggplot</span>(productivity, <span class="kw">aes</span>(<span class="dt">x =</span> last, <span class="dt">y =</span> improvement, <span class="dt">colour =</span> expenditure)) <span class="op">+</span></span>
+<span id="cb2371-2"><a href="analysis-of-covariance.html#cb2371-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-1520-1.png" width="672"  /></p>
+<p>The <code>se=F</code> is optional; no problem if you don’t include it. (If
+you miss it out, you’ll get those CI-of-mean-response grey envelopes
+around each line.)</p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><a name="part:graph-comment">*</a>
+Look at your graph of the previous part. Do you think that (i)
+knowing last year’s productivity improvement tells you something
+about this year’s, (ii) the level of expenditure on
+research-and-development has an impact on this year’s productivity
+improvement, (iii) there is an interaction effect between R&amp;D
+expenditure and last year’s productivity increase on this year’s
+productivity increase? In each case, explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>Taking the three things in turn:
+(i) knowing about last year’s productivity increase definitely
+helps, because the three trends definitely go up (extra: and are
+pretty much linear).
+(ii) knowing about the level of expenditure helps because the
+coloured trends are in different places (low on the
+left and high on the right, whatever colours they are for you).
+(iii) I am guessing there is no interaction because the three
+lines look more or less parallel (a judgement call: if you think
+that there <em>will</em> be an interaction because you think the
+lines are definitely not “approximately parallel” and therefore
+there is an interaction, that’s OK too).</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Fit an analysis of covariance model without interaction. Run
+the results through <code>drop1</code> with <code>test="F"</code> (the
+<code>F</code> must be in quotes). What do you conclude?</li>
+</ol>
+<p>Solution</p>
+<p>This looks exactly like a regression with a categorical variable,
+and is. Just the two main effects, thus:</p>
+<div class="sourceCode" id="cb2373"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2373-1"><a href="analysis-of-covariance.html#cb2373-1"></a>improvement<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(improvement <span class="op">~</span><span class="st"> </span>last <span class="op">+</span><span class="st"> </span>expenditure, <span class="dt">data =</span> productivity)</span>
+<span id="cb2373-2"><a href="analysis-of-covariance.html#cb2373-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"1.317535","4":"-73.542006","5":"NA","6":"NA","_rn_":"<none>"},{"1":"1","2":"14.044687","3":"15.362222","4":"-9.225988","5":"245.17589","6":"9.273750e-14","_rn_":"last"},{"1":"2","2":"4.195826","3":"5.513361","4":"-38.893885","5":"36.62294","6":"7.095379e-08","_rn_":"expenditure"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Both the P-values are small, so there is strong evidence of an effect
+on this year’s productivity increase of last year’s productivity
+increase and the level of R&amp;D expenditure.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Now look at the <code>summary</code> of your analysis of
+covariance model. Explain briefly how each of the <em>last three</em>
+numbers in the <code>Estimate</code> column are consistent with your graph.</li>
+</ol>
+<p>Solution</p>
+<p>To begin:</p>
+<div class="sourceCode" id="cb2374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2374-1"><a href="analysis-of-covariance.html#cb2374-1"></a><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = improvement ~ last + expenditure, data = productivity)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.52812 -0.16385 -0.00046  0.08379  0.45730 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         -1.00804    0.50991  -1.977   0.0602 .  
+## last                 1.11417    0.07116  15.658 9.27e-14 ***
+## expendituremoderate -1.83316    0.22372  -8.194 2.84e-08 ***
+## expenditurehigh     -3.14338    0.37115  -8.469 1.59e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2393 on 23 degrees of freedom
+## Multiple R-squared:  0.9629, Adjusted R-squared:  0.958 
+## F-statistic: 198.8 on 3 and 23 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The last three numbers in the Estimate column are slopes for the
+quantitative variable <code>last</code> and changes in intercept for the
+levels of the categorical variable <code>expenditure</code>. Specifically:</p>
+<ul>
+<li><p>the slope for <code>last</code> is positive, so if last year’s
+productivity increase is higher, this year’s will be higher as well.
+This matches
+the upward trends within each <code>expenditure</code> group on the
+graph.</p></li>
+<li><p><code>expenditure</code> is categorical, so everything is measured
+relative to the baseline. Mine is <code>low</code>, but yours is probably <code>high</code>.</p></li>
+<li><p>My two estimates for <code>expenditure</code> <code>high</code> and
+<code>moderate</code> are both negative, so when expenditure on R&amp;D is
+high or moderate, the productivity increase will be lower this year
+(for the same productivity increase last year). Going back to the
+graph, if you extend the lines for <code>moderate</code> and <code>high</code> to
+a middling <code>last</code> value of something like 10, the
+productivity increase this year will be higher when
+<code>expenditure</code> is low or moderate then when it is high, which
+is consistent with those slopes both being positive. (You don’t need
+to go to this detail, but you should say something convincing from
+the graph about how this year’s productivity increase is
+<em>higher</em> if R&amp;D expenditure is low or moderate compared to
+high.)</p></li>
+</ul>
+<p>Extra: the graph also indicates that the higher the
+<code>expenditure</code> on R&amp;D is, the more likely last year’s
+productivity improvement will be higher also. So in practice we are
+not likely to be comparing actual companies with different
+<code>expenditure</code> but the same <code>last</code>. Nonetheless, what I
+said is what those positive coefficients for <code>expenditure</code>
+actually mean. Be careful not to say that <code>low</code> is lowest
+because it’s on the left; it’s whether it’s higher or lower than the
+others <em>at the same value of <code>last</code></em> that matters.</p>
+<p>Extra extra: I asked you to do the test from <code>drop1</code> because
+there are three levels of <code>expenditure</code> (rather than just two),
+and the <code>summary</code> output only gives you a comparison with the
+baseline level, rather than comparing all three
+levels. I prefer to do the right test (using <code>drop1</code>) first,
+and then use <code>summary</code> to interpret what I have, or at least
+the parts of it that are significant.</p>
+<p>Extra extra extra: you would (or at least I would) expect a larger
+productivity increase to go with a <em>larger</em> expenditure on R&amp;D,
+but that’s not how it worked out. This is one of those cases where all
+else isn’t really equal.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Add an interaction between <code>last</code> and
+<code>expenditure</code> to your analysis of covariance model. Test it
+for significance using <code>drop1</code>. In the light of what you
+have seen, does this surprise you? Explain briefly why you are or
+are not surprised.</li>
+</ol>
+<p>Solution</p>
+<p>I like <code>update</code> for this (writing out the whole model is an
+alternative):</p>
+<div class="sourceCode" id="cb2376"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2376-1"><a href="analysis-of-covariance.html#cb2376-1"></a>improvement<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(improvement<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>last<span class="op">:</span>expenditure)</span>
+<span id="cb2376-2"><a href="analysis-of-covariance.html#cb2376-2"></a><span class="kw">drop1</span>(improvement<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"0.9571826","4":"-78.16915","5":"NA","6":"NA","_rn_":"<none>"},{"1":"2","2":"0.3603524","3":"1.3175350","4":"-73.54201","5":"3.952956","6":"0.03490941","_rn_":"last:expenditure"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Yes, I too forgot the <code>test="F"</code> the first time.</p>
+<p>The interaction term is actually significant, at least at
+<span class="math inline">\(\alpha=0.05\)</span>. This is a surprise to me, because I thought those lines
+on the graph were pretty close to parallel, so I wasn’t expecting to
+see a significant interaction. (What I want from you here is to look
+back at your answer to (iii) in part (<a href="#part:graph-comment">here</a>), and
+to say how this small P-value is consistent or inconsistent with
+whatever you said there. If you said that the lines weren’t parallel
+enough, then this significant interaction should <em>not</em> be a
+surprise to you.)</p>
+<p>That’s all I’m after. I don’t need you to speculate on <em>why</em> the
+test came out significant. I will, in a moment, but you don’t need to.</p>
+<p>Extra: I didn’t expect the interaction to come out significant, but
+the P-value is not nearly so small as the ones we had before. I guess
+the explanation for this is that the data cluster pretty tightly about
+the lines in the graph, so that even a small difference in slopes can
+be signficant. You might argue that my red line is not <em>quite</em>
+as steep as the others, but the difference does look very small.</p>
+<p>Let’s take a look at the <code>summary</code> for my interaction model:</p>
+<div class="sourceCode" id="cb2377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2377-1"><a href="analysis-of-covariance.html#cb2377-1"></a><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = improvement ~ last + expenditure + last:expenditure, 
+##     data = productivity)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.32417 -0.14885 -0.02465  0.13739  0.55556 
+## 
+## Coefficients:
+##                          Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)               0.27827    0.64967   0.428  0.67278    
+## last                      0.93243    0.09124  10.220 1.32e-09 ***
+## expendituremoderate      -4.50268    1.25959  -3.575  0.00179 ** 
+## expenditurehigh          -7.14795    1.91223  -3.738  0.00121 ** 
+## last:expendituremoderate  0.32217    0.14243   2.262  0.03444 *  
+## last:expenditurehigh      0.40858    0.17549   2.328  0.02997 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2135 on 21 degrees of freedom
+## Multiple R-squared:  0.973,  Adjusted R-squared:  0.9666 
+## F-statistic: 151.5 on 5 and 21 DF,  p-value: 9.763e-16</code></pre>
+<p>The last two Estimates, the ones beginning with <code>last:</code>, came
+from the interaction. Once again <code>low</code> is my baseline. These
+say how the <em>slopes</em> for <code>last</code> for the other groups
+differ from the slopes for <code>last</code> for <code>low</code>
+expenditure. (Yes, this is confusing. Read it again until you get it.)</p>
+<p>The biggest-size difference in slopes, about <span class="math inline">\(0.40\)</span>, is between low
+expenditure and high expenditure. This says that the line for high
+expenditure is this much more steep than the line for low
+expenditure. That’s where the non-parallelism is on the graph, such as
+it is. A small but significant difference in slopes. You can tell that
+the effect is small by looking in the Estimate column; those changes
+in slopes, <span class="math inline">\(0.40\)</span> and <span class="math inline">\(0.32\)</span>, are the smallest things in size out of
+everything in that column.</p>
+<p>Having seen this, you now realize that I did this question wrong (or,
+at least, I led you through it wrong). The right way to do this would
+have been to fit the interaction model <em>first</em>, see that it is
+significant, and then done some predictions to assess the effects of
+things:</p>
+<div class="sourceCode" id="cb2379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2379-1"><a href="analysis-of-covariance.html#cb2379-1"></a>lasts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb2379-2"><a href="analysis-of-covariance.html#cb2379-2"></a>expenditures &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;moderate&quot;</span>, <span class="st">&quot;high&quot;</span>)</span>
+<span id="cb2379-3"><a href="analysis-of-covariance.html#cb2379-3"></a>new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">last =</span> lasts, <span class="dt">expenditure =</span> expenditures)</span>
+<span id="cb2379-4"><a href="analysis-of-covariance.html#cb2379-4"></a>new</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["last"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["expenditure"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"7","2":"high"},{"1":"7","2":"low"},{"1":"7","2":"moderate"},{"1":"9","2":"high"},{"1":"9","2":"low"},{"1":"9","2":"moderate"},{"1":"11","2":"high"},{"1":"11","2":"low"},{"1":"11","2":"moderate"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>(oh, how I wish I’d given those variables shorter names),
+<label for="tufte-mn-188" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-188" class="margin-toggle"><span class="marginnote">The expenditure levels have come out in alphabetical order again.</span> and then:</p>
+<div class="sourceCode" id="cb2380"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2380-1"><a href="analysis-of-covariance.html#cb2380-1"></a>p &lt;-<span class="st"> </span><span class="kw">predict</span>(improvement<span class="fl">.2</span>, new)</span>
+<span id="cb2380-2"><a href="analysis-of-covariance.html#cb2380-2"></a><span class="kw">cbind</span>(new, p)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["last"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["expenditure"],"name":[2],"type":["chr"],"align":["left"]},{"label":["p"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"7","2":"high","3":"2.517338","_rn_":"1"},{"1":"7","2":"low","3":"6.805256","_rn_":"2"},{"1":"7","2":"moderate","3":"4.557743","_rn_":"3"},{"1":"9","2":"high","3":"5.199343","_rn_":"4"},{"1":"9","2":"low","3":"8.670110","_rn_":"5"},{"1":"9","2":"moderate","3":"7.066929","_rn_":"6"},{"1":"11","2":"high","3":"7.881348","_rn_":"7"},{"1":"11","2":"low","3":"10.534963","_rn_":"8"},{"1":"11","2":"moderate","3":"9.576115","_rn_":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The effect is more or less as we described it before: as <code>last</code>
+goes up (for fixed <code>expenditure</code>), the predicted productivity
+improvements for this year go up, and as <code>expenditure</code> level
+goes up, the predictions go <em>down</em>. But the rates at which they
+go up or down are different, which is the significant interaction
+coming into play. Having said that, they are not very different, so I
+cheated and pretended the interaction was not significant (or that I
+was using <span class="math inline">\(\alpha=0.01\)</span>), so that you would have something easier to
+interpret. Qualitatively, the story is the same either way, because
+the sizes of the interaction terms are small compared to the
+others. So, even though I cheated, you ended up with more or less the
+same conclusions doing it the way I asked you to do it, or doing it
+the way I just did it.</p>
+</div>
+<div id="treating-leprosy" class="section level2" number="29.2">
+<h2><span class="header-section-number">29.2</span> Treating leprosy</h2>
+<p>Two drugs are being tested in the treatment of
+leprosy. These are labelled A and D. There is also a control drug,
+labelled F. The response variable is a post-treatment score of leprosy
+bacilli (measured at six different sites on each patient). A lower
+score is better.</p>
+<p>Thus far, we have a standard one-way analysis of variance. But the
+researchers wanted greater precision in assessing the effects (if any)
+of the drugs, so they also measured a pre-treatment score of leprosy
+bacilli. The data are in the file
+<a href="http://ritsokiguess.site/datafiles/leprosy.txt">link</a>. The
+pre-treatment and post-treatment scores are labelled <code>pre</code> and
+<code>post</code> respectively.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in the data and check that you have apparently the
+right thing.</li>
+</ol>
+<p>Solution</p>
+<p>Take a look at the data file. The values have multiple spaces
+between them, but they are aligned with each other and the
+column headings, so <code>read_table</code> is the thing:</p>
+<div class="sourceCode" id="cb2381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2381-1"><a href="analysis-of-covariance.html#cb2381-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/leprosy.txt&quot;</span></span>
+<span id="cb2381-2"><a href="analysis-of-covariance.html#cb2381-2"></a>lepro &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ──────────────────────────────────────────────────────────────────
+## cols(
+##   drug = col_character(),
+##   pre = col_double(),
+##   post = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb2383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2383-1"><a href="analysis-of-covariance.html#cb2383-1"></a>lepro</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pre"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["post"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"11","3":"6"},{"1":"A","2":"6","3":"4"},{"1":"D","2":"6","3":"0"},{"1":"D","2":"8","3":"4"},{"1":"F","2":"16","3":"13"},{"1":"F","2":"16","3":"12"},{"1":"A","2":"8","3":"0"},{"1":"A","2":"10","3":"13"},{"1":"D","2":"6","3":"2"},{"1":"D","2":"19","3":"14"},{"1":"F","2":"13","3":"10"},{"1":"F","2":"12","3":"5"},{"1":"A","2":"5","3":"2"},{"1":"A","2":"6","3":"1"},{"1":"D","2":"7","3":"3"},{"1":"D","2":"8","3":"9"},{"1":"F","2":"11","3":"18"},{"1":"F","2":"12","3":"16"},{"1":"A","2":"14","3":"8"},{"1":"A","2":"11","3":"8"},{"1":"D","2":"8","3":"1"},{"1":"D","2":"5","3":"1"},{"1":"F","2":"9","3":"5"},{"1":"F","2":"7","3":"1"},{"1":"A","2":"19","3":"11"},{"1":"A","2":"3","3":"0"},{"1":"D","2":"18","3":"18"},{"1":"D","2":"15","3":"9"},{"1":"F","2":"21","3":"23"},{"1":"F","2":"12","3":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Call it what you like.</p>
+<p>That looks good, with variables of the right names.</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><a name="part:lepro-scatter">*</a> Make a scatterplot of post-treatment score against
+pre-treatment score, with the points for each drug drawn in a
+different colour.</li>
+</ol>
+<p>Solution</p>
+<p>This is the kind of thing that <code>ggplot</code> does without
+batting an eyelid:</p>
+<div class="sourceCode" id="cb2384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2384-1"><a href="analysis-of-covariance.html#cb2384-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-1529-1.png" width="672"  /></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Does it appear that including the pre-treatment score was a
+good idea? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The overall trend on the scatterplot is that a higher <code>pre</code>
+tends to go with a higher <code>post</code>, regardless of drug, so
+including this information appears to be informative.
+I personally suspect that there’s some fan-out happening on the
+pre-post relationship, but I’m not planning to make you explore that.</p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>What about this dataset suggests that analysis of
+covariance is a method worth trying?</li>
+</ol>
+<p>Solution</p>
+<p>The key is a mixture of categorical and quantitative explanatory
+variables. Here we have a categorical variable <code>drug</code> and a
+quantitative one <code>pre</code>.
+If we had only one type of explanatory variable, we could do a
+regression or an ANOVA as appropriate. But we don’t. In some ways,
+it’s not worth making a fuss about the distinction, because
+regressions and ANOVAs are all linear models anyway. But you may
+see the term “analysis of covariance”, so it’s worth your while
+to know what it’s about.</p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Fit an analysis of covariance model to predict
+post-treatment score. Include an interaction between your
+explanatory variables. (You don’t need to look at the output from
+the model.)</li>
+</ol>
+<p>Solution</p>
+<p>This is what you’d guess. <code>lm</code> handles the interaction
+properly, even though <code>pre</code> is a quantitative variable.</p>
+<div class="sourceCode" id="cb2385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2385-1"><a href="analysis-of-covariance.html#cb2385-1"></a>lepro<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">*</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
+<p>I wanted to take a look, so I did:</p>
+<div class="sourceCode" id="cb2386"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2386-1"><a href="analysis-of-covariance.html#cb2386-1"></a><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = post ~ pre * drug, data = lepro)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -6.225 -2.437 -0.586  1.126  8.775 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  -1.6306     2.9455  -0.554   0.5850  
+## pre           0.7452     0.2849   2.616   0.0152 *
+## drugD        -2.9549     4.1246  -0.716   0.4806  
+## drugF        -1.4780     5.4678  -0.270   0.7892  
+## pre:drugD     0.3233     0.3846   0.841   0.4089  
+## pre:drugF     0.4492     0.4458   1.008   0.3236  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.07 on 24 degrees of freedom
+## Multiple R-squared:  0.6915, Adjusted R-squared:  0.6272 
+## F-statistic: 10.76 on 5 and 24 DF,  p-value: 1.63e-05</code></pre>
+<p>For testing the interaction, there are <em>two</em> slope coefficients
+that should be zero if there is no interaction. So we have to test
+this with <code>drop1</code>, which is next.</p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>Pass your fitted model of the last part into
+<code>drop1</code>. Is
+the interaction term significant?</li>
+</ol>
+<p>Solution</p>
+<p>Just this:</p>
+<div class="sourceCode" id="cb2388"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2388-1"><a href="analysis-of-covariance.html#cb2388-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"397.5580","4":"89.52430","5":"NA","6":"NA","_rn_":"<none>"},{"1":"2","2":"19.64465","3":"417.2026","4":"86.97124","5":"0.5929594","6":"0.5605848","_rn_":"pre:drug"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>There is only a test for the interaction term because you can’t take out the main effects until you’ve taken out the interaction.</p>
+<p>The P-value for the interaction is very large (0.5606) so it is
+nowhere near significant. We can drop the interaction.</p>
+<ol start="7" style="list-style-type: lower-alpha">
+<li>Fit a model without the interaction. Is this a sensible thing to
+do (in addition, that is, to the fact that I just asked you to do it)?</li>
+</ol>
+<p>Solution</p>
+<p>Change the <code>*</code> to a <code>+</code>:</p>
+<div class="sourceCode" id="cb2389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2389-1"><a href="analysis-of-covariance.html#cb2389-1"></a>lepro<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">+</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</span></code></pre></div>
+<p>Or use <code>update</code> (not much in it, here):</p>
+<div class="sourceCode" id="cb2390"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2390-1"><a href="analysis-of-covariance.html#cb2390-1"></a>lepro<span class="fl">.2</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(lepro<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>pre<span class="op">:</span>drug)</span></code></pre></div>
+<p>We just said that the interaction could come out, since it wasn’t
+significant, so this is exactly the model that we should be fitting.</p>
+<ol start="8" style="list-style-type: lower-alpha">
+<li>Take a look at the <code>summary</code> of your preferred
+model. Is there a significant effect of pre-treatment score?
+Describe the effects of the different drugs on the post-treatment
+score. (Don’t do any tests for <code>drug</code>.) Does your comparison
+of drugs make sense?</li>
+</ol>
+<p>Solution</p>
+<p>Mine was the no-interaction model <code>lepro.2</code>:</p>
+<div class="sourceCode" id="cb2391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2391-1"><a href="analysis-of-covariance.html#cb2391-1"></a><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = post ~ pre + drug, data = lepro)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.4115 -2.3891 -0.5711  1.7237  8.5885 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -3.8808     1.9862  -1.954   0.0616 .  
+## pre           0.9872     0.1645   6.001 2.45e-06 ***
+## drugD         0.1090     1.7951   0.061   0.9521    
+## drugF         3.4461     1.8868   1.826   0.0793 .  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.006 on 26 degrees of freedom
+## Multiple R-squared:  0.6763, Adjusted R-squared:  0.6389 
+## F-statistic:  18.1 on 3 and 26 DF,  p-value: 1.501e-06</code></pre>
+<p>The pre-treatment term is definitely significant, with a P-value of
+0.0000025. So pre-treatment score definitely has an impact on
+post-treatment score.</p>
+<p>I didn’t ask you to test for significance of drugs. I just wanted you
+to assess their coefficients. Drug A is being used as the baseline, so
+its coefficient is zero. Drug D has a slightly positive coefficient
+(0.109) so its average bacilli score is slightly higher (for any
+pre-treatment score) than for drug A. Drug F, which was the placebo,
+has a slope of 3.446, so its average bacilli score is a fair bit
+higher than for either of the other drugs. This makes sense because a
+higher score is worse, and the two “real” drugs are both better than
+the fake one.</p>
+<p>Whether there is a real drug difference, I didn’t ask you to assess,
+but you could do it by <code>drop1</code> again, this way:</p>
+<div class="sourceCode" id="cb2393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2393-1"><a href="analysis-of-covariance.html#cb2393-1"></a><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"417.2026","4":"86.97124","5":"NA","6":"NA","_rn_":"<none>"},{"1":"1","2":"577.89740","3":"995.1000","4":"111.04938","5":"36.014475","6":"2.454330e-06","_rn_":"pre"},{"1":"2","2":"68.55371","3":"485.7563","4":"87.53529","5":"2.136128","6":"1.383793e-01","_rn_":"drug"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This is actually not significant.
+<label for="tufte-mn-189" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-189" class="margin-toggle"><span class="marginnote">This is why I didn’t ask you to test this, since it would have confused the story.</span>
+This is one of those cases where the non-significant <code>drug</code> has
+a slightly <em>bigger</em> AIC than <code>&lt;none&gt;</code>, so <code>drop1</code>
+considers it best to leave it in the model.</p>
+<ol style="list-style-type: lower-roman">
+<li>Obtain predicted values for <code>post</code> for each of the
+three drugs at <code>pre</code> scores 5, 12 and 20. To do this, obtain
+a new data frame that has all 9 combinations of drugs and
+<code>pre</code> scores, and then feed this into <code>predict</code> using
+your preferred model.
+<label for="tufte-mn-190" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-190" class="margin-toggle"><span class="marginnote">Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.</span></li>
+</ol>
+<p>Solution</p>
+<p>First, make the new data frame for predicting from, using
+<code>crossing</code>. I’m doing this in small steps for clarity:
+first, I define all the drugs and <code>pre</code> values, and then I
+feed them into <code>crossing</code>:</p>
+<div class="sourceCode" id="cb2394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2394-1"><a href="analysis-of-covariance.html#cb2394-1"></a>drugs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb2394-2"><a href="analysis-of-covariance.html#cb2394-2"></a>pres &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">20</span>)</span>
+<span id="cb2394-3"><a href="analysis-of-covariance.html#cb2394-3"></a>lepro.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">drug =</span> drugs, <span class="dt">pre =</span> pres)</span>
+<span id="cb2394-4"><a href="analysis-of-covariance.html#cb2394-4"></a>lepro.new</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pre"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"5"},{"1":"A","2":"12"},{"1":"A","2":"20"},{"1":"D","2":"5"},{"1":"D","2":"12"},{"1":"D","2":"20"},{"1":"F","2":"5"},{"1":"F","2":"12"},{"1":"F","2":"20"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The names of the columns in the new data frame have to be
+<em>exactly</em> <code>drug</code> and <code>pre</code>. Anything else, and
+<code>predict</code> won’t work.</p>
+<p>Now I obtain the predictions, from my best model <code>lepro.2</code>. I
+don’t need intervals or anything like that:</p>
+<div class="sourceCode" id="cb2395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2395-1"><a href="analysis-of-covariance.html#cb2395-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.2</span>, lepro.new)</span>
+<span id="cb2395-2"><a href="analysis-of-covariance.html#cb2395-2"></a>preds</span></code></pre></div>
+<pre><code>##         1         2         3         4         5         6         7         8         9 
+##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 11.411535 19.309005</code></pre>
+<p>only it would be easier to see the predictions side by side with the
+values they are predictions for:</p>
+<div class="sourceCode" id="cb2397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2397-1"><a href="analysis-of-covariance.html#cb2397-1"></a>allpreds &lt;-<span class="st"> </span><span class="kw">cbind</span>(lepro.new, preds)</span>
+<span id="cb2397-2"><a href="analysis-of-covariance.html#cb2397-2"></a>allpreds</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pre"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["preds"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"5","3":"1.055110","_rn_":"1"},{"1":"A","2":"12","3":"7.965396","_rn_":"2"},{"1":"A","2":"20","3":"15.862867","_rn_":"3"},{"1":"D","2":"5","3":"1.164081","_rn_":"4"},{"1":"D","2":"12","3":"8.074368","_rn_":"5"},{"1":"D","2":"20","3":"15.971838","_rn_":"6"},{"1":"F","2":"5","3":"4.501248","_rn_":"7"},{"1":"F","2":"12","3":"11.411535","_rn_":"8"},{"1":"F","2":"20","3":"19.309005","_rn_":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>I gave this a name in case I feel like using it again later.</p>
+<ol start="10" style="list-style-type: lower-alpha">
+<li>Now, plot the data with the fitted lines on. You’ll need to do
+the trick of using the original data frame (and plot the points),
+and the data frame of predictions (and join those points with lines).</li>
+</ol>
+<p>Solution</p>
+<div class="sourceCode" id="cb2398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2398-1"><a href="analysis-of-covariance.html#cb2398-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb2398-2"><a href="analysis-of-covariance.html#cb2398-2"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> allpreds, <span class="kw">aes</span>(<span class="dt">y =</span> preds, <span class="dt">linetype =</span> drug))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-1540-1.png" width="672"  /></p>
+<p>Inside the <code>aes</code> for the <code>geom_line</code>, I only have to
+specify the things that have changed, so that the <code>x</code>
+(<code>pre</code>) and the <code>colour</code> (<code>drug</code>) are
+“inherited” unchanged from the first <code>aes</code>.</p>
+<p><code>geom_line</code> has the <code>aes</code> as its default first argument,
+so I have to specify <code>data=</code> by name.</p>
+<p>The <code>linetype=</code> is really overkill, but I just wanted to show
+you that you can distinguish the drugs by line type as
+well.
+<label for="tufte-mn-191" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-191" class="margin-toggle"><span class="marginnote">The line types show up in the legend too, though they’re not so easy to see.</span></p>
+<ol start="11" style="list-style-type: lower-alpha">
+<li>Are the lines on your plot parallel, with the same slopes? Is this what you would
+expect? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>My lines are parallel. This is exactly what I would expect, since
+my best model has no interaction, and the interaction is what
+would make the lines <em>not</em> be parallel.
+If your best model
+<em>did</em> have the interaction term still in it, your predictions
+would have been these:</p>
+<div class="sourceCode" id="cb2399"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2399-1"><a href="analysis-of-covariance.html#cb2399-1"></a>preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.1</span>, lepro.new)</span>
+<span id="cb2399-2"><a href="analysis-of-covariance.html#cb2399-2"></a><span class="kw">cbind</span>(lepro.new, preds)</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pre"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["preds"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"5","3":"2.0955414","_rn_":"1"},{"1":"A","2":"12","3":"7.3121019","_rn_":"2"},{"1":"A","2":"20","3":"13.2738854","_rn_":"3"},{"1":"D","2":"5","3":"0.7572581","_rn_":"4"},{"1":"D","2":"12","3":"8.2370968","_rn_":"5"},{"1":"D","2":"20","3":"16.7854839","_rn_":"6"},{"1":"F","2":"5","3":"2.8637331","_rn_":"7"},{"1":"F","2":"12","3":"11.2249823","_rn_":"8"},{"1":"F","2":"20","3":"20.7806955","_rn_":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The slopes for each drug are no longer the same (because nothing is
+forcing them to be the same). For example, if you compare drug A at
+pre score 5 and 12, it goes up by 5.2, while drug D at the same pre
+scores goes up by 7.5.</p>
+<p>The <code>ggplot</code> in this case is actually a lot easier than the
+other <code>ggplot</code>, because the lines are now just the regression
+lines for each group. So <code>geom_smooth</code> will get them:</p>
+<div class="sourceCode" id="cb2400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2400-1"><a href="analysis-of-covariance.html#cb2400-1"></a><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span></span>
+<span id="cb2400-2"><a href="analysis-of-covariance.html#cb2400-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-1542-1.png" width="672"  /></p>
+<p>The grey intervals are a bit confusing.
+<label for="tufte-mn-192" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-192" class="margin-toggle"><span class="marginnote">You can get rid of them by saying <em>se=F</em> inside the geom-smooth, as normal.</span> They are
+confidence intervals for the mean <code>post</code> score (as we did for regression
+early on in the course). But I left them there to show that they
+overlap substantially and thus that those slopes are not
+“really different”. That’s the lack of interaction. There is, as you see, a
+substantial scatter in the points that would make it very difficult to
+prove that those three slopes are really different.</p>
+
+</div>
+</div>
+<p style="text-align: center;">
+<a href="analysis-of-variance-revisited.html"><button class="btn btn-default">Previous</button></a>
+<a href="multivariate-analysis-of-variance.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+
+</body>
+</html>
