@@ -2,51 +2,43 @@
 
 When I went to university (in Birmingham, England, a long time ago), I was very excited because I would be travelling to campus by train. My journey was on the Cross-City Line, a metro-type service with lots of stops short distances apart, but run in those days by diesel trains (the electrification came later). 
 
-```{r}
-library(tidyverse)
-library(tmaptools)
-library(leaflet)
+```{r echo=FALSE}
+my_url <- "http://ritsokiguess.site/datafiles/cross-city.csv"
 ```
 
 
+A list of the stations on the line is in `r my_url`. There is one column in the data file, called `station`. We are going to draw a map of these.
+
+(a) Read in and display (some of) the station names.
+
+Solution
+
+Nothing terribly unexpected here:
+
 ```{r}
-stations <- tribble(
-  ~station,
-  "Redditch",
-  "Alvechurch",
-  "Barnt Green",
-  "Longbridge",
-  "Northfield",
-  "King's Norton",
-  "Bournville",
-  "Selly Oak",
-  "Birmingham University",
-  "Five Ways",
-  "Birmingham New Street",
-  "Duddeston",
-  "Aston",
-  "Gravelly Hill",
-  "Erdington",
-  "Chester Road",
-  "Wylde Green",
-  "Sutton Coldfield",
-  "Four Oaks",
-  "Butler's Lane",
-  "Blake Street",
-  "Shenstone",
-  "Lichfield City",
-  "Lichfield Trent Valley"
-)
+stations <- read_csv(my_url)
 stations
 ```
 
-geocode
+(b) In preparation for geocoding, create a second column in the dataframe that consists of the station names with "station UK" on the end. (This is to improve the chances of the geocoder finding the actual railway station.)
+
+Solution
+
+I wrote this back into the original dataframe. Create a new one if you prefer:
 
 ```{r}
 stations %>% 
   mutate(longname = str_c(station, " station UK")) -> stations
 stations
 ```
+
+(c) Look up the longitudes and latitudes of all the stations, organizing your dataframe so that they are visible.
+
+Solution
+
+Two steps: the first is to do the geocoding, and the second is to disentangle what comes back.
+
+First, then:
 
 ```{r}
 stations %>% 
@@ -55,12 +47,24 @@ stations %>%
 stations
 ```
 
+The longitudes and latitudes are hidden in the list-column that I called `ll`, so the second step is to get them out:
+
 ```{r}
 stations %>% unnest_wider(ll) %>% 
   unnest_wider(coords) -> stations
+stations
 ```
 
-make a map
+The two `unnest_wider`s are because the longitudes and latitudes are hidden inside a thing called `coords` which is itself nested within `ll`. Do the first `unnest_wider`, and see what you have. This will tell you that you need to do another one. 
+
+The values seem reasonable; this is the UK, most of which is slightly west of the Greenwich meridian, and the latitudes look sensible given that the UK is north of southern Ontario.
+
+(d) Make a Leaflet map of the stations. Use circle markers or the "pin" markers as you prefer.
+
+
+Solution
+
+I used the pin markers (with `addMarkers`), though `addCircleMarkers` is as good. The code for drawing the map is always the same; the work here is in setting up the geocoding:
 
 ```{r}
 leaflet(data = stations) %>% 
@@ -68,3 +72,72 @@ leaflet(data = stations) %>%
   addMarkers(lng = ~x, lat = ~y)
 ```
 
+This seems to extend across the city of Birmingham, as it should. There are quite a lot of stations, so the pins overlap each other. Zoom in to see them in a bit more detail, or zoom out to orient yourself if your UK geography needs some work.
+
+(e) Zoom in to see whether the geocoding did indeed find each of the stations. Comment briefly on what you find.
+
+Solution
+
+The stations go south to north, so the most southerly one you find should be Redditch and the most northerly is Lichfield Trent Valley. 
+
+If you zoom in enough, you'll see where the railway line goes (a grey line). The points seem to be mainly close to it. But if you zoom in a bit more, some of the pins are right on the railway (such as Alvechurch), and some of them, like Redditch and Barnt Green, are a bit off, because the geocoder found the centre of the place rather than its railway station. This continues as you go north; Northfield and King's Norton are right where they should be, but Bournville is not (Bournville station is about halfway between where you see Bournville and Stirchley on the map.) Likewise, Gravelly Hill station is right where it should be, but Aston is not. 
+
+`r tufte::margin_note("If you're a soccer fan, this Aston is what Aston Villa is named after. See if you can find the team's stadium Villa Park on your map.")`
+
+Extra: `geocode_OSM` uses a free geocoder called Nominatim. This has some options. The defaults are to return only the first "hit", and to return just the coordinates and the "bounding box". These can be changed. Let's see what we can find for Aston:
+
+```{r}
+tibble(where = "Aston UK") %>% 
+  mutate(info = list(geocode_OSM(where, return.first.only = FALSE,
+                            details = TRUE))) -> d
+d         
+```
+There are now 10 things returned. Let's unnest this and see what we have:
+
+```{r}
+d %>% unnest(info) %>% 
+  unnest_wider(info)
+```
+
+There are 10 locations it found matching "Aston UK", and for each of those there is the information you see, a total of 12 column's worth in addition to the name of the place we are looking up. Perhaps the most interesting are the columns `class` and `type` near the end:
+
+```{r}
+d %>% unnest(info) %>% 
+  unnest_wider(info) %>% 
+  select(where, class, type)
+
+```
+
+Oh look, the second one is the station. 
+
+This makes me think that with sufficient patience we could do this for all our places, and pick out the one that is the station:
+
+```{r}
+stations <- read_csv(my_url)
+stations %>% 
+  mutate(longname = str_c(station, " UK")) %>% 
+  rowwise() %>% 
+  mutate(ll = list(geocode_OSM(longname, 
+                   return.first.only = FALSE,
+                   details = TRUE))) -> stations
+```
+
+
+```{r}
+stations %>% unnest(ll) %>% 
+  unnest_wider(ll) %>% 
+  select(station, coords, class, type) %>% 
+  filter(class == "railway", type == "station") %>% 
+  unnest_wider(coords) -> d
+d
+```
+
+Almost. We're missing University and Lichfield City stations, but it looks as if we got the rest:
+
+```{r}
+leaflet(data = d) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~x, lat = ~y)
+```
+
+If you zoom in, you'll see that the ones we got are all the actual stations, and not the area from which the station takes its name.
