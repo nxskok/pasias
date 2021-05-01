@@ -1,0 +1,70 @@
+## The Cross-City Line
+
+When I went to university (in Birmingham, England, a long time ago), I was very excited because I would be travelling to campus by train. My journey was on the Cross-City Line, a metro-type service with lots of stops short distances apart, but run in those days by diesel trains (the electrification came later). 
+
+```{r}
+library(tidyverse)
+library(tmaptools)
+library(leaflet)
+```
+
+
+```{r}
+stations <- tribble(
+  ~station,
+  "Redditch",
+  "Alvechurch",
+  "Barnt Green",
+  "Longbridge",
+  "Northfield",
+  "King's Norton",
+  "Bournville",
+  "Selly Oak",
+  "Birmingham University",
+  "Five Ways",
+  "Birmingham New Street",
+  "Duddeston",
+  "Aston",
+  "Gravelly Hill",
+  "Erdington",
+  "Chester Road",
+  "Wylde Green",
+  "Sutton Coldfield",
+  "Four Oaks",
+  "Butler's Lane",
+  "Blake Street",
+  "Shenstone",
+  "Lichfield City",
+  "Lichfield Trent Valley"
+)
+stations
+```
+
+geocode
+
+```{r}
+stations %>% 
+  mutate(longname = str_c(station, " station UK")) -> stations
+stations
+```
+
+```{r}
+stations %>% 
+  rowwise() %>% 
+  mutate(ll = list(geocode_OSM(longname))) -> stations
+stations
+```
+
+```{r}
+stations %>% unnest_wider(ll) %>% 
+  unnest_wider(coords) -> stations
+```
+
+make a map
+
+```{r}
+leaflet(data = stations) %>% 
+  addTiles() %>% 
+  addMarkers(lng = ~x, lat = ~y)
+```
+
