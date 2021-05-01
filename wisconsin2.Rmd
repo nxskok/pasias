@@ -28,7 +28,7 @@ file, so I had a blank `location` and missing values for all
 the distances for it. I tidied that up before sharing the file with
 you, though.
 
-\hfill \blacksquare
+\hfill $\blacksquare$
 
 
 (b) Make a dataframe containing the names of the locations (get rid of the columns containing distances), and add a column of the abbreviations of the states they are in. All of them are in Wisconsin (WI), except for the
@@ -59,7 +59,7 @@ wisc
 
 The states of the last three locations are now correct.
 
-Extra: I didn't know about this until literally just now, but there is a `tidyverse` way to do this as well (that may look familiar to those of you that know about SQL). Let's start by pretending again that everything is in Wisconsin:
+Extra: I didn't know about the following until literally just now, but there is a `tidyverse` way to do this as well (that may look familiar to those of you that know about SQL). Let's start by pretending again that everything is in Wisconsin:
 
 ```{r}
 wisc %>% 
@@ -123,9 +123,11 @@ wisc
 
 This works because the *first* column of `changes`, namely `location`, is the one that is looked up in `wisc2`. (`rows_update` has a `by` in the same way that `left_join` does if you want to change this.) So all three locations in `changes` are looked up in `wisc2`, and any that match have their `state` changed to the one in `changes`.
 
+In database terms, the `location` is known as a "key" column. That means that each city appears *once only* in the column, and so the replacements in `wisc` are only happening once. To a statistician, `location` is an "identifier variable", identifying the individuals in the dataset. Unless you are doing something like repeated measures, each individual will only give you one measurement, but even then, if you have wide format, the identifier variables will still only appear once.
+
 Magic. Now that I have learned about this, I will be using it a lot.
 
-\hfill \blacksquare
+\hfill $\blacksquare$
 
 (c) Create a new column in which the abbreviation for the state is glued on to the end of each `location`, separated by a space.
 
@@ -155,7 +157,7 @@ wisc
 
 This last one is my favourite, because it gets rid of the two constituent columns `location` and `state` that we don't need any more. The syntax is the name of the new column, a vector of columns to unite together, and (optionally) what to separate the joined-together values with. The default for that is an underscore, but here we want a space because that's what the geocoder (coming up) expects.
 
-\hfill \blacksquare
+\hfill $\blacksquare$
 
 (d) Look up the latitudes and longitudes of these twelve places.
 
@@ -174,7 +176,7 @@ wisc
 
 Yes, I forgot the `rowwise` as well the first time.
 
-\hfill \blacksquare
+\hfill $\blacksquare$
 
 (e) Obtain a Leaflet map of the area containing these
 twelve cities. 
@@ -204,6 +206,6 @@ locs
 You can even attach text to the markers that appears when you click on them, but that's farther than I would go here.
 
 
-\hfill \blacksquare
+\hfill $\blacksquare$
 
 
