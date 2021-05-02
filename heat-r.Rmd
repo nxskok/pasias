@@ -47,9 +47,9 @@ You might get a truncated `text` as I did, or you might have to
 click to see more of it. In any case, we won't be using the text, so
 you can just forget about it from here on.
 
+$\blacksquare$
 
-
-* In your data frame, are the dates stored as genuine dates or as text? How can you tell?
+(b) In your data frame, are the dates stored as genuine dates or as text? How can you tell?
 
 
 Solution
@@ -62,9 +62,9 @@ dates. (If they had been in some other order, they would have
 been read in as text and we would need to use
 `lubridate` to make them into dates.)
 
+$\blacksquare$
 
-
-* Which different heat alert codes do you have, and how many of each?
+(c) Which different heat alert codes do you have, and how many of each?
 
 
 Solution
@@ -89,9 +89,9 @@ heat %>% group_by(code) %>% summarize(count = n())
 
 There are six different codes, but EHAD only appears once.
 
+$\blacksquare$
 
-
-(b) Use the `text` in your dataset (or look back
+(d) Use the `text` in your dataset (or look back
 at the original data file) to describe briefly in your own
 words what the various codes represent.
 
@@ -120,9 +120,9 @@ whether a code applies *only* to continuing heat
 alerts (ie., that EHAD, EHAE, HAE and HAU are different
 from the others).
 
+$\blacksquare$
 
-
-(c) How many (regular and extended) heat alert events
+(e) How many (regular and extended) heat alert events
 are there altogether? A heat alert event is a stretch of
 consecutive days, on all of which there is a heat alert or
 extended heat alert. Hints: (i) you can answer this from
@@ -293,7 +293,9 @@ something to do with the number of days between one heat alert day and
 the next, so I calculated those first and then figured out what to do
 with them.
 
-(d) We are going to investigate how many heat alert
+$\blacksquare$
+
+(f) We are going to investigate how many heat alert
 days
 there were in each year. To do that, we have
 to extract the year from each of our dates. 
@@ -318,9 +320,9 @@ heat %>% select(-text) %>% mutate(year = year(date)) -> heat
 
                  
 
+$\blacksquare$
 
-
-(e) Count the number of heat alert days for each
+(g) Count the number of heat alert days for each
 year, by tabulating the year variable.
 Looking at this table, would you say that there
 have been more heat alert days in recent years? Explain
@@ -373,7 +375,7 @@ indicates that the number of heat-alert days in one year and the next
 is not independent: if you know one year, you can predict the next
 year. (Assessment of trend and autocorrelation are hard to untangle properly.)
 
-I learn from Environmental Science grad students (of whom we have a
+Extra 1: I learn from Environmental Science grad students (of whom we have a
 number at UTSC) that the approved measure of association is called the
 Mann-Kendall correlation, which is the Kendall correlation of the data
 values with time. In the same way that we use the sign test when we
@@ -414,7 +416,7 @@ with only 16 data points, a null hypothesis that the correlation is
 zero is far from being rejected, P-value 0.7519 as shown. So this is
 no evidence of a time trend at all.
 
-I'd like to say a word about how I got these data. They came from
+Extra 2: I'd like to say a word about how I got these data. They came from
 [link](http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json). If
 you take a look there, there are no obvious rows and columns. This
 format is called JSON. Look a bit more carefully and you'll see stuff
@@ -465,6 +467,8 @@ text, and then separated-by-spaces would have been fine, but I wanted
 you to see the text so that you could understand the `code`
 values. So `.csv` is what it was.
 
+$\blacksquare$
+ 
  
 
 
