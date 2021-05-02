@@ -1,0 +1,41 @@
+create a file without the solution
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+extract_q <- function(base) {
+  fname <- str_c(base, ".Rmd")
+  lines <- readLines(fname)
+  lines %>% enframe() %>% 
+    mutate(start = str_detect(value, "Solution"),
+           end = str_detect(value, "blacksquare")) %>% 
+    mutate(start_cume = cumsum(start),
+           end_cume = cumsum(end)) %>% 
+    filter(start_cume == end_cume, !end) -> d
+  outname <- str_c(base, "_qq.Rmd")
+  writeLines(d$value, outname)
+}
+```
+
+```{r}
+extract_q("cross-city")
+```
+
+```{r}
+extract_chapter_files <- function(chapter_name) {
+  lines <- readLines(chapter_name)
+  lines %>% enframe() %>% 
+    filter(str_detect(value, "child=")) %>% 
+    extract(value, "file", "child=\"(.*).Rmd\"") %>% 
+    filter(file != "packages") %>% 
+    pull(file)
+}
+```
+
+```{r}
+v <- extract_chapter_files("41-maps.Rmd")
+walk(v, ~extract_q(.))
+```
+
