@@ -1,0 +1,27 @@
+find files that need black-squaring
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+q_prop <- function(fname) {
+  file <- readLines(fname)
+  file %>% enframe() %>% 
+    mutate(sol = str_detect(value, "Solution")) %>% 
+    mutate(end_sol = str_detect(value, "blacksquare")) -> d
+  list(sol = any(d$sol), end_sol = any(d$end_sol))
+}
+```
+
+make list of all rmd
+
+```{r}
+list.files(pattern = "*.Rmd") %>% enframe(name = NULL) %>% 
+  rowwise() %>% 
+  mutate(stat = list(q_prop(value))) %>% 
+  unnest_wider(stat) %>% 
+  filter(sol, !end_sol) %>% 
+  slice_sample(n = 10)
+```
+
