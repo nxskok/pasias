@@ -27,12 +27,21 @@ extract_chapter_files <- function(chapter_name) {
     filter(str_detect(value, "child=")) %>% 
     extract(value, "file", "child=\"(.*).Rmd\"") %>% 
     filter(file != "packages") %>% 
+    filter(!str_detect(file, "_qq$")) %>% 
     pull(file)
 }
 ```
 
 ```{r}
-v <- extract_chapter_files("42-fa.Rmd")
-walk(v, ~extract_q(.))
+make_chapter_q <- function(chapter_name) {
+  v <- extract_chapter_files(chapter_name)
+  walk(v, ~extract_q(.))
+}
+```
+
+
+```{r}
+extract_chapter_files("42-fa.Rmd")
+make_chapter_q("42-fa.Rmd")
 ```
 
