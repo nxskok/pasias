@@ -1,0 +1,119 @@
+##  Bikes on College
+
+
+ The City of Toronto collects all kinds of data on aspects of
+life in the city. See
+[link](http://www1.toronto.ca/wps/portal/contentonly?vgnextoid=1a66e03bb8d1e310VgnVCM10000071d60f89RCRD). One
+collection of data is records of the number of cyclists on certain
+downtown streets. The data in
+[link](http://ritsokiguess.site/datafiles/bikes.csv) are a record
+of the cyclists on College Street on the block west from Huron to
+Spadina on September 24, 2010. In the spreadsheet, each row relates to
+one cyclist. The first column is the time the cyclist was observed (to
+the nearest 15 minutes). After that, there are four pairs of
+columns. The observer filled in (exactly) one X in each pair of
+columns, according to whether (i) the cyclist was male or female, (ii)
+was or was not wearing a helmet, (iii) was or was not carrying a
+passenger on the bike, (iv) was or was not riding on the sidewalk. We
+want to create a tidy data frame that has the time in each row, and
+has columns containing appropriate values, often `TRUE` or
+`FALSE`, for each of the four variables measured.
+
+I will lead you through the process, which will involve developing a
+(long) pipe, one step at a time.
+
+
+
+(a) Take a look at the spreadsheet (using Excel or similar:
+this may open when you click the link). Are there any obvious
+header rows? Is there any extra material before the data start?
+Explain briefly.
+
+
+
+(b) Read the data into an R data
+frame. Read *without* headers, and instruct R how many lines
+to skip over using `skip=` and a suitable number.
+When this is working, display the first few lines of your data
+frame.  Note that your columns have names `X1` through
+`X9`.
+
+
+
+(c) What do you notice about the times in your first
+column? What do you think those "missing" times should be?
+
+
+(d) Find something from the `tidyverse` that will
+fill
+`r tufte::margin_note("Oh, what a giveaway.")`
+in those missing values with the right thing.
+Start a pipe from the data frame you read in, that updates the
+appropriate column with the filled-in times.
+
+
+
+(e) R's `ifelse` function works like `=IF` in
+Excel. You use it to create values for a new variable, for
+example in a `mutate`.  The first input to it is a
+logical condition (something that is either true or false); the
+second is the value your new variable should take if the
+condition is true, and the third is the value of your new
+variable if the condition is false.  Create a new column
+`gender` in your data frame that is "male" or
+"female" depending on the value of your `X2` column,
+using `mutate`. (You can assume that exactly one of the
+second and third columns has an `X` in it.) Add your code
+to the end of your pipe and display (the first 10 rows of) the
+result.
+
+
+
+
+(f) Create variables `helmet`, `passenger` and
+`sidewalk` in your data frame that are `TRUE` if
+the "Yes" column contains `X` and `FALSE`
+otherwise. This will use `mutate` again, but you don't
+need `ifelse`: just set the variable equal to the
+appropriate logical condition. As before, the best way to
+create these variables is to test the appropriate things for
+missingness.  Note that you can create as many new variables
+as you like in one `mutate`. Show the first few lines
+of your new data frame. (Add your code onto the end of the
+pipe you made above.)
+
+
+
+(g) Finally 
+(for the data manipulation), get rid of
+all the original columns, keeping only the new ones that
+you created. Save the results in a data frame and display
+its first few rows.
+ 
+
+
+(h) The next few parts are a quick-fire analysis of
+the data set. They can all be solved using `count`.
+How many male and how many female cyclists were observed
+in total?
+
+
+
+(i) How many male and female cyclists were not
+wearing helmets?
+
+
+
+(j) How many cyclists were riding on the sidewalk
+*and* carrying a passenger?
+
+
+
+(k) What was the busiest 15-minute period of the
+day, and how many cyclists were there then?
+
+
+
+
+
+

@@ -1,0 +1,147 @@
+##  The brain of a cat
+
+
+ A large number (315) of psychology students were asked to
+imagine that they were serving on a university ethics committee
+hearing a complaint against animal research being done by a member of
+the faculty. The students were told that the surgery consisted of
+implanting a device called a cannula in each cat's brain, through
+which chemicals were introduced into the brain and the cats were then
+given psychological tests. At the end of the study, the cats' brains
+were subjected to histological analysis. The complaint asked that the
+researcher's authorization to carry out the study should be withdrawn,
+and the cats should be handed over to the animal rights group that
+filed the complaint. It was suggested that the research could just as
+well be done with computer simulations.
+
+All of the psychology students in the survey were told all of this. In
+addition, they read a statement by the researcher that no animal felt
+much pain at any time, and that computer simulation was *not* an
+adequate substitute for animal research. Each student was also given
+*one* of the following scenarios that explained the benefit of
+the research:
+
+
+
+* "cosmetic": testing the toxicity of chemicals to be used in
+new lines of hair care products.
+
+* "theory": evaluating two competing theories about the function
+of a particular nucleus in the brain.
+
+* "meat": testing a synthetic growth hormone said to potentially
+increase meat production.
+
+* "veterinary": attempting to find a cure for a brain disease
+that is killing domesticated cats and endangered species of wild cats.
+
+* "medical": evaluating a potential cure for a debilitating
+disease that afflicts many young adult humans.
+
+
+Finally, each student completed two questionnaires: one that would assess their
+"relativism": whether or not they believe in universal moral
+principles (low score) or whether they believed that the appropriate
+action depends on the person and situation (high score). The second
+questionnaire assessed "idealism": a high score reflects a belief
+that ethical behaviour will always lead to good consequences (and thus
+that  if a behaviour leads to any bad consequences at all, it is
+unethical).
+`r tufte::margin_note("I get confused about the difference between morals  and ethics. This is a very short description of that difference:  http://smallbusiness.chron.com/differences-between-ethical-issues-moral-issues-business-48134.html. The basic idea is that morals are part of who you are, derived from religion, philosophy etc. Ethics are how you act in a particular situation: that is, your morals, what you believe, inform your ethics, what you do. That's why the students had to play the role of an  ethics committee, rather than a morals committee; presumably the researcher had good morals, but an ethics committee had to evaluate what he was planning to do, rather than his character as a person.")`
+
+After being exposed to all of that, each student stated their decision
+about whether the research should continue or stop.
+
+I should perhaps stress at this point that no actual cats were harmed
+in the collection of these data (which can be found as a `.csv`
+file at
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/decision.csv)). The
+variables in the data set are these:
+
+
+
+* `decision`: whether the research should continue or stop (response)
+
+* `idealism`: score on idealism questionnaire
+
+* `relativism`: score on relativism questionnaire
+
+* `gender` of student
+
+* `scenario` of research benefits that the student read.
+
+
+A more detailed discussion
+`r tufte::margin_note("If you can believe it.")` of this
+study is at
+[link](http://core.ecu.edu/psyc/wuenschk/MV/Multreg/Logistic-SPSS.PDF). 
+
+
+(a) Read in the data and check by looking at the structure of
+your data frame that you have something sensible. *Do not* call
+your data frame `decision`, since that's the name of one of
+the variables in it.
+
+
+
+(b) Fit a logistic regression predicting
+`decision` from `gender`. Is there an effect of gender?
+
+
+
+(c) To investigate the effect (or non-effect) of
+`gender`, create a contingency table by feeding
+`decision` and `gender` into `table`. What does
+this tell you?
+
+
+
+(d) <a name="part:whichprob">*</a> Is your slope for `gender` in the previous logistic
+regression positive or negative? Is it applying to males or to females?
+Looking at the conclusions from your 
+contingency table, what probability does that mean your logistic
+regression is actually modelling?
+
+
+
+(e) Add the two variables `idealism` and
+`relativism` to your logistic regression. Do either or both of them add
+significantly to your model? Explain briefly.
+
+ 
+
+(f) Add the variable `scenario` to your model. That is,
+fit a new model with that variable plus all the others.
+
+
+
+(g) Use `anova` to compare the models with and without
+`scenario`. You'll have to add a `test="Chisq"` to your
+`anova`, to make sure that the test gets done.
+Does `scenario` make a difference or not, at $\alpha=0.10$?
+Explain briefly.
+(The reason we have to do it this way is that
+`scenario` is a factor with five levels, so it has four slope
+coefficients. To test them all at once, which is what we need to make
+an overall test for `scenario`, this is the way it has to be
+done.) 
+
+
+
+(h) Look at the `summary` of your model that contained
+`scenario`. Bearing in mind that the slope coefficient for
+`scenariocosmetic` is zero (since this is the first scenario
+alphabetically), which scenarios have the most positive and most
+negative slope coefficients? What does that tell you about those
+scenarios' effects?
+
+ 
+
+(i) Describe the effects that having (i) a higher idealism score
+and (ii) a higher relativity score have on a person's probability of
+saying that the research should stop. Do each of these increase or decrease
+that probability? Explain briefly.
+
+
+
+

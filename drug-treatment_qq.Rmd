@@ -1,0 +1,124 @@
+##  Drug treatment programs
+
+
+ One of the goals of drug treatment programs is to lengthen
+the time until the patient returns to using drugs. (It is not
+generally possible to prevent patients from *ever* using drugs
+again.) In one study, over 600 former drug users took part. Two
+different programs, a short program and a long program, were offered
+at two different sites, labelled A and B. The data can be found in
+[link](http://ritsokiguess.site/datafiles/drugusers.txt). The
+variables are these:
+
+
+
+* `ID`: patient ID number
+
+* `age`: patient age at enrollment into the study
+
+* `ndrugtx`: number of previous drug treatments
+
+* `treat`: 0 for short treatment program, 1 for long program
+
+* `site`: 0 for site A, 1 for site B
+
+* `time`: time until return to drug use
+
+* `censor`: whether the subject returned to drug use (1) or
+not (0) during the follow-up period
+
+* `herco`: whether subject used heroine or cocaine in the
+last 3 months: 1 is both, 2 is one (either heroine or cocaine), 3 is neither.
+
+
+
+(a) Read in the data and check in one way or another that you
+have what was promised above.
+
+
+
+(b) There are some missing values in the dataframe. Demonstrate
+this using `summary`. Pipe the dataframe into
+`drop_na` and show that they have gone. (`drop_na`
+removes all rows that have missing values in them.)
+
+
+
+(c) Some of these variables are recorded as numbers but are
+actually categorical. Which ones? Re-define these variables in your
+data frame so that they have sensible (text) values.
+
+
+
+(d) Create a suitable reponse variable for a Cox proportional
+hazards regression that predicts time until return to drug use from
+the other variables.
+This requires some care, because you need to be sure about what the
+censoring variable actually represents and what you need it to represent.
+
+
+
+(e) Look at the first few values of your response variable. Why
+is the fifth one marked with a `+`? Explain briefly.
+
+
+
+(f) Fit a Cox proportional hazards model, predicting from all
+the other variables (except for `row` and `ID`) that you haven't used
+yet. Display the results.
+
+
+
+(g) Find which explanatory variables can be removed at $\alpha=0.05$
+(there should be two of them). Bear in mind that we have categorical variables, so that looking at the output from `summary` is not enough.
+
+
+
+(h) Remove *all* the non-significant explanatory variables
+and re-fit your model. By carrying out a suitable test demonstrate
+that your smaller model is the better one.
+
+
+
+(i) <a name="part:posneg">*</a> Display your better model. Are all of the
+explanatory variables significant? Do their slope coefficients have
+sensible signs (plus or minus), based on what you know or can guess
+about drug treatments? Explain briefly.
+
+
+
+(j) We have three variables left in our model, `age`,
+`ndrugtx` and `treat`. The quartiles of age are 27 and
+37, the quartiles of `ndrugtx` are 1 and 6, and the two
+possible values of `treat` are `short` and `long`. Create a data frame
+with variables of these names and all possible combinations of their
+values (so there should be 8 rows in the resulting data
+frame). Display the resulting data frame.
+
+
+
+(k) Obtain predicted survival probabilities for each of the
+values of `age`, `ndrugtx` and `treat` used in
+the previous part. You don't need to display it (we are going to
+plot it shortly). 
+
+
+(l) Plot your predicted survival curves. 
+
+
+
+(m) Which of your combinations of values is predicted to take
+the longest to return to drug use? Which is predicted to take the
+shortest time? Explain briefly.
+
+
+
+(n) Are your survival curve plot and your conclusions from part
+(<a href="#part:posneg">here</a>) consistent, or not? Explain briefly.
+
+
+
+
+
+
+

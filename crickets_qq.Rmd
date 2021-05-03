@@ -1,0 +1,85 @@
+##  Mating songs in crickets
+
+
+ Male tree crickets produce "mating songs" by rubbing their
+wings together to produce a chirping sound. It is hypothesized that
+female tree crickets identify males of the correct species by how fast
+(in chirps per second) the male's mating song is. This is called the
+"pulse rate".  Some data for two species of crickets are in
+[link](http://ritsokiguess.site/datafiles/crickets.txt). The
+columns, which are unlabelled, are temperature and pulse rate
+(respectively) for *Oecanthus exclamationis* (first two
+columns) and *Oecanthus niveus* (third and fourth columns). The
+columns are separated by tabs. There are some missing values in the
+first two columns because fewer *exclamationis* crickets than
+*niveus* crickets were measured.
+The research question is whether males
+of the different species have different average pulse rates. It is
+also of interest to see whether temperature has an effect, and if
+so, what.
+Before we get to that, however, we have some data organization to do.
+
+
+(a) Read in the data, allowing for the fact that you have no
+column names. You'll see that the
+columns have names `X1` through `X4`. This is
+OK.
+
+
+
+(b) Tidy these untidy data, going as directly as you can to something tidy. (Some later parts show you how it used to be done.) Begin by: (i) adding a column of row numbers, (ii) `rename`-ing the columns to species name, an underscore, and the variable contents (keeping `pulserate` as one word), and then use `pivot_longer`. Note that the column names encode *two* things.
+
+
+
+
+(c) If you found (b) a bit much to take in, the rest of the way we take a rather more leisurely approach towards the tidying. 
+
+These data are rather far from being tidy. There need to be
+three variables, temperature, pulse rate and species, and there
+are $14+17=31$ observations altogether. This one is tricky in that
+there are temperature and pulse rate for each of two levels of a
+factor, so I'll suggest combining the temperature and chirp rate
+together into one thing for each species, then pivoting them longer ("combining"),
+then pivoting them wider again ("splitting"). Create new columns, named for  each species,
+that contain the temperature and pulse rate for that species in
+that order, `unite`d together.
+For the rest of this question, start from the data frame you read
+in, and build a pipe, one or two steps at a time, to save creating
+a lot of temporary data frames.
+
+
+
+(d) The two columns `exclamationis` and `niveus`
+that you just created are both temperature-pulse rate combos, but
+for different species. Collect them together into one
+column, labelled by species. (This is a straight `tidyr` `pivot_longer`, even though the columns contain something odd-looking.)
+
+
+
+(e) Now split up the temperature-pulse combos at the underscore, into
+two separate columns. This is `separate`. When specifying
+what to separate by, you can use a number ("split after this many characters") or a piece of text, in quotes ("when you see this text, split at it"). 
+
+
+
+(f) Almost there.  Temperature and pulse rate are still text
+(because `unite` turned them into text), but they should be
+numbers. Create new variables that are numerical versions of
+temperature and pulse rate (using `as.numeric`). Check that
+you have no extraneous variables (and, if necessary, get rid of
+the ones you don't want). (Species is also text and really ought
+to be a factor, but having it as text doesn't seem to cause any
+problems.)
+You can, if you like, use `parse_number` instead of
+`as.numeric`. They should both work. The distinction I
+prefer to make is that `parse_number` is good for text
+with a number in it (that we want to pull the number out of),
+while `as.numeric` is for turning something that looks like
+a number but isn't one into a genuine number.
+`r tufte::margin_note("You could      just as well make the point that the text 20.8 contains the      number 20.8 and nothing else, so that parsing it as text in search of a number      will pull out 20.8 as a number. If that logic works for you, go      with it.")`
+
+
+
+
+
+

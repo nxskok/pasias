@@ -1,0 +1,136 @@
+##  How not to get heart disease
+
+
+ What is associated with heart disease? In a study, a large
+number of variables were measured, as follows:
+
+
+
+* `age` (years)
+
+* `sex` male or female
+
+* `pain.type` Chest pain type (4 values: typical angina,
+atypical angina, non-anginal pain, asymptomatic)
+
+* `resting.bp` Resting blood pressure, on admission to hospital
+
+* `serum.chol` Serum cholesterol
+
+* `high.blood.sugar`: greater than 120, yes or no
+
+* `electro` resting electrocardiographic results (normal,
+having ST-T, hypertrophy)
+
+* `max.hr` Maximum heart rate
+
+* `angina` Exercise induced angina (yes or no)
+
+* `oldpeak` ST depression induced by exercise relative to
+rest. See [link](http://lifeinthefastlane.com/ecg-library/st-segment/).
+
+* `slope` Slope of peak exercise ST segment. Sloping up,
+flat or sloping down
+
+* `colored` number of major vessels (0--3) coloured by fluoroscopy
+
+* `thal` normal, fixed defect, reversible defect
+
+* `heart.disease` 1=absent, 2=present
+
+
+I don't know what most of those are, but we will not let that stand in
+our way. Our aim is to find out what variables are associated with
+heart disease, and what values of those variables give high
+probabilities of heart disease being present. The data are in
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/heartf.csv).
+
+
+
+(a) Read in the data. Display the first few lines and convince
+yourself that those values are reasonable.
+
+
+
+(b) In a logistic regression, what probability will be
+predicted here? Explain briefly but convincingly. (Is each line of
+the data file one observation or a summary of several?)
+
+
+
+(c) <a name="part:heart-first">*</a> Fit a logistic regression predicting heart disease from
+everything else (if you have a column called `X` or
+`X1`, ignore that), and display the results.
+
+
+
+(d) Quite a lot of our explanatory variables are factors. To
+assess whether the factor as a whole should stay or can be removed,
+looking at the slopes won't help us very much (since they tell us
+whether the other levels of the factor differ from the baseline,
+which may not be a sensible comparison to make). To assess which
+variables are candidates to be removed, factors included (properly),
+we can use `drop1`. Feed `drop1` a fitted model and
+the words `test="Chisq"` (take care of the capitalization!)
+and you'll get a list of P-values. Which variable is the one that
+you would remove first? Explain briefly.
+
+
+
+(e) I'm not going to make you do the whole backward elimination
+(I'm going to have you use `step` for that later), but do one
+step: that is, fit a model removing the variable you think should be
+removed, using `update`, and then run `drop1` again to
+see which variable will be removed next.
+
+
+
+(f) Use `step` to do a backward elimination to find which
+variables have an effect on heart disease. Display your final model
+(which you can do by saving the output from `step` in a
+variable, and asking for the summary of that. In `step`,
+you'll need to specify a starting model (the one from part
+(<a href="#part:heart-first">here</a>)), the direction of elimination, and the test
+to base the elimination decision on (the same one as you used in
+`drop1`). 
+
+
+
+(g) Display the summary of the model that came out of `step`.
+
+
+
+(h) We are going to make a large number of predictions. Create
+a data frame that contains all combinations of representative
+values for all the variables in the model that came out of
+`step`. By "representative" I mean all the values for a
+categorical variable, and the first and third quartiles for a numeric
+variable.
+
+
+
+(i) Obtain the predicted probabilities of heart disease for
+the data frame you constructed in the last part, using your
+model that came out of `step`. Add these predictions to
+the data frame from the previous part (as a column in that data
+frame). 
+
+
+
+(j) Find the largest predicted probability (which is the
+predicted probability of heart disease) and display all the
+variables that it was a prediction for. 
+
+
+
+(k) Compare the `summary` of the final model from
+`step` with your highest predicted heart disease
+probability and the values of the other variables that make it
+up. Are they consistent?
+
+
+
+
+
+
+

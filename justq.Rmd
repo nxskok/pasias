@@ -22,6 +22,7 @@ extract_q <- function(base) {
 
 ```{r}
 extract_chapter_files <- function(chapter_name) {
+  print(chapter_name)
   lines <- readLines(chapter_name)
   lines %>% enframe() %>% 
     filter(str_detect(value, "child=")) %>% 
@@ -42,6 +43,46 @@ make_chapter_q <- function(chapter_name) {
 
 ```{r}
 extract_chapter_files("42-fa.Rmd")
-make_chapter_q("42-fa.Rmd")
+make_chapter_q("01-getting-used.Rmd")
+```
+
+grab chapters
+
+```{r}
+readLines("_bookdown.yml") %>% 
+  enframe(name = NULL) %>% 
+  mutate(ch_name = str_replace_all(value, '"', '')) %>% 
+  mutate(ch_name = str_replace(ch_name, ",", "")) %>% 
+  filter(str_detect(ch_name, "^[0-9][0-9]*")) %>% 
+  pull(ch_name) -> z
+walk(z, ~make_chapter_q(.))
+```
+
+find chapters that don't have "answers follow"
+
+```{r}
+has_follow <- function(chapter) {
+  v <- readLines(chapter)
+  enframe(v, name = NULL) %>% 
+    mutate(foll = str_detect(value, "My solutions follow")) -> d
+  any(d$foll)
+}
+has_follow("32-making-graphs.Rmd")
+has_follow("41-maps.Rmd")
+```
+
+
+
+```{r}
+readLines("_bookdown.yml") %>% 
+  enframe(name = NULL) %>% 
+  mutate(ch_name = str_replace_all(value, '"', '')) %>% 
+  mutate(ch_name = str_replace(ch_name, ",", "")) %>% 
+  filter(str_detect(ch_name, "^[0-9][0-9]*")) %>% 
+  rowwise() %>% 
+  mutate(done = has_follow(ch_name)) %>% 
+  ungroup() %>% 
+  filter(!done) %>% 
+  slice_sample(n = 5)
 ```
 

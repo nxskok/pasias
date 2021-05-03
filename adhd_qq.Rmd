@@ -1,0 +1,92 @@
+##  Observing children with ADHD
+
+
+ A number of children with ADHD were observed by their mother
+or their father (only one parent observed each child). Each parent was
+asked to rate occurrences of behaviours of four different types,
+labelled `q1` through `q4` in the data set. Also
+recorded was the identity of the parent doing the observation for each
+child: 1 is father, 2 is mother.
+
+Can we tell (without looking at the `parent` column) which
+parent is doing the observation? Research suggests that rating the
+degree of impairment in different categories depends on who is doing
+the rating: for example, mothers may feel that a  child has difficulty
+sitting still, while fathers, who might do more observing of a child
+at play, might think of such a child as simply being "active" or
+"just being a kid". The data are in
+[link](http://ritsokiguess.site/datafiles/adhd-parents.txt). 
+
+
+
+(a) Read in the data and confirm that you have four ratings and
+a column labelling the parent who made each observation.
+
+
+
+(b) Run a suitable discriminant analysis and display the output.
+
+
+
+(c) Which behaviour item or items seem to be most helpful at
+distinguishing the parent making the observations? Explain briefly.
+
+
+
+(d) Obtain the predictions from the `lda`, and make a
+suitable plot of the discriminant scores, bearing in mind that you
+only have one `LD`.  Do you think there will be any
+misclassifications? Explain briefly.
+
+
+
+(e) Obtain the predicted group memberships and make a table of
+actual vs.\ predicted. Were there any misclassifications? Explain
+briefly. 
+
+
+
+(f) Re-run the discriminant analysis using cross-validation,
+and again obtain a table of actual and predicted parents. Is the
+pattern of misclassification different from before? Hints: (i) Bear in mind
+that there is no `predict` step this time, because the
+cross-validation output includes predictions; (ii) use a different name
+for the predictions this time because we are going to do a
+comparison in a moment.
+
+
+
+(g) Display the original data (that you read in from the data
+file) side by side with two sets of posterior probabilities: the
+ones that you obtained with `predict` before, and the ones
+from the cross-validated analysis. Comment briefly on whether the
+two sets of posterior probabilities are similar. Hints: (i) use
+`data.frame` rather than `cbind`, for reasons that I
+explain elsewhere; (ii) round the posterior probabilities to 3
+decimals before you display them.
+There are only 29 rows, so look at them all. I am going to add the
+`LD1` scores to my output and sort by that, but you don't
+need to. (This is for something I am going to add later.)
+
+
+
+(h) Row 17 of your (original) data frame above, row 5 of the
+output in the previous part, is the mother that was
+misclassified as a father. Why is it that the cross-validated
+posterior probabilities are 1 and 0, while the previous posterior
+probabilities are a bit less than 1 and a bit more than 0?
+
+
+
+(i) Find the parents where the cross-validated posterior
+probability of being a father is "non-trivial": that is, not
+close to zero and not close to 1. (You will have to make a judgement
+about what "close to zero or 1" means for you.) What do these
+parents have in common, all of them or most of them?
+
+
+
+
+
+
+

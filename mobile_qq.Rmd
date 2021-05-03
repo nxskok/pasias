@@ -1,0 +1,85 @@
+##  Do you like your mobile phone?
+
+
+ A phone company commissioned a survey of their customers'
+satisfaction with their mobile devices. The responses to the survey
+were on a so-called Likert scale of "very unsatisfied",
+"unsatisfied", "satisfied", "very satisfied". Also recorded were
+each customer's gender and age group (under 18, 18--24, 25--30, 31 or
+older). (A survey of this kind does not ask its respondents for their
+exact age, only which age group they fall in.) The data, as
+frequencies of people falling into each category combination, are in [link](http://ritsokiguess.site/datafiles/mobile.txt).
+
+
+
+(a) <a name="part:gather">*</a> Read in the data and take a look at the format. Use a tool
+that you know about to arrange the frequencies in *one* column,
+with other columns labelling the response categories that the
+frequencies belong to. Save the new data frame. (Take a look at it
+if you like.)
+ 
+
+(b) We are going to fit ordered logistic models below. To
+do that, we need our response variable to be a factor with its levels
+in the right order. By looking at the data frame
+you just created, determine what kind
+of thing your intended response variable currently is.
+
+
+
+
+(c) If your intended response variable is not a factor, create a factor in your data frame with levels in the right order. Hint: look at the order your levels are *in the data*.
+
+
+
+
+(d) <a name="part:thefit">*</a>
+Fit ordered logistic models to predict satisfaction from (i) gender
+and age group, (ii) gender only, (iii) age group only. (You don't
+need to examine the models.) Don't forget a suitable
+`weights`!
+ 
+
+(e) Use `drop1` on your model containing both explanatory
+variables to determine whether you can remove either of them. Use
+`test="Chisq"` to obtain P-values.
+
+
+
+
+(f) Use `anova` to decide whether we are justified in
+removing `gender` from a model containing both `gender`
+and `age.group`. Compare your P-value with the one from `drop1`.
+ 
+
+(g) Use `anova` to see whether we are justified in removing
+`age.group` from a model  containing both `gender` and
+`age.group`. Compare your P-value with the one from
+`drop1` above.
+ 
+
+(h) Which of the models you have fit so far is the most
+appropriate one? Explain briefly.
+ 
+
+(i) Obtain predicted probabilities of a
+customer falling in the various satisfaction categories, as it
+depends on gender and age group. To do that, you need to feed
+`predict` three things: the fitted model that contains both
+age group and gender, the data frame that you read in from the file
+back in part (<a href="#part:gather">here</a>) (which contains all the combinations of age group
+and gender), and an appropriate `type`.
+
+ 
+
+(j) <a name="part:unload">*</a> 
+Describe any patterns you see in the predictions, bearing in mind the
+significance or not of the explanatory variables.
+
+ 
+
+
+ 
+
+
+

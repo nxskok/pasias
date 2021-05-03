@@ -1,0 +1,151 @@
+##  Bridges in Pittsburgh
+
+
+ The city of Pittsburgh, Pennsylvania, lies where three
+rivers, the Allegheny, Monongahela, and Ohio, 
+meet.
+`r tufte::margin_note("For a long  time, the Pittsburgh Steelers football team played at the Three  Rivers Stadium.")` 
+It has long been important to build bridges there,
+to enable its residents to cross the rivers safely. See
+[link](https://en.wikipedia.org/wiki/List_of_bridges_of_Pittsburgh) for
+a listing (with pictures) of the bridges. The data at
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv) contains
+detail for a large number of past and present bridges in
+Pittsburgh. All the variables we will use are categorical. Here they
+are:
+
+
+
+* `id` identifying the bridge (we ignore)
+
+* `river`: initial letter of river that the bridge crosses
+
+* `location`: a numerical code indicating the location
+within Pittsburgh (we ignore)
+
+* `erected`: time period in which the bridge was built (a
+name, from `CRAFTS`, earliest, to `MODERN`, most
+recent.
+
+* `purpose`: what the bridge carries: foot traffic
+("walk"), water (aqueduct), road or railroad.
+
+* `length` categorized as long, medium or short.
+
+* `lanes` of traffic (or number of railroad tracks): a
+number, 1, 2, 4 or 6, that we will count as categorical.
+
+* `clear_g`: whether a vertical navigation requirement was
+included in the bridge design (that is, ships of a certain height
+had to be able to get under the bridge). I think `G` means
+"yes". 
+
+* `t_d`: method of construction. `DECK` means the
+bridge deck is on top of the construction, `THROUGH` means
+that when you cross the bridge, some of the bridge supports are next
+to you or above you. 
+
+* `material` the bridge is made of: iron, steel or wood.
+
+* `span`: whether the bridge covers a short, medium or long
+distance. 
+
+* `rel_l`: Relative length of the main span of the
+bridge (between the two central piers) to the total crossing length.
+The categories are `S`, `S-F` and `F`. I don't
+know what these mean.
+
+* `type` of bridge: wood, suspension, arch and three types
+of truss bridge: cantilever, continuous and simple.
+
+
+The website [link](https://www.steelconstruction.info/Bridges) is an
+excellent source of information about bridges. (That's where I learned
+the difference between `THROUGH` and `DECK`.) Wikipedia
+also has a good article at
+[link](https://en.wikipedia.org/wiki/Bridge). I also found
+[link](http://www.metaeventos.net/inscricoes/formularios_off/resumo_preenchido/DINCON/Pina-A_Colimodio-V_Silva-A_PinaFilho-A.pdf)
+which is the best description I've seen of the variables.
+
+
+
+(a) The bridges are stored in CSV format. Some of the
+information is not known and was recorded in the spreadsheet as
+`?`. Turn these into genuine missing values by adding
+`na="?"` to your file-reading command. Display some of your
+data, enough to see that you have some missing data.
+
+
+(b) Verify that there are missing values in this dataset. To see
+them, convert the text columns temporarily to `factor`s using
+`mutate`, and pass the resulting data frame into
+`summary`.
+
+
+(c) Use `drop_na` to remove any rows of the data frame with missing values in them. How many rows do you have left?
+
+
+(d) We are going to assess the dissimilarity between two bridges
+by the number of the categorical variables they *disagree*
+on. This is called a "simple matching coefficient", and is the
+same thing we did in the question about clustering fruits based on
+their properties. This time, though, we want to count matches in
+things that are *rows* of our data frame (properties of two
+different bridges), so we will need to use a strategy like the one I
+used in calculating the Bray-Curtis distances.
+First, write a function that takes as input two vectors `v`
+and `w` and counts the number of their entries that differ
+(comparing the first with the first, the second with the second,
+\ldots, the last with the last. I can think of a quick way and a
+slow way, but either way is good.) To test your function, create two
+vectors (using `c`) of the same length, and see whether it
+correctly counts the number of corresponding values that are
+different. 
+
+
+(e) Write a function that has as input two row numbers and a data
+frame to take those rows from. The function needs to select all the
+columns except for `id` and `location`, select the
+rows required one at a time, and turn them into vectors. (There may
+be some repetitiousness here. That's OK.)  Then those two vectors
+are passed into the function you wrote in the previous part, and the
+count of the number of differences is returned. This is like the
+code in the Bray-Curtis problem. Test your function on rows 3 and 4
+of your bridges data set (with the missings removed). There should
+be six variables that are different.
+
+
+(f) Create a matrix or data frame of pairwise dissimilarities
+between each pair of bridges (using only the ones with no missing
+values). Use loops, or `crossing` and `rowwise`, as
+you prefer. Display the first six rows of
+your matrix (using `head`) or the first few rows of your data
+frame. (The whole thing is big, so don't display it all.)
+
+
+(g) Turn your matrix or data frame into a `dist`
+object. (If you couldn't create a matrix or data frame of
+dissimilarities, read them in from
+[link](https://raw.githubusercontent.com/nxskok/datafiles/master/mm.csv).) Do not
+display your distance object.
+
+
+(h) Run a cluster analysis using Ward's method, and display a
+dendrogram. The labels for the bridges (rows of the data frame) may
+come out too big; experiment with a `cex` less than 1 on the
+plot so that you can see them.
+
+
+(i) How many clusters do you think is reasonable for these
+data? Draw them on your plot.
+
+
+(j) Pick three bridges in the same one of your clusters (it
+doesn't matter which three bridges or which cluster). Display the
+data for these bridges. Does it make sense that these three bridges
+ended up in the same cluster? Explain briefly.
+
+
+
+
+

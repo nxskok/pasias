@@ -1,0 +1,105 @@
+##  European Social Survey and voting
+
+
+ The European Social Survey is a giant survey carried out
+across Europe covering demographic information, attitudes to and
+amount of education, politics and so on. In this question, we will
+investigate what might make British people vote for a certain
+political party.
+
+The information for this question is in a (large) spreadsheet at
+[link](http://ritsokiguess.site/datafiles/ess.csv). There is also a
+"codebook" at
+[link](http://ritsokiguess.site/datafiles/ess-codebook.pdf) that
+tells you what all the variables are. The ones we will use are the
+last five columns of the spreadsheet, described on pages 11 onwards of
+the codebook. (I could have given you more, but I didn't want to make
+this any more complicated than it already was.)
+
+
+
+(a) Read in the `.csv` file, and verify that you have lots
+of rows and columns.
+ 
+
+(b) <a name="part:whatvar">*</a> Use the codebook to find out what the columns
+`prtvtgb`, `gndr`, `agea`, `eduyrs` and
+`inwtm` are.  What do the values 1 and 2 for `gndr`
+mean? (You don't, at this point, have to worry about the values for
+the other variables.)
+ 
+
+(c) The three major political parties in Britain are the
+Conservative, Labour and Liberal Democrat. (These, for your
+information, correspond roughly to the Canadian Progressive
+Conservative, NDP and Liberal parties.) For the variable that
+corresponds to "political party voted for at the last election",
+which values correspond to these three parties?
+ 
+
+(d) Normally, I would give you a tidied-up
+data set. But I figure you could use some practice tidying this one
+up. As the codebook shows, there are some numerical codes for
+missing values, and we want to omit those.
+We want just the columns `prtvtgb` through `inwtm`
+from the right side of the spreadsheet.  Use `dplyr` or
+`tidyr` tools to (i) select only these columns, (ii) include
+the rows that correspond to people who voted for one of the three
+major parties, (iii) include the rows that have an age at interview
+less than 999, (iv) include the rows that have less than 40 years of
+education, (v) include the rows that are not missing on
+`inwtm` (use the idea from Question~<a href="#part:prepare-next">here</a>
+for (v)).  The last four of those (the inclusion of rows) can be
+done in one go.
+ 
+
+(e) Why is my response variable nominal rather than  ordinal? How can I tell?
+Which R function should I use, therefore, to fit my model?
+ 
+
+(f) <a name="part:full">*</a> Take the political party voted for, and turn it into a
+factor, by feeding it into `factor`.
+Fit an appropriate model to predict political party voted
+for at the last election (as a factor) from all the other
+variables. Gender is really a categorical variable too, but since
+there are only two possible values it can be treated as a number.
+ 
+
+(g) We have a lot of explanatory variables. The standard way to
+test whether we need all of them is to take one of them out at a time,
+and test which ones we can remove. This is a lot of work. We won't do
+that. Instead,
+the R function `step` does what you want. You feed `step`
+two things: a fitted model object, and the option `trace=0`
+(otherwise you get a lot of output). The final part of the output from
+`step` tells you which explanatory variables you need to keep.
+Run `step` on your fitted model. Which explanatory variables
+need to stay in the model here?
+
+ 
+
+(h) Fit the model indicated by `step` (in the last part).
+
+ 
+
+(i) I didn't think that interview length could possibly be
+relevant to which party a person voted for. Test whether interview
+length can be removed from your model of the last part. What do you
+conclude? (Note that `step` and this test may disagree.)
+
+ 
+
+(j) Use your best model to obtain predictions from some
+suitably chosen combinations of values of the explanatory variables
+that remain. (If you have quantitative explanatory variables left,
+you could use their first and third quartiles as values to predict
+from. Running `summary` on the data frame will get summaries
+of all the variables.)
+ 
+
+(k) What is the effect of increasing age? What is the effect of
+an increase in years of education?
+ 
+
+
+

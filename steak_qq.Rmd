@@ -1,0 +1,136 @@
+##  How do you like your steak?
+
+
+ When you order a steak in a restaurant, the server will ask
+you how you would like it cooked, or to be precise, *how much*
+you would like it cooked: rare (hardly cooked at all), through medium
+rare, medium, medium well to well (which means "well done", so that
+the meat has only a little red to it). Could you guess how a person
+likes their steak cooked, from some other information about them? The
+website [link](fivethirtyeight.com) commissioned a survey where they
+asked a number of people how they preferred their steak, along with as
+many other things as they could think of to ask. (Many of the
+variables below are related to risk-taking, which was something the
+people designing the survey thought might have something to do with
+liking steak rare.) The variables of interest are all factors or true/false:
+
+
+
+* `respondent_ID`: a ten-digit number identifying each
+person who responded to the survey.
+
+* `lottery_a`: true if the respondent preferred lottery A
+with a small chance to win a lot of money, to lottery B, with a
+larger chance to win less money.
+
+* `smoke`: true if the respondent is currently a smoker
+
+* `alcohol`: true if the respondent at least occasionally
+drinks alcohol.
+
+* `gamble`: true if the respondent likes to gamble (eg.
+betting on horse racing or playing the lottery)
+
+* `skydiving`: true if the respondent has ever been
+skydiving.
+
+* `speed`: true if the respondent likes to drive fast
+
+* `cheated`: true if the respondent has ever cheated on a
+spouse or girlfriend/boyfriend
+
+* `steak`: true if the respondent likes to eat steak
+
+* `steak_prep` (response): how the respondent likes their
+steak cooked (factor, as described above, with 5 levels).
+
+* `female`: true if the respondent is female
+
+* `age`: age group, from 18--29 to 60+.
+
+* `hhold_income`: household income group, from \$0--24,999
+to \$150,000+.
+
+* `educ`: highest level of education attained, from 
+"less than high school" up to "graduate degree"
+
+* `region`: region (of the US)
+that the respondent lives in (five values).
+
+
+The data are in
+[link](http://ritsokiguess.site/datafiles/steak1.csv). This is the
+cleaned-up data from a previous question, with the missing values removed.
+
+
+
+(a) Read in the data and display the first few lines.
+
+
+
+
+(b) We are going to predict `steak_prep` from some of
+the other variables. Why is the model-fitting function `polr`
+from package `MASS` the best choice for these data
+(alternatives being `glm` and `multinom` from package
+`nnet`)?
+
+
+
+(c) What are the levels of `steak_prep`, 
+*in the  order that R thinks they are in?* If they are not in a sensible
+order, create an ordered factor where the levels are in a sensible order.
+
+
+
+(d) Fit a model predicting preferred steak preparation in an
+ordinal logistic regression from `educ`, `female` and
+`lottery_a`. This ought to be easy from your previous work,
+but you have to be careful about one thing. No need to print out the
+results. 
+
+
+
+(e) Run `drop1` on your fitted model, with
+`test="Chisq"`. Which explanatory variable should be removed
+first, if any? Bear in mind that the variable with the
+*smallest* AIC should come out first, in case your table
+doesn't get printed in order.
+
+
+
+(f) Remove the variable that should come out first, using
+`update`. (If all the variables should stay, you can skip
+this part.)
+
+
+
+(g) Using the best model that you have so far, predict the
+probabilities of preferring each different steak preparation (method
+of cooking) for each combination of the variables that
+remain. (Some of the variables are TRUE and FALSE rather than
+factors. Bear this in mind.)
+Describe the effects of each variable on the predicted
+probabilities, if any. Note that there is exactly one person in the
+study whose educational level is "less than high school".
+
+
+
+(h) Is it reasonable to remove *all* the remaining
+explanatory variables from your best model so far? Fit a model with no explanatory variables,
+and do a test. (In R, if the right side of the squiggle is a
+`1`, that means "just an intercept". Or you can remove
+whatever remains using `update`.) What do you conclude?
+Explain briefly.
+
+
+
+(i) In the article for which these data were collected,
+[link](https://fivethirtyeight.com/datalab/how-americans-like-their-steak/),
+does the author obtain consistent conclusions with yours? Explain
+briefly. (It's not a very long article, so it won't take you long to
+skim through, and the author's point is pretty clear.)
+
+
+
+

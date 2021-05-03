@@ -1,0 +1,87 @@
+##  Focused comparisons of the effect of caffeine
+
+
+ 
+Does caffeine help students do better on a certain test? To
+find out, 36 students were randomly allocated to three groups (12 in
+each group).  Each student received a fixed number of cups of coffee
+while they were studying, but the students didn't know whether they
+were receiving all full-strength coffee ("high"), all decaf coffee
+("low") or a 50-50 mixture of the two ("moderate"). For each
+subject, their group was recorded as well as their score on the
+test. The data are in
+[link](http://ritsokiguess.site/datafiles/caffeine.csv), as a
+`.csv` file.
+
+This time we look at
+contrasts. Suppose I knew ahead of time
+that I wanted to compare moderate caffeine with high, and any
+caffeine with none. (In the latter case, we're comparing 
+"no caffeine" against the average of the other two groups.)
+
+In the previous go-through of the caffeine data, we
+discovered that `amount` was actually text rather than a
+factor, but we also discovered that it *didn't matter*. Here it
+does matter, so the first thing we have to do is to re-do the
+`pivot_longer`, creating a factor version of `amount`.
+
+
+
+(a) Read in the data again, from
+[link](http://ritsokiguess.site/datafiles/caffeine.csv), and
+display it. This is the untidy format, so name it appropriately:
+
+
+
+(b) Copy your `pivot_longer` from before, only this time add
+`names_ptypes = list(amount=factor())` to the end of it. Take a look at the
+results. What has changed from before?
+
+
+
+(c) Using the newly tidied caffeine data, run the ANOVA 
+*as a  regression* (that is, using `lm`). Look at the
+`summary` of the output. What do you see?
+
+
+
+(d) Obtain the different values of `amount`, in the order
+that R has them.
+
+
+
+(e) Create a contrast that compares High with Moderate, ignoring
+None. That is, create a vector whose length is the same as the
+number of levels of `amount`, and which has a 1 to represent
+High and a $-1$ to represent Moderate. 
+
+
+
+(f) Create a contrast that compares "any caffeine" against
+"none" by comparing None against the average of Moderate and High.
+
+
+
+(g) Verify that your two contrasts are orthogonal.
+
+
+
+(h) Arrange your contrasts as columns of a matrix (using
+`cbind`), and say that you want to use these as contrasts for
+`amount` (in data frame `caffeine` or whatever you
+called it).
+
+
+
+(i) Fit the ANOVA as an `lm`, and look at the
+`summary`. What do you conclude about your contrasts?
+
+
+
+(j) What happens if you try to use high caffeine vs.\ moderate
+caffeine and moderate vs.\ none as your two contrasts?
+
+
+
+
+

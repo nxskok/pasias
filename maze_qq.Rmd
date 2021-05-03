@@ -1,0 +1,116 @@
+##  Running a maze
+
+
+ A researcher is trying to design a maze that can be run by
+rats in about 60 seconds. One particular maze was run by a sample of
+21 rats, with the times shown in
+[link](http://ritsokiguess.site/datafiles/maze.txt). 
+
+
+
+(a) Read the data into R. What (if anything) are the data values
+delimited by?
+
+
+(b) Run a sign test, doing it yourself as we did in class:
+count the number of values above and below 60, take the *smaller*
+of those, and find the probability of a value of that or smaller still
+on a binomial distribution with $n=21$ and $p=0.5$ (we have 21 data
+points), doubling the answer because the test is two-sided.
+
+
+
+
+(c) Install my package `smmr`, if you haven't already. To do
+this, you first need to install the package `devtools` (if you
+haven't already),
+by going to the console and typing
+
+```{r eval=F}
+install.packages("devtools")
+```
+
+ 
+
+When that's all done, install `smmr` thus:
+
+```{r eval=F}
+library(devtools)
+install_github("nxskok/smmr")
+```
+
+ 
+
+That all needs to be done only once. Then, each R Studio session where
+you want to use `smmr` needs this:
+
+```{r }
+library(smmr)
+```
+
+ 
+
+As usual, only the `library` thing only needs to be done every
+time. 
+
+When you have `smmr` installed, use `sign_test` from
+that package to re-run your sign test. Do you get the same P-value?
+
+
+
+
+(d) Package `smmr` also has a function
+`pval_sign`, which has the same input as
+`sign_test`, but with the null median *first*.
+Run it on your data and see what it gives.
+
+
+
+
+
+(e) Obtain a 95\% confidence interval for the median based on these
+data. Do this two ways. First, use the trial and error way from class
+(either the try-lots-of-values way or the bisection way; either is good).
+Second, use `ci_median` from `smmr`. The latter takes
+as input a data frame, a column name (unquoted) and optionally a
+`conf.level` that defaults to 0.95.
+
+
+
+
+
+
+This is a more accurate interval than we got above. (The
+`while` loop for the bisection keeps going until the two
+guesses at the appropriate end of the interval are less than 0.01
+apart, by default.)
+`r tufte::margin_note("You can change this by adding something like *tol=1e-4* to the end of your *ci-median*.")` 
+
+If you want some other confidence level, you add `conf.level`
+on the end, as you would for `t.test`:
+
+```{r }
+ci_median(times, time, conf.level = 0.75)
+```
+
+ 
+
+A 75\% CI, just for fun. This is a shorter interval than the 95\% one,
+as it should be.
+
+Likewise there is a `ci_median0` that takes a column and an
+optional confidence level:
+
+```{r }
+with(times, ci_median0(time))
+with(times, ci_median0(time, conf.level = 0.75))
+```
+
+ 
+
+with the same results. Try `ci_median` first, and if it
+doesn't work, try `ci_median0`.
+
+
+
+

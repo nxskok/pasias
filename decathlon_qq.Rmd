@@ -1,0 +1,108 @@
+##  Running, jumping, and throwing
+
+
+ The [decathlon](https://en.wikipedia.org/wiki/Decathlon) is a men's
+`r tufte::margin_note("Women  compete in a similar competition called the *heptathlon* with seven  events.")` track-and-field competition in which competitors complete 10
+events over two days as follows, requiring the skills shown:
+
+```{r, echo=FALSE}
+dec <- tribble(
+~Event, ~Skills,
+"100m","Running, speed",
+"Long jump", "Jumping, speed",
+"Shot put", "Throwing, strength",
+"High jump", "Jumping, agility",
+"400m", "Running, speed",
+"110m hurdles", "Running, jumping, speed",
+"Discus", "Throwing, agility (and maybe strength)", 
+"Pole vault", "Jumping, agility",
+"Javelin", "Throwing, agility",
+"1500m", "Running, endurance"
+)
+knitr::kable(dec)
+```
+
+
+\begin{tabular}{ll}
+Event & Skills \\
+\hline
+100m & Running, speed\\
+Long jump & Jumping, speed \\
+Shot put & Throwing, strength\\
+High jump & Jumping, agility\\ 
+400m & Running, speed\\
+110m hurdles & Running, jumping, speed\\
+Discus & Throwing, agility (and maybe strength)\\
+Pole vault & Jumping, agility\\
+Javelin & Throwing, agility\\
+1500m & Running, endurance\\
+\hline
+\end{tabular}
+
+(note: in the pdf version, this table might appear twice.)
+
+
+These are a mixture of running, jumping and throwing disciplines. The
+performance (time, distance or height) achieved in each event is
+converted to a number of points using [standard tables](https://en.wikipedia.org/wiki/Decathlon#Points_system).
+and the winner of the entire decathlon is the
+competitor with the largest total of points. The basic idea is that a "good" performance in an event is worth 1000 points, and the score decreases if the athlete takes more seconds (running) or achieves fewer metres (jumping/throwing).
+A good decathlete has to
+be at least reasonably good at all the disciplines.
+
+For the decathlon competition at the 2013 Track and Field World
+Championship, a record was kept of each competitor's performance in
+each event (for the competitors that competed in all ten
+events). These values are in
+[link](http://ritsokiguess.site/datafiles/dec2013.txt). 
+
+
+
+(a) Read in the data and verify that you have the right number
+of variables. 
+
+
+
+(b) Some of the performances are times in seconds, and some of
+them are distances (or heights) in metres. Also, some of the columns
+are more variable than others. Produce a matrix of standardized
+performances in each event, making sure not to try to standardize
+the names!
+
+
+
+(c) We are going to make a scree plot to decide on the number
+of clusters our K-means clustering should use. Using a loop, or
+otherwise,
+`r tufte::margin_note("I grew up in the UK, and when I saw that in an    exam, it was code for *the way they say is obvious but long, and    the otherwise-way is clever but short*. I think this is one of    those.")` obtain the total within-cluster sum of squares for these
+data for each number of clusters for 2 up to `r maxclust`.
+
+
+
+(d) Using what you calculated in the previous part, draw a scree
+plot. How does your
+scree plot tell you that 5 is a possible number of clusters? Explain
+briefly.
+
+
+
+
+(e) Run K-means with 5 clusters. Produce an output that shows
+which competitors are in which cluster.
+
+
+
+
+
+(f) Display the cluster means for all of the events. (This has
+already been calculated; you just have to display it.) Find the
+cluster mean, looking at all of the events, that is farthest from
+zero, and see if you can describe the strengths and weaknesses of the
+athletes in that cluster (look at all the events for the cluster that
+has that extreme mean). Bear in mind (i) that these are the original
+performances standardized, and (ii) for a running event, a
+*smaller* value is better.
+
+
+
+

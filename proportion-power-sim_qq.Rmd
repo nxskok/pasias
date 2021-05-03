@@ -1,0 +1,76 @@
+##  Simulating power for proportions
+
+
+ In opinion surveys (and other places), we are testing for a
+proportion $p$ (for example, the proportion of people agreeing with
+some statement). Often, we want to know whether the proportion is
+"really" greater than 0.5.
+`r tufte::margin_note("That would mean assessing whether  an observed proportion could be greater than 0.5 just by chance, or  whether it is bigger enough than 0.5 to reject chance as a  plausible explanation.")`  
+That would entail testing a null
+$H_0: p=0.5$ against an alternative $H_a: p>0.5$. This is usually done
+by calculating the test statistic
+$$ z = { \hat{p} - 0.5 \over \sqrt{0.25/n}},$$
+where $\hat{p}$ is the observed proportion in the sample,
+and getting a P-value from the upper tail of a standard normal
+distribution. (The 0.25 is $p(1-p)$ where $p=0.5$.) This is what
+`prop.test` does, as we investigate shortly.
+
+
+
+(a) Use `rbinom` to generate a random value from a
+binomial distribution with $n=100$ and $p=0.6$. There are three
+inputs to `rbinom`: the first one should be the number 1, and
+the second and third are the $n$ and $p$ of the binomial distribution.
+
+
+
+(b) Using the random binomial that you generated just above, use
+`prop.test` to test whether it could reasonably have come
+from a binomial population with $n=100$ and $p=0.5$, or whether $p$
+is actually bigger than 0.5. (Of course,
+you know it actually did not come from a population with $p=0.5$.)
+`prop.test` has, for us, four inputs, thus:
+
+
+* the observed number of successes
+
+* the `n` of the binomial distribution
+
+* the null-hypothesis `p` of the binomial distribution
+
+* the alternative hypothesis, here "greater"
+
+
+
+
+(c) Run `prop.test` again, just as you did before, but this
+time save the result, and extract the piece of it called
+`p.value`. Is that the P-value from your test?
+
+
+
+(d) Estimate the power of a test of
+$H_0: p=0.5$ against $H_a: p>0.5$ when $n=500$ and $p=0.56$, using
+$\alpha=0.05$. There are three steps:
+
+
+* generate random samples from binomial
+distributions with $n=500$ and $p=0.56$, repeated "many" times
+(something like 1000 or 10,000 is good)
+
+* run `prop.test` on each of those
+random samples 
+
+* extract the P-value for each test and
+save the results (in a column called, perhaps, `pvals`).
+
+So I lied: the fourth and final step is to count how many of
+those P-values are 0.05 or less.
+
+
+
+
+
+
+
+
