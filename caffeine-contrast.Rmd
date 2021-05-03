@@ -47,6 +47,7 @@ One caffeine level per column, rather than a column of caffeine
 levels, so untidy.
 
 
+$\blacksquare$
 
 (b) Copy your `pivot_longer` from before, only this time add
 `names_ptypes = list(amount=factor())` to the end of it. Take a look at the
@@ -60,7 +61,8 @@ We'll save into `caffeine` again:
 
 ```{r }
 caffeine.untidy %>%
-  pivot_longer(-Sub, names_to="amount", values_to="score", names_ptypes = list(amount=factor())) -> caffeine
+  pivot_longer(-Sub, names_to="amount", values_to="score", 
+               names_ptypes = list(amount=factor())) -> caffeine
 caffeine
 ```
 
@@ -72,6 +74,7 @@ factor before (it wouldn't have done any harm), but we got away with
 not doing so.
 
 
+$\blacksquare$
 
 (c) Using the newly tidied caffeine data, run the ANOVA 
 *as a  regression* (that is, using `lm`). Look at the
@@ -137,6 +140,7 @@ drop1(caffeine.2, test = "F")
 Same conclusion: there is some effect of caffeine level on test score.
 
 
+$\blacksquare$
 
 (d) Obtain the different values of `amount`, in the order
 that R has them.
@@ -197,6 +201,7 @@ with contrasts, we need to have the thing we're making contrasts for
 (see below) as a `factor`, otherwise it won't work.
 
 
+$\blacksquare$
 
 (e) Create a contrast that compares High with Moderate, ignoring
 None. That is, create a vector whose length is the same as the
@@ -217,6 +222,7 @@ c.hm <- c(1, -1, 0)
 Having the 1 and the $-1$ the other way around would also have been fine.
 
 
+$\blacksquare$
 
 (f) Create a contrast that compares "any caffeine" against
 "none" by comparing None against the average of Moderate and High.
@@ -241,6 +247,7 @@ sum(c.any)
  
 
 
+$\blacksquare$
 
 (g) Verify that your two contrasts are orthogonal.
 
@@ -260,6 +267,7 @@ Zero, so orthogonal. You can check that writing `c.any` as
 `c.hm`), and so would writing it as `c(1,1,-2)`. 
 
 
+$\blacksquare$
 
 (h) Arrange your contrasts as columns of a matrix (using
 `cbind`), and say that you want to use these as contrasts for
@@ -278,6 +286,7 @@ contrasts(caffeine$amount) <- m
  
 
 
+$\blacksquare$
 
 (i) Fit the ANOVA as an `lm`, and look at the
 `summary`. What do you conclude about your contrasts?
@@ -307,6 +316,7 @@ caffeine. This one is significant, with a P-value of 0.023. So this
 contrast tells us that having any caffeine is better than having none.
 
 
+$\blacksquare$
 
 (j) What happens if you try to use high caffeine vs.\ moderate
 caffeine and moderate vs.\ none as your two contrasts?
@@ -410,6 +420,7 @@ on just these comparisons, and not on any others. We decided ahead of
 time to test just these, and gave ourselves the best chance of finding
 significance that we could.
 
+$\blacksquare$
 
 
 
