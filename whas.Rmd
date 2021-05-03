@@ -41,7 +41,7 @@ see) unlike SAS, which determined that they were dates, and even used
 the first 20 rows of the file to determine what format of dates they
 were.
 
-
+$\blacksquare$
 
 (b) The date columns should be R dates. They are not
 year-month-day, so converting them via `as.Date` (which is
@@ -117,6 +117,7 @@ whas %>% mutate(across(ends_with("date"), ~dmy(.), .names = "{.col}_d")) %>% gli
 
 The three columns on the end are the new actual-dates we created. To give them new names, use `.names` inside `across`, and in *that* is a recipe that says how to make the new names. `{.col}` means the name the column had before, and the `_d` after that means to add that to the old name to make the new one.
 
+$\blacksquare$
 
 (c) Create three new variables `diff1, diff2, diff3` that
 are the numbers of days between each of your dates, and save the
@@ -187,7 +188,7 @@ with(whas3, all.equal(los, diff1))
 so they really are all equal, all 500 of them.
 `r tufte::margin_note("The computer  scientists among you will note that I shouldn't have done this,  because *diff1* through *diff3* are double-precision  decimal numbers, so I should have tested their equality with  *lenfol* and *los* by working out the absolute  differences and testing whether they were all *small*. On  consulting the help for *all.equal*, though, I find that it  *does* work properly, because it actually tests whether the  things being compared differ by less than a quantity  *tolerance* which defaults to 0.000000015, and if  they  do it calls them equal. This is all tied in with the difference  between integers and decimal numbers as they are represented on a  computer: exactly and approximately, respectively. A  double-precision number has about 16 significant digits of accuracy;  equal things won't have all 16 digits equal, most likely, but they  would be expected to have at least 8 of those digits the  same. CSCA08 stuff, I imagine. This is where you can casually toss  around terms like *machine epsilon*. Oh! I just realized  something. You know how very very small P-values are shown in R as  *<2.2e-16*? *That's* the machine epsilon. Anything smaller than that is  indistinguishable from zero, and you can't have a P-value be  *exactly* zero. The default *tolerance* I mentioned  above is the square root of this, which is normally used for such  things.")`
 
-
+$\blacksquare$
 
 (d) Construct side-by-side boxplots of the length of followup by
 each followup status. You'll need to make sure
@@ -279,3 +280,6 @@ whas3 %>%
 ```
 
 That's odd. On the left, it looks as if there were bursts of patients admitted to the study at around 1.5, 3.5, and 5.5 years from the end. (These are, remember, all people who survived and mostly people who survived to the end.) Not what I would have expected -- I would have expected a steady stream of patients, the heart attack victims as they happened to come in.
+
+$\blacksquare$
+
