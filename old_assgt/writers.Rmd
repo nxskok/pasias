@@ -1,0 +1,208 @@
+\question Some people believe that poets, especially female poets, die younger than other types of writer. [William Butler Yeats](https://en.wikipedia.org/wiki/W._B._Yeats)\endnote{An Irish, that is to say, Gaelic, poet (see below), but a male one.} wrote:
+
+> She is the Gaelic\endnote{Gaelic is a language of Scotland and Ireland, and the culture of the people who speak it.} muse, for she gives inspiration to those she persecutes. The Gaelic poets die young, for she is restless, and will not let them remain long on earth.
+
+A literature student wanted to investigate this, and so collected a sample of 123 female writers (of three different types), and noted the age at death of each writer. 
+
+The data are in [http://ritsokiguess.site/datafiles/STAC32/writers.csv](http://ritsokiguess.site/datafiles/STAC32/writers.csv).
+
+\bP
+
+\p Read in and display (some of) the data.
+
+\bS
+
+The usual:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/writers.csv"
+writers <- read_csv(my_url)
+writers
+```
+
+There are indeed 123 writers. The second column shows the principal type of writing each writer did, and the third column shows their age at death. The first column is a numerical code for the type of writing, which we ignore (since we can handle the text writing type).
+
+\eS
+
+\p Make a suitable plot of the ages and types of writing.
+
+\bS
+
+As usual, one quantitative and one categorical, so a boxplot:
+
+```{r}
+ggplot(writers, aes(x=Type, y=Age)) + geom_boxplot()
+```
+
+At this point, a boxplot is best, since right now you are mostly after a general sense of what is going on, rather than assessing normality in particular (that will come later).
+
+\eS
+
+\p Obtain a summary table showing, for each type of writing, the number of writers of that type, along with the mean, median and standard deviation of their ages at death.
+
+\bS
+
+The customary `group_by` and `summarize`:
+
+```{r}
+writers %>% group_by(Type) %>% 
+  summarize(n=n(), mean=mean(Age), med=median(Age), sd=sd(Age))
+```
+
+\eS
+
+\p Run a complete analysis, starting with an ordinary (not Welch) analysis of variance, that ends with a conclusion in the context of the data and an assessment of assumptions.
+
+\bS
+
+I've left this fairly open-ended, to see how well you know what needs to be included and what it means. There is a lot of room here for explanatory text to show that you know what you are doing. One output followed by another *without* any explanatory text suggests that you are just copying what I did without any idea about why you are doing it.
+
+The place to start is the ordinary (not Welch) ANOVA. You may not think that this is the best thing to do (you'll have a chance to talk about that later), but I wanted to make sure that you practiced the procedure:
+
+```{r}
+writers.1 <- aov(Age~Type, data=writers)
+summary(writers.1)
+```
+
+This says that the mean ages at death of the three groups of writers are not all the same, or that there are differences among those writers (in terms of mean age at death). "The mean ages of the types of writer are different" is not accurate enough, because it comes too close to saying that *all three* groups are different, which is more than you can say right now.
+
+The $F$-test is significant, meaning that there are some differences among\endnote{There might be differences *between* two things, but *among* three or more.} the means, and Tukey's method will enable us to see which ones differ:
+
+```{r}
+TukeyHSD(writers.1)
+```
+
+There is a significant difference in mean age at death between the poets and both the other types of writer. The novelists and the nonfiction writers do not differ significantly in mean age at death.
+
+We know from the boxplots (or the summary table) that this significant difference was because the poets died *younger* on average, which is exactly what the literature student was trying to find out. Thus, female poets really do die younger on average than female writers of other types. It is best to bring this point out, since this is the reason we (or the literature student) were doing this analysis in the first place. See Extra 1 for more.
+
+So now we need to assess the assumptions on which the ANOVA depends.
+
+The assumption we made is that the ages at death of the authors of each different type had approximately a normal distribution (given the sample sizes) with approximately equal spread. The boxplots definitely look skewed to the left (well, not the poets so much, but the others definitely). So now consider the sample sizes: 24, 67, and 32 for the three groups (respectively), and make a call about whether you think the normality is good enough. You are certainly entitled to declare the two outliers on the nonfiction writers to be too extreme given a sample size of only 24. Recall that once one sample fails normality, that's all you need.
+
+Now, since you specifically want normality, you could reasonably look at normal quantile plots instead of the boxplots. Don't just get normal quantile plots, though; say something about why you want them instead of the boxplots you drew earlier:
+
+```{r}
+ggplot(writers, aes(sample = Age)) +
+  stat_qq() + stat_qq_line() + 
+  facet_wrap(~Type)
+```
+
+I see that the Nonfiction writers have two outliers at the low end (and are otherwise not bad); the writers of Novels don't go up high enough (it's almost as if there is some magic that stops them living beyond 90!); the writers of Poems have a short-tailed distribution. You'll remember that short tails are not a problem, since the mean is still descriptive of such a distribution; it's *long* tails or outliers or skewness that you need to be worried about. The outliers in the Nonfiction writers are the biggest concern.
+
+Are you concerned that these outliers are a problem, given the sample size? There are only 24 nonfiction writers (from your table of means earlier), so the Central Limit Theorem will help a bit. Make a call about whether these outliers are a big enough problem. You can go either way on this, as long as you raise the relevant issues.
+
+Another approach you might take is to look at the P-values. The one in the $F$-test is really small, and so is one of the ones in the Tukey. So even if you think the analysis is a bit off, those conclusions are not likely to change. The 0.02 P-value in the Tukey, however, is another story. This could become non-significant in actual fact if the P-value is not to be trusted.
+
+Yet another approach (looking at the bootstrapped sampling distributions of the sample means) is in Extra 3. This gets more than a little hairy with three groups, especially doing it the way I do.
+
+If you think that the normality is not good enough, it's a good idea to suggest that we might do a Mood's Median Test instead, and you could even do it (followed up with pairwise median tests). If you think that normality is all right, you might then look at the spreads. I think you ought to conclude that these are close enough to equal (the SDs from the summary table or the heights of the boxes on the boxplots), and so there is no need to do a Welch ANOVA. (Disagree if you like, but be prepared to make the case.)
+
+I have several Extras:
+
+Extra 1: having come to that tidy conclusion, we really ought to back off a bit. These writers were (we assume) a random sample of some population, but they were actually mostly Americans, with a few Canadian and Mexican writers. So this appears to be true at least for North American writers. But this is (or might be) a different thing to the Yeats quote about female Gaelic poets.
+
+There is a more prosaic reason. It is harder (in most places, but especially North America) to get poetry published than it is to find a market for other types of writing. (A would-be novelist, say, can be a journalist or write for magazines to pay the bills while they try to find a publisher for their novel.) Thus a poet is living a more precarious existence, and that might bring about health problems.
+
+Extra 2: with the non-normality in mind, maybe Mood's median test is the thing:
+
+```{r}
+median_test(writers, Age, Type)
+```
+
+The P-value here is a bit bigger than for the $F$-test, but it is still clearly significant. Hence, we do the pairwise median tests to find out which medians differ:
+
+```{r}
+pairwise_median_test(writers, Age, Type)
+```
+
+The conclusion here is exactly the same as for the ANOVA. The P-values have moved around a bit, though: the first one is a little closer to significance (remember, look at the last column since we are doing three tests at once) and the last one is now only just significant.
+
+```{r}
+writers %>% group_by(Type) %>% 
+  summarize(n=n(), mean=mean(Age), med=median(Age), sd=sd(Age))
+```
+
+In both of these two cases (Nonfiction-Novels and Novels-Poems), the medians are closer together than the means are. That would explain why the Novels-Poems P-value would increase, but not why the Nonfiction-Novels one would decrease.
+
+I would have no objection *in general* to your running a Mood's Median Test on these data, but the point of *this* problem was to give you practice with `aov`.
+
+Extra 3: the other way to assess if the normality is OK given the sample sizes is to obtain bootstrap sampling distributions of the sample means for each `Type`. The sample size for the novelists is 67, so I would expect the skewness there to be fine, but the two outliers among the Nonfiction writers may be cause for concern, since there are only 24 of those altogether.
+
+Let's see if we can do all three at once (I like living on the edge). I take things one step at a time, building up a pipeline as I go. Here's how it starts:
+
+```{r}
+writers %>% nest(data=Age)
+```
+
+The thing `data` is a so-called list-column. I don't think you've seen one of these before, so let me take a moment to explain. The dataframes we have seen so far are like spreadsheets, in that each "cell" or "entry" in a dataframe has something like a number or a piece of text in it (or, occasionally, a thing that is True or False, or a date). Tibble-type dataframes are more flexible than that, however: each cell of a dataframe could contain *anything.*
+
+In this one, the three things in the column `data` are each *dataframes*,\endnote{Like those Russian dolls.} containing the column called `Age` from the original dataframe. These are the ages at death of the writers of that particular `Type`. These are the things we want bootstrap samples of.
+
+I'm not at all sure how this is going to go, so let's shoot for just 5 bootstrap samples to start with. If we can get it working, we can scale up the number of samples later, but having a smaller number of samples is easier to look at:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(5, sample(.$Age, replace = TRUE)))) 
+```
+
+This is the right kind of thing, but the problem with this kind of display is that we don't know what those two list-columns actually contain. To find out, piping the above into `str` ("structure") gives more detail:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(5, sample(.$Age, replace = T)))) %>% str()
+```
+
+Those do indeed look like five bootstrap samples of ages from each type of writer. So we are doing OK so far.
+
+Next, we want the means of each sample. This is awkward, because we want the mean of *each* sample, and they are nested too deeply for comfort: not just in the `samples` column, but inside a list in that. Let's see if we can make them a bit more accessible:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(5, sample(.$Age, replace = T)))) %>% 
+  unnest(samples)
+```
+
+The original dataframe had three rows, one for each `Type`, and all five bootstrap samples hidden in one row. This has split out each bootstrap sample into its own row, where it is easier to get at, with the result that there are now five rows where `Type` is `Novels`, one for each bootstrap sample, and $5 \times 3 = 15$ rows altogether.
+
+Now, for each of the bootstrap samples in `samples`, we want the mean of it, which might make you think of `map`, specifically `map_dbl`:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(5, sample(.$Age, replace = T)))) %>% 
+  unnest(samples) %>% 
+  mutate(mean=map_dbl(samples, ~mean(.)))
+```
+
+and then the last stage is to do facetted normal quantile plots of these, facetted by `Type`:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(5, sample(.$Age, replace = T)))) %>% 
+  unnest(samples) %>% 
+  mutate(mean=map_dbl(samples, ~mean(.))) %>% 
+  ggplot(aes(sample=mean)) + stat_qq() +
+    stat_qq_line() + facet_wrap(~Type, scales="free")
+```
+
+You may breathe now. The hard work is done.
+
+These plots, of course, are rather silly because they are means of only five bootstrap samples, instead of something like 1000. But our prototype works, so now all we have to do now is change 5 to 1000 and run it again:
+
+```{r}
+writers %>% nest(data=Age) %>% 
+  mutate(samples=map(data, ~rerun(1000, sample(.$Age, replace = T)))) %>% 
+  unnest(samples) %>% 
+  mutate(mean=map_dbl(samples, ~mean(.))) %>% 
+  ggplot(aes(sample=mean)) + stat_qq() +
+    stat_qq_line() + facet_wrap(~Type, scales="free")
+
+```
+
+Boom!
+
+These three normal quantile plots are all acceptable, to my mind, although the Nonfiction one, with the two outliers and the smallest sample size, is still a tiny bit skewed to the left. Apart from that, the three sampling distributions of the sample means are close to normal, so our `aov` is much better than you might have thought from looking at the boxplots.
+
+\eS
+
+\eP

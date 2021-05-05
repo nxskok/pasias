@@ -1,0 +1,77 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+College distance preferences
+
+```{r}
+preferred <- tribble(
+  ~distance, ~students, ~parents,
+  "250 or less", 4450, 1594,
+  "250-500", 3942, 902,
+  "500-1000", 2416, 331,
+  "1000 or more", 1907, 180
+)
+preferred
+```
+
+
+```{r}
+(preferred %>% select(-parents) %>% uncount(students) %>% mutate(who="students") -> d1)
+```
+
+```{r}
+(preferred %>% select(-students) %>% uncount(parents) %>% mutate(who="parents") -> d2)
+```
+
+```{r}
+bind_rows(d1, d2) -> all
+all
+```
+
+save "all"
+
+```{r}
+write_csv(all, "distance.csv")
+```
+
+
+```{r}
+all %>% count(who, distance)
+```
+
+```{r}
+ggplot(all, aes(x=distance)) + geom_bar()
+```
+
+```{r}
+ggplot(all, aes(x=fct_inorder(distance))) + geom_bar()
+```
+
+```{r}
+ggplot(all, aes(x=fct_inorder(distance), fill=who)) + geom_bar(position="dodge")
+```
+
+```{r}
+ggplot(all, aes(x=fct_inorder(distance), fill=who)) + geom_bar(position="fill")
+
+```
+```{r}
+ggplot(all, aes(x=who, fill=fct_inorder(distance))) + geom_bar(position="fill")
+```
+
+this I think  is nice
+
+```{r}
+ggplot(all, aes(x=who, fill=fct_inorder(distance))) + geom_bar(position="dodge")
+```
+
+
+
+

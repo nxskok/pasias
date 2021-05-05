@@ -1,0 +1,197 @@
+\question Many students at a certain university were asked about the importance of religion in their lives (categorized as "not", "fairly", or "very" important), and also about the number of 
+hours they spent studying per week. (This was part of a much larger survey.) We want to see whether there is any kind of relationship between these two variables. The data are in [here](http://ritsokiguess.site/datafiles/STAC32/student_relig.csv). 
+
+\bP
+
+\p[2] Read in and display (some of) the data.
+
+\bS
+
+The usual. This is a straightforward one:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/student_relig.csv"
+student <- read_csv(my_url)
+student
+```
+
+686 students, with columns obviously named for religious importance and study hours.
+
+Extra: 
+
+I said this came from a bigger survey, actually this one:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/student0405.csv"
+student0 <- read_csv(my_url)
+student0
+```
+
+There are four extra rows here. Why? Let's look at a `summary` of the dataframe:
+
+\small
+```{r}
+summary(student0) 
+```
+\normalsize
+
+You get information about each variable. For the text variables, you don't learn much, only how many there are. (See later for more on this.)
+For each of the four quantitative variables, you see
+some stats about each one, along with a count of missing values. The study hours variable is evidently skewed to the right (mean bigger than median), which we will have to think about later.
+
+R also has a "factor" variable type, which is the "official" way to handle categorical variables in R. Sometimes it matters, but most of the time leaving categorical variables as text is just fine. `summary` handles these
+differently. My second line of code below says "for each variable that is text, make it into a factor":
+
+```{r}
+student0 %>% 
+  mutate(across(where(is.character), ~factor(.))) %>% 
+  summary()
+```
+
+For factors, you also get how many observations there are in each category, and the number of missing values, which we didn't get before.
+However, `ReligImp` does not have any missing values.
+
+I said there were four missing values for study hours, that is, four students who left that blank on their survey. 
+We want to get rid of those students (that is, remove those whole rows), and, to simplify things for you, let's keep only the study hours and importance of religion columns. That goes like this:
+
+```{r}
+student0 %>% drop_na(StudyHrs) %>% 
+  select(ReligImp, StudyHrs)
+```
+
+Then I saved that for you. 686 rows instead of 690, having removed the four rows with missing `StudyHrs`.
+
+
+Another (better, but more complicated) option is to use the package `pointblank`, which produces much more detailed data validation reports. You would start that by piping your data into `scan_data()` to get a (very) detailed report of missingness and data values, and then you can check your data for particular problems, such as missing values, or values bigger or smaller than they should be, for the variables you care about. See [here](https://github.com/rich-iannone/pointblank) for more.
+
+\eS
+
+\p[2] Obtain the number of observations and the mean and standard deviation of study hours for each level of importance.
+
+\bS
+
+`group_by` and `summarize` (spelling the latter with s or z as you prefer):
+
+```{r}
+student %>% group_by(ReligImp) %>% 
+  summarize(n=n(), mean_sh=mean(StudyHrs), sd_sh=sd(StudyHrs))
+```
+
+
+\eS
+
+\p[2] Comment briefly on how the groups compare in terms of study hours.
+
+\bS
+
+The students who think religion is very important have a higher mean number of study hours. The other two groups seem similar. 
+
+As far as the SDs are concerned, make a call. You could say that the very-important group also has a (slightly) larger SD, or you could say that the SDs are all very similar.  
+I would actually favour the second one, but this is going to be a question about Welch ANOVA, so go whichever way you like.
+
+\eS
+
+\p[2] Make a suitable graph of this data set.
+
+\bS
+
+This kind of data is one quantitative and one categorical variable, so once again a boxplot:
+
+```{r}
+ggplot(student, aes(x=ReligImp, y=StudyHrs)) + geom_boxplot()
+```
+
+\eS
+
+\p[3] The statistician in this study decided that the data were sufficiently normal in shape given the (very large) sample sizes, but was concerned about unequal spreads among the three groups. 
+Given this,
+run a suitable analysis and display the output. (This includes a suitable follow-up test, if warranted.)
+
+\bS
+
+Normal-enough data (in the statistician's estimation) and unequal spreads means a Welch ANOVA:
+
+```{r}
+oneway.test(StudyHrs~ReligImp, data=student)
+gamesHowellTest(StudyHrs~factor(ReligImp), data=student)
+```
+
+Games-Howell is the suitable follow-up here, to go with the Welch ANOVA. It is warranted because the Welch ANOVA was significant.
+
+Make sure you have installed and loaded `PMCMRplus` before trying the second half of this.
+
+Extra: for large data sets, boxplots make it look as if the outlier problem is bad, because a boxplot of a large amount of data will almost certainly contain some outliers (according to Tukey's definition). 
+Tukey envisaged a boxplot as something you could draw by hand for a smallish data set, and couldn't foresee something like R and the kind of data we might be able to deal with. To show you the kind of thing I mean, let's draw some random samples of varying sizes from normal distributions, which should not have outliers, and see how their boxplots look:
+
+```{r, include=F}
+set.seed(457299)
+```
+
+
+```{r}
+tibble(n=c(10, 30, 100, 300)) %>% 
+  mutate(samp=map(n, ~rnorm(.))) %>% 
+  unnest(samp) %>% 
+  ggplot(aes(x=factor(n), y=samp)) + geom_boxplot()
+```
+
+As the sample size gets bigger, the number of outliers gets bigger, and the whiskers get longer. 
+All this means is that in a larger sample, you are more likely to see a small number of values that are further out, and that is not necessarily a reason for concern. Here, the outliers are only one value out of 100 and two out of 300, but they have what looks like an outsize influence on the plot. In the boxplot for our data, the distributions were a bit skewed, but the outliers may not have been as much of a problem as they looked.
+
+
+\eS
+
+\p[2] What do you conclude from your analysis of the previous part, in the context of the data?
+
+\bS
+
+The Welch ANOVA was significant, so the religious-importance groups are not all the same in terms of mean study hours, and we need to figure out which groups differ from which. (Or say this in the previous part if you wish.)
+
+The students for whom religion was very important had a significantly different mean number of study hours than the other students; the Fairly and Not groups were not significantly different from each other.
+Looking back at the means (or the boxplots), the significance was because the Very group studied for *more* hours than the other groups. 
+It seems that religion has to be very important to a student to positively affect how much they study.
+
+Extra: you might have been concerned that the study hours within the groups were not nearly normal enough to trust the Welch ANOVA. But the groups were large, so there is a lot of help from the Central Limit Theorem.
+Enough? Well, that is hard to judge.
+
+My take on this is to bootstrap the sampling distribution of the sample mean for each group. If *that* looks normal, then we ought to be able to trust the $F$-test (regular or Welch, as appropriate). The code is complicated (I'll explain the ideas below):
+
+```{r}
+student %>% nest(-ReligImp) %>% 
+  mutate(samp=map(data, ~rerun(1000, sample(.$StudyHrs, replace = T)))) %>% 
+  mutate(means=map(samp, ~map_dbl(., ~mean(.x)))) %>% 
+  unnest(means) %>% 
+  ggplot(aes(sample=means)) + stat_qq() + stat_qq_line() +
+  facet_wrap(~ReligImp, scales = "free")
+```
+
+To truly understand what's going on, you probably need to run this code one line at a time.
+
+Anyway, these normal quantile plots are *very* normal. This says that the sampling distributions of the sample means are *very much* normal in shape, which means that
+the sample sizes are definitely large enough to overcome the apparently bad skewness that we saw on the boxplots. In other words, using a regular or Welch ANOVA will be perfectly good; there is no need to reach for Mood's median test here, despite what you might think from looking at the boxplots, because the sample sizes are so large.
+
+The code, line by line:
+
+- create mini-data-frames called `data`, containing one column called `StudyHrs`, for each `ReligImp` group
+- generate 1000 bootstrap samples for each group (this is rather hairy, which plays out in the next line, because within each group you have 1000 different bootstrap samples, and we will want the mean of each one in a moment.)
+- work out the mean of each bootstrap sample within each group. The inner `map_dbl` works out the mean for each bootstrap sample, and the outer `map` does this for each religious-importance group. Hairy indeed!
+- make a column of all the means
+- plot normal quantile plots of them, using different facets for each group.
+
+Finally, you might have wondered whether we needed to do Welch:
+
+```{r}
+student.1 <- aov(StudyHrs~ReligImp, data=student)
+summary(student.1)
+TukeyHSD(student.1)
+```
+
+It didn't make much difference, and the conclusions are identical. So I think either way would have been defensible. 
+
+The value of doing Tukey is that we get confidence intervals for the difference of means between each group, and this gives us an "effect size": the students for whom religion was very important studied on average three or four hours per week more than the other students, and you can look at the confidence intervals to see how much uncertainty there is in those estimates. Students vary a lot in how much they study, but the sample sizes are large, so the intervals are not that long.
+
+\eS
+
+\eP
+
+

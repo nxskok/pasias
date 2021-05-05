@@ -1,0 +1,143 @@
+\question You might recall the IRS data from when we were learning about the sign test. The idea was that we wanted to see how long "on average" it took people to fill out a tax form. The data are in \url{http://ritsokiguess.site/datafiles/irs.txt}.
+
+\bP
+
+\p Read in and display (some of) the data. There is only one column of data, so you can pretend the values are separated by anything.
+
+\bS
+
+Pretty much any of the `read_` functions will work, even this one:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/irs.txt"
+irs <- read_table(my_url)
+irs
+```
+
+One column called `Time`.
+
+\eS
+
+\p Obtain a bootstrap distribution of the sample *median*.
+
+\bS
+
+The lecture notes use the exact same dataset, so you can borrow ideas from there:
+
+```{r}
+rerun(1000, sample(irs$Time, replace = TRUE)) %>% 
+  map_dbl(~median(.)) -> medians
+```
+
+Extra: if you prefer `rowwise` to `map`, you can do it that way also. I didn't show you this way in class, but you might find it easier to follow. Or not.
+
+Set up a dataframe with one row for each bootstrap sample you're going to draw, 1000 in this case:
+
+```{r}
+tibble(sim = 1:1000)
+```
+
+Create a column with a new bootstrap sample for each `sim`. This means doing `rowwise` *first* and then wrapping the sampling in `list` because you are creating a list-column of samples:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(sample(irs$Time, replace = TRUE)))
+```
+
+Each thing in `sample` has 30 observations in it (one bootstrap sample). If you want, you can `unnest` to take a look at the values; they should be the ones in the dataset, possibly with extra repeats.
+
+Next, work out the median of each bootstrapped sample, which is simple because we are still working rowwise:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(sample = list(sample(irs$Time, replace = TRUE))) %>% 
+  mutate(my_median = median(sample)) -> bs
+bs
+```
+
+As you realize, `bs` stands for "bootstrap". Of course.
+
+\eS
+
+\p Make a suitable graph of the bootstrap distribution of the median. What seems odd about it? Why did that happen? (Hint: use more bins on your plot than usual, like 50.)
+
+\bS
+
+One column of medians. If you did it the first way, make them into a dataframe first:
+
+```{r}
+tibble(median = medians) %>% 
+  ggplot(aes(x = median)) + geom_histogram(bins = 50) 
+```
+
+If you followed my second way, the medians are already in a dataframe, so go straight ahead:
+
+```{r}
+ggplot(bs, aes(x = my_median)) + geom_histogram(bins = 50)
+```
+
+What we are seeing at this resolution is that the distribution is *very* irregular, with funny holes in it, more than you would expect even with this many bins. By way of comparison, the bootstrap distribution of the *mean* looks a lot smoother:
+
+```{r}
+rerun(1000, sample(irs$Time, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) -> means
+tibble(mean = means) %>% ggplot(aes(x = mean)) + geom_histogram(bins = 50)
+```
+This is somewhat irregular, because we really have too many bins, but there are not nearly so many holes and irregular heights as on the plot for the median. I had you use a lot of bins in this special case because I wanted you to see just how irregular the bootstrapped distribution for the median really was.
+
+So why did that happen? Think about what the sample median is for 30 observations: it is the mean of the 15th and 16th smallest values when you arrange them in order. A bootstrap sample must contain the same values as the original dataset (just probably not the same frequencies of them). So the median of a bootstrap sample must be the average of two of the values in the original dataset, and probably two that were close together. What that means is that there are *not very many possible medians* of the bootstrap samples, and they form a clearly discrete rather than a continuous distribution. (The sample mean, on the other hand, uses all the values in the bootstrap sample, and so there are a lot more possible bootstrap means than bootstrap medians; the distribution of those is as good as continuous.)
+
+What this means is that bootstrapping for medians is odd (it always looks like this), but that's what the bootstrap distribution looks like.
+
+\eS
+
+\p Find 95% percentile and bootstrap-$t$ intervals for the population median.
+
+\bS
+
+The percentile interval comes from the middle 95% of the bootstrap distribution of medians:
+
+```{r}
+quantile(medians, c(0.025, 0.975))
+```
+
+For the bootstrap $t$, estimate the population median as the sample median:
+
+```{r}
+med <- median(irs$Time)
+med
+```
+
+get its standard error from the SD of the bootstrap distribution of medians:
+
+```{r}
+se <- sd(medians)
+se
+```
+
+then go up and down twice this (or 1.96 if you believe in $z$): (or T)
+
+```{r}
+med + c(-2, 2)*se
+```
+
+Extra: in this case, we also have the CI for the median that came out of the sign test:
+
+```{r}
+library(smmr)
+ci_median(irs, Time)
+```
+
+This one is actually very close to the bootstrap percentile interval, while the bootstrap $t$ interval is higher at both ends.
+
+\eS
+
+\bS
+
+
+
+\eS
+
+\eP

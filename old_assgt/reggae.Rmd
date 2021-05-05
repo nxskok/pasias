@@ -1,0 +1,198 @@
+\question Reggae is a music genre that originated in Jamaica in the late 1960s. One of the most famous reggae bands was Bob Marley and the Wailers. 
+In a survey, 729 students were asked to rate reggae music on a scale from 1, "don't like it at all" to 6, "like it a lot". 
+We will treat the ratings as quantitative.
+Each student was also asked to classify their home town as one of "big city", "suburban", "small town", "rural". Does a student's opinion of reggae depend on the kind of home town they come from? The data are in \url{http://ritsokiguess.site/datafiles/STAC32/reggae.csv}.
+
+\bP
+
+\p[2] Read in and display (some of) the data.
+
+\bS
+
+This is (evidently) a `.csv`, so:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/reggae.csv"
+reggae <- read_csv(my_url)
+reggae
+```
+
+The students shown are all from big cities, but there are others, as you can check by scrolling down.
+
+\eS
+
+\p[2] How many students are from each different size of town?
+
+\bS
+
+This is the usual kind of application of `count`:
+
+```{r}
+reggae %>% count(home)
+```
+
+Another, equally good, way (you can ignore the warning):
+
+```{r}
+reggae %>% group_by(home) %>% 
+  summarize(n=n())
+```
+
+Most of the students in this data set are from suburbia.
+
+\eS
+
+\p[2] Make a suitable graph of the two variables in this data frame. 
+
+\bS
+
+One quantitative, one categorical: a boxplot, as ever:
+
+```{r}
+ggplot(reggae, aes(x=home, y=rating)) + geom_boxplot()
+```
+
+Extra 1: the last three boxplots really are identical, because the medians, means, quartiles and extreme values are all equal. However, the *data values* are not all the same, as you see below.
+
+Extra 2: I said that the ratings should be treated as quantitative, to guide you towards this plot. 
+You could otherwise have taken the point of view that the ratings were (ordered) categorical, in which case the right graph would have been a grouped bar chart, as below. 
+There is a question about which variable should be `x` and which should be `fill`. 
+I am taking the point of view that we want to compare ratings within each category of `home`, which I think makes sense here (see discussion below), which breaks my "rule" that the categorical variable with fewer categories should be `x`.\endnote{Perhaps a better word here would be \emph{principle}, to convey the idea that you can do something else if it works better for your purposes.} 
+
+```{r}
+ggplot(reggae, aes(x=home, fill=factor(rating))) + geom_bar(position = "dodge")
+```
+
+
+\eS
+
+\p[2] Discuss briefly why you might prefer to run Mood's median test to compare ratings among home towns.
+
+\bS
+
+The issue here is whether *all* of the rating distributions (within each category of `home`) are sufficiently close to normal in shape.
+The "big city" group is clearly skewed to the left. This is enough to make us favour Mood's median test over ANOVA. 
+
+A part-marks answer is to note that the big-city group has smaller spread than the other groups (as measured by the IQR). This is answering the wrong question, though. 
+Remember the process: first we assess normality. If that fails, we use Mood's median test. Then, with normality OK, we assess equal spreads. If *that* fails, we use Welch ANOVA, and if both normality and equal spreads pass, we use regular ANOVA. 
+
+\eS
+
+\p[2] Suppose that somebody wanted to run Welch ANOVA on these data. What would be a reasonable argument to support that?
+
+\bS
+
+The argument would have to be that normality is all right, given the sample sizes. We found earlier that there are between 89 and 368 students in each group. These are large samples, and might be enough to overcome the non-normality we see. 
+
+The only real concern I have is with the big city group. This is the least normal, and also the smallest sample. The other groups seem to have the kind of non-normality that will easily be taken care of by the sample sizes we have. 
+
+Extra: the issue is really about the sampling distribution of the mean within each group. Does that look normal enough? This could be assessed by looking at each group, one at a time, and taking bootstrap samples. Here's the big-city group:
+
+```{r}
+reggae %>% filter(home=="big city") -> bigs
+rerun(1000, sample(bigs$rating, replace = T)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 12)
+```
+
+Not too much wrong with that. This shows that the sample size is indeed big enough to cope with the skewness. 
+
+You can do any of the others the same way. The rural students are the next smallest group:
+
+```{r}
+reggae %>% filter(home=="rural") -> rurals
+rerun(1000, sample(rurals$rating, replace = T)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 12)
+```
+
+and the suburban students are the biggest group, which should have no problems at all:
+
+```{r}
+reggae %>% filter(home=="suburban") -> subs
+rerun(1000, sample(subs$rating, replace = T)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 12)
+```
+
+Absolutely fine. We'll see how this plays out below.
+
+\eS
+
+\p[2] Run Mood's median test and display the output.
+
+\bS
+
+Data frame, quantitative column, categorical column:
+
+```{r}
+median_test(reggae, rating, home)
+```
+
+\eS
+
+\p[3] Explain briefly why running pairwise median tests is a good idea, run them, and display the results.
+
+\bS
+
+The Mood's median test is significant, with a P-value of 0.000005, so the median ratings are not all the same. We want to find out how they differ. 
+
+(The table of aboves and belows, and for that matter the boxplot earlier, suggest that big-city will be different from the rest, but it is not clear whether there will be any other significant differences.)
+
+
+
+```{r}
+pairwise_median_test(reggae, rating, home)
+```
+
+\eS
+
+\p Summarize, as concisely as possible, how the home towns differ in terms of their students' ratings of reggae music.
+
+\bS
+
+The students from big cities like reggae more than students from other places. The other kinds of hometown do not differ significantly.
+
+Extra 1: Given the previous discussion, you might be wondering how Welch ANOVA (and maybe even regular ANOVA) compare. Let's find out:
+
+```{r}
+oneway.test(rating~home,data=reggae)
+```
+and
+
+```{r}
+gamesHowellTest(rating~factor(home),data=reggae)
+```
+
+The conclusions are identical with Mood's median test, and the P-values are not that different, either. 
+
+This makes me wonder how an ordinary ANOVA with Tukey would have come out:
+
+```{r}
+reggae %>% 
+  aov(rating~home, data=.) %>% 
+  TukeyHSD()
+```
+
+Again, almost identical.
+
+Extra 2: some Bob Marley and the Wailers for you, the first from 1980, \url{https://www.youtube.com/watch?v=RhJ0q7X3DLM}, and the second from 1973: \url{https://www.youtube.com/watch?v=rf8GjhXvOjU}.
+
+\eS
+
+\eP
+
+
+
+
+
+
+
+
+
+
+
+

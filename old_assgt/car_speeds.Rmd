@@ -1,0 +1,64 @@
+---
+title: "Speed limits"
+output: html_notebook
+---
+
+Data from Watkins, Scheaffer and Cobb, ex E55 page 74.
+
+## Packages
+
+```{r}
+library(tidyverse)
+```
+
+## Constructing the data
+
+I have speeds and counts:
+
+```{r}
+counts=tribble(
+  ~speed_int, ~count,
+  25, 2, 
+  26, 31,
+  27, 92,
+  28, 149,
+  29, 178,
+  30, 156,
+  31, 157,
+  32, 99,
+  33, 74,
+  34, 31,
+  35, 16,
+  36, 13,
+  37, 1, 
+  38, 1
+)
+counts
+```
+
+Turn this back into an actual data frame
+
+```{r}
+counts %>% 
+  mutate(speed=map2(speed_int,count,~rep(.x,.y))) %>% 
+  unnest() %>% 
+  select(speed) %>% 
+  sample_frac(1) %>% 
+  mutate(car_no=row_number()) %>% 
+  select(2:1) ->
+speeds
+speeds
+```
+
+check by reconstituting the table
+
+```{r}
+speeds %>% count(speed)
+```
+
+save
+
+```{r}
+write_csv(speeds,"car-speeds.csv")
+```
+

@@ -1,0 +1,78 @@
+---
+title: "pleasant touch
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+```
+
+## data
+
+```{r}
+sensations <- 
+  tribble(
+    ~firing, ~pleasantness,
+    23, 0.2,
+    24, 1.0,
+    22, 1.2,
+    25, 1.2,
+    27, 1.0,
+    28, 2.0,
+    34, 2.3,
+    33, 2.2,
+    36, 2.4,
+    34, 2.8
+  )
+sensations
+```
+
+
+subjects received "a light brushing stroke on the forearm". Measured: firing frequency of stimulated nerves (impulses per second), and subject's rating of pleasantness of the touch.
+
+scatterplot
+
+```{r}
+ggplot(sensations, aes(y=pleasantness, x=firing)) + geom_point()
+```
+
+or
+
+```{r}
+ggplot(sensations, aes(y=pleasantness, x=firing)) + geom_point() + geom_smooth()
+```
+
+
+correlation
+
+```{r}
+cor(sensations)
+```
+
+regression
+
+```{r}
+sensations.1=lm(pleasantness~firing, data=sensations)
+summary(sensations.1)
+```
+
+normal quantile plot of residuals
+
+```{r}
+ggplot(sensations.1, aes(sample=.resid)) + stat_qq() + stat_qq_line()
+```
+
+residuals against fitted
+
+```{r}
+ggplot(sensations.1, aes(x=.fitted, y=.resid)) + geom_point() + geom_smooth()
+```
+
+## save the data
+
+```{r}
+write_csv(sensations, "touch.csv")
+```
+

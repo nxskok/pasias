@@ -1,0 +1,214 @@
+\question Insurance adjusters are concerned that Jocko's Garage is giving estimates for repairing car damage that are too high. To see whether this is indeed the case, ten cars that had been in collisions were taken to both Jocko's Garage and another garage, and the two estimates for repair were recorded. The data as recorded are in \url{http://ritsokiguess.site/datafiles/STAC32/jocko.txt}.
+
+\bP
+
+\p Take a look at the data file (eg. by using your web browser). How are the data laid out? Do there appear to be column headers?
+
+\bS
+
+The data are laid out in aligned columns, so that we will need to use `read_table` to read it in. There are no column headers, since there is no line at the top of the file saying what each column represents. (The fact that I was asking about column headers is kind of a clue that something non-standard is happening there.)
+
+\eS
+
+\p Read in and display the data file, bearing in mind what you just concluded about it. What names did the columns acquire?
+
+\bS
+
+As mentioned above, you'll need `read_table`, plus `col_names=FALSE` to *not* read the first row as column names:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/jocko.txt"
+cars0 <- read_table(my_url, col_names = FALSE)
+cars0
+```
+
+The column names have become `X1` through `X7`. You'll need to work with these in a minute, so it is good to be aware of that now.
+
+I used a "temporary" name for my dataframe since we are going to be tidying it before we do anything with it, and I'm saving the "good" name `cars` for the tidy one.
+
+\eS
+
+\p Make this data set tidy. That is, you need to end up with columns containing the repair cost estimates at each of the two garages and also identifying the cars, with each observation on one row. Describe your thought process. (It needs to be possible for the reader to follow your description and understand why it works.)
+Save your tidy dataframe.
+
+\bS
+
+This looks very far from tidy right now. The things in `X2` look like they will need to be variable names eventually, but there are two copies of them, and there are also five columns of data values that need eventually to become three. Having all the data values in *one* column might be a useful place to start:
+
+```{r}
+cars0 %>% pivot_longer(X3:X7, names_to="old_cols", values_to="values") 
+```
+
+This is tidier, but it's now *too long*: this has 30 rows but there are only 10 cars, or, depending on your point of view, there are 20 observations on 10 individual cars, so you could justify (in some way) having 20 rows, but not 30.
+
+Now, therefore, we need to pivot *wider*. But to get to this point, we had to try pivoting longer to see what it did, and then go from there. I don't think it's  at all obvious that this is what will  happen, so I think you need to do a pivot-longer first, *talk about it*, and then move on.
+
+From here, we want to make columns whose names are the things in `X2`, and whose values are the things in `values`. This is exactly what `pivot_wider` does, so add that to our pipe:
+
+```{r}
+cars0 %>% pivot_longer(X3:X7, names_to="names", values_to="values") %>% 
+  pivot_wider(names_from = X2, values_from = values) -> cars
+cars
+```
+
+This is now tidy: one row for each of the 10 cars, one column containing the repair estimates for each car at each of the two garages, and a column identifying the cars. I think this is best because this is a matched-pairs study, and so you want the two measurements for each individual car in columns next to each other (for `t.test` with `paired=TRUE`). 
+
+I think it is best to show the whole pipeline here, even though you are making R work a little harder, rather than having to make up a temporary variable name for the output from `pivot_longer` (that you are never going to look at again after this).
+
+
+
+
+
+If you thought there were 20 observations, you have a bit more work to do (that you will have to undo later to get the right graph), namely:
+
+```{r}
+cars %>% pivot_longer(c(Jocko, Other), names_to="garage", values_to="estimate") -> cars1
+cars1
+```
+
+This would be the right thing to do if you had independent observations (that is, *20 different* cars, and you randomly choose a garage to send each one to). But you can have a car assessed for repair without actually repairing it, so it makes more sense to send each car to both garages, and compare like with like. Compare the kids learning to read; once a child has learned to read, you can't teach them to read again, so that study had to be done with two independent samples.
+
+Extra: I thought about starting by making the dataframe even wider:
+
+```{r}
+cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7)
+```
+
+This is sort of the right thing, but there repeat columns now, depending on where the data values came from in `cars0`. What we want to do now is *some* kind of `pivot_longer`, creating three columns called `Car`, `Jocko`, and `Other`. If we only had *one* kind of thing to make longer, this would be a standard `pivot_longer`. But we have three. There are two "extras" to `pivot_longer` that will get you to the right place. The first one is to give multiple inputs to `names_to`, because the column names encode two things: where in the original data frame the value came from (which is now junk to us), and what the value actually represents, which we definitely *do* want to keep. I don't have a good name for it, though, so I'll call it `z` for now. Note that we need a `names_sep` that says what the two things in the column names are separated by, the underscore that the `pivot_wider` put in there: 
+
+```{r}
+cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
+  pivot_longer(-X1, names_to = c("junk", "z"), names_sep="_")
+```
+
+This is now exactly what I got by *starting* with `pivot_longer`, and so the same `pivot_wider` that I finished with before will tidy this up:
+
+```{r}
+cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
+  pivot_longer(-X1, names_to = c("junk", "z"), names_sep="_") %>% 
+  pivot_wider(names_from = z, values_from = value)
+```
+
+This is now tidy, so you have achieved what you set out to do, but you have not done it the best way, so you should expect to lose a little something.
+
+This kind of longer-then-wider happens often enough that there is an option in `pivot_longer` to do it in one step. Let's remind ourselves of where we were:
+
+
+```{r}
+cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) 
+```
+
+The second part of those funky column names needs to become *the names of our new columns*. To make that happen in one step, you put the special indicator `.value` in where we had `z` before:
+
+```{r}
+cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
+  pivot_longer(-X1, names_to = c("junk", ".value"), names_sep="_")
+```
+
+and as if by magic, we have tidiness. It's best to discover this and do it in two steps, though by starting with `pivot_wider` you have made it more difficult for yourself. By starting with `pivot_longer`, it is a very standard longer-then-wider, and there is nothing extra you have to learn. (The column `X1` I added to the data so that `pivot_wider` would work smoothly. See what happens if you remove it with `select(-X1)` before you start pivoting.)
+
+There is usually a relatively simple way to do these, and if your way is complicated, that is an invitation to try it again a different way. I don't think there's a way to do it in *one* step, though, because those things in `X2` have to get to column names somehow, and they can only do so by being attached to which original column the values came from. 
+
+All of these ideas are [here](https://tidyr.tidyverse.org/articles/pivot.html), which is a dense read, but worth working through to see what is possible. This problem is of the type in "Longer, then wider".
+
+\eS
+
+\p Make a suitable graph to assess the comparison of interest, and say briefly what your graph tells you.
+
+\bS
+
+You might be tempted to look at `cars`, see two quantitative variables, and think "scatterplot":
+
+```{r}
+ggplot(cars, aes(x=Jocko, y=Other)) + geom_point()
+```
+This says that a repair that is more expensive at one garage is more expensive at the other as well, which is true, but it's an answer to the *wrong question*. We care about whether Jocko's Garage is more expensive than the other one *on the same car*. To rescue the scatterplot, you can add the line $y=x$ to the graph and see which side of the line the points are, which you might have to find out how to do:
+
+
+```{r}
+ggplot(cars, aes(x=Jocko, y=Other)) + geom_point() + geom_abline(slope = 1, intercept = 0)
+```
+
+More of the points are below and to the right of the line, indicating that Jocko's Garage is typically more expensive (in the cases where the other garage is more expensive, there is not much in it). 
+
+There is a more direct approach here, based on the idea that a matched pairs test looks at the differences between the two estimates for each car: work out the differences, and make a *one*-sample plot of them:
+
+```{r}
+cars %>% mutate(diff=Jocko-Other) %>% 
+  ggplot(aes(x=diff)) + geom_histogram(bins = 4)
+```
+Most of the differences, this way around, are positive, so the indication is that Jocko's Garage is indeed more expensive. Don't have too many bins.
+
+A one-sample boxplot of the differences would also work:
+
+```{r}
+cars %>% mutate(diff=Jocko-Other) %>% 
+  ggplot(aes(x=1, y=diff)) + geom_boxplot()
+```
+This tells you that at least 75% of the differences are positive.
+
+If you ended up with my `cars1`:
+
+```{r}
+cars1
+```
+
+this is "obviously" a boxplot:
+
+```{r}
+ggplot(cars1, aes(x=garage, y=estimate)) + geom_boxplot()
+```
+except that you have not used the fact that each group is measurements on the *same* 10 cars. Here is a way to rescue that:
+
+```{r}
+ggplot(cars1, aes(x=garage, y=estimate, group=Car)) + geom_point() + geom_line()
+```
+
+The majority of the lines go downhill, so Jocko's Garage is more expensive most of the time. (The lines are really another way to look at the differences.) This last graph I would be good with, since it shows which pairs of measurements are related because of being on the same cars.
+
+\eS
+
+\p Carry  out a test to make an appropriate comparison of the mean estimates. What do you conclude, in the context of the data?
+
+\bS
+
+Comparing means requires the right flavour of $t$-test, in this case a matched-pairs one, with a one-sided alternative, since we were concerned that the Jocko estimates were bigger. In a matched pairs test, `alternative` says how the first column you name compares with the other one. If your columns are the opposite way to mine, your `alternative` needs to be "less":
+
+```{r}
+with(cars, t.test(Jocko, Other, paired = TRUE, alternative = "greater"))
+```
+
+Remember that this flavour of $t$-test doesn't take a `data=`, so you need to use `with` or dollar signs.
+
+The P-value is actually just less than 0.01, so we can definitely conclude that the Jocko estimates are bigger on average.
+
+If you calculated the differences earlier, feel free to use them here:
+
+```{r}
+cars %>% mutate(diff=Jocko-Other) %>% 
+  with(., t.test(diff, mu=0, alternative = "greater"))
+```
+Saving the data frame with the differences in it is probably smart.
+
+Again, if you got to `cars1`, you might think to do this:
+
+```{r}
+t.test(estimate~garage, data=cars1, alternative="greater")
+```
+
+but you would be *wrong*, because the two groups are not independent (they're the same cars at each garage). You have also lost the significant result, because some of the repairs are more expensive than others (at both garages), and this introduces extra variability that this test does not account for.
+
+I said to compare the means, so I don't want a sign test here. If you think we should be doing one, you'll need to make the case for it properly: first, calculate and plot the differences and make the case that they're not normal enough. I see left-skewness in the histogram of differences, but personally I don't find this bad enough to worry about. If you do, make that case (but, a sample of size 10 even from a normal distribution might look this skewed) and then run the right test:
+
+```{r}
+cars %>% mutate(diff=Jocko-Other) %>% 
+  sign_test(diff, 0)
+```
+
+The upper-tail P-value is the one you want (explain why), and this is not quite significant. This is different from the correct $t$-test for a couple of reasons: there is probably not much power with this small sample, and the two estimates that are higher at the Other garage are not much higher, which the $t$-test accounts for but the sign test does not.
+
+\eS
+
+
+\eP
+

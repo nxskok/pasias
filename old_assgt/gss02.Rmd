@@ -1,0 +1,96 @@
+```{r}
+library(tidyverse)
+library(smmr)
+library(skimr)
+```
+
+general social survey 2002
+
+```{r}
+f <- file.choose()
+```
+
+
+```{r}
+gss <- read_csv(f)
+skim(gss)
+```
+
+degree and tvhours
+
+```{r}
+gss %>% drop_na(degree, tvhours) -> gss1
+gss1
+```
+
+```{r}
+ggplot(gss1, aes(x=degree, y=tvhours)) + geom_boxplot()
+```
+
+think about HS or less, college, graduate
+
+```{r}
+gss1 %>% mutate(deg1=fct_collapse(degree, 
+                                  HSorLess=c("NotHs","HighSchool"),
+                                  College=c("Bachelor", "JunColl"))) %>% 
+  select(deg1, tvhours) %>% 
+  rename(degree=deg1) ->
+  gss1a
+```
+
+```{r}
+gss1a %>% count(degree)
+```
+
+save
+
+```{r}
+write_csv(gss1a, "gss_tv.csv")
+```
+
+go from here
+
+```{r}
+gss <- read_csv("gss_tv.csv")
+gss
+```
+
+
+
+```{r}
+ggplot(gss1a, aes(x=deg1, y=tvhours)) + geom_boxplot()
+```
+
+summary
+
+```{r}
+gss1a %>% group_by(deg1) %>% 
+  summarise(n=n(), mean=mean(tvhours), med=median(tvhours))
+```
+
+
+anova
+
+```{r}
+gss1.1 <- aov(tvhours~deg1, data=gss1a)
+summary(gss1.1)
+TukeyHSD(gss1.1)
+```
+
+mood
+
+```{r}
+median_test(gss1a, tvhours, deg1)
+pairwise_median_test(gss1a, tvhours, deg1)
+```
+
+college vs graduate
+
+```{r}
+gss1a %>% filter(deg1 != "HSL") %>% 
+  median_test(tvhours, as.character(deg1))
+```
+
+
+
+

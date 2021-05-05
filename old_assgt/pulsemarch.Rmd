@@ -1,0 +1,206 @@
+
+\question Forty students, some male and some female, measured their resting pulse rates. Then they marched in place for one minute and measured their pulse rate again. 
+Our aim is to use regression to predict the pulse rate after the marching from the pulse rate before, and to see whether that is different for males and females. The data is in \url{http://ritsokiguess.site/datafiles/STAC32/pulsemarch.csv}. 
+
+\bP
+
+\p Read in and display (some of) the data.
+
+\bS
+
+As usual:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/pulsemarch.csv"
+march <- read_csv(my_url)
+march
+```
+
+\eS
+
+\p Make a suitable graph using all three variables, adding appropriate regression line(s) to the plot.
+
+\bS
+
+Two quantitative and one categorical says scatterplot, with colour distinguishing the categories (two here). `geom_smooth` adds a regression line to the plot for each `Sex`, which is what we want. I used `se=F` to remove the grey envelopes from the plot (because I thought they confused the issue):
+
+```{r}
+ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
+  geom_smooth(method = "lm", se=F)
+```
+
+Having only one regression line is not so good because that only shows that pulse rate after goes up with pulse rate before, but not if and how the sexes differ.
+
+Extra: I took a shortcut of the process here, to make the question shorter. In practice, what you'd do is to put smooth trends on the plot first:
+
+```{r} 
+ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
+  geom_smooth(se=F)
+```
+
+The red trend looks curved, but if you look carefully, pretty much all of\endnote{My mind just jumped to a former German soccer player by the name of Klaus Allofs.} the evidence for the curve comes from that point on the right with pulse rate before over 90 and pulse rate after around 100. If it weren't for that, the red trend would be pretty close to linear. As you'll recall, a decision about the kind of trend based on *one* observation is a pretty flimsy decision.
+
+*Then*, having seen that the trends are not obviously curved, you would draw the plot with the straight lines. (Fitting separate *curves* is a whole different story that I didn't want to get into.)
+
+\eS
+
+\p Explain briefly but carefully how any effects of pulse rate before on pulse rate after, and also of sex on pulse rate after, show up on your plot. (If either explanatory variable has no effect, explain how you know.)
+
+\bS
+
+There is an upward trend, so
+if the pulse rate before is higher, so is the pulse rate after. This is true for both males and females. (Or, holding `Sex` fixed, that is, comparing two people of the same sex.)
+
+The red line is always above the  blue line, so at any given `Before` pulse rate, the `After` pulse rate for a female is predicted to be higher than that for a male.
+
+Note that you have to be careful: when talking about the effect of each explanatory variable, you have to *hold the other one constant* (in general, hold all the other ones constant). If you can word that in a way that makes sense in the context of the data you are looking at, so much the better.
+
+\eS
+
+\p Run a regression predicting pulse rate after from the other two variables. Display the output.
+
+\bS
+
+Thus:
+
+
+```{r}
+march.1 <- lm(After~Before+Sex, data=march)
+summary(march.1)
+```
+
+Extra: if you want "all the other variables except the response" as explanatory, there is also this shortcut:
+
+```{r}
+march.1a <- lm(After~., data=march)
+summary(march.1a)
+```
+
+
+\eS
+
+\p Looking at your graph, does the significance (or lack of) of each of your two explanatory variables surprise you? Explain briefly.
+
+\bS
+
+We noted a clear upward trend before, for both sexes, so there is no surprise that the `Before` pulse rate is significant.
+
+The red dots (females) on the graph seemed to be on average above the blue ones (males), at least for similar before pulse rates. (This is not completely convincing, so you are entitled to be surprised also; note that the P-value, while significant, is not *that* small).
+
+Extra: comparing the *lines* is less convincing, because how do we get a feel for whether these lines are more different than chance? One deceiving way to (fail to) get a feel for this is to re-draw our plot but with the grey envelopes:
+
+```{r}
+ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+The grey envelopes overlap substantially, which would make you think the lines are *not* significantly different. But, this is not the right way to compare the lines. It is a similar problem to that of comparing two *means*  (that we would normally do with a two-sample test of some kind) by working out the two *one*-sample confidence intervals, and seeing whether they overlap. If they *do not*, then you can be sure that the means differ, but if they do overlap, then you cannot say anything about whether the means differ: maybe they do, maybe they don't. This one is analogous; the grey envelopes overlap, so maybe the lines differ, maybe they don't. Looking at the grey envelopes in this case gives you *no* insight about whether males and females differ.
+
+[Here](https://www.cscu.cornell.edu/news/statnews/stnews73.pdf) is a short discussion of this issue (in the context of comparing two means).
+
+
+
+\eS
+
+\p What does the numerical value of the Estimate for `Sex` in your regression output mean, in the context of this data set? Explain briefly.
+
+\bS
+
+The estimate is labelled `SexMale`, and its value is $-4.8$.
+
+`Sex` is a categorical variable, so it has a baseline category, which is the first one, `Female`. The Estimate `SexMale` shows how males compare to the baseline (females), at a fixed `Before` pulse rate.
+This value is $-4.8$, so, at any `Before` pulse rate, the male `After` pulse rate is predicted to be 4.8 *less* than the female one.
+
+I think you have to mention the value $-4.8$, so that you can talk intelligently about what it means for these data.
+
+Extra: the implication of our model is that the predicted difference is the *same* all the way along. You might have your doubts about that; you might think the lines are closer together on the left and further apart on the right. Another way to think about this is whether the lines are *parallel*: that is, whether they have the same slope. I'm inclined to think they do; the data points are fairly scattered, and I think the slopes would have to be a lot more different to be significantly different. But you don't have to take my word for it: we can test this by adding an **interaction term** to the model. You might have seen this in ANOVA, where you are assessing the effect of one factor at different levels of the other. This is more or less the same idea. Note the `*` rather than the `+` in the model formula:\endnote{To be precise, the * means ``the main effects and the interaction together``; if you want to talk about just the interaction term, you denote it by ``:''; note the ``Before:SexMale'' term in the summary table.}
+
+```{r}
+march.2 <- lm(After~Before*Sex, data=march)
+summary(march.2)
+```
+
+The `Before:SexMale` term tests the interaction, and you see it is nowhere near significant. There is no justification for having lines with different slopes for males and females.
+
+We were lucky here in that `Sex` has only two levels, so looking at the `summary` gave us what we wanted. If we had had an `Other` category for `Sex`, for people who don't identify with either male or female, there would be two Estimates in the `summary` table, one comparing Male with Female, and one comparing Other with Female.\endnote{Female is the baseline, so everything gets compared with that, whether you like it or not.} 
+But maybe the significant difference is Male vs. Other, and we would never see it. 
+
+To look for *any* effect of a categorical variable, the right way is to use `drop1`, to see which variables, including categorical ones, can be removed as a whole, thus:\endnote{The \emph{test} piece says to do an F-test, which is different from without the quotes, which would mean not to do any tests, F without quotes meaning \emph{FALSE}.}
+
+```{r}
+drop1(march.2, test="F")
+```
+
+This *only* lists things that can be removed, in this case the interaction. It is not significant, so out it comes (resulting in our model `march.1`):
+
+```{r}
+drop1(march.1, test="F")
+```
+
+Both remaining explanatory variables are significant, so we need to keep them both. 
+
+Our categorical explanatory variable has only two levels, so `drop1` and `summary` give the exact same P-values.
+
+Extra 2:
+
+Let's go back and look at our data set again:
+
+```{r}
+march
+```
+
+You might have been thinking, when we started, that these are before and after measurements *on the same people*, and so what we have here is matched pairs. So we do, but it's not the kind of matched pairs we are accustomed to. Let's begin by taking differences, getting rid of the `Before` and `After` columns, and see what we have left:
+
+```{r}
+march %>% 
+  mutate(difference=After-Before) %>% 
+  select(-After, -Before) -> march_paired
+march_paired
+```
+
+In matched pairs, we are used to having *one* column of differences, and we test that for a mean or median of zero, to express no difference between before and after (or whatever it was). But now, we have an extra column `Sex`. We are not interested here in whether the differences average out to zero;\endnote{I think it's a given that pulse rates will be higher after exercise than before.} we care more about whether the differences differ (!) between males and females. That is to say, we have a two-sample matched pairs test!
+
+At this point, your head ought to be hurting!
+
+However, at this point what we are saying is that *if* you believe that the difference is a good way to summarize the effect of the exercise, then we have one measurement for each person, independent because different people's measurements will be independent. It doesn't matter where they came from. We have measurements on two groups, so some kind of two-sample test will be good. Which kind? Let's look at a graph, a good one now being a boxplot:
+
+```{r}
+ggplot(march_paired, aes(x=Sex, y=difference)) + geom_boxplot()
+```
+
+Or, if you like, a facetted normal quantile plot:
+
+```{r}
+ggplot(march_paired, aes(sample=difference)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~Sex)
+```
+
+
+It seems to me that these are normal enough for a $t$-test, given the sample sizes (feel free to disagree):
+
+```{r}
+march_paired %>% count(Sex)
+```
+
+The spreads look a bit different, so I think I would prefer the Welch test here:
+
+```{r}
+t.test(difference~Sex, data=march_paired)
+```
+
+This time, there is not quite a significant difference between males and females. (The P-value is just the other side of 0.05.) Though the conclusion is different, the P-values are fairly similar.
+
+Which test is better? I think treating it as matched pairs is assuming that the differences after minus before are the things to be looking at. This assumes that the after measurements are the before measurement plus a something that depends on treatment, but *not* on the before measurement. This would fail, for example, if all the after measurements are two times the before ones (so that the difference would be bigger if the before score was bigger).
+The regression approach is more flexible, because *any* linear relationship is taken care of. A matched-pairs model of this kind is a special case of the regression model but with the slope set to be 1. In our regression, the slope is less than 1, but not by much. 
+
+\eS
+
+
+
+\eP
+
+
+
+
+

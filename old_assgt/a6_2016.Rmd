@@ -1,0 +1,80 @@
+---
+title: "Assignment 6 Report"
+author: "Ken Butler"
+date: "November 10, 2016"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Introduction
+------------
+
+What, if anything, does the number of Facebook friends a person has say about that person's brain activity? A 2012 study measured the the density of grey matter in
+the areas of the brain associated with social perception and
+associative memory in a sample of 40 students. The grey matter density was measured on a standardized ($z$-score) scale.
+
+Exploratory analysis
+--------------------
+
+We begin by reading the data and loading the "tidyverse" (to enable us to make plots and so on):
+
+```{r}
+fb=read.table("facebook.txt",header=T)
+library(tidyverse)
+str(fb)
+```
+
+The dataset contains two variables, the grey matter density `GMdensity` and the number of Facebook friends `FBfriends`.
+
+A scatterplot will show the nature of the relationship between the two variables. I added a smooth trend:
+
+```{r}
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
+```
+
+There appears to be a weak upward trend. I think the "wiggle" on the smooth trend is just a peculiarity of this data set and does not indicate the shape of the trend.
+
+Regression analysis
+-------------------
+
+Having detected a trend, we next carry out a regression analysis to understand the trend better:
+ 
+```{r}
+fb.1=lm(FBfriends~GMdensity,data=fb)
+summary(fb.1)
+```
+
+R-squared of 0.19 is small, indicating that the fit of the regression is poor. Despite that, the slope of `GMdensity` is significantly different from zero, showing that there really is a relationship between grey matter density and number of Facebook friends. (That is, if we were to look at all possible students, we would see a relationship.)
+
+We have proved the existence of a relationship despite the weak trend. This seems surprising: we would have expected a significant relationship to go with a much smaller trend.
+
+Here is a scatterplot with the regression line on it:
+
+```{r}
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
+  geom_smooth(method="lm")
+```
+
+This suggests that the straight-line relationship is a more or less reasonable description of the data.
+
+Residual analysis
+-----------------
+
+To investigate whether the fitted relationship is satisfactory, we plot the residuals against the fitted values:
+
+```{r}
+ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+That looks very random.
+
+Conclusions
+-----------
+
+The original scatterplot showed a weak upward trend. We found, by fitting a regression, that the upward trend was in fact significant: that is, that an increase in grey matter density is associated with an increase in number of Facebook friends. On checking the residual plot, we found that the linear trend fits satisfactorily because the residual plot shows a random lack of pattern. This means that the linear relationship, weak though it is, is about the best we will do.
+

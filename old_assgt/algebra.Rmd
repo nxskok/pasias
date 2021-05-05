@@ -1,0 +1,117 @@
+\question At a high  school in New Jersey, teachers were interested in what might help students to learn algebra. One idea was laptops as a learning aid, to see whether having access to one helped with algebra scores. (This was some time ago.) The 20 students in one class were given laptops to use in school and at home, while the 27 students in another class were not given laptops. For all of these students, the final exam score in algebra was recorded. The data are in \url{http://ritsokiguess.site/datafiles/STAC33/algebra.txt}, with two columns, one indicating whether the student received a laptop or not, and the other giving their score on the algebra final exam.
+
+\bP
+
+\p Read in and display (some of) the data. Do you have (i) the correct number of observations, and (ii) the correct *type* of columns? Explain briefly.
+
+\bS
+
+Take a look at the data file first: the data values are *aligned in columns* with variable numbers of spaces between, so `read_table` is the thing. Read directly from the URL, rather than trying to copy the data from the website:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC33/algebra.txt"
+algebra <- read_table(my_url)
+algebra
+```
+
+
+There were $20+27=47$ students altogether in the two classes, and we do indeed have 47 rows, one per student. So we have the right number of rows. This is two independent samples; each student was in only one of the two classes, either the class whose students got laptops or not.
+The values in the `laptop` column are text (see the `chr` at the top), and the values in the `score` column are numbers (`dbl` at the top). Alternatively, you can look at the R Console output in which you see that `laptop` is `col_character()` (text) and `score` is `col_double()` (numerical, strictly a decimal number).
+
+
+Extra 1: as in the first question, `read.table` works but it is *wrong* in this course.
+
+Extra 2: with more than one space between the values, `read_delim` will not work. Or, perhaps more confusing, it will appear to work and then fail later, which means that you need to pay attention:
+
+```{r}
+d <- read_delim(my_url, " ")
+d
+```
+
+This *looks*  all right, but look carefully: the `laptop` column is correctly text, but the `score` column, which should be numbers (`dbl`), is actually text as well.  An easier way to see this is to look at the output from the console, which is the descriptions of the columns: they are *both* `col_character` or text, while `score` should be numbers. On mine, though possibly not on yours, you can see exactly what went wrong: with more than one space separating the values, the remaining spaces went into `score`, which then becomes a piece of text with some spaces at the front and then numbers.
+
+This will actually work for a while, as you go through the question, but will come back to bite you the moment you need `score` to be numerical (eg. when you try to draw a boxplot), because it is actually not numerical at all.
+
+Extra 3: this is the standard R way to lay out this kind of data, with all the outcome values in one column and a second (categorical) column saying which group each observation was in. In other places you might see two separate columns of scores, one for the students with laptops and one for the students without, as below (you won't understand the code below now, but you will by the end of the course):
+
+```{r}
+algebra %>% 
+  mutate(row = c(1:20, 1:27)) %>% 
+  pivot_wider(names_from = laptop, values_from = score)
+```
+
+A column of `yes` and a column of `no`. The classes were of different sizes, so the `yes` column, with only 20 observations, has some `NA` ("missing") observations at the end (scroll down to see them) to enable  the dataframe to keep a rectangular shape.
+
+We will learn later that these layouts of data are called "longer" and "wider" (respectively), and how to convert between them. R usually likes "longer" data, as in the data file, but you will often see data sets displayed wider because it takes up less space.
+
+
+\eS
+
+\p Make a suitable graph of these data.
+
+\bS
+
+The teachers were hoping to see how the laptop-yes and the laptop-no groups compared in terms of algebra scores, so side-by-side boxplots would be helpful. More simply, we have one quantitative and one categorical variable, which is a boxplot according to the table in the notes:
+
+```{r}
+ggplot(algebra, aes(x = laptop, y = score)) + geom_boxplot()
+```
+
+Extra: as you will note below, the median score for the students with laptops is a little higher for the students who had laptops. This is easy to see on a boxplot because that is what a boxplot does. (That was what Tukey, who we will meet later, *designed* the boxplot to do.)
+
+Another plot you might have drawn is a histogram for each group, side by side, or, as they come out here, above and below. This works using facets:
+
+```{r}
+ggplot(algebra, aes(x = score)) + 
+  geom_histogram(bins = 10) +
+  facet_wrap(~laptop, ncol = 1)
+```
+Looking  at those, can you *really* say that the median is slightly higher for the `yes` group? I really don't think you can. Certainly it is clear from the histograms that the spread for the `yes` group is less, but comparing the medians is much more easily done from the boxplot. The teachers were interested in whether the laptops were associated with higher scores on average, so the kind of comparison that the boxplot affords is clearly preferred here. 
+
+If you are interested in the code: you imagine you're  going to make a histogram of scores regardless of group, and then at the end you facet by your grouping variable. I added the `ncol = 1` to make the plots come out in one column (that is, one above the other). If you don't do this, they come out left and right, which makes the distributions even harder to compare.
+
+\eS
+
+\p Comment briefly on your graph, thinking about what the teachers would like to know.
+
+\bS
+
+There are three things to say something about, the first two of which would probably interest the teachers:
+
+- comparison of centre: the *median* score for the group that had laptops is (slightly) higher than for the group that did not.
+- comparison of spread: the scores for the group that had laptops are less spread out (have smaller *interquartile range*) than for the group that did not.
+- assessment of  shape: both groups have low outliers, or are skewed to the left in shape.
+
+Some comments from me:
+
+- boxplots say *nothing* about mean and standard deviation, so don't mention those here. You should say something about the measures of centre (median) and spread (IQR) that they *do* use.
+- I think of skewness as a property of a whole distribution, but outlierness as a property of individual observations. So, when you're looking at this one, think about where the evidence about shape is coming from: is it coming from those one or two low values that are different from the rest (which would be outliers), or is it coming from the whole distribution (would you get the same story if those maybe-outliers are taken away)? My take is that if you take the outliers away, both distributions are close to symmetric, and therefore what you see here is outliers rather than skewness. If you see something different, make the case for it.
+
+One reason to suspect skewness or something  like it is that test scores have an upper limit (100) that some of the scores got close to, and no effective lower limit (the lower limit is 0 but no-one got very close to that). In this sort of situation, you'd expect the scores to be skewed away from the limit: that is, to the left. Or to have low outliers rather than high ones.
+
+\eS
+
+\p Work out the median and  inter-quartile range for the students who did and who did not have laptops, and compare with the boxplot. (In R, the inter-quartile range is `IQR` in uppercase.)
+
+\bS
+
+This is easy to make way harder than it needs to be: `group_by` and `summarize` will do it. Put the two summaries in one `summarize`:
+
+```{r}
+algebra %>% 
+  group_by(laptop) %>% 
+  summarize(med = median(score), iqr = IQR(score))
+```
+
+Then relate these to the information on the boxplot: the centre line of the box is the median. For the `no` group this is just above 80, so 81 makes sense; for the `yes` group this is not quite halfway between 80 and 90, so 84 makes sense.
+
+The inter-quartile range is the height of the box for each group. Estimate the top and bottom of the two boxes from the boxplot scale, and subtract. For the  `no` group this is something like $88-68$ which *is* 20, and for the `yes` group it is something like $93-80$ which is indeed 13.
+
+Extra: I didn't ask you here about whether the difference was likely meaningful. The focus here was on getting the graph and summaries. If I had done so, you would then need to consider things like whether a three-point difference in medians could have been chance, and whether we really had random allocation of students to groups.
+
+To take the second point first: these are students who chose to take two different classes, rather than being randomly allocated to classes as would be the case in a true experiment. What we have is really in between an experiment and an observational study; yes, there was a treatment (laptop or not) that was (we hope) randomly allocated to one class and not the other, but the classes could have been different for any number of other reasons that had nothing to do with having  laptops or not, such as time of day, teacher, approach to material, previous ability at algebra, etc.
+
+So even if we are willing to believe that the students were as-if randomized to laptop or not, the question remains as to whether that three-point difference in medians is reproducible or indicative of a real difference or not. This is the kind of thing we would try a two-sample $t$-test with. In this case, we might doubt whether it will come out significant (because of the small difference in medians and presumably means, compared to the amount of variability present), and, even then, there is the question of whether we *should* be doing a $t$-test at all, given the outliers.
+
+\eS
+\eP

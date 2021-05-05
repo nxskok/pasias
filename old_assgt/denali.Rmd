@@ -1,0 +1,50 @@
+---
+title: "Denali"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggrepel)
+```
+
+## read in data
+
+```{r}
+my_url="http://ritsokiguess.site/datafiles/caribou.txt"
+denali=read_table(my_url)
+denali
+```
+
+make dates
+
+```{r}
+(denali %>% mutate(date=mdy(date)) -> denali)
+```
+
+## plot caribou and wolf against time with dual y axis
+
+start with caribou
+
+```{r}
+ggplot(denali, aes(x=date, y=caribou))+geom_line(aes(colour="caribou"))
+```
+
+add the wolf to it
+
+```{r}
+ggplot(denali, aes(x=date, y=caribou))+geom_line(aes(colour="caribou"))+geom_line(aes(y=wolf, colour="wolf"))
+```
+
+add the second axis
+
+```{r}
+ggplot(denali, aes(x=date, y=caribou))+geom_line(aes(colour="caribou"))+
+  geom_line(aes(y=wolf/2.5, colour="wolf"))+
+  scale_y_continuous(sec.axis=sec_axis(~./2.5,name="wolf"))
+
+```
+

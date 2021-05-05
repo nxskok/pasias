@@ -1,0 +1,134 @@
+---
+title: "rl"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(conflicted)
+conflict_prefer("filter", "dplyr")
+```
+
+## read in file, no header
+
+```{r}
+results <- read_csv("rl.txt", col_names = F)
+results
+```
+
+is the line a result or a date?
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - "))
+```
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) 
+```
+
+fill dates down
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date)
+
+```
+
+remove rows that don't contain a game result
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date) %>% 
+  filter(is_result)
+
+```
+
+separate home stuff from away stuff
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date) %>% 
+  filter(is_result) %>% 
+  separate(X1, into=c("home_stuff", "away_stuff"), sep=" - ")
+
+```
+
+extract team name and score for home stuff
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date) %>% 
+  filter(is_result) %>% 
+  separate(X1, into=c("home_stuff", "away_stuff"), sep=" - ") %>% 
+  extract(home_stuff, into=c("t1", "s1"), "(.*)\\s(\\d+)$")
+
+```
+
+and away stuff
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date) %>% 
+  filter(is_result) %>% 
+  separate(X1, into=c("home_stuff", "away_stuff"), sep=" - ") %>% 
+  extract(home_stuff, into=c("t1", "s1"), "(.*)\\s(\\d+)$", convert = T) %>% 
+  extract(away_stuff, into=c("s2", "t2", "lg"), "^(\\d+)\\s(.*)\\s(.*)$", convert=T) -> results_tidy
+results_tidy
+```
+
+how many games were played on each date?
+
+```{r}
+results_tidy %>% count(date) %>% mutate(dow=wday(date, label=T))
+```
+
+how many games were played in each league?
+
+```{r}
+results_tidy %>% count(lg)
+```
+
+which was the highest score and who scored it?
+
+```{r}
+results_tidy %>% 
+  gather(homeaway, score, s1:s2) %>% 
+  arrange(desc(as.numeric(score)))
+```
+
+alternative using str_count and word
+
+```{r}
+results %>% mutate(is_result=str_detect(X1, " - ")) %>% 
+  mutate(date_text=ifelse(is_result, NA, X1)) %>% 
+  mutate(date=dmy(str_c(date_text, " 2019"))) %>% 
+  fill(date) %>% 
+  filter(is_result) %>% 
+  separate(X1, into=c("home_stuff", "away_stuff"), sep=" - ") %>% 
+  mutate(home_count=1+str_count(home_stuff, " ")) %>%
+  mutate(t1=word(home_stuff, 1,home_count-1)) %>% 
+  mutate(s1=word(home_stuff, home_count)) %>% 
+  select(-home_stuff) %>% 
+  mutate(away_count=1+str_count(away_stuff, " ")) %>% 
+  mutate(t2=word(away_stuff, 2, away_count-1)) %>% 
+  mutate(s2=word(away_stuff, 1)) %>% 
+  mutate(lg=word(away_stuff, away_count)) %>% 
+  select(-away_stuff, -is_result, -date_text)
+```
+
+

@@ -1,0 +1,92 @@
+---
+title: "ceos"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+read
+
+```{r}
+fname <- "/home/ken/teaching/datasets/utts-heckard/ceodata08.XLS"
+ceos <- read_excel(fname)
+ceos
+```
+
+ages
+
+```{r}
+ggplot(ceos, aes(x=Age)) + geom_histogram(bins = 8)
+ggplot(ceos, aes(y=Age, x=1)) + geom_boxplot()
+```
+
+salaries
+
+```{r}
+ggplot(ceos, aes(x=Salary)) + geom_histogram(bins = 8)
+ggplot(ceos, aes(y=Salary, x=1)) + geom_boxplot()
+```
+
+```{r}
+ggplot(ceos, aes(sample=Salary)) + stat_qq() + stat_qq_line()
+ggplot(ceos, aes(sample=Age)) + stat_qq() + stat_qq_line()
+```
+
+## rainfall
+
+```{r}
+fname <- "/home/ken/teaching/datasets/utts-heckard/rainfall.XLS"
+rainfall <- read_excel(fname)
+rainfall
+```
+
+save
+
+```{r}
+write_delim(rainfall, "rainfall.txt", " ")
+```
+
+
+mean and median rainfall
+
+```{r}
+rainfall %>% 
+  summarize(mean=mean(Rainfall), med=median(Rainfall))
+```
+
+histogram
+
+```{r}
+ggplot(rainfall, aes(x=Rainfall)) + geom_histogram(bins=6)
+```
+
+```{r}
+ggplot(rainfall, aes(x=Rainfall)) + geom_bar() + scale_x_binned()
+```
+
+
+```{r}
+ggplot(rainfall, aes(x=Rainfall)) + geom_density()
+```
+
+```{r}
+ggplot(rainfall, aes(x=Year, y=Rainfall)) + geom_point() + geom_smooth(method = "lm")
+```
+
+```{r}
+r.1 <- lm(Rainfall~Year, data=rainfall)
+summary(r.1)
+```
+
+
+```{r}
+library(mkac)
+a <-  with(rainfall, kendall_Z_adjusted(Rainfall))
+enframe(a) %>% unnest(value)
+```
+

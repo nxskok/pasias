@@ -1,0 +1,190 @@
+---
+title: "graduation rates"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(broom)
+```
+
+## the data
+
+```{r}
+gradrate <- tribble(
+  ~med_sat, ~expenditure, ~grad_rate,
+  1065, 7970, 49,
+  950, 6401, 33,
+  1045, 6285, 37,
+  990, 6792, 49,
+  950, 4541, 22,
+  970, 7186, 38,
+  980, 7736, 39,
+  1080, 6382, 52,
+  1035, 7323, 53,
+  1010, 6531, 41,
+  1010, 6216, 38,
+  930, 7375, 37,
+  1005, 7874, 45,
+  1090, 6355, 57,
+  1085, 6261, 48
+)
+gradrate
+```
+
+rows are a random sample of US colleges with enrollments between 10,000 and 20,000.
+Columns:
+
+- median SAT score for students at that college
+- student-related expenditure ($) per full-time student
+- six-year graduation rate (percent)
+
+
+## save to read in later
+
+```{r}
+write_csv(gradrate, "graduation-rates.csv")
+```
+
+
+## correlations
+
+```{r}
+cor(gradrate)
+```
+
+## pictures
+
+```{r}
+ggplot(gradrate, aes(x=med_sat, y=grad_rate)) + geom_point() + geom_smooth()
+```
+
+```{r}
+ggplot(gradrate, aes(x=expenditure, y=grad_rate)) + geom_point() + geom_smooth()
+```
+
+low outlier on expenditure that makes it look as if there is a trend
+
+## multiple regression
+
+```{r}
+gr.1=lm(grad_rate~med_sat+expenditure, data=gradrate)
+summary(gr.1)
+```
+
+what if I take out that low expenditure case?
+
+```{r}
+gradrate %>% filter(expenditure>5000) -> gradrate_1
+gr.2=lm(grad_rate~med_sat+expenditure, data=gradrate_1)
+summary(gr.2)
+
+```
+
+## diagnostic graphs
+
+first regression
+
+residuals against fitted
+
+```{r}
+ggplot(gr.1, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+apparently ok
+
+```{r}
+gr.1 %>% augment(gradrate) -> gr.1a
+ggplot(gr.1a, aes(x=med_sat, y=.resid))+geom_point()+ geom_smooth()
+```
+
+I guess that's ok
+
+```{r}
+ggplot(gr.1a, aes(x=expenditure, y=.resid))+geom_point()+ geom_smooth()
+```
+
+apart from that low expenditure, there could be an upand down trend, but mainly caused by that residual near 10.
+
+The second model:
+
+```{r}
+ggplot(gr.2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+yep.
+
+```{r}
+ggplot(gr.2, aes(sample=.resid))+stat_qq()+stat_qq_line()
+```
+
+pretty good
+
+```{r}
+gr.2 %>% augment(gradrate_1) -> gr.2a
+gr.2a
+```
+
+```{r}
+ggplot(gr.2a, aes(x=med_sat, y=.resid)) + geom_point() + geom_smooth()
+```
+
+no problem
+
+```{r}
+ggplot(gr.2a, aes(x=expenditure, y=.resid)) + geom_point() + geom_smooth()
+```
+
+curve. Try expenditure squared in second model.
+
+```{r}
+gr.3=lm(grad_rate~med_sat+expenditure+I(expenditure^2), data=gradrate_1)
+summary(gr.3)
+
+```
+
+squared term is significant. Some predictions?
+
+generate data frame of values to predict for:
+
+```{r}
+new=crossing(med_sat=seq(950, 1100, 5), expenditure=seq(6000,8000,50))
+new
+```
+
+```{r}
+p=predict(gr.3, new)
+p
+new %>% bind_cols(pred=p) -> preds
+preds
+```
+
+find largest pred
+
+```{r}
+preds %>% arrange(desc(pred))
+```
+
+should check residuals
+
+```{r}
+ggplot(gr.3, aes(x=.fitted, y=.resid)) + geom_point() + geom_smooth()
+```
+
+```{r}
+ggplot(gr.3, aes(sample=.resid)) + stat_qq() + stat_qq_line()
+```
+
+```{r}
+gr.3 %>% augment(gradrate_1) -> gr.3a
+```
+
+```{r}
+ggplot(gr.3a, aes(x=med_sat, y=.resid)) + geom_point()
+```
+
+```{r}
+ggplot(gr.3a, aes(x=expenditure, y=.resid)) + geom_point()
+```

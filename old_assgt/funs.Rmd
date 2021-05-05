@@ -1,0 +1,70 @@
+---
+title: "function"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+```
+
+
+## mean and median
+
+```{r}
+summary1 <- function(x) {
+  c(mean(x), median(x))
+}
+```
+
+test it
+
+```{r}
+x=c(11,12,14,18)
+summary1(x)
+```
+
+label them using named vector
+
+```{r}
+summary1 <- function(x) {
+  v <- c(mean(x), median(x))
+  names(v) <- c("mean", "median")
+  v
+}
+```
+
+```{r}
+summary1(x)
+```
+
+```{r}
+summary1(x) %>% enframe()
+```
+
+
+mtcars
+
+```{r}
+mtcars %>% map_df(~summary1(.)) 
+```
+
+```{r}
+mtcars %>% map(~summary1(.)) %>% bind_cols()
+```
+
+
+```{r}
+mtcars %>% gather(xname, x, everything()) %>% 
+  ggplot(aes(x=1, y=x)) + geom_boxplot() + facet_wrap(~xname, scales="free")
+```
+
+or
+
+```{r}
+mtcars %>% gather(xname, x, everything()) %>% 
+  ggplot(aes(x=x)) + geom_histogram(bins=6) + facet_wrap(~xname, scales="free")
+
+```
+

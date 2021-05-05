@@ -1,0 +1,144 @@
+\question You are designing a study to test the null hypothesis that a population mean is 0 against the alternative hypothesis that it is greater than 0. Assume that the population SD is $\sigma=15$. It is important to detect the alternative $\mu=2$; that is, we want to design the study so that most of the time the null hypothesis would be (correctly) rejected if in fact $\mu=2$. A one-sample $t$-test will be used, and the data values are assumed to have a normal distribution.
+
+\bP
+
+\p Use simulation to estimate the power of this test when the sample size is 100. Use $\alpha=0.05$.
+
+\bS
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+This is `rerun`. Use at least 1000 simulations (more, if you're willing to wait for it). In `rnorm`, the sample size is first, then the (true) population mean, then the (assumed) population SD:
+
+```{r}
+rerun(1000, rnorm(100, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+The power is (estimated as) a disappointing 0.361. Your answer won't (most likely) be the same as this, but it should be somewhere close. I would like to see you demonstrate that you know what power is, for example "if the population mean is actually 2, the null hypothesis $H_0: \mu = 0$, which is wrong, will only be rejected about 36% of the time".\endnote{This is why I called my result ``disappointing''. I would like to reject a lot more of the time than this, but, given that the truth was not very far away from the null given the (large) population SD, I can't. See Extra 1.}
+
+The test we are doing is one-sided, so you need the `alternative` in there. If you omit it, you'll have the answer to a different problem:
+
+```{r}
+rerun(1000, rnorm(100, 2, 15)) %>% 
+  map(~t.test(., mu=0)) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+This is the probability that you reject $H_0: \mu=0$ in favour of $H_a: \mu \ne 0$. This is smaller, because the test is "wasting effort" allowing the possibility of rejecting when the sample mean is far enough *less* than zero, when most of the time the samples drawn from the true distribution have mean greater than zero. (If you get a sample mean of 2.5, say, the P-value for a one-sided test will be smaller than for a two-sided one.)
+
+Extra 1:
+
+This low power of 0.361 is because the population SD is large relative to the kind of difference from the null that we are hoping to find. To get a sense of how big the power might be, imagine you draw a "typical" sample from the true population: it will have a sample mean of 2 and a sample SD of 15, so that $t$ will be about
+
+```{r}
+(2-0)/(15/sqrt(100))
+```
+
+You won't reject with this ($t$ would have to be bigger than 2), so in the cases where you *do* reject, you'll have to be more lucky: you'll need a sample mean bigger than 2, or a sample SD smaller than 15. So the power won't be very big, less than 0.5, because about half the time you'll get a test statistic less than 1.33 and about half the time more, and not all of *those* will lead to rejection.
+
+Extra 2:
+
+This is exactly the situation where `power.t.test` works, so we can get the exact answer (you need all the pieces):
+
+```{r}
+power.t.test(n=100, delta=2-0, sd=15, type="one.sample", 
+             alternative = "one.sided")
+```
+
+Your answer, from 1000 simulations, should be within about 3 percentage points of that. (Mine was only about 1 percentage point off.)
+
+\eS
+
+\p Again by using simulation, estimate how large a sample size would be needed to obtain a power of 0.80. Show and briefly explain your process.
+
+\bS
+
+The point of this one is the process as well as the final answer, so you need to show and justify what you are doing. Showing only the final answer *does not* show that you know how to do it. The *whole point* of this one is to make mistakes and fix them!
+
+The simulation approach does not immediately give you a sample size for fixed power, so what you have to do is to try different sample sizes until you get one that gives a power close enough to 0.80. You have to decide what "close enough" means for you, given that the simulations have randomness in them. I'm going to use 10,000 simulations for each of my attempts, in the hope of getting a more accurate answer.
+
+First off, for a sample size of 100, the power was too small, so the answer had better be bigger than 100. I'll try 200. For these, copy and paste the code, changing the sample size each time:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(200, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+A sample size of 200 isn't big enough yet. I'll double again to 400:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(400, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+Getting closer. 400 is too big, but closer than 200. 350?
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(350, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+Close! I reckon you could call that good (see below), or try again with a sample size a bit less than 350:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(340, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+340 is definitely too small:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(347, 2, 15)) %>% 
+  map(~t.test(., mu=0, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get.\endnote{If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.} This is the middle 95% of that distribution.
+
+```{r}
+qbinom(c(0.025,0.975), 10000, 0.8)
+```
+
+Anything between those limits is the kind of thing we might get by chance, so simulation doesn't let us distinguish between 347 and 350 as the correct sample size. Unless we do more than 10,000 simulations, of course!
+
+If you stuck with 1000 simulations each time, these are the corresponding limits:
+
+```{r}
+qbinom(c(0.025,0.975), 1000, 0.8)
+```
+
+and any sample sizes that produce an estimated power between these are as accurate as you'll get. (Here you see the advantage of doing more simulations.)
+
+If you've been using 10,000 simulations each time like me, you'll have noticed that these actually take a noticeable time to run. This is why coders always have a coffee or something else to sip on while their code runs; coders, like us, need to see the output to decide what to do next. Or you could install the [beepr package](https://www.r-project.org/nosvn/pandoc/beepr.html), and get some kind of sound when your simulation finishes, so that you'll know to get off Twitter\endnote{Or Reddit or Quora or whatever your favourite time-killer is.} and see what happened. There are also packages that will send you a text message or will send a notification to all your devices.
+
+What I want to see from you here is some kind of trial and error that proceeds logically, sensibly increasing or decreasing the sample size at each trial, until you have gotten reasonably close to power 0.8.
+
+Extra: once again we can figure out the correct answer:
+
+```{r}
+power.t.test(power = 0.80, delta=2-0, sd=15, type="one.sample", 
+             alternative = "one.sided")
+```
+
+This does not answer the question, though, since you need to do it by simulation with trial and error. If you want to do it this way, do it at the *end* as a check on your work; if the answer you get this way is very different from the simulation results, that's an invitation to check what you did.
+
+350 actually *is* the correct answer. But you will need to try different sample sizes until you get close enough to a power of 0.8; simply doing it for $n=350$ is not enough, because how did you know to try 350 and not some other sample size?
+
+\eS
+
+\eP

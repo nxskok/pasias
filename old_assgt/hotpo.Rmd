@@ -1,0 +1,90 @@
+---
+title: "Hotpo"
+output: html_notebook
+---
+
+## Packages
+
+```{r}
+library(tidyverse)
+```
+
+## Introduction
+
+Consider this function, that takes an integer: if the input is even, the output is half of it; if the input is odd, the output is three times the input plus 1:
+
+```{r}
+hotpo=function(x) {
+    stopifnot(round(x)==x)
+    remainder = x %% 2
+    if (remainder==1) { ans=3*x+1 }
+    else { ans=x/2 }
+    as.integer(ans)
+}
+```
+
+To test it:
+
+```{r, error=TRUE}
+hotpo(3)
+hotpo(12)
+hotpo(4.5)
+```
+
+The last one fails because 4.5 is not an integer (in the code, it fails because the input rounded is not sufficiently close to the input unrounded; in R, `==` tests for equality within a tolerance).
+
+## A question
+
+If I start from a number, and keep on going until I eventually get to 1, how long does it take? (Do I always get to 1 in the end?)
+
+Let's write a function to explore this. This is an old-fashioned loop, actually a `while` loop since I don't know how many times I'm going around:
+
+```{r}
+hotpo_seq=function(x) {
+  ans=x
+  while (x!=1) {
+    x=hotpo(x)
+    ans=c(ans,x)
+  }
+  ans
+}
+```
+
+The strategy is to build up a vector called `ans` that contains the whole sequence, and each time I run `hotpo`, add the current `x` to the sequence. When I hit 1, the `while` loop exits, and I return the whole sequence. Does it work?
+
+```{r}
+hotpo_seq(6)
+```
+
+This is a wilder ride:
+
+```{r}
+hotpo_seq(27)
+```
+
+Notice how these both end with powers of 2. As soon as you hit a power of 2, you'll keep halving all the way to 1 and then stop. 
+
+## The length of the `hotpo` sequence
+
+`length` finds the length of a vector (the number of elements in it), so we can find how long it takes to get to 1 by running `length` on the output of `hotpo_seq`. For example, we can find which of the starting points 1 through 100 has the longest sequence like this:
+
+```{r}
+tibble(start=1:100) %>% 
+  mutate(seqlen=map_int(start,~length(hotpo_seq(.)))) %>% 
+  arrange(desc(seqlen))
+```
+
+27 is one of the longest, and has the smallest starting point of the long sequences.
+
+## Further thoughts
+
+There's a lot of self-similarity here. Consider the sequence for 9:
+
+```{r}
+hotpo_seq(9)
+```
+
+Once you land on this sequence somewhere, the rest of it is determined, because you can never get off it again. Thus, if you hit 10 (either because you previously had 20 or you previously had 3) you know how the sequence is going to end up.
+
+The sequence for 9 is one longer than the sequence for 28, two longer than the sequence for 14, three longer than the sequence for 7, and so on. Thus we don't actually need to find the sequences for 28, 14, 7, 22 etc after we have obtained this sequence, because we know how long they'll be. This would seriously improve the efficiency of the sequence length calculation above, because we wouldn't need to find most of the lengths. 
+

@@ -1,0 +1,415 @@
+\question A binomial experiment with 8 trials  produces the following results: success, failure, success, success, failure, success, success, success. (Each result is therefore a Bernoulli trial.) The person who gave you the data says that the success probability is most likely somewhere near 0.5, but might be near 0 or 1. The aim of this question is to estimate the success probability using Bayesian methods.
+
+In this question, use `rstan` as in class, or alternatively use `cmdstanr` (see [this site](https://mc-stan.org/cmdstanr/articles/cmdstanr.html) for instructions). If you have trouble with installing `rstan`, try `cmdstanr`. I will do it both ways. Documentation for Stan, either way, is [here](https://mc-stan.org/docs/2_26/reference-manual/index.html). You will probably want to be running R on your own computer.
+
+\bP
+
+\p Write a Stan program that will estimate the success probability $p$. To do this, start with the likelihood (Stan has a function `bernoulli` that takes one parameter, the success probability). The data, as 1s and 0s, will be in a vector `x`. Use a beta distribution with unknown parameters as a prior for `p`. (We will worry later what those parameters should be.)
+
+\bS
+
+File, New and Stan. Leave the template program there if you like, as a reminder of what to do. In the `model` section is where the likelihood goes, like this:\endnote{The comment line, with two slashes on the front, is optional but will help you keep track of what's what.}
+
+```
+model {
+  // likelihood
+  x ~ bernoulli(p);
+}
+```
+
+The right one here is `bernoulli` since your data are Bernoulli trials (successes and failures, coded as 1s and 0s). If you had a summarized total number of successes and a number of trials, then that would be binomial. It actually doesn't make any difference which way you do it, but it's probably easier to think about it this way because it's more like the Poisson one in lecture. 
+
+
+Thinking ahead, `x` is going to be data, and `p` is a parameter, so `p` will need a prior distribution.  The standard one for a Bernoulli success probability is a beta distribution. This is actually the conjugate prior, if you have learned about those: if `p` has a beta prior and the likelihood is Bernoulli, then the posterior is also beta. Back in the days when algebra was your only hope for this kind of thing, conjugate priors were very helpful, but now that we can sample from any posterior, the fact that a prior is conjugate is neither here nor there. Having said that, the beta distribution is a nice choice for a prior for this, because it is restricted to $[0, 1]$ the same way that a Bernoulli `p` is. 
+
+I'm going leave the prior parameters for `p` unknown for now; we'll just call them `a` and `b`.\endnote{We'll come back later to the question of what {\tt a} and {\tt b} should be for our situation.} Here's our completed `model` section:
+
+```
+model {
+  // prior
+  p ~ beta(a, b);
+  // likelihood
+  x ~ bernoulli(p);
+}
+```
+
+`a` and `b` are not parameters; they are some numbers that we will supply, so they will be part of the `data` section. Leaving them unspecified like this, rather than hard-coding them, is good coding practice, since the code we finish with can be used for any Bernoulli estimation problem, not just the one we happen to have. 
+
+There is only one parameter, `p`, so the `parameters` section is short:
+
+```
+parameters {
+  real<lower=0,upper=1> p;
+}
+```
+
+We know that `p` must be between 0 and 1, so we specify that here so that the sampler doesn't stray into impossible values for `p`. 
+
+That goes before the `model` section. Everything else is data. We also want to avoid hard-coding the number of observations, so we will also have an `n` as data, which we declare first, so we can declare the array of values `x` to be of length `n`:
+
+```
+data {
+  int<lower=0> n;
+  real a;
+  real b;
+  int<lower=0, upper=1> x[n];
+}
+```
+
+`x` is an integer array of length `n`. This is how you declare one of those: the type is first, along with any limits, and then the length of the array is appended in square brackets to the name of the array.
+
+Arrange your code in a file with extension `.stan`, with data first, parameters second, and model third. I called mine `bernoulli.stan`.
+
+Extra: there are two ways to declare a *real*-valued array `y`: as `real y[n]`, or as `vector[n] y`. Sometimes it matters which way you do it (and I don't have a clear sense of when it matters). The two ways differ in what you can do with them.
+
+\eS
+
+\p Compile your code, correcting any errors until it compiles properly. 
+
+\bS
+
+If you are going with `rstan`, that looks like this:
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+```{r, include=FALSE}
+# write_rds(m, "m.rds")
+```
+
+```{r, echo=FALSE}
+m <- read_rds("m.rds")
+```
+
+
+```{r, eval=FALSE}
+m <- stan_model(file = "bernoulli.stan")
+```
+
+```{r}
+m
+```
+
+
+If you are using `conflicted`, you may have a number of things to resolve. The only new one is that we will be using the `rstan` `extract` later, rather than the `tidyr` one that we have used before.
+
+This one gave me a warning when I compiled it, but displaying the compiled model looked as I expected, so I am happy. 
+
+The other way to go is to use `cmdstanr`, like this:
+
+```{r, include=FALSE}
+# write_rds(m2, "m2.rds")
+```
+
+```{r, echo=FALSE}
+m2 <- read_rds("m2.rds")
+```
+
+
+```{r, eval=FALSE}
+m2 <- cmdstan_model("bernoulli.stan")
+```
+
+```{r}
+m2
+```
+
+If it doesn't compile, you have some fixing up to do. The likely first problem is that you have missed a semicolon somewhere. The error message will at least give you a hint about where the problem is. Fix any errors you see and try again. If you end up with a different error message, that at least is progress.
+
+\eS
+
+\p The person who brought you the data told you that the success probability `p` should be somewhere near 0.5 (and is less likely to be close to 0 or 1). Use this information to pick a prior distribution for `p`. (The exact answer you get doesn't really matter, but try to interpret the statement in some kind of sensible way.)
+
+
+\bS
+
+I don't know how much intuition you have for what beta distributions look like, so let's play around a bit. Let's imagine we have a random variable $Y$ that has a beta distribution. This distribution has two parameters, usually called $a$ and $b$. Let's draw some pictures and see if we can find something that would serve as a prior. R has `dbeta` that is the beta distribution density function.
+
+Start by choosing some values for $Y$:
+
+```{r}
+y <- seq(0, 1, 0.01)
+y
+```
+
+then work out `dbeta` of these for your choice of parameters, then plot it. I'm going straight to a function for this, since I anticipate doing it several times. This `y` and the two parameters should be input to the function:
+
+```{r}
+plot_beta <- function(y, a, b) {
+  tibble(y=y) %>% 
+    mutate(density = dbeta(y, a, b)) %>% 
+    ggplot(aes(x = y, y = density)) + geom_line()
+}
+plot_beta(y, 1, 1)
+```
+
+The beta with parameters 1 and 1 is a uniform distribution. (If you look up the beta density function, you'll see why that is.)
+
+Let's try another:
+
+```{r}
+plot_beta(y, 3, 2)
+```
+
+This one is skewed to the left. You might guess that having the second parameter bigger would make it skewed to the right:
+
+```{r}
+plot_beta(y, 3, 7)
+```
+
+which indeed is the case. If you try some other values, you'll see that this pattern with the skewness continues to hold. Furthermore, the right-skewed distributions have their peak to the *left* of 0.5, and the left-skewed ones have their peak to the *right* of 0.5.
+
+Therefore, you would think, having the two parameters the same would give a symmetric distribution:
+
+```{r}
+plot_beta(y, 2, 2)
+```
+
+Note that the peak is now at 0.5, which is what we wanted.
+
+The question called for a prior distribution of values "somewhere near 0.5", and you could reasonably say that this does the job. What does 3 and 3 look like?
+
+```{r}
+plot_beta(y, 3, 3)
+```
+
+This is more concentrated around 0.5, and as you increase the two parameter values while keeping them equal, it gets more concentrated still:
+
+```{r}
+plot_beta(y, 20, 20)
+```
+
+For our purposes, this is undoubtedly too concentrated around 0.5; there is no chance of $y$ being outside $[0.25, 0.75]$. I would go with parameters 2 and 2 or maybe 3 and 3. As I said, pretty much any choice of parameter values that are both the same is at least somewhat justifiable. 
+
+If you don't want to go through all of this, find some pictures of beta distributions with different parameters, and pick one you like. The [Wikipedia page](https://en.wikipedia.org/wiki/Beta_distribution) is one place (from which you would probably pick 2 and 2). 
+[Here is another](https://www.researchgate.net/figure/Beta-distribution-probability-density-function_fig3_220556911), from which you might pick 5 and 5.
+
+In practice, you would have some back-and-forth with the person who brought you the data, and try to match what they are willing to say about `p`, without looking at the data, to what you know or can find out about the beta distribution. This process is called "prior elicitation".
+
+Extra: if you have obtained the posterior distribution in this case by algebra, you might recall that the effect of the prior distribution is to add some "fake" Bernoulli trials to the data. With $a=b=2$, for example, you imagine $2+2-2 = 2$ fake trials, with $2-1=1$ success and $2-1=1$ failure, to add to the data. This brings the estimate of `p` a little closer to 0.5 than it would be with just plain maximum likelihood.
+
+\eS
+
+
+\p Create an R `list` that contains all your `data` for your Stan model. Remember that Stan expects the data in `x` to be 0s and 1s.
+
+\bS
+
+Turn those successes and failures in the question into a vector of 0 and 1 values: they were success, failure, success, success, failure, success, success, success.
+
+```{r}
+x <- c(1, 0, 1, 1, 0, 1, 1, 1)
+x
+```
+
+Then make a "named list" of inputs to your Stan program, including the parameter values for the prior distribution (I went with 2 and 2):
+
+```{r}
+stan_data <- list(
+  n = 8,
+  a = 2,
+  b = 2,
+  x = x
+)
+stan_data
+```
+
+
+\eS
+
+\p Run your Stan model to obtain a simulated posterior distribution, using all the other defaults.
+
+\bS
+
+This depends on whether you are using `rstan` or `cmdstanr`. With `rstan`:
+
+```{r}
+fit <- sampling(m, data = stan_data)
+fit
+```
+
+The posterior mean is 0.66, with a 95% posterior interval from 0.38 to 0.90: not very informative, since there was very little data.
+
+The `cmdstanr` way is slightly different:
+
+```{r}
+fit2 <- m2$sample(data = stan_data)
+fit2
+```
+
+This one gives you a 90% posterior interval instead of a 95% one, but the posterior mean is 0.66, as before, and the interval once again says that `p` is likely bigger than about 0.4; the data did not narrow it down much apart from that.
+
+
+\eS
+
+\p Make a plot of the posterior distribution of the probability of success.
+
+\bS
+
+This means extracting the sampled values of $p$ first. The `rstan` way is this:
+
+```{r}
+bern.1 <- extract(fit)
+glimpse(bern.1)
+```
+
+This contains a list of two things: 4000 values of `p`, and 4000 corresponding values of the log-posterior distribution, should you need them for anything (I usually don't).
+
+The plot is then a histogram, as you would expect. With 4000 sampled values of $p$, you can use more bins than usual; Sturges' rule says 12, since $2^{12}=4096$. More would also be fine, most likely:
+
+```{r}
+tibble(p = bern.1$p) %>% 
+  ggplot(aes(x=p)) + geom_histogram(bins = 12)
+```
+
+This is skewed to the left. The reason for the skewness here is that the upper limit for $p$ is 1, and there is a reasonable chance of $p$ being close to 1, so the distribution is skewed in the opposite direction. There is basically no chance of $p$ being close to zero. If we had had more data, it is more likely that the values of $p$ near 0 and 1 would be ruled out, and then we might have ended up with something more symmetric.
+
+If you remember the algebra for this, the posterior distribution for `p` actually has a beta distribution, with parameters $2+6=8$ and $2+2=4$.\endnote{The first 2 in each case is the parameter of the prior distribution and the second number is the number of successes or failures observed in the data.} Our simulated posterior looks to have the right kind of shape to be this, being skewed to the left.
+
+The `cmdstanr` way is a bit less convenient, at least at first:
+
+```{r}
+bern.2a <- fit2$draws()
+str(bern.2a)
+```
+
+This is a 3-dimensional array (sample by chain by variable). For plotting and so on, we really want this as a dataframe. At this point, I would use the `posterior` and `bayesplot` packages, which you should install following the instructions for `cmdstanr` at the top of [this page](https://mc-stan.org/cmdstanr/articles/cmdstanr.html#running-mcmc-1). Put the names of the extra two packages in place of the `cmdstanr` that you see there.
+
+```{r}
+library(posterior)
+library(bayesplot)
+```
+
+To get the samples as a dataframe:
+
+```{r}
+bern.2 <- as_draws_df(fit2$draws())
+bern.2
+```
+
+You don't even need to go this far to make a plot of the posterior distribution, because `bayesplot` does it automatically:
+
+```{r}
+mcmc_hist(fit2$draws("p"), binwidth =  0.05)
+```
+
+Rather annoyingly, this plot function passes `binwidth` on to `geom_histogram`, but not `bins`! The picture, though, is very similar to what we got from `fit` (out of `rstan`). 
+
+\eS
+
+\p The posterior predictive distribution is rather odd here: the only possible values that can be observed are 0 and 1. Nonetheless, obtain the posterior predictive distribution for these data, and explain briefly why it is not surprising that it came out as it did.
+
+\bS
+
+The way to obtain the (sampled) posterior predictive distribution is to get the posterior distribution of values of $p$ in a dataframe, and make a new column as random values from the data-generating mechanism (here Bernoulli). This is easier to do and then talk about:
+
+```{r}
+bern.1$p %>% enframe(value = "p") %>% 
+  mutate(x = rbernoulli(4000, p)) -> ppd
+ppd
+```
+
+The values of `x` in the last column are TRUE for success and FALSE for failure (they could have been 1 and 0). Thus, the first `x` is a Bernoulli trial with success probability the first value of `p`, the second one uses the second value of `p`, and so on. Most of the success probabilities are bigger than 0.5, so most of the posterior predictive distribution is successes.
+
+A bar chart would be an appropriate plot (you can either think of `x` as categorical, or as a discrete 0 or 1):
+
+```{r}
+ggplot(ppd, aes(x=x)) + geom_bar()
+```
+
+which shows the majority of successes in the posterior predictive distribution. The idea is that the data and the posterior predictive distribution ought to be similar, and we did indeed have a majority of successes in our data as well. 
+
+You might have been perplexed by the 4000 in the code above. `bernoulli` is vectorized, meaning that if you give it a vector of values for `p`, it will generate Bernoulli trials for each one in turn, and the whole result should be 4000 values long altogether. We'll see a way around that in a moment, but you could also do this using `rbinom` (random binomials) if you do it right:
+
+```{r}
+bern.1$p %>% enframe(value = "p") %>% 
+  mutate(x = rbinom(4000, 1, p)) 
+```
+
+There are 4000 random binomials altogether, and *each one* has one trial. This is confusing, and a less confusing way around this is to work one row at time with `rowwise`:
+
+```{r}
+bern.1$p %>% enframe(value = "p") %>% 
+  rowwise() %>% 
+  mutate(x = rbernoulli(1, p))
+```
+
+or
+
+```{r}
+bern.1$p %>% enframe(value = "p") %>% 
+  rowwise() %>%
+  mutate(x = rbinom(1, 1, p)) 
+```
+
+If you used `cmdstanr`, your choices here are exactly the same, but starting from what I called `bern.2`.\endnote{I am writing this a couple of days after the Ever Given was freed from blocking the Suez Canal. One of the memes I saw about this was actually a meme-upon-a-meme: on the picture of the tiny tractor and the huge ship, someone had superimposed that picture of Bernie Sanders sitting on his chair. Feel the {\tt bern.2}.}
+
+Extra: I'd also like to put in a plug for the `tidybayes` package.  This works best with `rstan`, though it will work with `cmdstanr` also. The first thing it will help you with is setting up the data:
+
+```{r}
+library(tidybayes)
+tibble(x) %>% compose_data()
+```
+
+Starting from a dataframe of data (our `x`), this returns you a list that you can submit as `data =` to `sampling`. Note that it counts how many observations you have, on the basis that you'll be sending this to Stan as well (we did).
+
+Another thing that this will do is to handle categorical variables. Say you had something like this, with `g` being a group label:
+
+```{r}
+d <- tribble(
+  ~g, ~y,
+  "a", 10,
+  "a", 11,
+  "a", 12,
+  "b", 13,
+  "b", 14,
+  "b", 15
+)
+compose_data(d)
+```
+
+Knowing that Stan only has `real` and `int`, it labels the groups with numbers, and keeps track of how many groups there are as well as how many observations. These are all things that Stan needs to know. See slides 32 and 34 of my lecture notes, where I prepare to fit an ANOVA model. The `tidybayes` way is, I have to say, much cleaner than the way I did it in the lecture notes. After you have fitted the model, `tidybayes` lets you go back and re-associate the real group names with the ones Stan used, so that you could get a posterior mean and interval for each of the two groups.
+
+After obtaining the posterior distribution, `tidybayes` also helps in understanding it. This is how you get hold of the sampled values:
+
+```{r}
+fit %>% spread_draws(p)
+```
+
+which you can then summarize:
+
+```{r}
+fit %>% spread_draws(p) %>% 
+  median_hdi()
+```
+
+The median of the posterior distribution, along with a 95% Bayesian posterior interval based on the highest posterior density. There are other possibilities.
+
+Or you can plot it:
+
+```{r}
+fit %>% spread_draws(p) %>% 
+  ggplot(aes(x = p)) + stat_slab()
+```
+
+(a density plot)
+
+or, posterior predictive distribution:
+
+```{r}
+fit %>% spread_draws(p) %>% 
+  rowwise() %>% 
+  mutate(x = rbernoulli(1, p)) %>% 
+  ggplot(aes(x = x)) +
+  geom_bar()
+```
+
+[This](https://mjskay.github.io/tidybayes/articles/tidybayes.html) is a nice introduction to `tidybayes`, with a running example. 
+
+
+\eS
+
+
+\eP

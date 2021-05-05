@@ -1,0 +1,60 @@
+---
+title: "airline passengers"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(lubridate)
+```
+
+## grab the data
+
+```{r}
+AirPassengers
+```
+
+This is a time series, so I need to turn it into a data frame. I decided to make the year and month myself.
+
+```{r}
+month_names=month(1:12,label=T)
+month_names
+data.frame(count=as.integer(AirPassengers)) %>% 
+  bind_cols(crossing(yy=1949:1960,mm=month_names)) %>%
+  mutate(the_date=str_c(yy,"-",mm,"-15")) %>% 
+  mutate(the_date=ymd(the_date)) -> air
+air
+```
+
+
+
+Now plot against time:
+
+```{r}
+ggplot(air,aes(x=the_date,y=count))+geom_point()+geom_line()
+```
+
+- increasing trend
+- increasing up-and-down (variability)
+- trend within a year
+
+save
+
+```{r}
+air %>% write_csv("airline_passengers.csv")
+```
+
+means by month?
+
+```{r}
+air %>% group_by(mm) %>% summarize(m=mean(count))
+```
+
+boxplots by month
+
+```{r}
+ggplot(air,aes(x=factor(mm),y=count))+geom_boxplot()
+```
+

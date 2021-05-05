@@ -1,0 +1,33 @@
+---
+title: "Picture memory"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+## read data
+
+```{r}
+pictures=read_excel("../workshop-stats/PictureMemory.xls")
+pictures
+```
+
+tidy
+
+```{r}
+pics = pictures %>% gather(music, correct, everything())
+pics
+```
+
+
+boxplots
+
+```{r}
+ggplot(pics,aes(x=music, y=correct))+geom_boxplot()
+```
+

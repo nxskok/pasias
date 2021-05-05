@@ -1,0 +1,33 @@
+
+student0405
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+f <- file.choose()
+f
+student <- read_csv(f)
+```
+
+```{r}
+student
+```
+
+```{r}
+ggplot(student, aes(x=ReligImp, y=StudyHrs)) + geom_boxplot()
+```
+
+bootstrap per other
+
+```{r}
+student %>% nest(-ReligImp) %>% 
+  mutate(samp=map(data, ~rerun(10, sample(.$StudyHrs, replace = T)))) 
+%>% 
+  mutate(means=map(samp, ~map_dbl(., ~mean(.x)))) %>% 
+  unnest(means) 
+%>% 
+  ggplot(aes(x=means)) + geom_histogram(bins=30) + 
+  facet_wrap(~degree)
+```

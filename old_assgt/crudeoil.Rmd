@@ -1,0 +1,45 @@
+---
+title: "crude oil"
+output: html_notebook
+---
+
+From M&S, problem 4.50
+
+## packages
+
+```{r}
+library(tidyverse)
+```
+
+## make the data (designed experiment)
+
+```{r}
+txt="
+60.58
+72.72
+79.99
+66.83
+80.78
+89.78
+69.18
+80.31
+91.99
+"
+(d=read_csv(txt,col_names="oil_recovery"))
+```
+
+and then
+
+```{r}
+pressures=c(1000,1500,2000)
+dip_angles=c(0,15,30)
+(conds=crossing(pressure=pressures,dip_angle=dip_angles))
+```
+
+combine
+
+```{r}
+conds %>% bind_cols(d) %>% 
+  write_csv("crudeoil.csv")
+```
+

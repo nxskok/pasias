@@ -1,0 +1,118 @@
+\question A company produces prepackaged  diet meals. These meals are advertised as containing "6 ounces of protein per package". A consumer organization is concerned that this is not accurate. The organization takes a random sample of 20 of these meals, and measures the protein content of each one. The data are in \url{http://ritsokiguess.site/datafiles/STAC33/protein.txt}
+as one column. 
+
+\bP
+
+\p Read in and display (some of) the data.
+
+\bS
+
+The usual. This is one column only, so you can pretend the columns are separated by anything at all and it will still work:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC33/protein.txt"
+meals <- read_table(my_url)
+meals %>% arrange(protein)
+```
+Get it to work via one of the methods you've seen in this class (ie., *not* `read.table`); I don't mind how you manage it.
+
+\eS
+
+\p Make a suitable graph of your data.
+
+\bS
+
+One quantitative variable, so a histogram with a sufficiently small number of bins:
+
+```{r}
+ggplot(meals, aes(x=protein)) + geom_histogram(bins = 5)
+```
+
+\eS
+
+\p Why might a sign test be better than a $t$-test for assessing the average amount of protein per package? Explain briefly. ("Average" here means any measure of centre.)
+
+\bS
+
+ The shape of the above distribution is skewed to the left, and not symmetric like a normal distribution. (If you say "the histogram is not normal", make sure you also say how you know.) This means that the median would be a better measure of "average" (that is, centre) than the mean is, because the mean would be pulled downwards by the long tail, and the median would not. To complete the story, the sign test is a test of the median, so the sign test would be better than the $t$-test, which is a test of the mean.
+ 
+The other thing you might consider is the sample size, 20, which *might* be large enough to overcome this amount of skewness, but then again it might not be. So you could say that we should be cautious and run the sign test here instead.
+
+\eS
+
+\p Run a suitable sign test for these data. What do you conclude?
+
+\bS
+
+First, if you have not already done so, install `smmr` *following the instructions in the lecture notes*. (This one is not just `install.packages`.) Then, make sure you have a `library(smmr)` somewhere above where you are going to use something from it. Once that is in place, remember what we were interested in: was the median protein content 6 ounces, or is there evidence that it is something different? (The "not accurate" in the question says that the median could be higher or lower, either of which would be a problem, and so we need a two-sided alternative.) Thus, the null median is 6 and we need a two-sided test, which goes this way:
+
+```{r}
+sign_test(meals, protein, 6)
+```
+
+The P-value, 0.0414, is less than 0.05, so we reject the null hypothesis and conclude that the median is different from 6 ounces. The advertisement by the company is not accurate. 
+
+Make sure you give the actual P-value you are comparing with 0.05, since otherwise your answer is incomplete. That is, you need to say more than just "the P-value is less than 0.05"; there are three P-values here, and only one of them is the right one.
+
+Extra: we already decided that a $t$-test is not the best here, but I am curious as to how different its P-value is:
+
+```{r}
+with(meals, t.test(protein, mu=6))
+```
+
+The conclusion is the same, but the P-value is a lot smaller. I don't think it should really be this small; this is probably because the mean is pulled down by the left skew and so really ought not to look so far below 6. I am inclined to think that if the $t$-test were correct, its P-value ought to be between this and the one from the sign test, because the $t$-test uses the actual data values, and the sign test uses the data less efficiently (only considering whether each one is above or below the null median).
+\eS
+
+\p In your sign test, how could you have deduced that the P-value was going to be small even without looking at any of the P-values themselves? Explain briefly.
+
+\bS
+
+Look at the other part of the output, the count of values above and below the null median. (You might have to click on "R Console" to see it.) If the null hypothesis was correct and the median was really 6, you'd expect to see about half the data values above 6 and about half below. But that is not what happened: there were 15 values below and only 5 above. Such an uneven split is rather unlikely if the null hypothesis was correct. So we would guess that our P-value would be small, as indeed it is.
+
+\eS
+
+\p Obtain a 90% confidence interval for the population median protein content. What does this tell you about the reason for the rejection or non-rejection of the null hypothesis above?
+
+\bS
+
+This is `ci_median`, but you need to be paying attention: it's not the default 95% confidence level, so you have to specify that as well:
+
+```{r}
+ci_median(meals, protein, conf.level = 0.90)
+```
+The interval goes from 4.91 to 5.79. (The data values have one decimal place, so you could justify two decimals in the CI for the median, but anything beyond that is noise and you shouldn't give it in your answer.\endnote{There is actually slightly more to it here: the ends of this confidence interval for the median are always data values, because of the way it is constructed, so the actual end points really ought to be given to the \emph{same} number of decimals as the data, here 4.9 to 5.8. The output given is not exactly 4.9 and 5.8 because of inaccuracy in the bisection.})
+
+This interval is entirely below 6 (the null median), so evidently the reason that we rejected 6 as the population median is that the actual population median is *less than* 6. 
+
+Extra: the CI for the median is not that different from the one for the mean, which suggests that maybe the $t$-test was not so bad after all. If you want to investigate further, you can try finding a bootstrapped sampling distribution of the sample mean, and see how non-normal it looks:
+
+```{r}
+rerun(1000, sample(meals$protein, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() -> d
+ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
+```
+That is pretty close to normal. So the $t$-test would in actual fact have been fine. To confirm, a normal quantile plot:
+
+```{r}
+ggplot(d, aes(sample = value)) + stat_qq() + stat_qq_line()
+```
+A *tiny bit* skewed to the left.
+
+But I didn't ask you to do this, because I wanted to give you a chance to do a sign test for what seemed like a good reason. 
+
+Extra 2: I mentioned in an endnote that the endpoints of the CI for the median are actually data points, only we didn't see it because of the accuracy to which `ci_median` was working. You can control this accuracy by an extra input `tol`. Let's do something silly here:
+
+```{r}
+ci_median(meals, protein, conf.level = 0.90, tol = 0.00000001)
+```
+
+This takes a bit longer to run, since it has to get the answer more accurately, but now you can see how the interval goes from "just over 4.9" to "just under 5.8", and it actually makes the most sense to give the interval as "4.9 to 5.8" without giving any more decimals.
+
+Extra 3: the reason for the confidence interval endpoints to be data values is that the interval comes from inverting the test: that is, finding the values of the population median that would not be rejected by a sign test run on our data. Recall how the sign test works: it is based on a count of how many data values are above and below the hypothesized population median. These counts are only going to change as the hypothesized median changes if you hit a data point, since that's the only way you can change how many values are above and below.\endnote{There is a technicality about what happens when the null median is exactly equal to a data value; see PASIAS for more discussion on this.} Thus, the only places where changing the null median changes whether or not a value for it is inside or outside the confidence interval are at data values, and thus the ends of the interval must be at (or, perhaps more strictly, just above or below) data values.
+
+This is a peculiarity of using the sign test to get a CI for the median. If, say, you were to invert the $t$-test to get a confidence interval for the mean, you wouldn't see that. (This is in fact exactly what you do to get a confidence interval for the mean, but this is not the way it is usually introduced.) The reason that the CI for the mean (based on the $t$-test) is different from the one for the median (based on the sign test) is that if you change the null hypothesis in the $t$-test, however slightly, you change the P-value (maybe only slightly, but you change it). So the CI for the mean, based on the $t$-test, is not required to have data points at its ends, and indeed usually does not.  The difference is in the kind of distribution the test statistic has; the $t$-distribution is continuous, while the sign test statistic (a count of the number of values above or below something) is discrete. It's the discreteness that causes the problems.
+
+\eS
+
+\eP

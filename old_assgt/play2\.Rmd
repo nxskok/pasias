@@ -1,0 +1,90 @@
+---
+title: "davis2"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(rio)
+```
+
+cholest data
+
+```{r}
+# f <- file.choose()
+f
+cholest <- read_excel(f, sheet=1)
+cholest
+```
+
+save
+
+```{r}
+write_csv(cholest, "~/teaching/c32/web/cholest.csv")
+```
+
+
+```{r}
+ggplot(cholest, aes(x=control)) + geom_histogram(bins=4)
+```
+
+bootstrap samples
+
+```{r}
+rerun(10000, sample(cholest$control, 30, replace = T)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(sample=value)) + stat_qq() + stat_qq_line()
+
+```
+
+or
+
+```{r}
+rerun(10000, sample(cholest$control, 30, replace = T)) %>% 
+  map_dbl(~mean(.)) %>% 
+  quantile(c(0.025, 0.975))
+```
+
+
+
+```{r}
+with(cholest, t.test(control, mu=200, alternative = "less"))
+```
+
+```{r}
+with(cholest, t.test(control))
+```
+
+
+simulate from uniform
+
+```{r}
+tibble(x=seq(-0.01,1.01,0.01)) %>% 
+  mutate(y=dunif(x)) %>% 
+  ggplot(aes(x=x, y=y)) + geom_line()
+```
+
+or can I do better?
+
+```{r}
+toplot <- tribble(
+  ~x, ~y,
+  -0.1, 0,
+  0,0,
+  0,1,
+  1,1,
+  1,0,
+  1.1,0
+)
+toplot
+```
+
+
+```{r}
+ggplot(toplot, aes(x=x, y=y)) + geom_line()
+```
+

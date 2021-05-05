@@ -1,0 +1,23 @@
+---
+title: "sign power"
+output: html_notebook
+---
+
+estimating power of sign test vs. t when mean is 50 and SD 15, true mean 40, sample size 10
+
+```{r}
+library(tidyverse)
+set.seed(457299)
+```
+
+```{r}
+rerun(1000,rnorm(10,50,15)) %>% 
+  map(~tibble(x=.)) %>% 
+  map(~count(.,x<40)) %>% 
+  map(~summarize(.,the_min=min(n))) %>% 
+  map(~mutate(.,is_rejected=(the_min<=1 | the_min==10))) %>% 
+  map_lgl(~pull(.,is_rejected)) %>% 
+  tibble(was_true=.) %>% 
+  count(was_true)
+```
+

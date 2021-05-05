@@ -1,0 +1,62 @@
+---
+title: "M&M consumption"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+## get original data
+
+```{r}
+mm=read_excel("../workshop-stats/MMConsumption.xls")
+mm
+```
+
+needs tidying
+
+```{r}
+mm %>% gather(gender,candies,everything()) -> mm2
+mm2
+```
+
+## boxplot
+
+```{r}
+ggplot(mm2,aes(x=gender, y=candies))+geom_boxplot()
+```
+
+means
+
+```{r}
+
+```
+
+```{r}
+mm2 %>% group_by(gender) %>% 
+  summarize(mean=mean(candies),med=median(candies))
+```
+
+two-sample t (probably not good)
+
+```{r}
+t.test(candies~gender,data=mm2)
+```
+
+Mood's median test
+
+```{r}
+library(smmr)
+median_test(mm2,candies,gender)
+```
+
+save the data
+
+```{r}
+write_delim(mm2,"mm.txt"," ")
+```
+

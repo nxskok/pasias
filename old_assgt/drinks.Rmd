@@ -1,0 +1,84 @@
+
+```{r}
+library(tidyverse)
+library(smmr)
+```
+
+
+```{r}
+alcohol0 <- tribble(
+  ~seat, ~drinks, ~frequency,
+  "front", 0, 45,
+  "front", 1, 17,
+  "front", 2, 15,
+  "front", 3, 3,
+  "front", 5, 1,
+  "front", 6, 1,
+  "front", 8, 1,
+  "front", 10, 1,
+  "front", 11, 1,
+  "front", 16, 1,
+  "front", 21, 1, 
+  "middle", 0, 55,
+  "middle", 1, 60,
+  "middle", 2, 31,
+  "middle", 3, 20,
+  "middle", 4, 16,
+  "middle", 5, 7,
+  "middle", 6, 5,
+  "middle", 7, 2,
+  "middle", 11, 2,
+  "middle", 14, 1,
+  "middle", 15, 1,
+  "middle", 18, 1,
+  "middle", 20, 1,
+  "middle", 22, 1,
+  "middle", 25, 1,
+  "middle", 30, 1,
+  "middle", 35, 1,
+  "middle", 36, 1,
+  "back", 0, 20,
+  "back", 1, 5,
+  "back", 2, 4,
+  "back", 3, 3,
+  "back", 4, 5,
+  "back", 5, 4,
+  "back", 6, 8,
+  "back", 7, 10,
+  "back", 8, 6,
+  "back", 9, 5,
+  "back", 10, 4,
+  "back", 11, 2,
+  "back", 12, 1,
+  "back", 15, 1,
+  "back", 21, 1,
+)
+alcohol0
+```
+
+```{r}
+alcohol0 %>% uncount(frequency) -> alcohol
+alcohol
+```
+
+stats
+
+```{r}
+alcohol %>% 
+  group_by(seat) %>% 
+  summarize(n=n(), mean=mean(drinks), med=median(drinks), q3=quantile(drinks, 0.75), sd=sd(drinks))
+```
+
+or is it in student0405?
+
+```{r}
+library(readxl)
+f <- file.choose()
+student0405 <- read_xls(f)
+student0405
+```
+
+
+
+
+

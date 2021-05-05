@@ -1,0 +1,49 @@
+---
+title: "NBA points"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(smmr)
+```
+
+read in data
+
+```{r}
+nba=read_excel("../workshop-stats/NBAPoints.xls")
+nba
+write_csv(nba,"nbapoints.csv")
+```
+
+t-test
+
+```{r}
+t.test(nba$Points,mu=183.2,alternative="greater")
+```
+
+sign test
+
+```{r}
+sign_test(nba,Points,183.2)
+```
+
+visual
+
+```{r}
+ggplot(nba,aes(x=Points))+geom_histogram(bins=6)
+```
+
+normal quantile
+
+```{r}
+ggplot(nba,aes(sample=Points))+stat_qq()+stat_qq_line()
+```
+
+```{r}
+ggplot(nba,aes(x=1,y=Points))+geom_boxplot()
+```
+

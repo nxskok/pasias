@@ -1,0 +1,108 @@
+\question Two groups of students (in a class at a American university) were asked what they thought the population of Canada was. (The correct answer at the time was just over 30 million.)
+Some of the students, before having to answer this, were told that the population of the United States was about 270 million. The other students in the class were told that the population of Australia was
+about 18 million. The data are in \url{http://ritsokiguess.site/datafiles/STAC32/anchoring.csv}. The first column contains the country whose population the student was told, and the second contains the student's guess at the population of Canada.
+
+You might wonder how being told the population of an unrelated country would have any impact on a student's guess at the population of Canada. Psychology says it does: it's called the *anchoring effect*, and the idea is that the number mentioned first acts as an "anchor": a person's guess will be closer to the anchor than it would have been otherwise. In this case, that would mean that the guesses for the students given the
+US as an anchor will be higher than for the students given Australia as an anchor. We are interested in seeing whether there is evidence for that here.
+
+
+\bP
+
+\p Read in and display (some of)  the data.
+
+\bS
+
+I made it as easy as I could:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/anchoring.csv"
+canada <- read_csv(my_url)
+canada
+```
+
+You might need to scroll down to see that both "anchor" countries are indeed represented.
+
+\eS
+
+\p Draw a suitable graph of these data.
+
+\bS
+
+One categorical variable and one quantitative one, so a boxplot:
+
+```{r}
+ggplot(canada, aes(x = anchor, y = estimate)) + geom_boxplot()
+```
+
+\eS
+
+\p Explain briefly why a Welch $t$-test would be better than a pooled $t$-test in this case.
+
+\bS
+
+The decision between these two tests lies in whether you think the two groups have equal spread (variance, strictly). Here, the spread for the US group is much larger than for the Australia group, even taking into account the big outlier in the latter group. Since the spreads are different, we should do a Welch $t$-test rather than a pooled one.
+
+Make sure you answer the question I asked, not the one you think I should have asked.
+
+There is a separate question about whether the groups are close enough to normal, but I wasn't asking about that here. I was asking: *given* that we have decided to do some kind of $t$-test, why is the Welch one better than the pooled one? I am not asking whether we should be doing any kind of $t$-test at all; if I had, you could *then* reasonably talk about the outlier in the Australia group, and other possible skewness in its distribution, but that's not what I asked about.
+
+\eS
+
+\p Run a suitable Welch $t$-test and display the output.
+
+\bS
+
+The word "suitable" is a hint that you may have to think a bit about how you run the test. If the anchoring  effect is real, the mean of the guesses for the students told the population of the US will be higher on average than for those told the population of Australia, so we want a one-sided alternative. Australia is before the US alphabetically, so the alternative has to be `less`:
+
+```{r}
+t.test(estimate~anchor, data = canada, alternative = "less")
+```
+
+Note that the Welch test is the default, so you don't have to do anything special to get it. Your output will tell you that a Welch test is what you have.
+It's if you want a *pooled* test that you have to ask for it specifically (with `var.equal = TRUE`). 
+
+If you get a P-value close to 1, this is often an indication that you have the alternative the wrong way around.
+
+\eS
+
+\p What do you conclude from your test, in the context of the data?
+
+\bS
+
+The P-value is definitely less than 0.05, so we reject the null hypothesis (which says that the mean guess is the same regardless of the anchor the student was given). So we have evidence that the mean guess is higher for the students who were given the US population first. 
+
+Extra 1: this is perhaps the place to think about what effect that outlier in the `australia` group might  have had. Since it is a high outlier, its effect will be to make the the `australia` mean higher than it would have been otherwise, and therefore to make the two group means closer together. Despite this, the difference still came out strongly significant, so that we can be *even more sure than the P-value says* that there is a real difference between the means of estimates of the population of Canada. (To say it differently, if the outlier had not been there, the difference in means would have been even bigger and thus even more significant.)
+
+Extra 2: if you are still worried about doing a two-sample $t$-test here, you might consider looking at the bootstrapped sampling distribution of the sample mean of the `australia` group:
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+```{r}
+canada %>% filter(anchor == "australia") -> oz
+rerun(1000, sample(oz$estimate, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x = value)) + geom_histogram(bins=10)
+```
+
+This is indeed skewed to the right (though, with 11 observations, not nearly so non-normal as the original data), and so the P-value we got from the $t$-test may not be reliable. But, as discussed in Extra 1, the "correct" P-value is, if anything, *even smaller* than the one we got, and so the conclusion we drew earlier (that there is a significant anchoring effect) is not going to change.
+
+Extra 3: looking even further ahead, there is a test that definitely *does* apply here, called Mood's Median Test. You won't have installed the package yet, so this won't work for you just yet ([read ahead](http://ritsokiguess.site/datafiles/STAC33/inference_5_R_slides.pdf) if you want to learn more), but here's how it goes:
+
+```{r}
+library(smmr)
+median_test(canada, estimate, anchor)
+```
+
+This does (as it is written) a two-sided test, because it can also be used for comparing more than two groups. Since we want a one-sided test here, you can (i) check that we are on the correct side (we are)\endnote{The test works by comparing the data values in each group to the overall median. The students who were given Australia as an anchor mostly guessed below the overall median, and the students given the US as an anchor mostly guessed above.} (ii) halve the P-value to get 0.010.
+
+This is a P-value you can trust. It is not smaller than the $t$-test one, perhaps because this test is less powerful than the $t$-test in most cases.\endnote{It uses the data less efficiently than the $t$-test; it just counts the number of values above and below the overall median in each group, rather than using the actual numbers to compute means.}
+
+\eS
+
+\eP
+
+

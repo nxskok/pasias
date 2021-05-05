@@ -1,0 +1,58 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+```
+
+
+
+
+```{r}
+InsectSprays
+```
+
+```{r}
+ggplot(InsectSprays, aes(x=spray, y=count)) + geom_boxplot()
+```
+
+
+```{r}
+InsectSprays %>% group_by(spray) %>% 
+  summarize(q1=quantile(count, 0.25), q3=quantile(count, 0.75), iqr=IQR(count),
+            lo=q1-1.5*iqr, hi=q3+1.5*iqr) -> is_summ
+is_summ
+```
+
+```{r}
+InsectSprays %>% left_join(is_summ) %>% 
+  mutate(outlier=(count<lo | count>hi)) %>% 
+  filter(!outlier) %>% 
+  select(count, spray) -> InsectSprays2
+write_csv(InsectSprays2, "insect_sprays.csv")
+```
+
+## start again
+
+```{r}
+sprays=read_csv("insect_sprays.csv")
+sprays
+```
+
+boxplot
+
+```{r}
+ggplot(sprays, aes(x=spray, y=count)) + geom_boxplot()
+```
+
+nqp:
+
+```{r}
+ggplot(sprays, aes(sample=count))+stat_qq()+stat_qq_line()+
+  facet_wrap(~spray)
+```
+

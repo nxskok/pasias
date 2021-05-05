@@ -1,0 +1,215 @@
+\question Ben Roethlisberger plays (American) football for the Pittsburgh  Steelers. He plays as a quarterback, which means that his job is to throw (pass) the ball so that one of his teammates can catch it. Each time he makes a pass that is caught, this is called a "completion", and the team coaches are interested in his average number of completions per game (this average could be the mean or the median).
+
+In 2010, Roethlisberger was suspended for the first four games of the season, and there was concern that this might affect his performance (in terms of the number of passes completed in the games after he returned). The Pittsburgh Steelers did not play in week 5 of the 2010 season; the season is 17 weeks long (one game per week) and each team has one week in which they do not play.
+
+The data are in \url{http://ritsokiguess.site/datafiles/STAC32/roethlisberger.csv}. There are four columns: the year (always 2010), the week number of the season that the game was played in, the name of the opposing team, and the number of completed passes by Roethlisberger in the game.
+
+\bP
+
+\p Read in and display (some of) the data. Do you have what you were expecting?
+
+\bS
+
+Reading in is the usual, noting that this is a `.csv`:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/roethlisberger.csv"
+ben <- read_csv(my_url)
+ben
+```
+
+Since "Roethlisberger" is a lot to type every time, I called the dataframe by his first name.
+
+I am showing all 12 rows here; you are probably seeing only 10, and will have to scroll down to see the last two.
+
+I have the four variables promised, and I also have a sensible number of rows. In particular, there is no data for weeks 1--4 (the suspension) and for week 5 (in which the team did not play), but there is a number of passes completed for all the other weeks of the season up to week 17. (If Roethlisberger had not played in any other games, you can expect that I would have told you about it.)
+
+Extra: I did some processing to get the data to this point. I wanted to ask you about the 2010 season, and that meant having the 2009 data to compare it with. So I went [here](https://www.pro-football-reference.com/teams/pit/2009.htm), scrolled down to Schedule and Game Results, and clicked on each of the Boxscores to get the player stats by game. Then I made a note of the opponent and the number of passes completed, and did the same for 2010. I put them in a file I called `r1.txt`, in aligned columns, and read that in. (An alternative would have been to make a spreadsheet and save that as a `.csv`, but I already had R Studio open.) Thus:
+
+```{r}
+r0 <- read_table("r1.txt")
+r0
+```
+
+I was curious about the season medians (for reasons you see later), thus:
+
+```{r}
+r0 %>% group_by(season) %>% summarise(med = median(completed))
+```
+
+You will realize that my asserted average for "previous seasons" is close to the median for 2009. Here is where I have to admit that I cheated. It actually *is* the median for 2009, except that there are some games in 2010 where Roethlisberger had 22 completed passes and I didn't want to mess the sign test up (I talk more about this later). So I made it 22.5, which is a possible value for the median of an even number of whole-number values.
+
+Anyway, the last thing to do is to grab only the rows for 2010 and save them for you. This uses `filter` to select only the rows for which something is true (which we have seen several times in Extras, but meet "properly" later):
+
+```{r}
+library(smmr)
+r0 %>% filter(season==2010) -> r1
+write_csv(r1, "roethlisberger.csv")
+```
+
+\eS
+
+\p Make a suitable graph of the number of completed passes, and explain briefly why you would have some doubts about using $t$-procedures in this situation.
+
+\bS
+
+Don't be tempted to think *too* hard about the choice of graph (though I talk more about this below). One quantitative variable, so a histogram again. There are only 12 observations, so 5 bins is about as high as you should go:
+
+```{r}
+ggplot(ben, aes(x=completed)) + geom_histogram(bins=5)
+```
+
+This one shows an outlier: there is one number of completed passes that is noticeably higher than the rest. A normal distribution doesn't have outliers, and so this, coupled with a small sample in which normality is important, means that we should not be using a $t$-test or confidence interval.
+
+If you chose a different number of bins, you might get a different look. Here's 4 bins:
+
+```{r}
+ggplot(ben, aes(x=completed)) + geom_histogram(bins=4)
+```
+
+That looks more like right-skewness, but the conclusion is the same.
+
+Extra: if you have read, for example, [Problem 6.1 in PASIAS](http://ritsokiguess.site/datafiles/pasias/one-sample-inference.html#hunter-gatherers-in-australia), you'll have seen that another possibility is a one-group boxplot. This might have been the context in which you first saw the boxplot, maybe at about the time you first saw the five-number summary, but I don't talk about that so much in this course because `ggplot` boxplots have both an `x` and a `y`, and it makes more sense to think about using boxplots to *compare* groups. But, you can certainly get R to make you a one-sample boxplot. What you do is to set the grouping variable to a "dummy" thing like the number 1:
+
+```{r}
+ggplot(ben, aes(x=1, y=completed)) + geom_boxplot()
+```
+and then you ignore the $x$-axis.
+
+This really shows off the outlier; it is actually *much* bigger than the other observations. It didn't show up so much on the histograms because of where the bin boundaries happened to come. On the four-bin histogram, the highest value 30 was in the 27.5--32.5 bin, and the second-highest value 23 was at the bottom of the 22.5--27.5 bin. So the highest and second-highest values looked closer together than they actually were.
+
+If you have been reading ahead, you might also be thinking about a normal quantile plot. That is for specifically assessing normality, and here this is something that interests us, because a $t$-test will be doubtful if the normality fails:
+
+```{r}
+ggplot(ben, aes(sample=completed)) + stat_qq() + stat_qq_line()
+```
+This again shows off the outlier at the high end. It is a reasonable choice of plot *here* because normality is of specific interest to us.
+
+A note: you are absolutely not required to read ahead to future lectures. Each assignment can be done using the material in the indicated lectures only. If you want to use something from future lectures, go ahead, but make sure you are using it appropriately.
+
+Don't be tempted to plot the number of completed passes against something like week number:
+
+```{r}
+ggplot(ben, aes(x=week, y=completed)) + geom_point()
+```
+That is quite interesting (a mostly increasing trend over weeks, with the outlier performance in week 10), but it doesn't tell us what we want to know *here*: namely, is a $t$-test any good?
+
+\eS
+
+\p Run a sign test to compare Roethlisberger's performance in 2010 with his previous average of 22.5 completions per game. What do you conclude?
+
+\bS
+
+Use `smmr`, dataframe, column, null median:
+
+```{r}
+sign_test(ben, completed, 22.5)
+```
+
+I am looking for *any* change, so for me, a two-sided test is appropriate. If you think this is one-sided, make a case for your side, and then go ahead.
+
+My P-value is 0.039, so I can reject the null hypothesis (that the median number of passes completed is 22.5) and conclude that it has changed in 2010. 
+
+(You might hypothesize that this is the result of a decrease in confidence, that he is either throwing fewer passes, or the ones that he is throwing are harder to catch. If you know about football, you might suspect that Roethlisberger was actually passing *too much*, including in situations where he should have handing off to the running back, instead of reading the game appropriately.)
+
+Extra: I said above that I cheated and made the null median 22.5 instead of 22. What happens if we make the null median 22?
+
+```{r}
+sign_test(ben, completed, 22)
+```
+
+For one thing, the result is no longer significant. But looking at the table of values above and below reveals something odd: there are only ten values. What happened to the other two? What happened is that two of the data values were exactly equal to 22, so they are neither above nor below. In the sign test, they are thrown away, so that we are left with 8 values below 22 and 2 above. 
+
+I didn't want to make you wonder what happened, so I made the null median 22.5.
+
+\eS
+
+\p Why might you have expected your sign test to come out significant, even without looking at the P-value? Explain briefly. 
+
+\bS
+
+The other ingredient to the sign test is how many data values are above and below the null median. You can look at the output from `sign_test` (the first part), or count them yourself:
+
+```{r}
+ben %>% count(completed<22.5)
+```
+
+You can put a logical condition (something that can be true or false) into `count`, or you can create a new column using `ifelse` (which I think I showed you somewhere):
+
+```{r}
+ben %>% mutate(side = ifelse(completed<22.5, "below", "above")) %>% 
+  count(side)
+```
+
+Whichever way you do it, there seem to be a lot more values below than above, very different from a 50--50 split. Even with only 12 observations, this turns out to be enough to be significant. (If you tossed a fair coin 12 times, would you be surprised to get only 2 heads or 2 tails?)
+
+\eS
+
+\p Obtain a 90% confidence interval for the median number of completed passes (over "all possible games played by 2010 Ben Roethlisberger"). 
+
+\bS
+
+This is `ci_median`, but with `conf.level` since you are not using the default level of 95%:
+
+```{r}
+ci_median(ben, completed, conf.level = 0.90)
+```
+
+17 to 22 completed passes.
+
+Extra: the P-value of the sign test only changes (as the null median changes) when you get to a data point; otherwise, the number of values above and below will stay the same, and the P-value will stay the same. The data values here were all whole numbers, so the limits of the confidence interval are also whole numbers (to the accuracy of the bisection), so the interval really should be rounded off.
+
+
+\eS
+
+\p Find a 90% confidence interval for the *mean* number of passes completed, and explain briefly why it differs from the one for the median in the way that it does.
+
+\bS
+
+All right, get the interval for the mean first:
+
+```{r}
+with(ben, t.test(completed, conf.level = 0.90))
+```
+
+The 95% confidence interval for the mean goes from 17.9 to 22.1 (completions per game). 
+
+This is higher at both ends than the interval for the median, though possibly not as much as I expected. This is because the mean is made higher by the outlier (compared to the median), and so the CI procedure comes to the conclusion that the mean is higher.
+
+Extra: this is one of those cases where the bootstrap might shed some light on the sampling distribution of the sample mean:
+
+```{r}
+rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 10)
+```
+This is a little bit skewed to the right (it goes further up from the peak than down), but not so bad, which is why the CI for the mean went up a bit higher, but only a bit, than the one for the median.
+
+Finally, bootstrapping the median is not something you'd want to do, since the sign test doesn't depend on anything being normally-distributed. This is a good thing, since bootstrapping the sample median is weird:
+
+```{r}
+rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
+  map_dbl(~median(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 30)
+```
+
+The "clumpiness" in the distribution comes about because there are not all that many different possible sample medians when you sample with replacement. For one thing, the values are all whole numbers, so the median can only be something or something and a half. Even then, the bar heights look kind of irregular.
+
+I used a large number of bins to emphasize this, but even a more reasonable number looks strange:
+
+```{r}
+rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
+  map_dbl(~median(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(x=value)) + geom_histogram(bins = 10)
+
+```
+
+A sample median of 19 or 20 is more likely than one of 19.5.
+
+\eS
+
+\eP
+

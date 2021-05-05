@@ -1,0 +1,169 @@
+
+\question A student keeps track of what time they go to bed and what time they get up in the morning. They also have an app on their phone that measures the number of hours they were asleep during that time. The data for one week are in \url{http://ritsokiguess.site/datafiles/STAC33/sleeping.csv}, in the 24-hour clock.
+
+
+\bP
+
+\p Read in and display the data. What type of things are each of your columns? 
+
+\bS
+
+The usual, to start:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC33/sleeping.csv"
+sleep <- read_csv(my_url)
+sleep
+```
+
+On mine, the sleep time is an ordinary decimal number, but the two times are something called `dttm`, which I can guess means date-time. In your notebook, you might see
+`S3:POSIXct`, and you probably don't know what that is (although you can guess).\endnote{Which one you see will depend on which type of output you are looking at. In your notebook you will probably see the POSIXCT thing, but in your HTML or PDF output it will probably say ``dttm''.}
+
+If you search for this, you'll find some links to the help files, but a bit further down is [this](https://rstudio-pubs-static.s3.amazonaws.com/28038_1bcb9aa80ca84f27ace07d612872861a.html), which says it in a few words: "These objects store the number of seconds (for `POSIXct`) ... since January 1st 1970 at midnight."\endnote{The piece in quotes comes word-for-word from the source: it is exactly what the author said. Except that the author also talks about dates, which don't concern us here, so I removed that bit and replaced it with the three dots, called an ``ellipsis'', to show that the author said some extra stuff that I didn't quote. I checked that what remained does actually still capture what the author said. Extra-in-endnote: an ellipsis is not to be confused with the conic section called an ellipse, and these three dots are not to be confused with the three dots in an R function, where they mean 
+``anything else that was passed in to the function''. Both uses of the three dots capture the idea of 
+``something was missed out''.}
+
+Make the claim that the first two columns are genuine date-times, and if they are labelled `S3:POSIXct` for you, say how you know. That is to say, they may look like pieces of text laid out as date-times, but they are *actual* date-times stored internally as seconds since Jan 1 1970 and displayed nicely. Thus we *do not* need to use `ymd_hms` or anything similar to deal with them.
+
+\eS
+
+\p Work out the fractional number of hours that the student was in bed each of these nights. (They may not have been asleep this whole time.) Your result needs to be a *number* since we will be doing some calculations with it shortly.
+
+\bS
+
+Since these are genuine date-times, you can take the difference, but the unit is not predictable. Internally, these are stored as a number of *seconds*, but it displays a "nice" unit:
+
+```{r}
+sleep %>% mutate(in_bed = rise.time - bed.time)
+```
+
+In this case, we did get a number of hours, but in the next part, we are going to do a calculation like this:
+
+```{r, error=TRUE}
+sleep %>% mutate(in_bed = rise.time - bed.time) %>% 
+    mutate(ratio = sleep.time / in_bed)
+```
+
+and this doesn't work because you can't divide a number by a time. (What would its units be?) So we have to turn `in_bed` into a number, and to do that we can divide by the number of seconds in an hour:
+
+```{r}
+sleep %>% mutate(in_bed = (rise.time - bed.time) / dhours(1))
+```
+
+This is now correctly a (decimal) number.
+
+\eS
+
+\p The student is concerned with something they call "sleep efficiency". This is the percentage of time in bed spent sleeping. Work out the student's sleep efficiency for the seven nights in this dataframe. Which night was the student's sleep efficiency greatest?
+
+\bS
+
+Divide the sleep time by the in-bed time and multiply by 100. To answer the last part of the question, you might think of sorting these in descending order as well:
+
+```{r}
+sleep %>% mutate(in_bed = (rise.time - bed.time) / dhours(1)) %>% 
+    mutate(efficiency = sleep.time / in_bed * 100) %>% 
+    arrange(desc(efficiency))
+```
+
+The night of September 8. This was the night the student went to bed the latest, but they were asleep almost all the time they were in bed.
+
+\eS
+
+\p Display the time spent in bed each night as a number of hours, minutes and seconds.
+
+\bS
+
+The idea here is to display the time between going to bed and getting up as an interval, using `%--%`, and then turn that into a period:
+
+```{r}
+sleep %>% mutate(in_bed_hms = as.period(bed.time %--% rise.time))
+```
+
+\eS
+
+\p Make a graph of what time the student went to bed each night. Bear in mind that you only need the times, not the dates, and that you want a graph that is informative, showing appropriately the distribution of times the student went to bed.
+
+\bS
+
+If you just pull out the times, some of them will be at the end of the day and some will be at the beginning. Extracting the hours, minutes and seconds is one way:\endnote{Make sure you use ``hour'' and not ``hours'' as I did the first time. That computes the total number of hours between the zero date of Jan 1, 1970 and the time given, and so is way too large to be an answer here!}
+
+```{r}
+sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time))
+```
+
+You could convert these into fractional hours to make a histogram of:
+
+```{r}
+sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
+    mutate(bed_time_hours = h + m / 60 + s / (60*60))
+```
+
+but if you make a histogram of these, this is what you get:
+
+```{r}
+sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
+    mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
+    ggplot(aes(x = bed_time_hours)) + geom_histogram(bins = 5)
+```
+
+but this makes no sense because the bedtimes after midnight are on the end of the previous day, not the beginning of the next one!
+
+With that in mind, let's move the bedtimes that are, say, before 3:00am to the end of the previous day by adding 24 to them before we make the graph:
+
+```{r}
+sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
+    mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
+    mutate(bed_time_hours = ifelse(bed_time_hours < 3, bed_time_hours + 24, bed_time_hours)) %>% 
+    ggplot(aes(x = bed_time_hours)) + geom_histogram(bins = 5)
+```
+
+This gives a sense of where the bedtimes are. If you're used to reading the 24-hour clock, you'll know that 23 is 11:00pm, and you'll have a sense that some of the bedtimes were 11 or a bit earlier and some were around midnight. (I like the 24-hour clock.) There are only 7 observations, so the graph you get won't look very nice as a histogram, but at least this one says something about when the student went to bed, in a way that puts times just after midnight next to times just before. You should give some thought about the number of bins; with only 7 observations, even 5 bins is pushing it, but this looked nicer to me than 4 bins.
+
+If you're more used to the 12-hour clock, you'll want to convert the times to something between 10 and 12. You can do this with an `ifelse` as above, subtracting 12 from the ones before midnight and adding 12 to the ones after. Or you can recognize this as modulo arithmetic (the clock is a classic case: what is 10:00pm plus 3 hours?) A little thought will reveal that subtracting (or adding) 12 hours and taking the result modulo 24 would do it: the pre-midnight bedtimes will get turned into a number like 10 or 11, and the post-midnight ones to 12 and a bit. R has a modulo operator, which is `%%` (cite your source: mine was [this](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Arithmetic.html)):
+
+```{r}
+sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
+    mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
+    mutate(bed_time_hours = (bed_time_hours - 12) %% 24) %>% 
+    ggplot(aes(x = bed_time_hours)) + geom_histogram(bins = 5)
+```
+
+and you might find the $x$-scale of that easier to cope with. (The bins have come out differently, for some reason.)
+
+I think the best graph uses the fact that date-times plot nicely, so if we keep them as date-times, the $x$-scale will look nice. The problem is that they are times on *different* days. What if we faked it up so that they were all on the *same* day (or, at least, consecutive days, to account for the ones after midnight)?
+
+Let's look at our dataframe again:
+
+```{r}
+sleep
+```
+
+The `rise.time` values are all a.m., and on consecutive days, so if we subtract consecutive numbers of days from the `bed.time`s, we'll put them all on appropriate days too:
+
+```{r}
+sleep %>% mutate(time_of_bed = bed.time - ddays(0:6))
+```
+
+These are all around the midnight at the end of September 1, so some of them are in the early hours of September 2. Now, if we make a histogram of *those*:
+
+```{r}
+sleep %>% mutate(time_of_bed = bed.time - ddays(0:6)) %>% 
+    ggplot(aes(x = time_of_bed)) + geom_histogram(bins = 5)
+```
+Now the $x$-axis formatting looks like a time, and spills seamlessly into the next day. (There was no real range of dates, so the formatting is of the times only.)
+
+One more embellishment, idea from [here](https://www.r-bloggers.com/2018/06/customizing-time-and-date-scales-in-ggplot2/):
+
+```{r}
+sleep %>% mutate(time_of_bed = bed.time - ddays(0:6)) %>% 
+    ggplot(aes(x = time_of_bed)) + geom_histogram(bins = 5) +
+    scale_x_datetime(date_labels = "%l:%M %p")
+```
+
+The `scale_x` and `scale_y` functions customize the $x$ and $y$ axes respectively. Inside `date_labels` go some codes that say what time units you want to display: in this case, the 12-hour hours, the minutes, and whether the time is AM or PM. The codes come from a function called `strftime`, and a full list is [here](https://man7.org/linux/man-pages/man3/strftime.3.html). Alternatively, you can look up the help for R's function of the same name with `?strftime`.\endnote{Confusingly, uppercase I and lowercase l not only look the same, but they also both display the 12-hour hour. The former adds a zero to the front if the hour is a single digit, and the latter does not. All the hours here have two digits, though, so it comes out the same whichever you use.}
+
+\eS
+
+\eP
+

@@ -1,0 +1,57 @@
+---
+title: "file info and updating"
+output: html_notebook
+---
+
+the usual
+
+```{r}
+library(tidyverse)
+```
+
+data frame of files matching pattern and their last mod times
+
+```{r}
+tibble(f=list.files(pattern="*.Rnw")) %>% 
+  mutate(last_mod_rnw=file.mtime(f)) %>% 
+  separate(f, into=c("name","ext"), sep="\\.") %>%
+  filter(ext=="Rnw") %>% 
+  select(-ext) -> rnws
+```
+
+```{r}
+rnws
+```
+
+same thing for rmds in pasias
+
+```{r}
+tibble(f=list.files("~/teaching/pasias",pattern="*.Rmd",full.names=T)) %>% 
+  mutate(last_mod_rmd=file.mtime(f)) %>% 
+  separate(f, into=c("a0","a1","a2","a3","a4","fname"), sep="\\/") %>% 
+  select(-starts_with("a")) %>%
+  separate(fname, into=c("name","ext"),sep="\\.") %>% 
+  filter(ext=="Rmd") %>% 
+  select(-ext) -> rmds
+rmds
+```
+
+look up name in rnws
+
+```{r}
+rmds %>% left_join(rnws) %>% 
+  filter(!is.na(last_mod_rnw)) %>% 
+  mutate(newer=ifelse(last_mod_rnw>last_mod_rmd,"newer","older")) %>% 
+  filter(newer=="newer") -> rmds
+rmds
+```
+
+construct system command
+
+```{r}
+rmds %>% mutate(cmd=str_c("perl ~/teaching/pasias/convert.pl ",name,".Rnw > ~/teaching/pasias/",name,".Rmd")) %>% 
+  pluck("cmd") -> cmd
+cmd
+system(cmd)
+```
+

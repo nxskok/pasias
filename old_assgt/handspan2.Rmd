@@ -1,0 +1,212 @@
+\question Take your right hand, and stretch the fingers out as far as
+you can. The distance between the tip of your thumb and the tip of
+your little (pinky) finger is your handspan. The students in a
+Statistics class at Penn State measured their handspans and also
+whether they identified as male or female.  The data are at
+\url{http://ritsokiguess.site/datafiles/STAC32/handspan.txt}, with handspans
+measured in inches. We want to
+see whether male students have a larger mean handspan than female students.
+
+\bP
+  \p Read in and display (some of) the data.
+  
+  \bS
+
+Delimited by a single space, so:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/handspan.txt"
+span <- read_delim(my_url, " ")
+span
+``` 
+  \eS
+  
+  \p Make a suitable (facetted) normal quantile plot of the data. (Bear in
+  mind what is supposed to have a normal distribution.)
+  
+  \bS
+    Here, we need \emph{each} group to be approximately
+    normal, so make normal quantile plots of handspan, facetted by sex:
+    
+```{r}
+ggplot(span, aes(sample=handspan)) + stat_qq() + stat_qq_line() +
+    facet_wrap(~sex)
+```     
+  \eS
+  
+  \p Discuss briefly whether you might prefer to use Mood's median
+  test to compare the handspans of the male and female students,
+  compared to a two-sample $t$-test.
+  
+  \bS
+    A two-sample $t$-test assumes that each of the two samples comes
+    from a (approximately) normal distribution ("the data
+    are normal" is not precise enough). The female values, on the left, definitely have some
+    outliers at the low end (or a long lower tail), so these are
+    definitely not normal.
+    The male values (on the right) are
+    slightly skewed to the left, or there are some mild outliers at the low end, or, if you prefer, these are
+    approximately normal. 
+    (You need discussion of each of the males and
+    females, or of why looking at one group is enough.) Because the males are not close enough to normal (or,
+    because neither group is close enough to normal), we would prefer
+    to use Mood's median test. (Say this.) You do yourself a favour by making it clear that you know that *both* groups have to be normal enough;
+    if one is good but the other is not, that is not enough.
+    
+  The other relevant issue is sample size. The best answer discusses that as well, even though you have a lot to think about already. This data set has 190 observations in it, so the samples must be pretty big:
+  
+```{r}
+span %>% count(sex)
+```
+  
+  With these sample sizes, we can expect a lot of help from the central limit theorem. The apparent outliers in the males won't be a problem, and maybe we could even get away with those 
+  outliers in the females.
+    
+  Extra: you could also think about bootstrapped sampling distributions of the sample mean here. The one we are most concerned about is the females; if it turns out that they are all right, then the males must be all right too, since the plot for them is showing less non-normality (or, without the double negative, is closer to being normal). So let's do the females:
+  
+```{r}
+span %>% 
+  filter(sex == "F") -> females 
+rerun(1000, sample(females$handspan, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() %>% 
+  ggplot(aes(sample = value)) + stat_qq() + stat_qq_line()
+```
+  
+My take is that the sampling distribution of the sample mean for the females is normal enough, therefore the one for the males is also normal enough, therefore the two-sample $t$-test is actually fine.
+  
+  The reason that this one is close to normal is different from the other one, though. In the other question, we had milder non-normality but a smaller sample; in this one, the data distribution is less normal, but we had a much larger sample size to compensate.
+  
+  \eS
+  
+  \p Run Mood's median test. What do you conclude from the test, in the context of the data?
+  
+  \bS
+```{r}
+library(smmr)
+median_test(span, handspan, sex)
+```     
+
+  The P-value of $2.66 \times 10^{-19}$ is extremely small, so we
+    can conclude that males and females have different median
+    handspans. Remember that we are now comparing medians, and that
+    this test is \emph{two}-sided. 
+    
+  You can stop here, or you can go on and note that most of the
+    males have a handspan bigger than the median, and most of the
+    females have a handspan smaller than the median, so that males
+    have on average a larger handspan. But you have to make the case
+    that males have a larger handspan; you cannot just assert this
+    from the P-value.
+    
+  A more formal way to do this is to  make the same observation as
+    above, then note that this is "on the correct side" (for males
+    to have a larger handspan), and thus that you can halve the
+    P-value, and conclude that males' handspans are indeed larger in
+    terms of median.
+    
+   Extra: you are probably expecting a confidence interval now for
+    the difference in medians. I haven't talked about that in lecture, because the ideas are a bit trickier than they were for the confidence interval for the sign test. The sign test could be used for testing any median, so we could try a bunch of medians and see whether each one was rejected or not. The problem with Mood's median test is that it only tests that the medians are *the same*. If you could easily test that the difference in medians was 3, say, you would know whether 3 was inside or outside the confidence interval for the difference in medians.
+    
+What were the actual sample medians, anyway?
+
+```{r}
+span %>% group_by(sex) %>% 
+  summarize(med = median(handspan))
+```
+
+Here's an idea: if we shift all the female handspans up by 2.5 inches, the medians would be the same:
+
+```{r}
+span %>% mutate(x = ifelse(sex=="F", handspan+2.5, handspan)) -> d
+d
+```
+
+Dataframe `d` has a new column `x` that is the handspan plus 2.5 inches for females, and the unchanged handspan for males. So the median of `x` should be the same for males and females:
+
+```{r}
+d %>% group_by(sex) %>% 
+  summarize(med_x = median(x))
+```
+
+and also the medians of `x` cannot possibly be significantly different:
+
+```{r}
+median_test(d, x, sex)
+```
+Quite a lot of the values of `x` are exactly equal to the overall median (and are discarded), so the P-value is not exactly 1 as you would expect. But it is definitely not significant, and so a difference of 2.5 inches smaller for females is going to be in a confidence interval for the difference in medians.
+
+The strategy now is to try shifting the female handspans by different amounts, run Mood's median test for each one, and see which shifts are not rejected. These are the ones for which that difference in medians would be in the confidence interval. Before we get to that, though, I want to simplify the procedure we have, so that it is easier to run it lots of times. First, let's get just the P-value out of the median test:
+
+```{r}
+d.1 <- median_test(d, x, sex)
+d.1 %>% pluck("test", "value", 3)
+```
+
+That's the P-value. `pluck` pulls individual things out of bigger things. The variable I called `d.1` has two things in it. The one called `table` has the numbers of data values above and below the overall median; the one called `test` has the test statistic and P-value in it. `test` is a dataframe; inside *that* is a column called `what` and a column called `value` with the number we want in it, and we want the third thing in that (the other two are the chi-squared test statistic and its degrees of freedom). Hence the `pluck` statement got the right thing.
+
+Let's think strategy: we want to shift the female handspans by a bunch of different amounts, run the test on each one, and get the P-value each time. When you're running a big for-each like this, you want the thing you do each time to be as simple as possible. So let's write a function that takes the shift as input, works out the new `x`, runs the test, and returns the P-value. We have all the ingredients, so it's a matter of putting them together:
+
+```{r}
+shift_pval <- function(shift) {
+  span %>% mutate(x = ifelse(sex == "F", handspan + shift, handspan)) -> d
+  d.1 <- median_test(d, x, sex)
+  d.1 %>% pluck("test", "value", 3)
+}
+```
+
+In the function, the `shift` is input. The first line computes the handspans shifted by the input amount, whatever it is; the second line runs the median test on the shifted data; the last line pulls out, and returns, the P-value.
+
+I am being a little sloppy here (but R is letting me get away with it): the function is also using a dataframe called `span`, which is the one we read in from the file earlier. That *was not input to the function*, so, if you have experience with other programming languages, you might be wondering whether that is "in the scope" of inside the function: that is, whether R will know about it. R does; anything the function needs that is not part of the input, it will take from your workspace. This is, you might imagine, dangerous; if the input to your function is called, say, `x`, you might easily have an `x` lying around in your workspace from some other analysis that has nothing to do with the `x` you want as the input to your function. The safe way to do it, and what I should have done, is to have `span` be input to my function as well. However, that clutters up the discussion below, so we'll leave things as I did them here.
+
+Let's test this on a shift of 2.5 inches, and on the original data (a shift of zero):
+
+```{r}
+shift_pval(2.5)
+shift_pval(0)
+```
+
+Those are the same P-values we got before, so good.
+
+Now, let's get a bunch of shifts, say from 0 to 5 in steps of 0.5:
+
+```{r}
+tibble(shift = seq(0, 5, 0.5))
+```
+
+work out the P-value for each one (this is `map_dbl` because each P-value is a single number):
+
+```{r}
+tibble(shift = seq(0, 5, 0.5)) %>% 
+  mutate(p_value = map_dbl(shift, ~shift_pval(.)))
+```
+
+and finally decide whether each shift is inside or outside the CI (because I am too lazy to figure out the scientific notation):
+
+```{r}
+tibble(shift = seq(0, 5, 0.5)) %>% 
+  mutate(p_value = map_dbl(shift, ~shift_pval(.))) %>% 
+  mutate(where = ifelse(p_value<0.05, "outside", "inside"))
+
+```
+
+The confidence interval goes from 2 inches to 2.5 inches on this scale. I checked and it goes up to 3 really, except that 3 itself is outside the interval. So let's call it 2 to 3 inches. This means that the median female handspan is between 2 and 3 inches *smaller* than the median male handspan, because we had to shift the female handspans up by that much to make them not significantly different.
+
+You, of course, would do just the last pipeline; I showed you the steps so you could see what was going on.
+
+The final observation is that this interval is a long way from containing zero, because the P-value was so tiny. 
+
+Let's see how the $t$-interval looks in comparison (two-sided, because we want the confidence interval):
+
+```{r}
+t.test(handspan~sex, data = span)
+```
+
+Almost exactly the same (except that F is before M). So it made no difference at all whether we did a $t$-test or a Mood's median test, as the bootstrapped sampling distribution suggested.
+
+  \eS
+  
+
+  
+  
+\eP

@@ -1,0 +1,38 @@
+---
+title: "insect repellents"
+output: html_notebook
+---
+
+## Packages
+
+```{r}
+library(tidyverse)
+```
+
+## read in data
+
+```{r}
+(repellents=read_table("repellent1.txt"))
+```
+
+looks good
+
+predict hours of protection from other things
+
+```{r}
+repellent.1=lm(protection~type+cost,data=repellents)
+summary(repellent.1)
+```
+
+## plot
+
+```{r}
+ggplot(repellents, aes(x=cost, y=protection, colour=type))+geom_point()
+```
+
+write as delimited
+
+```{r}
+write_delim(repellents,"repellent.txt"," ")
+```
+

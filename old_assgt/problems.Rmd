@@ -1,0 +1,243 @@
+---
+title: "assignment problems"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(gdata)
+library(smmr)
+library(conflicted)
+conflict_prefer("filter", "dplyr")
+```
+
+get pennstate1; seem to need to save as csv
+
+```{r}
+pennstate1 <- read_csv("~/teaching/datasets/utts-heckard-xls/pennstate1.csv")
+pennstate1
+```
+
+```{r}
+pennstate1 %>% select(sex=Sex, handspan=RtSpan) %>% write_delim("handspan.txt", " ")
+```
+
+
+```{r}
+ggplot(pennstate1, aes(x=Sex, y=RtSpan)) + geom_boxplot()
+```
+
+read it back in:
+
+```{r}
+span <- read_delim("handspan.txt", " ")
+span
+```
+
+bootstrap
+
+```{r}
+sample1 <- function(d) {
+    d %>% filter(sex=="M") -> males
+    d %>% filter(sex=="F") -> females
+    ms <- sample(males$handspan, replace=T)
+    fs <- sample(females$handspan, replace=T)
+    mean(fs)-mean(ms)
+}
+```
+
+```{r}
+sample1(span)
+```
+
+```{r}
+rerun(1000, m=sample1(span)) %>% bind_rows() %>% 
+  ggplot(aes(sample=m)) + stat_qq() + stat_qq_line()
+```
+
+Hodges-Lehmann
+
+```{r}
+span -> d
+d %>% count(sex)
+d %>% mutate(id=1) -> d 
+d %>% filter(sex=="F") -> females
+d %>% filter(sex=="M") -> males
+full_join(females, males, by="id") %>% 
+  mutate(diffce=handspan.x-handspan.y) %>% 
+  arrange(diffce) -> d2
+d2
+```
+
+
+
+Hodges-Lehmann estimate is median of these:
+
+```{r}
+d2 %>% summarize(hl=median(diffce))
+```
+
+for 90\% CI, $z^*$ has 5\% of normal above it:
+
+```{r}
+zstar <- qnorm(1-0.05)
+zstar
+```
+
+also need to know how many males and females:
+
+```{r}
+d %>% count(sex) -> counts
+counts
+```
+
+```{r}
+m <- counts$n[1]
+n <- counts$n[2]
+c(m, n)
+rank_lo <- floor(m*n/2 - zstar*sqrt(m*n*(m+n+1)/12))
+rank_lo
+```
+
+```{r}
+rank_hi <- m*n - rank_lo + 1
+rank_hi
+```
+
+```{r}
+d2 %>% slice(c(rank_lo, rank_hi))
+```
+
+-3 to -2.
+
+is this the same as using smmr? No, because the table being used is that of the signed rank test. This also assumes equal spreads, which I don't want to assume.
+
+```{r}
+
+ci_median(d2, diffce, conf.level = 0.90)
+sign_test(d2, diffce, -2.49)
+sign_test(d2, diffce, -2.51)
+```
+
+no. Why not? Anything different from 2.5 is rejected. The other is using a normal approx, but we have a lot of ties here:
+
+```{r}
+d2 %>% count(diffce) %>% filter(diffce==-2.5)
+```
+
+try this again with some more continuous data:
+
+```{r}
+set.seed(457299)
+x <- rnorm(10)
+y <- rnorm(12, 0.5, 1)
+expand.grid(x, y) %>% 
+  mutate(mydiff=Var1 - Var2) %>% 
+  arrange(mydiff) -> d
+d %>% mutate(r=row_number())
+ci_median(d, mydiff)
+```
+
+rows 50 and 72, or similar.
+
+
+as per book
+
+```{r}
+m <- 10
+n <- 12
+zstar <- qnorm(1-0.025)
+zstar
+rank_lo <- floor(m*n/2 - zstar*sqrt(m*n*(m+n+1)/12))
+rank_lo
+rank_hi <- m*n - rank_lo + 1
+rank_hi
+d %>% slice(c(rank_lo, rank_hi))
+
+```
+
+this interval is much wider.
+
+I think this is because the differences are not independent, but why does the book make it seem as if they are?
+
+Try it again with the sign test prescription.
+
+```{r}
+set.seed(457299)
+z <- rnorm(100)
+z
+```
+
+test a median of 0.2:
+
+```{r}
+# sign_test(tibble(z), z, 0.2)
+ci_median(tibble(z), z)
+```
+
+```{r}
+sign_test(tibble(z), z, )
+```
+
+```{r}
+sort(z)
+```
+
+between 40th and 61st.
+
+how does that book do it?
+
+```{r}
+n <- 100
+x <- 0:n
+p <- pbinom(x, n, 0.5)
+tibble(x, p)
+```
+
+for our data, `x` 
+
+looking for near 0.025, `x` of 40. Hence look at ranks 41 and 60: -0.2527 to 0.23, comparable. Check.
+
+
+
+
+
+
+does xlsx package do any better? needs rjava to work. gdata any better?
+
+```{r}
+my_url <- "/home/ken/teaching/datasets/utts-heckard-xls/pennstate1.XLS"
+ps1 <- read.xls(my_url)
+ps1
+```
+
+yes!
+
+so:
+
+```{r}
+my_url <- "/home/ken/teaching/datasets/utts-heckard/deprived.XLS"
+deprived <- read.xls(my_url)
+deprived
+```
+
+
+
+
+moore mccabe
+
+```{r}
+acidrain <- read_tsv("~/teaching/datasets/moore-mccabe-craig/acidrain.txt")
+acidrain
+```
+
+```{r}
+my_url <- "/home/ken/teaching/datasets/moore-mccabe-craig/internetandlife.txt"
+ial <- read_tsv(my_url)
+ial
+```
+
+```{r}
+ggplot(ial, aes(x=InternetUsers, y=LifeExpectancy)) + geom_point() + geom_smooth()
+```
+

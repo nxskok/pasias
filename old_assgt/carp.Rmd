@@ -1,0 +1,165 @@
+---
+title: "Endogenous nitrogen excretion in carp"
+author: "Ken Butler"
+date: "July 1, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+A paper in Fisheries Science reported on variables that
+affect ``endogenous nitrogen excretion'' or ENE in carp raised in
+Japan. A number of carp were divided into groups based on body weight,
+and each group was placed in a different tank. The mean body weight of
+the carp placed in each tank was recorded. The carp were then fed a
+protein-free diet three times daily for a period of 20 days. At the
+end of the experiment, the amount of ENE in each tank was measured, in
+milligrams of total fish body weight per day. Ten tanks were used.
+
+The aim in this report is to find a satisfactory model that predicts ENE from body weight.
+
+## Exploratory analysis
+
+We begin by reading in the data:
+
+```{r}
+library(tidyverse)
+my_url="http://ritsokiguess.site/datafiles/carp.txt"
+carp=read_delim(my_url," ")  
+carp
+```
+
+There are indeed ten tanks. 
+
+With two quantitative variables, a suitable graph is a scatterplot. We are taking ENE as the response, so:
+
+```{r}
+ggplot(carp,aes(x=bodyweight,y=ENE))+geom_point()+
+  geom_smooth()
+```
+
+The trend is downward: as bodyweight increases, ENE
+decreases. However, the decrease is rapid at first and then levels
+off, so the relationship is nonlinear.
+
+## Model 1: a line
+
+Given our observations above, a straight line should be a poor description of the relationship, but we begin by exploring this:
+
+```{r}
+carp.1=lm(ENE~bodyweight,data=carp)
+summary(carp.1)
+```
+
+R-squared is 47%, which is not that good.
+
+We check the residuals for this model by plotting them against the fitted values:
+
+```{r}
+ggplot(carp.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+This is a clear curve, which means the original relationship must have been a curve. So let's try a second model, a parabola, by adding bodyweight-squared.
+
+## Model 2: a parabola
+
+```{r}
+carp.2=lm(ENE~bodyweight+I(bodyweight^2),data=carp)
+summary(carp.2)
+```
+
+R-squared has gone up from 47\% to 74\%, a substantial
+improvement. This suggests to me that the parabola model is a
+substantial improvement. This is confirmed by the coefficient for the squared term being significantly nonzero: the parabola is definitely better than the straight line.
+
+Let's make a plot with the data and fitted curve on it. This is most easily done by "fortify"-ing the regression object. What
+that means, in the context of `ggplot`, is to add the original
+data back onto the regression object, so that we can plot any
+combination of original data and values derived from the
+regression. That goes like this:
+
+```{r}
+carp.2.fort=fortify(carp.2)
+carp.2.fort
+```
+
+and then we make the plot thus:
+
+```{r}
+ggplot(carp.2.fort,aes(x=bodyweight,y=.fitted))+
+  geom_line(colour="blue")+
+  geom_point(aes(y=ENE))
+```
+
+The points in the middle are above the
+curve, and the points at the ends are below. (That is, negative
+residuals at the ends, and positive ones in the middle.) Another problem is that the parabola curve
+fails to capture the \emph{shape} of the relationship; for example, I
+see nothing much in the data suggesting that the relationship should go
+back up, and even given that, the fitted curve doesn't go especially
+near any of the points.
+
+Once again, we need to look at the residuals:
+
+```{r}
+ggplot(carp.2,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+I think this is \emph{still} a curve (or, it goes down and then
+sharply up at the end). Either way, there is still a pattern. 
+
+Thus, our parabola was a
+curve all right, but it appears not to be the right *kind* of
+curve. I think the original data looks more like a hyperbola (a curve
+like $y=1/x$) than a parabola, in that it seems to decrease fast and
+then gradually to a limit, and *that* suggests, as in the class
+example, that we should try an asymptote model. (This is upside down compared to the windmill one, but it's same idea of tending to a limit.)
+
+## Model 3: an asymptote model
+
+```{r}
+carp.3=lm(ENE~I(bodyweight^(-1)),data=carp)
+summary(carp.3)
+```
+
+That fits *extraordinarily* well, with an R-squared up near
+98%. The intercept is the asymptote, which suggests a (lower) limit
+of about 5.2 for ENE (in the limit for large bodyweight). We
+would have to ask the fisheries scientist whether this kind of thing
+is a reasonable biological mechanism. It says that a carp always has
+some ENE, no matter how big it gets, but a smaller carp will have a
+lot more.
+
+Does the fitted value plot look reasonable now? The "fortify" thing
+doesn't quite work here, since `bodyweight` doesn't itself get
+added to the fortified data set (it is not part of the model), so it
+looks as if we are working with two data frames. I cheated and pulled
+the things I wanted out of `carp` without doing a
+`data=`:
+
+```{r}
+ggplot(carp.3,aes(x=carp$bodyweight,y=.fitted))+
+  geom_line(colour="blue")+
+  geom_point(aes(y=carp$ENE))
+```
+
+I'd say that does a really nice job of fitting the data. But it would
+be nice to have a few more tanks with large-bodyweight fish, to
+convince us that we have the shape of the trend right.
+
+And, as ever, the residual plot:
+
+```{r}
+ggplot(carp.3,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+All in all, that looks pretty good (and certainly a vast improvement
+over the ones we got before).
+
+## Conclusions
+
+The nonlinear nature of this relationship --- a sharp drop followed by a levelling off --- requires the right kind of nonlinear model, in this case an asymptote model. We found that a straight line and a parabola were not appropriate, both by looking at the residual plots and by looking at R-squared, but the asymptote model has a very high R-squared and a satisfactory residual plot. For these data, the asymptote model, fitted as our model 3, appears to be the best.

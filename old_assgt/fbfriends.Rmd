@@ -1,0 +1,71 @@
+---
+title: The relationship between the number of Facebook friends and grey matter in
+  the brain
+author: "Ken Butler"
+date: "October 17, 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Introduction
+============
+
+Is there a relationship between the number
+of Facebook friends a person has, and the density of grey matter in
+the areas of the brain associated with social perception and
+associative memory? To find out, a 2012 study measured both of these
+variables for a sample of 40 students at City University in London
+(England). The grey
+matter density is on a $z$-score standardized scale.
+
+Scatterplot
+============
+
+We read in the data and make a scatterplot, to see if there is any trend:
+
+```{r}
+fb=read.table("facebook.txt",header=T)
+library(tidyverse)
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+geom_smooth()
+```
+
+      There seems to be a weak, upward, apparently linear
+      trend. I find that the points are not especially close to the trend.
+      
+Regression
+==========
+
+Next, we fit a regression for predicting the number of Facebook friends from the grey matter density:
+      
+```{r}
+fb.1=lm(FBfriends~GMdensity,data=fb)
+summary(fb.1)
+```
+
+The regression has a disappointing R-squared (as we would expect from the weakness of the trend on the scatterplot), but the slope is significantly non-zero, indicating that there really is a relationship between number of Facebook friends and grey matter density in the population of which these students are a sample. 
+
+I am surprised that the P-value for the slope is so small, given the weakness of the trend on the scatterplot. Perhaps, with $n=40$ observations, even this weak trend is strong enough to be significant. 
+
+Having found a significant regression, we can obtain a scatterplot of the data with the regression line on it:
+
+```{r}
+ggplot(fb,aes(x=GMdensity,y=FBfriends))+geom_point()+
+  geom_smooth(method="lm")
+```
+
+Insofar as the trend is weak, the regression line appears to do a satisfactory job of capturing it.
+
+Residual analysis
+=================
+
+Before accepting this as our final model, we should check by a residual analysis that our model is satisfactory. Plotting the residuals against the fitted values will indicate whether there are any problems with our model:
+
+```{r}
+ggplot(fb.1,aes(x=.fitted,y=.resid))+geom_point()
+```
+
+I see a completely random scatter of points, and therefore my linear regression model is satisfactory. I see no need to improve it.
+

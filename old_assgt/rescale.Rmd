@@ -1,0 +1,482 @@
+\question Suppose we have this vector of values:
+
+```{r}
+z <- c(10, 14, 11)
+z
+```
+
+We want to scale these so that the smallest value is 0 and the largest is 1. We are going to be doing this a lot, so we are going to write a function that will work for any input.
+
+\bP
+
+\p Using a copy of my `z`, work out `min(z)` and `max(z)`. What do they do? Explain (very) briefly.
+
+\bS
+
+Simply this -- define `z` first:
+
+```{r}
+z <- c(10, 14, 11)
+min(z)
+max(z)
+```
+
+They are respectively (and as you would guess) the smallest and largest of the values in `z`. (A nice gentle warmup, but I wanted to get you on the right track for what is coming up.)
+
+\eS
+
+
+\p What do these lines of code do, using the same `z` that I had? Run them and see, and describe briefly what `s` contains.
+
+```{r, eval=FALSE}
+lo <- min(z)
+hi <- max(z)
+s <- (z - lo) / (hi - lo)
+s
+```
+
+\bS
+
+Here we go:
+
+```{r}
+lo <- min(z)
+hi <- max(z)
+s <- (z - lo) / (hi - lo)
+s
+```
+
+The lowest value became 0, the highest 1, and the other one to something in between. Saying this shows the greatest insight.
+
+Extra: the reason for doing it in three steps rather than one (see below) is (i) it makes it clearer what is going on (and thus makes it less likely that you make a mistake), and (ii) it is more efficient, since my way only finds the minimum once instead of twice. Compare this approach with mine above:
+
+```{r}
+(z - min(z)) / (max(z) - min(z))
+```
+
+More complicated with all the brackets, and two `min(z)`. Admittedly the difference here will be thousandths of a second, but why call a function twice when you don't have to?
+
+
+
+\eS
+
+
+
+
+\p Write a function called `rescale` that implements the calculation above, for any input vector called `x`. (Note that I changed the name.)
+
+\bS
+
+Write a function skeleton:
+
+```{r}
+rescale <- function(x) {
+  
+}
+```
+
+and inside the curly brackets put the code from above, replacing `z` with `x` everywhere:
+
+```{r}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  (x - lo) / (hi - lo)
+}
+```
+
+You'll need to make sure your function returns something to the outside world. Either don't save the last line in `s` (as I did here), or save it in `s` and then return `s`:
+
+```{r}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  s <- (x - lo) / (hi - lo)
+  s
+}
+```
+
+or use `return()` if you must, but be aware that this is bad style in R (unlike Python, where you need it). The approved way of using `return` in R is when you are returning something *earlier* than the last line of a function, for example, you are testing a simple case first and returning the value that goes with that, before getting down to the serious computation. 
+
+Extra: in the spirit of what's coming up below, you might check first whether the maximum and minimum are the same and return something else if that's the case:
+
+```{r}
+rescale0 <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  if (lo == hi) return(0)
+  s <- (x - lo) / (hi - lo)
+  s
+}
+```
+
+This is good style; in this case, if `lo` and `hi` are the same, we want to return something else (zero) to the outside world, and *then* we do the calculation, knowing that `lo` and `hi` are different, so that we are sure we are not dividing by zero (but I get ahead of myself).
+
+Doing it this way, there is something to be careful of: a function ought to return a predictable *type* of thing: numbers, in this case. If you have your function return *text* on error, like this:
+
+```{r}
+rescale0 <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  if (lo == hi) return("High and low need to be different")
+  s <- (x - lo) / (hi - lo)
+  s
+}
+```
+
+then you can get into trouble:
+
+```{r}
+rescale0(z)
+rescale0(c(3,3,3))
+```
+The first one is numbers and the second one is text.
+
+
+\eS
+
+\p Test your function on my `z`, and on another vector of your choosing. Explain briefly why the answer you get from your vector makes sense.
+
+\bS
+
+On my `z`:
+
+```{r}
+rescale(z)
+```
+
+The same values as I got before, so that works.
+
+For your vector, use whatever you like. I think it makes sense to have the values already in order, to make it easier to check. Here's one possibility:
+
+```{r}
+w <- 2:6
+w
+```
+
+and then
+
+```{r}
+rescale(w)
+```
+
+The smallest value is 2, which goes to zero; the largest is 6, which goes to 1, and the others are equally spaced between in both the input and the output.
+
+Another possibility is to use a vector with values whose largest and smallest you can clearly see:
+
+```{r}
+w <- c(10, 11, 100, 0, 20)
+rescale(w)
+```
+
+Clearly the smallest value is 0 and the largest is 100. These become 0 and 1, and these particular values make it easy to see what happened: each of the other values got divided by 100.
+
+Some discussion is needed here, in that you need to say something convincing about why your answer is right.
+
+Extra: This is why I had you use a name *other than* `z` for the input to your function. The function can be used on any input, not just the `z` that we tested it on. There's another R-specific reason, which is that you need to be careful about using the named inputs *only*. Consider this function:
+
+```{r}
+ff <- function(x) {
+  x + z
+}
+  
+ff(10)
+```
+
+Where did `z` come from? R *used the `z` we had before*, which is rather dangerous: what if we had a `z` lying around from some completely different work? Much better to have a function work with only inputs in the top line:
+
+```{r, error=TRUE}
+ff <- function(x, z) {
+  x + z
+}
+ff(10, 3)
+ff(10)
+```
+
+The first time, the two inputs are added together, but the second time it tells you it was expecting a value to use for `z` and didn't see one. Much safer.
+
+\eS
+
+\p What happens if your input to `rescale` is a vector of numbers all the same? Give an example. Rewrite your function to intercept this case and give a helpful error message.
+
+\bS
+
+First, try it and see. Any collection of values all the same will do:
+
+```{r}
+rescale(c(3,3,3))
+```
+
+`NaN` stands for "not a number". The way we got it is that the minimum and maximum were the same, so our function ended up dividing by zero (in fact, working out zero divided by zero). This is, in R terms, not even an error, but the answer is certainly not helpful.
+
+The easiest way to check inputs is to use `stopifnot` to express what should be *true* if the function is to proceed. Here, we want the maximum and minimum to be different, so:
+
+```{r, error=TRUE}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot(hi != lo)
+  (x - lo) / (hi - lo)
+}
+rescale(c(3,3,3))
+```
+
+This is much clearer: I only have to recall what my `hi` and `lo` are to see what the problem is.
+
+Extra 1: by calculating and saving the min and max up front, I still only need to calculate them once. If you do it this way:
+
+```{r, error=TRUE}
+rescale <- function(x) {
+  stopifnot(max(x) != min(x))
+  (x - min(x)) / (max(x) - min(x))
+}
+rescale(c(3,3,3))
+```
+
+you get a slightly more informative error message, but you have calculated the max *twice* and the min *three times* for no reason.
+
+Extra 2: `stopifnot` is shorthand for this:
+
+```{r, error=TRUE}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  if (hi == lo) stop("min and max are the same!")
+  (x - lo) / (hi - lo)
+}
+rescale(c(3,3,3))
+```
+
+I didn't show you this, so if you use `stop`, you must tell me where you found out about it. This is better than returning some text (see `rescale0` above) or printing a message: it's an error, so you want to make it look like an error. I am very sympathetic to being persuaded that this is *better* than `stopifnot`, because you can customize the message (and, also, you don't have to go through the double-negative contortions of `stopifnot`). Another way to use `stopifnot` and get a customized message is this one (that I only learned about right when you were writing this Assignment):
+
+```{r, error=TRUE}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot("high and low must be different" = (hi != lo))
+  (x - lo) / (hi - lo)
+}
+rescale(c(3,3,3))
+```
+This is called a "named argument", and the name, if given, is used as an error message.
+
+
+Extra 3: returning to my `rescale0` from above:
+
+```{r}
+rescale0
+```
+
+this can get you into trouble if you use it in a dataframe. This is a bit complicated, since it has to use list-columns. Here we go:
+
+```{r}
+tibble(x = list(z, c(3,3,3)))
+```
+
+Just to check that this does contain what you think it does:
+
+```{r}
+tibble(x = list(z, c(3,3,3))) %>% unnest(x)
+```
+
+So now, for each of those two input vectors, what happens when we run `rescale0` on them? This is `map`:
+
+```{r}
+tibble(x = list(z, c(3,3,3))) %>% 
+  mutate(ans = map(x, ~rescale0(.)))
+```
+The first `ans` is a vector of 3 numbers, and the second one is one piece of text (the "error message"). I was actually surprised it got this far. So what happens when we `unnest` the second column?
+
+```{r, error=TRUE}
+tibble(x = list(z, c(3,3,3))) %>% 
+  mutate(ans = map(x, ~rescale0(.))) %>% 
+  unnest(ans)
+```
+
+Now we get a confusing error: it's *here* that combining some numbers and some text in one column of a dataframe doesn't work. To forestall this, we need to go back and rewrite `rescale0` to not mix things up. Having it return an error, as the latest version of `rescale` does, gives an error here too, but at least we know what it means:
+
+```{r, error=TRUE}
+tibble(x = list(z, c(3,3,3))) %>% 
+  mutate(ans = map(x, ~rescale(.))) %>% 
+  unnest(ans)
+```
+
+because this is the error we anticipated: it says "somewhere within the list-column `x` is a vector where everything is the same".
+
+Extra 3a (or wherever we are now): these also work with `rowwise`, if you find that easier to think about:
+
+```{r, error=TRUE}
+tibble(x = list(z, c(3,3,3))) %>% 
+  rowwise() %>% 
+  mutate(ans = list(rescale0(x))) %>% 
+  unnest(ans)
+```
+
+```{r, error=TRUE}
+tibble(x = list(z, c(3,3,3))) %>% 
+  rowwise() %>% 
+  mutate(ans = list(rescale(x))) %>% 
+  unnest(ans)
+```
+
+The `rescale`s (might) return a vector of several numbers, so you have to wrap it in `list` inside the `mutate` here. Or, do what I did: try it first, and when it doesn't work, then put the `list` around it.
+
+
+\eS
+
+\p Make a dataframe (containing any numeric values), and in it create a new column containing the rescaled version of one of its columns, using your function. Show your result.
+
+\bS
+
+This is less difficult than you might be expecting: make a dataframe with at least one numeric column, and use `mutate`:
+
+```{r}
+d <- tibble(y=2:6)
+d
+```
+
+and then
+
+```{r}
+d %>% mutate(s=rescale(y))
+```
+
+You can supply the values for what I called `y`, or use random numbers. It's easier for you to check that it has worked if your column playing the role of my `y` has not too many values in it.
+
+Extra: this is actually already in the `tidyverse` under the name `percent_rank` ("percentile ranks"):
+
+```{r}
+d %>% mutate(s = percent_rank(y))
+```
+
+The value 5, for example, is at the 75th percentile.
+
+\eS
+
+\p We might want to rescale the input not to be between 0 and 1, but between two values `a` and `b` that we specify as input. If `a` and/or `b` are not given, we want to use the values 0 for `a` and 1 for `b`. Rewrite your function to rescale the input to be between `a` and `b` instead of 0 and 1. Hint: allow your function to produce values between 0 and 1 as before, and then note that if all the values in a vector `s` are between 0 and 1, then all the values in `a+(b-a)*s`
+are between $a$ and $b$.
+
+\bS
+
+I'm showing you my thought process in this one. The answer I want from you is the one at the end.
+
+So, start by copying and pasting what you had before:
+
+```{r}
+rescale <- function(x) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot(hi != lo)
+  (x - lo) / (hi - lo)
+}
+```
+
+On the top line, add the extra inputs and their default values. I also changed the name of my function, for reasons you'll see later:
+
+```{r}
+rescale2 <- function(x, a=0, b=1) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot(hi != lo)
+  (x - lo) / (hi - lo)
+}
+```
+
+Save the last line, since we have to do something else with it:
+
+```{r}
+rescale2 <- function(x, a=0, b=1) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot(hi != lo)
+  s <- (x - lo) / (hi - lo)
+}
+```
+
+and finally add the calculation in the hint, which we don't need to save because we are returning it:
+
+```{r}
+rescale2 <- function(x, a=0, b=1) {
+  lo <- min(x)
+  hi <- max(x)
+  stopifnot(hi != lo)
+  s <- (x - lo) / (hi - lo)
+  a + (b-a) * s
+}
+```
+
+This complete function is what I want to see from you. (You should keep the `stopifnot`, because this function will have the exact same problem as the previous one if all the values in `x` are the same.)
+
+A better way is to observe that you can call functions inside functions. The function above is now a bit messy since it has several steps. Something that corresponds better to my hint is to call the original `rescale` first, and then modify its result:
+
+```{r}
+rescale3 <- function(x, a=0, b=1) {
+  s <- rescale(x)
+  a + (b-a) * s
+}
+```
+
+The logic to this is rather clearly "rescale the input to be between 0 and 1, then rescale *that* to be between $a$ and $b$." My `rescale2` does exactly the same thing, but it's much less clear that it does so, unless you happen to have in your head how `rescale` works. (I think you are more likely to remember, sometime in the future, what `rescale` *does*, compared to precisely how it *works*.)
+
+That is why `rescale3` is better than `rescale2`. Remember that you can, and generally should, use functions that have already been written (by you or someone else) as part of functions that do more complex things. See also my second point below.
+
+Extra: there are two important principles about why functions are important:
+
+1.  they allow you to re-do a calculation on many different inputs (the point I've been making up to now)
+1.  by abstracting a calculation into a thing with a name, it makes it easier to understand that calculation's role in something bigger. The only thing we had to remember in `rescale3` is what the last line did, because the name of the function called on the first line tells us what happens there. This is much easier than remembering what the first four lines of `rescale2` do.
+
+The second principle here is what psychologists call "chunking": you view a thing like my function `rescale` as a single item, rather than as four separate lines of code, and then that single item can be part of something larger (like my `rescale3`), and you have a smaller number of things to keep track of.
+
+\eS
+
+\p Test your new function two or more times, on input where you know or can guess what the output is going to be. In each case, explain briefly why your output makes sense.
+
+\bS
+
+I'll start by using the default values for `a` and `b` (so I don't have to specify them):
+
+```{r}
+rescale2(2:6)
+rescale3(2:6)
+```
+
+I did both of the variants of my function; of course, you'll only have one variant.
+
+We got the same answer as before for the same input, so the default values $a=0, b=1$ look as if they have been used.
+
+Let's try a different one:
+
+```{r}
+v <- c(7, 11, 12)
+rescale2(v, 10, 30)
+rescale3(v, 10, 30)
+```
+
+The lowest value in `v` has become 10, and the highest has become 30. (Also, the in-between value 11 was closer to 12 than to 7, and it has become something closer to 30 than to 10.)
+
+Extra: you can also name any of your inputs:
+
+```{r}
+rescale3(x=v, a=10, b=30)
+```
+
+and if you name them, you can shuffle the order too:
+
+```{r}
+rescale3(a=10, b=30, x=v)
+```
+
+The point of doing more than one test is to check that different aspects of your function all work. Therefore, the best testing here checks that the defaults work, and that the answer is sensible for some different `a` and `b` (to check that this works as well).
+
+When you write your version of `rescale` with the optional inputs, it's best if you do it so that the things you have to supply (the vector of numbers) is *first*. If you put `a` and `b` first, when you want to omit them, you'll have to call the input vector by name, like this:
+
+```{r}
+rescale3(x=v)
+```
+
+because otherwise the input vector will be taken to be `a`, not what you want.
+\eS
+
+\eP
+
+

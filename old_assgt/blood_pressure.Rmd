@@ -1,0 +1,30 @@
+\question Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist's appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolic\endnote{A blood pressure is usually given as two numbers, like "120 over 80". The first number, which is the one shown in our data, is called the systolic blood pressure. It is the pressure in the arteries when the heart is pumping. The second is called the diastolic blood pressure, and it is the pressure in the arteries when the heart is resting.})
+
+Data as originally shown:
+
+```{r}
+bp0 <- tribble(
+  ~time, ~p1, ~p2, ~p3, ~p4, ~p5, ~p6, ~p7, ~p8, ~p9, ~p10,
+  "before", 132, 135, 149, 133, 119, 121, 128, 132, 119, 110,
+  "after", 118, 137, 140, 139, 107, 116, 122, 124, 115, 103
+)
+bp0
+```
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  pivot_wider(names_from = time, values_from = bp) -> bp1
+bp1
+```
+
+```{r}
+ggplot(bp1, aes(x=before, y=after)) + geom_point() + geom_abline(intercept = 0, slope = 1)
+```
+
+differences
+
+```{r}
+bp1 %>% mutate(diff = after-before) %>% 
+  ggplot(aes(x=diff)) + geom_histogram(bins=5)
+```
+

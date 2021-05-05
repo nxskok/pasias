@@ -1,0 +1,30 @@
+
+brandpref1
+
+```{r}
+f <- file.choose()
+```
+
+```{r}
+pref <- read_tsv(f)
+pref
+```
+
+recode
+
+```{r}
+codes <- tribble(
+  ~Group, ~Treatment,
+  1, "dog_dog",
+  2, "dog_cat",
+  3, "words_none"
+)
+pref %>% left_join(codes) -> magic_coat
+magic_coat
+```
+
+```{r}
+ggplot(magic_coat, aes(fill=Treatment, x=Preference)) + geom_density(alpha=0.3)
+```
+
+this is better, because the data is discrete again

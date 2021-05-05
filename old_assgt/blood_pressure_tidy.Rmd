@@ -1,0 +1,213 @@
+% this is still available
+
+\question Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist's appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolic\endnote{A blood pressure is usually given as two numbers, like ``120 over 80''. The first number, which is the one shown in our data, is called the systolic blood pressure. It is the pressure in the arteries when the heart is pumping. The second is called the diastolic blood pressure, and it is the pressure in the arteries when the heart is resting.})  blood pressure measured while they are in a dentist's waiting room, and then again one hour after their appointment is finished.
+
+You might have seen a tidy version of this data set before.
+
+The data as I originally received it is in \url{http://ritsokiguess.site/datafiles/STAC32/blood_pressure2.csv}.
+
+\bP
+
+\p Read in and display the data as originally received.
+
+\bS
+
+You ought to be suspicious that something is going to be up with the layout. With that in mind, I'm using a "disposable" name for this dataframe:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/blood_pressure2.csv"
+bp0 <- read_csv(my_url)
+bp0
+```
+
+\eS
+
+\p Describe briefly how the data you read in is not tidy, bearing in mind how the data were collected and how they would be analysed.
+
+\bS
+
+In short, the things that are rows should be columns, and the things that are columns should be rows. Or, the individuals (people, here) should be in rows but they are in columns. Or, the variables (time points) should be in columns but they are in rows. One of those. 
+
+Another way to go at it is to note that the numbers are all blood pressure measurements, and so should be all in one column, labelled by which time and individual they belong to. This is, however, not quite right, for reasons of how the data were collected. They are pairs of measurements on the same individual, and so there should be (for something like a matched pairs $t$-test) a column of  before measurements and a column of after measurements. This will mean some extra work in the next part to get it tidy.
+
+\eS
+
+\p Produce a tidy dataframe from the one you read in from the file. (How many rows should you have?)
+
+\bS
+
+The usual starting point for these is to get all the measurements into one column and see what to do after that.
+This is `pivot_longer`:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
+```
+
+This would be tidy if we had 20 independent observations from 20 different people. But we don't. We only have 10 people, with two measurements on each, so we should only have 10 rows. Having made things longer, they are now *too* long, and we have to make it wider again.
+
+We want to have a column of before and a column of after, so the names of the new columns are coming from what I called `time`. The values are coming from what I called `bp`, so, gluing the `pivot_wider` on the end of the pipe:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  pivot_wider(names_from = time, values_from = bp) -> blood_pressure
+blood_pressure
+```
+
+This is now tidy, so I gave it a "permanent" name.
+
+I laid out the steps of my thinking, so you could follow my logic. I'm expecting your *thinking* to be about the same as mine, but the work you hand in can certainly be the finished pipe I had just above, as if you thought of it right away.
+
+Extra: `pivot_wider` is smarter than you think, but it can be helpful to know what it does, in order to help diagnose when things go wrong. Let's go back and look at the too-long dataframe again:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
+```
+
+Each one of those values in `bp` has to go somewhere in the wider dataframe. In particular, it needs to go in a particular row and column. The column is pretty obvious: the column whose name is in the `time` column. But the row is much less obvious. How does `pivot_wider` figure it out? Well, it looks for all combinations of values in the *other* columns, the ones not mentioned in the `pivot_wider`, and makes a row for each of those. In this case, the only other column is `person`, so it makes one row for each person. Since there is one before and one after measurement for each person, everything works smoothly. 
+
+This enables us to try a couple of what-ifs to see what can go wrong. 
+
+First, what if there's no person column at all, so there is nothing to say what row an observation should go in?
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  select(-person) %>% 
+  pivot_wider(names_from = time, values_from = bp)
+```
+
+It kinda works, but with a warning. The warning says "values are not uniquely identified", which is a posh way to say that it doesn't know where to put them (because there is no longer a way to say which row each observation should go in). 
+
+Here's another one, similar:
+
+```{r}
+d <- tribble(
+  ~g, ~id, ~y,
+  "a", "p1", 10,
+  "a", "p2", 11,
+  "b", "p1", 12,
+  "b", "p2", 13,
+  "a", "p3", 14,
+  "a", "p1", 15
+)
+d
+```
+
+When we do this:
+
+```{r}
+d %>% pivot_wider(names_from = g, values_from = y)
+```
+
+we get list-columns again (and the same warning). What this output is telling you is that mostly there is one number per id-group combination (the `dbl[1]`) but there are two observations labelled id `p1` and group `a`, and no observations at all labelled id `p3` and group `b`. It turns out\endnote{I know because I made these data up.} that the last row of the tribble contains errors. Fix them, and all is good:
+
+```{r}
+d <- tribble(
+  ~g, ~id, ~y,
+  "a", "p1", 10,
+  "a", "p2", 11,
+  "b", "p1", 12,
+  "b", "p2", 13,
+  "a", "p3", 14,
+  "b", "p3", 15
+)
+d %>% pivot_wider(names_from = g, values_from = y)
+```
+
+One last one:
+
+```{r}
+d <- tribble(
+  ~id, ~g, ~y,
+  1, "a", 10,
+  2, "a", 11,
+  3, "a", 12,
+  4, "b", 13,
+  5, "b", 14,
+  6, "b", 15
+)
+d
+```
+
+and then
+
+```{r}
+d %>% pivot_wider(names_from = g, values_from = y)
+```
+
+Where did those missing values come from? If you go back and look at this `d`, you'll see that each person has only *one* measurement, *either* an `a` or a `b`, not both. There is, for example, nothing to go in the `a` column for person number 4, because their only measurement was in group `b`. This kind of thing happens with two independent samples, and is a warning that you don't *need* to pivot wider: it's already tidy:
+
+```{r}
+d
+```
+Think about the kind of layout you need for a two-sample $t$-test.
+
+\eS
+
+\p What kind of test might you run on these data? Explain briefly.
+
+\bS
+
+This is a matched-pairs experiment, so it needs a matched-pairs analysis. This could be a matched-pairs $t$-test, or a sign test on the differences (testing that the population median difference is zero). You can suggest either, since we haven't drawn any graphs yet, but "sign test" is not enough; you need to say something about what kind of sign test. (It's actually quicker to answer "matched-pairs $t$-test" since you don't need any more detail than that.)
+
+\eS
+
+\p Draw a suitable graph of these data.
+
+\bS
+
+Given that we are going to do a matched-pairs analysis of some kind, the best graph looks at the *differences* between the two measurements. So calculate them first, and then make a one-sample plot of them, such as a histogram:
+
+```{r}
+blood_pressure %>% mutate(diff = before - after) %>% 
+  ggplot(aes(x=diff)) + geom_histogram(bins=5)
+```
+You will need a suitably small number of bins, since we only have ten observations. You can take the differences the other way around if you prefer; they will then be mostly negative.
+
+You might have looked at the two quantitative columns and thought "scatterplot":
+
+```{r}
+ggplot(blood_pressure, aes(x=before, y=after)) + geom_point()
+```
+This says that if the blood pressure before was large, the blood pressure afterwards is as well. This is fair enough, but it is the answer to a question *we don't care about*. What we *do* care about is whether the after measurement is bigger than the before one *for the same person*, which this graph does not show. So this is not the best.
+
+To rescue this graph, you can add the line $y=x$ to it. The value of this is that a point above this line has the after measurement bigger than the corresponding before one, and a point below the line has the after measurement smaller. You will need to find out how to add a line with a given intercept and slope to the plot, since I haven't shown you how to do it. It's called `geom_abline`, thus:
+
+```{r}
+ggplot(blood_pressure, aes(x=before, y=after)) + geom_point() +
+  geom_abline(intercept = 0, slope = 1)
+```
+This is insightful, because most of the points are below the line, so that most of the before measurements were bigger than the corresponding after ones.
+
+Note that if you put a *regression line* on your plot, you will need to offer a convincing explanation of why that offers insight, which I think you will find difficult.
+
+Finally, if you thought the long data frame was tidy, this one:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
+```
+
+then you can rescue some points here by making a suitable plot of that. A boxplot is not enough:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  ggplot(aes(x=time, y=bp)) + geom_boxplot()
+```
+
+because you have *lost* the connection between the two measurements for each person. To keep that connection, start with the same plot but as points rather than boxes:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  ggplot(aes(x=time, y=bp)) + geom_point()
+```
+and then join the two points that belong to the same person. This is done with `geom_line` as usual, only you have to say which points are going to be joined, namely the two for each person, and to do that, you specify `person` in `group`:
+
+```{r}
+bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
+  ggplot(aes(x=time, y=bp, group=person)) + geom_point() + geom_line()
+```
+Most of the lines are going uphill, so most of the `after` measurements are less than the corresponding `before` ones.\endnote{This is known in the trade as a "spaghetti plot" because the lines resemble strands of spaghetti.}
+
+\eS
+
+\eP
+

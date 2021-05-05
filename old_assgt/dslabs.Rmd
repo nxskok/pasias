@@ -1,0 +1,261 @@
+---
+title: "investigating dslabs package"
+output: html_notebook
+---
+
+## packages
+
+```{r}
+library(tidyverse)
+library(dslabs)
+library(ggrepel)
+```
+
+## gender bias in grad school admissions at Berkeley
+
+```{r}
+admissions
+```
+
+calls out for log-linear model
+
+```{r}
+admissions %>% mutate(admitted=round(admitted*applicants/100)) %>% 
+  mutate(not_admitted=applicants-admitted) %>% 
+  gather(was_admitted,frequency,ends_with("admitted")) ->
+ken_admissions
+```
+
+fit model
+
+```{r}
+ken_admissions
+adm.1=glm(frequency~was_admitted*major*gender,family=poisson,data=ken_admissions)
+```
+
+inspect
+
+```{r}
+drop1(adm.1,test="Chisq")
+```
+
+```{r}
+summary(adm.1)
+```
+
+a shame the 3-way interaction is significant
+
+## divorce rate and margarine consumption
+
+```{r}
+divorce_margarine
+```
+
+scatter plot
+
+```{r}
+  ggplot(divorce_margarine,aes(x=margarine_consumption_per_capita,y=divorce_rate_maine))+
+    geom_point()
+```
+
+regression
+
+```{r}
+dr.1=lm(divorce_rate_maine~margarine_consumption_per_capita,data=divorce_margarine)
+summary(dr.1)
+```
+
+```{r}
+dr.2=lm(divorce_rate_maine~margarine_consumption_per_capita+year,data=divorce_margarine)
+summary(dr.2)
+
+```
+
+suggests multicollinearity: are the other things dependent on year?
+
+```{r}
+ggplot(divorce_margarine,aes(y=margarine_consumption_per_capita,x=year))+
+    geom_point()
+
+```
+
+```{r}
+ggplot(divorce_margarine,aes(x=year,y=divorce_rate_maine))+
+    geom_point()
+
+```
+
+## gapminder
+
+```{r}
+gapminder
+```
+
+extract rows for a specific year, say, then compare something by continent or region
+
+## self-reported heights
+
+```{r}
+heights
+```
+
+compare heights for males and females
+
+```{r}
+ggplot(heights,aes(x=sex,y=height))+geom_boxplot()
+```
+
+```{r}
+t.test(height~sex,data=heights)
+```
+
+## gun murders
+
+```{r}
+murders
+```
+
+```{r}
+ggplot(murders,aes(x=population,y=total))+geom_point()
+```
+
+gun murders per million
+
+```{r}
+murders %>% mutate(murder_rate=total/population*1e6) %>% 
+  arrange(desc(murder_rate))
+```
+
+total by region
+
+```{r}
+murders %>% group_by(region) %>% 
+  summarize(r_total=sum(total),r_pop=sum(population)) %>% 
+  mutate(r_rate=r_total/r_pop*1e6)
+```
+
+murder rates by state, classified by region
+
+```{r}
+murders %>% mutate(murder_rate=total/population*1e6) %>% 
+  mutate(my_label=ifelse(murder_rate>50,state,"")) %>% 
+  ggplot(aes(x=region,y=murder_rate,label=my_label))+geom_boxplot()+
+    geom_text_repel()
+```
+
+## missing values
+
+```{r}
+na_example
+```
+
+## outlier example
+
+```{r}
+outlier_example
+```
+
+```{r}
+ggplot(tibble(height=outlier_example),aes(x=1,y=height))+geom_boxplot()
+```
+
+## US election polls
+
+```{r}
+polls_us_election_2016
+```
+
+## reported heights
+
+```{r}
+reported_heights
+```
+
+```{r}
+reported_heights %>% count(height)
+```
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(ht<200) %>% 
+  ggplot(aes(x=ht))+geom_histogram()
+```
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(between(ht,0,3))
+```
+
+these could be metres
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(between(ht,3,8))
+```
+
+these are feet or feet and inches
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(between(ht,50,100))
+
+```
+
+these are inches
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(between(ht,150,200))
+
+```
+
+these are centimetres
+
+```{r}
+reported_heights %>% mutate(ht=parse_number(height)) %>% 
+  filter(between(ht,200,Inf))
+
+```
+
+these seem like gibberish
+
+## research funding rates
+
+```{r}
+research_funding_rates
+```
+
+## falling object (simulated)
+
+```{r}
+rfalling_object()
+```
+
+## blue and red beads
+
+```{r}
+take_poll(n=100)
+```
+
+## contagious diseases
+
+```{r}
+us_contagious_diseases
+```
+
+calculate rates per million
+
+```{r}
+us_contagious_diseases %>% mutate(rate=count/population*1e6) %>% 
+  arrange(desc(rate))
+```
+
+```{r}
+us_contagious_diseases %>% mutate(rate=count/population*1e6) %>% 
+  filter(disease=="Measles") %>% 
+  ggplot(aes(x=year,y=rate,colour=state))+ 
+    geom_line()+guides(colour=F)
+```
+
+this would go well by region also
+

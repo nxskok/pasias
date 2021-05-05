@@ -1,0 +1,176 @@
+\question A population of a large number of values `v` is at \url{http://ritsokiguess.site/datafiles/STAC32/pop.csv}, in a CSV file. 
+
+\bP
+
+\p Read in the population and display some of the values.
+
+\bS
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/pop.csv"
+pop <- read_csv(my_url)
+pop
+```
+
+10,000 values. A large population. (From these few values, `v` seems to be positive but rather variable.)
+
+\eS
+
+
+\p Obtain a suitable plot of your population. What do you notice?
+
+\bS
+
+One quantitative variable, so a histogram. The population is large, so you can use more bins than usual. Sturges' rule says 14 bins (the logarithm below is base 2, or, the next power of 2 above 10,000 is 16,384 which is $2^{14}$):
+
+```{r}
+log(10000, 2)
+2^14
+```
+
+```{r}
+ggplot(pop, aes(x=v)) + geom_histogram(bins=14)
+```
+
+Pick a number of bins: the default 30 bins is pretty much always too many. Any number of bins that shows this shape is good as an answer, but you also need to display some thinking about how many bins to use, either starting with a rule as I did, or experimenting with different numbers of bins. Rules are not hard and fast; it so happened that I liked the picture that 14 bins gave, so I stopped there. Thirty bins, the default, is actually not bad here:
+
+```{r}
+ggplot(pop, aes(x=v)) + geom_histogram()
+```
+
+but if you do this, you need to say something that indicates some conscious thought, such as saying "this number of bins gives a good picture of the shape of the distribution", which I am OK with. *Have a reason for doing what you do*.
+
+
+This is skewed to the right, or has a long right tail. This is a better description than "outliers": there are indeed some very large values (almost invisible on the histogram), but to say that is to imply that the rest of the distribution apart from the outliers has a regular shape, not something you can say here.\endnote{The question to ask yourself is whether the shape comes from the entire distribution, as it does here (skewness), or whether it comes from a few unusual observations (outliers).}
+
+Extra: The issue that's coming up is whether this is normally-distributed, which of course it is not. This is a normal quantile plot, which comes up in lecture right around the time you are reading this. (Idea: if the points follow the line, at least approximately, the variable is normally distributed; if not, not.):
+
+
+```{r}
+ggplot(pop, aes(sample=v)) + stat_qq() + stat_qq_line()
+```
+
+That is your archetypal skewed-to-right. The two highest values are not a lot higher than the rest, again supporting a curved shape overall (skewness) on this plot, rather than the problem being outliers. (The highest values are consistent with the shape of the curve, rather than being unusually high compared to the curve.)
+
+\eS
+
+\p If you take a sample of 10 observations from this population and run a $t$-test, how likely are you to (correctly) reject the null hypothesis $H_0: \mu = 4$, against the alternative $H_a: \mu > 4$? Investigate by simulation.
+
+
+
+\bS
+
+As you noted, this is a one-sided alternative, so make sure your code does the right thing. Take a lot of random samples, run the $t$-test on each one, grab the P-value each time, make a dataframe, count the number of P-values less or equal to your $\alpha$:
+
+```{r}
+rerun(1000, sample(pop$v, 10)) %>% 
+  map(~t.test(., mu=4, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+The estimated power is only about 0.19.
+
+Here, and elsewhere in this question, use at least 1000 simulations. More will give you more accurate results, but you'll have to wait longer for it to run. Your choice.
+
+As a final remark, you *can not* do this one by algebra, as you might have done in other courses, because you do not know the functional form of the population distribution. The power calculations you may have done before as calculations typically assume a normal population, because if you don't, the algebra gets too messy too fast. (You'd need to know the distribution of the test statistic under the *alternative* hypothesis, which in cases beyond the normal is not usually known.)
+
+\eS
+
+\p Try again with a sample size of 50 (leaving everything else the same). Explain briefly why the results so far are as you'd expect.
+
+\bS
+
+For the code, this is copy-paste-edit. Just change the sample size:
+
+```{r}
+rerun(1000, sample(pop$v, 50)) %>% 
+  map(~t.test(., mu=4, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+The power is now much bigger, around 73%. This is as expected because with a larger sample size we should be more likely to reject a false null hypothesis. 
+
+The reason for this is that the mean of a bigger sample should be closer to the population mean, because of the Law of Large Numbers, and thus further away from the incorrect null hypothesis and more likely far enough away to reject it. In this case, as you will see shortly, the population mean is 5, and so, with a bigger sample, the sample mean will almost certainly be closer to 5 and further away from 4.
+
+I have a feeling you could formalize this kind of argument with Chebyshev's inequality, which would apply to any kind of population.\endnote{It has to have a standard deviation, though, which rules out Cauchy, but our population seems well-enough behaved to have a standard deviation.} I think I'd have to write it down to get it right, though.
+
+\eS
+
+\p Again by simulation, estimate the probability that the null hypothesis $H_0: \mu=5$ will be rejected when a sample of size 10 is taken from this population, in favour of the alternative $H_a: \mu > 5$. Explain briefly why the answer is not what you would have expected, and why that happened here. (Hint: what is the population mean?)
+
+\bS
+
+Taking the hint first:
+
+```{r}
+pop %>% 
+  summarize(m = mean(v))
+```
+
+(I'm hoping that some light dawns at this point), and copy-paste-edit your simulation code again:
+
+```{r}
+rerun(1000, sample(pop$v, 10)) %>% 
+  map(~t.test(., mu=5, alternative = "greater")) %>% 
+  map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+The "power" is estimated to be 0.020. (Again, your value won't be exactly this, most likely, but it should be somewhere close.)
+
+So what were we expecting? This time, the null hypothesis, that the population mean is 5, is actually *true*. So rejecting it is now a *type I error*, and the probability of that should be $\alpha$, which was 0.05 here. In our simulation, though, the estimated probability is quite a bit *less* than 0.05. (Your result will probably differ from mine, but it is not likely to be bigger than 0.05). 
+
+To think about why that happened, remember that this is a very skewed population, and the sample size of 10 is not big, so this is not really the situation in which we should be using a $t$-test. The consequence of doing so anyway, which is what we investigated, is that the actual $\alpha$ of our test is not 0.05, but something smaller: the test is not properly calibrated.
+
+If you do this again for a sample of size 50, you'll find that the simulation tells you that $\alpha$ is closer to 0.05, but still less. The population is skewed enough that the Central Limit Theorem still hasn't kicked in yet, and so we still cannot trust the $t$-test to give us a sensible P-value. 
+
+Extra: a lot more discussion on what is happening here:
+
+This test is what is known in the jargon as "conservative". To a statistician, this means that the probability of making a type I error is smaller than it should be. That is in some sense safe, in that if you reject, you can be pretty sure that this rejection is correct, but it makes it a lot harder than it should to reject in the first place, and thus you can fail to declare a discovery when you have really made one (but the test didn't say so).
+
+I  did some investigation to see what was going on. First, I ran the simulation again, but this time keeping the mean and SD of each sample, as well as the $t$-statistic:
+
+```{r}
+rerun(1000, sample(pop$v, 10)) %>% 
+  enframe(name="sim") %>% 
+  unnest(value) %>% 
+  group_by(sim) %>% 
+  summarize(xbar=mean(value), s=sd(value), tstat=(xbar-5)/(s/sqrt(10))) -> mean_sd
+mean_sd
+```
+
+As for coding, I turned the simulated samples into a dataframe, got out the individual values, obtaining a column `sim` that numbers the individual samples, and then was able to get what I wanted by `group_by` and `summarize` as usual. Try it one line at a time to see how it works. The `enframe` turns a `list` (which is what comes out of `rerun`) into a dataframe. I'm never quite sure how it will come out, but I try it first and then deal with what it produces. When I was working this out, I started with a `rerun(2, ...)` so that I could see what it was doing, and when I was happy that it was all working, I did it again with the final number of simulations.
+
+After that, I played around with several things, but I found something interesting when I plotted the sample mean and SD *against each other*:
+
+```{r}
+ggplot(mean_sd, aes(x=xbar, y=s)) + geom_point() + geom_smooth(se=F)
+```
+
+*When the sample mean is bigger, so is the sample standard deviation!*
+
+This actually does make sense, if you stop to think about it. A sample with a large mean will have some of those values from the long right tail in it, and having those values will also make the sample more spread out. The same does not happen at the low end: if the mean is small, all the sample values must be close together and the SD will be small also.\endnote{You might have something lurking in your mind about the sample mean and sample SD/variance being \emph{independent}, which they clearly are not here. That is true if the samples come from a \emph{normal distribution}, and from that comes independence of the top and bottom of the t-statistic. But here is an example of how everything fails once you go away from normality, and how you have to rely on the central limit theorem, or large sample sizes more generally, for most of your theory to be any good.}
+
+It wasn't clear to me what that would do to the $t$-statistic. A larger sample mean would make the top of the test statistic bigger, but a larger sample mean would also go with a larger sample SD, and so the bottom of the test statistic would be bigger as well. That's why I included this in the simulation too:
+
+```{r}
+ggplot(mean_sd, aes(x=tstat)) + geom_histogram(bins=12)
+```
+
+Well, well. Skewed to the *left*.
+
+This too makes sense with a bit of thought. A small sample mean will also have a small sample SD, so the test statistic could be more negative. But a large sample mean will have a *large* sample SD, so the test statistic won't get so positive. Hence, in our simulation, the test statistic won't get large enough to reject with as often as it should. Thus, the type I error probability that is too small.
+
+
+\eS
+
+
+\eP
+

@@ -1,0 +1,84 @@
+---
+title: "Boston Marathon"
+output: html_notebook
+---
+
+## introduction
+
+scraping these off the Wikipedia page.
+
+Go to web site and find wanted table. Right-click, Inspect Element. Find the thing that highlights everything I want. Right click on right, copy, copy xpath.
+
+## packages
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(lubridate)
+```
+
+## now, in R, set up these:
+
+```{r}
+url="https://en.wikipedia.org/wiki/List_of_winners_of_the_Boston_Marathon"
+xpath='//*[@id="mw-content-text"]/div/table[2]'
+```
+
+(hint: put the `xpath` in *single* quotes)
+
+then
+
+```{r}
+(url %>% 
+  read_html() %>% 
+  html_nodes(xpath = xpath) %>% 
+  html_table() %>% 
+  pluck(1) ->
+men)
+```
+
+the winners' names have gotten mangled, but the year and the winning time appear to be OK.
+
+What about the women? Same url:
+
+```{r}
+xpath='//*[@id="mw-content-text"]/div/table[3]'
+(url %>% 
+  read_html() %>% 
+  html_nodes(xpath = xpath) %>% 
+  html_table() %>% 
+  pluck(1) ->
+women)
+```
+
+## processing
+
+Now some organization to get them into one data frame, select columns I want, and turn time into something useful
+
+```{r}
+(
+bind_rows("Men"=men,"Women"=women,.id="Gender") %>% 
+  select(Gender,Year,Time) %>% 
+  mutate(WinTime=as.duration(hms(Time))/dhours(1)) %>% 
+  select(-Time) ->
+winning_times)
+```
+
+save them to csv
+
+```{r}
+write_csv(winning_times,"marathon.csv")
+```
+
+
+```{r}
+winning_times %>% 
+  ggplot(aes(x=Year,y=WinTime,colour=Gender))+
+  geom_point()+geom_smooth(se=F)
+```
+
+
+
+## references
+
+[Cory Nissen's page](http://blog.corynissen.com/2015/01/using-rvest-to-scrape-html-table.html)

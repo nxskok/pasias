@@ -1,0 +1,125 @@
+\question The Wade Tract in Thomas County, Georgia, is an old-growth forest of longleaf pine trees. It has survived in a relatively undisturbed state since before settlements of the area by Europeans. For each tree in the tract, researchers measured the diameter at breast height. This is a standard measure in forestry: it is defined as the height of the tree at 4.5 feet above the ground.\endnote{The height of a typical human breast off the ground. Men have a breast too, you know.} They are interested in the mean diameter at breast height of the trees in this tract. These values are in [http://ritsokiguess.site/datafiles/STAC32/treediameter.csv](http://ritsokiguess.site/datafiles/STAC32/treediameter.csv). The diameters are measured in centimetres.
+The easiest way to get the URL is to *right*-click on the blue text and select Copy URL. (If you copy and paste the actual text you might end up with extra spaces, especially if the printed URL goes over two lines.)
+
+\bP
+
+\p[2] Read in and display (some of) the data.
+
+\bS
+
+The obvious way is this:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_csv(my_url)
+trees
+```
+
+Call the data frame what you like, though it is better to use a name that tells you what the dataframe contains (rather than something like `mydata`). 
+
+Extra 1: there is only one column, so you can pretend the columns are separated by anything at all. Thus you could use this:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_delim(my_url, " ")
+trees
+```
+
+or even this:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_table(my_url)
+trees
+```
+
+Extra 2: you might be wondering how they measure the diameter without doing something like drilling a hole through the tree. They don't actually measure the diameter at all. What they measure is the *circumference* of the tree, which is easy enough to do with a tape measure. Longleaf pines are usually near circular, so you get the diameter by taking the circumference and dividing by $\pi$. [This City of Portland website](https://www.portlandoregon.gov/trees/article/424017) shows you how it's done.
+
+\eS
+
+\p Make a suitable plot of your dataframe.
+
+\bS
+
+One quantitative variable, so a histogram. Choose a sensible number of bins. There are 40 observations, so a number of bins up to about 10 is good. Sturges' rule says 6 since $2^6=64$:
+
+```{r}
+ggplot(trees, aes(x=diameter)) + geom_histogram(bins=6)
+```
+
+Extra 1: comments come later, but you might care to note (if only for yourself) that the distribution is a little skewed to the right, or, perhaps better, has *no* left tail at all. You might even observe that diameters cannot be less than 0 (they are measurements), and so you might expect a skew away from the limit. 
+
+After you've looked at the $t$ procedures for these data, we'll get back to the shape. 
+
+Extra 2: later we look at a more precise tool for assessing normality, the normal quantile plot, which looks like this:
+
+```{r}
+ggplot(trees, aes(sample=diameter)) + stat_qq() + stat_qq_line()
+```
+
+If the data comes from a normal distribution, the points should follow the straight line, at least approximately. Here, most of the points do, except for the points on the left, which veer away upwards from the line: that is, the highest values, on the right, are about right for a normal distribution, but the lowest values, on the left, *don't go down low enough*.\endnote{They cannot go down far enough, because they can't go below zero.}
+Thus, the problem with normality is not the long tail on the right, but the short one on the left. It is hard to get this kind of insight from the histogram, but at the moment, it's the best we have.
+
+The big problems, for things like $t$-tests that depend on means, is stuff like outliers, or long tails, with extreme values that might distort the mean. Having short tails, as the left tail here, will make the distribution look non-normal but won't cause any problems for the $t$-tests.
+
+
+\eS
+
+\p[3] Obtain a 95% confidence interval for the mean diameter.
+
+\bS
+
+This is `t.test`, but with `conf.level` to get the interval (and then you ignore the P-value):
+
+```{r}
+with(trees, t.test(diameter))
+```
+
+The mean diameter of a longleaf pine (like the ones in this tract) is between 21.6 and 33.0 centimetres.
+
+If you prefer, do it this way:
+```{r}
+t.test(trees$diameter)
+```
+
+
+You need to *state the answer* and *round it off suitably*. The actual diameters in the data have one decimal place, so you can give the same accuracy for the CI, or *at most* two decimals (so 21.63 to 32.95 cm would also be OK).\endnote{One more decimal place than the data is the maximum you give in a CI.} Giving an answer with more decimals is something you cannot possibly justify. Worse even than giving too many decimals is not writing out the interval at all. *Never* make your reader find something in output. If they want it, tell them what it is. 
+
+Thus, here, one mark for the output, one more for saying what the interval is, and the third if you give the interval with a sensible number of decimals.
+
+\eS
+
+\p[4] Based on what you have seen so far, would you expect to reject a null hypothesis that the population mean diameter (of all longleaf pines like these) is 35 cm? Explain briefly. Then, carry out the test (against a two-sided alternative) and explain briefly whether you were right.
+
+\bS
+
+The logic is that "plausible" values for the population mean, ones you believe, are inside the interval, and implausible ones that you don't believe are outside. Remember that the interval is your best answer to "what is the population mean", and 35 is outside the interval so you don't think the population mean is 35, and thus you would reject it.
+
+Are we right? Take out the `conf.level` and put in a `mu`:
+
+```{r}
+with(trees, t.test(diameter, mu = 35))
+```
+
+The P-value is less than our $\alpha$ of 0.05, so we would indeed reject a mean of 35 cm (in favour of the mean being different from 35).
+
+\eS
+
+\p[3] Would you expect 35 cm to be in a *99%* confidence interval for the mean diameter? Explain briefly, and then see if you were right.
+
+\bS
+
+The P-value is less than 0.01 (as well as being less than 0.05), so, in the same way that 35 was outside the 95% interval, it should be outside the 99% CI also. Maybe not by much, though, since the P-value is only just less than 0.01:
+
+```{r}
+with(trees, t.test(diameter, conf.level = 0.99))
+```
+
+Indeed so, outside, but only just.
+
+\eS
+
+part about assessing normality?
+
+\eP
+

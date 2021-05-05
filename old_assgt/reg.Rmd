@@ -1,0 +1,180 @@
+\question Earlier, we investigated some data on predicting the height of a person from the length of their foot. The data were in \url{http://ritsokiguess.site/datafiles/STAC32/heightfoot.csv}.
+
+\bP
+
+\p Read in and display (some of) the data.
+
+\bS
+
+Copy what you did before:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/heightfoot.csv"
+hf <- read_csv(my_url)
+hf
+```
+
+\eS
+
+\p In STAC67, you learn (or will learn) the matrix formulation of the least squares estimates of intercept and slope. This produces a vector $\hat\beta$ containing estimates of both the intercept and the slope, from the formula
+
+$$ \hat\beta = (X^T X)^{-1} X^T y, $$
+
+where:
+
+- $X$ is a matrix containing a column of 1s followed by all the columns of explanatory variables
+- $X^T$ denotes the (matrix) transpose of $X$
+- $M^{-1}$ denotes the inverse of the matrix $M$
+- $y$ denotes the column of response variable values.
+
+Use the formula above to obtain the least squares estimates of intercepts and slope for this regression, using R's vector-matrix algebra. Hint: you are advised to do the calculation in steps, or else it will be very hard to read, and hard for the grader to check that it is correct.
+
+\bS
+
+There is some setup first: we have to get hold of $X$ and $y$ from the data as a matrix and a vector respectively. I would use tidyverse ideas to do this, and then turn them into a matrix at the end, which I think is best. Don't forget to create a column of 1s to make the first column of $X$
+
+```{r}
+hf %>% mutate(one=1) %>% 
+  select(one, foot) %>% 
+  as.matrix() -> X
+head(X)
+```
+
+(`head` displays the first six rows, or else you'll be displaying all 33, which is too many.)
+
+Another approach is this:
+
+```{r}
+X <- cbind(1, hf$foot)
+head(X)
+```
+
+Note that the recycling rules mean that a column with only one value in it will be repeated to the length of the other one, and so this is better than working out how many observations there are and repeating `1` that many times.
+
+The choice here is whether to use tidyverse stuff and turn into a matrix at the end, or make a matrix at the start (which is what `cbind` from base R is doing). I don't believe you've seen that in this course, so you ought to cite your source if you go that way.
+
+The simplest choice for making $y$ is this:
+
+```{r}
+y <- hf$height
+y
+```
+
+This also works:
+
+```{r}
+hf %>% select(height) %>% pull(height)
+```
+
+(remembering that you don't want to have anything that's a dataframe), or this:
+
+```{r}
+hf %>% select(height) %>% as.matrix() -> yy
+head(yy)
+```
+
+remembering that a (column) vector and a 1-column matrix are the same thing as R is concerned.
+
+Now we want to construct some things. I would go at it this way, rather than trying to do everything at once (if you do, you will either get lost now, or in six months when you try to figure out what you did):
+
+```{r}
+Xt <- t(X) # X-transpose
+XtX <- Xt %*% X 
+XtXi <- solve(XtX)
+Xty <- Xt %*% y
+XtXi %*% Xty
+```
+
+The intercept is 34.33 and the slope is 1.36.
+
+These compute, respectively, $X^T$, $X^T X$, the inverse of that, $X^T y$ and $\hat\beta$. Expect credit for laying out your calculation clearly.
+
+Extra: the value of this formula is that it applies no matter whether you have one $x$-variable, as here (or in the windmill data), or whether you have a lot (as in the asphalt data). In either case, $\hat\beta$ contains the estimate of the intercept followed by all the slope estimates, however many there are. There are also matrix formulas that tell you how the slopes or the residuals will change if you remove one observation or one explanatory variable, so that something like `step` will work very efficiently, and calculations for leverages likewise.
+
+\eS
+
+\p Verify that your calculation is correct by running the regression.
+
+\bS
+
+The usual `lm`:
+
+```{r}
+hf.1 <- lm(height ~ foot, data = hf)
+summary(hf.1)
+```
+The same.
+
+Extra: 
+in this "well-conditioned" case,\endnote{Which in this case means that the column of 1s and the actual $x$ values are not strongly correlated, which means that the $x$-values vary enough.} it makes no difference, but if $X^T X$ is almost singular, so that it almost doesn't have an inverse (for example, some of your explanatory variables are highly correlated with each other), you can get into trouble. Regression calculations in practice use something more sophisticated like the 
+[singular value decomposition](https://en.wikipedia.org/wiki/Singular_value_decomposition) of $X^TX$ to diagnose whether $X^TX$ is actually singular or almost so, which from a numerical point of view is almost as bad, and to produce a sensible answer in that case.
+
+I guess I should try to make up one where it struggles. Let me do one with two $x$'s that are strongly correlated:
+
+```{r}
+d <- tribble(
+  ~x1, ~x2, ~y,
+  10, 20, 55,
+  11, 19.0001, 60,
+  12, 17.9999, 61,
+  13, 17.0001, 64,
+  14, 15.9998, 66,
+  15, 15.0001, 67
+)
+d
+```
+
+`x2` is almost exactly equal to 30 minus `x1`. What's the right answer?
+
+```{r}
+d.1 <- lm(y ~ x1 + x2, data = d)
+summary(d.1)
+coef(d.1)
+```
+
+You should be right away suspicious here: the R-squared is high, but neither of the explanatory variables are significant! (This actually means that you can remove one of them, either one.) The standard errors are also suspiciously large, never a good sign. If you've done C67, you might be thinking about variance inflation factors here:
+
+```{r}
+library(car)
+vif(d.1)
+```
+
+These are both huge (greater than 5 or 10 or whatever guideline you use), indicating that they are highly correlated with each other (as we know they are).
+
+All right, how does the matrix algebra work? This is just the same as before:
+
+```{r}
+d %>% mutate(one=1) %>% 
+  select(one, starts_with("x")) %>% 
+  as.matrix() -> X
+head(X)
+```
+
+and then
+
+```{r}
+y <- d$y
+Xt <- t(X) # X-transpose
+XtX <- Xt %*% X 
+XtXi <- solve(XtX)
+Xty <- Xt %*% y
+XtXi %*% Xty
+```
+
+These answers are actually noticeably different from the right answers (with a few more decimals here):
+
+```{r}
+coef(d.1)
+```
+
+One way of finding out how nearly singular $X^TX$ is is to look at its eigenvalues. You'll recall that a singular matrix has one or more zero eigenvalues:
+
+```{r}
+eigen(XtX)
+```
+
+The third eigenvalue is $8.8 \times 10^{-11}$, which is very close to zero, especially compared to the other two, which are 34 and over two *thousand*. This is a very nearly singular matrix, and hence $(X^TX)^{-1}$ is very close to not existing at all, and *that* would mean that you couldn't even compute the intercept and slope estimates, never mind hope to get close to the right answer.
+
+\eS
+
+\eP

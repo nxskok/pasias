@@ -1,0 +1,39 @@
+
+wood beams with influential obs
+
+read in data
+
+```{r}
+my_url <- "wood_beams.txt"
+beams <- read_table(my_url)
+beams
+```
+
+strength is response
+
+```{r}
+beams %>% pivot_longer(c(sp_gravity, moisture), names_to = "xname", values_to = "xval") %>% 
+  ggplot(aes(x = xval, y = strength)) + geom_point() +
+  facet_wrap(~xname, scales = "free")
+```
+
+the two x's against each other
+
+```{r}
+ggplot(beams, aes(x = sp_gravity, y = moisture)) + geom_point()
+```
+bottom left one might be influential
+
+fit regression
+
+```{r}
+beams.1 <- lm(strength ~ sp_gravity + moisture, data = beams)
+summary(beams.1)
+```
+
+look for influential
+
+```{r}
+beams.1 %>% augment(beams)
+```
+

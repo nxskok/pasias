@@ -1,0 +1,332 @@
+\question the C32 folks have already had one on mercury -  Eating fish is generally healthy, but sometimes the fish is contaminated with mercury. What might affect the amount of mercury in a fish? Large-mouth bass were studied in Florida lakes to examine factors that might affect the amount of mercury contamination. 38 lakes were used for the study. Water samples were taken from each lake and analyzed. Also, samples of fish were caught in each lake and the mercury concentration in their muscle tissue was measured. The resulting data are in \url{http://ritsokiguess.site/datafiles/STAC32/mercury.txt}, separated by single spaces. The variables measured were as follows:
+
+-   standardized mercury level (parts per million in 3-year-old fish)
+-   alkalinity of water (milligrams per litre)
+-   calcium level of water (milligrams per litre)
+-   pH of water (standard scale; see eg. [this](https://www.usgs.gov/special-topic/water-science-school/science/ph-and-water?qt-science_center_objects=0#qt-science_center_objects))
+
+\bP
+
+\p Read in and display (some of) the data.
+
+\bS
+
+The data values were separated by single spaces, so this one is `read_delim`:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/mercury.txt"
+mercury <- read_delim(my_url, " ")
+mercury
+```
+
+Extra: I found these data in a textbook, and I couldn't find them online anywhere, so I typed them in myself. This is how I did it.
+
+First, I entered the values as a piece of text:
+
+```{r}
+mercury_txt <- "
+mercury alkalinity calcium ph
+1330 2.5 2.9 4.6
+250 19.6 4.5 7.3
+450 5.2 2.8 5.4
+160 71.4 55.2 8.1
+720 26.4 9.2 5.8
+810 4.8 4.6 6.4
+710 6.6 2.7 5.4
+510 16.5 13.8 7.2
+1000 7.1 5.2 5.8
+150 83.7 66.5 8.2
+190 108.5 35.6 8.7
+1020 6.4 4.0 5.8
+450 7.5 2.0 4.4
+590 17.3 10.7 6.7
+810 7.0 6.3 6.9
+420 10.5 6.3 5.5
+O530 30.0 13.9 6.9
+310 55.4 15.9 7.3
+470 6.3 3.3 5.8
+250 67.0 58.6 7.8
+410 28.8 10.2 7.4
+160 119.1 38.4 7.9
+160 25.4 8.8 7.1
+230 106.5 90.7 6.8
+560 8.5 2.5 7.0
+890 87.6 85.5 7.5
+180 114.0 72.6 7.0
+190 97.5 45.5 6.8
+440 11.8 24.2 5.9
+160 66.5 26.0 8.3
+670 16.0 41.2 6.7
+550 5.0 23.6 6.2
+580 25.6 12.6 6.2
+980 1.2 2.1 4.3
+310 34.0 13.1 7.0
+430 15.5 5.2 6.9
+280 17.3 3.0 5.2
+250 71.8 20.5 7.9
+"
+```
+
+Then, I wanted to get these into a file laid out just like that, which is what `writeLines` does:
+
+```{r}
+writeLines(mercury_txt, "mercury.txt")
+```
+
+and then I uploaded the file to the course website.
+
+\eS
+
+\p Plot the mercury levels against each of the explanatory variables.
+
+\bS
+
+The best way to do this is in one shot, using facets. This means organizing the dataframe so that there is one column of $y$-values, and also one column of $x$-values, with an additional column labelling which $x$ it is. This, as you'll recall, is exactly what `pivot_longer` does. To show you:
+
+```{r}
+mercury %>% 
+  pivot_longer(-mercury, names_to = "xname", values_to = "xval")
+```
+
+and now we plot `mercury` against `xval` in facets according to `xname`. The other thing to remember is that the explanatory variables are on different scales, so we should use `scales="free"` to allow each facet to have its own scales:
+
+```{r}
+mercury %>% 
+  pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
+  ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
+  facet_wrap(~xname, scales = "free", ncol = 2)
+```
+
+I did one more thing, which is to note that I am going to be assessing these relationships in a moment, so I would rather have squarer plots than the tall skinny ones that come out by default (that is to say these):
+
+```{r}
+mercury %>% 
+  pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
+  ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
+  facet_wrap(~xname, scales = "free")
+```
+
+To make this happen, I added `ncol=2`, which says to arrange the facets in *two* columns (that is, as three cells of a $2\times 2$ grid), and that makes them come out more landscape than portrait. `nrow=2` would have had the same effect.
+
+If you are stuck, get three separate graphs, but note that you are making more work for yourself (that you will have to do again later).
+
+\eS
+
+\p Describe any trends (or lack thereof) that you see on your graphs.
+
+\bS
+
+Think about "form, direction, strength" to guide you in interpreting what you see: is it a line or a curve, does it go up or down, and are the points mostly close to the trend or not? I think it makes most sense to talk about those things for the three trends one after the other:
+
+- `alkalinity`: this is a curved trend, but downward (the rate of decrease is fast at the beginning and then levels off). There is one clear outlier, but otherwise most of the points are close to the trend. 
+- `calcium`: this is a down-and-up curved trend, though I think most of the evidence for the "up" part is the outlier on the middle right of the graph; without that, it would probably be a levelling-off decreasing trend as for `alkalinity`. There seem to be more outliers on this plot, and, on top of that, the points are not that close to the trend.
+- `ph`: this is a downward trend, more or less linear, but of only moderate strength. The points can be some way from the trend, but (in contrast to the other plots) there don't seem to be any points a *long* way away.
+
+If you are going to talk about outliers, you need to be specific about where they are: describe where they are on the plot, or give approximate coordinates (you only need to be accurate enough to make it clear which point you are talking about). For example, I described one of the outliers on the `calcium` plot as "middle right", or you could describe the same point as having `calcium` above 80 and `mercury` near 1000, which narrows it down enough. There is a grey area between outliers and not being close to the trend overall; if it is a lot of points, I'd call it a weaker trend (as for `ph`), but if it's a few points that are a long way off, as for `calcium`, I'd call that outliers.
+
+Extra: most of the outliers are *above* the trends, which suggests that something to bring the high values down a bit would be helpful: that is, a transformation like log or square root. That's coming up later.
+
+\eS
+
+\p Concerned by some of what you see on your plots, you consult with a fisheries scientist, who says that using the logs of `alkalinity` and `calcium` are often used in modelling this kind of data. Add columns containing the logs of these two variables to your dataframe, and run a regression predicting `mercury` from `ph` and the two new variables. Display the output from your regression.
+
+\bS
+
+I would create the two new variables and save them back into the original dataframe, myself:
+
+```{r}
+mercury %>% 
+  mutate(log_alkalinity = log(alkalinity), log_calcium = log(calcium)) -> mercury
+```
+
+though you could equally well create a new dataframe to hold them, as long as you remember to use the new dataframe from here on.
+
+The regression has no great surprises:
+
+```{r}
+mercury.1 <- lm(mercury ~ log_alkalinity + log_calcium + ph, data = mercury)
+summary(mercury.1)
+```
+
+
+\eS
+
+\p What might you learn from running Box-Cox here? Explain briefly, then run it (on the same variables as your regression above) and describe what the results tell you.
+
+\bS
+
+Box-Cox is to find out whether you need to transform the response variable, here `mercury`. The hint is that we have already transformed two of the explanatory variables, the ones that had some unusually large values, and so those are presumably now all right now.
+
+`boxcox` comes from the `MASS` package, so install and load that first.
+
+```{r}
+boxcox(mercury ~ log_alkalinity + log_calcium + ph, data = mercury)
+```
+
+The confidence interval for $\lambda$ goes from about $-0.4$ to $0.5$. The only round-number powers in there are 0 (log) and 0.5 (square root, right on the end). The $\lambda$ for the log transformation is right in the middle of the interval, so that's what I would choose. That means that we should use log of mercury instead of mercury itself in a regression.
+
+Extra: I looked at the residual plots of the regression `mercury.1`, in the hope that they would point you towards some kind of transformation of `mercury`, but they really didn't -- the biggest feature was an upper-end outlier,  more extreme than the one you see below, that appeared on all of them. So I didn't have you produce those graphs.
+
+\eS
+
+\p Using the results of the Box-Cox procedure and your previous work in the question, what seems to be the most appropriate regression now? Fit it, and display the results. 
+\bS
+
+This says to predict log-mercury (Box-Cox) from log-alkalinity, log-calcium (the fisheries scientist) and pH:
+
+```{r}
+mercury.2 <- lm(log(mercury) ~ log_alkalinity + log_calcium + ph, data = mercury)
+summary(mercury.2)
+```
+
+There's no need to define a new column containing log-mercury in the dataframe, since you can define it in the `lm`. (Note for me: do I need to define new columns anywhere?)
+
+\eS
+
+\p Obtain all the standard residual plots (the ones we have seen in this course) for this model. Describe any problems you see.
+
+\bS
+
+residuals against fitted
+
+```{r}
+ggplot(mercury.2, aes(x=.fitted, y=.resid)) + geom_point()
+```
+
+normal quantile plot of residuals
+
+```{r}
+ggplot(mercury.2, aes(sample = .resid)) + stat_qq() + stat_qq_line()
+```
+
+against the explanatory variables. This uses the ideas of `augment` (from `broom`) and pivoting longer:
+
+```{r}
+mercury.2 %>% augment(mercury) %>% 
+  pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
+  ggplot(aes(x = xval, y = .resid)) + geom_point() +
+  facet_wrap(~xname, scales = "free", ncol = 2)
+```
+I think the only troublesome feature on there is the large positive residual that appears at the top of all the plots. Other than that, I see nothing troubling. 
+
+You might, if you look a bit longer (but remember, apophenia!) see a tiny up and down on the plot with log-alkalinity, and maybe a small downward trend on the plots with the other two explanatory variables, but I would need a lot of convincing to say that these are more than chance. You are looking for *obvious trouble*, and I really don't think there's any sign of that here.
+
+Extra: you sometimes see a downward trend on residual plots that have an outlier on them. This is because if you have an outlier, it can change the slope disproportionately from what it ought to be, and then most of the observations at one end will be underestimated and most of the observations at the other end will be overestimated.
+
+Extra 2: which one was that outlier anyway?
+
+```{r}
+mercury.2 %>% augment(mercury) %>% 
+  filter(.resid > 1)
+```
+How do these compare to the other data values?
+
+```{r}
+summary(mercury)
+```
+
+The variable values are all high (even the pH, a modest-looking 7.5, is above Q3). 
+
+Remember that the fitted value is of *log*-mercury, so we have to anti-log it to understand it (anti-log is "exp" since these are "natural" or base-$e$ logs):
+
+```{r}
+exp(5.561902)
+```
+
+This was a *much* higher mercury value than expected, given the other variables.
+
+\eS
+
+\p Is there any other way your model could be improved
+
+\eP
+
+
+
+
+
+
+
+
+
+
+
+build model
+
+```{r}
+tidy(mercury.1) %>% arrange(p.value)
+```
+
+remove ph
+
+```{r}
+mercury.2 <- update(mercury.1, .~. - ph)
+tidy(mercury.2)
+```
+
+or step
+
+```{r}
+mercury.4 <- step(mercury.1, direction = "backward")
+```
+
+```{r}
+summary(mercury.4)
+```
+
+residuals for this one
+
+```{r}
+ggplot(mercury.4, aes(x = .fitted, y = .resid)) + geom_point()
+```
+
+```{r}
+ggplot(mercury.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
+```
+
+```{r}
+mercury.4 %>% augment(mercury) %>% 
+  pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
+  ggplot(aes(x = xval, y = .resid)) + geom_point() +
+  facet_wrap(~xname, scales = "free")
+```
+
+residual plot with outlier
+
+make up some data
+
+```{r}
+d <- tribble(
+  ~x, ~y,
+  10, 100,
+  11, 108,
+  12, 112,
+  13, 119,
+  14, 126,
+  15, 148,
+  16, 135,
+  17, 142
+)
+d
+```
+
+regression
+
+```{r}
+d.1 <- lm(y~x, data = d)
+summary(d.1)
+```
+
+```{r}
+ggplot(d.1, aes(x = .fitted, y = .resid)) + geom_point()
+```
+
+```{r}
+d <- tibble(err = rnorm(200), x=as.numeric(gl(20, 10)))
+d %>% mutate(y = 10+3*x+err) -> d
+```
+
+```{r}
+ggplot(d, aes(x=x, y=y)) + geom_point()
+```
+
