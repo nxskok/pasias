@@ -3,11 +3,11 @@
  Reggae is a music genre that originated in Jamaica in the late 1960s. One of the most famous reggae bands was Bob Marley and the Wailers. 
 In a survey, 729 students were asked to rate reggae music on a scale from 1, "don't like it at all" to 6, "like it a lot". 
 We will treat the ratings as quantitative.
-Each student was also asked to classify their home town as one of "big city", "suburban", "small town", "rural". Does a student's opinion of reggae depend on the kind of home town they come from? The data are in \url{http://ritsokiguess.site/datafiles/STAC32/reggae.csv}.
+Each student was also asked to classify their home town as one of "big city", "suburban", "small town", "rural". Does a student's opinion of reggae depend on the kind of home town they come from? The data are in \url{http://ritsokiguess.site/datafiles/reggae.csv}.
 
 
 
-(a)[2] Read in and display (some of) the data.
+(a) Read in and display (some of) the data.
 
 Solution
 
@@ -15,7 +15,7 @@ Solution
 This is (evidently) a `.csv`, so:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/reggae.csv"
+my_url <- "http://ritsokiguess.site/datafiles/reggae.csv"
 reggae <- read_csv(my_url)
 reggae
 ```
@@ -26,7 +26,7 @@ The students shown are all from big cities, but there are others, as you can che
 $\blacksquare$
 
 
-(a)[2] How many students are from each different size of town?
+(b) How many students are from each different size of town?
 
 Solution
 
@@ -50,7 +50,7 @@ Most of the students in this data set are from suburbia.
 $\blacksquare$
 
 
-(a)[2] Make a suitable graph of the two variables in this data frame. 
+(c) Make a suitable graph of the two variables in this data frame. 
 
 Solution
 
@@ -66,7 +66,7 @@ Extra 1: the last three boxplots really are identical, because the medians, mean
 Extra 2: I said that the ratings should be treated as quantitative, to guide you towards this plot. 
 You could otherwise have taken the point of view that the ratings were (ordered) categorical, in which case the right graph would have been a grouped bar chart, as below. 
 There is a question about which variable should be `x` and which should be `fill`. 
-I am taking the point of view that we want to compare ratings within each category of `home`, which I think makes sense here (see discussion below), which breaks my "rule" that the categorical variable with fewer categories should be `x`.xxx tufte::margin_note{Perhaps a better word here would be \emph{principle}, to convey the idea that you can do something else if it works better for your purposes.} 
+I am taking the point of view that we want to compare ratings within each category of `home`, which I think makes sense here (see discussion below), which breaks my "rule" that the categorical variable with fewer categories should be `x`. `r tufte::margin_note("Perhaps a better word here would be principle, to convey the idea that you can do something else if it works better for your purposes.")` 
 
 ```{r}
 ggplot(reggae, aes(x=home, fill=factor(rating))) + geom_bar(position = "dodge")
@@ -77,7 +77,7 @@ ggplot(reggae, aes(x=home, fill=factor(rating))) + geom_bar(position = "dodge")
 $\blacksquare$
 
 
-(a)[2] Discuss briefly why you might prefer to run Mood's median test to compare ratings among home towns.
+(d) Discuss briefly why you might prefer to run Mood's median test to compare ratings among home towns.
 
 Solution
 
@@ -92,7 +92,7 @@ Remember the process: first we assess normality. If that fails, we use Mood's me
 $\blacksquare$
 
 
-(a)[2] Suppose that somebody wanted to run Welch ANOVA on these data. What would be a reasonable argument to support that?
+(e) Suppose that somebody wanted to run Welch ANOVA on these data. What would be a reasonable argument to support that?
 
 Solution
 
@@ -139,7 +139,7 @@ Absolutely fine. We'll see how this plays out below.
 $\blacksquare$
 
 
-(a)[2] Run Mood's median test and display the output.
+(f) Run Mood's median test and display the output.
 
 Solution
 
@@ -154,7 +154,7 @@ median_test(reggae, rating, home)
 $\blacksquare$
 
 
-(a)[3] Explain briefly why running pairwise median tests is a good idea, run them, and display the results.
+(g) Explain briefly why running pairwise median tests is a good idea, run them, and display the results.
 
 Solution
 
@@ -173,7 +173,7 @@ pairwise_median_test(reggae, rating, home)
 $\blacksquare$
 
 
-(a) Summarize, as concisely as possible, how the home towns differ in terms of their students' ratings of reggae music.
+(h) Summarize, as concisely as possible, how the home towns differ in terms of their students' ratings of reggae music.
 
 Solution
 
