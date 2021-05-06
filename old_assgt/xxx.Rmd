@@ -1,173 +1,141 @@
 # xxx title here
-```{r}
-library(tidyverse)
-```
 
- Take your right hand, and stretch the fingers out as far as
-you can. The distance between the tip of your thumb and the tip of
-your little (pinky) finger is your handspan. The students in a
-Statistics class at Penn State measured their handspans and also
-whether they identified as male or female. The data are at
-\url{http://ritsokiguess.site/datafiles/STAC32/handspan.txt}, with handspans
-measured in inches.  Thinking of these as a random sample of all
-possible students, is it true that males have a larger mean handspan
-than females? This is what we will explore.
+ Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist's appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolicxxx tufte margin note{A blood pressure is usually given as two numbers, like ``120 over 80''. The first number, which is the one shown in our data, is called the systolic blood pressure. It is the pressure in the arteries when the heart is pumping. The second is called the diastolic blood pressure, and it is the pressure in the arteries when the heart is resting.}) blood pressure measured while they are in a dentist's waiting room, and then again one hour after their appointment is finished.
+
+The data are in \url{http://ritsokiguess.site/datafiles/STAC32/blood_pressure1.csv}.
 
 
-(a) Read in and display (some of) the data.
+
+(a) Read in and display the data.
 
 Solution
 
-This is a delimited (by spaces) file, so:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/handspan.txt"
-span <- read_delim(my_url, " ")
-span
-```     
-
-
-$\blacksquare$
-
-
-(a) Make a suitable graph of the two columns.
-
-Solution
-
-One quantitative variable and one categorical one, so a boxplot:
-
-```{r}
-ggplot(span, aes(x=sex, y=handspan)) + geom_boxplot()
-```     
-
-$\blacksquare$
-
-
-(a) Run a suitable two-sample $t$-test to address the question
-of interest. What do you conclude, in the context of the data?
-
-Solution
-
-We are trying to show that males have a \emph{larger} mean
-handspan, so we need an \texttt{alternative}. To see which: there
-are two sexes, F and M in that order, and we are trying to show
-that F is less than M:
-
-```{r}
-t.test(handspan~sex, data=span, alternative="less")
-```     
-
-The P-value is very small, so there is no doubt that males have larger
-average handspans than females.
-
-$\blacksquare$
-
-
-(a) Obtain a 90\% confidence interval for the difference
-in mean handspan between males and females. Do you need to run
-any more code? Explain briefly.
-
-Solution
-
-A confidence interval is two-sided, so we have to re-run the test
-without the \texttt{alternative} to make it two-sided. Note also that
-we need a 90\% interval, which is different from the default 95\%, so
-we have to ask for that too:
-
-```{r}
-t.test(handspan~sex, data=span, conf.level=0.90)
-``` 
-
-The interval is $-2.93$ to $-2.15$, \emph{which you should say}. It
-would be even better to say that males have a mean handspan between
-2.15 and 2.93 inches larger than that of females. You also need to round off your answer: the data are 
-given to 0 or 1 decimals, so your interval should be given to 1 or 2 decimals (since the confidence interval is for a mean). 
-
-On a question like this, the grader is looking for three things: 
-
-- getting the output
-- saying what the interval is
-- rounding it to a suitable number of decimals. 
-
-Thus, getting the output alone is only one out of three things.
-
-$\blacksquare$
-
-
-(a) Explain briefly why you might have some concerns about the
-validity of the $t$-tests you ran in this question. Or, if you don't have any concerns, explain briefly why that is.
-
-Solution
-
-The major assumption here is that the male and female handspans
-have (approximate) normal distributions. The boxplots we drew
-earlier both had low-end outliers, so the normality is
-questionable. 
-
-Also, say something about the sample sizes and whether or not you think they are large enough to be helpful.
-
-How big are our sample sizes?
-
-```{r}
-span %>% count(sex)
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/blood_pressure1.csv"
+blood_pressure <- read_csv(my_url)
+blood_pressure
 ```
 
 
-My suspicion is that we are saved by two things: the sample sizes
-are large enough for the central limit theorem to help us, and in
-any case, the conclusion is so clear that the assumptions can
-afford to be off by a bit. 
+$\blacksquare$
 
 
-Extra: one way to think about whether we should be concerned about
-the lack of normality is to use the \emph{bootstrap} to see what
-the sampling distribution of the sample mean might look like for males and for females. (This is the stuff in Lecture 5a.) The
-way this works is to sample from each distribution \emph{with
-replacement}, work out the mean of each sample, then repeat many
-times, once for the females and once for the males.
+(a) What kind of experimental design is this? How do you know? Explain briefly.
 
-To start with the females, the first thing to do is to grab *only* the rows containing the females. This, using an idea from Lecture 5a that we see again properly later, is `filter`:
+Solution
+
+
+This is a matched pairs design. We know this because we have two measurements on each person, or the same people were measured before and after seeing the dentist. (The thing that it is *not* is one group of people measured before seeing the dentist, and a *different* group of people measured afterwards, so a two-sample test is *not* the right thing.)
+
+
+$\blacksquare$
+
+
+(a) Run a suitable $t$-test on these data. What do you conclude, in the context of the data?
+
+Solution
+
+
+A matched-pairs $t$-test, then. Remember, we want to see whether blood pressure is *lower* afterwards (that is, before is *greater* than after), so this needs to be one-sided:
 
 ```{r}
-span %>% filter(sex=="F") -> females
-females
+with(blood_pressure, t.test(before, after, alternative = "greater", paired = TRUE))
 ```
 
-There are 103 females. From these we need to take a "large" number of bootstrap samples to get a sense of how the mean handspan of the females varies:
+There are some variations possible here: `before` and `after` could be switched (in which case `alternative` must be reversed also).
+
+Or, you can do a one-sample $t$ on the differences, with the right `alternative` corresponding to the way you took differences. If you are looking ahead, you might realize that working out the differences *now* and adding them to the dataframe will be a good idea:
 
 ```{r}
-set.seed(457299)
-rerun(1000, sample(females$handspan, replace = TRUE)) %>% 
+blood_pressure %>% 
+mutate(difference = before - after) -> blood_pressure
+blood_pressure
+```
+
+I took the differences this way around since I was expecting, if anything, the before numbers to be bigger than the after ones. And then:
+
+```{r}
+with(blood_pressure, t.test(difference, mu = 0, alternative = "greater"))
+```
+
+If you did the differences the other way around, your `alternative` will need to be the other way around also.
+
+The P-value (either way) is 0.008,xxx tufte margin note{Give the P-value, and round it off to about this accuracy so that your reader can see easily (i) how it compares to 0.05, and (ii) how big it is. More than two decimal places is too many.} so we have evidence that the mean blood pressure before is greater than the mean blood pressure after.
+
+
+$\blacksquare$
+
+
+(a) Run a suitable sign test on these data. What do you conclude, in the context of the data?
+
+Solution
+
+
+A sign test on the differences. By this point, you will realize that you will need to have obtained the differences. Get them here if you did not already get them:
+
+```{r}
+sign_test(blood_pressure, difference, 0)
+```
+
+This one gives us all three P-values. The way around I found the differences, the one we want is "upper", 0.055. There is not quite evidence that median blood pressure before is higher. 
+
+
+$\blacksquare$
+
+
+(a) Draw a suitable normal quantile plot of these data, one that will enable you to decide between the tests you ran in the previous two parts.
+
+Solution
+
+
+
+The *differences* are supposed to be approximately normal if a matched-pairs $t$-test is the thing:
+
+```{r}
+ggplot(blood_pressure, aes(sample=difference)) + stat_qq() + stat_qq_line()
+```
+
+
+$\blacksquare$
+
+
+(a) Discuss briefly which of your two tests is the more appropriate one to run.
+
+Solution
+
+
+Make a call about whether the differences are normal enough. You have a couple of angles you can take:
+
+- the lowest two values are too low, so we have two outliers at the low end
+- the lowest *and* highest values are too extreme, so that we have a long-tailed distribution
+
+Either of these would suggest a non-normal distribution, which I think you have to conclude from this plot.
+
+The best answer also considers the sample size: there are only 10 differences, a small sample size, and so we will not get much help from the Central Limit Theorem (the sample size is likely not enoughxxx tufte margin note{But see the Extra.} to overcome those two outliers or the long tails). Thus, we should *not* trust the $t$-test and should prefer the sign test.
+
+Extra: you might be disappointed to go through this and come to the conclusion that there was not a decrease in blood pressure between before and after.
+
+What has happened, I think, is that we have only a small sample (10 people), and having 8 positive differences and 2 negative ones is not quite unbalanced enough (with such a small sample) to rule out chance: that is to say, a median difference of zero. The $t$-test accounted for the size of the differences, and if you believed the normality was satisfactory, you could demonstrate a difference between before and after. But if you didn't like the normality, you were out of luck: the only test you have is an apparently not very powerful one.
+
+If you wanted to, you could bootstrap the sampling distribution of the sample mean and see how normal it looks:
+
+```{r}
+rerun(10000, sample(blood_pressure$difference, replace = TRUE)) %>% 
 map_dbl(~mean(.)) %>% 
-enframe() -> d
+enframe() %>% 
+ggplot(aes(sample = value)) + stat_qq() + stat_qq_line()
 ```
 
+(Code note: you can do anything with the result of a simulation, and you can use anything that might need to be normal as input to a normal quantile plot. Now that we have the normal quantile plot as a tool, we can use it wherever it might be helpful.)
 
+This is actually not nearly as bad as I was expecting. Even a sample size of 10 is providing some help. The bootstrapped sampling distribution is somewhat left-skewed, which is not a surprise given the two low outliers. However, it is rather close to normal, suggesting that the $t$-test is not as bad as we thought.
 
-Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:
-
-```{r}
-ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
-```
-
-I don't know what you think of this. There are a few more extreme values than I would like, and
-it looks otherwise a bit left-skewed to me. But maybe I  am worrying too much.
-
-The males one works exactly the same way:
-
-```{r}
-span %>% filter(sex=="M") -> males
-rerun(1000, sample(males$handspan, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() -> d
-ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
-```
-
-There is a similar story here. I think these are good enough overall, and so I am happy with the two-sample $t$-test, but it is not as clear-cut as I was expecting.
-
+(I did 10,000 simulations because I was having trouble seeing how non-normal it was. With this many, I can be pretty sure that this distribution is somewhat left-skewed.)
 
 
 $\blacksquare$
+
 
 
 

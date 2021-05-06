@@ -79,38 +79,3 @@ as input a data frame, a column name (unquoted) and optionally a
 
 
 
-
-This is a more accurate interval than we got above. (The
-`while` loop for the bisection keeps going until the two
-guesses at the appropriate end of the interval are less than 0.01
-apart, by default.)
-`r tufte::margin_note("You can change this by adding something like *tol=1e-4* to the end of your *ci-median*.")` 
-
-If you want some other confidence level, you add `conf.level`
-on the end, as you would for `t.test`:
-
-```{r }
-ci_median(times, time, conf.level = 0.75)
-```
-
- 
-
-A 75\% CI, just for fun. This is a shorter interval than the 95\% one,
-as it should be.
-
-Likewise there is a `ci_median0` that takes a column and an
-optional confidence level:
-
-```{r }
-with(times, ci_median0(time))
-with(times, ci_median0(time, conf.level = 0.75))
-```
-
- 
-
-with the same results. Try `ci_median` first, and if it
-doesn't work, try `ci_median0`.
-
-
-
-
