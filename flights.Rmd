@@ -1,0 +1,391 @@
+## Flying from New York
+
+ In 2013, there were over 300,000 flights that departed from one of New York City's three airports. The package `nycflights13` contains information about all these flights, as well as details about the airports, airlines and planes referenced in the flights dataset, and also information about the weather in each hour of 2013 (that can be matched up with the flights). Install the package using the usual `install.packages`, and load it. When you load the package, dataframes called `airlines`, `airports`, `flights`, `planes` and `weather` are available to you.
+
+
+
+(a) Using the `airports` dataframe, display the names of New York City's three major airports. They have airport codes EWR, JFK, LGA.
+
+Solution
+
+
+Take a look at the `airports` dataframe first:
+
+```{r}
+airports 
+```
+
+The airport codes are in the `faa` column, so:
+
+```{r}
+airports %>% filter(faa == "EWR" | faa == "LGA" | faa == "JFK")
+```
+
+They are called Newark Liberty (which is actually in New Jersey), John F Kennedy, and La Guardia. 
+
+The code uses `|` to represent "or" in a `filter`. Another way to do it is to define a set of abbreviations as a vector, and then search for `faa` values "in" a set:
+
+```{r}
+nyc_airports <- c("EWR", "JFK", "LGA")
+airports %>% filter(faa %in% nyc_airports)
+```
+
+These are the best way to do it. Inferior ways are finding the airports one at a time, and (even more inferior) scanning the airports dataframe by eye, which doesn't in any case answer the question.
+
+
+$\blacksquare$
+
+
+(b) How many flights departed from each of these airports, in the `flights` dataframe? 
+
+Solution
+
+
+This is actually simple, but you can overthink yourself into something more complicated very easily.
+
+First look at `flights` and see that the column you want is called `origin`. Then count them:
+
+```{r}
+flights %>% count(origin)
+```
+
+Approximately 120,000 out of Newark, 111,000 out of John F Kennedy, nearly 105,000 out of La Guardia.
+
+Extra: if you want to include the airport *names* on this, you can look them up with `left_join`. This creates a lot of columns, so I would then use `select` to just display the ones I want:
+
+```{r}
+flights %>% count(origin) %>% 
+left_join(airports, by = c("origin" = "faa")) %>% 
+select(name, n)
+```
+The reason for the `by` on the `left_join` is that the airports we want to look up the names of are called `origin` in `flights` and `faa` in `airports`. (FAA stands for "Federal Aviation Administration", one of whose responsibilities is maintaining a unique three-character code for each airport and airfield.) 
+
+This idea of having short codes in the main database and a separate place where you can look them up is very common; for maintaining or accessing the main database, it is much easier to enter codes compared to full names, and you can always get hold of the full names if you need them. In a business database, you might have codes for customers or transaction types and then separate databases with fuller descriptions and maybe other columns, as here. This is related to what database people call "normal form", limiting duplicated information.
+
+
+$\blacksquare$
+
+
+(c) Display the *names* of the five most common destination airports for flights from the New York City airports (taken together), along with the number of flights to each.
+
+Solution
+
+
+This begins like the previous part, noting that the column you want is called `dest`:
+
+```{r}
+flights %>% count(dest)
+```
+
+Then arrange in descending order by `n`, and slice off the top 5:
+
+```{r}
+flights %>% count(dest) %>% 
+arrange(desc(n)) %>% 
+slice(1:5)
+```
+
+Another way is this:
+
+```{r}
+flights %>% count(dest) %>% 
+slice_max(n, n=5)
+```
+I can't remember (as I write this) whether I've shown you this last one anywhere or not. It's probably a good idea to cite your source if you do it this way. The first way is definitely something you've seen in lecture.
+
+Now you need to think about your reader. I happen to know four of these airports (Chicago, `r tufte::margin_note("The abbreviation comes from O'Hare Field, which is the original name of Chicago's airport.")`
+Atlanta, Los Angeles and Boston are the first four), but it's asking a lot to expect your reader to know that. So you need to translate these to actual airport names. You could do this by looking in the `airports` dataframe for these abbreviations by hand and then adding the names to your answer, but I think you should be suspecting that there is a better, code, way to do this, and it's the same idea as the Extra to the previous part: look up the abbreviations in the `airports` dataframe using `left_join`, and then grab only the columns you want to display, like this:
+
+```{r}
+flights %>% count(dest) %>% 
+arrange(desc(n)) %>% 
+slice(1:5) %>% 
+left_join(airports, by = c("dest" = "faa")) %>% 
+select(name, dest, n)
+```
+
+This is the best way to do it. The airports are O'Hare in Chicago, Atlanta, Los Angeles, Logan in Boston, and Orlando. 
+
+Extra: Some of these are big cities, and some of them not so much. I think Atlanta and Orlando are "hub cities"; airlines tend to have a "base" with a lot of flights into it, and if you want to go somewhere else, you change planes in the hub city. 
+
+Well, we have airline codes in the `flights` dataframe, so let's investigate this. I'm pretty sure that Atlanta is a hub for Delta Airlines, so let's look at Atlanta first. Step one is to look only at the flights with destination Atlanta:
+
+```{r}
+flights %>% 
+filter(dest == "ATL")
+```
+
+A mere 17,000 flights. The airline info is in the column called `carrier`:
+
+```{r}
+flights %>% 
+filter(dest == "ATL") %>% 
+count(carrier) %>% 
+arrange(desc(n))
+```
+
+I have even less clue about airline abbreviations than airport ones, so we definitely need to look these up. Let's examine the `airlines` dataframe:
+
+```{r}
+airlines
+```
+
+This is going to be easier than the other ones, because the airline abbreviations have the same name `carrier` in both dataframes, and there are no other columns that have the same name in either dataframe:
+
+```{r}
+flights %>% 
+filter(dest == "ATL") %>% 
+count(carrier) %>% 
+arrange(desc(n)) %>% 
+left_join(airlines) 
+
+
+```
+
+Looks like my guess of Delta was on the money. What about Orlando? Wikipedia says that this is a hub for JetBlue and Southwest, among others. The same code idea will work again:
+
+```{r}
+flights %>% 
+filter(dest == "MCO") %>% 
+count(carrier) %>% 
+arrange(desc(n)) %>% 
+left_join(airlines) 
+```
+JetBlue for sure, but what happened to Southwest? Do they fly out of New York at all, and if so, where to? We need their abbreviation first:
+
+```{r}
+airlines %>% 
+filter(str_detect(name, "Southwest"))
+```
+I did something a little different here: I didn't know what the exact `name` would be, so I asked for the rows where the text `Southwest` was found in the name somewhere.xxx tufte::margin_note{This is actually a regular expression match.}
+
+All right, let's find the flights with this carrier, count their destinations, and look them up:
+
+```{r}
+flights %>% 
+filter(carrier == "WN") %>% 
+count(dest) %>% 
+arrange(desc(n)) %>% 
+left_join(airports, by = c("dest"="faa")) %>% 
+select(name, dest, n)
+```
+
+If you wanted to fly Southwest from New York to Orlando, you couldn't do it direct, but I imagine you could fly to one of those airports first and from there to Orlando.
+
+
+$\blacksquare$
+
+
+(d) One of the main hazards to air travel is bad visibility, such as fog. The `flights` dataframe contains a column `dep_delay` that is the number of minutes late each flight was in taking off from its New York airport, and also a column `time_hour` which is the scheduled departure day and hour of that flight. There is also a dataframe `weather` that contains weather information about each airport for each hour of 2013, including a column `visib` that shows the number of miles of visibility from that airport at that time on that date.
+
+Obtain and save a dataframe that contains, for each flight, its departure delay, and the number of miles of visibility at its scheduled departure time at the airport that it departed from.
+
+Solution
+
+
+This is rather a lot to think about, but the weather will have to be looked up for each flight. The keyxxx tufte::margin_note{A joke. The most important column, and also the one the database lookup is going to be based on.} column is the one called `time_hour` in `flights`. What does `weather` contain?
+
+```{r}
+weather
+```
+
+A column of the same name right at the end. That makes our job a bit easier. We want the weather at the same airport and same time as the flight departed from, so the `by` has to contain both (they have the same names in the two dataframes). If you get over a million rows, it's probably because you forgot to match the airport (and thus you'd have three rows in the output, one for each airport):
+
+```{r}
+flights %>% 
+left_join(weather, by = c("origin", "time_hour")) %>% 
+select(dep_delay, visib) %>% 
+drop_na() -> d
+d
+```
+
+
+$\blacksquare$
+
+
+(e) Using your dataframe from the previous part, make a suitable plot of the number of minutes of delay on departure against visibility. Is there any indication that delays are typically worse when the visibility is worse? You may need to use some imagination to come up with a plot that shows what you want to see.
+
+Solution
+
+
+Two quantitative variables, so a scatterplot. I would put a smooth trend on it, to make it easier to see whether there is a relationship. There are a *lot* of observations, so the plot takes an appreciable time to draw:
+
+```{r, cache=TRUE}
+ggplot(d, aes(x = visib, y = dep_delay)) + geom_point() + geom_smooth(se = FALSE)
+```
+
+The big takeaway here is that the delay can be very large for any visibility, and this makes it hard to see whether the average delay has any trend with visibility. I think it's a tiny bit higher for low (that is, bad) visibility, but it really isn't clear. 500 minutes of delay is over 8 hours, which is a long time for a flight to be late leaving. This is therefore not the best plot, because it is dominated by the (huge number of) outliers. 
+
+So let's try removing the points and just leaving the smooth trend, which is down at the bottom of this plot. That might be clearer:
+
+```{r, cache=TRUE}
+ggplot(d, aes(x = visib, y = dep_delay)) + geom_smooth()
+```
+
+This is a lot clearer: once the visibility gets down below about 2.5 miles, the average delay increases. I'm not sure about that wiggle around 0.5 miles, but the grey envelope suggests that the smooth trend is an accurate picture, based as it is on so many observations. You might also note that the average delay is smaller when the visibility is at its maximum of 10 miles.
+
+Another way to try is to treat `visib` as categorical, which it really isn't, but there is a fairly small set of discrete values. If you do that, you have a quantitative delay and a categorical visibility, which you have to make such, and thus a boxplot:
+
+```{r}
+ggplot(d, aes(x = factor(visib), y = dep_delay)) + geom_boxplot()
+```
+
+This is also not the best, because it is dominated by the outliers. 
+
+You could just plotting the median for each `visib` value, thus:
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(med_delay = median(dep_delay)) %>% 
+ggplot(aes(x = visib, y = med_delay)) +
+geom_point() + geom_line()
+```
+
+Not all the median delays are large when visibility is under 2.5 miles, but at least some of them are, and the implication is that you could be delayed a long time if the visibility is bad. This also shows that the median delay drops when the visibility is best. The median delay is actually *negative* when the visibility is good, which means that the flights on average left *early*, which they can do if all the booked passengers, their baggage and the crew are on board the plane.
+
+
+What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first:xxx tufte::margin_note{The \emph{factor} thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.}
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(q1 = quantile(dep_delay, 0.25),
+med = median(dep_delay),
+q3 = quantile(dep_delay, 0.75)) -> d_summ
+d_summ
+```
+
+Well, this I can do now.xxx tufte::margin_note{If I remember to put quotes around the names of my new columns, that is.} Let's make this longer, since we want *one* column of delay summaries to plot:
+
+```{r}
+d_summ %>% 
+pivot_longer(q1:q3, names_to = "which", values_to = "delay") 
+```
+
+then plot these as points, joining up the ones that are the same quantile:
+
+```{r}
+d_summ %>% 
+pivot_longer(q1:q3, names_to = "which", values_to = "delay") %>% 
+ggplot(aes(x = visib, y = delay, colour = which)) + geom_point() + geom_line()
+```
+
+My take from this is that delays can be bigger when the visibility is less than about 2.5 miles. It's a bit harder to interpret because it is jumpy, even with so much data. 
+
+Extra 1: another way of making a plot like these is to have `ggplot` do the calculations for you. We haven't talked about writing functions yet, so some of this won't make much sense to you, but (this way)[https://stackoverflow.com/questions/41077199/how-to-use-r-ggplot-stat-summary-to-plot-median-and-quartiles/41077282] also works, though it too takes noticeable time:
+
+```{r}
+ggplot(d, aes(x = visib, y = dep_delay)) + stat_summary(
+fun.min = function(z) { quantile(z, 0.25) },
+fun.max = function(z) { quantile(z, 0.75) },
+fun = median)
+```
+
+
+The dots are the medians, and the lines extend from the median to the quartiles for each visibility value. Once again, the impression is that longer delays are possible when the visibility is worse, and it is unusual to have a long delay once the visibility gets beyond about 2.5 miles.
+
+The code idea is that `stat_summary` contains instructions for calculating the summaries you are going to plot. The input `fun` is a function that calculates where the points are going to go. In this case, that is the median. `fun.min` and `fun.max` are the bottom and top of the vertical lines, which here need to be the quartiles. The `quantile` function needs an extra input, saying which quantile (percentile) is wanted, and one way around this is to write a little (nameless) function that is input to `fun.min` or `fun.max`, taking input `z` (the name doesn't matter as long as you use the chosen name in the function) and calculating what is needed from that `z`.
+
+Extra 2: if you calculate the three percentiles in one go, the process to the plot is different, thus:
+
+```{r}
+qs <- c(0.25, 0.5, 0.75)
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  quantile(dep_delay, qs))
+```
+This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:xxx tufte::margin_note{Or be cleverer than I am capable of.}
+
+```{r}
+qs <- c(0.25, 0.5, 0.75)
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  quantile(dep_delay, qs)) %>% 
+mutate(which = rep(qs))
+```
+
+`rep` repeats its input a number of times that you normally have to specify, but here it works out that the new column `which` has to be the same length as the other columns (because we're working with a dataframe). So we are good.
+
+Now everything is ready to go:
+
+```{r}
+qs <- c(0.25, 0.5, 0.75)
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  quantile(dep_delay, qs)) %>% 
+mutate(which = rep(qs)) %>% 
+ggplot(aes(x = visib, y = q_delay, colour = which)) + 
+geom_point() + geom_line()
+```
+
+Oops. The column `which` is quantitative, but I want it treated as categorical, so I should wrap it in `factor`:
+
+
+```{r}
+qs <- c(0.25, 0.5, 0.75)
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  quantile(dep_delay, qs)) %>% 
+mutate(which = rep(qs)) %>% 
+ggplot(aes(x = visib, y = q_delay, colour = factor(which))) + 
+geom_point() + geom_line()
+```
+
+as we had before.
+
+Extra 3: an attempt to be clever.xxx tufte::margin_note{And thus most likely doomed to failure.}
+
+`quantile` does actually keep track of which quantile is which (using the same `qs` as above):
+
+```{r}
+quantile(1:10, qs)
+```
+
+except that the percentages are what is called the "names attribute" of the output, and the `tidyverse` tends to lose things like names attributes, *unless* you explicitly keep hold of them, like this:
+
+```{r}
+enframe(quantile(1:10, qs), name = "percent", value = "percentile")
+```
+
+So now, what if we add the `enframe` to the calculation we had above?
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  enframe(quantile(dep_delay, qs), name = "percent", value = "delay")) 
+```
+We now have a list-column, which is OK, but each visibility value is repeated three times, which is not, so I don't like this. I think I need to explicitly add a `list` in the right place:
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay")))
+```
+
+Now each `visib` value appears once, and in the list-column `q_delay` there is some kind of dataframe for each `visib`, which we hope is the same kind of thing as `enframe` gave us before. Let's `unnest` and take a look:
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 
+unnest(q_delay)
+```
+
+Genius! Or, as my daughter says, "pog":
+
+```{r}
+d %>% 
+group_by(visib) %>% 
+summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 
+unnest(q_delay) %>% 
+ggplot(aes(x = visib, y = delay, colour = percent)) + geom_point() + geom_line()
+```
+
+
+
+
+$\blacksquare$
+
+
+

@@ -1,0 +1,246 @@
+## Comparing eyesight
+
+ Do people see on average better with their left eye or their right eye, or is there no difference? To find out, 15 subjects were shown a sequence of images, some to their left eye and some to their right (with a blindfold on the other eye). The subjects were asked to identify some objects in each image, and were given an overall score for each eye, based on their ability to identify objects with each eye. (A higher score is better.) Data in \url{http://ritsokiguess.site/datafiles/eyesight.csv}.
+
+
+
+(a) Read in and display (some of) the data.
+
+Solution
+
+
+This is a `csv`, so no surprises:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/eyesight.csv"
+sight <- read_csv(my_url)
+sight
+```
+
+15 observations, with the subjects labelled by number, and a score for each subject and each eye. 
+
+
+
+$\blacksquare$
+
+
+(b) Explain briefly why looking at differences (say right minus left) makes sense for these data, and calculate and save a dataframe with the differences added to it.
+
+Solution
+
+
+This is matched pairs data, with two observations for each subject. A matched pairs analysis, whether by a sign test or a matched-pairs $t$-test, would be based on one difference for each subject, and so those would make sense to calculate. (You'll recall that a matched pairs analysis uses the differences and *not* the original data.)
+
+Thus, saving back into our original dataframe:
+
+```{r}
+sight %>% 
+mutate(difference = right - left) -> sight
+sight
+```
+
+Extra: this is one of those cases where having long data would make it very much more difficult to work out the differences for each person. Try it and see. How will you match up the two measurements for each person?
+
+
+$\blacksquare$
+
+
+(c) Make a suitable normal quantile plot, and describe what it tells you.
+
+Solution
+
+
+A normal quantile plot *of the differences*, therefore, since normality of the two individual scores is immaterial:
+
+```{r}
+ggplot(sight, aes(sample = difference)) + stat_qq() +
+stat_qq_line()
+```
+
+We have what I think is best described as "long tails", with the high values being too high and the low ones being a bit too low for a normal distribution. I think this is a better description than "outliers" because outliers are isolated unusual values, not five observations out of fifteen!
+
+The plot is telling us that a matched-pairs $t$-test is questionable, and that we might do a sign test instead. Or, as we explore in this question, find a bootstrap distribution (in this case, for the median).
+
+Extra: the one kind of sensible plot that uses the original data in this situation would be a scatterplot, since the right and left scores are matched up:
+
+```{r}
+ggplot(sight, aes(x = right, y = left)) + 
+geom_point() + geom_abline(slope = 1, intercept = 0)
+```
+
+I added the line $y = x$ to the  plot. The value of doing that is that a point to the right and below the line has the right-eye score bigger than the left-eye one, and vice versa for a point to the left and above. This plot tells us that a small majority of the subjects had a higher score with the right eye, and for the ones that had a higher score with the left eye, the difference wasn't usually very big. 
+
+This plot tells us nothing about normality of differences, though (not without some careful looking), which is one of the things we usually care about.
+
+
+$\blacksquare$
+
+
+(d) Obtain a bootstrap distribution of the sample *median*.
+
+Solution
+
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+Borrow the idea from lecture, replacing mean with median:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+rowwise() %>% 
+mutate(sample = list(sample(sight$difference, replace = TRUE))) %>% 
+mutate(my_median = median(sample)) -> meds
+meds
+```
+
+The steps are:
+
+- create a dataframe with a column called `sim` to label the simulations
+- from here on out, work "rowwise", that is, with one row at a time
+- generate a bootstrap sample for each row. A bootstrap sample is fifteen observations rather than just one, so we are making a list-column and thus the `list` has to go on the front
+- work out the median of each bootstrap sample. Remember, the `rowwise` applies until you cancel it,
+`r tufte::margin_note("This is done using ungroup, should you ever need to stop working rowwise. This seems like an odd choice of function, since the usual use of  ungroup is to undo a group-by, but what ungroup actually does is to remove any special properties a dataframe has, including both groups and any rowwise behaviour.")` and so this will be the median of the bootstrap sample on each row, one at a time. 
+
+
+As ever, if you want to see what's going on, run this one line at a time. 
+
+
+
+
+
+$\blacksquare$
+
+
+
+(e) Make a histogram of your bootstrap distribution of the median. Use a lot of bins, such as the default 30, for this. What do you notice about the distribution? Why did it come out this way?
+
+Solution
+
+For this histogram, there is no need to specify a number of bins (unless you want to):
+
+```{r}
+ggplot(meds, aes(x = my_median)) + geom_histogram()
+```
+
+The distribution is very discrete (this shows up more clearly with more bins).
+
+The data values are all integers (and therefore so are the differences). The median of an odd number of data values must be one of the data values, and the bootstrap samples only contain (varying numbers of copies of) the differences in the original dataset, so 
+each bootstrap sample must have a median that is an integer too.
+
+
+Extra:
+in case you are thinking that this happened because the data values were integers, no, it would happen even if the data were decimal numbers. Let's make some fake data of 15 random normals and then do the same thing again:
+
+```{r}
+fake_data <- tibble(x = rnorm(15))
+fake_data
+```
+
+and once again bootstrap the median:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+rowwise() %>% 
+mutate(sample = list(sample(fake_data$x, replace = TRUE))) %>% 
+mutate(my_median = median(sample)) -> meds2
+meds2
+```
+
+You can see even from these few that the bootstrap distribution of the median has repeats, so there should also be some discreteness here:
+
+```{r}
+ggplot(meds2, aes(x = my_median)) + geom_histogram()
+```
+
+The discreteness is a property of the fact that we were bootstrapping the *median*, and the median has to be one of the data values. 
+
+To confirm that, recall that our original data were integers:
+
+```{r}
+sight
+```
+
+but even for these, if you bootstrap the mean, you don't get the same discreteness:
+
+```{r}
+tibble(sim = 1:1000) %>% 
+rowwise() %>% 
+mutate(sample = list(sample(sight$difference, replace = TRUE))) %>% 
+mutate(my_mean = mean(sample)) -> means
+means %>% 
+ggplot(aes(x = my_mean)) + geom_histogram()
+```
+
+This is too many bins for 1000 bootstrap samples, so the shape is kind of irregular, but there are not the big gaps that the bootstrap distribution of the sample median has. Indeed, this ought to be somewhere near normal and is:
+
+```{r}
+ggplot(means, aes(sample = my_mean)) + stat_qq() +
+stat_qq_line()
+```
+
+(This is saying that the Central Limit Theorem is really helping, even for a sample size of only 15 from clearly non-normal data, so the paired $t$ may not be as bad as we would have thought.)
+
+
+$\blacksquare$
+
+
+(f) Find a 95% percentile interval for the population median.`r tufte::margin_note("I was also going to have you do a bootstrap-t interval, but I'm not completely convinced I got that right when I was explaining it to you before.")`
+
+Solution
+
+
+The percentile interval comes from the middle 95% of the bootstrap distribution of medians:
+
+```{r}
+quantile(meds$my_median, c(0.025, 0.975))
+```
+
+The bootstrap percentile interval goes from $-2$ to 4. Like the CI for the median based on the sign test, the ends of this interval must be data values.
+
+Extra: for comparison, the interval from the sign test is this:
+
+```{r}
+ci_median(sight, difference)
+```
+
+which is, when rounded off, from $-2$ to 5, very like the percentile interval.
+
+
+$\blacksquare$
+
+
+(g) Find the BCA 95% confidence interval for the population median difference.
+
+Solution
+
+
+Load (and if necessary install) the `bootstrap` package, and then:
+
+```{r}
+bca <- bcanon(sight$difference, 1000, median)
+bca$confpoints
+```
+
+$-2$ to 4, in this case like the percentile interval. `r tufte::margin_note("They don't often agree this well, but all of these intervals in this situation but have data values at their endpoints, and all of our data values are integers.")` Note how this one is data values also. 
+
+
+$\blacksquare$
+
+
+(h) What do your intervals tell us about any possible difference between left eye and right eye in terms of ability to identify objects in images? Do the intervals agree or disagree about this?
+
+Solution
+
+
+The intervals are not quite all the same, but one thing they have in common is that they all have a negative lower limit and a positive upper one (more positive than the negative one is negative). This says that 0 is a plausible difference in each case, and thus it is reasonable to conclude that there is no evidence of any difference between the two eyes, based on this sample of 15 subjects. 
+
+The intervals do all go more positive than negative, which says that if anything the scores are better with the right eye than the left on average (from the way around that we took the differences). However, there is no evidence here that this is any more than chance.
+
+
+$\blacksquare$
+
+
+
