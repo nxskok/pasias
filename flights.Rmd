@@ -245,7 +245,7 @@ geom_point() + geom_line()
 Not all the median delays are large when visibility is under 2.5 miles, but at least some of them are, and the implication is that you could be delayed a long time if the visibility is bad. This also shows that the median delay drops when the visibility is best. The median delay is actually *negative* when the visibility is good, which means that the flights on average left *early*, which they can do if all the booked passengers, their baggage and the crew are on board the plane.
 
 
-What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first:xxx tufte::margin_note{The \emph{factor} thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.}
+What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first: `r tufte::margin_note("The \emph{factor} thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.")`
 
 ```{r}
 d %>% 
@@ -295,7 +295,7 @@ d %>%
 group_by(visib) %>% 
 summarize(q_delay =  quantile(dep_delay, qs))
 ```
-This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:xxx tufte::margin_note{Or be cleverer than I am capable of.}
+This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:`r tufte::margin_note("Or be cleverer than I am capable of.")`
 
 ```{r}
 qs <- c(0.25, 0.5, 0.75)
@@ -334,7 +334,7 @@ geom_point() + geom_line()
 
 as we had before.
 
-Extra 3: an attempt to be clever.xxx tufte::margin_note{And thus most likely doomed to failure.}
+Extra 3: an attempt to be clever.`r tufte::margin_note("And thus most likely doomed to failure.")`
 
 `quantile` does actually keep track of which quantile is which (using the same `qs` as above):
 

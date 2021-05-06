@@ -1,0 +1,328 @@
+## Renegotiating bontracts
+
+ A company keeps track of the contracts it makes with its suppliers. On November 15 of each year, it looks at all the current contracts and decides what the status of each contract is. Seven of the current contracts and their original negotiation dates are as shown in \url{http://ritsokiguess.site/datafiles/contracts.csv}. The company has asked you to work out the status of each of these contracts, according to the following scheme:
+
+- anything up to and including November 15, 2013: "expired"
+- after that and up to and including Nov 15, 2014: "renegotiate"
+- after that and up to and including Nov 15, 2016: "arbitration"
+- after that, "current", with month name and year
+
+The company says that if you can get this one to work, they will give you the entire file, containing several thousand contracts, to work out the statuses of!
+
+
+
+(a) Read in and display the data.
+
+Solution
+
+
+The exact usual thing:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/contracts.csv"
+contracts <- read_csv(my_url)
+contracts
+```
+Extra: the original data file came with statuses as well (computed by someone using SAS). I copied and pasted it, and wanted to get it into a data frame. I did this by first pasting it into a piece of text:
+
+```{r}
+data_txt <- "
+contract status        date
+5829014  EXPIRED       November 6, 2013
+2301911  RENEGOTIATION January 23, 2014
+1540956  ARBITRATION   December 1, 2014
+6051271  ARBITRATION   April 11, 2015
+9330471  ARBITRATION   September 21, 2015
+6894300  ARBITRATION   August 21, 2016
+7465502  NOV2016       November 18, 2016 
+"
+```
+
+This is aligned columns (think `read_table`) and in fact you can read from a piece of text just as easily as from a file (which is why I wanted to show you this):
+
+```{r}
+contracts0 <- read_table(data_txt)
+contracts0
+```
+
+There is also a package called `datapasta` (see [here](https://github.com/MilesMcBain/datapasta)) that is nice for creating dataframes and other things out of copy-pasted text.
+
+
+$\blacksquare$
+
+
+(b) Explain briefly why you will not be able to use your dataframe as it currently stands to work out the status of each contract.
+
+Solution
+
+
+The column `date` in our current dataframe is text rather than an actual date, and we need actual dates in order to make the comparisons required to work out the statuses. You need to  make the observation that we are *comparing* dates, and we cannot do that if the dates are text.
+
+Extra: if the dates were something like `2020-08-12`, you could compare them as text and get the right answer, but these are not. That's another reason to format your dates consistently as year-month-day.
+
+
+$\blacksquare$
+
+
+(c) Create and display a column of dates that you will be able to work with in computing the status of each contract.
+
+Solution
+
+
+For this, you will need `lubridate`, installed and loaded. Give the column of actual dates whatever name you like. I realized afterwards that a shorter name would have been better, since I was going to be typing it a lot:
+
+```{r}
+contracts %>% mutate(date_date = mdy(date))
+```
+
+The header of my `date_date` column shows that it is indeed a `date`. (It may look as if the text has just been reformatted, but it is indeed a date.)
+
+
+$\blacksquare$
+
+
+(d) Use `case_when` to create a column in your dataframe containing the status of each contract. Display your results. (Recalling exactly how `case_when` works may make your coding easier.)
+
+Solution
+
+
+There are two things to remember about `case_when` that will help you here:
+
+- the *first* of the conditions that is true will provide the answer, so that if you get to the second one, it must mean that the first one was *false*. This is like if-elif-elif-else in Python. 
+- the catch-all condition `TRUE` means, in English, "otherwise".
+
+Strategy-wise, therefore, if you start from one end of the range of dates, then you don't need to worry about "between". The best answer, therefore, looks something like this:
+
+```{r}
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(status = case_when(
+date_date <= ymd("2013-11-15") ~ "expired",
+date_date <= ymd("2014-11-15") ~ "renegotiate",
+date_date <= ymd("2016-11-15") ~ "arbitration",
+TRUE                           ~ str_c("current ", 
+month(date_date, label = TRUE), 
+year(date_date)) 
+)) -> contracts
+contracts
+```
+
+By the time your code gets to the second line, it already knows that the date is later than Nov. 15, 2013 so you don't have to test that again. If you do, it reveals that you don't really know how `case_when` works. If you are in that situation, the best way to proceed is to use `between`, which you will have to find out about (and, as ever, cite your source) in order to get the job done, which is better than not getting it done. Going this way will make your code a *lot* messier, though.
+
+The other thing to remember is that you have to compare a date *with another date*, not with a piece of text that looks like a date, so that you have to make those Nov 15s into dates. You can write them in any format and convert them with `ymd` or `mdy` or whatever is appropriate, or you can write them in ISO format as I did and use `as.Date` (a base R function) instead of `ymd`. 
+
+With that in mind, you might want to pre-compute those key dates (and give them short names), something like this:
+
+```{r}
+exp_date <- ymd("2013-11-15")
+reneg_date <- ymd("2014-11-15")
+arb_date <- ymd("2016-11-15")
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(status = case_when(
+date_date <= exp_date   ~ "expired",
+date_date <= reneg_date ~ "renegotiate",
+date_date <= arb_date   ~ "arbitration",
+TRUE                    ~ str_c("current ", 
+month(date_date, label = TRUE), 
+year(date_date)) 
+)) -> contracts2
+contracts2
+```
+
+This would also make it easier to edit your code if any of the key dates changed later. For this one, though, the key dates only appear once, and it doesn't make the `case_when` much longer if they are in it rather than pre-computed, so I don't have any strong feelings either way.
+
+For the contracts that are current, you need to get hold of three things:
+
+- the text `current`
+- the *name* of the month, which is `month` with `label=TRUE` 
+- the year, which is a straight `year`.
+
+Then you have to glue `r tufte::margin_note("There is also a package called glue that does exactly this. I show you this later.")` 
+these together into one piece of text, for which I prefer `str_c` from `stringr` (in the `tidyverse`), but you can also use `paste` or `paste0`  if you can find out how they work.
+
+Also, you could start from the latest date and work the other way:
+
+```{r}
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(status = case_when(
+date_date > mdy("Nov 15, 2016") ~ str_c("current ", 
+month(date_date, label = TRUE), 
+year(date_date)),
+date_date > mdy("Nov 15, 2014") ~ "arbitration",
+date_date > mdy("Nov 15, 2013") ~ "renegotiate",
+TRUE                            ~ "expired"
+))
+```
+
+Getting this answer with a strategy like one of these is best. 
+
+It is good coding practice, in your `case_when`, to line up your `~`s, so that it is easy to see what you are testing and what the result is if that thing is true. It is also smart to split up long lines, like the ones with `str_c` in them, and also to line up the three inputs to `str_c` or `paste`. This is rather directly for the benefit of your grader, `r tufte::margin_note("If your code is messy, the grader, being human, is likely to check it carefully for errors. If you don't show attention to detail on the layout of your code, it will make people wonder what else you don't show attention to detail on.")` but also in the real world is for the benefit of your colleagues and (something that is easy to forget) *you* in the future, when you come back to it in six months or six years to modify something.
+
+Extra 1: an alternative to using `str_c` or `paste` is called `glue`. It is a package that you will need to install first, containing a function of the same name. Here's how it works:
+
+```{r}
+library(glue)
+exp_date <- ymd("2013-11-15")
+reneg_date <- ymd("2014-11-15")
+arb_date <- ymd("2016-11-15")
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(if_current = as.character(glue("current {month(date_date, label = TRUE)} {year(date_date)}"))) %>% 
+mutate(status = case_when(
+date_date <= exp_date   ~ "expired",
+date_date <= reneg_date ~ "renegotiate",
+date_date <= arb_date   ~ "arbitration",
+TRUE                    ~ if_current
+)) -> contracts2
+contracts2
+```
+
+This turned out to be more fiddly than I would have liked, but there are some lessons that are worth learning: 
+
+- `glue` itself takes a single piece of text (unlike the others such as `str_c`, which take a mixture of text and variable values). Any literal text (like `current`) is used as is. Anything in curly brackets, like `year(date_date)`, is evaluated as if it were in a code chunk, and the value is inserted into the answer. This one, therefore, makes a piece of text (but see the next point) out of the literal text `current`, the name of the month, and the year as a number. Is this clearer than `str_c`? I dunno. Up to you.
+- The output from `glue` actually has a special class `glue/character` which is not the same as `character`. `case_when` is very picky: all the things on the right side of the squiggles have to be of *exactly* the same class. The others are ordinary text, so I have to make this one into ordinary text as well, which is the reason for the `as.character` around the outside. You might be thinking "how did he figure that out ahead of time?", and the answer is that I didn't: the first time I had it without the `as.character` and it didn't work:
+
+```{r, error=TRUE}
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(if_current = glue("current {month(date_date, label = TRUE)} {year(date_date)}")) %>% 
+mutate(status = case_when(
+date_date <= exp_date   ~ "expired",
+date_date <= reneg_date ~ "renegotiate",
+date_date <= arb_date   ~ "arbitration",
+TRUE                    ~ if_current
+)) -> contracts2
+```
+
+This gave me the hint that something was up with the output from `glue`. I remembered that `case_when`, like the other things in the `tidyverse`, is picky about types, having recently run into trouble with "types of `NA`" (yes, there is [such a thing](https://github.com/tidyverse/dplyr/issues/3202)). So I turned it into actual text and then it worked. As ever, try it, and if it fails, figure out why and then fix it. Nobody will know or care how many errors you made if you fix them all before you hand your work in.
+
+- the `glue` call is rather long, and not easy to split up, and I thought it was too long to go into the `case_when`. So what I did was to pre-compute it: I created a column that was the months and years for each contract, *in case* I needed it. This might strike you as wasteful, since I might not need it for certain contracts. Make a call for yourself about whether it's better to compute it for all the contracts and just grab it in the `case_when` if  you happen to need it, or whether you think it's important to only compute it when it's needed, and then have rather a long and hard-to-read last line on the `case_when`. It's a trade-off, and there are no right answers.
+
+Extra 2: if you are unable to get `case_when` working, you can do this with nested `ifelse`s, though I think you'll need to format this carefully to get the logic to make sense. `ifelse` takes three things: something that is true or false, the value if the thing is true, and the value if it is false, like this:
+
+```{r}
+x <- 3
+ifelse(x==3, "three", "not three")
+x <- 4
+ifelse(x==3, "three", "not three")
+```
+
+In Python, or indeed in `case_when`, you can have more than two choices, by using `elif` or by adding  another line to your `case_when`. What you do with `ifelse` is to replace the last input by *another `ifelse`*:
+
+```{r}
+x <- 3
+ifelse(x==3, "three", ifelse(x==4, "four", "something else"))
+x <- 4
+ifelse(x==3, "three", ifelse(x==4, "four", "something else"))
+```
+
+or perhaps better written as
+
+```{r}
+x <- 5
+ifelse(
+x==3, "three", 
+ifelse(x==4, "four", "something else"))
+```
+
+For our actual example, that might go like this:
+
+```{r}
+exp_date <- ymd("2013-11-15")
+reneg_date <- ymd("2014-11-15")
+arb_date <- ymd("2016-11-15")
+contracts %>% mutate(date_date = mdy(date)) %>% 
+mutate(if_current = as.character(glue("current {month(date_date, label = TRUE)} {year(date_date)}"))) %>% 
+mutate(status = ifelse(
+date_date <= exp_date,           "expired",
+ifelse(date_date <= reneg_date , "renegotiate",
+ifelse(date_date <= arb_date   , "arbitration", if_current
+)))) -> contracts2
+contracts2
+```
+On the `mutate` with the `ifelse` in it, you'll need to make sure you  close the right number of brackets at the end, since each `ifelse` opens a new bracket. This also works with `str_c` or `paste` rather than `glue`.
+
+
+$\blacksquare$
+
+
+(e) For the future, the company wants to define the status of a contract based on the number of years ago it was negotiated. Create and display a new column in your dataframe that contains the number of years between the negotiation date and today's date. This could be completed years or decimal years; either one is good.
+
+Solution
+
+
+There are a couple of ways to get today's date. One way is to look at your phone, and make an R date from the date you see there. When I did this originally, it was August 6, 2020, thus:
+
+```{r}
+d <- ymd("2020-08-06")
+d
+class(d)
+```
+
+which doesn't look as if it did much, but the last line verifies that it is indeed a Date.
+
+A better way is to recognize that `lubridate` will probably have something that gives you today's date more easily, and it does:
+
+```{r}
+today()
+```
+
+or there is the no-`lubridate`-required base-R way:
+
+```{r}
+Sys.Date()
+```
+
+If you found out about these somewhere, tell me where.
+
+Then take the difference between today and the dates in your dataframe:
+
+```{r}
+contracts %>% 
+mutate(since_date = today()-date_date)
+```
+
+(it chose the units), and convert that into fractional years by dividing by the number of days in a year:
+
+```{r}
+contracts %>% 
+mutate(since_date = today()-date_date) %>% 
+mutate(years = since_date  / dyears(1))
+```
+
+
+
+Extra: another way, also good, is to get the number of completed years since the contract was negotiated. This is also of value to the company since they can decide what to do on the basis of this being greater than or equal to something; the fractional part is not necessarily needed.
+
+The way to solve this is to make what `lubridate` calls a "period", in which the start and end are also stored, as per lecture 23a. Here, that goes like this:
+
+\small
+
+```{r}
+contracts %>% 
+mutate(since_date = as.period(date_date %--% today())) %>% 
+mutate(years = year(since_date))
+```
+\normalsize
+
+The values of `since_date` now are a number of years, months, and days, and these are now exact because the start and end dates are known, so that `lubridate` knows whether the periods in question include any February 29 dates and can account for them.
+
+As far as I am concerned, either way of figuring out the years is equally good.
+
+Extra extra: this works because the times-since-negotiation have the years as the biggest time unit (there aren't any decades or anything like that). Note that these are completed years, not rounded-off years. If you wanted completed *months*, `r tufte::margin_note("Which you might do if the company policy was something like renegotiating contracts after 66 months (5 and a half years).")` you'd have to treat years as 12 months, thus:
+
+\small
+
+```{r}
+contracts %>% 
+mutate(since_date = as.period(date_date %--% today())) %>% 
+mutate(months = month(since_date) + 12*year(since_date))
+```
+
+\normalsize
+
+Eyeballing the years and months, and doing some quick mental calculations, suggests that those numbers in the `months` column are correct.
+
+
+
+$\blacksquare$
+
+
+

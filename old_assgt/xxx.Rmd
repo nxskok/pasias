@@ -1,391 +1,278 @@
-## Flying from New York
+## xxx title here
 
- In 2013, there were over 300,000 flights that departed from one of New York City's three airports. The package `nycflights13` contains information about all these flights, as well as details about the airports, airlines and planes referenced in the flights dataset, and also information about the weather in each hour of 2013 (that can be matched up with the flights). Install the package using the usual `install.packages`, and load it. When you load the package, dataframes called `airlines`, `airports`, `flights`, `planes` and `weather` are available to you.
+ In 1997, a company in Davis, California, had problems with
+odour in its wastewater facility. According to a company official, the
+problems were caused by "unprecedented weather conditions" and "because
+rainfall was at 170 to 180 percent of its normal level, the water in
+the holding ponds took longer to exit for irrigation, giving it more
+time to develop an odour."
+
+Annual rainfall data for the Davis area is in \url{http://ritsokiguess.site/datafiles/STAC32/rainfall.txt}.
+Note that clicking on the link (in blue) will display the file, and *right*-clicking on the link will give you some options, one of which is Copy Link Address, which you can then paste into your R Notebook.
+
+The rainfall is
+measured in inches.
 
 
 
-(a) Using the `airports` dataframe, display the names of New York City's three major airports. They have airport codes EWR, JFK, LGA.
+
+
+(a) Read in and display (some of) the data.
 
 Solution
 
 
-Take a look at the `airports` dataframe first:
+
+
+Look at the data file, and see that the values are separated by a
+single space, so \verb=read_delim= will do it. Read straight from
+the URL; the hint above tells you how to copy it, which would even work if the link spans two lines.
 
 ```{r}
-airports 
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/rainfall.txt"
+rain <- read_delim(my_url, " ")
+rain
 ```
 
-The airport codes are in the `faa` column, so:
+Note for later that the \verb=Year= and the \verb=Rainfall= have
+Capital Letters. You can call the data frame whatever you like, but I
+think something descriptive is better than eg.\ \verb=mydata=.
+
+
+
+Extra: this works because there is exactly one space between the year and the
+rainfall amount. But the year is always four digits, so the columns
+line up, and there is a space all the way down between the year and
+the rainfall. That means that this will also work: 
 
 ```{r}
-airports %>% filter(faa == "EWR" | faa == "LGA" | faa == "JFK")
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/rainfall.txt"
+rain <- read_table(my_url)
+rain
 ```
 
-They are called Newark Liberty (which is actually in New Jersey), John F Kennedy, and La Guardia. 
 
-The code uses `|` to represent "or" in a `filter`. Another way to do it is to define a set of abbreviations as a vector, and then search for `faa` values "in" a set:
+This is therefore also good.
+
+It also looks as if it could be tab-separated values, since the rainfall
+column always starts in the same place, but if you try it, you'll find
+that it doesn't work:
 
 ```{r}
-nyc_airports <- c("EWR", "JFK", "LGA")
-airports %>% filter(faa %in% nyc_airports)
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/rainfall.txt"
+rain_nogood <- read_tsv(my_url)
+rain_nogood
 ```
 
-These are the best way to do it. Inferior ways are finding the airports one at a time, and (even more inferior) scanning the airports dataframe by eye, which doesn't in any case answer the question.
+
+This looks as if it worked, but it didn't, because there is only
+\emph{one} column, of years and rainfalls smooshed together as text,
+and if you try to do anything else with them later it won't work.
+
+Hence those values that might have been tabs actually were
+not. There's no way to be sure about this; you have to try something
+and see what works. An indication, though: if you have more than one
+space, and the things in the later columns are \emph{left}-justified,
+that could be tab-separated; if the things in the later columns are
+\emph{right}-justified, so that they finish in the same place but
+don't start in the same place, that is probably aligned columns. 
+
 
 
 $\blacksquare$
 
 
-(b) How many flights departed from each of these airports, in the `flights` dataframe? 
+(a) Summarize the data frame (as done in Lecture 2).
 
 Solution
 
 
-This is actually simple, but you can overthink yourself into something more complicated very easily.
-
-First look at `flights` and see that the column you want is called `origin`. Then count them:
+I almost gave the game away: this is `summary`.
 
 ```{r}
-flights %>% count(origin)
+summary(rain)
 ```
 
-Approximately 120,000 out of Newark, 111,000 out of John F Kennedy, nearly 105,000 out of La Guardia.
-
-Extra: if you want to include the airport *names* on this, you can look them up with `left_join`. This creates a lot of columns, so I would then use `select` to just display the ones I want:
-
-```{r}
-flights %>% count(origin) %>% 
-left_join(airports, by = c("origin" = "faa")) %>% 
-select(name, n)
-```
-The reason for the `by` on the `left_join` is that the airports we want to look up the names of are called `origin` in `flights` and `faa` in `airports`. (FAA stands for "Federal Aviation Administration", one of whose responsibilities is maintaining a unique three-character code for each airport and airfield.) 
-
-This idea of having short codes in the main database and a separate place where you can look them up is very common; for maintaining or accessing the main database, it is much easier to enter codes compared to full names, and you can always get hold of the full names if you need them. In a business database, you might have codes for customers or transaction types and then separate databases with fuller descriptions and maybe other columns, as here. This is related to what database people call "normal form", limiting duplicated information.
+The summary of the years may not be very helpful, but the summary of the annual rainfall values might be. It's not clear yet why I asked you to do this, but it will become clearer later.
 
 
 $\blacksquare$
 
 
-(c) Display the *names* of the five most common destination airports for flights from the New York City airports (taken together), along with the number of flights to each.
+(a) Make a suitable plot of the rainfall values. (We are not,
+for the time being, concerned about the years.)
 
 Solution
 
 
-This begins like the previous part, noting that the column you want is called `dest`:
+This is one quantitative variable, so a histogram is your first
+thought. This means picking a number of bins. Not too many, since
+you want a picture of the shape:
 
 ```{r}
-flights %>% count(dest)
+ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=8)
 ```
 
-Then arrange in descending order by `n`, and slice off the top 5:
+If you picked fewer bins, you'll get a different picture:
 
 ```{r}
-flights %>% count(dest) %>% 
-arrange(desc(n)) %>% 
-slice(1:5)
+ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=6)
 ```
 
-Another way is this:
+The choice of the number of bins depends on what you think the story
+about shape is that you want to tell (see next part). You will
+probably need to try some different numbers of bins to see which one
+you like best. You can say something about what you tried, for example "I also tried 8 bins, but I like the histogram with 6 bins better."
 
-```{r}
-flights %>% count(dest) %>% 
-slice_max(n, n=5)
-```
-I can't remember (as I write this) whether I've shown you this last one anywhere or not. It's probably a good idea to cite your source if you do it this way. The first way is definitely something you've seen in lecture.
-
-Now you need to think about your reader. I happen to know four of these airports (Chicagoxxx tufte::margin_note{The abbreviation comes from ``O'Hare Field'', which is the original name of Chicago's airport,}
-Atlanta, Los Angeles and Boston are the first four), but it's asking a lot to expect your reader to know that. So you need to translate these to actual airport names. You could do this by looking in the `airports` dataframe for these abbreviations by hand and then adding the names to your answer, but I think you should be suspecting that there is a better, code, way to do this, and it's the same idea as the Extra to the previous part: look up the abbreviations in the `airports` dataframe using `left_join`, and then grab only the columns you want to display, like this:
-
-```{r}
-flights %>% count(dest) %>% 
-arrange(desc(n)) %>% 
-slice(1:5) %>% 
-left_join(airports, by = c("dest" = "faa")) %>% 
-select(name, dest, n)
-```
-
-This is the best way to do it. The airports are O'Hare in Chicago, Atlanta, Los Angeles, Logan in Boston, and Orlando. 
-
-Extra: Some of these are big cities, and some of them not so much. I think Atlanta and Orlando are "hub cities"; airlines tend to have a "base" with a lot of flights into it, and if you want to go somewhere else, you change planes in the hub city. 
-
-Well, we have airline codes in the `flights` dataframe, so let's investigate this. I'm pretty sure that Atlanta is a hub for Delta Airlines, so let's look at Atlanta first. Step one is to look only at the flights with destination Atlanta:
-
-```{r}
-flights %>% 
-filter(dest == "ATL")
-```
-
-A mere 17,000 flights. The airline info is in the column called `carrier`:
-
-```{r}
-flights %>% 
-filter(dest == "ATL") %>% 
-count(carrier) %>% 
-arrange(desc(n))
-```
-
-I have even less clue about airline abbreviations than airport ones, so we definitely need to look these up. Let's examine the `airlines` dataframe:
-
-```{r}
-airlines
-```
-
-This is going to be easier than the other ones, because the airline abbreviations have the same name `carrier` in both dataframes, and there are no other columns that have the same name in either dataframe:
-
-```{r}
-flights %>% 
-filter(dest == "ATL") %>% 
-count(carrier) %>% 
-arrange(desc(n)) %>% 
-left_join(airlines) 
-
-
-```
-
-Looks like my guess of Delta was on the money. What about Orlando? Wikipedia says that this is a hub for JetBlue and Southwest, among others. The same code idea will work again:
-
-```{r}
-flights %>% 
-filter(dest == "MCO") %>% 
-count(carrier) %>% 
-arrange(desc(n)) %>% 
-left_join(airlines) 
-```
-JetBlue for sure, but what happened to Southwest? Do they fly out of New York at all, and if so, where to? We need their abbreviation first:
-
-```{r}
-airlines %>% 
-filter(str_detect(name, "Southwest"))
-```
-I did something a little different here: I didn't know what the exact `name` would be, so I asked for the rows where the text `Southwest` was found in the name somewhere.xxx tufte::margin_note{This is actually a regular expression match.}
-
-All right, let's find the flights with this carrier, count their destinations, and look them up:
-
-```{r}
-flights %>% 
-filter(carrier == "WN") %>% 
-count(dest) %>% 
-arrange(desc(n)) %>% 
-left_join(airports, by = c("dest"="faa")) %>% 
-select(name, dest, n)
-```
-
-If you wanted to fly Southwest from New York to Orlando, you couldn't do it direct, but I imagine you could fly to one of those airports first and from there to Orlando.
 
 
 $\blacksquare$
 
 
-(d) One of the main hazards to air travel is bad visibility, such as fog. The `flights` dataframe contains a column `dep_delay` that is the number of minutes late each flight was in taking off from its New York airport, and also a column `time_hour` which is the scheduled departure day and hour of that flight. There is also a dataframe `weather` that contains weather information about each airport for each hour of 2013, including a column `visib` that shows the number of miles of visibility from that airport at that time on that date.
-
-Obtain and save a dataframe that contains, for each flight, its departure delay, and the number of miles of visibility at its scheduled departure time at the airport that it departed from.
+(a) How would you describe the shape of the distribution of
+rainfall values?
 
 Solution
 
 
-This is rather a lot to think about, but the weather will have to be looked up for each flight. The keyxxx tufte::margin_note{A joke. The most important column, and also the one the database lookup is going to be based on.} column is the one called `time_hour` in `flights`. What does `weather` contain?
-
-```{r}
-weather
-```
-
-A column of the same name right at the end. That makes our job a bit easier. We want the weather at the same airport and same time as the flight departed from, so the `by` has to contain both (they have the same names in the two dataframes). If you get over a million rows, it's probably because you forgot to match the airport (and thus you'd have three rows in the output, one for each airport):
-
-```{r}
-flights %>% 
-left_join(weather, by = c("origin", "time_hour")) %>% 
-select(dep_delay, visib) %>% 
-drop_na() -> d
-d
-```
+This will depend on the histogram you drew in the previous
+part. If it looks like the first one, the best answer is
+"bimodal": that is, it has two peaks with a gap between them. If
+it looks like the second one, you have an easier time; this is
+ordinary right-skewness.
 
 
 $\blacksquare$
 
 
-(e) Using your dataframe from the previous part, make a suitable plot of the number of minutes of delay on departure against visibility. Is there any indication that delays are typically worse when the visibility is worse? You may need to use some imagination to come up with a plot that shows what you want to see.
+(a) In the quote at the beginning of the question, where do you
+think the assertion that the 1997 rainfall was "at 170 to 180
+percent of its normal level" came from? Explain briefly.
 
 Solution
 
 
-Two quantitative variables, so a scatterplot. I would put a smooth trend on it, to make it easier to see whether there is a relationship. There are a *lot* of observations, so the plot takes an appreciable time to draw:
-
-```{r, cache=TRUE}
-ggplot(d, aes(x = visib, y = dep_delay)) + geom_point() + geom_smooth(se = FALSE)
-```
-
-The big takeaway here is that the delay can be very large for any visibility, and this makes it hard to see whether the average delay has any trend with visibility. I think it's a tiny bit higher for low (that is, bad) visibility, but it really isn't clear. 500 minutes of delay is over 8 hours, which is a long time for a flight to be late leaving. This is therefore not the best plot, because it is dominated by the (huge number of) outliers. 
-
-So let's try removing the points and just leaving the smooth trend, which is down at the bottom of this plot. That might be clearer:
-
-```{r, cache=TRUE}
-ggplot(d, aes(x = visib, y = dep_delay)) + geom_smooth()
-```
-
-This is a lot clearer: once the visibility gets down below about 2.5 miles, the average delay increases. I'm not sure about that wiggle around 0.5 miles, but the grey envelope suggests that the smooth trend is an accurate picture, based as it is on so many observations. You might also note that the average delay is smaller when the visibility is at its maximum of 10 miles.
-
-Another way to try is to treat `visib` as categorical, which it really isn't, but there is a fairly small set of discrete values. If you do that, you have a quantitative delay and a categorical visibility, which you have to make such, and thus a boxplot:
+First we
+need the 1997 rainfall. Go back and find it in the data. I am borrowing an idea from later in the course (because I am lazy):
 
 ```{r}
-ggplot(d, aes(x = factor(visib), y = dep_delay)) + geom_boxplot()
+rain %>% filter(Year==1997)
 ```
 
-This is also not the best, because it is dominated by the outliers. 
+29.7 inches.
 
-You could just plotting the median for each `visib` value, thus:
+Now, what would be a "normal level" of rainfall? Some kind of average, like a mean or a median, maybe. But we have those, from our summary that we made earlier, repeated here for (my) convenience:
 
 ```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(med_delay = median(dep_delay)) %>% 
-ggplot(aes(x = visib, y = med_delay)) +
-geom_point() + geom_line()
+summary(rain)
 ```
 
-Not all the median delays are large when visibility is under 2.5 miles, but at least some of them are, and the implication is that you could be delayed a long time if the visibility is bad. This also shows that the median delay drops when the visibility is best. The median delay is actually *negative* when the visibility is good, which means that the flights on average left *early*, which they can do if all the booked passengers, their baggage and the crew are on board the plane.
+The mean is 18.69 and the median is 16.72 inches.
 
-
-What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first:xxx tufte::margin_note{The \emph{factor} thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.}
+So divide the 1997 rainfall by each of the summaries, and see what happens, using
+your calculator, or using R as a calculator:
 
 ```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(q1 = quantile(dep_delay, 0.25),
-med = median(dep_delay),
-q3 = quantile(dep_delay, 0.75)) -> d_summ
-d_summ
+29.7/18.69
+29.7/16.72
 ```
 
-Well, this I can do now.xxx tufte::margin_note{If I remember to put quotes around the names of my new columns, that is.} Let's make this longer, since we want *one* column of delay summaries to plot:
-
-```{r}
-d_summ %>% 
-pivot_longer(q1:q3, names_to = "which", values_to = "delay") 
-```
-
-then plot these as points, joining up the ones that are the same quantile:
-
-```{r}
-d_summ %>% 
-pivot_longer(q1:q3, names_to = "which", values_to = "delay") %>% 
-ggplot(aes(x = visib, y = delay, colour = which)) + geom_point() + geom_line()
-```
-
-My take from this is that delays can be bigger when the visibility is less than about 2.5 miles. It's a bit harder to interpret because it is jumpy, even with so much data. 
-
-Extra 1: another way of making a plot like these is to have `ggplot` do the calculations for you. We haven't talked about writing functions yet, so some of this won't make much sense to you, but (this way)[https://stackoverflow.com/questions/41077199/how-to-use-r-ggplot-stat-summary-to-plot-median-and-quartiles/41077282] also works, though it too takes noticeable time:
-
-```{r}
-ggplot(d, aes(x = visib, y = dep_delay)) + stat_summary(
-fun.min = function(z) { quantile(z, 0.25) },
-fun.max = function(z) { quantile(z, 0.75) },
-fun = median)
-```
-
-
-The dots are the medians, and the lines extend from the median to the quartiles for each visibility value. Once again, the impression is that longer delays are possible when the visibility is worse, and it is unusual to have a long delay once the visibility gets beyond about 2.5 miles.
-
-The code idea is that `stat_summary` contains instructions for calculating the summaries you are going to plot. The input `fun` is a function that calculates where the points are going to go. In this case, that is the median. `fun.min` and `fun.max` are the bottom and top of the vertical lines, which here need to be the quartiles. The `quantile` function needs an extra input, saying which quantile (percentile) is wanted, and one way around this is to write a little (nameless) function that is input to `fun.min` or `fun.max`, taking input `z` (the name doesn't matter as long as you use the chosen name in the function) and calculating what is needed from that `z`.
-
-Extra 2: if you calculate the three percentiles in one go, the process to the plot is different, thus:
-
-```{r}
-qs <- c(0.25, 0.5, 0.75)
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  quantile(dep_delay, qs))
-```
-This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:xxx tufte::margin_note{Or be cleverer than I am capable of.}
-
-```{r}
-qs <- c(0.25, 0.5, 0.75)
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  quantile(dep_delay, qs)) %>% 
-mutate(which = rep(qs))
-```
-
-`rep` repeats its input a number of times that you normally have to specify, but here it works out that the new column `which` has to be the same length as the other columns (because we're working with a dataframe). So we are good.
-
-Now everything is ready to go:
-
-```{r}
-qs <- c(0.25, 0.5, 0.75)
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  quantile(dep_delay, qs)) %>% 
-mutate(which = rep(qs)) %>% 
-ggplot(aes(x = visib, y = q_delay, colour = which)) + 
-geom_point() + geom_line()
-```
-
-Oops. The column `which` is quantitative, but I want it treated as categorical, so I should wrap it in `factor`:
-
-
-```{r}
-qs <- c(0.25, 0.5, 0.75)
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  quantile(dep_delay, qs)) %>% 
-mutate(which = rep(qs)) %>% 
-ggplot(aes(x = visib, y = q_delay, colour = factor(which))) + 
-geom_point() + geom_line()
-```
-
-as we had before.
-
-Extra 3: an attempt to be clever.xxx tufte::margin_note{And thus most likely doomed to failure.}
-
-`quantile` does actually keep track of which quantile is which (using the same `qs` as above):
-
-```{r}
-quantile(1:10, qs)
-```
-
-except that the percentages are what is called the "names attribute" of the output, and the `tidyverse` tends to lose things like names attributes, *unless* you explicitly keep hold of them, like this:
-
-```{r}
-enframe(quantile(1:10, qs), name = "percent", value = "percentile")
-```
-
-So now, what if we add the `enframe` to the calculation we had above?
-
-```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  enframe(quantile(dep_delay, qs), name = "percent", value = "delay")) 
-```
-We now have a list-column, which is OK, but each visibility value is repeated three times, which is not, so I don't like this. I think I need to explicitly add a `list` in the right place:
-
-```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay")))
-```
-
-Now each `visib` value appears once, and in the list-column `q_delay` there is some kind of dataframe for each `visib`, which we hope is the same kind of thing as `enframe` gave us before. Let's `unnest` and take a look:
-
-```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 
-unnest(q_delay)
-```
-
-Genius! Or, as my daughter says, "pog":
-
-```{r}
-d %>% 
-group_by(visib) %>% 
-summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 
-unnest(q_delay) %>% 
-ggplot(aes(x = visib, y = delay, colour = percent)) + geom_point() + geom_line()
-```
-
+The 1997 rainfall was about 178 percent of the normal level if the normal
+level was the \emph{median}.
 
 
 
 $\blacksquare$
+
+
+(a) Do you think the official's calculation was reasonable? 
+Explain briefly. (Note that this is not the same as asking whether
+the official's calculation was \emph{correct}. This is an important
+distinction for you to make.)
+
+Solution
+
+There are several approaches to take. Argue for yours.
+
+If you came to the conclusion that the distribution was
+right-skewed, you can say that the sensible "normal level" is
+the median, and therefore the official did the right thing. Using
+the mean would have been the wrong thing.
+
+If you thought the distribution was bimodal, you can go a couple
+of ways: (i) it makes no sense to use any measure of location for
+"normal" (in fact, the mean rainfall is almost in that low-frequency bar,
+and so is not really a "normal level" at all). Or, (ii) it looks
+as if the years split into two kinds: low-rainfall years with
+around 15 inches, and high-rainfall years with more than 25
+inches. Evidently 1997 was a high-rainfall year, but 29.7 inches
+was not especially high for a high-rainfall year, so the
+official's statement was an exaggeration. (I think (ii) is more
+insightful than (i), so ought to get more points.)
+
+You could even also take a more conspiratorial approach and say
+that the official was trying to make 1997 look like a freak year,
+and picked the measure of location that made 1997 look more
+unusual. 
+
+"Normal level" here has nothing to do with a normal
+\emph{distribution}; for this to make sense, the official would
+have needed to say something like "normal shape". This is why
+language skills are also important for a statistician to have.
+
+
+$\blacksquare$
+
+
+(a) Do you think that the official was right to use the word
+"unprecedented" to describe the 1997 rainfall? Justify your answer
+briefly. 
+
+Solution
+
+"Unprecedented" means "never seen before" or "never having
+happened or existed in the past".xxx tufte::margin_note{Searching for
+\emph{define} followed by a word is a good way to find out
+exactly what a word means, if you are not sure, but you should at least say where you got the definition from if you had to look it up.} That came out of my head; [this link](https://www.dictionary.com/browse/unprecedented) has a very similar "never before known or experienced").
+
+If you look back at your histogram, there are several years that
+had over about 30 inches of rain: five or six, depending on your
+histogram. One of them was 1997, but there were others too, so
+1997 was in no way "unprecedented". 
+
+Another approach that you have seen is to `View` your dataframe:
+
+```{r, eval=FALSE}
+View(rain)
+```
+
+That will come out as a  separate tab in your R Studio and you can look at it (yourself; it won't appear in the Preview). You can look at the 1997 rainfall (29.69 inches) and count how many were bigger than that, 4 of them. Or, save yourself some effortxxx tufte::margin_note{When you have a computer at your disposal, it's worth taking a few minutes to figure out how to use it to make your life easier.} and sort the rainfall values in descending order (with the biggest one first), by clicking on the little arrows next to Rainfall (twice). Mine looks like this:
+
+![](Screenshot_2020-09-11_15-17-51.png){height=50%}
+
+Later, we learn how to sort in code, which goes like this (to sort highest first):
+
+```{r}
+rain %>% arrange(desc(Rainfall))
+``` 
+
+
+A more sophisticated way that we learn later:
+
+```{r}
+rain %>% summarize(max=max(Rainfall))
+```
+
+This is greater than the rainfall for 1997, ruling out "unprecedented".
+
+
+1997 was only the \emph{fifth} highest rainfall, and two of the
+higher ones were also in the 1990s. Definitely not
+"unprecedented". The official needs to get a new dictionary!
+
+
+$\blacksquare$
+
 
 
 
