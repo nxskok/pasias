@@ -1,0 +1,164 @@
+\# xxx title here
+
+ Take your right hand, and stretch the fingers out as far as
+you can. The distance between the tip of your thumb and the tip of
+your little (pinky) finger is your handspan. The students in a
+Statistics class at Penn State measured their handspans and also
+whether they identified as male or female. The data are at
+\url{http://ritsokiguess.site/datafiles/STAC32/handspan.txt}, with handspans
+measured in inches.  Thinking of these as a random sample of all
+possible students, is it true that males have a larger mean handspan
+than females? This is what we will explore.
+
+\bP
+  \p Read in and display (some of) the data.
+  
+  \bS
+    This is a delimited (by spaces) file, so:
+    
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/handspan.txt"
+span <- read_delim(my_url, " ")
+span
+```     
+  
+  \eS
+  
+  \p Make a suitable graph of the two columns.
+  
+  \bS
+    One quantitative variable and one categorical one, so a boxplot:
+    
+```{r}
+ggplot(span, aes(x=sex, y=handspan)) + geom_boxplot()
+```     
+  \eS
+  
+  \p Run a suitable two-sample $t$-test to address the # xxx title here
+
+
+  of interest. What do you conclude, in the context of the data?
+  
+  \bS
+    We are trying to show that males have a \emph{larger} mean
+    handspan, so we need an \texttt{alternative}. To see which: there
+    are two sexes, F and M in that order, and we are trying to show
+    that F is less than M:
+    
+```{r}
+t.test(handspan~sex, data=span, alternative="less")
+```     
+
+The P-value is very small, so there is no doubt that males have larger
+average handspans than females.
+  \eS
+  
+  \p Obtain a 90\% confidence interval for the difference
+  in mean handspan between males and females. Do you need to run
+  any more code? Explain briefly.
+  
+  \bS
+A confidence interval is two-sided, so we have to re-run the test
+without the \texttt{alternative} to make it two-sided. Note also that
+we need a 90\% interval, which is different from the default 95\%, so
+we have to ask for that too:
+
+```{r}
+t.test(handspan~sex, data=span, conf.level=0.90)
+``` 
+
+The interval is $-2.93$ to $-2.15$, \emph{which you should say}. It
+would be even better to say that males have a mean handspan between
+2.15 and 2.93 inches larger than that of females. You also need to round off your answer: the data are 
+given to 0 or 1 decimals, so your interval should be given to 1 or 2 decimals (since the confidence interval is for a mean). 
+
+On a # xxx title here
+
+ like this, the grader is looking for three things: 
+
+- getting the output
+- saying what the interval is
+- rounding it to a suitable number of decimals. 
+
+Thus, getting the output alone is only one out of three things.
+  \eS
+  
+  \p Explain briefly why you might have some concerns about the
+  validity of the $t$-tests you ran in this # xxx title here
+
+. Or, if you don't have any concerns, explain briefly why that is.
+  
+  \bS
+    The major assumption here is that the male and female handspans
+    have (approximate) normal distributions. The boxplots we drew
+    earlier both had low-end outliers, so the normality is
+    # xxx title here
+
+able. 
+    
+  Also, say something about the sample sizes and whether or not you think they are large enough to be helpful.
+
+How big are our sample sizes?
+
+```{r}
+span %>% count(sex)
+```
+
+    
+  My suspicion is that we are saved by two things: the sample sizes
+    are large enough for the central limit theorem to help us, and in
+    any case, the conclusion is so clear that the assumptions can
+    afford to be off by a bit. 
+    
+    
+  Extra: one way to think about whether we should be concerned about
+    the lack of normality is to use the \emph{bootstrap} to see what
+    the sampling distribution of the sample mean might look like for males and for females. (This is the stuff in Lecture 5a.) The
+    way this works is to sample from each distribution \emph{with
+      replacement}, work out the mean of each sample, then repeat many
+    times, once for the females and once for the males.
+    
+To start with the females, the first thing to do is to grab *only* the rows containing the females. This, using an idea from Lecture 5a that we see again properly later, is `filter`:
+
+```{r}
+span %>% filter(sex=="F") -> females
+females
+```
+
+There are 103 females. From these we need to take a "large" number of bootstrap samples to get a sense of how the mean handspan of the females varies:
+
+```{r}
+set.seed(457299)
+rerun(1000, sample(females$handspan, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() -> d
+```
+
+
+
+Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:
+
+```{r}
+ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
+```
+
+I don't know what you think of this. There are a few more extreme values than I would like, and
+it looks otherwise a bit left-skewed to me. But maybe I  am worrying too much.
+
+The males one works exactly the same way:
+
+```{r}
+span %>% filter(sex=="M") -> males
+rerun(1000, sample(males$handspan, replace = TRUE)) %>% 
+  map_dbl(~mean(.)) %>% 
+  enframe() -> d
+ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
+```
+
+There is a similar story here. I think these are good enough overall, and so I am happy with the two-sample $t$-test, but it is not as clear-cut as I was expecting.
+
+
+\eS
+  
+  
+\eP
