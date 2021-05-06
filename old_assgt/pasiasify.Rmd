@@ -15,7 +15,16 @@ v %>%
   str_replace_all("\\\\endnote", "xxx tufte margin note") %>% 
   str_replace_all("\\\\bP", "") %>% 
   str_replace_all("\\\\eP", "") %>% 
-  str_replace_all("\\\\p", "(a)") %>% 
+  str_replace_all(" *\\\\p", "(a)") %>% # count these?
+  str_replace_all("\\\\bS", "Solution\n") %>% 
+  str_replace_all("\\\\eS", "\n$\\\\blacksquare$\n") %>% 
+  str_replace_all("^ +", "") %>% 
   writeLines("xxx.Rmd")
+```
+
+add appropriate library for testing, eg
+
+```{r}
+library(tidyverse)
 ```
 
