@@ -20,7 +20,13 @@ to_add
 ```
 
 ```{r}
-sample(to_add, 5)
+sample(to_add, 10) %>% 
+  enframe(name = NULL) %>% 
+  rowwise() %>% 
+  mutate(file = list(readLines(value))) %>% 
+  mutate(head = list(head(file, 2))) %>% 
+  select(value, head) %>% 
+  unnest(head) %>% View()
 ```
 
 things to edit
