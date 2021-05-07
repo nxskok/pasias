@@ -1,142 +1,152 @@
 ## xxx title here
 
- The Wade Tract in Thomas County, Georgia, is an old-growth forest of longleaf pine trees. It has survived in a relatively undisturbed state since before settlements of the area by Europeans. For each tree in the tract, researchers measured the diameter at breast height. This is a standard measure in forestry: it is defined as the height of the tree at 4.5 feet above the ground.xxx tufte::margin_note{The height of a typical human breast off the ground. Men have a breast too, you know.} They are interested in the mean diameter at breast height of the trees in this tract. These values are in [http://ritsokiguess.site/datafiles/STAC32/treediameter.csv](http://ritsokiguess.site/datafiles/STAC32/treediameter.csv). The diameters are measured in centimetres.
-The easiest way to get the URL is to *right*-click on the blue text and select Copy URL. (If you copy and paste the actual text you might end up with extra spaces, especially if the printed URL goes over two lines.)
+ You are designing a study to test the null hypothesis that a population mean is 0 against the alternative hypothesis that it is greater than 0. Assume that the population SD is $\sigma=15$. It is important to detect the alternative $\mu=2$; that is, we want to design the study so that most of the time the null hypothesis would be (correctly) rejected if in fact $\mu=2$. A one-sample $t$-test will be used, and the data values are assumed to have a normal distribution.
 
 
 
-(a)[2] Read in and display (some of) the data.
+(a) Use simulation to estimate the power of this test when the sample size is 100. Use $\alpha=0.05$.
 
 Solution
 
 
-The obvious way is this:
-
-```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
-trees <- read_csv(my_url)
-trees
+```{r, echo=FALSE}
+set.seed(457299)
 ```
 
-Call the data frame what you like, though it is better to use a name that tells you what the dataframe contains (rather than something like `mydata`). 
-
-Extra 1: there is only one column, so you can pretend the columns are separated by anything at all. Thus you could use this:
+This is `rerun`. Use at least 1000 simulations (more, if you're willing to wait for it). In `rnorm`, the sample size is first, then the (true) population mean, then the (assumed) population SD:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
-trees <- read_delim(my_url, " ")
-trees
+rerun(1000, rnorm(100, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-or even this:
+The power is (estimated as) a disappointing 0.361. Your answer won't (most likely) be the same as this, but it should be somewhere close. I would like to see you demonstrate that you know what power is, for example "if the population mean is actually 2, the null hypothesis $H_0: \mu = 0$, which is wrong, will only be rejected about 36% of the time".xxx tufte::margin_note{This is why I called my result ``disappointing''. I would like to reject a lot more of the time than this, but, given that the truth was not very far away from the null given the (large) population SD, I can't. See Extra 1.}
+
+The test we are doing is one-sided, so you need the `alternative` in there. If you omit it, you'll have the answer to a different problem:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
-trees <- read_table(my_url)
-trees
+rerun(1000, rnorm(100, 2, 15)) %>% 
+map(~t.test(., mu=0)) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-Extra 2: you might be wondering how they measure the diameter without doing something like drilling a hole through the tree. They don't actually measure the diameter at all. What they measure is the *circumference* of the tree, which is easy enough to do with a tape measure. Longleaf pines are usually near circular, so you get the diameter by taking the circumference and dividing by $(a)i$. [This City of Portland website](https://www.portlandoregon.gov/trees/article/424017) shows you how it's done.
+This is the probability that you reject $H_0: \mu=0$ in favour of $H_a: \mu \ne 0$. This is smaller, because the test is "wasting effort" allowing the possibility of rejecting when the sample mean is far enough *less* than zero, when most of the time the samples drawn from the true distribution have mean greater than zero. (If you get a sample mean of 2.5, say, the P-value for a one-sided test will be smaller than for a two-sided one.)
+
+Extra 1:
+
+This low power of 0.361 is because the population SD is large relative to the kind of difference from the null that we are hoping to find. To get a sense of how big the power might be, imagine you draw a "typical" sample from the true population: it will have a sample mean of 2 and a sample SD of 15, so that $t$ will be about
+
+```{r}
+(2-0)/(15/sqrt(100))
+```
+
+You won't reject with this ($t$ would have to be bigger than 2), so in the cases where you *do* reject, you'll have to be more lucky: you'll need a sample mean bigger than 2, or a sample SD smaller than 15. So the power won't be very big, less than 0.5, because about half the time you'll get a test statistic less than 1.33 and about half the time more, and not all of *those* will lead to rejection.
+
+Extra 2:
+
+This is exactly the situation where `power.t.test` works, so we can get the exact answer (you need all the pieces):
+
+```{r}
+power.t.test(n=100, delta=2-0, sd=15, type="one.sample", 
+alternative = "one.sided")
+```
+
+Your answer, from 1000 simulations, should be within about 3 percentage points of that. (Mine was only about 1 percentage point off.)
 
 
 $\blacksquare$
 
 
-(a) Make a suitable plot of your dataframe.
+(a) Again by using simulation, estimate how large a sample size would be needed to obtain a power of 0.80. Show and briefly explain your process.
 
 Solution
 
 
-One quantitative variable, so a histogram. Choose a sensible number of bins. There are 40 observations, so a number of bins up to about 10 is good. Sturges' rule says 6 since $2^6=64$:
+The point of this one is the process as well as the final answer, so you need to show and justify what you are doing. Showing only the final answer *does not* show that you know how to do it. The *whole point* of this one is to make mistakes and fix them!
 
-```{r}
-ggplot(trees, aes(x=diameter)) + geom_histogram(bins=6)
+The simulation approach does not immediately give you a sample size for fixed power, so what you have to do is to try different sample sizes until you get one that gives a power close enough to 0.80. You have to decide what "close enough" means for you, given that the simulations have randomness in them. I'm going to use 10,000 simulations for each of my attempts, in the hope of getting a more accurate answer.
+
+First off, for a sample size of 100, the power was too small, so the answer had better be bigger than 100. I'll try 200. For these, copy and paste the code, changing the sample size each time:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(200, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-Extra 1: comments come later, but you might care to note (if only for yourself) that the distribution is a little skewed to the right, or, perhaps better, has *no* left tail at all. You might even observe that diameters cannot be less than 0 (they are measurements), and so you might expect a skew away from the limit. 
+A sample size of 200 isn't big enough yet. I'll double again to 400:
 
-After you've looked at the $t$ procedures for these data, we'll get back to the shape. 
-
-Extra 2: later we look at a more precise tool for assessing normality, the normal quantile plot, which looks like this:
-
-```{r}
-ggplot(trees, aes(sample=diameter)) + stat_qq() + stat_qq_line()
+```{r, cache=TRUE}
+rerun(10000, rnorm(400, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-If the data comes from a normal distribution, the points should follow the straight line, at least approximately. Here, most of the points do, except for the points on the left, which veer away upwards from the line: that is, the highest values, on the right, are about right for a normal distribution, but the lowest values, on the left, *don't go down low enough*.xxx tufte::margin_note{They cannot go down far enough, because they can't go below zero.}
-Thus, the problem with normality is not the long tail on the right, but the short one on the left. It is hard to get this kind of insight from the histogram, but at the moment, it's the best we have.
+Getting closer. 400 is too big, but closer than 200. 350?
 
-The big problems, for things like $t$-tests that depend on means, is stuff like outliers, or long tails, with extreme values that might distort the mean. Having short tails, as the left tail here, will make the distribution look non-normal but won't cause any problems for the $t$-tests.
+```{r, cache=TRUE}
+rerun(10000, rnorm(350, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
 
+Close! I reckon you could call that good (see below), or try again with a sample size a bit less than 350:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(340, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+340 is definitely too small:
+
+```{r, cache=TRUE}
+rerun(10000, rnorm(347, 2, 15)) %>% 
+map(~t.test(., mu=0, alternative = "greater")) %>% 
+map_dbl("p.value") -> pvals
+tibble(pvals) %>% count(pvals<=0.05)
+```
+
+This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get.xxx tufte::margin_note{If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.} This is the middle 95% of that distribution.
+
+```{r}
+qbinom(c(0.025,0.975), 10000, 0.8)
+```
+
+Anything between those limits is the kind of thing we might get by chance, so simulation doesn't let us distinguish between 347 and 350 as the correct sample size. Unless we do more than 10,000 simulations, of course!
+
+If you stuck with 1000 simulations each time, these are the corresponding limits:
+
+```{r}
+qbinom(c(0.025,0.975), 1000, 0.8)
+```
+
+and any sample sizes that produce an estimated power between these are as accurate as you'll get. (Here you see the advantage of doing more simulations.)
+
+If you've been using 10,000 simulations each time like me, you'll have noticed that these actually take a noticeable time to run. This is why coders always have a coffee or something else to sip on while their code runs; coders, like us, need to see the output to decide what to do next. Or you could install the [beepr package](https://www.r-project.org/nosvn/pandoc/beepr.html), and get some kind of sound when your simulation finishes, so that you'll know to get off Twitterxxx tufte::margin_note{Or Reddit or Quora or whatever your favourite time-killer is.} and see what happened. There are also packages that will send you a text message or will send a notification to all your devices.
+
+What I want to see from you here is some kind of trial and error that proceeds logically, sensibly increasing or decreasing the sample size at each trial, until you have gotten reasonably close to power 0.8.
+
+Extra: once again we can figure out the correct answer:
+
+```{r}
+power.t.test(power = 0.80, delta=2-0, sd=15, type="one.sample", 
+alternative = "one.sided")
+```
+
+This does not answer the question, though, since you need to do it by simulation with trial and error. If you want to do it this way, do it at the *end* as a check on your work; if the answer you get this way is very different from the simulation results, that's an invitation to check what you did.
+
+350 actually *is* the correct answer. But you will need to try different sample sizes until you get close enough to a power of 0.8; simply doing it for $n=350$ is not enough, because how did you know to try 350 and not some other sample size?
 
 
 $\blacksquare$
-
-
-(a)[3] Obtain a 95% confidence interval for the mean diameter.
-
-Solution
-
-
-This is `t.test`, but with `conf.level` to get the interval (and then you ignore the P-value):
-
-```{r}
-with(trees, t.test(diameter))
-```
-
-The mean diameter of a longleaf pine (like the ones in this tract) is between 21.6 and 33.0 centimetres.
-
-If you prefer, do it this way:
-```{r}
-t.test(trees$diameter)
-```
-
-
-You need to *state the answer* and *round it off suitably*. The actual diameters in the data have one decimal place, so you can give the same accuracy for the CI, or *at most* two decimals (so 21.63 to 32.95 cm would also be OK).xxx tufte::margin_note{One more decimal place than the data is the maximum you give in a CI.} Giving an answer with more decimals is something you cannot possibly justify. Worse even than giving too many decimals is not writing out the interval at all. *Never* make your reader find something in output. If they want it, tell them what it is. 
-
-Thus, here, one mark for the output, one more for saying what the interval is, and the third if you give the interval with a sensible number of decimals.
-
-
-$\blacksquare$
-
-
-(a)[4] Based on what you have seen so far, would you expect to reject a null hypothesis that the population mean diameter (of all longleaf pines like these) is 35 cm? Explain briefly. Then, carry out the test (against a two-sided alternative) and explain briefly whether you were right.
-
-Solution
-
-
-The logic is that "plausible" values for the population mean, ones you believe, are inside the interval, and implausible ones that you don't believe are outside. Remember that the interval is your best answer to "what is the population mean", and 35 is outside the interval so you don't think the population mean is 35, and thus you would reject it.
-
-Are we right? Take out the `conf.level` and put in a `mu`:
-
-```{r}
-with(trees, t.test(diameter, mu = 35))
-```
-
-The P-value is less than our $\alpha$ of 0.05, so we would indeed reject a mean of 35 cm (in favour of the mean being different from 35).
-
-
-$\blacksquare$
-
-
-(a)[3] Would you expect 35 cm to be in a *99%* confidence interval for the mean diameter? Explain briefly, and then see if you were right.
-
-Solution
-
-
-The P-value is less than 0.01 (as well as being less than 0.05), so, in the same way that 35 was outside the 95% interval, it should be outside the 99% CI also. Maybe not by much, though, since the P-value is only just less than 0.01:
-
-```{r}
-with(trees, t.test(diameter, conf.level = 0.99))
-```
-
-Indeed so, outside, but only just.
-
-
-$\blacksquare$
-
-
-part about assessing normality?
 
 
 
