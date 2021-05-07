@@ -1,85 +1,142 @@
----
-title: "Comparing Skin Creams"
-author: "Ken Butler"
-date: "10/30/2019"
-output: html_document
----
+## xxx title here
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+ The Wade Tract in Thomas County, Georgia, is an old-growth forest of longleaf pine trees. It has survived in a relatively undisturbed state since before settlements of the area by Europeans. For each tree in the tract, researchers measured the diameter at breast height. This is a standard measure in forestry: it is defined as the height of the tree at 4.5 feet above the ground.xxx tufte::margin_note{The height of a typical human breast off the ground. Men have a breast too, you know.} They are interested in the mean diameter at breast height of the trees in this tract. These values are in [http://ritsokiguess.site/datafiles/STAC32/treediameter.csv](http://ritsokiguess.site/datafiles/STAC32/treediameter.csv). The diameters are measured in centimetres.
+The easiest way to get the URL is to *right*-click on the blue text and select Copy URL. (If you copy and paste the actual text you might end up with extra spaces, especially if the printed URL goes over two lines.)
 
-## Introduction
 
-Is a new skin cream superior to others on the market? To be better, a skin cream should remove more skin blemishes from the person it is tested on. This report describes a study in which a new skin cream, labelled `New`, was compared with the best crean currently on the market, labelled `Old`, and a placebo cream, `Control`. Our aim is to compare these three creams in terms of the numbers of blemishes they remove. We hope to see that the new skin cream is significantly better than the others at removing skin blemishes. 
 
-## Analysis
+(a)[2] Read in and display (some of) the data.
 
-### Introduction
+Solution
 
-We need to load a couple of packages first:
+
+The obvious way is this:
 
 ```{r}
-library(tidyverse)
-library(smmr)
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_csv(my_url)
+trees
 ```
 
+Call the data frame what you like, though it is better to use a name that tells you what the dataframe contains (rather than something like `mydata`). 
 
-Thirty subjects were randomly assigned to one of the three creams, and the number of blemishes removed from each subject was recorded. The data are as follows, being separated in the data file by single spaces:
+Extra 1: there is only one column, so you can pretend the columns are separated by anything at all. Thus you could use this:
 
 ```{r}
-my_url="http://www.utsc.utoronto.ca/~butler/assgt_data/cosmetic-wide.txt"
-cosmetic=read_delim(my_url, " ")
-cosmetic
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_delim(my_url, " ")
+trees
 ```
 
-Three of the 30 subjects dropped out before the study was complete; these are the missing values in the data set above.
-
-### Tidying
-
-The data in the current format are not suitable for analysis because they are not "tidy": the three columns are all numbers of blemishes under different conditions, and the column names are not variables themselves but levels of a categorical variable that says which skin cream a subject received. We need the numbers of blemishes in *one* column, with a second column saying which treatment (cream) the subject received.
-
-That is to say, we need to make the data set *longer* (and to remove the missing values):
+or even this:
 
 ```{r}
-cosmetic %>%
-pivot_longer(everything(), names_to="treatment", 
-values_to="blemishes", values_drop_na=T) -> cosmetic_tidy
-cosmetic_tidy
+my_url <- "http://ritsokiguess.site/datafiles/STAC32/treediameter.csv"
+trees <- read_table(my_url)
+trees
 ```
 
-This is now tidy, and we can work with it.
+Extra 2: you might be wondering how they measure the diameter without doing something like drilling a hole through the tree. They don't actually measure the diameter at all. What they measure is the *circumference* of the tree, which is easy enough to do with a tape measure. Longleaf pines are usually near circular, so you get the diameter by taking the circumference and dividing by $(a)i$. [This City of Portland website](https://www.portlandoregon.gov/trees/article/424017) shows you how it's done.
 
-### Exploratory analysis
 
-We begin by plotting the data. With one quantitative and one categorical variable, a boxplot is suitable:
+$\blacksquare$
+
+
+(a) Make a suitable plot of your dataframe.
+
+Solution
+
+
+One quantitative variable, so a histogram. Choose a sensible number of bins. There are 40 observations, so a number of bins up to about 10 is good. Sturges' rule says 6 since $2^6=64$:
 
 ```{r}
-ggplot(cosmetic_tidy, aes(x=treatment, y=blemishes)) + geom_boxplot()
+ggplot(trees, aes(x=diameter)) + geom_histogram(bins=6)
 ```
 
-The New and Old groups both have upper outliers, with the one in the New group being especially far out. As well, the Control group distribution appears skewed to the right (long upper whisker) and more variable than the other groups. 
+Extra 1: comments come later, but you might care to note (if only for yourself) that the distribution is a little skewed to the right, or, perhaps better, has *no* left tail at all. You might even observe that diameters cannot be less than 0 (they are measurements), and so you might expect a skew away from the limit. 
 
-As far as medians are concerned, the New cream removed more blemishes on average for our data, with the Old and Control creams being fairly similar. But the real question of interest is whether this difference *generalizes*: that is to say, whether that applies to *all* individuals that apply these creams, rather than just the ones we happened to look at. To assess that, we need a hypothesis test.
+After you've looked at the $t$ procedures for these data, we'll get back to the shape. 
 
-### Inference
-
-To compare three groups, we need to use something like analysis of variance. This assumes two things: approximate normality within the groups, and approximately equal spreads between the groups. We have already noted that equal spreads is questionable (the Control group appears more spread out than the others), and because of the outliers, normality is questionable also. The groups are small (10, 9, and 8 observations) so it is necessary to require that the data are closer to normal than this (the Central Limit Theorem will not help much).
-
-With that in mind, the most sensible test here seems to be Mood's median test:
+Extra 2: later we look at a more precise tool for assessing normality, the normal quantile plot, which looks like this:
 
 ```{r}
-median_test(cosmetic_tidy, blemishes, treatment)
+ggplot(trees, aes(sample=diameter)) + stat_qq() + stat_qq_line()
 ```
 
-This tells us that the three groups do not all have the same median. We therefore follow up with pairwise median tests to find out which groups differ:
+If the data comes from a normal distribution, the points should follow the straight line, at least approximately. Here, most of the points do, except for the points on the left, which veer away upwards from the line: that is, the highest values, on the right, are about right for a normal distribution, but the lowest values, on the left, *don't go down low enough*.xxx tufte::margin_note{They cannot go down far enough, because they can't go below zero.}
+Thus, the problem with normality is not the long tail on the right, but the short one on the left. It is hard to get this kind of insight from the histogram, but at the moment, it's the best we have.
+
+The big problems, for things like $t$-tests that depend on means, is stuff like outliers, or long tails, with extreme values that might distort the mean. Having short tails, as the left tail here, will make the distribution look non-normal but won't cause any problems for the $t$-tests.
+
+
+
+$\blacksquare$
+
+
+(a)[3] Obtain a 95% confidence interval for the mean diameter.
+
+Solution
+
+
+This is `t.test`, but with `conf.level` to get the interval (and then you ignore the P-value):
 
 ```{r}
-pairwise_median_test(cosmetic_tidy, blemishes, treatment)
+with(trees, t.test(diameter))
 ```
 
-Looking at the adjusted P-values in the last column, we find that *none* of the groups differ significantly! Having said that, we note that the New-Old comparison *almost* reaches significance, but the comparison with `Control` is not significant in either case.
+The mean diameter of a longleaf pine (like the ones in this tract) is between 21.6 and 33.0 centimetres.
 
-## Conclusion
+If you prefer, do it this way:
+```{r}
+t.test(trees$diameter)
+```
 
-The analysis shows that there is at least one significant difference between the creams, but the pairwise median tests don't (strictly) reveal anything significant. I think the fairest conclusion to draw here is that `New` is almost significantly better than `Old` but not compared to `Control`. So we have a suggestion that `New` is best, but not anything concrete. I think that the `Control` measurements are too variable (and there are too few of them) to be able to make a more concrete conclusion. My recommendation, therefore, is that (given we appear to be stuck with a Mood's median test) that we should have collected more data. This would have enabled a clearer conclusion. This is in some ways not surprising, because we know Mood's median test does not use the data very efficiently (just above/below the overall median, rather than the actual value). If an ANOVA of some kind had been appropriate here, we would have an easier time with the conclusions.
+
+You need to *state the answer* and *round it off suitably*. The actual diameters in the data have one decimal place, so you can give the same accuracy for the CI, or *at most* two decimals (so 21.63 to 32.95 cm would also be OK).xxx tufte::margin_note{One more decimal place than the data is the maximum you give in a CI.} Giving an answer with more decimals is something you cannot possibly justify. Worse even than giving too many decimals is not writing out the interval at all. *Never* make your reader find something in output. If they want it, tell them what it is. 
+
+Thus, here, one mark for the output, one more for saying what the interval is, and the third if you give the interval with a sensible number of decimals.
+
+
+$\blacksquare$
+
+
+(a)[4] Based on what you have seen so far, would you expect to reject a null hypothesis that the population mean diameter (of all longleaf pines like these) is 35 cm? Explain briefly. Then, carry out the test (against a two-sided alternative) and explain briefly whether you were right.
+
+Solution
+
+
+The logic is that "plausible" values for the population mean, ones you believe, are inside the interval, and implausible ones that you don't believe are outside. Remember that the interval is your best answer to "what is the population mean", and 35 is outside the interval so you don't think the population mean is 35, and thus you would reject it.
+
+Are we right? Take out the `conf.level` and put in a `mu`:
+
+```{r}
+with(trees, t.test(diameter, mu = 35))
+```
+
+The P-value is less than our $\alpha$ of 0.05, so we would indeed reject a mean of 35 cm (in favour of the mean being different from 35).
+
+
+$\blacksquare$
+
+
+(a)[3] Would you expect 35 cm to be in a *99%* confidence interval for the mean diameter? Explain briefly, and then see if you were right.
+
+Solution
+
+
+The P-value is less than 0.01 (as well as being less than 0.05), so, in the same way that 35 was outside the 95% interval, it should be outside the 99% CI also. Maybe not by much, though, since the P-value is only just less than 0.01:
+
+```{r}
+with(trees, t.test(diameter, conf.level = 0.99))
+```
+
+Indeed so, outside, but only just.
+
+
+$\blacksquare$
+
+
+part about assessing normality?
+
+
+

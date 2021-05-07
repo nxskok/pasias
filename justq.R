@@ -4,6 +4,7 @@ library(tidyverse)
 # extract q from just one file
 
 extract_q <- function(base) {
+  print(base)
   fname <- str_c(base, ".Rmd")
   lines <- readLines(fname)
   lines %>% enframe() %>% 
