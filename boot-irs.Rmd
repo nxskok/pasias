@@ -1,4 +1,4 @@
-## xxx title here
+## Bootstrapping the IRS data
 
  You might recall the IRS data from when we were learning about the sign test. The idea was that we wanted to see how long "on average" it took people to fill out a tax form. The data are in \url{http://ritsokiguess.site/datafiles/irs.txt}.
 
@@ -23,19 +23,12 @@ One column called `Time`.
 $\blacksquare$
 
 
-(a) Obtain a bootstrap distribution of the sample *median*.
+(b) Obtain a bootstrap distribution of the sample *median*.
 
 Solution
 
 
 The lecture notes use the exact same dataset, so you can borrow ideas from there:
-
-```{r}
-rerun(1000, sample(irs$Time, replace = TRUE)) %>% 
-map_dbl(~median(.)) -> medians
-```
-
-Extra: if you prefer `rowwise` to `map`, you can do it that way also. I didn't show you this way in class, but you might find it easier to follow. Or not.
 
 Set up a dataframe with one row for each bootstrap sample you're going to draw, 1000 in this case:
 
@@ -69,19 +62,12 @@ As you realize, `bs` stands for "bootstrap". Of course.
 $\blacksquare$
 
 
-(a) Make a suitable graph of the bootstrap distribution of the median. What seems odd about it? Why did that happen? (Hint: use more bins on your plot than usual, like 50.)
+(c) Make a suitable graph of the bootstrap distribution of the median. What seems odd about it? Why did that happen? (Hint: use more bins on your plot than usual, like 50.)
 
 Solution
 
 
-One column of medians. If you did it the first way, make them into a dataframe first:
-
-```{r}
-tibble(median = medians) %>% 
-ggplot(aes(x = median)) + geom_histogram(bins = 50) 
-```
-
-If you followed my second way, the medians are already in a dataframe, so go straight ahead:
+The medians are already in a dataframe, so go straight ahead:
 
 ```{r}
 ggplot(bs, aes(x = my_median)) + geom_histogram(bins = 50)
@@ -90,9 +76,11 @@ ggplot(bs, aes(x = my_median)) + geom_histogram(bins = 50)
 What we are seeing at this resolution is that the distribution is *very* irregular, with funny holes in it, more than you would expect even with this many bins. By way of comparison, the bootstrap distribution of the *mean* looks a lot smoother:
 
 ```{r}
-rerun(1000, sample(irs$Time, replace = TRUE)) %>% 
-map_dbl(~mean(.)) -> means
-tibble(mean = means) %>% ggplot(aes(x = mean)) + geom_histogram(bins = 50)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(irs$Time, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 50)
 ```
 This is somewhat irregular, because we really have too many bins, but there are not nearly so many holes and irregular heights as on the plot for the median. I had you use a lot of bins in this special case because I wanted you to see just how irregular the bootstrapped distribution for the median really was.
 
@@ -104,16 +92,51 @@ What this means is that bootstrapping for medians is odd (it always looks like t
 $\blacksquare$
 
 
-(a) Find 95% percentile and bootstrap-$t$ intervals for the population median.
+(d) Find 95% percentile and bootstrap-$t$ intervals for the population median. (Hint: your dataframe of bootstrapped medians may still be `rowwise`, so you might need to run `ungroup` first.)
 
 Solution
 
 
-The percentile interval comes from the middle 95% of the bootstrap distribution of medians:
+The percentile interval comes from the middle 95% of the bootstrap distribution of medians. The dataframe `bs` is still rowwise, so we have to undo that first to do it the obvious way:
 
 ```{r}
-quantile(medians, c(0.025, 0.975))
+bs %>% 
+  ungroup() %>% 
+  summarize(ci1 = quantile(my_median, 0.025),
+            ci2 = quantile(my_median, 0.975))
 ```
+
+Or, pull out just that column and find the two quantiles of that, for which there are two ways, the base R way:
+
+```{r}
+quantile(bs$my_median, c(0.025, 0.975))
+```
+
+and the slightly odd-looking:
+
+```{r}
+bs %>% pull(my_median) %>% 
+  quantile(c(0.025, 0.975))
+```
+
+All of these get you to the same place. There is even one more:
+
+```{r}
+bs %>% 
+  ungroup() %>% 
+  summarize(ci = quantile(my_median, c(0.025, 0.975)))
+```
+
+This takes advantage of a (newish) behaviour of `summarize`: if your summary is more than one thing, it puts one of the summaries on each row, as if you had done something like this:
+
+```{r}
+bs %>% 
+  ungroup() %>% 
+  summarize(ci = list(quantile(my_median, c(0.025, 0.975)))) %>% 
+  unnest(ci)  
+```
+
+If you had `rowwise` in the back of your mind, you might have tried this. Try it up to but *not* including the `unnest` to see how it works.
 
 For the bootstrap $t$, estimate the population median as the sample median:
 
@@ -125,11 +148,11 @@ med
 get its standard error from the SD of the bootstrap distribution of medians:
 
 ```{r}
-se <- sd(medians)
+se <- sd(bs$my_median)
 se
 ```
 
-then go up and down twice this (or 1.96 if you believe in $z$): (or T)
+then go up and down twice this (or 1.96 if you believe in $z$): 
 
 ```{r}
 med + c(-2, 2)*se
@@ -143,15 +166,6 @@ ci_median(irs, Time)
 ```
 
 This one is actually very close to the bootstrap percentile interval, while the bootstrap $t$ interval is higher at both ends.
-
-
-$\blacksquare$
-
-
-Solution
-
-
-
 
 
 $\blacksquare$
