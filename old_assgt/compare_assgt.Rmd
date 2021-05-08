@@ -20,13 +20,12 @@ to_add
 ```
 
 ```{r}
-sample(to_add, 10) %>% 
+sample(to_add, 20) %>% 
   enframe(name = NULL) %>% 
   rowwise() %>% 
   mutate(file = list(readLines(value))) %>% 
-  mutate(head = list(head(file, 2))) %>% 
-  select(value, head) %>% 
-  unnest(head) %>% View()
+  unnest(file) %>% 
+  filter(str_detect(file, "\\\\question")) %>% View()
 ```
 
 things to edit
