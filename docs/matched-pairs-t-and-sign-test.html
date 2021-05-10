@@ -21,16 +21,18 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 11 Matched pairs t and sign test | Problems and Solutions in Applied Statistics</title>
 
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
@@ -46,26 +48,27 @@ MathJax.Hub.Config({
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -74,9 +77,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -122,10 +125,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
+<li><a href="index.html#introduction">Introduction</a>
+<ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a>
+<ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">1.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">1.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">1.3</span> Reading data from a file</a></li>
@@ -135,7 +140,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file-1"><span class="toc-section-number">1.7</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways-1"><span class="toc-section-number">1.8</span> Reading files different ways</a></li>
 </ul></li>
-<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a>
+<ul>
 <li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
 <li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
@@ -143,7 +149,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a><ul>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a>
+<ul>
 <li><a href="drawing-graphs.html#orange-juice-2"><span class="toc-section-number">3.1</span> Orange juice</a></li>
 <li><a href="drawing-graphs.html#making-soap-2"><span class="toc-section-number">3.2</span> Making soap</a></li>
 <li><a href="drawing-graphs.html#handling-shipments-2"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
@@ -153,7 +160,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.7</span> Handling shipments</a></li>
 <li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.8</span> Rainfall in Davis, California</a></li>
 </ul></li>
-<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a>
+<ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
@@ -169,13 +177,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data-exploration.html#unprecendented-rainfall-1"><span class="toc-section-number">4.13</span> Unprecendented rainfall</a></li>
 <li><a href="data-exploration.html#learning-algebra-1"><span class="toc-section-number">4.14</span> Learning algebra</a></li>
 </ul></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a>
+<ul>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
 </ul></li>
-<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
@@ -187,7 +197,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.9</span> Inferring ice break-up in Nenana</a></li>
 <li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.10</span> Diameters of trees</a></li>
 </ul></li>
-<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
@@ -203,7 +214,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#handspans-of-males-and-females-1"><span class="toc-section-number">7.13</span> Handspans of males and females</a></li>
 <li><a href="two-sample-inference.html#the-anchoring-effect-australia-vs-us-1"><span class="toc-section-number">7.14</span> The anchoring effect: Australia vs US</a></li>
 </ul></li>
-<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
@@ -213,7 +225,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions-1"><span class="toc-section-number">8.7</span> Simulating power for proportions</a></li>
 <li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.8</span> Designing a study to have enough power</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a><ul>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
+<ul>
 <li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -223,7 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li class="has-sub"><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a><ul>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
+<ul>
 <li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -233,7 +247,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="moods-median-test.html#medical-instructions-1"><span class="toc-section-number">10.7</span> Medical instructions</a></li>
 <li><a href="moods-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
+<ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
@@ -249,13 +264,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="matched-pairs-t-and-sign-test.html#the-dentist-and-blood-pressure-1"><span class="toc-section-number">11.13</span> The dentist and blood pressure</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#french-teachers-1"><span class="toc-section-number">11.14</span> French teachers</a></li>
 </ul></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
+<ul>
 <li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
@@ -271,13 +288,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.13</span> Reggae music</a></li>
 <li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.14</span> Watching TV and education</a></li>
 </ul></li>
-<li class="has-sub"><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a><ul>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
+<ul>
 <li><a href="writing-reports.html#atomic-weight-of-carbon-2"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
 <li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
 <li><a href="writing-reports.html#atomic-weight-of-carbon-3"><span class="toc-section-number">14.3</span> Atomic weight of carbon</a></li>
 <li><a href="writing-reports.html#sparrowhawks-1"><span class="toc-section-number">14.4</span> Sparrowhawks</a></li>
 </ul></li>
-<li class="has-sub"><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a><ul>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
+<ul>
 <li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
 <li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
 <li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
@@ -299,7 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.19</span> Feeling the heat</a></li>
 <li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.20</span> Isoflavones</a></li>
 </ul></li>
-<li class="has-sub"><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a><ul>
+<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a>
+<ul>
 <li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
 <li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
 <li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
@@ -325,7 +345,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.23</span> Calories and fat in pizza</a></li>
 <li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.24</span> Where should the fire stations be?</a></li>
 </ul></li>
-<li class="has-sub"><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a><ul>
+<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a>
+<ul>
 <li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
 <li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
 <li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
@@ -335,11 +356,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#salaries-of-mathematicians-1"><span class="toc-section-number">17.7</span> Salaries of mathematicians</a></li>
 <li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students-1"><span class="toc-section-number">17.8</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
+<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
+<ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
+<ul>
 <li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
 <li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
 <li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
@@ -349,17 +372,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="dates-and-times.html#wolves-and-caribou-1"><span class="toc-section-number">19.7</span> Wolves and caribou</a></li>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study-1"><span class="toc-section-number">19.8</span> Dealing with dates in the Worcester Heart Attack study</a></li>
 </ul></li>
-<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a><ul>
+<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
+<ul>
 <li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
 <li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.3</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.4</span> The Collatz sequence</a></li>
 </ul></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
+<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
+<ul>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a><ul>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
+<ul>
 <li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
 <li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
 <li><a href="the-bootstrap.html#comparing-eyesight"><span class="toc-section-number">22.3</span> Comparing eyesight</a></li>
@@ -369,13 +395,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-bootstrap.html#comparing-eyesight-1"><span class="toc-section-number">22.7</span> Comparing eyesight</a></li>
 <li><a href="the-bootstrap.html#bootstrapping-the-irs-data-1"><span class="toc-section-number">22.8</span> Bootstrapping the IRS data</a></li>
 </ul></li>
-<li class="has-sub"><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a><ul>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
+<ul>
 <li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
-<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey-1"><span class="toc-section-number">23.3</span> Estimating proportion in favour from a survey</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.4</span> Bayesian regression</a></li>
+<li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way"><span class="toc-section-number">23.3</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
+<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey-1"><span class="toc-section-number">23.4</span> Estimating proportion in favour from a survey</a></li>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.5</span> Bayesian regression</a></li>
+<li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way-1"><span class="toc-section-number">23.6</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
+<ul>
 <li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
 <li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
 <li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
@@ -397,7 +427,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression.html#who-needs-the-most-intensive-care-1"><span class="toc-section-number">24.19</span> Who needs the most intensive care?</a></li>
 <li><a href="logistic-regression.html#go-away-and-dont-come-back-1"><span class="toc-section-number">24.20</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a>
+<ul>
 <li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
@@ -409,7 +440,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-1"><span class="toc-section-number">25.9</span> How do you like your steak?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data-1"><span class="toc-section-number">25.10</span> How do you like your steak – the data</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a><ul>
+<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a>
+<ul>
 <li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-2"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
@@ -423,7 +455,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data-1"><span class="toc-section-number">26.11</span> Crimes in San Francisco – the data</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play-1"><span class="toc-section-number">26.12</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
+<ul>
 <li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
@@ -433,7 +466,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma-1"><span class="toc-section-number">27.7</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer-1"><span class="toc-section-number">27.8</span> Ovarian cancer</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
+<ul>
 <li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
@@ -447,13 +481,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance-revisited.html#mental-context-1"><span class="toc-section-number">28.11</span> Mental context</a></li>
 <li><a href="analysis-of-variance-revisited.html#trying-on-shirts-1"><span class="toc-section-number">28.12</span> Trying on shirts</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a><ul>
+<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
+<ul>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><span class="toc-section-number">29.3</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy-1"><span class="toc-section-number">29.4</span> Treating leprosy</a></li>
 </ul></li>
-<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
+<ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
@@ -461,7 +497,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">30.5</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1"><span class="toc-section-number">30.6</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
+<ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
@@ -475,7 +512,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#investigating-motor-activity-in-rats-1"><span class="toc-section-number">31.11</span> Investigating motor activity in rats</a></li>
 <li><a href="repeated-measures.html#repeated-measures-with-no-background-1"><span class="toc-section-number">31.12</span> Repeated measures with no background</a></li>
 </ul></li>
-<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
+<ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
 <li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
 <li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
@@ -491,7 +529,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn-1"><span class="toc-section-number">32.13</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender-1"><span class="toc-section-number">32.14</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li class="has-sub"><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a><ul>
+<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
+<ul>
 <li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
 <li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
@@ -501,7 +540,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species-1"><span class="toc-section-number">33.7</span> Similarity of species</a></li>
 <li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh-1"><span class="toc-section-number">33.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li class="has-sub"><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a><ul>
+<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
+<ul>
 <li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
 <li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
 <li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
@@ -513,7 +553,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="k-means-cluster-analysis.html#grouping-similar-cars-1"><span class="toc-section-number">34.9</span> Grouping similar cars</a></li>
 <li><a href="k-means-cluster-analysis.html#rating-beer-1"><span class="toc-section-number">34.10</span> Rating beer</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a><ul>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
+<ul>
 <li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line"><span class="toc-section-number">35.3</span> The Cross-City Line</a></li>
@@ -521,7 +562,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">35.5</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line-1"><span class="toc-section-number">35.6</span> The Cross-City Line</a></li>
 </ul></li>
-<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
+<ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-2"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
 <li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
 <li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
@@ -533,11 +575,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multidimensional-scaling.html#more-beer-please-1"><span class="toc-section-number">36.9</span> More beer please</a></li>
 <li><a href="multidimensional-scaling.html#feeling-similar-again-1"><span class="toc-section-number">36.10</span> Feeling similar, again</a></li>
 </ul></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
+<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
+<ul>
 <li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
 </ul></li>
-<li class="has-sub"><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a><ul>
+<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
+<ul>
 <li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
 <li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
@@ -545,11 +589,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="factor-analysis.html#a-correlation-matrix-1"><span class="toc-section-number">38.5</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution-1"><span class="toc-section-number">38.6</span> Air pollution</a></li>
 </ul></li>
-<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
+<ul>
 <li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
 <li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
-<li><a href="frequency-table-analysis.html#college-plans-1"><span class="toc-section-number">39.3</span> College plans</a></li>
-<li><a href="frequency-table-analysis.html#predicting-voting-1"><span class="toc-section-number">39.4</span> Predicting voting</a></li>
+<li><a href="frequency-table-analysis.html#brand-m-laundry-detergent"><span class="toc-section-number">39.3</span> Brand M laundry detergent</a></li>
+<li><a href="frequency-table-analysis.html#college-plans-1"><span class="toc-section-number">39.4</span> College plans</a></li>
+<li><a href="frequency-table-analysis.html#predicting-voting-1"><span class="toc-section-number">39.5</span> Predicting voting</a></li>
+<li><a href="frequency-table-analysis.html#brand-m-laundry-detergent-1"><span class="toc-section-number">39.6</span> Brand M laundry detergent</a></li>
 </ul></li>
 </ul>
 </div>
@@ -557,11 +604,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="matched-pairs-t-and-sign-test" class="section level1">
+<div id="matched-pairs-t-and-sign-test" class="section level1" number="11">
 <h1><span class="header-section-number">Chapter 11</span> Matched pairs t and sign test</h1>
-<div class="sourceCode" id="cb711"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb711-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb711-2" title="2"><span class="kw">library</span>(smmr)</a></code></pre></div>
-<div id="measuring-body-fat" class="section level2">
+<div class="sourceCode" id="cb708"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb708-1"><a href="matched-pairs-t-and-sign-test.html#cb708-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb708-2"><a href="matched-pairs-t-and-sign-test.html#cb708-2"></a><span class="kw">library</span>(smmr)</span></code></pre></div>
+<div id="measuring-body-fat" class="section level2" number="11.1">
 <h2><span class="header-section-number">11.1</span> Measuring body fat</h2>
 <p>Athletes are concerned with measuring their body fat
 percentage. Two different methods are available: one using ultrasound,
@@ -587,7 +634,7 @@ them. Is there any evidence that normality of differences fails?
 Explain briefly.</p></li>
 </ol>
 </div>
-<div id="throwing-baseballs-and-softballs" class="section level2">
+<div id="throwing-baseballs-and-softballs" class="section level2" number="11.2">
 <h2><span class="header-section-number">11.2</span> Throwing baseballs and softballs</h2>
 <p>Can students throw a baseball farther than a softball? A
 statistics class, containing 24 students, went out to a football field
@@ -612,7 +659,7 @@ it is greater than zero. Obtain a P-value. Your option whether you use
 <code>smmr</code> or not.</p></li>
 </ol>
 </div>
-<div id="throwing-baseballs-and-softballs-again" class="section level2">
+<div id="throwing-baseballs-and-softballs-again" class="section level2" number="11.3">
 <h2><span class="header-section-number">11.3</span> Throwing baseballs and softballs, again</h2>
 <p>Previously, you carried out a sign test to determine
 whether students could throw a baseball farther than a softball. This
@@ -636,7 +683,7 @@ trial-and-error procedure that determines whether a number of
 possible medians are inside or outside the CI.</p></li>
 </ol>
 </div>
-<div id="changes-in-salary" class="section level2">
+<div id="changes-in-salary" class="section level2" number="11.4">
 <h2><span class="header-section-number">11.4</span> Changes in salary</h2>
 <p>A company is growing and would like to attract more
 employees. The company would like to advertise that salaries there are
@@ -660,7 +707,7 @@ will enable the company to assess this, and tell the CEO which piece
 of the output they should look at.</p></li>
 </ol>
 </div>
-<div id="body-fat-revisited" class="section level2">
+<div id="body-fat-revisited" class="section level2" number="11.5">
 <h2><span class="header-section-number">11.5</span> Body fat revisited</h2>
 <p>Athletes are concerned with measuring their body fat
 percentage. Two different methods are available: one using ultrasound,
@@ -683,7 +730,7 @@ measuring body fat. (Use <code>smmr</code> if you wish.) What do you
 conclude, as ever in the context of the data?</p></li>
 </ol>
 </div>
-<div id="the-dentist-and-blood-pressure" class="section level2">
+<div id="the-dentist-and-blood-pressure" class="section level2" number="11.6">
 <h2><span class="header-section-number">11.6</span> The dentist and blood pressure</h2>
 <p>Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist’s appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolic) blood pressure measured while they are in a dentist’s waiting room, and then again one hour after their appointment is finished.</p>
 <p>The data are in .</p>
@@ -696,7 +743,7 @@ conclude, as ever in the context of the data?</p></li>
 <li><p>Discuss briefly which of your two tests is the more appropriate one to run.</p></li>
 </ol>
 </div>
-<div id="french-teachers" class="section level2">
+<div id="french-teachers" class="section level2" number="11.7">
 <h2><span class="header-section-number">11.7</span> French teachers</h2>
 <p>Twenty high-school French teachers attended a summer institute to improve their French skills. At the beginning of their session, each teacher took a listening test (to test their understanding of spoken French). After 4 weeks of immersion in French, each teacher took a similar listening test again. (The actual French spoken in the two tests was different, so simply taking the first test should not improve the score in the second one; the tests were otherwise similar.) The maximum score on each test was 36, and a higher score is better. The data are <a href="http://ritsokiguess.site/datafiles/frenchtest.txt">here</a>. (Right-click on the link, select “copy link address”, and then paste that URL into R Studio.) The data values are separated by <em>tabs</em>.</p>
 <p>The data file has three columns:</p>
@@ -718,7 +765,7 @@ conclude, as ever in the context of the data?</p></li>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="measuring-body-fat-1" class="section level2">
+<div id="measuring-body-fat-1" class="section level2" number="11.8">
 <h2><span class="header-section-number">11.8</span> Measuring body fat</h2>
 <p>Athletes are concerned with measuring their body fat
 percentage. Two different methods are available: one using ultrasound,
@@ -779,16 +826,16 @@ rows and columns.</li>
 <p>Solution</p>
 <p>This kind of thing. Since you looked at the data (didn’t you?),
 you’ll know that the values are separated by single spaces:</p>
-<div class="sourceCode" id="cb713"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb713-1" title="1">myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bodyfat.txt&quot;</span></a>
-<a class="sourceLine" id="cb713-2" title="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb710"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb710-1"><a href="matched-pairs-t-and-sign-test.html#cb710-1"></a>myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bodyfat.txt&quot;</span></span>
+<span id="cb710-2"><a href="matched-pairs-t-and-sign-test.html#cb710-2"></a>bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb715"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb715-1" title="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb712"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb712-1"><a href="matched-pairs-t-and-sign-test.html#cb712-1"></a>bodyfat</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["athlete"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["xray"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ultrasound"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"5.00","3":"4.75"},{"1":"2","2":"7.00","3":"3.75"},{"1":"3","2":"9.25","3":"9.00"},{"1":"4","2":"12.00","3":"11.75"},{"1":"5","2":"17.25","3":"17.00"},{"1":"6","2":"29.50","3":"27.50"},{"1":"7","2":"5.50","3":"6.50"},{"1":"8","2":"6.00","3":"6.75"},{"1":"9","2":"8.00","3":"8.75"},{"1":"10","2":"8.50","3":"9.50"},{"1":"11","2":"9.25","3":"9.50"},{"1":"12","2":"11.00","3":"12.00"},{"1":"13","2":"12.00","3":"12.25"},{"1":"14","2":"14.00","3":"15.50"},{"1":"15","2":"17.00","3":"18.00"},{"1":"16","2":"18.00","3":"18.25"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -811,7 +858,7 @@ the same or different. (At this point, obtain the R output including a P-value.)
 take any special steps for that. Note that we’re back to the
 “old-fashioned” version of <code>t.test</code> that <em>does not</em>
 allow <code>data=</code>, so we have to go the <code>with</code> way:</p>
-<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb716-1" title="1"><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb713"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb713-1"><a href="matched-pairs-t-and-sign-test.html#cb713-1"></a><span class="kw">with</span>(bodyfat, <span class="kw">t.test</span>(xray, ultrasound, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -863,10 +910,10 @@ data frame that would normally go first (the input data frame here
 is the new one with the differences in it, which doesn’t have a
 name). I’ll make a normal quantile plot in a moment, but if you
 haven’t seen that yet, the plot to make is a histogram:</p>
-<div class="sourceCode" id="cb718"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb718-1" title="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb718-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb718-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-583-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb715"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb715-1"><a href="matched-pairs-t-and-sign-test.html#cb715-1"></a>bodyfat <span class="op">%&gt;%</span></span>
+<span id="cb715-2"><a href="matched-pairs-t-and-sign-test.html#cb715-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></span>
+<span id="cb715-3"><a href="matched-pairs-t-and-sign-test.html#cb715-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-587-1.png" width="672"  /></p>
 <p>I don’t know whether you’d call that “approximately normal” or
 not. We are in kind of a double-bind with this one: the sample size is
 small, so normality matters, but with a small sample, the data might
@@ -882,10 +929,10 @@ right way is to calculate the differences , then use that new data frame twice. 
 going to draw either the histogram or the normal quantile plot, not
 both, so you can use the appropriate one of my two bits of code. The
 normal quantile plot:</p>
-<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb719-1" title="1">bodyfat <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb719-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb719-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-584-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb716"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb716-1"><a href="matched-pairs-t-and-sign-test.html#cb716-1"></a>bodyfat <span class="op">%&gt;%</span></span>
+<span id="cb716-2"><a href="matched-pairs-t-and-sign-test.html#cb716-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) <span class="op">%&gt;%</span></span>
+<span id="cb716-3"><a href="matched-pairs-t-and-sign-test.html#cb716-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-588-1.png" width="672"  /></p>
 <p>This is showing a little evidence of skewness or outliers (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -912,7 +959,7 @@ up with a significant result. So I would be happy to trust this paired
 <span class="math inline">\(t\)</span>-test.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="throwing-baseballs-and-softballs-1" class="section level2">
+<div id="throwing-baseballs-and-softballs-1" class="section level2" number="11.9">
 <h2><span class="header-section-number">11.9</span> Throwing baseballs and softballs</h2>
 <p>Can students throw a baseball farther than a softball? A
 statistics class, containing 24 students, went out to a football field
@@ -932,16 +979,16 @@ to the columns.</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb720-1" title="1">myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/throw.txt&quot;</span></a>
-<a class="sourceLine" id="cb720-2" title="2">throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb717"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb717-1"><a href="matched-pairs-t-and-sign-test.html#cb717-1"></a>myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/throw.txt&quot;</span></span>
+<span id="cb717-2"><a href="matched-pairs-t-and-sign-test.html#cb717-2"></a>throws=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>,<span class="dt">col_names=</span><span class="kw">c</span>(<span class="st">&quot;student&quot;</span>,<span class="st">&quot;baseball&quot;</span>,<span class="st">&quot;softball&quot;</span>))</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
 ##   softball = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb722"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb722-1" title="1">throws</a></code></pre></div>
+<div class="sourceCode" id="cb719"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb719-1"><a href="matched-pairs-t-and-sign-test.html#cb719-1"></a>throws</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["student"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["baseball"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["softball"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"65","3":"57"},{"1":"2","2":"90","3":"58"},{"1":"3","2":"75","3":"66"},{"1":"4","2":"73","3":"61"},{"1":"5","2":"79","3":"65"},{"1":"6","2":"68","3":"56"},{"1":"7","2":"58","3":"53"},{"1":"8","2":"41","3":"41"},{"1":"9","2":"56","3":"44"},{"1":"10","2":"70","3":"65"},{"1":"11","2":"64","3":"57"},{"1":"12","2":"62","3":"60"},{"1":"13","2":"73","3":"55"},{"1":"14","2":"50","3":"53"},{"1":"15","2":"63","3":"54"},{"1":"16","2":"48","3":"42"},{"1":"17","2":"34","3":"32"},{"1":"18","2":"49","3":"48"},{"1":"19","2":"48","3":"45"},{"1":"20","2":"68","3":"67"},{"1":"21","2":"30","3":"27"},{"1":"22","2":"26","3":"25"},{"1":"23","2":"28","3":"25"},{"1":"24","2":"26","3":"31"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -960,8 +1007,8 @@ columns called <code>X1, X2, X3</code> or whatever they end up as.</p>
 right-arrow assignment to create what I called
 <code>throws2</code> below, or put something like
 <code>throws2 &lt;-</code> on the beginning of the line. Your choice.</p>
-<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb723-1" title="1">throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff=</span>baseball<span class="op">-</span>softball) -&gt;</a>
-<a class="sourceLine" id="cb723-2" title="2"><span class="st">  </span>throws2</a></code></pre></div>
+<div class="sourceCode" id="cb720"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb720-1"><a href="matched-pairs-t-and-sign-test.html#cb720-1"></a>throws <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff=</span>baseball<span class="op">-</span>softball) -&gt;</span>
+<span id="cb720-2"><a href="matched-pairs-t-and-sign-test.html#cb720-2"></a><span class="st">  </span>throws2</span></code></pre></div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Carry out a sign test in R, testing the null hypothesis
@@ -973,8 +1020,8 @@ it is greater than zero. Obtain a P-value. Your option whether you use
 <p>I think using <code>smmr</code> is way easier, so I’ll do that
 first. There is even a shortcut in that the null median defaults to
 zero, which is exactly what we want here:</p>
-<div class="sourceCode" id="cb724"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb724-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb724-2" title="2"><span class="kw">sign_test</span>(throws2,diff)</a></code></pre></div>
+<div class="sourceCode" id="cb721"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb721-1"><a href="matched-pairs-t-and-sign-test.html#cb721-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb721-2"><a href="matched-pairs-t-and-sign-test.html#cb721-2"></a><span class="kw">sign_test</span>(throws2,diff)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     2    21 
@@ -989,20 +1036,20 @@ prove that students can throw a baseball a <em>longer</em> distance
 than a softball. Thus the P-value we want is 0.000033.</p>
 <p>To build it yourself, you know the steps by now.
 First step is to count how many differences are greater and less than zero:</p>
-<div class="sourceCode" id="cb726"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb726-1" title="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb723"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb723-1"><a href="matched-pairs-t-and-sign-test.html#cb723-1"></a><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&gt;</span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##     3    21</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb728-1" title="1"><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&lt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb725"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb725-1"><a href="matched-pairs-t-and-sign-test.html#cb725-1"></a><span class="kw">table</span>(throws2<span class="op">$</span>diff<span class="op">&lt;</span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##    22     2</code></pre>
 <p>or, since we have things in a data frame,</p>
-<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb730-1" title="1">throws2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(diff<span class="op">&gt;</span><span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb727"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb727-1"><a href="matched-pairs-t-and-sign-test.html#cb727-1"></a>throws2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(diff<span class="op">&gt;</span><span class="dv">0</span>)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["diff > 0"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"3"},{"1":"TRUE","2":"21"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["diff > 0"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"3","_rn_":"1"},{"1":"TRUE","2":"21","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>or count those less than zero. I’d take any of those.</p>
@@ -1020,17 +1067,17 @@ from the appropriate binomial distribution.</p>
 differences out of 24 (or 23) or more, since this is the end of the
 distribution we should be at if the alternative hypothesis is correct.
 Thus any of these will get you a defensible P-value:</p>
-<div class="sourceCode" id="cb731"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb731-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb728-1"><a href="matched-pairs-t-and-sign-test.html#cb728-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">23</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 3.302097e-05</code></pre>
-<div class="sourceCode" id="cb733"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb733-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">22</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb730"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb730-1"><a href="matched-pairs-t-and-sign-test.html#cb730-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">22</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 1.7941e-05</code></pre>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb735-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb732-1"><a href="matched-pairs-t-and-sign-test.html#cb732-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">21</span><span class="op">:</span><span class="dv">24</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 0.0001385808</code></pre>
-<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb737-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb734"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb734-1"><a href="matched-pairs-t-and-sign-test.html#cb734-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">23</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 3.302097e-05</code></pre>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb739-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb736-1"><a href="matched-pairs-t-and-sign-test.html#cb736-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 1.7941e-05</code></pre>
-<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb741-1" title="1"><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb738"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb738-1"><a href="matched-pairs-t-and-sign-test.html#cb738-1"></a><span class="kw">sum</span>(<span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,<span class="dv">24</span>,<span class="fl">0.5</span>))</span></code></pre></div>
 <pre><code>## [1] 0.0001385808</code></pre>
 <p>The first and fourth of those are the same as <code>smmr</code> (throwing
 away the exactly-median value).</p>
@@ -1040,7 +1087,7 @@ difference of zero in favour of a median difference greater than
 zero.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="throwing-baseballs-and-softballs-again-1" class="section level2">
+<div id="throwing-baseballs-and-softballs-again-1" class="section level2" number="11.10">
 <h2><span class="header-section-number">11.10</span> Throwing baseballs and softballs, again</h2>
 <p>Previously, you carried out a sign test to determine
 whether students could throw a baseball farther than a softball. This
@@ -1055,17 +1102,17 @@ differences.</li>
 <p>Solution</p>
 <p>I did it this way, combining the reading
 of the data with the calculation of the differences in <em>one</em> pipe:</p>
-<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb743-1" title="1">myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/throw.txt&quot;</span></a>
-<a class="sourceLine" id="cb743-2" title="2">throws &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;student&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;softball&quot;</span>)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb743-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> baseball <span class="op">-</span><span class="st"> </span>softball)</a></code></pre></div>
+<div class="sourceCode" id="cb740"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb740-1"><a href="matched-pairs-t-and-sign-test.html#cb740-1"></a>myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/throw.txt&quot;</span></span>
+<span id="cb740-2"><a href="matched-pairs-t-and-sign-test.html#cb740-2"></a>throws &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;student&quot;</span>, <span class="st">&quot;baseball&quot;</span>, <span class="st">&quot;softball&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb740-3"><a href="matched-pairs-t-and-sign-test.html#cb740-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> baseball <span class="op">-</span><span class="st"> </span>softball)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   student = col_double(),
 ##   baseball = col_double(),
 ##   softball = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb745-1" title="1">throws</a></code></pre></div>
+<div class="sourceCode" id="cb742"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb742-1"><a href="matched-pairs-t-and-sign-test.html#cb742-1"></a>throws</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["student"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["baseball"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["softball"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["diff"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"65","3":"57","4":"8"},{"1":"2","2":"90","3":"58","4":"32"},{"1":"3","2":"75","3":"66","4":"9"},{"1":"4","2":"73","3":"61","4":"12"},{"1":"5","2":"79","3":"65","4":"14"},{"1":"6","2":"68","3":"56","4":"12"},{"1":"7","2":"58","3":"53","4":"5"},{"1":"8","2":"41","3":"41","4":"0"},{"1":"9","2":"56","3":"44","4":"12"},{"1":"10","2":"70","3":"65","4":"5"},{"1":"11","2":"64","3":"57","4":"7"},{"1":"12","2":"62","3":"60","4":"2"},{"1":"13","2":"73","3":"55","4":"18"},{"1":"14","2":"50","3":"53","4":"-3"},{"1":"15","2":"63","3":"54","4":"9"},{"1":"16","2":"48","3":"42","4":"6"},{"1":"17","2":"34","3":"32","4":"2"},{"1":"18","2":"49","3":"48","4":"1"},{"1":"19","2":"48","3":"45","4":"3"},{"1":"20","2":"68","3":"67","4":"1"},{"1":"21","2":"30","3":"27","4":"3"},{"1":"22","2":"26","3":"25","4":"1"},{"1":"23","2":"28","3":"25","4":"3"},{"1":"24","2":"26","3":"31","4":"-5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1078,7 +1125,7 @@ median difference.</li>
 </ol>
 <p>Solution</p>
 <p><code>ci_median</code>, with 95% being the default confidence level:</p>
-<div class="sourceCode" id="cb746"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb746-1" title="1"><span class="kw">ci_median</span>(throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="matched-pairs-t-and-sign-test.html#cb743-1"></a><span class="kw">ci_median</span>(throws, diff)</span></code></pre></div>
 <pre><code>## [1] 2.002930 8.999023</code></pre>
 <p>2 to 9. The ends of a CI for the median will be data values, which are
 all whole numbers, so round off that 8.999.</p>
@@ -1100,7 +1147,7 @@ on a function name brings up the help for that function.)
 Let’s check that it works properly by repeating the previous
 <code>sign_test</code> and verifying that <code>pval_sign</code> gives
 the same thing:</p>
-<div class="sourceCode" id="cb748"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb748-1" title="1"><span class="kw">sign_test</span>(throws, diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="matched-pairs-t-and-sign-test.html#cb745-1"></a><span class="kw">sign_test</span>(throws, diff, <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     2    21 
@@ -1110,7 +1157,7 @@ the same thing:</p>
 ## 1       lower 9.999971e-01
 ## 2       upper 3.302097e-05
 ## 3   two-sided 6.604195e-05</code></pre>
-<div class="sourceCode" id="cb750"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb750-1" title="1"><span class="kw">pval_sign</span>(<span class="dv">0</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb747-1"><a href="matched-pairs-t-and-sign-test.html#cb747-1"></a><span class="kw">pval_sign</span>(<span class="dv">0</span>, throws, diff)</span></code></pre></div>
 <pre><code>## [1] 6.604195e-05</code></pre>
 <p>The P-values are the same (for the two-sided test) and both small, so
 the median difference is not zero.</p>
@@ -1140,9 +1187,9 @@ wish. Anything that makes sense is good: whatever mixture of
 mindlessness, guesswork and cleverness that you want to employ.
 The most mindless way to try some values one at a time and see what
 you get, eg.:</p>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb752-1" title="1"><span class="kw">pval_sign</span>(<span class="dv">1</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb749-1"><a href="matched-pairs-t-and-sign-test.html#cb749-1"></a><span class="kw">pval_sign</span>(<span class="dv">1</span>, throws, diff)</span></code></pre></div>
 <pre><code>## [1] 0.001489639</code></pre>
-<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb754-1" title="1"><span class="kw">pval_sign</span>(<span class="dv">5</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb751-1"><a href="matched-pairs-t-and-sign-test.html#cb751-1"></a><span class="kw">pval_sign</span>(<span class="dv">5</span>, throws, diff)</span></code></pre></div>
 <pre><code>## [1] 1.168188</code></pre>
 <p>So median 1 is outside and median 5 is inside the 95% interval. Keep
 trying values until you’ve figured out where the lower and upper ends
@@ -1150,9 +1197,9 @@ of the interval are: where the P-values cross from below 0.05 to
 above, or vice versa.</p>
 <p>Something more intelligent is to make a long list of potential
 medians, and get the P-value for each of them, eg.:</p>
-<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb756-1" title="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb756-2" title="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb756-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</a></code></pre></div>
+<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb753-1"><a href="matched-pairs-t-and-sign-test.html#cb753-1"></a>d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">20</span>, <span class="dv">2</span>))</span>
+<span id="cb753-2"><a href="matched-pairs-t-and-sign-test.html#cb753-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb753-3"><a href="matched-pairs-t-and-sign-test.html#cb753-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["my.med"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["pvals"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0","2":"6.604195e-05"},{"1":"2","2":"5.247879e-02"},{"1":"4","2":"8.388197e-01"},{"1":"6","2":"6.776395e-01"},{"1":"8","2":"2.100396e-01"},{"1":"10","2":"2.265584e-02"},{"1":"12","2":"1.489639e-03"},{"1":"14","2":"6.604195e-05"},{"1":"16","2":"3.588200e-05"},{"1":"18","2":"5.722046e-06"},{"1":"20","2":"2.980232e-06"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1160,9 +1207,9 @@ medians, and get the P-value for each of them, eg.:</p>
 </div>
 <p>2 is just inside the interval, 8 is also inside, and 10 is
 outside. Some closer investigation:</p>
-<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb757-1" title="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb757-2" title="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb757-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</a></code></pre></div>
+<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb754-1"><a href="matched-pairs-t-and-sign-test.html#cb754-1"></a>d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="fl">0.5</span>))</span>
+<span id="cb754-2"><a href="matched-pairs-t-and-sign-test.html#cb754-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb754-3"><a href="matched-pairs-t-and-sign-test.html#cb754-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["my.med"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["pvals"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.0","2":"6.604195e-05"},{"1":"0.5","2":"2.771616e-04"},{"1":"1.0","2":"1.489639e-03"},{"1":"1.5","2":"2.265584e-02"},{"1":"2.0","2":"5.247879e-02"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1170,9 +1217,9 @@ outside. Some closer investigation:</p>
 </div>
 <p>The bottom end of the interval actually is 2, since 2 is inside and
 1.5 is outside.</p>
-<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb758-1" title="1">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="fl">0.5</span>))</a>
-<a class="sourceLine" id="cb758-2" title="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb758-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</a></code></pre></div>
+<div class="sourceCode" id="cb755"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb755-1"><a href="matched-pairs-t-and-sign-test.html#cb755-1"></a>d &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">my.med =</span> <span class="kw">seq</span>(<span class="dv">8</span>, <span class="dv">10</span>, <span class="fl">0.5</span>))</span>
+<span id="cb755-2"><a href="matched-pairs-t-and-sign-test.html#cb755-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb755-3"><a href="matched-pairs-t-and-sign-test.html#cb755-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pvals =</span> <span class="kw">pval_sign</span>(my.med, throws, diff))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["my.med"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["pvals"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"8.0","2":"0.21003962"},{"1":"8.5","2":"0.15158963"},{"1":"9.0","2":"0.05247879"},{"1":"9.5","2":"0.02265584"},{"1":"10.0","2":"0.02265584"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1184,21 +1231,21 @@ The most sophisticated way is the “bisection” idea we saw before. We
 already have a kickoff for this, since we found, mindlessly, that 1 is
 outside the interval on the low end and 5 is inside, so the lower
 limit has to be between 1 and 5. Let’s try halfway between, ie. 3:</p>
-<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb759-1" title="1"><span class="kw">pval_sign</span>(<span class="dv">3</span>, throws, diff)</a></code></pre></div>
+<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="matched-pairs-t-and-sign-test.html#cb756-1"></a><span class="kw">pval_sign</span>(<span class="dv">3</span>, throws, diff)</span></code></pre></div>
 <pre><code>## [1] 0.3833103</code></pre>
 <p>Inside, so lower limit is between 1 and 3. This can be automated, thus:</p>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb761-1" title="1">lo &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb761-2" title="2">hi &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb761-3" title="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
-<a class="sourceLine" id="cb761-4" title="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb761-5" title="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
-<a class="sourceLine" id="cb761-6" title="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb761-7" title="7">    hi &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb761-8" title="8">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb761-9" title="9">    lo &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb761-10" title="10">  }</a>
-<a class="sourceLine" id="cb761-11" title="11">}</a>
-<a class="sourceLine" id="cb761-12" title="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
+<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb758-1"><a href="matched-pairs-t-and-sign-test.html#cb758-1"></a>lo &lt;-<span class="st"> </span><span class="dv">1</span></span>
+<span id="cb758-2"><a href="matched-pairs-t-and-sign-test.html#cb758-2"></a>hi &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb758-3"><a href="matched-pairs-t-and-sign-test.html#cb758-3"></a><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</span>
+<span id="cb758-4"><a href="matched-pairs-t-and-sign-test.html#cb758-4"></a>  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb758-5"><a href="matched-pairs-t-and-sign-test.html#cb758-5"></a>  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</span>
+<span id="cb758-6"><a href="matched-pairs-t-and-sign-test.html#cb758-6"></a>  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</span>
+<span id="cb758-7"><a href="matched-pairs-t-and-sign-test.html#cb758-7"></a>    hi &lt;-<span class="st"> </span>try</span>
+<span id="cb758-8"><a href="matched-pairs-t-and-sign-test.html#cb758-8"></a>  } <span class="cf">else</span> {</span>
+<span id="cb758-9"><a href="matched-pairs-t-and-sign-test.html#cb758-9"></a>    lo &lt;-<span class="st"> </span>try</span>
+<span id="cb758-10"><a href="matched-pairs-t-and-sign-test.html#cb758-10"></a>  }</span>
+<span id="cb758-11"><a href="matched-pairs-t-and-sign-test.html#cb758-11"></a>}</span>
+<span id="cb758-12"><a href="matched-pairs-t-and-sign-test.html#cb758-12"></a><span class="kw">c</span>(lo, hi)</span></code></pre></div>
 <pre><code>## [1] 1.9375 2.0000</code></pre>
 <p>The difficult bit is to decide whether the value <code>try</code> becomes
 the new <code>lo</code> or the new <code>hi</code>. If the P-value for the
@@ -1211,18 +1258,18 @@ inside, and they move closer and closer to each other.</p>
 <code>hi</code> is outside, so there is a little switching around within
 the loop. For starting values, you can be fairly mindless: for
 example, we know that 5 is inside and something big like 20 must be outside:</p>
-<div class="sourceCode" id="cb763"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb763-1" title="1">lo &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb763-2" title="2">hi &lt;-<span class="st"> </span><span class="dv">20</span></a>
-<a class="sourceLine" id="cb763-3" title="3"><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</a>
-<a class="sourceLine" id="cb763-4" title="4">  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a>
-<a class="sourceLine" id="cb763-5" title="5">  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</a>
-<a class="sourceLine" id="cb763-6" title="6">  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</a>
-<a class="sourceLine" id="cb763-7" title="7">    lo &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb763-8" title="8">  } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb763-9" title="9">    hi &lt;-<span class="st"> </span>try</a>
-<a class="sourceLine" id="cb763-10" title="10">  }</a>
-<a class="sourceLine" id="cb763-11" title="11">}</a>
-<a class="sourceLine" id="cb763-12" title="12"><span class="kw">c</span>(lo, hi)</a></code></pre></div>
+<div class="sourceCode" id="cb760"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb760-1"><a href="matched-pairs-t-and-sign-test.html#cb760-1"></a>lo &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb760-2"><a href="matched-pairs-t-and-sign-test.html#cb760-2"></a>hi &lt;-<span class="st"> </span><span class="dv">20</span></span>
+<span id="cb760-3"><a href="matched-pairs-t-and-sign-test.html#cb760-3"></a><span class="cf">while</span> (<span class="kw">abs</span>(hi <span class="op">-</span><span class="st"> </span>lo) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.1</span>) {</span>
+<span id="cb760-4"><a href="matched-pairs-t-and-sign-test.html#cb760-4"></a>  try &lt;-<span class="st"> </span>(lo <span class="op">+</span><span class="st"> </span>hi) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb760-5"><a href="matched-pairs-t-and-sign-test.html#cb760-5"></a>  ptry &lt;-<span class="st"> </span><span class="kw">pval_sign</span>(try, throws, diff)</span>
+<span id="cb760-6"><a href="matched-pairs-t-and-sign-test.html#cb760-6"></a>  <span class="cf">if</span> (ptry <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.05</span>) {</span>
+<span id="cb760-7"><a href="matched-pairs-t-and-sign-test.html#cb760-7"></a>    lo &lt;-<span class="st"> </span>try</span>
+<span id="cb760-8"><a href="matched-pairs-t-and-sign-test.html#cb760-8"></a>  } <span class="cf">else</span> {</span>
+<span id="cb760-9"><a href="matched-pairs-t-and-sign-test.html#cb760-9"></a>    hi &lt;-<span class="st"> </span>try</span>
+<span id="cb760-10"><a href="matched-pairs-t-and-sign-test.html#cb760-10"></a>  }</span>
+<span id="cb760-11"><a href="matched-pairs-t-and-sign-test.html#cb760-11"></a>}</span>
+<span id="cb760-12"><a href="matched-pairs-t-and-sign-test.html#cb760-12"></a><span class="kw">c</span>(lo, hi)</span></code></pre></div>
 <pre><code>## [1] 8.984375 9.042969</code></pre>
 <p>The interval goes from 2 to (as calculated here) about 9. (This is
 apparently the same as <code>ci_median</code> in <code>smmr</code> got.)
@@ -1232,7 +1279,7 @@ from 2 to 9: that is, students can throw a baseball on average between
 2 and 9 feet further than they can throw a softball.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="changes-in-salary-1" class="section level2">
+<div id="changes-in-salary-1" class="section level2" number="11.11">
 <h2><span class="header-section-number">11.11</span> Changes in salary</h2>
 <p>A company is growing and would like to attract more
 employees. The company would like to advertise that salaries there are
@@ -1248,16 +1295,16 @@ salaries for each of 20 employees.</li>
 <p>Solution</p>
 <p>Looking at the file, we see that the values are separated by
 exactly one space:</p>
-<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb765-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/salaryinc.txt&quot;</span></a>
-<a class="sourceLine" id="cb765-2" title="2">salaries &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="matched-pairs-t-and-sign-test.html#cb762-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/salaryinc.txt&quot;</span></span>
+<span id="cb762-2"><a href="matched-pairs-t-and-sign-test.html#cb762-2"></a>salaries &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   employee = col_character(),
 ##   jan2016 = col_double(),
 ##   jan2017 = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb767"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb767-1" title="1">salaries</a></code></pre></div>
+<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="matched-pairs-t-and-sign-test.html#cb764-1"></a>salaries</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["employee"],"name":[1],"type":["chr"],"align":["left"]},{"label":["jan2016"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["jan2017"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"36.00","3":"39.50"},{"1":"B","2":"41.25","3":"47.00"},{"1":"C","2":"40.00","3":"45.00"},{"1":"D","2":"42.80","3":"49.00"},{"1":"E","2":"51.00","3":"57.75"},{"1":"F","2":"50.50","3":"54.00"},{"1":"G","2":"56.00","3":"62.00"},{"1":"I","2":"57.80","3":"69.90"},{"1":"J","2":"62.00","3":"66.80"},{"1":"K","2":"65.50","3":"71.00"},{"1":"L","2":"66.00","3":"72.00"},{"1":"M","2":"68.90","3":"74.00"},{"1":"N","2":"71.00","3":"80.00"},{"1":"O","2":"72.30","3":"79.00"},{"1":"P","2":"74.65","3":"80.00"},{"1":"Q","2":"77.00","3":"83.10"},{"1":"R","2":"79.90","3":"82.50"},{"1":"S","2":"81.00","3":"92.00"},{"1":"T","2":"83.25","3":"85.00"},{"1":"U","2":"90.00","3":"101.00"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1294,10 +1341,10 @@ the other, for each employee. The individual salaries don’t have
 to be normally distributed at all.
 We don’t have the differences here, so we have to calculate them
 first. The smoothest way is to make a pipeline:</p>
-<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb768-1" title="1">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb768-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb768-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-603-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb765-1"><a href="matched-pairs-t-and-sign-test.html#cb765-1"></a>salaries <span class="op">%&gt;%</span></span>
+<span id="cb765-2"><a href="matched-pairs-t-and-sign-test.html#cb765-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></span>
+<span id="cb765-3"><a href="matched-pairs-t-and-sign-test.html#cb765-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-607-1.png" width="672"  /></p>
 <p>A couple of coding notes: (i) you can take the differences 2016 minus
 2017 if you like (then they will tend to be negative), (ii)
 <code>ggplot</code> used in a pipeline like this does <em>not</em> have a
@@ -1329,7 +1376,7 @@ it anyway for the purposes of this assignment.) What do you conclude?</li>
 <p>The company is trying to prove that salaries are <em>increasing</em>
 over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:</p>
-<div class="sourceCode" id="cb769"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb769-1" title="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2016, jan2017, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="matched-pairs-t-and-sign-test.html#cb766-1"></a><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2016, jan2017, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1343,7 +1390,7 @@ Following through the procedure, even though you may not trust it much:</p>
 ##                  -6.185</code></pre>
 <p>You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:</p>
-<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb771-1" title="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="matched-pairs-t-and-sign-test.html#cb768-1"></a><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1359,9 +1406,9 @@ alternative has to be the other way around as well:</p>
 one-sample test on those, again making sure that you get the
 <code>alternative</code> right. I didn’t save it, so I’m calculating the
 differences again:</p>
-<div class="sourceCode" id="cb773"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb773-1" title="1">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb773-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb773-3" title="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">t.test</span>(diff, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="matched-pairs-t-and-sign-test.html#cb770-1"></a>salaries <span class="op">%&gt;%</span></span>
+<span id="cb770-2"><a href="matched-pairs-t-and-sign-test.html#cb770-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></span>
+<span id="cb770-3"><a href="matched-pairs-t-and-sign-test.html#cb770-3"></a><span class="st">  </span><span class="kw">with</span>(., <span class="kw">t.test</span>(diff, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1379,10 +1426,10 @@ all that salaries are increasing.</p>
 everyone’s 2017 salary appears to be greater than their 2016 salary.)</p>
 <p>Extra: you might be feeling that we ought to be doing a matched-pairs
 sign test, which you could do this way:</p>
-<div class="sourceCode" id="cb775"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb775-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb775-2" title="2">salaries <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb775-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb775-4" title="4"><span class="st">  </span><span class="kw">sign_test</span>(diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb772-1"><a href="matched-pairs-t-and-sign-test.html#cb772-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb772-2"><a href="matched-pairs-t-and-sign-test.html#cb772-2"></a>salaries <span class="op">%&gt;%</span></span>
+<span id="cb772-3"><a href="matched-pairs-t-and-sign-test.html#cb772-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">diff =</span> jan2017 <span class="op">-</span><span class="st"> </span>jan2016) <span class="op">%&gt;%</span></span>
+<span id="cb772-4"><a href="matched-pairs-t-and-sign-test.html#cb772-4"></a><span class="st">  </span><span class="kw">sign_test</span>(diff, <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     0    20 
@@ -1407,7 +1454,7 @@ of the output they should look at.</li>
 <p>A confidence interval. 95% is fine. As before, we have to run
 <code>t.test</code> again because we ran a one-sided test and a
 confidence interval for us is two-sided:</p>
-<div class="sourceCode" id="cb777"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb777-1" title="1"><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="matched-pairs-t-and-sign-test.html#cb774-1"></a><span class="kw">with</span>(salaries, <span class="kw">t.test</span>(jan2017, jan2016, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1422,7 +1469,7 @@ confidence interval for us is two-sided:</p>
 <p>Between about $5,000 and about $7,500. This is what to tell the CEO.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="body-fat-revisited-1" class="section level2">
+<div id="body-fat-revisited-1" class="section level2" number="11.12">
 <h2><span class="header-section-number">11.12</span> Body fat revisited</h2>
 <p>Athletes are concerned with measuring their body fat
 percentage. Two different methods are available: one using ultrasound,
@@ -1438,16 +1485,16 @@ athletes are at
 <p>Solution</p>
 <p>This kind of thing. Since you looked at the data (didn’t you?),
 you’ll know that the values are separated by single spaces:</p>
-<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb779-1" title="1">myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bodyfat.txt&quot;</span></a>
-<a class="sourceLine" id="cb779-2" title="2">bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="matched-pairs-t-and-sign-test.html#cb776-1"></a>myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bodyfat.txt&quot;</span></span>
+<span id="cb776-2"><a href="matched-pairs-t-and-sign-test.html#cb776-2"></a>bodyfat &lt;-<span class="st"> </span><span class="kw">read_delim</span>(myurl, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   athlete = col_double(),
 ##   xray = col_double(),
 ##   ultrasound = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb781-1" title="1">bodyfat</a></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="matched-pairs-t-and-sign-test.html#cb778-1"></a>bodyfat</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["athlete"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["xray"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ultrasound"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"5.00","3":"4.75"},{"1":"2","2":"7.00","3":"3.75"},{"1":"3","2":"9.25","3":"9.00"},{"1":"4","2":"12.00","3":"11.75"},{"1":"5","2":"17.25","3":"17.00"},{"1":"6","2":"29.50","3":"27.50"},{"1":"7","2":"5.50","3":"6.50"},{"1":"8","2":"6.00","3":"6.75"},{"1":"9","2":"8.00","3":"8.75"},{"1":"10","2":"8.50","3":"9.50"},{"1":"11","2":"9.25","3":"9.50"},{"1":"12","2":"11.00","3":"12.00"},{"1":"13","2":"12.00","3":"12.25"},{"1":"14","2":"14.00","3":"15.50"},{"1":"15","2":"17.00","3":"18.00"},{"1":"16","2":"18.00","3":"18.25"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1463,12 +1510,12 @@ Explain briefly.</li>
 <p>This is a good place to look ahead. We’ll need the differences in two
 places, most likely: first for the normal quantile plot, and second
 for the matched-pairs sign test. So we should calculate and save them first:</p>
-<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb782-1" title="1">bodyfat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) -&gt;<span class="st"> </span>bodyfat2</a></code></pre></div>
+<div class="sourceCode" id="cb779"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb779-1"><a href="matched-pairs-t-and-sign-test.html#cb779-1"></a>bodyfat <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">diff =</span> xray <span class="op">-</span><span class="st"> </span>ultrasound) -&gt;<span class="st"> </span>bodyfat2</span></code></pre></div>
 <p>I seem to be using a 2 on the end to name my
 dataframe-with-differences, but you can use whatever name you like.</p>
 <p>Then, not forgetting to use the data frame that we just made:</p>
-<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb783-1" title="1"><span class="kw">ggplot</span>(bodyfat2, <span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-611-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="matched-pairs-t-and-sign-test.html#cb780-1"></a><span class="kw">ggplot</span>(bodyfat2, <span class="kw">aes</span>(<span class="dt">sample =</span> diff)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-615-1.png" width="672"  /></p>
 <p>This is showing a little evidence of skewness or outliers (depending
 on your point of view: either is good). The lowest and highest values
 are both too high, and the pattern of points on the plot is kind of
@@ -1522,7 +1569,7 @@ for positive or only for negative differences, so I think two-sided is
 right. You need some reason to do a one-sided test, and there isn’t
 one here.)</p>
 <p>Remembering again to use the data frame that has the differences in it:</p>
-<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb784-1" title="1"><span class="kw">sign_test</span>(bodyfat2, diff, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="matched-pairs-t-and-sign-test.html#cb781-1"></a><span class="kw">sign_test</span>(bodyfat2, diff, <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##    10     6 
@@ -1546,7 +1593,7 @@ significant, that it could be very wrong without changing the
 conclusion. That is what seems to have happened.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="the-dentist-and-blood-pressure-1" class="section level2">
+<div id="the-dentist-and-blood-pressure-1" class="section level2" number="11.13">
 <h2><span class="header-section-number">11.13</span> The dentist and blood pressure</h2>
 <p>Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist’s appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolic) blood pressure measured while they are in a dentist’s waiting room, and then again one hour after their appointment is finished.</p>
 <p>The data are in .</p>
@@ -1554,16 +1601,16 @@ conclusion. That is what seems to have happened.</p>
 <li>Read in and display the data.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb786-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/blood_pressure1.csv&quot;</span></a>
-<a class="sourceLine" id="cb786-2" title="2">blood_pressure &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="matched-pairs-t-and-sign-test.html#cb783-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/blood_pressure1.csv&quot;</span></span>
+<span id="cb783-2"><a href="matched-pairs-t-and-sign-test.html#cb783-2"></a>blood_pressure &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   person = col_character(),
 ##   before = col_double(),
 ##   after = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb788-1" title="1">blood_pressure</a></code></pre></div>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="matched-pairs-t-and-sign-test.html#cb785-1"></a>blood_pressure</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["person"],"name":[1],"type":["chr"],"align":["left"]},{"label":["before"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["after"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"p1","2":"132","3":"118"},{"1":"p2","2":"135","3":"137"},{"1":"p3","2":"149","3":"140"},{"1":"p4","2":"133","3":"139"},{"1":"p5","2":"119","3":"107"},{"1":"p6","2":"121","3":"116"},{"1":"p7","2":"128","3":"122"},{"1":"p8","2":"132","3":"124"},{"1":"p9","2":"119","3":"115"},{"1":"p10","2":"110","3":"103"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1582,7 +1629,7 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>A matched-pairs <span class="math inline">\(t\)</span>-test, then. Remember, we want to see whether blood pressure is <em>lower</em> afterwards (that is, before is <em>greater</em> than after), so this needs to be one-sided:</p>
-<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb789-1" title="1"><span class="kw">with</span>(blood_pressure, <span class="kw">t.test</span>(before, after, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="matched-pairs-t-and-sign-test.html#cb786-1"></a><span class="kw">with</span>(blood_pressure, <span class="kw">t.test</span>(before, after, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">paired =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1596,16 +1643,16 @@ conclusion. That is what seems to have happened.</p>
 ##                     5.7</code></pre>
 <p>There are some variations possible here: <code>before</code> and <code>after</code> could be switched (in which case <code>alternative</code> must be reversed also).</p>
 <p>Or, you can do a one-sample <span class="math inline">\(t\)</span> on the differences, with the right <code>alternative</code> corresponding to the way you took differences. If you are looking ahead, you might realize that working out the differences <em>now</em> and adding them to the dataframe will be a good idea:</p>
-<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb791-1" title="1">blood_pressure <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb791-2" title="2"><span class="kw">mutate</span>(<span class="dt">difference =</span> before <span class="op">-</span><span class="st"> </span>after) -&gt;<span class="st"> </span>blood_pressure</a>
-<a class="sourceLine" id="cb791-3" title="3">blood_pressure</a></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="matched-pairs-t-and-sign-test.html#cb788-1"></a>blood_pressure <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb788-2"><a href="matched-pairs-t-and-sign-test.html#cb788-2"></a><span class="kw">mutate</span>(<span class="dt">difference =</span> before <span class="op">-</span><span class="st"> </span>after) -&gt;<span class="st"> </span>blood_pressure</span>
+<span id="cb788-3"><a href="matched-pairs-t-and-sign-test.html#cb788-3"></a>blood_pressure</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["person"],"name":[1],"type":["chr"],"align":["left"]},{"label":["before"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["after"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["difference"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"p1","2":"132","3":"118","4":"14"},{"1":"p2","2":"135","3":"137","4":"-2"},{"1":"p3","2":"149","3":"140","4":"9"},{"1":"p4","2":"133","3":"139","4":"-6"},{"1":"p5","2":"119","3":"107","4":"12"},{"1":"p6","2":"121","3":"116","4":"5"},{"1":"p7","2":"128","3":"122","4":"6"},{"1":"p8","2":"132","3":"124","4":"8"},{"1":"p9","2":"119","3":"115","4":"4"},{"1":"p10","2":"110","3":"103","4":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>I took the differences this way around since I was expecting, if anything, the before numbers to be bigger than the after ones. And then:</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb792-1" title="1"><span class="kw">with</span>(blood_pressure, <span class="kw">t.test</span>(difference, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb789"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb789-1"><a href="matched-pairs-t-and-sign-test.html#cb789-1"></a><span class="kw">with</span>(blood_pressure, <span class="kw">t.test</span>(difference, <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1625,7 +1672,7 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>A sign test on the differences. By this point, you will realize that you will need to have obtained the differences. Get them here if you did not already get them:</p>
-<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb794-1" title="1"><span class="kw">sign_test</span>(blood_pressure, difference, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="matched-pairs-t-and-sign-test.html#cb791-1"></a><span class="kw">sign_test</span>(blood_pressure, difference, <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     2     8 
@@ -1642,8 +1689,8 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>The <em>differences</em> are supposed to be approximately normal if a matched-pairs <span class="math inline">\(t\)</span>-test is the thing:</p>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb796-1" title="1"><span class="kw">ggplot</span>(blood_pressure, <span class="kw">aes</span>(<span class="dt">sample=</span>difference)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-618-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="matched-pairs-t-and-sign-test.html#cb793-1"></a><span class="kw">ggplot</span>(blood_pressure, <span class="kw">aes</span>(<span class="dt">sample=</span>difference)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-622-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Discuss briefly which of your two tests is the more appropriate one to run.</li>
@@ -1659,18 +1706,18 @@ conclusion. That is what seems to have happened.</p>
 <p>Extra: you might be disappointed to go through this and come to the conclusion that there was not a decrease in blood pressure between before and after.</p>
 <p>What has happened, I think, is that we have only a small sample (10 people), and having 8 positive differences and 2 negative ones is not quite unbalanced enough (with such a small sample) to rule out chance: that is to say, a median difference of zero. The <span class="math inline">\(t\)</span>-test accounted for the size of the differences, and if you believed the normality was satisfactory, you could demonstrate a difference between before and after. But if you didn’t like the normality, you were out of luck: the only test you have is an apparently not very powerful one.</p>
 <p>If you wanted to, you could bootstrap the sampling distribution of the sample mean and see how normal it looks:</p>
-<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb797-1" title="1"><span class="kw">tibble</span>(<span class="dt">sim =</span>  <span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb797-2" title="2"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb797-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(blood_pressure<span class="op">$</span>difference, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb797-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb797-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-619-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb794-1"><a href="matched-pairs-t-and-sign-test.html#cb794-1"></a><span class="kw">tibble</span>(<span class="dt">sim =</span>  <span class="dv">1</span><span class="op">:</span><span class="dv">10000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb794-2"><a href="matched-pairs-t-and-sign-test.html#cb794-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb794-3"><a href="matched-pairs-t-and-sign-test.html#cb794-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(blood_pressure<span class="op">$</span>difference, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb794-4"><a href="matched-pairs-t-and-sign-test.html#cb794-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb794-5"><a href="matched-pairs-t-and-sign-test.html#cb794-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-623-1.png" width="672"  /></p>
 <p>(Code note: you can do anything with the result of a simulation, and you can use anything that might need to be normal as input to a normal quantile plot. Now that we have the normal quantile plot as a tool, we can use it wherever it might be helpful.)</p>
 <p>This is actually not nearly as bad as I was expecting. Even a sample size of 10 is providing some help. The bootstrapped sampling distribution is somewhat left-skewed, which is not a surprise given the two low outliers. However, it is rather close to normal, suggesting that the <span class="math inline">\(t\)</span>-test is not as bad as we thought.</p>
 <p>(I did 10,000 simulations because I was having trouble seeing how non-normal it was. With this many, I can be pretty sure that this distribution is somewhat left-skewed.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="french-teachers-1" class="section level2">
+<div id="french-teachers-1" class="section level2" number="11.14">
 <h2><span class="header-section-number">11.14</span> French teachers</h2>
 <p>Twenty high-school French teachers attended a summer institute to improve their French skills. At the beginning of their session, each teacher took a listening test (to test their understanding of spoken French). After 4 weeks of immersion in French, each teacher took a similar listening test again. (The actual French spoken in the two tests was different, so simply taking the first test should not improve the score in the second one; the tests were otherwise similar.) The maximum score on each test was 36, and a higher score is better. The data are <a href="http://ritsokiguess.site/datafiles/frenchtest.txt">here</a>. (Right-click on the link, select “copy link address”, and then paste that URL into R Studio.) The data values are separated by <em>tabs</em>.</p>
 <p>The data file has three columns:</p>
@@ -1684,16 +1731,16 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>Separated by tabs means <code>read_tsv</code>:</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb798-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/frenchtest.txt&quot;</span></a>
-<a class="sourceLine" id="cb798-2" title="2">french &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="matched-pairs-t-and-sign-test.html#cb795-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/frenchtest.txt&quot;</span></span>
+<span id="cb795-2"><a href="matched-pairs-t-and-sign-test.html#cb795-2"></a>french &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   id = col_double(),
 ##   pre = col_double(),
 ##   post = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb800-1" title="1">french</a></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="matched-pairs-t-and-sign-test.html#cb797-1"></a>french</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["id"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["pre"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["post"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"32","3":"34"},{"1":"2","2":"31","3":"31"},{"1":"3","2":"29","3":"35"},{"1":"4","2":"10","3":"16"},{"1":"5","2":"30","3":"33"},{"1":"6","2":"33","3":"36"},{"1":"7","2":"22","3":"24"},{"1":"8","2":"25","3":"28"},{"1":"9","2":"32","3":"26"},{"1":"10","2":"20","3":"26"},{"1":"11","2":"30","3":"36"},{"1":"12","2":"20","3":"26"},{"1":"13","2":"24","3":"27"},{"1":"14","2":"24","3":"24"},{"1":"15","2":"31","3":"32"},{"1":"16","2":"30","3":"31"},{"1":"17","2":"15","3":"15"},{"1":"18","2":"32","3":"34"},{"1":"19","2":"23","3":"26"},{"1":"20","2":"23","3":"26"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1713,7 +1760,7 @@ conclusion. That is what seems to have happened.</p>
 <p>Solution</p>
 <p>Seeing whether the scores have improved implies a <em>one</em>-sided test that <code>post</code> is bigger than <code>pre</code>. There are three ways you might do that, any of which is good. Remember that if you are running a test with <code>paired = TRUE</code>, the alternative is relative to the column that is <em>input first</em>, not the first one in alphabetical order or anything like that:</p>
 <p>(i):</p>
-<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb801-1" title="1"><span class="kw">with</span>(french, <span class="kw">t.test</span>(pre, post, <span class="dt">paired =</span> <span class="ot">TRUE</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb798-1"><a href="matched-pairs-t-and-sign-test.html#cb798-1"></a><span class="kw">with</span>(french, <span class="kw">t.test</span>(pre, post, <span class="dt">paired =</span> <span class="ot">TRUE</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1726,7 +1773,7 @@ conclusion. That is what seems to have happened.</p>
 ## mean of the differences 
 ##                    -2.5</code></pre>
 <p>(ii):</p>
-<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb803-1" title="1"><span class="kw">with</span>(french, <span class="kw">t.test</span>(post, pre, <span class="dt">paired =</span> T, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="matched-pairs-t-and-sign-test.html#cb800-1"></a><span class="kw">with</span>(french, <span class="kw">t.test</span>(post, pre, <span class="dt">paired =</span> T, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1742,8 +1789,8 @@ conclusion. That is what seems to have happened.</p>
 <ol start="3" style="list-style-type: lower-roman">
 <li>working out the differences and testing those (but look ahead in the question to see whether you need the differences for anything else: you do):</li>
 </ol>
-<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb805-1" title="1">french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> post <span class="op">-</span><span class="st"> </span>pre) -&gt;<span class="st"> </span>french1</a>
-<a class="sourceLine" id="cb805-2" title="2"><span class="kw">with</span>(french1, <span class="kw">t.test</span>(gain, <span class="dt">mu=</span><span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="matched-pairs-t-and-sign-test.html#cb802-1"></a>french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> post <span class="op">-</span><span class="st"> </span>pre) -&gt;<span class="st"> </span>french1</span>
+<span id="cb802-2"><a href="matched-pairs-t-and-sign-test.html#cb802-2"></a><span class="kw">with</span>(french1, <span class="kw">t.test</span>(gain, <span class="dt">mu=</span><span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1757,8 +1804,8 @@ conclusion. That is what seems to have happened.</p>
 ##       2.5</code></pre>
 <p>This last is an ordinary one-sample test, which saves you having to learn anything new, but requires you to calculate the differences first. You will need the differences for a plot anyway, so this may not be as much extra work as it appears. The right thing to do here is to <em>save</em> the data frame with the differences in it, so that you don’t need to calculate them again later.</p>
 <p>A fourth alternative is to calculate the differences as <code>pre</code> minus <code>post</code>, and then switch the <code>alternative</code> around (since if going to the French institute helps, the differences this way will be mostly <em>negative</em>):</p>
-<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb807-1" title="1">french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> pre <span class="op">-</span><span class="st"> </span>post) -&gt;<span class="st"> </span>french2</a>
-<a class="sourceLine" id="cb807-2" title="2"><span class="kw">with</span>(french2, <span class="kw">t.test</span>(gain, <span class="dt">mu=</span><span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="matched-pairs-t-and-sign-test.html#cb804-1"></a>french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> pre <span class="op">-</span><span class="st"> </span>post) -&gt;<span class="st"> </span>french2</span>
+<span id="cb804-2"><a href="matched-pairs-t-and-sign-test.html#cb804-2"></a><span class="kw">with</span>(french2, <span class="kw">t.test</span>(gain, <span class="dt">mu=</span><span class="dv">0</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1782,7 +1829,7 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>A 95% (or other level) confidence interval for the mean difference. A one-sided test doesn’t give that, so you need to do the test again without the <code>alternative</code> (to make it two-sided), via any of the methods above, such as:</p>
-<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb809-1" title="1"><span class="kw">with</span>(french, <span class="kw">t.test</span>(post, pre, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb806"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb806-1"><a href="matched-pairs-t-and-sign-test.html#cb806-1"></a><span class="kw">with</span>(french, <span class="kw">t.test</span>(post, pre, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1796,7 +1843,7 @@ conclusion. That is what seems to have happened.</p>
 ##                     2.5</code></pre>
 <p>This says that, with 95% confidence, the mean test score afterwards is between about 1.1 and 3.9 points higher than before. So that’s how much listening skill is improving on average. Give the suitably rounded interval; the test scores are whole numbers, and there are 20 differences making up the mean, so one decimal is the most you should give.</p>
 <p>If you did it the first way:</p>
-<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb811-1" title="1"><span class="kw">with</span>(french, <span class="kw">t.test</span>(pre, post, <span class="dt">paired =</span> T))</a></code></pre></div>
+<div class="sourceCode" id="cb808"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb808-1"><a href="matched-pairs-t-and-sign-test.html#cb808-1"></a><span class="kw">with</span>(french, <span class="kw">t.test</span>(pre, post, <span class="dt">paired =</span> T))</span></code></pre></div>
 <pre><code>## 
 ##  Paired t-test
 ## 
@@ -1816,13 +1863,13 @@ conclusion. That is what seems to have happened.</p>
 <p>Solution</p>
 <p>The key assumption here is that the <em>differences</em> are approximately normally distributed.</p>
 <p>First calculate <em>and save</em> the differences (since you will need them later for a sign test; otherwise you would have to find them again). If you found the differences to make your <span class="math inline">\(t\)</span>-test, use the ones you saved there.</p>
-<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb813-1" title="1">french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> post <span class="op">-</span><span class="st"> </span>pre) -&gt;<span class="st"> </span>french1</a></code></pre></div>
+<div class="sourceCode" id="cb810"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb810-1"><a href="matched-pairs-t-and-sign-test.html#cb810-1"></a>french <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">gain =</span> post <span class="op">-</span><span class="st"> </span>pre) -&gt;<span class="st"> </span>french1</span></code></pre></div>
 <p>Assess that with a histogram (with suitable number of bins):</p>
-<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb814-1" title="1"><span class="kw">ggplot</span>(french1, <span class="kw">aes</span>(<span class="dt">x=</span>gain)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-628-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="matched-pairs-t-and-sign-test.html#cb811-1"></a><span class="kw">ggplot</span>(french1, <span class="kw">aes</span>(<span class="dt">x=</span>gain)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-632-1.png" width="672"  /></p>
 <p>or, better, a normal quantile plot (since the normality is our immediate concern):</p>
-<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb815-1" title="1"><span class="kw">ggplot</span>(french1, <span class="kw">aes</span>(<span class="dt">sample=</span>gain)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-629-1.png" width="672"  />
+<div class="sourceCode" id="cb812"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb812-1"><a href="matched-pairs-t-and-sign-test.html#cb812-1"></a><span class="kw">ggplot</span>(french1, <span class="kw">aes</span>(<span class="dt">sample=</span>gain)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-633-1.png" width="672"  />
 (note that the horizontal lines of points are because the test scores were whole numbers, therefore the differences between them are whole numbers also, and some of the teachers had the same difference in scores as others.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -1839,11 +1886,11 @@ conclusion. That is what seems to have happened.</p>
 <p>The third of my points says that even if the distribution of differences is not normal enough, and so the P-value is off by a bit, it would take a lot to change it enough to stop it being significant. So I don’t think we need to worry, for myself.</p>
 <p>Extra:</p>
 <p>We can assess the <span class="math inline">\(t\)</span>-test by obtaining a bootstrap distribution of the sample mean, by sampling from the differences with replacement:</p>
-<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb816-1" title="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(french1<span class="op">$</span>gain, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb816-2" title="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">mean</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb816-3" title="3"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb816-4" title="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>value)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-631-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="matched-pairs-t-and-sign-test.html#cb813-1"></a><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(french1<span class="op">$</span>gain, <span class="dt">replace =</span> T)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb813-2"><a href="matched-pairs-t-and-sign-test.html#cb813-2"></a><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">mean</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb813-3"><a href="matched-pairs-t-and-sign-test.html#cb813-3"></a><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb813-4"><a href="matched-pairs-t-and-sign-test.html#cb813-4"></a><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>value)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-635-1.png" width="672"  /></p>
 <p>The bootstrapped sampling distribution of the sample mean difference is about as normal as you could reasonably wish for, so there was no need to worry. Only a very few of the most extreme samples were at all off the line.</p>
 <p>A histogram would be almost as good, but now that you know about the normal quantile plot, the time to use it is when you are <em>specifically</em> interested in normality, as you are here. (If you were interested in shape generally, then a histogram or, if appropriate, a boxplot, would also work.)</p>
 <p>The code: the first line takes 1000 bootstrap samples, and the second finds the mean of each one. Instead of saving the sample means, since I was only going to be using them once, I made them into a dataframe, and then made a normal quantile plot of them. The <code>enframe</code> creates a dataframe with a column called <code>value</code> with the means in it, which I use in the plot.</p>
@@ -1853,7 +1900,7 @@ conclusion. That is what seems to have happened.</p>
 </ol>
 <p>Solution</p>
 <p>This works with the differences, that you calculated for the plot, so use the data frame that you saved them in:</p>
-<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb817-1" title="1"><span class="kw">sign_test</span>(french1, gain, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb814-1"><a href="matched-pairs-t-and-sign-test.html#cb814-1"></a><span class="kw">sign_test</span>(french1, gain, <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     1    16 
@@ -1863,7 +1910,7 @@ conclusion. That is what seems to have happened.</p>
 ## 1       lower 0.9999923706
 ## 2       upper 0.0001373291
 ## 3   two-sided 0.0002746582</code></pre>
-<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb819-1" title="1"><span class="kw">ci_median</span>(french1, gain)</a></code></pre></div>
+<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb816-1"><a href="matched-pairs-t-and-sign-test.html#cb816-1"></a><span class="kw">ci_median</span>(french1, gain)</span></code></pre></div>
 <pre><code>## [1] 1.007812 3.000000</code></pre>
 <p>The P-value is 0.00014, again very small, saying that the median difference is greater than zero, that is, that the test scores after are greater than the test scores before on average. The confidence interval is from 1 to 3 points, indicating that this is how much test scores are increasing on average.</p>
 <p>A technique thing: the first time you are going through this, you probably got to this point and realized that you were calculating the differences for the second (or third) time. This is the place to stop and think that you don’t really need to do that, and to go back to the plot you did and <em>save</em> the differences after you have calculated them. Then you edit the code here to use the differences you got before and saved. It doesn’t matter whether you see this the first time you do it or not, but it does matter that you see it before you hand it in. It’s like editing an essay; you need to go back through work that you will be handing in and make sure you did it the best way you could.</p>

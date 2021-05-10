@@ -1,0 +1,209 @@
+## Brand M laundry detergent
+
+ A survey was carried out comparing respondents' preferences of a laundry detergent M compared to a mystery brand X. For each respondent, the researchers recorded the temperature of the laundry load (low or high), whether or not they previously used brand M (yes or no), and the softness of the water used for the laundry load(hard, medium or soft). The aim of the survey was to find out what was associated with the respondents preferring brand M. The data are in <http://ritsokiguess.site/datafiles/brand_m.csv>.
+
+
+
+(a) Read in and display (some of) the data. Explain briefly how the data is laid out appropriately to fit a log-linear model.
+
+Solution
+
+
+The reading-in is entirely familiar:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/brand_m.csv"
+prefs <- read_csv(my_url)
+prefs
+```
+
+This is good because we have each "observation" (frequency, here) in one row, or, said differently, we have a column of frequencies and each of the factors in a column of its own. (See the Extra for the kind of layout we might have had to deal with.)
+
+Extra: as you might expect, this is very much *not* how the data came to me. It was originally in a textbook, laid out like this:
+
+![](brand_m.jpg "Original layout of data (in a textbook)")
+
+This is a common layout for frequency data, because it saves a lot of space. Multiple header rows are hard to deal with, though, so I combined the three column variables into one with a layout like this (aligned in columns):
+
+softness no_low_x no_low_m no_high_x no_high_m yes_low_x yes_low_m yes_high_x yes_high_m
+hard        68       42        42       30         37        52        24        43
+medium      66       50        33       23         47        55        23        47
+soft        63       53        29       27         57        49        19        29
+
+Let's read this in and then think about what to do with it:
+
+```{r}
+prefs0 <- read_table("brand_m.txt")
+prefs0
+```
+
+We want to get all those frequencies into one column, which suggest some kind of `pivot_longer.`There are two ways to go about this. One is to try a regular `pivot_longer`and see what happens. I had to think for a moment about what to call the column that ended up as `combo`:
+
+```{r}
+prefs0 %>% pivot_longer(-softness, names_to = "combo", values_to = "frequency")
+```
+
+This is the right kind of shape, but those things in the column `combo` are three variables all smooshed together: respectively, previous user (of brand M), temperature, preference (you can tell by the values, which are all different). These can be split up with `separate`, thus:
+
+```{r}
+prefs0 %>% pivot_longer(-softness, names_to = "combo", values_to = "frequency") %>% 
+separate(combo, into = c("prev_user", "temperature", "preference"), sep = "_")
+```
+
+That works, but the combination of `pivot_longer` and `separate` is a common one, and so there is an "advanced" version of `pivot_longer` that does it all at once. The idea is that you enter three columns into `names_to` and then use `names_sep` to say what they're separated by:
+
+```{r}
+prefs0 %>% 
+pivot_longer(-softness, 
+names_to = c("m_user", "temperature", "prefer"),
+names_sep = "_", values_to = "frequency") 
+```
+
+This data frame is what I saved for you.
+
+
+$\blacksquare$
+
+
+(b) Using backward elimination, build a suitable log-linear model for the associations between the variables. (Do *not* use `step`; do the elimination yourself).
+
+Solution
+
+
+The first step is to fit a model containing all the interactions between the factors, using `frequency` as the response, and then to use `drop1` with `test="Chisq"` to see what can come out. Don't forget the `family = "poisson"`, since that's what drives the modelling. I tnink it's easiest to number these models, since there might be a lot of them:
+
+```{r}
+prefs.1 <- glm(frequency~softness*m_user*temperature*prefer, family = "poisson", data=prefs)
+drop1(prefs.1, test = "Chisq")
+```
+
+To our relief, the four-way interaction is not significant and can be removed. (I was *not* looking forward to the prospect of interpreting that!)
+
+Now write an `update` line that removes that four-way interaction from your model, as shown below, and copy-paste your `drop1` line from above, changing  the number  of your model to the one coming out of `update`. Copy-paste the complicated interaction from the `drop1` output:
+
+```{r}
+prefs.2 <- update(prefs.1, .~.-softness:m_user:temperature:prefer)
+drop1(prefs.2, test = "Chisq")
+```
+
+There are now four three-way interactions that could be removed. You might suspect that they are all going to go eventually, but as in regression, we take them one at a time, starting with the one that has the highest P-value (just in case, for example, the P-value of the second one goes under 0.05 when we remove the others). The easiest way to do the coding is a vigorous amount of copying and pasting. Copy-paste your last code chunk:
+
+```{r, eval=FALSE}
+prefs.2 <- update(prefs.1, .~.-softness:m_user:temperature:prefer)
+drop1(prefs.2, test = "Chisq")
+```
+
+Change the interaction in the `update` to the one you want to remove (from the `drop1` table), which is `softness:temperature:prefer` (you can copy-paste that too), and then increase all three of the model numbers by 1:
+
+```{r}
+prefs.3 <- update(prefs.2, .~.-softness:temperature:prefer)
+drop1(prefs.3, test = "Chisq")
+```
+
+Then, as they say, rinse and repeat. This one takes a while, but each step is just like the others.
+
+drop `softness:m_user:temperature`
+
+```{r}
+prefs.4 <- update(prefs.3, .~.-softness:m_user:temperature)
+drop1(prefs.4, test = "Chisq")
+```
+
+drop `m_user:temperature:prefer`
+
+```{r}
+prefs.5 <- update(prefs.4, .~.-m_user:temperature:prefer)
+drop1(prefs.5, test = "Chisq")
+```
+
+drop `m_user:temperature`
+
+```{r}
+prefs.6 <- update(prefs.5, .~.-m_user:temperature)
+drop1(prefs.6, test = "Chisq")
+```
+
+drop `softness:m_user:prefer`
+
+```{r}
+prefs.7 <- update(prefs.6, .~.-softness:m_user:prefer)
+drop1(prefs.7, test = "Chisq")
+```
+
+More two-ways.
+
+drop `softness:prefer`
+
+```{r}
+prefs.8 <- update(prefs.7, .~.-softness:prefer)
+drop1(prefs.8, test = "Chisq")
+```
+
+One more?
+
+drop `softness:m_user`
+
+```{r}
+prefs.9 <- update(prefs.8, .~.-softness:m_user)
+drop1(prefs.9, test = "Chisq")
+```
+
+And finally we are done! There are three two-way interactions left, which shouldn't be too hard to interpret. That's in the next part.
+
+
+
+$\blacksquare$
+
+
+(c) What is associated with the brand a  respondent prefers? By obtaining suitable frequency tables, describe the nature of these associations.
+
+Solution
+
+
+To see what is associated with brand preference, look for significant associations with `prefer`. There are two of them, one with `m_user`, and, separately, one with temperature. This means that a respondent's brand preference depends on whether or not they previously used brand M, and also on what temperature the laundry was washed at.
+
+To investigate these, use `xtabs` to get a frequency table (easiest), and if necessary use `prop.table` to get row or column proportions as appropriate. The first thing in the model formula in `xtabs` is the frequency column; the first thing after the squiggle is rows and the second thing is columns. (If there happened to be a third thing, it would be "layers" in the table.) You might find that the table of frequencies is enough to interpret what is going on, but if not, use `prop.table` to get a table of proportions. I talk about that in a moment.
+
+```{r}
+xt <- xtabs(frequency ~ m_user + prefer, data = prefs)
+xt
+```
+
+`prefer` is the response (outcome), which I put in the columns, so I look along the rows to see what is going on. Out of the people who were previous users of Brand M (second row), slightly more of them preferred Brand M; out of the people who were not Brand M users (first row), somewhat more of them preferred Brand X.
+
+This was not hard to see, because the opposite frequencies were bigger each time. But you might find it easier to compute percentages and compare those. In my table, the response was rows, so the right percentages to compute are *row* ones. That is done like this. 1 is rows, 2 is columns:
+
+```{r}
+prop.table(xt, margin = 1)
+```
+
+Out of the people who were previous Brand M users, 57% preferred Brand M; out of the people who were not previous Brand M users, only 43% of them preferred Brand M. 
+
+Advertisers use terms like "brand familiarity" to capture ideas like this: more people prefer Brand M in the survey if they have used it before. Not altogether surprising. 
+
+
+On to the effects of temperature on preference:
+
+```{r}
+xt <- xtabs(frequency ~ temperature + prefer, data = prefs)
+xt
+prop.table(xt, margin = 1)
+```
+
+Out of the people who used a high-temperature wash, 54% of them preferred brand M, but out of the people who used a low-temperature wash, only 47% of them preferred brand M.
+
+I'm making it seem like this is a big difference, and of course it's a very small one, but the size of the survey makes even this tiny difference significant. 
+
+Those are really the two effects of interest, since they are the ones associated with brand preference. But there was one more association that was significant: between temperature and softness. The softness in this case was of the water used to do the laundry (and not, for example, the softness of the clothes after they come out of the dryer). That goes like this:
+
+```{r}
+xt <- xtabs(frequency ~ temperature + softness, data = prefs)
+xt
+prop.table(xt, margin = 2)
+```
+
+I decided to condition on the softness of the water, since that cannot be controlled by the person doing the laundry (the water just *is* hard or soft, depending on where you live and where your water comes from). 
+
+In each case, a majority of the washes were done at low temperature, but the softer the water, the bigger that majority was. Once again, the effect is not all that big, because the association was only just significant.
+
+$\blacksquare$
