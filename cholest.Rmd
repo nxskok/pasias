@@ -1,7 +1,7 @@
-## xxx title here
+## One-sample cholesterol
 
  The data set at
-\url{http://ritsokiguess.site/datafiles/STAC32/cholest.csv} contains cholesterol
+\url{http://ritsokiguess.site/datafiles/cholest.csv} contains cholesterol
 measurements for heart attack patients (at several different times) as
 well as for a group of control patients. We will focus on the control
 patients in this question. 
@@ -14,7 +14,7 @@ Solution
 This is (as you might guess) a \verb=.csv=, so:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/cholest.csv"
+my_url <- "http://ritsokiguess.site/datafiles/cholest.csv"
 cholest <- read_csv(my_url)
 cholest
 ```     
@@ -23,7 +23,7 @@ Note for yourself that there are 30 observations (and some missing
 ones), and a column called \verb=control= that is the one we'll be
 working with.
 
-Extra: the 2-day, 4-day and 14-day columns have the funny "backticks" around their names, because a column name cannot contain a `-` or start with a number. This is not a problem here, since we won't be using those columns, but if we wanted to, this would not work:
+Extra: the 2-day, 4-day and 14-day columns need to be referred to with funny "backticks" around their names, because a column name cannot contain a `-` or start with a number. This is not a problem here, since we won't be using those columns, but if we wanted to, this would not work:
 
 ```{r, error=TRUE}
 cholest %>% summarize(xbar = mean(2-Day))
@@ -35,7 +35,7 @@ because it is looking for a column called `Day`, which doesn't exist. The meanin
 cholest %>% summarize(xbar = mean(`2-Day`, na.rm = TRUE))
 ```
 
-This column also has missing values (at the bottom), so here I've asked to remove the missing valuesxxx tufte::margin_note{In R, missing values are labelled NA, and ``rm'' is Unix/C shorthand for ``remove''.} before working out the mean. Otherwise the mean is, unhelpfully, missing as well.
+This column also has missing values (at the bottom), so here I've asked to remove the missing values `r tufte::margin_note("In R, missing values are labelled NA, and rm is Unix/C shorthand for remove.")` before working out the mean. Otherwise the mean is, unhelpfully, missing as well.
 
 You might imagine that dealing with column names like this would get annoying. There is a package called `janitor` that has a function called `clean_names` to save you the trouble. Install it first, then load it:
 
@@ -61,7 +61,7 @@ cholest1 %>% summarize(xbar = mean(x2_day, na.rm = TRUE))
 $\blacksquare$
 
 
-(a) Make a suitable plot of the cholesterol levels of the
+(b) Make a suitable plot of the cholesterol levels of the
 control patients, and comment briefly on the shape of the
 distribution. 
 
@@ -88,7 +88,7 @@ distribution is somewhat skewed to the right.
 $\blacksquare$
 
 
-(a) It is recommended that people in good health, such as the
+(c) It is recommended that people in good health, such as the
 Control patients here, keep their cholesterol level below 200. Is
 there evidence that the mean cholesterol level of the population of
 people of which the Control patients are a sample is less than 200? Show that you understand the process,
@@ -144,7 +144,7 @@ Writing out all the steps correctly shows that you understand the process. Anyth
 $\blacksquare$
 
 
-(a) What values could the population mean cholesterol level take? You
+(d) What values could the population mean cholesterol level take? You
 might need to get some more output to determine this.
 
 Solution
@@ -183,13 +183,13 @@ we have a sample size of 30, which is between 10 and 100, so we can
 justify one extra decimal place beyond the data, here one decimal
 altogether, or two \emph{at the absolute outside}. (Two is more
 justifiable if the sample size is bigger than 100.) See, for example,
-\href{https://www2.southeastern.edu/Academics/Faculty/dgurney/Math241/StatTopics/SciNot.htm}{this},
+[this](https://www2.southeastern.edu/Academics/Faculty/dgurney/Math241/StatTopics/SciNot.htm), 
 in particular the piece at the bottom.
 
 $\blacksquare$
 
 
-(a) Explain briefly why you would be reasonably happy to trust
+(e) Explain briefly why you would be reasonably happy to trust
 the $t$ procedures in this question. (There are two points you need
 to make.)
 
@@ -234,11 +234,11 @@ subjective, and so it is. What actually matters is the shape of
 the thing called the \emph{sampling distribution of the sample
 mean}. That is to say, what kind of sample means you might get
 in repeated samples from your population. The problem is that you
-don't know what the population looks like.xxx tufte::margin_note{If you did, all
-your problems would be over.} But we can fake it up, in a couple
-of ways: (a) we can play what-if and pretend we know what the population
+don't know what the population looks like. `r tufte::margin_note("If you did, all
+your problems would be over.")` But we can fake it up, in a couple
+of ways: we can play what-if and pretend we know what the population
 looks like (to get some understanding for "populations like
-that"), or (b) we can use a technique called the "bootstrap" that
+that"), or we can use a technique called the "bootstrap" that
 will tell us what kind of sample means we might get from the
 population that \emph{our} sample came from (this seems like magic
 and, indeed, is).
@@ -246,7 +246,7 @@ and, indeed, is).
 The moral of the story is that the central limit theorem is more
 powerful than you think.
 
-To illustrate my (a), let's pretend the population looks like this,
+To illustrate my first idea, let's pretend the population looks like this,
 with a flat top:
 
 ```{r, echo=F}
@@ -265,7 +265,7 @@ ggplot(toplot, aes(x=x, y=y)) + geom_line()
 
 Only values between 0 and 1 are possible, and each of those is equally
 likely. Not very normal in shape. So let's take some random samples of
-size \emph{three}, not in any sense a large sample, from this
+size \emph{three}, not in any sense a large sample, from this "uniform"
 population, and see what kind of sample means we get. This technique
 is called \emph{simulation}: rather than working out the answer by
 math, we're letting the computer approximate the answer for us. Here's
@@ -281,10 +281,11 @@ and here's the same thing 1000 times, including a histogram of the
 sample means:
 
 ```{r}
-rerun(1000, runif(3)) %>%
-map_dbl(~mean(.)) %>%
-enframe() %>%
-ggplot(aes(x=value)) + geom_histogram(bins=12)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(runif(3))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 12)
 ``` 
 
 This is our computer-generated assessment of what the sampling
@@ -322,7 +323,7 @@ that we had:
 ggplot(cholest, aes(x=control)) + geom_histogram(bins=6)
 ```     
 
-That brings us to my (b) above.
+That brings us to my second idea above.
 
 The sample that we had is in some sense an "estimate of the
 population". To think about the sampling distribution of the sample
@@ -359,10 +360,11 @@ the mean of each, plot the means, and see how normal it looks. The
 only new idea here is the sampling with replacement:
 
 ```{r}
-rerun(1000, sample(cholest$control, 30, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins=12)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(cholest$control, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 12)
 ``` 
 
 That looks pretty normal, not obviously skewed, and so the $t$
