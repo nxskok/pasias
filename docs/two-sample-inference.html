@@ -21,18 +21,16 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 7 Two-sample inference | Problems and Solutions in Applied Statistics</title>
 
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
@@ -48,27 +46,26 @@ MathJax.Hub.Config({
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -77,9 +74,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,12 +122,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li><a href="index.html#introduction">Introduction</a>
-<ul>
+<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a>
-<ul>
+<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a><ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">1.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">1.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">1.3</span> Reading data from a file</a></li>
@@ -140,8 +135,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file-1"><span class="toc-section-number">1.7</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways-1"><span class="toc-section-number">1.8</span> Reading files different ways</a></li>
 </ul></li>
-<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a>
-<ul>
+<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
 <li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
 <li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
@@ -149,8 +143,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a>
-<ul>
+<li class="has-sub"><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a><ul>
 <li><a href="drawing-graphs.html#orange-juice-2"><span class="toc-section-number">3.1</span> Orange juice</a></li>
 <li><a href="drawing-graphs.html#making-soap-2"><span class="toc-section-number">3.2</span> Making soap</a></li>
 <li><a href="drawing-graphs.html#handling-shipments-2"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
@@ -160,8 +153,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.7</span> Handling shipments</a></li>
 <li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.8</span> Rainfall in Davis, California</a></li>
 </ul></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a>
-<ul>
+<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
@@ -177,15 +169,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data-exploration.html#unprecendented-rainfall-1"><span class="toc-section-number">4.13</span> Unprecendented rainfall</a></li>
 <li><a href="data-exploration.html#learning-algebra-1"><span class="toc-section-number">4.14</span> Learning algebra</a></li>
 </ul></li>
-<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a>
-<ul>
+<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
-<ul>
+<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
@@ -197,8 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.9</span> Inferring ice break-up in Nenana</a></li>
 <li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.10</span> Diameters of trees</a></li>
 </ul></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
-<ul>
+<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
@@ -214,19 +203,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#handspans-of-males-and-females-1"><span class="toc-section-number">7.13</span> Handspans of males and females</a></li>
 <li><a href="two-sample-inference.html#the-anchoring-effect-australia-vs-us-1"><span class="toc-section-number">7.14</span> The anchoring effect: Australia vs US</a></li>
 </ul></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
-<ul>
+<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
 <li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power"><span class="toc-section-number">8.4</span> Designing a study to have enough power</a></li>
-<li><a href="power-and-sample-size.html#simulating-power-1"><span class="toc-section-number">8.5</span> Simulating power</a></li>
-<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean-1"><span class="toc-section-number">8.6</span> Calculating power and sample size for estimating mean</a></li>
-<li><a href="power-and-sample-size.html#simulating-power-for-proportions-1"><span class="toc-section-number">8.7</span> Simulating power for proportions</a></li>
-<li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.8</span> Designing a study to have enough power</a></li>
+<li><a href="power-and-sample-size.html#power-and-alpha-in-a-skewed-population"><span class="toc-section-number">8.5</span> Power and <span class="math inline">\(\alpha\)</span> in a skewed population</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-1"><span class="toc-section-number">8.6</span> Simulating power</a></li>
+<li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean-1"><span class="toc-section-number">8.7</span> Calculating power and sample size for estimating mean</a></li>
+<li><a href="power-and-sample-size.html#simulating-power-for-proportions-1"><span class="toc-section-number">8.8</span> Simulating power for proportions</a></li>
+<li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.9</span> Designing a study to have enough power</a></li>
+<li><a href="power-and-sample-size.html#power-and-alpha-in-a-skewed-population-1"><span class="toc-section-number">8.10</span> Power and <span class="math inline">\(\alpha\)</span> in a skewed population</a></li>
 </ul></li>
-<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
-<ul>
+<li class="has-sub"><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a><ul>
 <li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -236,8 +225,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
-<ul>
+<li class="has-sub"><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a><ul>
 <li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -247,8 +235,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="moods-median-test.html#medical-instructions-1"><span class="toc-section-number">10.7</span> Medical instructions</a></li>
 <li><a href="moods-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
-<ul>
+<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
@@ -264,15 +251,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="matched-pairs-t-and-sign-test.html#the-dentist-and-blood-pressure-1"><span class="toc-section-number">11.13</span> The dentist and blood pressure</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#french-teachers-1"><span class="toc-section-number">11.14</span> French teachers</a></li>
 </ul></li>
-<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
-<ul>
+<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
-<ul>
+<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a><ul>
 <li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
@@ -288,8 +273,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.13</span> Reggae music</a></li>
 <li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.14</span> Watching TV and education</a></li>
 </ul></li>
-<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
-<ul>
+<li class="has-sub"><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a><ul>
 <li><a href="writing-reports.html#atomic-weight-of-carbon-2"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
 <li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
 <li><a href="writing-reports.html#learning-to-code"><span class="toc-section-number">14.3</span> Learning to code</a></li>
@@ -301,8 +285,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="writing-reports.html#analysis"><span class="toc-section-number">14.9</span> Analysis</a></li>
 <li><a href="writing-reports.html#conclusions-see-note-9"><span class="toc-section-number">14.10</span> Conclusions (see note 9)</a></li>
 </ul></li>
-<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
-<ul>
+<li class="has-sub"><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a><ul>
 <li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
 <li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
 <li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
@@ -326,8 +309,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.21</span> Isoflavones</a></li>
 <li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.22</span> Jocko’s Garage</a></li>
 </ul></li>
-<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a>
-<ul>
+<li class="has-sub"><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a><ul>
 <li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
 <li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
 <li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
@@ -353,8 +335,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.23</span> Calories and fat in pizza</a></li>
 <li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.24</span> Where should the fire stations be?</a></li>
 </ul></li>
-<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a>
-<ul>
+<li class="has-sub"><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a><ul>
 <li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
 <li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
 <li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
@@ -364,13 +345,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#salaries-of-mathematicians-1"><span class="toc-section-number">17.7</span> Salaries of mathematicians</a></li>
 <li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students-1"><span class="toc-section-number">17.8</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
-<ul>
+<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
-<ul>
+<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a><ul>
 <li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
 <li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
 <li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
@@ -380,20 +359,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="dates-and-times.html#wolves-and-caribou-1"><span class="toc-section-number">19.7</span> Wolves and caribou</a></li>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study-1"><span class="toc-section-number">19.8</span> Dealing with dates in the Worcester Heart Attack study</a></li>
 </ul></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
-<ul>
+<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a><ul>
 <li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
 <li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.3</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.4</span> The Collatz sequence</a></li>
 </ul></li>
-<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
-<ul>
+<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
-<ul>
+<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a><ul>
 <li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
 <li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
 <li><a href="the-bootstrap.html#comparing-eyesight"><span class="toc-section-number">22.3</span> Comparing eyesight</a></li>
@@ -403,8 +379,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-bootstrap.html#comparing-eyesight-1"><span class="toc-section-number">22.7</span> Comparing eyesight</a></li>
 <li><a href="the-bootstrap.html#bootstrapping-the-irs-data-1"><span class="toc-section-number">22.8</span> Bootstrapping the IRS data</a></li>
 </ul></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
-<ul>
+<li class="has-sub"><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a><ul>
 <li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way"><span class="toc-section-number">23.3</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
@@ -412,8 +387,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.5</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way-1"><span class="toc-section-number">23.6</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
 </ul></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
-<ul>
+<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a><ul>
 <li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
 <li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
 <li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
@@ -435,8 +409,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression.html#who-needs-the-most-intensive-care-1"><span class="toc-section-number">24.19</span> Who needs the most intensive care?</a></li>
 <li><a href="logistic-regression.html#go-away-and-dont-come-back-1"><span class="toc-section-number">24.20</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a>
-<ul>
+<li class="has-sub"><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a><ul>
 <li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
@@ -448,8 +421,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-1"><span class="toc-section-number">25.9</span> How do you like your steak?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data-1"><span class="toc-section-number">25.10</span> How do you like your steak – the data</a></li>
 </ul></li>
-<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a>
-<ul>
+<li class="has-sub"><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a><ul>
 <li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-2"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
@@ -463,8 +435,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data-1"><span class="toc-section-number">26.11</span> Crimes in San Francisco – the data</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play-1"><span class="toc-section-number">26.12</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
-<ul>
+<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a><ul>
 <li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
@@ -474,8 +445,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma-1"><span class="toc-section-number">27.7</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer-1"><span class="toc-section-number">27.8</span> Ovarian cancer</a></li>
 </ul></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
-<ul>
+<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a><ul>
 <li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
@@ -489,15 +459,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance-revisited.html#mental-context-1"><span class="toc-section-number">28.11</span> Mental context</a></li>
 <li><a href="analysis-of-variance-revisited.html#trying-on-shirts-1"><span class="toc-section-number">28.12</span> Trying on shirts</a></li>
 </ul></li>
-<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
-<ul>
+<li class="has-sub"><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a><ul>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><span class="toc-section-number">29.3</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy-1"><span class="toc-section-number">29.4</span> Treating leprosy</a></li>
 </ul></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
-<ul>
+<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a><ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
@@ -505,8 +473,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">30.5</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1"><span class="toc-section-number">30.6</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
-<ul>
+<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a><ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
@@ -520,8 +487,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#investigating-motor-activity-in-rats-1"><span class="toc-section-number">31.11</span> Investigating motor activity in rats</a></li>
 <li><a href="repeated-measures.html#repeated-measures-with-no-background-1"><span class="toc-section-number">31.12</span> Repeated measures with no background</a></li>
 </ul></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
-<ul>
+<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a><ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
 <li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
 <li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
@@ -537,8 +503,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn-1"><span class="toc-section-number">32.13</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender-1"><span class="toc-section-number">32.14</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
-<ul>
+<li class="has-sub"><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a><ul>
 <li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
 <li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
@@ -548,8 +513,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species-1"><span class="toc-section-number">33.7</span> Similarity of species</a></li>
 <li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh-1"><span class="toc-section-number">33.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
-<ul>
+<li class="has-sub"><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a><ul>
 <li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
 <li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
 <li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
@@ -561,8 +525,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="k-means-cluster-analysis.html#grouping-similar-cars-1"><span class="toc-section-number">34.9</span> Grouping similar cars</a></li>
 <li><a href="k-means-cluster-analysis.html#rating-beer-1"><span class="toc-section-number">34.10</span> Rating beer</a></li>
 </ul></li>
-<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
-<ul>
+<li class="has-sub"><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a><ul>
 <li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line"><span class="toc-section-number">35.3</span> The Cross-City Line</a></li>
@@ -570,8 +533,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">35.5</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line-1"><span class="toc-section-number">35.6</span> The Cross-City Line</a></li>
 </ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
-<ul>
+<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a><ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-2"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
 <li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
 <li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
@@ -583,13 +545,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multidimensional-scaling.html#more-beer-please-1"><span class="toc-section-number">36.9</span> More beer please</a></li>
 <li><a href="multidimensional-scaling.html#feeling-similar-again-1"><span class="toc-section-number">36.10</span> Feeling similar, again</a></li>
 </ul></li>
-<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
-<ul>
+<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
 <li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
 </ul></li>
-<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
-<ul>
+<li class="has-sub"><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a><ul>
 <li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
 <li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
@@ -597,8 +557,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="factor-analysis.html#a-correlation-matrix-1"><span class="toc-section-number">38.5</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution-1"><span class="toc-section-number">38.6</span> Air pollution</a></li>
 </ul></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
-<ul>
+<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a><ul>
 <li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
 <li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
 <li><a href="frequency-table-analysis.html#brand-m-laundry-detergent"><span class="toc-section-number">39.3</span> Brand M laundry detergent</a></li>
@@ -612,10 +571,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="two-sample-inference" class="section level1" number="7">
+<div id="two-sample-inference" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Two-sample inference</h1>
-<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="two-sample-inference.html#cb326-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
-<div id="children-and-electronic-devices" class="section level2" number="7.1">
+<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb329-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div id="children-and-electronic-devices" class="section level2">
 <h2><span class="header-section-number">7.1</span> Children and electronic devices</h2>
 <p>Do children (aged 8–17) spend more time on electronic
 devices now than they did 10 years ago? Samples of 15 children aged
@@ -630,7 +589,7 @@ different years.</p></li>
 <li><p>Draw side-by-side boxplots of the number of hours for each
 year. <code>year</code> is a numeric variable that we want to treat as a
 factor, so we need to <em>make</em> it into a factor.</p></li>
-<li><p>Test whether the mean number of hours has <em>increased</em> since</p></li>
+<li>Test whether the mean number of hours has <em>increased</em> since</li>
 </ol>
 <ol start="1999" style="list-style-type: decimal">
 <li>Which test did R do?</li>
@@ -639,7 +598,7 @@ factor, so we need to <em>make</em> it into a factor.</p></li>
 <li>Obtain a 99% confidence interval for the difference in means.</li>
 </ol>
 </div>
-<div id="parking-close-to-the-curb" class="section level2" number="7.2">
+<div id="parking-close-to-the-curb" class="section level2">
 <h2><span class="header-section-number">7.2</span> Parking close to the curb</h2>
 <p>In 2009, the Toronto Star commissioned a survey to address
 the issue of who is better at parking a car: men or women. The
@@ -678,7 +637,7 @@ concluded that, and do you think they were right to do so?
 Explain briefly.</p></li>
 </ol>
 </div>
-<div id="bell-peppers-and-too-much-water" class="section level2" number="7.3">
+<div id="bell-peppers-and-too-much-water" class="section level2">
 <h2><span class="header-section-number">7.3</span> Bell peppers and too much water</h2>
 <p>A pathogen called <em>Phytophthora capsici</em> causes bell
 peppers to wilt and die. It is thought that too much water aids in the
@@ -705,7 +664,7 @@ results from a two-sided test.)</p></li>
 not? Explain briefly.</p></li>
 </ol>
 </div>
-<div id="exercise-and-anxiety-and-bullying-mice" class="section level2" number="7.4">
+<div id="exercise-and-anxiety-and-bullying-mice" class="section level2">
 <h2><span class="header-section-number">7.4</span> Exercise and anxiety and bullying mice</h2>
 <p>Does exercise help to reduce anxiety?
 To assess this, some researchers randomly assigned
@@ -735,7 +694,7 @@ least for mice)? Explain briefly.</p></li>
 the analysis you just did? Explain briefly.</p></li>
 </ol>
 </div>
-<div id="diet-and-growth-in-boys" class="section level2" number="7.5">
+<div id="diet-and-growth-in-boys" class="section level2">
 <h2><span class="header-section-number">7.5</span> Diet and growth in boys</h2>
 <p>A dietician is studying the effect of
 different diets on children’s growth. In part of the study, the
@@ -762,7 +721,7 @@ significantly. What do you conclude? Explain briefly. (Run the
 right thing to do.)</p></li>
 </ol>
 </div>
-<div id="handspans-of-males-and-females" class="section level2" number="7.6">
+<div id="handspans-of-males-and-females" class="section level2">
 <h2><span class="header-section-number">7.6</span> Handspans of males and females</h2>
 <p>Take your right hand, and stretch the fingers out as far as
 you can. The distance between the tip of your thumb and the tip of
@@ -785,7 +744,7 @@ any more code? Explain briefly.</p></li>
 validity of the <span class="math inline">\(t\)</span>-tests you ran in this question. Or, if you don’t have any concerns, explain briefly why that is.</p></li>
 </ol>
 </div>
-<div id="the-anchoring-effect-australia-vs-us" class="section level2" number="7.7">
+<div id="the-anchoring-effect-australia-vs-us" class="section level2">
 <h2><span class="header-section-number">7.7</span> The anchoring effect: Australia vs US</h2>
 <p>Two groups of students (in a class at a American university) were asked what they thought the population of Canada was. (The correct answer at the time was just over 30 million.)
 Some of the students, before having to answer this, were told that the population of the United States was about 270 million. The other students in the class were told that the population of Australia was
@@ -801,7 +760,7 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="children-and-electronic-devices-1" class="section level2" number="7.8">
+<div id="children-and-electronic-devices-1" class="section level2">
 <h2><span class="header-section-number">7.8</span> Children and electronic devices</h2>
 <p>Do children (aged 8–17) spend more time on electronic
 devices now than they did 10 years ago? Samples of 15 children aged
@@ -816,15 +775,15 @@ different years.</li>
 </ol>
 <p>Solution</p>
 <p>I see this:</p>
-<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="two-sample-inference.html#cb327-1"></a>myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/pluggedin.txt&quot;</span></span>
-<span id="cb327-2"><a href="two-sample-inference.html#cb327-2"></a>plugged=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb330-1" title="1">myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/pluggedin.txt&quot;</span></a>
+<a class="sourceLine" id="cb330-2" title="2">plugged=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   year = col_double(),
 ##   hours = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb329-1"><a href="two-sample-inference.html#cb329-1"></a>plugged</span></code></pre></div>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1">plugged</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["hours"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1999","2":"4"},{"1":"1999","2":"5"},{"1":"1999","2":"7"},{"1":"1999","2":"7"},{"1":"1999","2":"5"},{"1":"1999","2":"7"},{"1":"1999","2":"5"},{"1":"1999","2":"6"},{"1":"1999","2":"5"},{"1":"1999","2":"6"},{"1":"1999","2":"7"},{"1":"1999","2":"8"},{"1":"1999","2":"5"},{"1":"1999","2":"6"},{"1":"1999","2":"6"},{"1":"2009","2":"5"},{"1":"2009","2":"9"},{"1":"2009","2":"5"},{"1":"2009","2":"8"},{"1":"2009","2":"7"},{"1":"2009","2":"6"},{"1":"2009","2":"7"},{"1":"2009","2":"9"},{"1":"2009","2":"7"},{"1":"2009","2":"9"},{"1":"2009","2":"6"},{"1":"2009","2":"9"},{"1":"2009","2":"10"},{"1":"2009","2":"9"},{"1":"2009","2":"8"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -833,17 +792,17 @@ different years.</li>
 <p>I see only the first ten rows (with an indication that there are 20 more, so 30 altogether). In your notebook, it’ll look a bit different: again, you’ll see the first 10 rows, but you’ll see exactly how many rows and columns there are, and there will be buttons “Next” and “Previous” to see earlier and later rows, and a little right-arrow to see more columns to the right (to which is added a little left-arrow if there are previous columns to scroll back to). If you want to check for yourself that there are 30 rows, you can click Next a couple of times to get down to row 30, and then see that the Next button cannot be clicked again, and therefore that 30 rows is how many there are.</p>
 <p>Or, you can summarize the years by counting how many there are
 of each:</p>
-<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="two-sample-inference.html#cb330-1"></a>plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(year)</span></code></pre></div>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb333-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(year)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1999","2":"15","_rn_":"1"},{"1":"2009","2":"15","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1999","2":"15"},{"1":"2009","2":"15"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>or the more verbose form of the same thing:</p>
-<div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb331-1"><a href="two-sample-inference.html#cb331-1"></a>plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">rows=</span><span class="kw">n</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb334-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">rows=</span><span class="kw">n</span>())</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rows"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1999","2":"15","_rn_":"1"},{"1":"2009","2":"15","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["year"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["rows"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1999","2":"15"},{"1":"2009","2":"15"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Any of those says that it looks good. 30 rows, 1999 and 2009, 15
@@ -855,8 +814,8 @@ year. <code>year</code> is a numeric variable that we want to treat as a
 factor, so we need to <em>make</em> it into a factor.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="two-sample-inference.html#cb332-1"></a><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-365-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb335-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-367-1.png" width="672"  /></p>
 <p>The <code>fct_inorder</code> trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.</p>
 <p>The median for 2009 is noticeably higher, and there is no skewness or
@@ -867,9 +826,9 @@ there would be no problem running the pooled test here.</p>
 get around that, you can define year-as-factor <em>first</em>, using
 <code>mutate</code>, then feed your new column into the boxplot. That goes
 like this. There is a wrinkle that I explain afterwards:</p>
-<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="two-sample-inference.html#cb333-1"></a>plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></span>
-<span id="cb333-2"><a href="two-sample-inference.html#cb333-2"></a><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-366-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb336-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb336-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-368-1.png" width="672"  /></p>
 <p>You could even redefine <code>year</code> to be the factor version of
 itself (if you don’t need the year-as-number anywhere else). The
 wrinkle I mentioned above is that in the <code>ggplot</code> you  name the data frame first; the data frame used is the
@@ -878,9 +837,9 @@ wrinkle I mentioned above is that in the <code>ggplot</code> you  name the data 
 <code>the_year</code>.</p>
 <p>Note how the <span class="math inline">\(x\)</span>-axis now has the name of the new variable.</p>
 <p>If you forget to make <code>year</code> into a factor, this happens:</p>
-<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb334-1"><a href="two-sample-inference.html#cb334-1"></a><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb337-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-367-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-369-1.png" width="672"  /></p>
 <p>You get <em>one</em> boxplot, for all the hours, without distinguishing
 by year, and a warning message that tries (and fails) to read our
 mind: yes, we have a continuous, quantitative <code>x</code>, but
@@ -896,7 +855,7 @@ mind: yes, we have a continuous, quantitative <code>x</code>, but
 <p>The hard part to remember is how you specify a one-sided test in
 R; it’s <code>alternative="less"</code> (rather
 than “greater”) because 1999 is “before” 2009:</p>
-<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="two-sample-inference.html#cb336-1"></a><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb339-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)  </a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -915,7 +874,7 @@ we got. (The pooled test is below.)</p>
 <code>t.test</code>, with a “model formula” (the thing with the
 squiggle) allows a <code>data=</code> to say which data frame to get
 things from. The other ways, using (for example) <code>with</code>, also work:</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="two-sample-inference.html#cb338-1"></a><span class="kw">with</span>(plugged,<span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="kw">with</span>(plugged,<span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -928,7 +887,7 @@ things from. The other ways, using (for example) <code>with</code>, also work:</
 ## mean in group 1999 mean in group 2009 
 ##           5.933333           7.600000</code></pre>
 <p>This also works, but is <em>ugly</em>:</p>
-<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="two-sample-inference.html#cb340-1"></a><span class="kw">t.test</span>(plugged<span class="op">$</span>hours<span class="op">~</span>plugged<span class="op">$</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1"><span class="kw">t.test</span>(plugged<span class="op">$</span>hours<span class="op">~</span>plugged<span class="op">$</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -945,7 +904,7 @@ dollar sign <em>twice</em> for no reason. As a general principle, if you
 as a programmer are repeating yourself, you should stop and ask
 yourself how you can avoid the repeat.</p>
 <p>If you want the pooled test in R, you have to ask for it:</p>
-<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="two-sample-inference.html#cb342-1"></a><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>,<span class="dt">data=</span>plugged,<span class="dt">var.equal=</span>T)    </span></code></pre></div>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>,<span class="dt">data=</span>plugged,<span class="dt">var.equal=</span>T)    </a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -995,7 +954,7 @@ switched around. Or, do the same thing with Welch-Satterthwaite.</p>
 <p>Solution</p>
 <p>Take off the thing that made it one-sided, and
 put in a thing that gets the right CI:</p>
-<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="two-sample-inference.html#cb344-1"></a><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">conf.level=</span><span class="fl">0.99</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">conf.level=</span><span class="fl">0.99</span>)  </a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1012,7 +971,7 @@ is consistent with our having rejected a null hypothesis of no
 difference in means.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="parking-close-to-the-curb-1" class="section level2" number="7.9">
+<div id="parking-close-to-the-curb-1" class="section level2">
 <h2><span class="header-section-number">7.9</span> Parking close to the curb</h2>
 <p>In 2009, the Toronto Star commissioned a survey to address
 the issue of who is better at parking a car: men or women. The
@@ -1088,14 +1047,14 @@ by-passes the download-upload steps that you would have to do
 otherwise. (I am grateful to Rose Gao for this idea.)
 Here is how you can use <code>download.file</code> here:</p></li>
 </ul>
-<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="two-sample-inference.html#cb346-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/parking.xlsx&quot;</span></span>
-<span id="cb346-2"><a href="two-sample-inference.html#cb346-2"></a>local &lt;-<span class="st"> &quot;parking.xlsx&quot;</span></span>
-<span id="cb346-3"><a href="two-sample-inference.html#cb346-3"></a><span class="kw">download.file</span>(my_url, local, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb349-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/parking.xlsx&quot;</span></a>
+<a class="sourceLine" id="cb349-2" title="2">local &lt;-<span class="st"> &quot;parking.xlsx&quot;</span></a>
+<a class="sourceLine" id="cb349-3" title="3"><span class="kw">download.file</span>(my_url, local, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a></code></pre></div>
 <p>When you’ve gotten the spreadsheet into your project folder via one of
 those two ways, you go ahead and do this:</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb347-1"><a href="two-sample-inference.html#cb347-1"></a><span class="kw">library</span>(readxl)</span>
-<span id="cb347-2"><a href="two-sample-inference.html#cb347-2"></a>parking &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;parking.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">2</span>)</span>
-<span id="cb347-3"><a href="two-sample-inference.html#cb347-3"></a>parking</span></code></pre></div>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" title="1"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb350-2" title="2">parking &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;parking.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb350-3" title="3">parking</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["distance"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"0.5","2":"male"},{"1":"1.0","2":"male"},{"1":"1.5","2":"male"},{"1":"1.5","2":"male"},{"1":"1.5","2":"male"},{"1":"3.0","2":"male"},{"1":"3.5","2":"male"},{"1":"5.0","2":"male"},{"1":"6.0","2":"male"},{"1":"6.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"8.0","2":"male"},{"1":"8.0","2":"male"},{"1":"8.5","2":"male"},{"1":"8.5","2":"male"},{"1":"9.0","2":"male"},{"1":"9.0","2":"male"},{"1":"9.5","2":"male"},{"1":"10.0","2":"male"},{"1":"10.0","2":"male"},{"1":"11.0","2":"male"},{"1":"12.0","2":"male"},{"1":"12.0","2":"male"},{"1":"12.0","2":"male"},{"1":"13.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.5","2":"male"},{"1":"14.5","2":"male"},{"1":"14.5","2":"male"},{"1":"17.0","2":"male"},{"1":"18.0","2":"male"},{"1":"18.0","2":"male"},{"1":"19.0","2":"male"},{"1":"19.0","2":"male"},{"1":"20.0","2":"male"},{"1":"21.0","2":"male"},{"1":"48.0","2":"male"},{"1":"2.0","2":"female"},{"1":"2.5","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"4.0","2":"female"},{"1":"4.5","2":"female"},{"1":"4.5","2":"female"},{"1":"4.5","2":"female"},{"1":"5.0","2":"female"},{"1":"5.0","2":"female"},{"1":"5.0","2":"female"},{"1":"6.0","2":"female"},{"1":"6.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.5","2":"female"},{"1":"8.0","2":"female"},{"1":"8.5","2":"female"},{"1":"8.5","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"10.0","2":"female"},{"1":"10.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.5","2":"female"},{"1":"13.0","2":"female"},{"1":"13.0","2":"female"},{"1":"13.0","2":"female"},{"1":"14.0","2":"female"},{"1":"14.0","2":"female"},{"1":"14.0","2":"female"},{"1":"15.5","2":"female"},{"1":"16.0","2":"female"},{"1":"18.0","2":"female"},{"1":"20.0","2":"female"},{"1":"21.0","2":"female"},{"1":"25.0","2":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1113,9 +1072,9 @@ second sheet in the workbook), or a name (whatever name the sheet has
 on its tab in the workbook).</p>
 <p>Extra: Rose actually came up with a better idea, which I will show
 you and explain:</p>
-<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="two-sample-inference.html#cb348-1"></a>tf &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</span>
-<span id="cb348-2"><a href="two-sample-inference.html#cb348-2"></a><span class="kw">download.file</span>(my_url, tf, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</span>
-<span id="cb348-3"><a href="two-sample-inference.html#cb348-3"></a>p &lt;-<span class="st"> </span><span class="kw">read_excel</span>(tf, <span class="dt">sheet =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb351-1" title="1">tf &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb351-2" title="2"><span class="kw">download.file</span>(my_url, tf, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a>
+<a class="sourceLine" id="cb351-3" title="3">p &lt;-<span class="st"> </span><span class="kw">read_excel</span>(tf, <span class="dt">sheet =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p>What <code>tempfile()</code> does is to create a temporary file to hold the
 spreadsheet that you are about to download. After downloading the
 spreadsheet to the temporary file, you then use <code>read_excel</code> to
@@ -1147,14 +1106,14 @@ before you Save As <code>.csv</code>. I did that, and called my
 saved <code>.csv</code> <code>parking2.csv</code> (because it was from
 sheet 2, but you can use any name you like).
 Then I read this into R thus:</p>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb349-1"><a href="two-sample-inference.html#cb349-1"></a>parking2 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;parking2.csv&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb352-1" title="1">parking2 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;parking2.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   distance = col_double(),
 ##   gender = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="two-sample-inference.html#cb351-1"></a>parking2</span></code></pre></div>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb354-1" title="1">parking2</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["distance"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["gender"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"0.5","2":"male"},{"1":"1.0","2":"male"},{"1":"1.5","2":"male"},{"1":"1.5","2":"male"},{"1":"1.5","2":"male"},{"1":"3.0","2":"male"},{"1":"3.5","2":"male"},{"1":"5.0","2":"male"},{"1":"6.0","2":"male"},{"1":"6.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"7.0","2":"male"},{"1":"8.0","2":"male"},{"1":"8.0","2":"male"},{"1":"8.5","2":"male"},{"1":"8.5","2":"male"},{"1":"9.0","2":"male"},{"1":"9.0","2":"male"},{"1":"9.5","2":"male"},{"1":"10.0","2":"male"},{"1":"10.0","2":"male"},{"1":"11.0","2":"male"},{"1":"12.0","2":"male"},{"1":"12.0","2":"male"},{"1":"12.0","2":"male"},{"1":"13.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.0","2":"male"},{"1":"14.5","2":"male"},{"1":"14.5","2":"male"},{"1":"14.5","2":"male"},{"1":"17.0","2":"male"},{"1":"18.0","2":"male"},{"1":"18.0","2":"male"},{"1":"19.0","2":"male"},{"1":"19.0","2":"male"},{"1":"20.0","2":"male"},{"1":"21.0","2":"male"},{"1":"48.0","2":"male"},{"1":"2.0","2":"female"},{"1":"2.5","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"3.0","2":"female"},{"1":"4.0","2":"female"},{"1":"4.5","2":"female"},{"1":"4.5","2":"female"},{"1":"4.5","2":"female"},{"1":"5.0","2":"female"},{"1":"5.0","2":"female"},{"1":"5.0","2":"female"},{"1":"6.0","2":"female"},{"1":"6.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.0","2":"female"},{"1":"7.5","2":"female"},{"1":"8.0","2":"female"},{"1":"8.5","2":"female"},{"1":"8.5","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"9.0","2":"female"},{"1":"10.0","2":"female"},{"1":"10.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.0","2":"female"},{"1":"12.5","2":"female"},{"1":"13.0","2":"female"},{"1":"13.0","2":"female"},{"1":"13.0","2":"female"},{"1":"14.0","2":"female"},{"1":"14.0","2":"female"},{"1":"14.0","2":"female"},{"1":"15.5","2":"female"},{"1":"16.0","2":"female"},{"1":"18.0","2":"female"},{"1":"20.0","2":"female"},{"1":"21.0","2":"female"},{"1":"25.0","2":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1170,10 +1129,10 @@ route, but I really wanted you to figure out how to read the Excel
 spreadsheet directly, so that’s what would be worth full marks.</p>
 <p>You might want to check that you have some males and some females, and
 how many of each, which you could do this way:</p>
-<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="two-sample-inference.html#cb352-1"></a>parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</span></code></pre></div>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["gender"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"female","2":"47","_rn_":"1"},{"1":"male","2":"46","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["gender"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"female","2":"47"},{"1":"male","2":"46"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -1184,8 +1143,8 @@ gender seem to be better at parking than the other? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>With the right data set, this is a piece of cake:</p>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb353-1"><a href="two-sample-inference.html#cb353-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> gender, <span class="dt">y =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-378-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb356-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> gender, <span class="dt">y =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-380-1.png" width="672"  /></p>
 <p>The outcome variable is distance from the curb, so smaller should be
 better (more accurate parking). With that in mind, the median for
 females is a little smaller than for males (about 8.5 vs. about 10),
@@ -1197,18 +1156,18 @@ difference — don’t worry, that’s coming up).</p>
 above-and-below histograms, as another way of comparing males and
 females (two or more groups, in general). First, we make a histogram of all
 the distances, without distinguishing by gender:</p>
-<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="two-sample-inference.html#cb354-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">8</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-379-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb357-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">8</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-381-1.png" width="672"  /></p>
 <p>That big outlier is the very inaccurate male driver.</p>
 <p>Now, how do we get a <em>separate</em> histogram for each
 <code>gender</code>? In <code>ggplot</code>, separate plots for each
 “something” are called <strong>facets</strong>, and the way to get facets
 arranged as you want them is called <code>facet_grid</code>. Let me show you
 the code first, and then explain how it works:</p>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb355-1"><a href="two-sample-inference.html#cb355-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></span>
-<span id="cb355-2"><a href="two-sample-inference.html#cb355-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></span>
-<span id="cb355-3"><a href="two-sample-inference.html#cb355-3"></a><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-380-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb358-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb358-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb358-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-382-1.png" width="672"  /></p>
 <p><code>facet_grid</code> takes a “model formula” with a squiggle, with <span class="math inline">\(y\)</span>
 on the left and <span class="math inline">\(x\)</span> on the right. We want to compare our two
 histograms, one for males and one for females, and I think the best
@@ -1225,10 +1184,10 @@ more careful since you don’t have any control over how the histograms
 come out (you probably get them side by side, which is not so helpful
 for comparing distributions). You can make it work by using
 <code>ncol=1</code> to arrange “all” the histograms in one column:</p>
-<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="two-sample-inference.html#cb356-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></span>
-<span id="cb356-2"><a href="two-sample-inference.html#cb356-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></span>
-<span id="cb356-3"><a href="two-sample-inference.html#cb356-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-381-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb359-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb359-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-383-1.png" width="672"  /></p>
 <p>The centres of both histograms are somewhere around 10, so it’s hard
 to see any real difference between males and females here. Maybe this
 is further evidence that the small difference we saw between the
@@ -1242,16 +1201,16 @@ arrange), but <code>facet_grid</code> <em>must</em> have something on
 on the left, how to arrange in the <span class="math inline">\(x\)</span> direction on the right), and if
 you don’t have anything else to put there, you put a dot. Here’s my
 <code>facet_grid</code> code from above, again:</p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb357-1"><a href="two-sample-inference.html#cb357-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></span>
-<span id="cb357-2"><a href="two-sample-inference.html#cb357-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></span>
-<span id="cb357-3"><a href="two-sample-inference.html#cb357-3"></a><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb360-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb360-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb360-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
 <p>We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my <code>facet_wrap</code>
 code:
 <label for="tufte-mn-35" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-35" class="margin-toggle"><span class="marginnote">I took out the <em>ncol</em> since that confuses the explanation here.</span></p>
-<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="two-sample-inference.html#cb358-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></span>
-<span id="cb358-2"><a href="two-sample-inference.html#cb358-2"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></span>
-<span id="cb358-3"><a href="two-sample-inference.html#cb358-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</span></code></pre></div>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb361-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb361-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb361-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</a></code></pre></div>
 <p>This says “make a separate facet for each gender”, but it doesn’t
 say anything about how to arrange them.
 The choice of bins for my histogram(s) came from Sturges’ rule: with
@@ -1259,26 +1218,26 @@ The choice of bins for my histogram(s) came from Sturges’ rule: with
 <span class="math inline">\(k=\log_2(n)+1\)</span>, rounded up. If we were to make a histogram of all the
 parking distances combined together, we would have <span class="math inline">\(n=47+48=95\)</span>
 observations, so we should use this many bins:</p>
-<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb359-1"><a href="two-sample-inference.html#cb359-1"></a>sturges &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">95</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
-<span id="cb359-2"><a href="two-sample-inference.html#cb359-2"></a>sturges</span></code></pre></div>
+<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb362-1" title="1">sturges &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">95</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb362-2" title="2">sturges</a></code></pre></div>
 <pre><code>## [1] 7.569856</code></pre>
 <p>Round this up to 8. (The second thing in <code>log</code> is the base of
 the logs, if you specify it, otherwise it defaults to <span class="math inline">\(e\)</span> and gives
 you “natural” logs.) I seem to have the powers of 2 in my head, so I
 can do it mentally by saying “the next power of 2 is 128, which is <span class="math inline">\(2^7\)</span>, so I need <span class="math inline">\(7+1=8\)</span> bins.”</p>
 <p>Or:</p>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb361-1"><a href="two-sample-inference.html#cb361-1"></a><span class="kw">with</span>(parking, <span class="kw">nclass.Sturges</span>(distance))</span></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb364-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 8</code></pre>
 <p>Sturges’ rule tends to produce not enough bins if <span class="math inline">\(n\)</span> is small, so be
 prepared to increase it a bit if you don’t have much data.
 I think that gives a fairly bare-bones picture of the shape: skewed to
 the right with outlier.</p>
 <p>The other rule we saw was Freedman-Diaconis:</p>
-<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb363-1"><a href="two-sample-inference.html#cb363-1"></a><span class="kw">with</span>(parking, <span class="kw">nclass.FD</span>(distance))</span></code></pre></div>
+<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb366-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.FD</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 14</code></pre>
 <p>and that leads to this histogram:</p>
-<div class="sourceCode" id="cb365"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb365-1"><a href="two-sample-inference.html#cb365-1"></a><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">14</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-387-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb368-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">14</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-389-1.png" width="672"  /></p>
 <p>That gives rather more detail (a lot more bars: the binwidth in the
 Sturges-rule histogram is about 7, or twice what you see here), but in
 this case the overall story is about the same.</p>
@@ -1288,7 +1247,7 @@ might have quite different numbers of observations, but you can only
 use one <code>binwidth</code> (or <code>bins</code>), so you may have to
 compromise. For example, using Sturges’ rule based on 47 observations
 (the number of males; the number of females is one more):</p>
-<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb366-1"><a href="two-sample-inference.html#cb366-1"></a><span class="kw">log</span>(<span class="dv">47</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb369-1" title="1"><span class="kw">log</span>(<span class="dv">47</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
 <pre><code>## [1] 6.554589</code></pre>
 <p>and so each facet should have that many bins, rounded up. That’s where
 I got my 7 for the facetted histogram from. This one doesn’t work
@@ -1296,9 +1255,9 @@ immediately with <code>nclass.Sturges</code>, because we do not have
 <em>one</em> column whose length is the number of observations we want:
 we have one column of distances that are males and females mixed
 up. To do <em>that</em>, <code>filter</code> one of the genders first:</p>
-<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb368-1"><a href="two-sample-inference.html#cb368-1"></a>parking <span class="op">%&gt;%</span></span>
-<span id="cb368-2"><a href="two-sample-inference.html#cb368-2"></a><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb368-3"><a href="two-sample-inference.html#cb368-3"></a><span class="st">  </span><span class="kw">with</span>(., <span class="kw">nclass.Sturges</span>(distance))</span></code></pre></div>
+<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb371-1" title="1">parking <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb371-2" title="2"><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb371-3" title="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <p>I used the “dot” trick again, which you can read as “it”: “from <code>parking</code>, take only the rows for the females, and with it, give me the number of bins for a histogram by Sturges’ rule.”</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -1341,7 +1300,7 @@ can do the Welch one either without comment or by asserting that the
 boxplots show different spreads; if you are going to do the pooled
 one, you need to say that the spreads are “about equal”, by
 comparing the heights of the boxes on the boxplots:</p>
-<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb370-1"><a href="two-sample-inference.html#cb370-1"></a><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking)</span></code></pre></div>
+<div class="sourceCode" id="cb373"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb373-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1358,7 +1317,7 @@ not assume equal SDs in the two groups. The P-value of 0.1894 is not
 small, so there is no evidence of any difference in parking accuracy
 between males and females.</p>
 <p>Or, this being the pooled one:</p>
-<div class="sourceCode" id="cb372"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb372-1"><a href="two-sample-inference.html#cb372-1"></a><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking, <span class="dt">var.equal =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb375-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking, <span class="dt">var.equal =</span> T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1406,7 +1365,7 @@ Test, which is kind of the two-sample equivalent of the sign
 test (which we will also see later). It goes like this:
 Work out the overall median of all the distances, regardless
 of gender:</p>
-<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb374-1"><a href="two-sample-inference.html#cb374-1"></a>parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(distance))</span></code></pre></div>
+<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb377-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(distance))</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["med"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1417,8 +1376,8 @@ of gender:</p>
 overall median. (Strictly, I’m supposed to throw away any values that
 are exactly equal to the overall median, but I won’t here for clarity
 of exposition.)</p>
-<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb375-1"><a href="two-sample-inference.html#cb375-1"></a>tab &lt;-<span class="st"> </span><span class="kw">with</span>(parking, <span class="kw">table</span>(gender, distance <span class="op">&lt;</span><span class="st"> </span><span class="dv">9</span>))</span>
-<span id="cb375-2"><a href="two-sample-inference.html#cb375-2"></a>tab</span></code></pre></div>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">tab &lt;-<span class="st"> </span><span class="kw">with</span>(parking, <span class="kw">table</span>(gender, distance <span class="op">&lt;</span><span class="st"> </span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb378-2" title="2">tab</a></code></pre></div>
 <pre><code>##         
 ## gender   FALSE TRUE
 ##   female    23   24
@@ -1428,7 +1387,7 @@ Both genders are pretty close to 50–50 above and below the overall
 median, which suggests that the males and females have about the same
 median. This can be tested (it’s a chi-squared test for independence,
 if you know that):</p>
-<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb377-1"><a href="two-sample-inference.html#cb377-1"></a><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb380-1" title="1"><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
@@ -1462,7 +1421,7 @@ it was not reasonable to conclude that females generally
 are more accurate at parallel-parking than males are.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="bell-peppers-and-too-much-water-1" class="section level2" number="7.10">
+<div id="bell-peppers-and-too-much-water-1" class="section level2">
 <h2><span class="header-section-number">7.10</span> Bell peppers and too much water</h2>
 <p>A pathogen called <em>Phytophthora capsici</em> causes bell
 peppers to wilt and die. It is thought that too much water aids in the
@@ -1480,25 +1439,25 @@ list the resulting data frame.</li>
 </ol>
 <p>Solution</p>
 <p>Reading directly from the URL is easiest:</p>
-<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb379-1"><a href="two-sample-inference.html#cb379-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bellpepper.csv&quot;</span></span>
-<span id="cb379-2"><a href="two-sample-inference.html#cb379-2"></a>pepper &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb382-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bellpepper.csv&quot;</span></a>
+<a class="sourceLine" id="cb382-2" title="2">pepper &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   field = col_character(),
 ##   water = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb381-1"><a href="two-sample-inference.html#cb381-1"></a>pepper</span></code></pre></div>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb384-1" title="1">pepper</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["field"],"name":[1],"type":["chr"],"align":["left"]},{"label":["water"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"a","2":"10.2"},{"1":"a","2":"10.7"},{"1":"a","2":"15.5"},{"1":"a","2":"10.4"},{"1":"a","2":"9.9"},{"1":"a","2":"10.0"},{"1":"a","2":"16.6"},{"1":"a","2":"15.1"},{"1":"a","2":"15.2"},{"1":"a","2":"13.8"},{"1":"a","2":"14.1"},{"1":"a","2":"11.4"},{"1":"a","2":"11.5"},{"1":"a","2":"11.0"},{"1":"b","2":"8.1"},{"1":"b","2":"8.5"},{"1":"b","2":"8.4"},{"1":"b","2":"7.3"},{"1":"b","2":"8.0"},{"1":"b","2":"7.1"},{"1":"b","2":"13.9"},{"1":"b","2":"12.2"},{"1":"b","2":"13.4"},{"1":"b","2":"11.3"},{"1":"b","2":"12.6"},{"1":"b","2":"12.6"},{"1":"b","2":"12.7"},{"1":"b","2":"12.4"},{"1":"b","2":"11.3"},{"1":"b","2":"12.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>If you like, find out how many observations you have from each field, thus:</p>
-<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb382-1"><a href="two-sample-inference.html#cb382-1"></a>pepper <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(field)</span></code></pre></div>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb385-1" title="1">pepper <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(field)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["field"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"14","_rn_":"1"},{"1":"b","2":"16","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["field"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"14"},{"1":"b","2":"16"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Fourteen and sixteen.</p>
@@ -1509,28 +1468,28 @@ the two fields. How do the fields seem to compare?</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb383-1"><a href="two-sample-inference.html#cb383-1"></a><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> field, <span class="dt">y =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb386-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> field, <span class="dt">y =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/dartmouth-1.png" width="672"  /></p>
 <p>This one is rather interesting: the distribution of water contents for
 field <code>a</code> is generally higher than that for field <code>b</code>,
 but the median for <code>a</code> is actually <em>lower</em>.</p>
 <p>The other reasonable plot is a facetted histogram, something like this:</p>
-<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb384-1"><a href="two-sample-inference.html#cb384-1"></a><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></span>
-<span id="cb384-2"><a href="two-sample-inference.html#cb384-2"></a><span class="st">  </span><span class="kw">facet_grid</span>(field <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-397-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb387-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb387-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(field <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-399-1.png" width="672"  /></p>
 <p>The distribution of water content in field <code>b</code> is actually
 bimodal, which is probably the explanation of the funny thing with the
 median. What actually seems to be happening (at least for these data)
 is that the water content in field B is either about the same as field
 A, or a lot less (nothing in between). I can borrow an idea from
 earlier to find the five-number summaries for each field:</p>
-<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb385-1"><a href="two-sample-inference.html#cb385-1"></a>pepper <span class="op">%&gt;%</span></span>
-<span id="cb385-2"><a href="two-sample-inference.html#cb385-2"></a><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>field) <span class="op">%&gt;%</span></span>
-<span id="cb385-3"><a href="two-sample-inference.html#cb385-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb385-4"><a href="two-sample-inference.html#cb385-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qq =</span> <span class="kw">list</span>(<span class="kw">enframe</span>(<span class="kw">quantile</span>(data<span class="op">$</span>water))))<span class="op">%&gt;%</span></span>
-<span id="cb385-5"><a href="two-sample-inference.html#cb385-5"></a><span class="st">  </span><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></span>
-<span id="cb385-6"><a href="two-sample-inference.html#cb385-6"></a><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb385-7"><a href="two-sample-inference.html#cb385-7"></a><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>name, <span class="dt">values_from=</span>value)</span></code></pre></div>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb388-1" title="1">pepper <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb388-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>field) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb388-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb388-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qq =</span> <span class="kw">list</span>(<span class="kw">enframe</span>(<span class="kw">quantile</span>(data<span class="op">$</span>water))))<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb388-5" title="5"><span class="st">  </span><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb388-6" title="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb388-7" title="7"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>name, <span class="dt">values_from=</span>value)</a></code></pre></div>
 <pre><code>## Warning: All elements of `...` must be named.
 ## Did you want `data = c(water)`?</code></pre>
 <div data-pagedtable="false">
@@ -1550,7 +1509,7 @@ figure out a way of doing a one-sided test, or how to adapt the
 results from a two-sided test.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb387-1"><a href="two-sample-inference.html#cb387-1"></a><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">data =</span> pepper)</span></code></pre></div>
+<div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb390-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">data =</span> pepper)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1570,7 +1529,7 @@ means) in favour of the <code>a</code> mean being bigger than the
 <code>b</code> mean: field <code>a</code> really does have a higher mean water
 content.</p>
 <p>Another way to tackle this is to do a two-sided test and adapt the P-value:</p>
-<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb389-1"><a href="two-sample-inference.html#cb389-1"></a><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">data =</span> pepper)</span></code></pre></div>
+<div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb392-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">data =</span> pepper)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1609,7 +1568,7 @@ smaller samples, having overlapping boxes would probably lead to a
 non-significant difference.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="exercise-and-anxiety-and-bullying-mice-1" class="section level2" number="7.11">
+<div id="exercise-and-anxiety-and-bullying-mice-1" class="section level2">
 <h2><span class="header-section-number">7.11</span> Exercise and anxiety and bullying mice</h2>
 <p>Does exercise help to reduce anxiety?
 To assess this, some researchers randomly assigned
@@ -1629,15 +1588,15 @@ darkness is recorded for each of the mice.</p>
 </ol>
 <p>Solution</p>
 <p>These are aligned columns with spaces in between, so we need <code>read_table</code>:</p>
-<div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="two-sample-inference.html#cb391-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/stressedmice.txt&quot;</span></span>
-<span id="cb391-2"><a href="two-sample-inference.html#cb391-2"></a>mice &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb394-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/stressedmice.txt&quot;</span></a>
+<a class="sourceLine" id="cb394-2" title="2">mice &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   Time = col_double(),
 ##   Environment = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="two-sample-inference.html#cb393-1"></a>mice</span></code></pre></div>
+<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb396-1" title="1">mice</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["Time"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Environment"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"359","2":"Enriched"},{"1":"280","2":"Enriched"},{"1":"138","2":"Enriched"},{"1":"227","2":"Enriched"},{"1":"203","2":"Enriched"},{"1":"184","2":"Enriched"},{"1":"231","2":"Enriched"},{"1":"394","2":"Standard"},{"1":"477","2":"Standard"},{"1":"439","2":"Standard"},{"1":"428","2":"Standard"},{"1":"391","2":"Standard"},{"1":"488","2":"Standard"},{"1":"454","2":"Standard"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1645,10 +1604,10 @@ darkness is recorded for each of the mice.</p>
 </div>
 <p>You can call the data frame whatever you like.</p>
 <p>If you must, you can physically count the number of mice in each group, but you ought to get in the habit of coding this kind of thing:</p>
-<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb394-1"><a href="two-sample-inference.html#cb394-1"></a>mice <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Environment)</span></code></pre></div>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" title="1">mice <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Environment)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Environment"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Enriched","2":"7","_rn_":"1"},{"1":"Standard","2":"7","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Environment"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Enriched","2":"7"},{"1":"Standard","2":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Seven in each.</p>
@@ -1659,7 +1618,7 @@ group of mice.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb395-1"><a href="two-sample-inference.html#cb395-1"></a><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">x =</span> Environment, <span class="dt">y =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb398-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">x =</span> Environment, <span class="dt">y =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/artichoke-1.png" width="672"  /></p>
 <p>You did remember to put capital letters on the variable names, didn’t you?</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -1699,7 +1658,7 @@ think about is how R organizes the groups for
 <code>Enriched</code> is first (like on the boxplot). We’re trying to
 prove that the mean <code>Time</code> is <em>less</em> for
 <code>Enriched</code> than for <code>Standard</code>, so we need <code>alternative="less"</code>:</p>
-<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb396-1"><a href="two-sample-inference.html#cb396-1"></a><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1712,7 +1671,7 @@ prove that the mean <code>Time</code> is <em>less</em> for
 ## mean in group Enriched mean in group Standard 
 ##               231.7143               438.7143</code></pre>
 <p>A common clue that you have the wrong alternative hypothesis is a P-value coming out close to <em>1</em>, which is what you would have gotten from something like this:</p>
-<div class="sourceCode" id="cb398"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb398-1"><a href="two-sample-inference.html#cb398-1"></a><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1773,9 +1732,9 @@ chance. So I do not see a problem.</p></li>
 </ul>
 <p>Extra: another way to think about this is normal quantile plots to assess
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each <code>Environment</code>:</p>
-<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb400-1"><a href="two-sample-inference.html#cb400-1"></a><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
-<span id="cb400-2"><a href="two-sample-inference.html#cb400-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-405-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb403-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb403-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-407-1.png" width="672"  /></p>
 <p>For the <code>Enriched</code> group, the upper-end outlier shows up. In a
 way this plot is no more illuminating than the boxplot, because you
 still have to make a call about whether this is “too big”. Bear in
@@ -1785,16 +1744,16 @@ exaggerated. On this plot, the lowest value also looks too low.</p>
 <p>For the <code>Standard</code> group, there are no problems with normality
 at all.</p>
 <p>What happens if we change the shape of the plots?</p>
-<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb401-1"><a href="two-sample-inference.html#cb401-1"></a><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
-<span id="cb401-2"><a href="two-sample-inference.html#cb401-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-406-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb404-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-408-1.png" width="672"  /></p>
 <p>This makes the plots come out in one column, that is, short and
 squat. I prefer these. I’d still call the highest value in
 <code>Enriched</code> an outlier, but the lowest value now looks pretty
 close to what you’d expect.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="diet-and-growth-in-boys-1" class="section level2" number="7.12">
+<div id="diet-and-growth-in-boys-1" class="section level2">
 <h2><span class="header-section-number">7.12</span> Diet and growth in boys</h2>
 <p>A dietician is studying the effect of
 different diets on children’s growth. In part of the study, the
@@ -1813,15 +1772,15 @@ and which variables.</li>
 </ol>
 <p>Solution</p>
 <p>The data values are separated by one space, so:</p>
-<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb402-1"><a href="two-sample-inference.html#cb402-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/kids-diet.txt&quot;</span></span>
-<span id="cb402-2"><a href="two-sample-inference.html#cb402-2"></a>diet &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb405-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/kids-diet.txt&quot;</span></a>
+<a class="sourceLine" id="cb405-2" title="2">diet &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   sect = col_character(),
 ##   height = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb404-1"><a href="two-sample-inference.html#cb404-1"></a>diet</span></code></pre></div>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb407-1" title="1">diet</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sect"],"name":[1],"type":["chr"],"align":["left"]},{"label":["height"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"a","2":"140"},{"1":"a","2":"140"},{"1":"a","2":"140"},{"1":"a","2":"143"},{"1":"a","2":"135"},{"1":"a","2":"144"},{"1":"a","2":"156"},{"1":"a","2":"149"},{"1":"a","2":"146"},{"1":"a","2":"148"},{"1":"a","2":"144"},{"1":"a","2":"153"},{"1":"b","2":"151"},{"1":"b","2":"154"},{"1":"b","2":"139"},{"1":"b","2":"159"},{"1":"b","2":"159"},{"1":"b","2":"148"},{"1":"b","2":"140"},{"1":"b","2":"157"},{"1":"b","2":"145"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1840,8 +1799,8 @@ are different? Comment briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The boxplot is the kind of thing we’ve seen before:</p>
-<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb405-1"><a href="two-sample-inference.html#cb405-1"></a><span class="kw">ggplot</span>(diet, <span class="kw">aes</span>(<span class="dt">x =</span> sect, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-408-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb408-1" title="1"><span class="kw">ggplot</span>(diet, <span class="kw">aes</span>(<span class="dt">x =</span> sect, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-410-1.png" width="672"  /></p>
 <p>It looks to me as if the boys in Sect B are taller on average.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1861,10 +1820,10 @@ is good.
 As ever, normal quantile plots can offer more insight. With
 data in this form, the
 two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of <em>all</em> the heights, and then say at the end that we would actually like a separate plot for each sect:</p>
-<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb406-1"><a href="two-sample-inference.html#cb406-1"></a>diet <span class="op">%&gt;%</span></span>
-<span id="cb406-2"><a href="two-sample-inference.html#cb406-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
-<span id="cb406-3"><a href="two-sample-inference.html#cb406-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>sect, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-409-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb409-1" title="1">diet <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb409-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb409-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>sect, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-411-1.png" width="672"  /></p>
 <p>I decided that I wanted short squat plots rather than tall skinny ones.</p>
 <p>With the sizes of the samples, I really don’t see any problems
 here. Most of the evidence for the left skewness in Sect B is actually coming
@@ -1872,8 +1831,8 @@ from that largest value being too small. Sect A is as good as you
 could wish for. Having extreme values being <em>not extreme enough</em> is not a problem, since it won’t be distorting the mean.</p>
 <p>The other way of doing this is to use <code>filter</code> to pull out the
 rows you want and then feed that into the plot:</p>
-<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb407-1"><a href="two-sample-inference.html#cb407-1"></a>secta &lt;-<span class="st"> </span><span class="kw">filter</span>(diet, sect <span class="op">==</span><span class="st"> &quot;a&quot;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb407-2"><a href="two-sample-inference.html#cb407-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> sect)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb410-1" title="1">secta &lt;-<span class="st"> </span><span class="kw">filter</span>(diet, sect <span class="op">==</span><span class="st"> &quot;a&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb410-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> sect)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p>and the same for sect B. This is the usual <code>ggplot</code>-in-pipeline
 thing where you don’t have a named data frame in the <code>ggplot</code>
 because it will use whatever came out of the previous step of the
@@ -1888,7 +1847,7 @@ right thing to do.)</li>
 <p>Solution</p>
 <p>The wording states that a two-sided test is correct, which is the
 default, so you don’t need anything special:</p>
-<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb408-1"><a href="two-sample-inference.html#cb408-1"></a><span class="kw">t.test</span>(height <span class="op">~</span><span class="st"> </span>sect, <span class="dt">data =</span> diet)</span></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb411-1" title="1"><span class="kw">t.test</span>(height <span class="op">~</span><span class="st"> </span>sect, <span class="dt">data =</span> diet)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1918,8 +1877,8 @@ thing, if you were worried about that skewness in Sect B. My guess is
 that the <span class="math inline">\(t\)</span>-test is all right, so it will be the better test
 (and give the smaller P-value) here, but if you want to do it, you
 could do it this way:</p>
-<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="two-sample-inference.html#cb410-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb410-2"><a href="two-sample-inference.html#cb410-2"></a><span class="kw">median_test</span>(diet, height, sect)</span></code></pre></div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb413-1" title="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb413-2" title="2"><span class="kw">median_test</span>(diet, height, sect)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1945,7 +1904,7 @@ sect B are both 4.5), the conclusion is unlikely to be wrong because
 the P-value is so far from 0.05.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="handspans-of-males-and-females-1" class="section level2" number="7.13">
+<div id="handspans-of-males-and-females-1" class="section level2">
 <h2><span class="header-section-number">7.13</span> Handspans of males and females</h2>
 <p>Take your right hand, and stretch the fingers out as far as
 you can. The distance between the tip of your thumb and the tip of
@@ -1961,16 +1920,16 @@ than females? This is what we will explore.</p>
 </ol>
 <p>Solution</p>
 <p>This is a delimited (by spaces) file, so:</p>
-<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="two-sample-inference.html#cb412-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb412-2"><a href="two-sample-inference.html#cb412-2"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></span>
-<span id="cb412-3"><a href="two-sample-inference.html#cb412-3"></a>span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb415-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb415-2" title="2">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></a>
+<a class="sourceLine" id="cb415-3" title="3">span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   sex = col_character(),
 ##   handspan = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="two-sample-inference.html#cb414-1"></a>span</span></code></pre></div>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" title="1">span</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["handspan"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"M","2":"21.50"},{"1":"M","2":"22.50"},{"1":"M","2":"23.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.50"},{"1":"F","2":"20.25"},{"1":"M","2":"23.00"},{"1":"M","2":"24.50"},{"1":"M","2":"23.00"},{"1":"F","2":"20.00"},{"1":"M","2":"26.00"},{"1":"M","2":"23.00"},{"1":"F","2":"18.00"},{"1":"M","2":"21.50"},{"1":"F","2":"20.50"},{"1":"M","2":"21.50"},{"1":"F","2":"22.00"},{"1":"M","2":"24.50"},{"1":"F","2":"20.00"},{"1":"F","2":"21.50"},{"1":"M","2":"23.50"},{"1":"F","2":"17.00"},{"1":"F","2":"16.00"},{"1":"M","2":"22.00"},{"1":"F","2":"22.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"M","2":"23.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"24.50"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.70"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.25"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.00"},{"1":"F","2":"20.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"19.50"},{"1":"M","2":"22.50"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"20.50"},{"1":"M","2":"21.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"21.50"},{"1":"M","2":"25.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.50"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"22.50"},{"1":"F","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"21.50"},{"1":"M","2":"21.50"},{"1":"M","2":"18.00"},{"1":"M","2":"20.00"},{"1":"M","2":"22.00"},{"1":"M","2":"24.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"25.50"},{"1":"M","2":"24.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"20.00"},{"1":"F","2":"13.00"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"F","2":"19.50"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"17.50"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"18.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"M","2":"23.50"},{"1":"M","2":"21.00"},{"1":"M","2":"25.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"21.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.50"},{"1":"M","2":"23.00"},{"1":"M","2":"18.50"},{"1":"M","2":"21.00"},{"1":"M","2":"24.00"},{"1":"M","2":"23.50"},{"1":"M","2":"24.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"24.00"},{"1":"M","2":"24.50"},{"1":"F","2":"21.00"},{"1":"F","2":"18.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"22.00"},{"1":"F","2":"12.50"},{"1":"F","2":"18.00"},{"1":"F","2":"20.50"},{"1":"F","2":"19.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"21.50"},{"1":"F","2":"23.00"},{"1":"F","2":"23.25"},{"1":"F","2":"20.00"},{"1":"F","2":"18.80"},{"1":"F","2":"21.00"},{"1":"F","2":"17.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.50"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"M","2":"20.50"},{"1":"M","2":"24.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"21.00"},{"1":"M","2":"22.50"},{"1":"M","2":"21.50"},{"1":"M","2":"24.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"21.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"22.50"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"21.50"},{"1":"M","2":"19.00"},{"1":"M","2":"21.50"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1982,8 +1941,8 @@ than females? This is what we will explore.</p>
 </ol>
 <p>Solution</p>
 <p>One quantitative variable and one categorical one, so a boxplot:</p>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="two-sample-inference.html#cb415-1"></a><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-414-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb418-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-416-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Run a suitable two-sample <span class="math inline">\(t\)</span>-test to address the question
@@ -1994,7 +1953,7 @@ of interest. What do you conclude, in the context of the data?</li>
 handspan, so we need an . To see which: there
 are two sexes, F and M in that order, and we are trying to show
 that F is less than M:</p>
-<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="two-sample-inference.html#cb416-1"></a><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb419-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -2019,7 +1978,7 @@ any more code? Explain briefly.</li>
 without the  to make it two-sided. Note also that
 we need a 90% interval, which is different from the default 95%, so
 we have to ask for that too:</p>
-<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="two-sample-inference.html#cb418-1"></a><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">conf.level=</span><span class="fl">0.90</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">conf.level=</span><span class="fl">0.90</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -2054,10 +2013,10 @@ earlier both had low-end outliers, so the normality is
 questionable.</p>
 <p>Also, say something about the sample sizes and whether or not you think they are large enough to be helpful.</p>
 <p>How big are our sample sizes?</p>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="two-sample-inference.html#cb420-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</span></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"F","2":"103","_rn_":"1"},{"1":"M","2":"87","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"F","2":"103"},{"1":"M","2":"87"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>My suspicion is that we are saved by two things: the sample sizes
@@ -2070,36 +2029,36 @@ the sampling distribution of the sample mean might look like for males and for f
 way this works is to sample from each distribution , work out the mean of each sample, then repeat many
 times, once for the females and once for the males.</p>
 <p>To start with the females, the first thing to do is to grab <em>only</em> the rows containing the females. This, using an idea from Lecture 5a that we see again properly later, is <code>filter</code>:</p>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="two-sample-inference.html#cb421-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>) -&gt;<span class="st"> </span>females</span>
-<span id="cb421-2"><a href="two-sample-inference.html#cb421-2"></a>females</span></code></pre></div>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb424-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>) -&gt;<span class="st"> </span>females</a>
+<a class="sourceLine" id="cb424-2" title="2">females</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["handspan"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.50"},{"1":"F","2":"20.25"},{"1":"F","2":"20.00"},{"1":"F","2":"18.00"},{"1":"F","2":"20.50"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.50"},{"1":"F","2":"17.00"},{"1":"F","2":"16.00"},{"1":"F","2":"22.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.70"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.25"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.50"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"22.50"},{"1":"F","2":"22.50"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"20.00"},{"1":"F","2":"13.00"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"F","2":"19.50"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"17.50"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"18.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"F","2":"21.00"},{"1":"F","2":"18.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"22.00"},{"1":"F","2":"12.50"},{"1":"F","2":"18.00"},{"1":"F","2":"20.50"},{"1":"F","2":"19.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"21.50"},{"1":"F","2":"23.00"},{"1":"F","2":"23.25"},{"1":"F","2":"20.00"},{"1":"F","2":"18.80"},{"1":"F","2":"21.00"},{"1":"F","2":"17.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.50"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>There are 103 females. From these we need to take a “large” number of bootstrap samples to get a sense of how the mean handspan of the females varies:</p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="two-sample-inference.html#cb422-1"></a><span class="kw">set.seed</span>(<span class="dv">457299</span>)</span>
-<span id="cb422-2"><a href="two-sample-inference.html#cb422-2"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb422-3"><a href="two-sample-inference.html#cb422-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb422-4"><a href="two-sample-inference.html#cb422-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb422-5"><a href="two-sample-inference.html#cb422-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</span></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb425-1" title="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
+<a class="sourceLine" id="cb425-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb425-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb425-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb425-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
 <p>Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:</p>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb423-1"><a href="two-sample-inference.html#cb423-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-420-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb426-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-422-1.png" width="672"  /></p>
 <p>I don’t know what you think of this. There are a few more extreme values than I would like, and
 it looks otherwise a bit left-skewed to me. But maybe I am worrying too much.</p>
 <p>The males one works exactly the same way:</p>
-<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="two-sample-inference.html#cb424-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;M&quot;</span>) -&gt;<span class="st"> </span>males</span>
-<span id="cb424-2"><a href="two-sample-inference.html#cb424-2"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb424-3"><a href="two-sample-inference.html#cb424-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb424-4"><a href="two-sample-inference.html#cb424-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(males<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb424-5"><a href="two-sample-inference.html#cb424-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</span></code></pre></div>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="two-sample-inference.html#cb425-1"></a><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-422-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;M&quot;</span>) -&gt;<span class="st"> </span>males</a>
+<a class="sourceLine" id="cb427-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb427-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb427-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(males<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb427-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
+<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb428-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-424-1.png" width="672"  /></p>
 <p>There is a similar story here. I think these are good enough overall, and so I am happy with the two-sample <span class="math inline">\(t\)</span>-test, but it is not as clear-cut as I was expecting.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="the-anchoring-effect-australia-vs-us-1" class="section level2" number="7.14">
+<div id="the-anchoring-effect-australia-vs-us-1" class="section level2">
 <h2><span class="header-section-number">7.14</span> The anchoring effect: Australia vs US</h2>
 <p>Two groups of students (in a class at a American university) were asked what they thought the population of Canada was. (The correct answer at the time was just over 30 million.)
 Some of the students, before having to answer this, were told that the population of the United States was about 270 million. The other students in the class were told that the population of Australia was
@@ -2111,15 +2070,15 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>I made it as easy as I could:</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="two-sample-inference.html#cb426-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/anchoring.csv&quot;</span></span>
-<span id="cb426-2"><a href="two-sample-inference.html#cb426-2"></a>canada &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb429-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/anchoring.csv&quot;</span></a>
+<a class="sourceLine" id="cb429-2" title="2">canada &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   anchor = col_character(),
 ##   estimate = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="two-sample-inference.html#cb428-1"></a>canada</span></code></pre></div>
+<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb431-1" title="1">canada</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["anchor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"US","2":"20.0"},{"1":"US","2":"90.0"},{"1":"US","2":"1.5"},{"1":"US","2":"100.0"},{"1":"US","2":"132.0"},{"1":"US","2":"150.0"},{"1":"US","2":"130.0"},{"1":"US","2":"40.0"},{"1":"US","2":"200.0"},{"1":"US","2":"20.0"},{"1":"australia","2":"12.0"},{"1":"australia","2":"20.0"},{"1":"australia","2":"10.0"},{"1":"australia","2":"81.0"},{"1":"australia","2":"15.0"},{"1":"australia","2":"20.0"},{"1":"australia","2":"30.0"},{"1":"australia","2":"20.0"},{"1":"australia","2":"9.0"},{"1":"australia","2":"10.0"},{"1":"australia","2":"20.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -2132,8 +2091,8 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>One categorical variable and one quantitative one, so a boxplot:</p>
-<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb429-1"><a href="two-sample-inference.html#cb429-1"></a><span class="kw">ggplot</span>(canada, <span class="kw">aes</span>(<span class="dt">x =</span> anchor, <span class="dt">y =</span> estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-424-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb432-1" title="1"><span class="kw">ggplot</span>(canada, <span class="kw">aes</span>(<span class="dt">x =</span> anchor, <span class="dt">y =</span> estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-426-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Explain briefly why a Welch <span class="math inline">\(t\)</span>-test would be better than a pooled <span class="math inline">\(t\)</span>-test in this case.</li>
@@ -2148,7 +2107,7 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>The word “suitable” is a hint that you may have to think a bit about how you run the test. If the anchoring effect is real, the mean of the guesses for the students told the population of the US will be higher on average than for those told the population of Australia, so we want a one-sided alternative. Australia is before the US alphabetically, so the alternative has to be <code>less</code>:</p>
-<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="two-sample-inference.html#cb430-1"></a><span class="kw">t.test</span>(estimate<span class="op">~</span>anchor, <span class="dt">data =</span> canada, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb433-1" title="1"><span class="kw">t.test</span>(estimate<span class="op">~</span>anchor, <span class="dt">data =</span> canada, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -2171,17 +2130,17 @@ It’s if you want a <em>pooled</em> test that you have to ask for it specifical
 <p>The P-value is definitely less than 0.05, so we reject the null hypothesis (which says that the mean guess is the same regardless of the anchor the student was given). So we have evidence that the mean guess is higher for the students who were given the US population first.</p>
 <p>Extra 1: this is perhaps the place to think about what effect that outlier in the <code>australia</code> group might have had. Since it is a high outlier, its effect will be to make the the <code>australia</code> mean higher than it would have been otherwise, and therefore to make the two group means closer together. Despite this, the difference still came out strongly significant, so that we can be <em>even more sure than the P-value says</em> that there is a real difference between the means of estimates of the population of Canada. (To say it differently, if the outlier had not been there, the difference in means would have been even bigger and thus even more significant.)</p>
 <p>Extra 2: if you are still worried about doing a two-sample <span class="math inline">\(t\)</span>-test here, you might consider looking at the bootstrapped sampling distribution of the sample mean of the <code>australia</code> group:</p>
-<div class="sourceCode" id="cb432"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb432-1"><a href="two-sample-inference.html#cb432-1"></a>canada <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(anchor <span class="op">==</span><span class="st"> &quot;australia&quot;</span>) -&gt;<span class="st"> </span>oz</span>
-<span id="cb432-2"><a href="two-sample-inference.html#cb432-2"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb432-3"><a href="two-sample-inference.html#cb432-3"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb432-4"><a href="two-sample-inference.html#cb432-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(oz<span class="op">$</span>estimate, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb432-5"><a href="two-sample-inference.html#cb432-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb432-6"><a href="two-sample-inference.html#cb432-6"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</span></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-427-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" title="1">canada <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(anchor <span class="op">==</span><span class="st"> &quot;australia&quot;</span>) -&gt;<span class="st"> </span>oz</a>
+<a class="sourceLine" id="cb435-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(oz<span class="op">$</span>estimate, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-429-1.png" width="672"  /></p>
 <p>This is indeed skewed to the right (though, with 11 observations, not nearly so non-normal as the original data), and so the P-value we got from the <span class="math inline">\(t\)</span>-test may not be reliable. But, as discussed in Extra 1, the “correct” P-value is, if anything, <em>even smaller</em> than the one we got, and so the conclusion we drew earlier (that there is a significant anchoring effect) is not going to change.</p>
 <p>Extra 3: looking even further ahead, there is a test that definitely <em>does</em> apply here, called Mood’s Median Test. You won’t have installed the package yet, so this won’t work for you just yet (<a href="http://ritsokiguess.site/STAC33/inference_5_R_slides.pdf">read ahead</a> if you want to learn more), but here’s how it goes:</p>
-<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="two-sample-inference.html#cb433-1"></a><span class="kw">library</span>(smmr)</span>
-<span id="cb433-2"><a href="two-sample-inference.html#cb433-2"></a><span class="kw">median_test</span>(canada, estimate, anchor)</span></code></pre></div>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" title="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb436-2" title="2"><span class="kw">median_test</span>(canada, estimate, anchor)</a></code></pre></div>
 <pre><code>## $table
 ##            above
 ## group       above below
