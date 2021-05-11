@@ -1,12 +1,10 @@
-% this is still available
+## Tidy blood pressure
 
-## xxx title here
-
- Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist's appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolicxxx tufte::margin_note{A blood pressure is usually given as two numbers, like ``120 over 80''. The first number, which is the one shown in our data, is called the systolic blood pressure. It is the pressure in the arteries when the heart is pumping. The second is called the diastolic blood pressure, and it is the pressure in the arteries when the heart is resting.})  blood pressure measured while they are in a dentist's waiting room, and then again one hour after their appointment is finished.
+ Going to the dentist is scary for a lot of people. One way in which this might show up is that people might have higher blood pressure on average before their dentist's appointment than an hour after the appointment is done. Ten randomly-chosen individuals have their (systolic^[A blood pressure is usually given as two numbers, like "120 over 80". The first number, which is the one shown in our data, is called the systolic blood pressure. It is the pressure in the arteries when the heart is pumping. The second is called the diastolic blood pressure, and it is the pressure in the arteries when the heart is resting.])  blood pressure measured while they are in a dentist's waiting room, and then again one hour after their appointment is finished.
 
 You might have seen a tidy version of this data set before.
 
-The data as I originally received it is in \url{http://ritsokiguess.site/datafiles/STAC32/blood_pressure2.csv}.
+The data as I originally received it is in \url{http://ritsokiguess.site/datafiles/blood_pressure2.csv}.
 
 
 
@@ -18,7 +16,7 @@ Solution
 You ought to be suspicious that something is going to be up with the layout. With that in mind, I'm using a "disposable" name for this dataframe:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/blood_pressure2.csv"
+my_url <- "http://ritsokiguess.site/datafiles/blood_pressure2.csv"
 bp0 <- read_csv(my_url)
 bp0
 ```
@@ -27,7 +25,7 @@ bp0
 $\blacksquare$
 
 
-(a) Describe briefly how the data you read in is not tidy, bearing in mind how the data were collected and how they would be analysed.
+(b) Describe briefly how the data you read in is not tidy, bearing in mind how the data were collected and how they would be analysed.
 
 Solution
 
@@ -40,7 +38,7 @@ Another way to go at it is to note that the numbers are all blood pressure measu
 $\blacksquare$
 
 
-(a) Produce a tidy dataframe from the one you read in from the file. (How many rows should you have?)
+(c) Produce a tidy dataframe from the one you read in from the file. (How many rows should you have?)
 
 Solution
 
@@ -58,7 +56,7 @@ We want to have a column of before and a column of after, so the names of the ne
 
 ```{r}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
-pivot_wider(names_from = time, values_from = bp) -> blood_pressure
+  pivot_wider(names_from = time, values_from = bp) -> blood_pressure
 blood_pressure
 ```
 
@@ -107,7 +105,7 @@ When we do this:
 d %>% pivot_wider(names_from = g, values_from = y)
 ```
 
-we get list-columns again (and the same warning). What this output is telling you is that mostly there is one number per id-group combination (the `dbl[1]`) but there are two observations labelled id `p1` and group `a`, and no observations at all labelled id `p3` and group `b`. It turns outxxx tufte::margin_note{I know because I made these data up.} that the last row of the tribble contains errors. Fix them, and all is good:
+we get list-columns again (and the same warning). What this output is telling you is that mostly there is one number per id-group combination (the `dbl[1]`) but there are two observations labelled id `p1` and group `a`, and no observations at all labelled id `p3` and group `b`. It turns out^[I know because I made these data up. that the last row of the tribble contains errors. Fix them, and all is good:
 
 ```{r}
 d <- tribble(
@@ -143,7 +141,7 @@ and then
 d %>% pivot_wider(names_from = g, values_from = y)
 ```
 
-Where did those missing values come from? If you go back and look at this `d`, you'll see that each person has only *one* measurement, *either* an `a` or a `b`, not both. There is, for example, nothing to go in the `a` column for person number 4, because their only measurement was in group `b`. This kind of thing happens with two independent samples, and is a warning that you don't *need* to pivot wider: it's already tidy:
+Where did those missing values come from? If you go back and look at this `d`, you'll see that each person has only *one* measurement, *either* an `a` or a `b`, not both. There is, for example, nothing to go in the `a` column for person number 4, because their only measurement was in group `b`. This kind of thing happens with two independent samples, and is a warning that you don't *need* to pivot wider; it's already tidy:
 
 ```{r}
 d
@@ -154,7 +152,7 @@ Think about the kind of layout you need for a two-sample $t$-test.
 $\blacksquare$
 
 
-(a) What kind of test might you run on these data? Explain briefly.
+(d) What kind of test might you run on these data? Explain briefly.
 
 Solution
 
@@ -165,7 +163,7 @@ This is a matched-pairs experiment, so it needs a matched-pairs analysis. This c
 $\blacksquare$
 
 
-(a) Draw a suitable graph of these data.
+(e) Draw a suitable graph of these data.
 
 Solution
 
@@ -220,7 +218,7 @@ and then join the two points that belong to the same person. This is done with `
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
 ggplot(aes(x=time, y=bp, group=person)) + geom_point() + geom_line()
 ```
-Most of the lines are going uphill, so most of the `after` measurements are less than the corresponding `before` ones.xxx tufte::margin_note{This is known in the trade as a "spaghetti plot" because the lines resemble strands of spaghetti.}
+Most of the lines are going uphill, so most of the `after` measurements are less than the corresponding `before` ones.^[This is known in the trade as a *spaghetti plot* because the lines resemble strands of spaghetti.]
 
 
 $\blacksquare$

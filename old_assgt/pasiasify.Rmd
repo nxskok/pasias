@@ -5,18 +5,18 @@ library(tidyverse)
 ```
 
 ```{r}
-filename <- "writers.Rmd"
+filename <- "blood_pressure_tidy.Rmd"
 ```
 
 ```{r}
 v <- readLines(filename)
 v %>% 
   str_replace_all("\\\\question", "## xxx title here\n\n") %>% 
-  str_replace_all("\\\\endnote", "xxx tufte::margin_note") %>% 
+  str_replace_all("\\\\endnote", "xxx ^[") %>% 
   str_replace_all("\\\\bP", "") %>% 
   str_replace_all("\\\\eP", "") %>% 
   str_replace_all(" *\\\\p", "(a)") %>% # count these?
-  str_replace_all("\\\\bS", "Solution\n") %>% 
+  str_replace_all("\\\\bS", "xxx Solution\n") %>% 
   str_replace_all("\\\\eS", "\n$\\\\blacksquare$\n") %>% 
   str_replace_all("^ +", "") %>% 
   writeLines("xxx.Rmd")
