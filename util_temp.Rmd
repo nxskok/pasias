@@ -1,0 +1,226 @@
+## Tidying electricity consumption
+
+ How does the consumption of electricity depend on  temperature?  To find out, a short-term study was carried out by a utility company based in a certain area. For a period of two years, the average monthly temperature was recorded (in degrees Fahrenheit), the mean daily demand for electricity per household (in kilowatt hours), and the cost per kilowatt  hour of electricity for that year (8 cents for the first year and 10 cents for the second, which it will be easiest to treat as categorical). 
+
+The data were laid out in an odd way, as shown in \url{http://ritsokiguess.site/datafiles/utils.txt}, in aligned columns: the twelve months of temperature were laid out on *two* lines for the first year, then the twelve months of consumption for the first year on the next two lines, and then four more lines for the second year laid out the same way. Thus the temperature of 31 in the first line goes with the consumption of 55 in the *third* line, and the last measurements for that year are the 78 at the end of the second line (temperature) and 73 at the end of the fourth line (consumption).  Lines 5 through 8 of the data file are the same thing for the second year (when electricity was more expensive). 
+
+The data seem to have been laid out in order of temperature, rather than in order of months, which I would have thought would make more sense. But this is what we have.
+
+
+
+(a) Read in and display the data file, bearing in mind that it has *no column names*.
+
+Solution
+
+
+That means `col_names = FALSE` when reading in. I gave this a "disposable" name, saving the good name `utils` for the tidy version:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/utils.txt"
+utils0 <- read_table(my_url, col_names = FALSE)
+utils0
+```
+
+The columns have acquired names `X1` through `X8`. It doesn't really matter what these names *are*, but as we will see shortly, it matters that they *have* names.
+
+
+$\blacksquare$
+
+
+(b) Arrange these data tidily, so that there is a column of price (per kilowatt hour), a column of temperatures, and a column of consumptions. Describe your process, including why you got list-columns (if you did) and what you did about them (if necessary).
+
+Solution
+
+
+This question is asking about your process as well as your answer, so I think it's best to build a pipeline one step at a time (which corresponds in any case to how you would figure out what to do). The first step seems to be to make longer, for example getting all those numbers in one column. I'm not quite sure what to call the new columns, so I'll make up some names and figure things out later:
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") 
+```
+
+If you scroll down, `X2` has consumptions as well as temperatures, so we need to get that straightened out.
+
+This, so far, is actually a lot like the weather one in lecture (where we had a max and a min temperature), and the solution is the same: follow up with a `pivot_wider` to get the temperatures and consumptions in their own columns:
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+pivot_wider(names_from = X2, values_from = value) 
+```
+
+Except that it didn't appear to work. Although it actually did. These are list-columns. I actually recorded lecture 14a to help you with this. (See also the discussion in Extra 3 of the last part of the writers question, and the word "list" at the top of `temperature` and `consumption`). Each cell holds *two* numbers instead of the one you were probably expecting. 
+
+Why did that happen? The warning above the output is a clue. Something is going to be "not uniquely identified". Think about how `pivot_wider` works. It has to decide which *row* and *column* of the wider dataframe to put each value in. The column comes from the `names_from`: temperature or consumption. So that's not a problem. The row comes from the combination of the other columns not named in the `pivot_wider`: that means the ones called `X1` and `col`. (Another way to see that is the columns in the result from the `pivot_wider` that *do not* have values in them: not `temperature` or `consumption`, the other two.)
+
+If you look back at the things in `col`, they go from `X3` to `X8`, so there are six of them. There are two values in `X1`, so there are $2 \times 6 = 12$ combinations of the two, and so 12 rows in the wider dataframe. This has two columns, and thus $12 \times 2 = 24$ cells altogether. But there were 48 values in the longer dataframe (go back and look: it has 48 rows), so there isn't enough room for all of them here.
+
+If you go back and look at the longer dataframe, you'll see, for example, that there are two `temperature` values that go with an `X1` of 8 cents and a col of `X3`, so that they will both have to be jammed into one cell of the wider dataframe.
+
+The resolution of the list-columns here is the same as in the one about the writers: `unnest` them,  and then you can ignore the warning:
+
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+pivot_wider(names_from = X2, values_from = value) %>% 
+unnest(c(temperature, consumption)) -> utils
+utils
+```
+
+There were 24 months of data, and a temperature and consumption for each, so this is now tidy and I can give it a proper name.
+
+
+
+Extra: if you got to here and got scared:
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+pivot_wider(names_from = X2, values_from = value) 
+```
+
+which is an entirely reasonable reaction, you might have asked yourself how you could have prevented this from happening. The problem, as discussed earlier, is with the rows, and that the `X1`-`col` combinations repeat. Let's go back to "longer":
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") 
+```
+
+Rows 1 and 7, 2 and 8, etc, are "replicates" in that they have the same `X1` and `col` values but different temperatures. This is because they come from the same column in the original layout of the data (the 31 and the 62 are underneath each other). This means that the first six rows are "replicate 1" and the next six are "replicate 2". Scrolling down, we then get to 8 cents and consumption, and we need to do the same again. So if we make a column that has 1s and 2s in the right places (six 1s, six 2s, repeat), we should then have unique rows for the `pivot_wider`. 
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+mutate(replicate = rep(1:2, each = 6, length.out = 48))
+```
+
+`rep` does repeats like this: something to repeat (the numbers 1 through 2), how many times to repeat each one (six times), and how long the final thing has to be (48, since there were 48 rows in the longer dataframe).
+
+Then, this time, if we do the `pivot_wider`, it should give us something tidy:
+
+```{r}
+utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+mutate(replicate = rep(1:2, each = 6, length.out = 48)) %>% 
+pivot_wider(names_from = X2, values_from = value) 
+```
+
+and so it does, with 24 rows for the 24 months.
+
+Another, perhaps easier, way to think about this (you might find it easier, anyway) is to go back to the original dataframe and make the `replicate` there:
+
+```{r}
+utils0
+```
+
+The first two rows are replicates (both 8 cents and temperature), then the third and fourth, and so on. So setting a `replicate` column as 1, 2, 1, 2 etc should do it, and this is short enough to type directly. Do this *first*, then the `pivot_longer`, then the `pivot_wider` as we did before, and we should end up with something tidy:
+
+
+```{r}
+utils0 %>% mutate(replicate = c(1,2,1,2,1,2,1,2)) %>% 
+pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
+pivot_wider(names_from = X2, values_from = value) %>% 
+unnest(c(temperature, consumption)) 
+```
+
+If you check this, you'll see that `replicate` gets turned into the same thing in the longer dataframe that we had earlier, so you can do it either way.
+
+The moral of the story is that when you are planning to do a pivot-wider, you ought to devote some attention to which *rows* things are going into. Sometimes you can get away with just doing it and it works, but thinking about rows is how to diagnose it when it doesn't. (The ideas below also appear in Lecture 14a.) Here's another mini-example where the observations are matched pairs but they come to us long, like two-sample data:
+
+```{r}
+d <- tribble(
+~obs, ~y, ~time,
+1, 10, "pre",
+2, 13, "post",
+3, 12, "pre",
+4, 14, "post",
+5, 13, "pre",
+6, 15, "post"
+)
+d %>% pivot_wider(names_from = time, values_from = y)
+```
+
+Oh. The columns are all right, but the rows certainly are not.
+
+The problem is that the only thing left after `y` and `time` have been used in the `pivot_wider` is the column `obs`, and there are six values there, so there are six rows. This is, in a way, the opposite of the problem we had before; now, there is *not enough* data to fill the twelve cells of the wider dataframe. For example, there is no `pre` measurement in the row where `obs` is 2, so this cell of the wider dataframe is empty: it has a missing value in it.
+
+The problem is that the `obs` column numbered the six observations 1 through 6, but really they are three groups of two observations on three people, so instead of `obs` we need a column called `person` that shows which observations are the matched pairs, like this:
+
+```{r}
+d <- tribble(
+~person, ~y, ~time,
+1, 10, "pre",
+1, 13, "post",
+2, 12, "pre",
+2, 14, "post",
+3, 13, "pre",
+3, 15, "post"
+)
+```
+
+Now there are going to be three rows with a pre and a post in each:
+
+```{r}
+d %>% pivot_wider(names_from = time, values_from = y)
+```
+
+`pivot_wider` requires more thinking than `pivot_longer`, and when it does something mysterious, that's when you need to have some understanding of how it works, so that you can fix things up.
+
+
+
+
+
+
+$\blacksquare$
+
+
+(c) Make a suitable graph of temperature, consumption and price in your tidy dataframe. Add smooth trends if appropriate. If you were unable to get the data tidy, use my tidy version [here](http://ritsokiguess.site/datafiles/utils_tidy.csv). (If you need the other file, right-click on "here" and Copy Link Address.)
+
+Solution
+
+
+I said earlier to treat price (rather badly labelled as `X1`) as categorical, so we have two quantitative variables and one categorical. This suggests a scatterplot with the two prices distinguished by colours. (We don't have a mechanism for making three-dimensional plots, and in any case if you have a quantitative variable with not that many distinct different values, you can often treat that as categorical, such as price here.)
+
+Before we make a graph, though, we should rename `X1`. The way you might think of is to create a new column with the same values as `X1`, but a new name. `r tufte::margin_note("This actually creates a copy of the original column, so if you look you now have two columns with the same thing in them, one with a bad name and one with a good one.")` Like this. Consumption is the outcome, so it goes on the $y$-axis:
+
+
+```{r}
+utils %>% 
+mutate(price = X1) %>% 
+ggplot(aes(x = temperature, y = consumption, colour = price)) + 
+geom_point() + geom_smooth()
+```
+
+I said smooth trends rather than lines, because you don't know until you draw the graph whether the trends *are* lines. If they're not, there's not much point in drawing lines through them. These ones are rather clearly curves, which we take up in the next part.
+
+If you fail to rename `X1`, that's what will appear on the legend, and the first thing your reader would ask is "what is `X1`?" When writing, you need to think of your reader, since they are (in the real world) paying you for your work.
+
+
+
+Extra: there is an official `rename` also. I haven't used that in class, so if you discover this, make sure to say where you found out about it from:
+
+```{r}
+utils %>% 
+rename(price = X1)
+```
+
+The syntax is "new name equals old one". I used to think it was something like "take the column called `X1` and rename it to `price`", but as you see, that's exactly backwards. The English-language version is "create a new column called `price` from the column previously called `X1`".
+
+
+$\blacksquare$
+
+
+(d) What patterns or trends do you see on your graph? Do they make practical sense? There are two things I would like you to comment on.
+
+Solution
+
+
+The two things are:
+
+- the relationships are both curves, going down and then up again.
+- the blue curve is above the red one.
+
+If the temperature is low (30 degrees F is just below freezing), people will need to heat their houses, and the electricity consumption to do this is reflected in the curves being higher at the left. (Not all people have electric heating, but at least some people do, and electric heating uses a lot of electricity.) When the temperature is high, people will turn on the air-conditioning (which is usually electric), and that explains the sharp increase in consumption at high temperatures. In between is the zone where the house stays a good temperature without heating or cooling.
+
+So why is the blue curve above the red one? This is saying that when electricity is cheaper, people will use more of it. (This seems to be particularly true when the temperature is high; people might "crank" the air-conditioning if it doesn't cost too much to run.) Conversely, if electricity is more expensive, people might be more thoughtful about what temperature to turn on the heating or AC. (For example, in summer you might keep the drapes closed so that it stays cooler inside without needing to use the AC so much.)
+
+
+$\blacksquare$
+
+
+
+

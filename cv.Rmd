@@ -1,4 +1,4 @@
-## xxx title here
+## Coefficient of VariationF
 
  The coefficient of variation of a vector `x` is defined as the standard deviation of `x` divided by the mean of `x`. 
 
@@ -55,13 +55,13 @@ sd(x)/mean(x)
 
 This will work, but it is not a good habit to get into, and thus not best as an answer to this question. This one line of code says three things: "work out the SD of `x`", "work out the mean of `x`", and "divide them by each other". It is much clearer, for anyone else reading the code (including yourself in six months when you have forgotten what you were thinking) to have the three things one per line, so that anyone reading the code sees that each line does one thing and what that one thing is. There is a reason why production code and [code golf](https://en.wikipedia.org/wiki/Code_golf) are two very different things. Code that is easy to read is also easy to maintain, either by you or others.
 
-- using something other than `mean` and `sd` as the names of your intermediate results is a good idea because these names are already used by R (as the names of the functions that compute the mean and SD). Redefining names that R uses can make other code behave unpredictably and cause hard-to-find bugs.xxx tufte::margin_note{This is something I've done in the past and been bitten by, so I am trying to get myself not to do it any more.}
+- using something other than `mean` and `sd` as the names of your intermediate results is a good idea because these names are already used by R (as the names of the functions that compute the mean and SD). Redefining names that R uses can make other code behave unpredictably and cause hard-to-find bugs. `r tufte::margin_note("This is something I've done in the past and been bitten by, so I am trying to get myself not to do it any more.")`
 
 
 $\blacksquare$
 
 
-(a) Use your function to find the coefficient of variation of the set of integers 1 through 5.
+(b) Use your function to find the coefficient of variation of the set of integers 1 through 5.
 
 Solution
 
@@ -93,7 +93,7 @@ $\blacksquare$
 
 
 
-(a) Define a vector as follows:
+(c) Define a vector as follows:
 
 ```{r}
 v <- c(-2.8, -1.8, -0.8, 1.2, 4.2)
@@ -118,7 +118,7 @@ What actually happened was that the mean of `v` is this:
 mean(v)
 ```
 
-Zero, or close enough, so that in calculating the coefficient of variation, we divided by something that was (almost) zero and got a result that was (almost) infinite.xxx tufte::margin_note{In computing with decimal numbers, things are almost never exactly zero or exactly infinite; they are very small or very  big. The mean here, which you would calculate to be zero, is less than ``machine epsilon'', which is about $10^{-16}$ in R (R works in ``double precision''). A mean that small is, to the computer, indistinguishable from zero. It came out that way because the last value is added to a total that is by that point negative, and so you have a loss of accuracy because of subtracting nearly equal quantities. I learned all about this stuff in my first real computer science course, which I think was a "numerical math" course, some absurd number of years ago. It looks as if this gets taught in CSCC37 these days. See \url{https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html} for a properly detailed treatment.}
+Zero, or close enough, so that in calculating the coefficient of variation, we divided by something that was (almost) zero and got a result that was (almost) infinite. `r tufte::margin_note("In computing with decimal numbers, things are almost never exactly zero or exactly infinite; they are very small or very  big. The mean here, which you would calculate to be zero, is less than the so-called machine epsilon, which is about $10^{-16}$ in R (R works in double precision). A mean that small is, to the computer, indistinguishable from zero. It came out that way because the last value is added to a total that is by that point negative, and so you have a loss of accuracy because of subtracting nearly equal quantities. I learned all about this stuff in my first real computer science course, which I think was a "numerical math" course, some absurd number of years ago. It looks as if this gets taught in CSCC37 these days. See \url{https://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html} for a properly detailed treatment.")`
 
 The possibility of getting a zero mean is why most people only calculate a coefficient of variation if all of the numbers are positive, which brings us to the next part:
 
@@ -126,7 +126,7 @@ The possibility of getting a zero mean is why most people only calculate a coeff
 $\blacksquare$
 
 
-(a) Most people only calculate a coefficient of variation if there are no negative numbers. Rewrite your function so that it gives an error if there are any negative numbers in the input, and test it with the vector `v` above. Hint: you might need to add `error=TRUE` to your chunk header to allow your document to preview/knit (inside the curly brackets at the top of the chunk, after a comma).
+(d) Most people only calculate a coefficient of variation if there are no negative numbers. Rewrite your function so that it gives an error if there are any negative numbers in the input, and test it with the vector `v` above. Hint: you might need to add `error=TRUE` to your chunk header to allow your document to preview/knit (inside the curly brackets at the top of the chunk, after a comma).
 
 Solution
 

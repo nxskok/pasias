@@ -1,0 +1,95 @@
+## Mindless Eating
+
+ The author of a popular book called *Mindless Eating*
+studies factors that make people eat without realizing how much they
+are eating. (Have you ever opened a bag of chips, and then, a little
+later, wondered where they all went?) One study was of 10 males and 10
+females, who were allowed to take as many M&M candies as they wanted
+from a bowl during a study session. Do males or females tend to take
+more candies? 
+
+The data in [https://ritsokiguess.site/datafiles/mm.txt] show each subject's gender and how many candies they took.
+
+
+(a)art[3] Read the data into R and count up how many male and female subjects there are.
+
+
+
+Separated by exactly one space, so `read\_delim`:
+
+<<>>=
+my_url="https://ritsokiguess.site/datafiles/mm.txt"
+mm=read_delim(my_url," ")
+@
+
+If you display this, you'll see only the males (who were listed first in the file). Hence I changed up the question to get you to count how many there were of each gender:
+
+<<>>=
+mm %>% count(gender)
+@
+
+or if you prefer being more long-winded:
+
+<<>>=
+mm %>% group_by(gender) %>% summarize(how_many=n())
+@
+
+Ten males and ten females (which you need to say), as in the preamble of the question. 
+
+
+by males and females.
+
+(a)art[2] Make a suitable plot to display the distributions of M\&Ms taken
+
+
+One categorical variable (gender) and one quantitative (number of M\&Ms), so a boxplot is my first port of call:
+
+<<>>=
+ggplot(mm, aes(x=gender, y=candies))+geom_boxplot()
+@
+
+If you like, facetted above-and-below histograms will also work:
+
+<<>>=
+ggplot(mm, aes(x=candies))+geom_histogram(bins=6)+facet_wrap(~gender,ncol=1)
+@
+
+I like the boxplots better because they provide a clearer comparison of the two groups. You could even (almost) make a case for above-and-below facetted normal quantile plots, but that would be specifically be for assessing normality, as opposed to a general comparison of the distributions:
+
+<<>>=
+ggplot(mm, aes(sample=candies))+stat_qq()+stat_qq_line()+facet_wrap(~gender,ncol=1)
+@
+
+
+
+(a)art[2] What does your plot tell you about the typical numbers of candies taken by males and females, and how they compare with each other? Explain briefly.
+
+
+
+Looking at the boxplot, the median number of candies taken by females is slightly higher than by males: the median is 45 or 50 for females and about 40 for males. (You should say that the boxplot gives you the median, something about what each median is, at least approximately, and which one is higher.) If you prefer, you can say that the medians are very similar, and ``they are both close to 45'' or something like that. 
+If you drew histograms, make some kind of sensible call about whether the centres of them are. If you draw normal quantile plots, you won't be able to answer this one, which will be a hint that some other kind of plot would be better.
+
+
+
+(a)art[2] Why would a two-sample $t$-test not be best for comparing the typical  number of candies taken by people of each gender?
+
+
+A $t$-test would require both distributions to be approximately normal, given that there are only ten observations in each. The obvious thing is the high outlier on the male boxplot; there was one male who took a lot of candies. The female distribution looks fairly symmetric.  If you drew histograms, neither distribution looks especially normal (but that might be the small samples). The normal quantile plots are designed to answer this kind of question; the female one looks acceptably normal (given the small sample size), and most of the male one does too, except for the high value that is too high.
+
+Some kind of sensible comment given your graph. I would also accept drawing a normal quantile plot here and commenting on it.
+
+
+(a)art[3] Run Mood's median test on these data, using the `smmr` package. What do you conclude, in the context of the data? (Note that the test result as given is two-sided.)
+
+
+I already loaded the `smmr` package. You may need to do that first, but I don't:
+
+<<>>=
+median_test(mm,candies,gender)
+@
+
+There is no evidence of a difference in median numbers of candies taken by males and females. (This is not a great surprise to me, looking at the graphs, or indeed, looking at the very near 50--50 split in the table of aboves and belows.) The test is two-sided, so it tells us whether there is *any* difference. This makes sense, given that we had no reason ahead of time to expect a particular one of the genders to take more candies.
+
+If you really wanted a one-sided test, you would do the usual two-part thing: ask whether you are on the correct side, and, if you are, halve the two-sided P-value. This test is set up this way because it's based on the chi-squared test, which is looking for *any* association between group and being above/below the overall median. If you have more than two groups (your categorical variable has more than two levels), the only sensible kind of alternative is a multi-sided one, since you are testing only that ``not all the groups have the same median''. SAS (later) does distinguish the two-group Mood median test from the one with more than two groups; when you have two groups, it will also give you a one-sided P-value.
+
+

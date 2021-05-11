@@ -1,0 +1,116 @@
+## xxx title here
+
+ Some students in a Statistics class were asked how many
+minutes they typically exercised in a week. The data are shown in
+\url{http://ritsokiguess.site/datafiles/exercise.txt}. 
+
+Some of the
+students identified as male and some as female. Our concern is how the males
+and females compare in terms of the amount of exercise they do.
+
+
+(a) Take a look at the data file. (Click on the link, or paste the copied link into your web browser.) How is it laid out?
+
+Solution
+
+Aligned in columns. Or, separated by spaces, but a variable number
+of them. (The latter is a hint that \verb=read_delim= will not
+work, and the former is a hint about what \emph{will} work.)
+
+$\blacksquare$
+
+
+(b) Read in and display (some of) the data. (This means to
+display enough of what you read in to convince others that you read
+in the right kind of thing.)
+
+Solution
+
+"Aligned in columns" is the best way of saying it so that you
+know to use \verb=read_table=. Hence:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/exercise.txt"
+exercise <- read_table(my_url)
+exercise
+```
+
+Just entering the data frame name displays the first ten rows, which
+is usually enough to convince anyone that you have the right thing. 
+
+Call the data frame what you like, as long as it describes what's in
+the data frame in some way.
+
+
+$\blacksquare$
+
+
+(c) Make a suitable plot of this data frame. 
+
+Solution
+
+Two variables, one quantitative and one categorical, means that a
+boxplot is the thing:
+
+```{r}
+ggplot(exercise, aes(x=gender, y=minutes)) + geom_boxplot()
+```
+
+
+$\blacksquare$
+
+
+(d) Does there appear to be any substantial difference in the
+average amount of time that males and females spend exercising?
+Explain briefly. ("average" could be mean or median. Which is it
+here?)
+
+Solution
+
+A boxplot shows the median. So we learn here that the median time
+spent exercising per week is very slightly higher for
+females. However, there is a lot of variability (the height of the
+boxes), and so the difference between the medians is very
+small. Hence, there is definitely \emph{no} substantial difference
+between males and females. 
+
+Less insightfully, the difference in median between males and females is
+very small (but that doesn't rule out the possibility that the
+spread is very small also).
+
+$\blacksquare$
+
+
+(e) How do you know that both distributions, for males as well
+as females, are skewed to the right? Explain (very) briefly.
+
+Solution
+
+The upper whiskers, at the top of the box, are longer than the
+lower ones (at the bottom).
+
+$\blacksquare$
+
+
+(f) For data like this, why does it make practical sense that
+the distributions are skewed to the right?
+
+Solution
+
+Nobody can exercise less than 0 minutes per week, but there is no
+upper limit: a student in the class can exercise as much as they
+want. This means that there could be unusually high values, but
+not unusually low values. 
+
+Extra: Distributions that have a limit on one side are often skewed to the other side. 
+This one has a limit on the left, so it is skewed to the *right*. This is most likely to be true if 
+there are observations close to the limit, such as the people in this data set that don't exercise at all (and there are some of those).
+
+
+
+$\blacksquare$
+
+
+
+
+
