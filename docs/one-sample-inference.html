@@ -21,16 +21,18 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 6 One-sample inference | Problems and Solutions in Applied Statistics</title>
 
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
@@ -46,26 +48,27 @@ MathJax.Hub.Config({
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -74,9 +77,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -122,10 +125,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
+<li><a href="index.html#introduction">Introduction</a>
+<ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a>
+<ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">1.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">1.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">1.3</span> Reading data from a file</a></li>
@@ -135,7 +140,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file-1"><span class="toc-section-number">1.7</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways-1"><span class="toc-section-number">1.8</span> Reading files different ways</a></li>
 </ul></li>
-<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a>
+<ul>
 <li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
 <li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
@@ -143,17 +149,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a><ul>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a>
+<ul>
 <li><a href="drawing-graphs.html#orange-juice-2"><span class="toc-section-number">3.1</span> Orange juice</a></li>
 <li><a href="drawing-graphs.html#making-soap-2"><span class="toc-section-number">3.2</span> Making soap</a></li>
 <li><a href="drawing-graphs.html#handling-shipments-2"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
 <li><a href="drawing-graphs.html#rainfall-in-davis-california"><span class="toc-section-number">3.4</span> Rainfall in Davis, California</a></li>
-<li><a href="drawing-graphs.html#orange-juice-3"><span class="toc-section-number">3.5</span> Orange juice</a></li>
-<li><a href="drawing-graphs.html#making-soap-3"><span class="toc-section-number">3.6</span> Making soap</a></li>
-<li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.7</span> Handling shipments</a></li>
-<li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.8</span> Rainfall in Davis, California</a></li>
+<li><a href="drawing-graphs.html#xxx-title-here"><span class="toc-section-number">3.5</span> xxx title here</a></li>
+<li><a href="drawing-graphs.html#orange-juice-3"><span class="toc-section-number">3.6</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-3"><span class="toc-section-number">3.7</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.8</span> Handling shipments</a></li>
+<li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.9</span> Rainfall in Davis, California</a></li>
+<li><a href="drawing-graphs.html#xxx-title-here-1"><span class="toc-section-number">3.10</span> xxx title here</a></li>
 </ul></li>
-<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a>
+<ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
@@ -169,25 +179,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data-exploration.html#unprecendented-rainfall-1"><span class="toc-section-number">4.13</span> Unprecendented rainfall</a></li>
 <li><a href="data-exploration.html#learning-algebra-1"><span class="toc-section-number">4.14</span> Learning algebra</a></li>
 </ul></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a>
+<ul>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
 </ul></li>
-<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
 <li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
 <li><a href="one-sample-inference.html#diameters-of-trees"><span class="toc-section-number">6.5</span> Diameters of trees</a></li>
-<li><a href="one-sample-inference.html#hunter-gatherers-in-australia-1"><span class="toc-section-number">6.6</span> Hunter-gatherers in Australia</a></li>
-<li><a href="one-sample-inference.html#buses-to-boulder-1"><span class="toc-section-number">6.7</span> Buses to Boulder</a></li>
-<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina-1"><span class="toc-section-number">6.8</span> Length of gestation in North Carolina</a></li>
-<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.9</span> Inferring ice break-up in Nenana</a></li>
-<li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.10</span> Diameters of trees</a></li>
+<li><a href="one-sample-inference.html#one-sample-cholesterol"><span class="toc-section-number">6.6</span> One-sample cholesterol</a></li>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia-1"><span class="toc-section-number">6.7</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder-1"><span class="toc-section-number">6.8</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina-1"><span class="toc-section-number">6.9</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.10</span> Inferring ice break-up in Nenana</a></li>
+<li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.11</span> Diameters of trees</a></li>
+<li><a href="one-sample-inference.html#one-sample-cholesterol-1"><span class="toc-section-number">6.12</span> One-sample cholesterol</a></li>
 </ul></li>
-<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
@@ -203,7 +218,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#handspans-of-males-and-females-1"><span class="toc-section-number">7.13</span> Handspans of males and females</a></li>
 <li><a href="two-sample-inference.html#the-anchoring-effect-australia-vs-us-1"><span class="toc-section-number">7.14</span> The anchoring effect: Australia vs US</a></li>
 </ul></li>
-<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
@@ -215,7 +231,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.9</span> Designing a study to have enough power</a></li>
 <li><a href="power-and-sample-size.html#power-and-alpha-in-a-skewed-population-1"><span class="toc-section-number">8.10</span> Power and <span class="math inline">\(\alpha\)</span> in a skewed population</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a><ul>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
+<ul>
 <li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -225,7 +242,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li class="has-sub"><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a><ul>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
+<ul>
 <li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -235,7 +253,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="moods-median-test.html#medical-instructions-1"><span class="toc-section-number">10.7</span> Medical instructions</a></li>
 <li><a href="moods-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
+<ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
@@ -251,13 +270,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="matched-pairs-t-and-sign-test.html#the-dentist-and-blood-pressure-1"><span class="toc-section-number">11.13</span> The dentist and blood pressure</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#french-teachers-1"><span class="toc-section-number">11.14</span> French teachers</a></li>
 </ul></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
+<ul>
 <li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
@@ -265,15 +286,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
 <li><a href="analysis-of-variance.html#reggae-music"><span class="toc-section-number">13.6</span> Reggae music</a></li>
 <li><a href="analysis-of-variance.html#watching-tv-and-education"><span class="toc-section-number">13.7</span> Watching TV and education</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths-1"><span class="toc-section-number">13.8</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat-1"><span class="toc-section-number">13.9</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again-1"><span class="toc-section-number">13.10</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon-1"><span class="toc-section-number">13.11</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test-1"><span class="toc-section-number">13.12</span> Can caffeine improve your performance on a test?</a></li>
-<li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.13</span> Reggae music</a></li>
-<li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.14</span> Watching TV and education</a></li>
+<li><a href="analysis-of-variance.html#death-of-poets"><span class="toc-section-number">13.8</span> Death of poets</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths-1"><span class="toc-section-number">13.9</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat-1"><span class="toc-section-number">13.10</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again-1"><span class="toc-section-number">13.11</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon-1"><span class="toc-section-number">13.12</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test-1"><span class="toc-section-number">13.13</span> Can caffeine improve your performance on a test?</a></li>
+<li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.14</span> Reggae music</a></li>
+<li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.15</span> Watching TV and education</a></li>
+<li><a href="analysis-of-variance.html#death-of-poets-1"><span class="toc-section-number">13.16</span> Death of poets</a></li>
 </ul></li>
-<li class="has-sub"><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a><ul>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
+<ul>
 <li><a href="writing-reports.html#atomic-weight-of-carbon-2"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
 <li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
 <li><a href="writing-reports.html#learning-to-code"><span class="toc-section-number">14.3</span> Learning to code</a></li>
@@ -285,7 +309,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="writing-reports.html#analysis"><span class="toc-section-number">14.9</span> Analysis</a></li>
 <li><a href="writing-reports.html#conclusions-see-note-9"><span class="toc-section-number">14.10</span> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="has-sub"><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a><ul>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
+<ul>
 <li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
 <li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
 <li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
@@ -297,19 +322,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">15.9</span> Feeling the heat</a></li>
 <li><a href="tidying-data.html#isoflavones"><span class="toc-section-number">15.10</span> Isoflavones</a></li>
 <li><a href="tidying-data.html#jockos-garage"><span class="toc-section-number">15.11</span> Jocko’s Garage</a></li>
-<li><a href="tidying-data.html#baseball-and-softball-spaghetti-1"><span class="toc-section-number">15.12</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats-1"><span class="toc-section-number">15.13</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-data.html#growth-of-tomatoes-1"><span class="toc-section-number">15.14</span> Growth of tomatoes</a></li>
-<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again-1"><span class="toc-section-number">15.15</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-data.html#location-species-and-disease-in-plants-1"><span class="toc-section-number">15.16</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-data.html#mating-songs-in-crickets-1"><span class="toc-section-number">15.17</span> Mating songs in crickets</a></li>
-<li><a href="tidying-data.html#number-1-songs-1"><span class="toc-section-number">15.18</span> Number 1 songs</a></li>
-<li><a href="tidying-data.html#bikes-on-college-1"><span class="toc-section-number">15.19</span> Bikes on College</a></li>
-<li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.20</span> Feeling the heat</a></li>
-<li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.21</span> Isoflavones</a></li>
-<li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.22</span> Jocko’s Garage</a></li>
+<li><a href="tidying-data.html#tidying-electricity-consumption"><span class="toc-section-number">15.12</span> Tidying electricity consumption</a></li>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti-1"><span class="toc-section-number">15.13</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats-1"><span class="toc-section-number">15.14</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes-1"><span class="toc-section-number">15.15</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again-1"><span class="toc-section-number">15.16</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants-1"><span class="toc-section-number">15.17</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets-1"><span class="toc-section-number">15.18</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs-1"><span class="toc-section-number">15.19</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college-1"><span class="toc-section-number">15.20</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.21</span> Feeling the heat</a></li>
+<li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.22</span> Isoflavones</a></li>
+<li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.23</span> Jocko’s Garage</a></li>
+<li><a href="tidying-data.html#tidying-electricity-consumption-1"><span class="toc-section-number">15.24</span> Tidying electricity consumption</a></li>
 </ul></li>
-<li class="has-sub"><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a><ul>
+<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a>
+<ul>
 <li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
 <li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
 <li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
@@ -322,20 +350,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="simple-regression.html#running-and-blood-sugar"><span class="toc-section-number">16.10</span> Running and blood sugar</a></li>
 <li><a href="simple-regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">16.11</span> Calories and fat in pizza</a></li>
 <li><a href="simple-regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">16.12</span> Where should the fire stations be?</a></li>
-<li><a href="simple-regression.html#rainfall-in-california-1"><span class="toc-section-number">16.13</span> Rainfall in California</a></li>
-<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes-1"><span class="toc-section-number">16.14</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys-1"><span class="toc-section-number">16.15</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="simple-regression.html#facebook-friends-and-grey-matter-1"><span class="toc-section-number">16.16</span> Facebook friends and grey matter</a></li>
-<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp-1"><span class="toc-section-number">16.17</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="simple-regression.html#salaries-of-social-workers-1"><span class="toc-section-number">16.18</span> Salaries of social workers</a></li>
-<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees-1"><span class="toc-section-number">16.19</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="simple-regression.html#tortoise-shells-and-eggs-1"><span class="toc-section-number">16.20</span> Tortoise shells and eggs</a></li>
-<li><a href="simple-regression.html#roller-coasters-1"><span class="toc-section-number">16.21</span> Roller coasters</a></li>
-<li><a href="simple-regression.html#running-and-blood-sugar-1"><span class="toc-section-number">16.22</span> Running and blood sugar</a></li>
-<li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.23</span> Calories and fat in pizza</a></li>
-<li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.24</span> Where should the fire stations be?</a></li>
+<li><a href="simple-regression.html#making-it-stop"><span class="toc-section-number">16.13</span> Making it stop</a></li>
+<li><a href="simple-regression.html#rainfall-in-california-1"><span class="toc-section-number">16.14</span> Rainfall in California</a></li>
+<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes-1"><span class="toc-section-number">16.15</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys-1"><span class="toc-section-number">16.16</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="simple-regression.html#facebook-friends-and-grey-matter-1"><span class="toc-section-number">16.17</span> Facebook friends and grey matter</a></li>
+<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp-1"><span class="toc-section-number">16.18</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="simple-regression.html#salaries-of-social-workers-1"><span class="toc-section-number">16.19</span> Salaries of social workers</a></li>
+<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees-1"><span class="toc-section-number">16.20</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="simple-regression.html#tortoise-shells-and-eggs-1"><span class="toc-section-number">16.21</span> Tortoise shells and eggs</a></li>
+<li><a href="simple-regression.html#roller-coasters-1"><span class="toc-section-number">16.22</span> Roller coasters</a></li>
+<li><a href="simple-regression.html#running-and-blood-sugar-1"><span class="toc-section-number">16.23</span> Running and blood sugar</a></li>
+<li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.24</span> Calories and fat in pizza</a></li>
+<li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.25</span> Where should the fire stations be?</a></li>
+<li><a href="simple-regression.html#making-it-stop-1"><span class="toc-section-number">16.26</span> Making it stop</a></li>
 </ul></li>
-<li class="has-sub"><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a><ul>
+<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a>
+<ul>
 <li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
 <li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
 <li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
@@ -345,11 +376,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#salaries-of-mathematicians-1"><span class="toc-section-number">17.7</span> Salaries of mathematicians</a></li>
 <li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students-1"><span class="toc-section-number">17.8</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
+<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
+<ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
+<ul>
 <li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
 <li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
 <li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
@@ -359,17 +392,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="dates-and-times.html#wolves-and-caribou-1"><span class="toc-section-number">19.7</span> Wolves and caribou</a></li>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study-1"><span class="toc-section-number">19.8</span> Dealing with dates in the Worcester Heart Attack study</a></li>
 </ul></li>
-<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a><ul>
+<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
+<ul>
 <li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
-<li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.3</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.4</span> The Collatz sequence</a></li>
+<li><a href="functions.html#coefficient-of-variationf"><span class="toc-section-number">20.3</span> Coefficient of VariationF</a></li>
+<li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.4</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.5</span> The Collatz sequence</a></li>
+<li><a href="functions.html#coefficient-of-variationf-1"><span class="toc-section-number">20.6</span> Coefficient of VariationF</a></li>
 </ul></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
+<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
+<ul>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a><ul>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
+<ul>
 <li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
 <li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
 <li><a href="the-bootstrap.html#comparing-eyesight"><span class="toc-section-number">22.3</span> Comparing eyesight</a></li>
@@ -379,7 +417,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-bootstrap.html#comparing-eyesight-1"><span class="toc-section-number">22.7</span> Comparing eyesight</a></li>
 <li><a href="the-bootstrap.html#bootstrapping-the-irs-data-1"><span class="toc-section-number">22.8</span> Bootstrapping the IRS data</a></li>
 </ul></li>
-<li class="has-sub"><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a><ul>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
+<ul>
 <li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way"><span class="toc-section-number">23.3</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
@@ -387,7 +426,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.5</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way-1"><span class="toc-section-number">23.6</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
+<ul>
 <li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
 <li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
 <li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
@@ -409,7 +449,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression.html#who-needs-the-most-intensive-care-1"><span class="toc-section-number">24.19</span> Who needs the most intensive care?</a></li>
 <li><a href="logistic-regression.html#go-away-and-dont-come-back-1"><span class="toc-section-number">24.20</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a>
+<ul>
 <li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
@@ -421,7 +462,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-1"><span class="toc-section-number">25.9</span> How do you like your steak?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data-1"><span class="toc-section-number">25.10</span> How do you like your steak – the data</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a><ul>
+<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a>
+<ul>
 <li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-2"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
@@ -435,7 +477,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data-1"><span class="toc-section-number">26.11</span> Crimes in San Francisco – the data</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play-1"><span class="toc-section-number">26.12</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
+<ul>
 <li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
@@ -445,7 +488,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma-1"><span class="toc-section-number">27.7</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer-1"><span class="toc-section-number">27.8</span> Ovarian cancer</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
+<ul>
 <li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
@@ -459,13 +503,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance-revisited.html#mental-context-1"><span class="toc-section-number">28.11</span> Mental context</a></li>
 <li><a href="analysis-of-variance-revisited.html#trying-on-shirts-1"><span class="toc-section-number">28.12</span> Trying on shirts</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a><ul>
+<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
+<ul>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><span class="toc-section-number">29.3</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy-1"><span class="toc-section-number">29.4</span> Treating leprosy</a></li>
 </ul></li>
-<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
+<ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
@@ -473,7 +519,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">30.5</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1"><span class="toc-section-number">30.6</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
+<ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
@@ -487,7 +534,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#investigating-motor-activity-in-rats-1"><span class="toc-section-number">31.11</span> Investigating motor activity in rats</a></li>
 <li><a href="repeated-measures.html#repeated-measures-with-no-background-1"><span class="toc-section-number">31.12</span> Repeated measures with no background</a></li>
 </ul></li>
-<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
+<ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
 <li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
 <li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
@@ -503,7 +551,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn-1"><span class="toc-section-number">32.13</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender-1"><span class="toc-section-number">32.14</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li class="has-sub"><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a><ul>
+<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
+<ul>
 <li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
 <li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
@@ -513,7 +562,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species-1"><span class="toc-section-number">33.7</span> Similarity of species</a></li>
 <li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh-1"><span class="toc-section-number">33.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li class="has-sub"><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a><ul>
+<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
+<ul>
 <li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
 <li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
 <li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
@@ -525,7 +575,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="k-means-cluster-analysis.html#grouping-similar-cars-1"><span class="toc-section-number">34.9</span> Grouping similar cars</a></li>
 <li><a href="k-means-cluster-analysis.html#rating-beer-1"><span class="toc-section-number">34.10</span> Rating beer</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a><ul>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
+<ul>
 <li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line"><span class="toc-section-number">35.3</span> The Cross-City Line</a></li>
@@ -533,7 +584,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">35.5</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line-1"><span class="toc-section-number">35.6</span> The Cross-City Line</a></li>
 </ul></li>
-<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
+<ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-2"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
 <li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
 <li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
@@ -545,11 +597,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multidimensional-scaling.html#more-beer-please-1"><span class="toc-section-number">36.9</span> More beer please</a></li>
 <li><a href="multidimensional-scaling.html#feeling-similar-again-1"><span class="toc-section-number">36.10</span> Feeling similar, again</a></li>
 </ul></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
+<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
+<ul>
 <li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
 </ul></li>
-<li class="has-sub"><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a><ul>
+<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
+<ul>
 <li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
 <li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
@@ -557,7 +611,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="factor-analysis.html#a-correlation-matrix-1"><span class="toc-section-number">38.5</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution-1"><span class="toc-section-number">38.6</span> Air pollution</a></li>
 </ul></li>
-<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
+<ul>
 <li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
 <li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
 <li><a href="frequency-table-analysis.html#brand-m-laundry-detergent"><span class="toc-section-number">39.3</span> Brand M laundry detergent</a></li>
@@ -571,10 +626,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="one-sample-inference" class="section level1">
+<div id="one-sample-inference" class="section level1" number="6">
 <h1><span class="header-section-number">Chapter 6</span> One-sample inference</h1>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div id="hunter-gatherers-in-australia" class="section level2">
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="one-sample-inference.html#cb266-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="hunter-gatherers-in-australia" class="section level2" number="6.1">
 <h2><span class="header-section-number">6.1</span> Hunter-gatherers in Australia</h2>
 <p>A hunter-gatherer society is one where people get their food
 by hunting, fishing or foraging rather than by agriculture or by
@@ -605,7 +660,7 @@ Explain briefly, using a suitable graph to support your
 explanation.</p></li>
 </ol>
 </div>
-<div id="buses-to-boulder" class="section level2">
+<div id="buses-to-boulder" class="section level2" number="6.2">
 <h2><span class="header-section-number">6.2</span> Buses to Boulder</h2>
 <p>A bus line operates a route from Denver to Boulder (these
 places are in Colorado). The
@@ -628,7 +683,7 @@ confidence interval? Explain briefly.</p></li>
 to doubt the test that you did above?</p></li>
 </ol>
 </div>
-<div id="length-of-gestation-in-north-carolina" class="section level2">
+<div id="length-of-gestation-in-north-carolina" class="section level2" number="6.3">
 <h2><span class="header-section-number">6.3</span> Length of gestation in North Carolina</h2>
 <p>The data in file
 <a href="http://ritsokiguess.site/datafiles/ncbirths.csv">link</a> are about
@@ -662,7 +717,7 @@ histogram first. I don’t mind very much what you pick, as long as it’s
 not obviously too many or too few bins.)</p></li>
 </ol>
 </div>
-<div id="inferring-ice-break-up-in-nenana" class="section level2">
+<div id="inferring-ice-break-up-in-nenana" class="section level2" number="6.4">
 <h2><span class="header-section-number">6.4</span> Inferring ice break-up in Nenana</h2>
 <p>Nenana, Alaska, is about 50 miles west of Fairbanks.
 Every spring, there is a contest in Nenana. A wooden tripod is
@@ -698,7 +753,7 @@ briefly. (You did this before, but I have some extra comments on
 the graph this time, so feel free to just read this part.)</p></li>
 </ol>
 </div>
-<div id="diameters-of-trees" class="section level2">
+<div id="diameters-of-trees" class="section level2" number="6.5">
 <h2><span class="header-section-number">6.5</span> Diameters of trees</h2>
 <p>The Wade Tract in Thomas County, Georgia, is an old-growth forest of longleaf pine trees. It has survived in a relatively undisturbed state since before settlements of the area by Europeans. For each tree in the tract, researchers measured the diameter at breast height. This is a standard measure in forestry: it is defined as the diameter of the tree at 4.5 feet above the ground. <label for="tufte-mn-21" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-21" class="margin-toggle"><span class="marginnote">The height of a typical human breast off the ground. Men have a breast too, you know.</span> They are interested in the mean diameter at breast height of the trees in this tract. These values are in <a href="http://ritsokiguess.site/datafiles/treediameter.csv">http://ritsokiguess.site/datafiles/treediameter.csv</a>. The diameters are measured in centimetres.
 The easiest way to get the URL is to <em>right</em>-click on the blue text and select Copy URL. (If you copy and paste the actual text you might end up with extra spaces, especially if the printed URL goes over two lines.)</p>
@@ -709,10 +764,34 @@ The easiest way to get the URL is to <em>right</em>-click on the blue text and s
 <li><p>Based on what you have seen so far, would you expect to reject a null hypothesis that the population mean diameter (of all longleaf pines like these) is 35 cm? Explain briefly. Then, carry out the test (against a two-sided alternative) and explain briefly whether you were right.</p></li>
 <li><p>Would you expect 35 cm to be in a <em>99%</em> confidence interval for the mean diameter? Explain briefly, and then see if you were right.</p></li>
 </ol>
+</div>
+<div id="one-sample-cholesterol" class="section level2" number="6.6">
+<h2><span class="header-section-number">6.6</span> One-sample cholesterol</h2>
+<p>The data set at
+ contains cholesterol
+measurements for heart attack patients (at several different times) as
+well as for a group of control patients. We will focus on the control
+patients in this question.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Read in and display (some of) the data.</p></li>
+<li><p>Make a suitable plot of the cholesterol levels of the
+control patients, and comment briefly on the shape of the
+distribution.</p></li>
+<li><p>It is recommended that people in good health, such as the
+Control patients here, keep their cholesterol level below 200. Is
+there evidence that the mean cholesterol level of the population of
+people of which the Control patients are a sample is less than 200? Show that you understand the process,
+and state your conclusion in the context of the data.</p></li>
+<li><p>What values could the population mean cholesterol level take? You
+might need to get some more output to determine this.</p></li>
+<li><p>Explain briefly why you would be reasonably happy to trust
+the <span class="math inline">\(t\)</span> procedures in this question. (There are two points you need
+to make.)</p></li>
+</ol>
 <p>My solutions follow:</p>
 </div>
-<div id="hunter-gatherers-in-australia-1" class="section level2">
-<h2><span class="header-section-number">6.6</span> Hunter-gatherers in Australia</h2>
+<div id="hunter-gatherers-in-australia-1" class="section level2" number="6.7">
+<h2><span class="header-section-number">6.7</span> Hunter-gatherers in Australia</h2>
 <p>A hunter-gatherer society is one where people get their food
 by hunting, fishing or foraging rather than by agriculture or by
 raising animals. Such societies tend to move from place to place.
@@ -734,10 +813,10 @@ Explain briefly.</li>
 <p>Solution</p>
 <p>The data values are separated by (single) spaces, so <code>read_delim</code>
 is the thing:</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1">url=<span class="st">&quot;http://ritsokiguess.site/datafiles/hg.txt&quot;</span></a>
-<a class="sourceLine" id="cb266-2" title="2">societies=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="one-sample-inference.html#cb267-1"></a>url=<span class="st">&quot;http://ritsokiguess.site/datafiles/hg.txt&quot;</span></span>
+<span id="cb267-2"><a href="one-sample-inference.html#cb267-2"></a>societies=<span class="kw">read_delim</span>(url,<span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   name = col_character(),
 ##   density = col_double()
@@ -747,7 +826,7 @@ is the thing:</p>
 in one step, that’s fine, as long as it’s clear that you are doing the
 right thing.</p>
 <p>Let’s look at the data frame:</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1">societies</a></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="one-sample-inference.html#cb269-1"></a>societies</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["name"],"name":[1],"type":["chr"],"align":["left"]},{"label":["density"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"jeidji","2":"17.00"},{"1":"kuku","2":"50.00"},{"1":"mamu","2":"45.00"},{"1":"ngatjan","2":"59.80"},{"1":"undanbi","2":"21.74"},{"1":"jinibarra","2":"16.00"},{"1":"ualaria","2":"9.00"},{"1":"barkindji","2":"15.43"},{"1":"wongaibon","2":"5.12"},{"1":"jaralde","2":"40.00"},{"1":"tjapwurong","2":"35.00"},{"1":"tasmanians","2":"13.35"},{"1":"badjalang","2":"13.40"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -783,7 +862,7 @@ conclude, in the context of the data?</li>
 </ol>
 <p>Solution</p>
 <p>A <span class="math inline">\(t\)</span>-test, since we are testing a mean:</p>
-<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb269-1" title="1"><span class="kw">t.test</span>(societies<span class="op">$</span>density,<span class="dt">mu=</span><span class="fl">7.38</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="one-sample-inference.html#cb270-1"></a><span class="kw">t.test</span>(societies<span class="op">$</span>density,<span class="dt">mu=</span><span class="fl">7.38</span>)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -813,30 +892,30 @@ approximately normal. We can assess that in several ways, but the
 simplest (which is perfectly acceptable at this point) is a
 histogram. You’ll need to pick a suitable number of bins. This one
 comes from Sturges’ rule:</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-333-1.png" width="672"  />
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="one-sample-inference.html#cb272-1"></a><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-347-1.png" width="672"  />
 Your conclusion might depend on how many bins you chose for your
 histogram. Here’s 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well):</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-334-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="one-sample-inference.html#cb273-1"></a><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-348-1.png" width="672"  /></p>
 <p>or you can get a number of bins from one of the built-in functions,
 such as:</p>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1">mybins=<span class="kw">nclass.FD</span>(societies<span class="op">$</span>density)</a>
-<a class="sourceLine" id="cb273-2" title="2">mybins</a></code></pre></div>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="one-sample-inference.html#cb274-1"></a>mybins=<span class="kw">nclass.FD</span>(societies<span class="op">$</span>density)</span>
+<span id="cb274-2"><a href="one-sample-inference.html#cb274-2"></a>mybins</span></code></pre></div>
 <pre><code>## [1] 3</code></pre>
 <p>This one is small. The interquartile range is large and <span class="math inline">\(n\)</span> is small,
 so the binwidth will be large and therefore the number of bins will be
 small.</p>
 <p>Other choices: a one-group boxplot:</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>density))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-336-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="one-sample-inference.html#cb276-1"></a><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>,<span class="dt">y=</span>density))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-350-1.png" width="672"  /></p>
 <p>This isn’t the best for assessing normality as such, but it will tell
 you about lack of symmetry and outliers, which are the most important
 threats to the <span class="math inline">\(t\)</span>-test, so it’s fine here. Or, a normal quantile plot:</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">sample=</span>density))<span class="op">+</span></a>
-<a class="sourceLine" id="cb276-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-337-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="one-sample-inference.html#cb277-1"></a><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">sample=</span>density))<span class="op">+</span></span>
+<span id="cb277-2"><a href="one-sample-inference.html#cb277-2"></a><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-351-1.png" width="672"  /></p>
 <p>This is actually the best way to assess normality, but I’m not
 expecting you to use this plot here, because we may not have gotten to
 it in class yet. (If you have read ahead and successfully use the
@@ -856,8 +935,8 @@ distribution was right-skewed. Later on, we’ll learn about the sign
 test for the median, which I think is actually a better test here.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="buses-to-boulder-1" class="section level2">
-<h2><span class="header-section-number">6.7</span> Buses to Boulder</h2>
+<div id="buses-to-boulder-1" class="section level2" number="6.8">
+<h2><span class="header-section-number">6.8</span> Buses to Boulder</h2>
 <p>A bus line operates a route from Denver to Boulder (these
 places are in Colorado). The
 schedule says that the journey time should be 60 minutes. 11
@@ -876,14 +955,14 @@ Also, there is only one column, so you can pretend that there
 were multiple columns, separated by whatever you like. It’s least
 typing to pretend that they were separated by commas like a
 <code>.csv</code> file:</p>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/buses.txt&quot;</span></a>
-<a class="sourceLine" id="cb277-2" title="2">journey.times &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="one-sample-inference.html#cb278-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/buses.txt&quot;</span></span>
+<span id="cb278-2"><a href="one-sample-inference.html#cb278-2"></a>journey.times &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   minutes = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1">journey.times</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="one-sample-inference.html#cb280-1"></a>journey.times</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["minutes"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"58"},{"1":"61"},{"1":"69"},{"1":"62"},{"1":"81"},{"1":"54"},{"1":"72"},{"1":"71"},{"1":"53"},{"1":"54"},{"1":"66"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -899,7 +978,7 @@ old-fashioned, with underscores being the modern way.
 You can also use what is called “camel case”
 by starting each “word” after the first with an uppercase
 letter like this:</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1">journeyTimes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="one-sample-inference.html#cb281-1"></a>journeyTimes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <p>You have to get the capitalization and punctuation right when you use your variables,
 no matter what they’re called. In any of the cases above, there is no
 variable called <code>journeytimes</code>. As Jenny Bryan (in
@@ -919,7 +998,7 @@ times of buses.)</li>
 <p>Solution</p>
 <p><code>t.test</code> doesn’t take a <code>data=</code> to say which
 data frame to use. Wrap it in a <code>with</code>:</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1"><span class="kw">with</span>(journey.times, <span class="kw">t.test</span>(minutes, <span class="dt">mu =</span> <span class="dv">60</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="one-sample-inference.html#cb282-1"></a><span class="kw">with</span>(journey.times, <span class="kw">t.test</span>(minutes, <span class="dt">mu =</span> <span class="dv">60</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -968,7 +1047,7 @@ to doubt the test that you did above?</li>
 <p>Solution</p>
 <p>The grouping variable is a
 “nothing” as in the Ken and Thomas question (part (d)):</p>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1"><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="one-sample-inference.html#cb284-1"></a><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="dv">1</span>, <span class="dt">y =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/brixham-1.png" width="672"  /></p>
 <p>The assumption behind the <span class="math inline">\(t\)</span>-test is that the population from which
 the data come has a normal distribution: ie. symmetric with no
@@ -980,15 +1059,15 @@ therefore we should doubt the <span class="math inline">\(t\)</span>-test, becau
 longer than the lower one. In fact, the topmost value is very nearly
 an outlier:
 <label for="tufte-mn-24" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-24" class="margin-toggle"><span class="marginnote">Whether you think it is or not may depend on how many bins you have on your histogram. With 5 bins it looks like an outlier, but with 6 it does not. Try it and see.</span></p>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb284-1" title="1"><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">x =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="one-sample-inference.html#cb285-1"></a><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">x =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/babbacombe-1.png" width="672"  /></p>
 <p>and there might be skewness as well, so maybe I should have been concerned.</p>
 <p>I would be looking for some intelligent comment on the boxplot: what it
 looks like vs. what it ought to look like. I don’t so much mind what
 that comment is, as long as it’s intelligent enough.</p>
 <p>Perhaps I should draw a normal quantile plot:</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1"><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">sample =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-341-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="one-sample-inference.html#cb286-1"></a><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">sample =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-355-1.png" width="672"  /></p>
 <p>The normal quantile plot is saying that the problem is actually at the
 <em>bottom</em> of the distribution: the lowest value is not low enough,
 but the highest value is actually <em>not</em> too high. So this one
@@ -998,8 +1077,8 @@ too bad. But you are free to disagree.</p>
 <p>If you don’t like the normality, you’d use a <em>sign test</em> and test
 that the <em>median</em> is not 60 minutes, which you would (at my
 guess) utterly fail to reject:</p>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb286-2" title="2"><span class="kw">sign_test</span>(journey.times, minutes, <span class="dv">60</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="one-sample-inference.html#cb287-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb287-2"><a href="one-sample-inference.html#cb287-2"></a><span class="kw">sign_test</span>(journey.times, minutes, <span class="dv">60</span>)</span></code></pre></div>
 <pre><code>## $above_below
 ## below above 
 ##     4     7 
@@ -1009,13 +1088,13 @@ guess) utterly fail to reject:</p>
 ## 1       lower 0.8867187
 ## 2       upper 0.2744141
 ## 3   two-sided 0.5488281</code></pre>
-<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1"><span class="kw">ci_median</span>(journey.times, minutes)</a></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="one-sample-inference.html#cb289-1"></a><span class="kw">ci_median</span>(journey.times, minutes)</span></code></pre></div>
 <pre><code>## [1] 54.00195 71.99023</code></pre>
 <p>and so we do. The median could easily be 60 minutes.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="length-of-gestation-in-north-carolina-1" class="section level2">
-<h2><span class="header-section-number">6.8</span> Length of gestation in North Carolina</h2>
+<div id="length-of-gestation-in-north-carolina-1" class="section level2" number="6.9">
+<h2><span class="header-section-number">6.9</span> Length of gestation in North Carolina</h2>
 <p>The data in file
 <a href="http://ritsokiguess.site/datafiles/ncbirths.csv">link</a> are about
 500 randomly chosen births of babies in North Carolina. There is a lot
@@ -1031,10 +1110,10 @@ type of file it is.</li>
 <p>This is a <code>.csv</code> file (it came from a spreadsheet), so it
 needs reading in accordingly. Work directly from the URL (rather
 than downloading the file, unless you are working offline):</p>
-<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1">myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ncbirths.csv&quot;</span></a>
-<a class="sourceLine" id="cb290-2" title="2">bw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(myurl)</a></code></pre></div>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="one-sample-inference.html#cb291-1"></a>myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ncbirths.csv&quot;</span></span>
+<span id="cb291-2"><a href="one-sample-inference.html#cb291-2"></a>bw &lt;-<span class="st"> </span><span class="kw">read_csv</span>(myurl)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   `Father Age` = col_double(),
 ##   `Mother Age` = col_double(),
@@ -1059,7 +1138,7 @@ question mark) in it, remember that you have to surround its name with
 backticks, as discussed the first time we looked at these data.</p>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1"><span class="kw">t.test</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="one-sample-inference.html#cb293-1"></a><span class="kw">t.test</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1072,7 +1151,7 @@ backticks, as discussed the first time we looked at these data.</p>
 ## mean of x 
 ##   7.06875</code></pre>
 <p>or (the same, but remember to match your brackets):</p>
-<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb294-1" title="1"><span class="kw">with</span>(bw, <span class="kw">t.test</span>(<span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="one-sample-inference.html#cb295-1"></a><span class="kw">with</span>(bw, <span class="kw">t.test</span>(<span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1112,7 +1191,7 @@ that the mean is less: <span class="math inline">\(H_a: \mu&lt;7.3\)</span> poun
 <p>Note that I defined <span class="math inline">\(\mu\)</span> first before I used it.</p>
 <p>This is a one-sided
 alternative, which we need to feed into <code>t.test</code>:</p>
-<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1"><span class="kw">t.test</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>, <span class="dt">mu =</span> <span class="fl">7.3</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="one-sample-inference.html#cb297-1"></a><span class="kw">t.test</span>(bw<span class="op">$</span><span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>, <span class="dt">mu =</span> <span class="fl">7.3</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1148,8 +1227,8 @@ not obviously too many or too few bins.)</li>
 <p>We did this before (and discussed the number of bins before), so
 I’ll just reproduce my 10-bin histogram (which is what I preferred,
 but this is a matter of taste):</p>
-<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-347-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="one-sample-inference.html#cb299-1"></a><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-361-1.png" width="672"  /></p>
 <p>So, we were assessing normality. What about that?</p>
 <p>It is mostly normal-looking, but I am suspicious about those
 <em>very</em> low birth weights, the ones below about 4 pounds. There
@@ -1162,8 +1241,8 @@ interpretation of the histogram.</p>
 <p>A normal quantile plot is better for assessing normality
 than a histogram is, but I won’t make you do one until we have seen
 the idea in class. Here’s the normal quantile plot for these data:</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1"><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">sample =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-348-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="one-sample-inference.html#cb300-1"></a><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">sample =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-362-1.png" width="672"  /></p>
 <p>This is rather striking: the lowest birthweights (the ones below 5
 pounds or so) are <em>way</em> too low for a normal distribution to
 apply. The top end is fine (except perhaps for that one very heavy
@@ -1185,8 +1264,8 @@ is based on data being approximately normal, so it will tend to
 produce a small number of bins for data that have outliers.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="inferring-ice-break-up-in-nenana-1" class="section level2">
-<h2><span class="header-section-number">6.9</span> Inferring ice break-up in Nenana</h2>
+<div id="inferring-ice-break-up-in-nenana-1" class="section level2" number="6.10">
+<h2><span class="header-section-number">6.10</span> Inferring ice break-up in Nenana</h2>
 <p>Nenana, Alaska, is about 50 miles west of Fairbanks.
 Every spring, there is a contest in Nenana. A wooden tripod is
 placed on the frozen river, and people try to guess the exact minute
@@ -1209,10 +1288,10 @@ you read in before. Note that the values are separated by
 <p>Solution</p>
 <p>These are “tab-separated values”, so <code>read_tsv</code> is the
 thing, as for the Australian athletes:</p>
-<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb300-1" title="1">myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/nenana.txt&quot;</span></a>
-<a class="sourceLine" id="cb300-2" title="2">nenana &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(myurl)</a></code></pre></div>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="one-sample-inference.html#cb301-1"></a>myurl &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/nenana.txt&quot;</span></span>
+<span id="cb301-2"><a href="one-sample-inference.html#cb301-2"></a>nenana &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(myurl)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   Year = col_double(),
 ##   JulianDate = col_double(),
@@ -1235,7 +1314,7 @@ interval. Since we are looking for a non-standard interval, we
 have to remember <code>conf.level</code> as the way to get the
 confidence level that we want. I’m going with <code>with</code> this
 time, though the dollar-sign thing is equally as good:</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb302-1" title="1"><span class="kw">with</span>(nenana, <span class="kw">t.test</span>(JulianDate, <span class="dt">conf.level =</span> <span class="fl">0.90</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="one-sample-inference.html#cb303-1"></a><span class="kw">with</span>(nenana, <span class="kw">t.test</span>(JulianDate, <span class="dt">conf.level =</span> <span class="fl">0.90</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1273,7 +1352,7 @@ What practical implication does that have
 <p>Solution</p>
 <p>The test is <code>t.test</code> again, but this time we have to
 specify a null mean and a direction of alternative:</p>
-<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb304-1" title="1"><span class="kw">with</span>(nenana, <span class="kw">t.test</span>(JulianDate, <span class="dt">mu =</span> <span class="dv">130</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="one-sample-inference.html#cb305-1"></a><span class="kw">with</span>(nenana, <span class="kw">t.test</span>(JulianDate, <span class="dt">mu =</span> <span class="dv">130</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1308,9 +1387,9 @@ the graph this time, so feel free to just read this part.)</li>
 </ol>
 <p>Solution</p>
 <p>I liked the <code>ggplot</code> with a smooth trend on it:</p>
-<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb306-1" title="1"><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="one-sample-inference.html#cb307-1"></a><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-352-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-366-1.png" width="672"  /></p>
 <p>There was something obvious to see: after about 1960, there is a clear
 downward trend: the ice is breaking up earlier on average every
 year. Even though there is a lot of variability, the overall trend,
@@ -1331,10 +1410,10 @@ be done by a regression: predict <code>JulianDate</code> from
 trend isn’t really linear, but is not that far off. I can modify the
 previous picture to give you an idea. Putting in <code>method="lm"</code>
 fits a line; as we see later, <code>lm</code> does regressions in R:</p>
-<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1"><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb308-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="one-sample-inference.html#cb309-1"></a><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb309-2"><a href="one-sample-inference.html#cb309-2"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-353-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-367-1.png" width="672"  /></p>
 <p>Compare the confidence interval for the mean <code>JulianDate</code> in
 1920: 126 to 131 (the shaded area on the graph), with 2000: 121 to
 125. A change of about 5 days over 80 years. And with the recent trend
@@ -1342,8 +1421,8 @@ that we saw above, it’s probably changing faster than that
 now. Sobering indeed.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="diameters-of-trees-1" class="section level2">
-<h2><span class="header-section-number">6.10</span> Diameters of trees</h2>
+<div id="diameters-of-trees-1" class="section level2" number="6.11">
+<h2><span class="header-section-number">6.11</span> Diameters of trees</h2>
 <p>The Wade Tract in Thomas County, Georgia, is an old-growth forest of longleaf pine trees. It has survived in a relatively undisturbed state since before settlements of the area by Europeans. For each tree in the tract, researchers measured the diameter at breast height. This is a standard measure in forestry: it is defined as the diameter of the tree at 4.5 feet above the ground. <label for="tufte-mn-25" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-25" class="margin-toggle"><span class="marginnote">The height of a typical human breast off the ground. Men have a breast too, you know.</span> They are interested in the mean diameter at breast height of the trees in this tract. These values are in <a href="http://ritsokiguess.site/datafiles/treediameter.csv">http://ritsokiguess.site/datafiles/treediameter.csv</a>. The diameters are measured in centimetres.
 The easiest way to get the URL is to <em>right</em>-click on the blue text and select Copy URL. (If you copy and paste the actual text you might end up with extra spaces, especially if the printed URL goes over two lines.)</p>
 <ol style="list-style-type: lower-alpha">
@@ -1351,14 +1430,14 @@ The easiest way to get the URL is to <em>right</em>-click on the blue text and s
 </ol>
 <p>Solution</p>
 <p>The obvious way is this:</p>
-<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb310-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></a>
-<a class="sourceLine" id="cb310-2" title="2">trees &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="one-sample-inference.html#cb311-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></span>
+<span id="cb311-2"><a href="one-sample-inference.html#cb311-2"></a>trees &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   diameter = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb312-1" title="1">trees</a></code></pre></div>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="one-sample-inference.html#cb313-1"></a>trees</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["diameter"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"10.5"},{"1":"13.3"},{"1":"26.0"},{"1":"18.3"},{"1":"52.2"},{"1":"9.2"},{"1":"26.1"},{"1":"17.6"},{"1":"40.5"},{"1":"31.8"},{"1":"47.2"},{"1":"11.4"},{"1":"2.7"},{"1":"69.3"},{"1":"44.4"},{"1":"16.9"},{"1":"35.7"},{"1":"5.4"},{"1":"44.2"},{"1":"2.2"},{"1":"4.3"},{"1":"7.8"},{"1":"38.1"},{"1":"2.2"},{"1":"11.4"},{"1":"51.5"},{"1":"4.9"},{"1":"39.7"},{"1":"32.6"},{"1":"51.8"},{"1":"43.6"},{"1":"2.3"},{"1":"44.6"},{"1":"31.5"},{"1":"40.3"},{"1":"22.3"},{"1":"43.3"},{"1":"37.5"},{"1":"29.1"},{"1":"27.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1366,28 +1445,28 @@ The easiest way to get the URL is to <em>right</em>-click on the blue text and s
 </div>
 <p>Call the data frame what you like, though it is better to use a name that tells you what the dataframe contains (rather than something like <code>mydata</code>).</p>
 <p>Extra 1: there is only one column, so you can pretend the columns are separated by anything at all. Thus you could use this:</p>
-<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></a>
-<a class="sourceLine" id="cb313-2" title="2">trees &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="one-sample-inference.html#cb314-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></span>
+<span id="cb314-2"><a href="one-sample-inference.html#cb314-2"></a>trees &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   diameter = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb315-1" title="1">trees</a></code></pre></div>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="one-sample-inference.html#cb316-1"></a>trees</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["diameter"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"10.5"},{"1":"13.3"},{"1":"26.0"},{"1":"18.3"},{"1":"52.2"},{"1":"9.2"},{"1":"26.1"},{"1":"17.6"},{"1":"40.5"},{"1":"31.8"},{"1":"47.2"},{"1":"11.4"},{"1":"2.7"},{"1":"69.3"},{"1":"44.4"},{"1":"16.9"},{"1":"35.7"},{"1":"5.4"},{"1":"44.2"},{"1":"2.2"},{"1":"4.3"},{"1":"7.8"},{"1":"38.1"},{"1":"2.2"},{"1":"11.4"},{"1":"51.5"},{"1":"4.9"},{"1":"39.7"},{"1":"32.6"},{"1":"51.8"},{"1":"43.6"},{"1":"2.3"},{"1":"44.6"},{"1":"31.5"},{"1":"40.3"},{"1":"22.3"},{"1":"43.3"},{"1":"37.5"},{"1":"29.1"},{"1":"27.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>or even this:</p>
-<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb316-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></a>
-<a class="sourceLine" id="cb316-2" title="2">trees &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="one-sample-inference.html#cb317-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/treediameter.csv&quot;</span></span>
+<span id="cb317-2"><a href="one-sample-inference.html#cb317-2"></a>trees &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   diameter = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb318-1" title="1">trees</a></code></pre></div>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="one-sample-inference.html#cb319-1"></a>trees</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["diameter"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"10.5"},{"1":"13.3"},{"1":"26.0"},{"1":"18.3"},{"1":"52.2"},{"1":"9.2"},{"1":"26.1"},{"1":"17.6"},{"1":"40.5"},{"1":"31.8"},{"1":"47.2"},{"1":"11.4"},{"1":"2.7"},{"1":"69.3"},{"1":"44.4"},{"1":"16.9"},{"1":"35.7"},{"1":"5.4"},{"1":"44.2"},{"1":"2.2"},{"1":"4.3"},{"1":"7.8"},{"1":"38.1"},{"1":"2.2"},{"1":"11.4"},{"1":"51.5"},{"1":"4.9"},{"1":"39.7"},{"1":"32.6"},{"1":"51.8"},{"1":"43.6"},{"1":"2.3"},{"1":"44.6"},{"1":"31.5"},{"1":"40.3"},{"1":"22.3"},{"1":"43.3"},{"1":"37.5"},{"1":"29.1"},{"1":"27.9"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1400,13 +1479,13 @@ The easiest way to get the URL is to <em>right</em>-click on the blue text and s
 </ol>
 <p>Solution</p>
 <p>One quantitative variable, so a histogram. Choose a sensible number of bins. There are 40 observations, so a number of bins up to about 10 is good. Sturges’ rule says 6 since <span class="math inline">\(2^6=64\)</span>:</p>
-<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb319-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">x=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-357-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="one-sample-inference.html#cb320-1"></a><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">x=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-371-1.png" width="672"  /></p>
 <p>Extra 1: comments come later, but you might care to note (if only for yourself) that the distribution is a little skewed to the right, or, perhaps better, has <em>no</em> left tail at all. You might even observe that diameters cannot be less than 0 (they are measurements), and so you might expect a skew away from the limit.</p>
 <p>After you’ve looked at the <span class="math inline">\(t\)</span> procedures for these data, we’ll get back to the shape.</p>
 <p>Extra 2: later we look at a more precise tool for assessing normality, the normal quantile plot, which looks like this:</p>
-<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb320-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">sample=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-358-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="one-sample-inference.html#cb321-1"></a><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">sample=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-372-1.png" width="672"  /></p>
 <p>If the data comes from a normal distribution, the points should follow the straight line, at least approximately. Here, most of the points do, except for the points on the left, which veer away upwards from the line: that is, the highest values, on the right, are about right for a normal distribution, but the lowest values, on the left, <em>don’t go down low enough</em>. <label for="tufte-mn-26" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-26" class="margin-toggle"><span class="marginnote">They cannot go down far enough, because they can’t go below zero.</span>
 Thus, the problem with normality is not the long tail on the right, but the short one on the left. It is hard to get this kind of insight from the histogram, but at the moment, it’s the best we have.</p>
 <p>The big problems, for things like <span class="math inline">\(t\)</span>-tests that depend on means, is stuff like outliers, or long tails, with extreme values that might distort the mean. Having short tails, as the left tail here, will make the distribution look non-normal but won’t cause any problems for the <span class="math inline">\(t\)</span>-tests.</p>
@@ -1416,7 +1495,7 @@ Thus, the problem with normality is not the long tail on the right, but the shor
 </ol>
 <p>Solution</p>
 <p>This is <code>t.test</code>, but with <code>conf.level</code> to get the interval (and then you ignore the P-value):</p>
-<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb321-1" title="1"><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter))</a></code></pre></div>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="one-sample-inference.html#cb322-1"></a><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1430,7 +1509,7 @@ Thus, the problem with normality is not the long tail on the right, but the shor
 ##     27.29</code></pre>
 <p>The mean diameter of a longleaf pine (like the ones in this tract) is between 21.6 and 33.0 centimetres.</p>
 <p>If you prefer, do it this way:</p>
-<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb323-1" title="1"><span class="kw">t.test</span>(trees<span class="op">$</span>diameter)</a></code></pre></div>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="one-sample-inference.html#cb324-1"></a><span class="kw">t.test</span>(trees<span class="op">$</span>diameter)</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1451,7 +1530,7 @@ Thus, the problem with normality is not the long tail on the right, but the shor
 <p>Solution</p>
 <p>The logic is that “plausible” values for the population mean, ones you believe, are inside the interval, and implausible ones that you don’t believe are outside. Remember that the interval is your best answer to “what is the population mean”, and 35 is outside the interval so you don’t think the population mean is 35, and thus you would reject it.</p>
 <p>Are we right? Take out the <code>conf.level</code> and put in a <code>mu</code>:</p>
-<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb325-1" title="1"><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter, <span class="dt">mu =</span> <span class="dv">35</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="one-sample-inference.html#cb326-1"></a><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter, <span class="dt">mu =</span> <span class="dv">35</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1470,7 +1549,7 @@ Thus, the problem with normality is not the long tail on the right, but the shor
 </ol>
 <p>Solution</p>
 <p>The P-value is less than 0.01 (as well as being less than 0.05), so, in the same way that 35 was outside the 95% interval, it should be outside the 99% CI also. Maybe not by much, though, since the P-value is only just less than 0.01:</p>
-<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb327-1" title="1"><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter, <span class="dt">conf.level =</span> <span class="fl">0.99</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="one-sample-inference.html#cb328-1"></a><span class="kw">with</span>(trees, <span class="kw">t.test</span>(diameter, <span class="dt">conf.level =</span> <span class="fl">0.99</span>))</span></code></pre></div>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -1483,6 +1562,320 @@ Thus, the problem with normality is not the long tail on the right, but the shor
 ## mean of x 
 ##     27.29</code></pre>
 <p>Indeed so, outside, but only just.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<div id="one-sample-cholesterol-1" class="section level2" number="6.12">
+<h2><span class="header-section-number">6.12</span> One-sample cholesterol</h2>
+<p>The data set at
+ contains cholesterol
+measurements for heart attack patients (at several different times) as
+well as for a group of control patients. We will focus on the control
+patients in this question.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in and display (some of) the data.</li>
+</ol>
+<p>Solution</p>
+<p>This is (as you might guess) a , so:</p>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="one-sample-inference.html#cb330-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/cholest.csv&quot;</span></span>
+<span id="cb330-2"><a href="one-sample-inference.html#cb330-2"></a>cholest &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## 
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## cols(
+##   `2-Day` = col_double(),
+##   `4-Day` = col_double(),
+##   `14-Day` = col_double(),
+##   control = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb332-1"><a href="one-sample-inference.html#cb332-1"></a>cholest</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["2-Day"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["4-Day"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["14-Day"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["control"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"270","2":"218","3":"156","4":"196"},{"1":"236","2":"234","3":"NA","4":"232"},{"1":"210","2":"214","3":"242","4":"200"},{"1":"142","2":"116","3":"NA","4":"242"},{"1":"280","2":"200","3":"NA","4":"206"},{"1":"272","2":"276","3":"256","4":"178"},{"1":"160","2":"146","3":"142","4":"184"},{"1":"220","2":"182","3":"216","4":"198"},{"1":"226","2":"238","3":"248","4":"160"},{"1":"242","2":"288","3":"NA","4":"182"},{"1":"186","2":"190","3":"168","4":"182"},{"1":"266","2":"236","3":"236","4":"198"},{"1":"206","2":"244","3":"NA","4":"182"},{"1":"318","2":"258","3":"200","4":"238"},{"1":"294","2":"240","3":"264","4":"198"},{"1":"282","2":"294","3":"NA","4":"188"},{"1":"234","2":"220","3":"264","4":"166"},{"1":"224","2":"200","3":"NA","4":"204"},{"1":"276","2":"220","3":"188","4":"182"},{"1":"282","2":"186","3":"182","4":"178"},{"1":"360","2":"352","3":"294","4":"212"},{"1":"310","2":"202","3":"214","4":"164"},{"1":"280","2":"218","3":"NA","4":"230"},{"1":"278","2":"248","3":"198","4":"186"},{"1":"288","2":"278","3":"NA","4":"162"},{"1":"288","2":"248","3":"256","4":"182"},{"1":"244","2":"270","3":"280","4":"218"},{"1":"236","2":"242","3":"204","4":"170"},{"1":"NA","2":"NA","3":"NA","4":"200"},{"1":"NA","2":"NA","3":"NA","4":"176"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Note for yourself that there are 30 observations (and some missing
+ones), and a column called  that is the one we’ll be
+working with.</p>
+<p>Extra: the 2-day, 4-day and 14-day columns need to be referred to with funny “backticks” around their names, because a column name cannot contain a <code>-</code> or start with a number. This is not a problem here, since we won’t be using those columns, but if we wanted to, this would not work:</p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb333-1"><a href="one-sample-inference.html#cb333-1"></a>cholest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">xbar =</span> <span class="kw">mean</span>(<span class="dv">2</span><span class="op">-</span>Day))</span></code></pre></div>
+<pre><code>## Error: Problem with `summarise()` input `xbar`.
+## ✖ error in evaluating the argument &#39;x&#39; in selecting a method for function &#39;mean&#39;: object &#39;Day&#39; not found
+## ℹ Input `xbar` is `mean(2 - Day)`.</code></pre>
+<p>because it is looking for a column called <code>Day</code>, which doesn’t exist. The meaning of <code>2-Day</code> is “take the column called <code>Day</code> and subtract it from 2”. To make this work, we have to supply the backticks ourselves:</p>
+<div class="sourceCode" id="cb335"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb335-1"><a href="one-sample-inference.html#cb335-1"></a>cholest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">xbar =</span> <span class="kw">mean</span>(<span class="st">`</span><span class="dt">2-Day</span><span class="st">`</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["xbar"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"253.9286"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This column also has missing values (at the bottom), so here I’ve asked to remove the missing values <label for="tufte-mn-28" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-28" class="margin-toggle"><span class="marginnote">In R, missing values are labelled NA, and rm is Unix/C shorthand for remove.</span> before working out the mean. Otherwise the mean is, unhelpfully, missing as well.</p>
+<p>You might imagine that dealing with column names like this would get annoying. There is a package called <code>janitor</code> that has a function called <code>clean_names</code> to save you the trouble. Install it first, then load it:</p>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb336-1"><a href="one-sample-inference.html#cb336-1"></a><span class="kw">library</span>(janitor)</span></code></pre></div>
+<p>and then pipe your dataframe into <code>clean_names</code> and see what happens:</p>
+<div class="sourceCode" id="cb337"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb337-1"><a href="one-sample-inference.html#cb337-1"></a>cholest <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">clean_names</span>() -&gt;<span class="st"> </span>cholest1</span>
+<span id="cb337-2"><a href="one-sample-inference.html#cb337-2"></a>cholest1</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["x2_day"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["x4_day"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["x14_day"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["control"],"name":[4],"type":["dbl"],"align":["right"]}],"data":[{"1":"270","2":"218","3":"156","4":"196"},{"1":"236","2":"234","3":"NA","4":"232"},{"1":"210","2":"214","3":"242","4":"200"},{"1":"142","2":"116","3":"NA","4":"242"},{"1":"280","2":"200","3":"NA","4":"206"},{"1":"272","2":"276","3":"256","4":"178"},{"1":"160","2":"146","3":"142","4":"184"},{"1":"220","2":"182","3":"216","4":"198"},{"1":"226","2":"238","3":"248","4":"160"},{"1":"242","2":"288","3":"NA","4":"182"},{"1":"186","2":"190","3":"168","4":"182"},{"1":"266","2":"236","3":"236","4":"198"},{"1":"206","2":"244","3":"NA","4":"182"},{"1":"318","2":"258","3":"200","4":"238"},{"1":"294","2":"240","3":"264","4":"198"},{"1":"282","2":"294","3":"NA","4":"188"},{"1":"234","2":"220","3":"264","4":"166"},{"1":"224","2":"200","3":"NA","4":"204"},{"1":"276","2":"220","3":"188","4":"182"},{"1":"282","2":"186","3":"182","4":"178"},{"1":"360","2":"352","3":"294","4":"212"},{"1":"310","2":"202","3":"214","4":"164"},{"1":"280","2":"218","3":"NA","4":"230"},{"1":"278","2":"248","3":"198","4":"186"},{"1":"288","2":"278","3":"NA","4":"162"},{"1":"288","2":"248","3":"256","4":"182"},{"1":"244","2":"270","3":"280","4":"218"},{"1":"236","2":"242","3":"204","4":"170"},{"1":"NA","2":"NA","3":"NA","4":"200"},{"1":"NA","2":"NA","3":"NA","4":"176"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>These are all legit column names; the <code>-</code> has been replaced by an underscore, and each of the first three column names has gained an <code>x</code> on the front so that it no longer starts with a number. This then works:</p>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb338-1"><a href="one-sample-inference.html#cb338-1"></a>cholest1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">xbar =</span> <span class="kw">mean</span>(x2_day, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["xbar"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"253.9286"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Make a suitable plot of the cholesterol levels of the
+control patients, and comment briefly on the shape of the
+distribution.</li>
+</ol>
+<p>Solution</p>
+<p>There is one quantitative variable, so a histogram, as ever:</p>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb339-1"><a href="one-sample-inference.html#cb339-1"></a><span class="kw">ggplot</span>(cholest, <span class="kw">aes</span>(<span class="dt">x=</span>control)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-383-1.png" width="672"  /></p>
+<p>Pick a number of bins that shows the shape reasonably well. Too many
+or too few won’t. (Sturges’ rule says 6, since there are 30
+observations and <span class="math inline">\(2^5=32\)</span>.) Seven bins also works, but by the time you
+get to 8 bins or more, you are starting to lose a clear picture of the
+shape. Four bins is, likewise, about as low as you can go before
+getting too crude a picture.</p>
+<p>Choosing one of these numbers of bins will make it clear that the
+distribution is somewhat skewed to the right.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>It is recommended that people in good health, such as the
+Control patients here, keep their cholesterol level below 200. Is
+there evidence that the mean cholesterol level of the population of
+people of which the Control patients are a sample is less than 200? Show that you understand the process,
+and state your conclusion in the context of the data.</li>
+</ol>
+<p>Solution</p>
+<p>The word “evidence” means to do a hypothesis test and get a
+P-value. Choose an <span class="math inline">\(\alpha\)</span> first, such as 0.05.</p>
+<p>Testing a mean implies a one-sample <span class="math inline">\(t\)</span>-test. We are trying to
+prove that the mean is less than 200, so that’s our alternative:
+<span class="math inline">\(H_a: \mu &lt; 200\)</span>, and therefore the null is that the mean is equal
+to 200: <span class="math inline">\(H_0: \mu = 200\)</span>. (You might think it makes more logical
+sense to have <span class="math inline">\(H_0: \mu \ge 200\)</span>, which is also fine. As long as
+the null hypothesis has an equals in it in a logical place, you
+are good.)</p>
+<div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb340-1"><a href="one-sample-inference.html#cb340-1"></a><span class="kw">with</span>(cholest, <span class="kw">t.test</span>(control, <span class="dt">mu=</span><span class="dv">200</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  control
+## t = -1.6866, df = 29, p-value = 0.05121
+## alternative hypothesis: true mean is less than 200
+## 95 percent confidence interval:
+##      -Inf 200.0512
+## sample estimates:
+## mean of x 
+##  193.1333</code></pre>
+<p>This is also good:</p>
+<div class="sourceCode" id="cb342"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb342-1"><a href="one-sample-inference.html#cb342-1"></a><span class="kw">t.test</span>(cholest<span class="op">$</span>control, <span class="dt">mu=</span><span class="dv">200</span>, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  cholest$control
+## t = -1.6866, df = 29, p-value = 0.05121
+## alternative hypothesis: true mean is less than 200
+## 95 percent confidence interval:
+##      -Inf 200.0512
+## sample estimates:
+## mean of x 
+##  193.1333</code></pre>
+<p>I like the first version better because a lot of what we do later
+involves giving a data frame, and then working with things in that
+data frame. This is more like that.</p>
+<p>This test is -sided because we are looking for evidence of
+; if the mean is actually  than 200, we don’t
+care about that. For a one-sided test, R requires you to say which
+side you are testing.</p>
+<p>The P-value is not (quite) less than 0.05, so we cannot quite reject
+the null. Therefore, there is no evidence that the mean cholesterol
+level (of the people of which the control group are a sample) is less
+than 200. Or, this mean is not significantly less than 200. Or, we
+conclude that this mean is equal to 200. Or, we conclude that this
+mean could be 200. Any of those.</p>
+<p>If you chose a different <span class="math inline">\(\alpha\)</span>, draw the right conclusion for the
+<span class="math inline">\(\alpha\)</span> you chose. For example, with <span class="math inline">\(\alpha=0.10\)</span>, we  have
+evidence that the mean is less than 200. Being consistent is more
+important than getting the same answer as me.</p>
+<p>Writing out all the steps correctly shows that you understand the process. Anything less doesn’t.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>What values could the population mean cholesterol level take? You
+might need to get some more output to determine this.</li>
+</ol>
+<p>Solution</p>
+<p>This is <em>not</em> quoting the sample mean, giving that as your answer, and then stopping. The sample mean should, we hope, be somewhere the population mean, but it is almost certainly not the same as the population mean, because there is variability due to random sampling. (This is perhaps the most important thing in all of Statistics: recognizing that variability exists and dealing with it.)</p>
+<p>With that in mind, the question means to get a range of values that the population mean could
+be: that is to say, a confidence interval. The one that came out
+of the previous output is one-sided, to go with the one-sided
+test, but confidence intervals for us are two-sided, so we have to
+run the test again, but two-sided, to get it. To do that, take out
+the “alternative”, thus (you can also take out the null mean,
+since a confidence interval has no null hypothesis):</p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb344-1"><a href="one-sample-inference.html#cb344-1"></a><span class="kw">with</span>(cholest, <span class="kw">t.test</span>(control))</span></code></pre></div>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  control
+## t = 47.436, df = 29, p-value &lt; 2.2e-16
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  184.8064 201.4603
+## sample estimates:
+## mean of x 
+##  193.1333</code></pre>
+<p>With 95% confidence, the population mean cholesterol level is between
+184.8 and 201.5.</p>
+<p> This is because in your
+statistical life, you are providing results to someone else  They do not have time to go
+searching in some output, or to fish through some excessive number of
+decimal places. If that’s what you give them, they will ask you to
+rewrite your report, wasting everybody’s time when you could have done
+it right the first time.</p>
+<p>How many decimal places is a good number? Look back at your data. In
+this case, the cholesterol values are whole numbers (zero decimal
+places). A confidence interval is talking about a mean. In this case,
+we have a sample size of 30, which is between 10 and 100, so we can
+justify one extra decimal place beyond the data, here one decimal
+altogether, or two . (Two is more
+justifiable if the sample size is bigger than 100.) See, for example,
+<a href="https://www2.southeastern.edu/Academics/Faculty/dgurney/Math241/StatTopics/SciNot.htm">this</a>,
+in particular the piece at the bottom.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Explain briefly why you would be reasonably happy to trust
+the <span class="math inline">\(t\)</span> procedures in this question. (There are two points you need
+to make.)</li>
+</ol>
+<p>Solution</p>
+<p>The first thing is to look back at the graph you made
+earlier. This was skewed to the right (“moderately” or
+“somewhat” or however you described it). This would seem to say
+that the <span class="math inline">\(t\)</span> procedures were not very trustworthy, since the
+population distribution doesn’t look very normal in shape.</p>
+<p>However, the second thing is to look at the sample size. We have
+the central limit theorem, which says (for us) that the larger the
+sample is, the less the normality matters, when it comes to
+estimating the mean. Here, the sample size is 30, which, for the
+central limit theorem, is large enough to overcome moderate
+non-normality in the data.</p>
+<p>My take, which I was trying to guide you towards, is that our
+non-normality was not too bad, and so our sample size is large
+enough to trust the <span class="math inline">\(t\)</span> procedures we used.</p>
+<p>Extra 1: 
+What matters is the tradeoff between sample size and the extent of
+the non-normality. If your data is less normal, you need a larger
+sample size to overcome it. Even a sample size of 500 might not be
+enough if your distribution is very skewed, or if you have extreme
+outliers.</p>
+<p>The place <span class="math inline">\(n=30\)</span> comes from is back from the days when we only
+ever used printed tables. In most textbooks, if you printed the
+<span class="math inline">\(t\)</span>-table on one page in a decent-sized font, you’d get to about
+29 df before running out of space. Then they would say “<span class="math inline">\(\infty\)</span>
+df” and put the normal-distribution <span class="math inline">\(z\)</span> numbers in. If the df you
+needed was bigger than what you had in the table, you used this
+last line: that is, you called the sample “large”. Try it in
+your stats textbooks: I bet the df go up to 30, then you get a few
+more, then the <span class="math inline">\(z\)</span> numbers.</p>
+<p>Extra 2: By now you are probably thinking that this is very
+subjective, and so it is. What actually matters is the shape of
+the thing called the . That is to say, what kind of sample means you might get
+in repeated samples from your population. The problem is that you
+don’t know what the population looks like. <label for="tufte-mn-29" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-29" class="margin-toggle"><span class="marginnote">If you did, all
+your problems would be over.</span> But we can fake it up, in a couple
+of ways: we can play what-if and pretend we know what the population
+looks like (to get some understanding for “populations like
+that”), or we can use a technique called the “bootstrap” that
+will tell us what kind of sample means we might get from the
+population that  sample came from (this seems like magic
+and, indeed, is).</p>
+<p>The moral of the story is that the central limit theorem is more
+powerful than you think.</p>
+<p>To illustrate my first idea, let’s pretend the population looks like this,
+with a flat top:</p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-387-1.png" width="672"  /></p>
+<p>Only values between 0 and 1 are possible, and each of those is equally
+likely. Not very normal in shape. So let’s take some random samples of
+size , not in any sense a large sample, from this “uniform”
+population, and see what kind of sample means we get. This technique
+is called : rather than working out the answer by
+math, we’re letting the computer approximate the answer for us. Here’s
+one simulated sample:</p>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb346-1"><a href="one-sample-inference.html#cb346-1"></a>u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">3</span>)</span>
+<span id="cb346-2"><a href="one-sample-inference.html#cb346-2"></a>u</span></code></pre></div>
+<pre><code>## [1] 0.9475841 0.1245953 0.2277288</code></pre>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb348-1"><a href="one-sample-inference.html#cb348-1"></a><span class="kw">mean</span>(u)</span></code></pre></div>
+<pre><code>## [1] 0.4333027</code></pre>
+<p>and here’s the same thing 1000 times, including a histogram of the
+sample means:</p>
+<div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb350-1"><a href="one-sample-inference.html#cb350-1"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb350-2"><a href="one-sample-inference.html#cb350-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb350-3"><a href="one-sample-inference.html#cb350-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">runif</span>(<span class="dv">3</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb350-4"><a href="one-sample-inference.html#cb350-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb350-5"><a href="one-sample-inference.html#cb350-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-389-1.png" width="672"  /></p>
+<p>This is our computer-generated assessment of what the sampling
+distribution of the sample mean looks like. Isn’t this looking like a
+normal distribution?</p>
+<p>Let’s take a moment to realize what this is saying. If the population
+looks like the flat-topped uniform distribution, the central limit
+theorem kicks in for a sample of size , and thus if your
+population looks like this, <span class="math inline">\(t\)</span> procedures will be perfectly good for
+<span class="math inline">\(n=3\)</span> or bigger, .</p>
+<p>Thus, when you’re thinking about whether to use a <span class="math inline">\(t\)</span>-test or
+something else (that we’ll learn about later), the distribution shape
+matters, .</p>
+<p>I should say a little about my code. I’m not expecting you to figure
+out details now (we see the ideas properly in simulating power of
+tests), but in words, one line at a time:</p>
+<p>Now, the central limit theorem doesn’t always work as nicely as this,
+but maybe a sample size of 30 is large enough to overcome the skewness
+that we had:</p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb351-1"><a href="one-sample-inference.html#cb351-1"></a><span class="kw">ggplot</span>(cholest, <span class="kw">aes</span>(<span class="dt">x=</span>control)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-390-1.png" width="672"  /></p>
+<p>That brings us to my second idea above.</p>
+<p>The sample that we had is in some sense an “estimate of the
+population”. To think about the sampling distribution of the sample
+mean, we need more estimates of the population. How might we get
+those? The curious answer is to . This is
+the idea behind the . (This is what Lecture 3c is about.) The name comes from the
+expression “pulling yourself up by your own bootstraps”, meaning
+“to begin an enterprise or recover from a setback without any outside
+help” (from <a href="https://www.yourdictionary.com/pull-oneself-up-by-one-s-bootstraps">here</a>),
+something that should be difficult or impossible. How is it
+possible to understand a sampling distribution with only one sample?</p>
+<p>We have to be a bit careful. Taking a sample from the sample would
+give us the original sample back. So, instead, we sample , so that each bootstrap sample is different:</p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb352-1"><a href="one-sample-inference.html#cb352-1"></a><span class="kw">sort</span>(cholest<span class="op">$</span>control)</span></code></pre></div>
+<pre><code>##  [1] 160 162 164 166 170 176 178 178 182 182 182 182 182 184 186 188 196 198 198
+## [20] 198 200 200 204 206 212 218 230 232 238 242</code></pre>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb354-1"><a href="one-sample-inference.html#cb354-1"></a><span class="kw">sort</span>(<span class="kw">sample</span>(cholest<span class="op">$</span>control, <span class="dt">replace=</span><span class="ot">TRUE</span>))</span></code></pre></div>
+<pre><code>##  [1] 164 166 166 166 166 176 178 178 182 182 182 182 182 188 198 198 198 200 200
+## [20] 200 200 204 206 206 218 218 230 232 232 242</code></pre>
+<p>A bootstrap sample contains repeats of the original data values, and
+misses some of the others. Here, the original data had values 160 and 162 that are missing in the bootstrap sample; the original data had one value 166, but the bootstrap sample has <em>four</em>!
+I sorted the data and the bootstrap sample
+to make this clearer; you will not need to sort. This is a perfectly good bootstrap sample:</p>
+<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb356-1"><a href="one-sample-inference.html#cb356-1"></a><span class="kw">sample</span>(cholest<span class="op">$</span>control, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>##  [1] 242 232 198 160 242 182 182 182 198 162 212 198 242 204 242 242 170 198 182
+## [20] 206 232 170 218 188 166 178 164 160 218 196</code></pre>
+<p>So now we know what to do: take lots of bootstrap samples, work out
+the mean of each, plot the means, and see how normal it looks. The
+only new idea here is the sampling with replacement:</p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb358-1"><a href="one-sample-inference.html#cb358-1"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb358-2"><a href="one-sample-inference.html#cb358-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb358-3"><a href="one-sample-inference.html#cb358-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(cholest<span class="op">$</span>control, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb358-4"><a href="one-sample-inference.html#cb358-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb358-5"><a href="one-sample-inference.html#cb358-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-393-1.png" width="672"  /></p>
+<p>That looks pretty normal, not obviously skewed, and so the <span class="math inline">\(t\)</span>
+procedures we used will be reliable enough.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 
 </div>

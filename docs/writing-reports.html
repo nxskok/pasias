@@ -21,16 +21,18 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 14 Writing reports | Problems and Solutions in Applied Statistics</title>
 
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 <script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
@@ -46,26 +48,27 @@ MathJax.Hub.Config({
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -74,9 +77,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -122,10 +125,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
+<li><a href="index.html#introduction">Introduction</a>
+<ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a><ul>
+<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a>
+<ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">1.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">1.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">1.3</span> Reading data from a file</a></li>
@@ -135,7 +140,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file-1"><span class="toc-section-number">1.7</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways-1"><span class="toc-section-number">1.8</span> Reading files different ways</a></li>
 </ul></li>
-<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
+<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a>
+<ul>
 <li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
 <li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
@@ -143,17 +149,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a><ul>
+<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a>
+<ul>
 <li><a href="drawing-graphs.html#orange-juice-2"><span class="toc-section-number">3.1</span> Orange juice</a></li>
 <li><a href="drawing-graphs.html#making-soap-2"><span class="toc-section-number">3.2</span> Making soap</a></li>
 <li><a href="drawing-graphs.html#handling-shipments-2"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
 <li><a href="drawing-graphs.html#rainfall-in-davis-california"><span class="toc-section-number">3.4</span> Rainfall in Davis, California</a></li>
-<li><a href="drawing-graphs.html#orange-juice-3"><span class="toc-section-number">3.5</span> Orange juice</a></li>
-<li><a href="drawing-graphs.html#making-soap-3"><span class="toc-section-number">3.6</span> Making soap</a></li>
-<li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.7</span> Handling shipments</a></li>
-<li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.8</span> Rainfall in Davis, California</a></li>
+<li><a href="drawing-graphs.html#xxx-title-here"><span class="toc-section-number">3.5</span> xxx title here</a></li>
+<li><a href="drawing-graphs.html#orange-juice-3"><span class="toc-section-number">3.6</span> Orange juice</a></li>
+<li><a href="drawing-graphs.html#making-soap-3"><span class="toc-section-number">3.7</span> Making soap</a></li>
+<li><a href="drawing-graphs.html#handling-shipments-3"><span class="toc-section-number">3.8</span> Handling shipments</a></li>
+<li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.9</span> Rainfall in Davis, California</a></li>
+<li><a href="drawing-graphs.html#xxx-title-here-1"><span class="toc-section-number">3.10</span> xxx title here</a></li>
 </ul></li>
-<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
+<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a>
+<ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
@@ -169,25 +179,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data-exploration.html#unprecendented-rainfall-1"><span class="toc-section-number">4.13</span> Unprecendented rainfall</a></li>
 <li><a href="data-exploration.html#learning-algebra-1"><span class="toc-section-number">4.14</span> Learning algebra</a></li>
 </ul></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a>
+<ul>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
 </ul></li>
-<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
+<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
+<ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
 <li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana"><span class="toc-section-number">6.4</span> Inferring ice break-up in Nenana</a></li>
 <li><a href="one-sample-inference.html#diameters-of-trees"><span class="toc-section-number">6.5</span> Diameters of trees</a></li>
-<li><a href="one-sample-inference.html#hunter-gatherers-in-australia-1"><span class="toc-section-number">6.6</span> Hunter-gatherers in Australia</a></li>
-<li><a href="one-sample-inference.html#buses-to-boulder-1"><span class="toc-section-number">6.7</span> Buses to Boulder</a></li>
-<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina-1"><span class="toc-section-number">6.8</span> Length of gestation in North Carolina</a></li>
-<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.9</span> Inferring ice break-up in Nenana</a></li>
-<li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.10</span> Diameters of trees</a></li>
+<li><a href="one-sample-inference.html#one-sample-cholesterol"><span class="toc-section-number">6.6</span> One-sample cholesterol</a></li>
+<li><a href="one-sample-inference.html#hunter-gatherers-in-australia-1"><span class="toc-section-number">6.7</span> Hunter-gatherers in Australia</a></li>
+<li><a href="one-sample-inference.html#buses-to-boulder-1"><span class="toc-section-number">6.8</span> Buses to Boulder</a></li>
+<li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina-1"><span class="toc-section-number">6.9</span> Length of gestation in North Carolina</a></li>
+<li><a href="one-sample-inference.html#inferring-ice-break-up-in-nenana-1"><span class="toc-section-number">6.10</span> Inferring ice break-up in Nenana</a></li>
+<li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.11</span> Diameters of trees</a></li>
+<li><a href="one-sample-inference.html#one-sample-cholesterol-1"><span class="toc-section-number">6.12</span> One-sample cholesterol</a></li>
 </ul></li>
-<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
+<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
+<ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
@@ -203,7 +218,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#handspans-of-males-and-females-1"><span class="toc-section-number">7.13</span> Handspans of males and females</a></li>
 <li><a href="two-sample-inference.html#the-anchoring-effect-australia-vs-us-1"><span class="toc-section-number">7.14</span> The anchoring effect: Australia vs US</a></li>
 </ul></li>
-<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
+<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
+<ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
@@ -215,7 +231,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.9</span> Designing a study to have enough power</a></li>
 <li><a href="power-and-sample-size.html#power-and-alpha-in-a-skewed-population-1"><span class="toc-section-number">8.10</span> Power and <span class="math inline">\(\alpha\)</span> in a skewed population</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a><ul>
+<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
+<ul>
 <li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -225,7 +242,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li class="has-sub"><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a><ul>
+<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
+<ul>
 <li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -235,7 +253,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="moods-median-test.html#medical-instructions-1"><span class="toc-section-number">10.7</span> Medical instructions</a></li>
 <li><a href="moods-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
+<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
+<ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
@@ -251,13 +270,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="matched-pairs-t-and-sign-test.html#the-dentist-and-blood-pressure-1"><span class="toc-section-number">11.13</span> The dentist and blood pressure</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#french-teachers-1"><span class="toc-section-number">11.14</span> French teachers</a></li>
 </ul></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a><ul>
+<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
+<ul>
 <li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
 <li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
 <li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
@@ -265,15 +286,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
 <li><a href="analysis-of-variance.html#reggae-music"><span class="toc-section-number">13.6</span> Reggae music</a></li>
 <li><a href="analysis-of-variance.html#watching-tv-and-education"><span class="toc-section-number">13.7</span> Watching TV and education</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths-1"><span class="toc-section-number">13.8</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat-1"><span class="toc-section-number">13.9</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again-1"><span class="toc-section-number">13.10</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon-1"><span class="toc-section-number">13.11</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test-1"><span class="toc-section-number">13.12</span> Can caffeine improve your performance on a test?</a></li>
-<li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.13</span> Reggae music</a></li>
-<li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.14</span> Watching TV and education</a></li>
+<li><a href="analysis-of-variance.html#death-of-poets"><span class="toc-section-number">13.8</span> Death of poets</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-and-lengths-1"><span class="toc-section-number">13.9</span> Movie ratings and lengths</a></li>
+<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat-1"><span class="toc-section-number">13.10</span> Deer and how much they eat</a></li>
+<li><a href="analysis-of-variance.html#movie-ratings-again-1"><span class="toc-section-number">13.11</span> Movie ratings again</a></li>
+<li><a href="analysis-of-variance.html#atomic-weight-of-carbon-1"><span class="toc-section-number">13.12</span> Atomic weight of carbon</a></li>
+<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test-1"><span class="toc-section-number">13.13</span> Can caffeine improve your performance on a test?</a></li>
+<li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.14</span> Reggae music</a></li>
+<li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.15</span> Watching TV and education</a></li>
+<li><a href="analysis-of-variance.html#death-of-poets-1"><span class="toc-section-number">13.16</span> Death of poets</a></li>
 </ul></li>
-<li class="has-sub"><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a><ul>
+<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
+<ul>
 <li><a href="writing-reports.html#atomic-weight-of-carbon-2"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
 <li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
 <li><a href="writing-reports.html#learning-to-code"><span class="toc-section-number">14.3</span> Learning to code</a></li>
@@ -285,7 +309,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="writing-reports.html#analysis"><span class="toc-section-number">14.9</span> Analysis</a></li>
 <li><a href="writing-reports.html#conclusions-see-note-9"><span class="toc-section-number">14.10</span> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="has-sub"><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a><ul>
+<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
+<ul>
 <li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
 <li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
 <li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
@@ -297,19 +322,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">15.9</span> Feeling the heat</a></li>
 <li><a href="tidying-data.html#isoflavones"><span class="toc-section-number">15.10</span> Isoflavones</a></li>
 <li><a href="tidying-data.html#jockos-garage"><span class="toc-section-number">15.11</span> Jocko’s Garage</a></li>
-<li><a href="tidying-data.html#baseball-and-softball-spaghetti-1"><span class="toc-section-number">15.12</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats-1"><span class="toc-section-number">15.13</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-data.html#growth-of-tomatoes-1"><span class="toc-section-number">15.14</span> Growth of tomatoes</a></li>
-<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again-1"><span class="toc-section-number">15.15</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-data.html#location-species-and-disease-in-plants-1"><span class="toc-section-number">15.16</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-data.html#mating-songs-in-crickets-1"><span class="toc-section-number">15.17</span> Mating songs in crickets</a></li>
-<li><a href="tidying-data.html#number-1-songs-1"><span class="toc-section-number">15.18</span> Number 1 songs</a></li>
-<li><a href="tidying-data.html#bikes-on-college-1"><span class="toc-section-number">15.19</span> Bikes on College</a></li>
-<li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.20</span> Feeling the heat</a></li>
-<li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.21</span> Isoflavones</a></li>
-<li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.22</span> Jocko’s Garage</a></li>
+<li><a href="tidying-data.html#tidying-electricity-consumption"><span class="toc-section-number">15.12</span> Tidying electricity consumption</a></li>
+<li><a href="tidying-data.html#baseball-and-softball-spaghetti-1"><span class="toc-section-number">15.13</span> Baseball and softball spaghetti</a></li>
+<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats-1"><span class="toc-section-number">15.14</span> Ethanol and sleep time in rats</a></li>
+<li><a href="tidying-data.html#growth-of-tomatoes-1"><span class="toc-section-number">15.15</span> Growth of tomatoes</a></li>
+<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again-1"><span class="toc-section-number">15.16</span> Pain relief in migraine headaches (again)</a></li>
+<li><a href="tidying-data.html#location-species-and-disease-in-plants-1"><span class="toc-section-number">15.17</span> Location, species and disease in plants</a></li>
+<li><a href="tidying-data.html#mating-songs-in-crickets-1"><span class="toc-section-number">15.18</span> Mating songs in crickets</a></li>
+<li><a href="tidying-data.html#number-1-songs-1"><span class="toc-section-number">15.19</span> Number 1 songs</a></li>
+<li><a href="tidying-data.html#bikes-on-college-1"><span class="toc-section-number">15.20</span> Bikes on College</a></li>
+<li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.21</span> Feeling the heat</a></li>
+<li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.22</span> Isoflavones</a></li>
+<li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.23</span> Jocko’s Garage</a></li>
+<li><a href="tidying-data.html#tidying-electricity-consumption-1"><span class="toc-section-number">15.24</span> Tidying electricity consumption</a></li>
 </ul></li>
-<li class="has-sub"><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a><ul>
+<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a>
+<ul>
 <li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
 <li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
 <li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
@@ -322,20 +350,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="simple-regression.html#running-and-blood-sugar"><span class="toc-section-number">16.10</span> Running and blood sugar</a></li>
 <li><a href="simple-regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">16.11</span> Calories and fat in pizza</a></li>
 <li><a href="simple-regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">16.12</span> Where should the fire stations be?</a></li>
-<li><a href="simple-regression.html#rainfall-in-california-1"><span class="toc-section-number">16.13</span> Rainfall in California</a></li>
-<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes-1"><span class="toc-section-number">16.14</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys-1"><span class="toc-section-number">16.15</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="simple-regression.html#facebook-friends-and-grey-matter-1"><span class="toc-section-number">16.16</span> Facebook friends and grey matter</a></li>
-<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp-1"><span class="toc-section-number">16.17</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="simple-regression.html#salaries-of-social-workers-1"><span class="toc-section-number">16.18</span> Salaries of social workers</a></li>
-<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees-1"><span class="toc-section-number">16.19</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="simple-regression.html#tortoise-shells-and-eggs-1"><span class="toc-section-number">16.20</span> Tortoise shells and eggs</a></li>
-<li><a href="simple-regression.html#roller-coasters-1"><span class="toc-section-number">16.21</span> Roller coasters</a></li>
-<li><a href="simple-regression.html#running-and-blood-sugar-1"><span class="toc-section-number">16.22</span> Running and blood sugar</a></li>
-<li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.23</span> Calories and fat in pizza</a></li>
-<li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.24</span> Where should the fire stations be?</a></li>
+<li><a href="simple-regression.html#making-it-stop"><span class="toc-section-number">16.13</span> Making it stop</a></li>
+<li><a href="simple-regression.html#rainfall-in-california-1"><span class="toc-section-number">16.14</span> Rainfall in California</a></li>
+<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes-1"><span class="toc-section-number">16.15</span> Carbon monoxide in cigarettes</a></li>
+<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys-1"><span class="toc-section-number">16.16</span> Maximal oxygen uptake in young boys</a></li>
+<li><a href="simple-regression.html#facebook-friends-and-grey-matter-1"><span class="toc-section-number">16.17</span> Facebook friends and grey matter</a></li>
+<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp-1"><span class="toc-section-number">16.18</span> Endogenous nitrogen excretion in carp</a></li>
+<li><a href="simple-regression.html#salaries-of-social-workers-1"><span class="toc-section-number">16.19</span> Salaries of social workers</a></li>
+<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees-1"><span class="toc-section-number">16.20</span> Predicting volume of wood in pine trees</a></li>
+<li><a href="simple-regression.html#tortoise-shells-and-eggs-1"><span class="toc-section-number">16.21</span> Tortoise shells and eggs</a></li>
+<li><a href="simple-regression.html#roller-coasters-1"><span class="toc-section-number">16.22</span> Roller coasters</a></li>
+<li><a href="simple-regression.html#running-and-blood-sugar-1"><span class="toc-section-number">16.23</span> Running and blood sugar</a></li>
+<li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.24</span> Calories and fat in pizza</a></li>
+<li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.25</span> Where should the fire stations be?</a></li>
+<li><a href="simple-regression.html#making-it-stop-1"><span class="toc-section-number">16.26</span> Making it stop</a></li>
 </ul></li>
-<li class="has-sub"><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a><ul>
+<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a>
+<ul>
 <li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
 <li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
 <li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
@@ -345,11 +376,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#salaries-of-mathematicians-1"><span class="toc-section-number">17.7</span> Salaries of mathematicians</a></li>
 <li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students-1"><span class="toc-section-number">17.8</span> Predicting GPA of computer science students</a></li>
 </ul></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
+<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
+<ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
 </ul></li>
-<li class="has-sub"><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a><ul>
+<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
+<ul>
 <li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
 <li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
 <li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
@@ -359,17 +392,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="dates-and-times.html#wolves-and-caribou-1"><span class="toc-section-number">19.7</span> Wolves and caribou</a></li>
 <li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study-1"><span class="toc-section-number">19.8</span> Dealing with dates in the Worcester Heart Attack study</a></li>
 </ul></li>
-<li class="has-sub"><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a><ul>
+<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
+<ul>
 <li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
 <li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
-<li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.3</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.4</span> The Collatz sequence</a></li>
+<li><a href="functions.html#coefficient-of-variationf"><span class="toc-section-number">20.3</span> Coefficient of VariationF</a></li>
+<li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.4</span> Making some R functions</a></li>
+<li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.5</span> The Collatz sequence</a></li>
+<li><a href="functions.html#coefficient-of-variationf-1"><span class="toc-section-number">20.6</span> Coefficient of VariationF</a></li>
 </ul></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
+<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
+<ul>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
 </ul></li>
-<li class="has-sub"><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a><ul>
+<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
+<ul>
 <li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
 <li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
 <li><a href="the-bootstrap.html#comparing-eyesight"><span class="toc-section-number">22.3</span> Comparing eyesight</a></li>
@@ -379,7 +417,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-bootstrap.html#comparing-eyesight-1"><span class="toc-section-number">22.7</span> Comparing eyesight</a></li>
 <li><a href="the-bootstrap.html#bootstrapping-the-irs-data-1"><span class="toc-section-number">22.8</span> Bootstrapping the IRS data</a></li>
 </ul></li>
-<li class="has-sub"><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a><ul>
+<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
+<ul>
 <li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way"><span class="toc-section-number">23.3</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
@@ -387,7 +426,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.5</span> Bayesian regression</a></li>
 <li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way-1"><span class="toc-section-number">23.6</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a><ul>
+<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
+<ul>
 <li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
 <li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
 <li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
@@ -409,7 +449,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression.html#who-needs-the-most-intensive-care-1"><span class="toc-section-number">24.19</span> Who needs the most intensive care?</a></li>
 <li><a href="logistic-regression.html#go-away-and-dont-come-back-1"><span class="toc-section-number">24.20</span> Go away and don’t come back!</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a><ul>
+<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a>
+<ul>
 <li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
@@ -421,7 +462,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-1"><span class="toc-section-number">25.9</span> How do you like your steak?</a></li>
 <li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data-1"><span class="toc-section-number">25.10</span> How do you like your steak – the data</a></li>
 </ul></li>
-<li class="has-sub"><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a><ul>
+<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a>
+<ul>
 <li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-2"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
@@ -435,7 +477,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data-1"><span class="toc-section-number">26.11</span> Crimes in San Francisco – the data</a></li>
 <li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play-1"><span class="toc-section-number">26.12</span> What sports do these athletes play?</a></li>
 </ul></li>
-<li class="has-sub"><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a><ul>
+<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
+<ul>
 <li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
 <li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
 <li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
@@ -445,7 +488,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="survival-analysis.html#multiple-myeloma-1"><span class="toc-section-number">27.7</span> Multiple myeloma</a></li>
 <li><a href="survival-analysis.html#ovarian-cancer-1"><span class="toc-section-number">27.8</span> Ovarian cancer</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a><ul>
+<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
+<ul>
 <li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
 <li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
 <li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
@@ -459,13 +503,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="analysis-of-variance-revisited.html#mental-context-1"><span class="toc-section-number">28.11</span> Mental context</a></li>
 <li><a href="analysis-of-variance-revisited.html#trying-on-shirts-1"><span class="toc-section-number">28.12</span> Trying on shirts</a></li>
 </ul></li>
-<li class="has-sub"><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a><ul>
+<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
+<ul>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
 <li><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><span class="toc-section-number">29.3</span> Productivity and research-and-development</a></li>
 <li><a href="analysis-of-covariance.html#treating-leprosy-1"><span class="toc-section-number">29.4</span> Treating leprosy</a></li>
 </ul></li>
-<li class="has-sub"><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a><ul>
+<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
+<ul>
 <li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
@@ -473,7 +519,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">30.5</span> Do characteristics of urine depend on obesity?</a></li>
 <li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1"><span class="toc-section-number">30.6</span> How do height and weight depend on sport played by elite athletes?</a></li>
 </ul></li>
-<li class="has-sub"><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a><ul>
+<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
+<ul>
 <li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
 <li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
 <li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
@@ -487,7 +534,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="repeated-measures.html#investigating-motor-activity-in-rats-1"><span class="toc-section-number">31.11</span> Investigating motor activity in rats</a></li>
 <li><a href="repeated-measures.html#repeated-measures-with-no-background-1"><span class="toc-section-number">31.12</span> Repeated measures with no background</a></li>
 </ul></li>
-<li class="has-sub"><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a><ul>
+<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
+<ul>
 <li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
 <li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
 <li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
@@ -503,7 +551,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="discriminant-analysis.html#growing-corn-1"><span class="toc-section-number">32.13</span> Growing corn</a></li>
 <li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender-1"><span class="toc-section-number">32.14</span> Understanding athletes’ height, weight, sport and gender</a></li>
 </ul></li>
-<li class="has-sub"><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a><ul>
+<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
+<ul>
 <li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
 <li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
@@ -513,7 +562,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="hierarchical-cluster-analysis.html#similarity-of-species-1"><span class="toc-section-number">33.7</span> Similarity of species</a></li>
 <li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh-1"><span class="toc-section-number">33.8</span> Bridges in Pittsburgh</a></li>
 </ul></li>
-<li class="has-sub"><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a><ul>
+<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
+<ul>
 <li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
 <li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
 <li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
@@ -525,7 +575,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="k-means-cluster-analysis.html#grouping-similar-cars-1"><span class="toc-section-number">34.9</span> Grouping similar cars</a></li>
 <li><a href="k-means-cluster-analysis.html#rating-beer-1"><span class="toc-section-number">34.10</span> Rating beer</a></li>
 </ul></li>
-<li class="has-sub"><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a><ul>
+<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
+<ul>
 <li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line"><span class="toc-section-number">35.3</span> The Cross-City Line</a></li>
@@ -533,7 +584,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">35.5</span> Making a map of Wisconsin</a></li>
 <li><a href="drawing-maps-with-leaflet.html#the-cross-city-line-1"><span class="toc-section-number">35.6</span> The Cross-City Line</a></li>
 </ul></li>
-<li class="has-sub"><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a><ul>
+<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
+<ul>
 <li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-2"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
 <li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
 <li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
@@ -545,11 +597,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multidimensional-scaling.html#more-beer-please-1"><span class="toc-section-number">36.9</span> More beer please</a></li>
 <li><a href="multidimensional-scaling.html#feeling-similar-again-1"><span class="toc-section-number">36.10</span> Feeling similar, again</a></li>
 </ul></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
+<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
+<ul>
 <li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
 </ul></li>
-<li class="has-sub"><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a><ul>
+<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
+<ul>
 <li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
 <li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
@@ -557,7 +611,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="factor-analysis.html#a-correlation-matrix-1"><span class="toc-section-number">38.5</span> A correlation matrix</a></li>
 <li><a href="factor-analysis.html#air-pollution-1"><span class="toc-section-number">38.6</span> Air pollution</a></li>
 </ul></li>
-<li class="has-sub"><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a><ul>
+<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
+<ul>
 <li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
 <li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
 <li><a href="frequency-table-analysis.html#brand-m-laundry-detergent"><span class="toc-section-number">39.3</span> Brand M laundry detergent</a></li>
@@ -571,10 +626,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="writing-reports" class="section level1">
+<div id="writing-reports" class="section level1" number="14">
 <h1><span class="header-section-number">Chapter 14</span> Writing reports</h1>
-<div class="sourceCode" id="cb1019"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1019-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div id="atomic-weight-of-carbon-2" class="section level2">
+<div class="sourceCode" id="cb1068"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1068-1"><a href="writing-reports.html#cb1068-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="atomic-weight-of-carbon-2" class="section level2" number="14.1">
 <h2><span class="header-section-number">14.1</span> Atomic weight of carbon</h2>
 <p>The atomic weight of the chemical element
 carbon is 12. Two methods of measuring the atomic weight of samples of
@@ -630,7 +685,7 @@ seems appropriate, put the discussion into a section called
 Conclusions.</p></li>
 </ol>
 </div>
-<div id="sparrowhawks" class="section level2">
+<div id="sparrowhawks" class="section level2" number="14.2">
 <h2><span class="header-section-number">14.2</span> Sparrowhawks</h2>
 <p>(This is a report-writing question, but it also uses some regression techniques from later in the course.)</p>
 <p>One of nature’s patterns is the relationship
@@ -669,13 +724,13 @@ sparrowhawk? Add a short Conclusions section to your report with
 discussion of this issue.</p></li>
 </ol>
 </div>
-<div id="learning-to-code" class="section level2">
+<div id="learning-to-code" class="section level2" number="14.3">
 <h2><span class="header-section-number">14.3</span> Learning to code</h2>
 <p>A programming course, Comp Sci 101, can be taken either in-person, by attending a class at fixed days and times, or online, by doing sessions that can be taken at times the student chooses. The course coordinator wants to know whether students taking the course in these two different ways learn a different amount, as measured by their scores on the final exam for the course. This example comes from the before-times, so the final exam was taken in person by all students. The final exam was out of 45 marks. A total of 18 students took part in the study. Each student was allowed to choose the section they preferred. The data are in .</p>
 <p>Write a report of a complete and appropriate analysis of these data. Your report should include a description of the data in your own words, any necessary pre-processing steps, appropriate graphs, statistical analysis, assessment of assumptions for your preferred analysis, and a statement of conclusions. Imagine that your report will be read by the department Chair, who does not know about this study, and who still remembers some of their first-year Statistics course.</p>
 <p>My solutions follow:</p>
 </div>
-<div id="atomic-weight-of-carbon-3" class="section level2">
+<div id="atomic-weight-of-carbon-3" class="section level2" number="14.4">
 <h2><span class="header-section-number">14.4</span> Atomic weight of carbon</h2>
 <p>The atomic weight of the chemical element
 carbon is 12. Two methods of measuring the atomic weight of samples of
@@ -747,15 +802,15 @@ read the data into R and display the results.</li>
 </ol>
 <p>Solution</p>
 <p>Values separated by spaces:</p>
-<div class="sourceCode" id="cb1020"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1020-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/carbon.txt&quot;</span></a>
-<a class="sourceLine" id="cb1020-2" title="2">carbon &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1069"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1069-1"><a href="writing-reports.html#cb1069-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/carbon.txt&quot;</span></span>
+<span id="cb1069-2"><a href="writing-reports.html#cb1069-2"></a>carbon &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   method = col_double(),
 ##   weight = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1022"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1022-1" title="1">carbon</a></code></pre></div>
+<div class="sourceCode" id="cb1071"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1071-1"><a href="writing-reports.html#cb1071-1"></a>carbon</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["method"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"12.0129"},{"1":"1","2":"12.0072"},{"1":"1","2":"12.0064"},{"1":"1","2":"12.0054"},{"1":"1","2":"12.0016"},{"1":"1","2":"11.9853"},{"1":"1","2":"11.9949"},{"1":"1","2":"11.9985"},{"1":"1","2":"12.0077"},{"1":"1","2":"12.0061"},{"1":"2","2":"12.0318"},{"1":"2","2":"12.0246"},{"1":"2","2":"12.0069"},{"1":"2","2":"12.0006"},{"1":"2","2":"12.0075"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -764,7 +819,7 @@ read the data into R and display the results.</li>
 <p>I would expect you to include, without being told to include it, some
 text in your report indicating that you have sensible data: two
 methods labelled 1 and 2 as promised, and a bunch
-<label for="tufte-mn-76" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-76" class="margin-toggle"><span class="marginnote">It’s probably better in a report to use language a bit more formal than <em>a bunch</em>. Something like <em>a number</em> would be better.</span>
+<label for="tufte-mn-83" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-83" class="margin-toggle"><span class="marginnote">It’s probably better in a report to use language a bit more formal than <em>a bunch</em>. Something like <em>a number</em> would be better.</span>
 of atomic
 weights close to the nominal figure of 12.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -781,12 +836,12 @@ weight, is something like a boxplot. If you’re not careful,
 <code>method</code> will get treated as a quantitative variable,
 which you don’t want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:</p>
-<div class="sourceCode" id="cb1023"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1023-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(method), <span class="dt">y =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-762-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1072"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1072-1"><a href="writing-reports.html#cb1072-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(method), <span class="dt">y =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-807-1.png" width="672"  /></p>
 <p>If you insist, you could do a faceted histogram (above and below, for preference):</p>
-<div class="sourceCode" id="cb1024"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1024-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1024-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-763-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1073"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1073-1"><a href="writing-reports.html#cb1073-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></span>
+<span id="cb1073-2"><a href="writing-reports.html#cb1073-2"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-808-1.png" width="672"  /></p>
 <p>There are really not enough data values for a histogram to be of much
 help, so I don’t like this as much.</p>
 <p>If you are thinking ahead (we are going to be doing a <span class="math inline">\(t\)</span>-test), then
@@ -794,10 +849,10 @@ you’ll realize that normality is the kind of thing we’re looking for,
 in which case normal quantile plots would be the thing. However, we
 might have to be rather forgiving for method 2 since there are only 5
 observations:</p>
-<div class="sourceCode" id="cb1025"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1025-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">sample =</span> weight)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1025-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb1025-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-764-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1074"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1074-1"><a href="writing-reports.html#cb1074-1"></a><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">sample =</span> weight)) <span class="op">+</span></span>
+<span id="cb1074-2"><a href="writing-reports.html#cb1074-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb1074-3"><a href="writing-reports.html#cb1074-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-809-1.png" width="672"  /></p>
 <p>I don’t mind these coming out side by side, though I would rather have
 them squarer.</p>
 <p>I would say, boxplots are the best, normal quantile plots are also
@@ -842,7 +897,7 @@ begin another new section in your report here.)</li>
 <p>Solution</p>
 <p>This would be the Welch-Satterthwaite version of the two-sample
 <span class="math inline">\(t\)</span>-test, since the two groups do appear to have different spreads:</p>
-<div class="sourceCode" id="cb1026"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1026-1" title="1"><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb1075"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1075-1"><a href="writing-reports.html#cb1075-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -859,7 +914,7 @@ to defend your choice of the Welch-Satterthwaite test (as I did
 above), and not just do the default <span class="math inline">\(t\)</span>-test without comment.</p>
 <p>If, in your discussion above, you thought the spreads were equal
 enough, then you should do the pooled <span class="math inline">\(t\)</span>-test here, which goes like this:</p>
-<div class="sourceCode" id="cb1028"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1028-1" title="1"><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon, <span class="dt">var.equal =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb1077"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1077-1"><a href="writing-reports.html#cb1077-1"></a><span class="kw">t.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon, <span class="dt">var.equal =</span> T)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -888,7 +943,7 @@ variances, given that you might be pondering that. There are
 several that I can think of, that R can do, of which I mention two.</p>
 <p>The first is the <span class="math inline">\(F\)</span>-test for variances that you might have learned in
 B57 (that is the basis for the ANOVA <span class="math inline">\(F\)</span>-test):</p>
-<div class="sourceCode" id="cb1030"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1030-1" title="1"><span class="kw">var.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb1079"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1079-1"><a href="writing-reports.html#cb1079-1"></a><span class="kw">var.test</span>(weight <span class="op">~</span><span class="st"> </span>method, <span class="dt">data =</span> carbon)</span></code></pre></div>
 <pre><code>## 
 ##  F test to compare two variances
 ## 
@@ -908,8 +963,8 @@ large). Since the ANOVA <span class="math inline">\(F\)</span>-test is based on 
 why normality is also more important in ANOVA than it is in a <span class="math inline">\(t\)</span>-test.</p>
 <p>The second is Levene’s test. This doesn’t depend on normality (at
 least, not nearly so much), so I like it better in general:</p>
-<div class="sourceCode" id="cb1032"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1032-1" title="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb1032-2" title="2"><span class="kw">leveneTest</span>(weight <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(method), <span class="dt">data =</span> carbon)</a></code></pre></div>
+<div class="sourceCode" id="cb1081"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1081-1"><a href="writing-reports.html#cb1081-1"></a><span class="kw">library</span>(car)</span>
+<span id="cb1081-2"><a href="writing-reports.html#cb1081-2"></a><span class="kw">leveneTest</span>(weight <span class="op">~</span><span class="st"> </span><span class="kw">factor</span>(method), <span class="dt">data =</span> carbon)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["int"],"align":["right"]},{"label":["F value"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"0.988736","3":"0.3382002","_rn_":"group"},{"1":"13","2":"NA","3":"NA","_rn_":""}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -920,14 +975,14 @@ differences from the group medians are calculated, and then an ANOVA
 is run on the absolute differences. If, say, one of the groups has a
 larger spread than the other(s), its absolute differences from the
 median will tend to be bigger.
-<label for="tufte-mn-77" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-77" class="margin-toggle"><span class="marginnote">The use of absolute differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
+<label for="tufte-mn-84" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-84" class="margin-toggle"><span class="marginnote">The use of absolute differences, and the median, downplays the influence of outliers. The assumption here is that the absolute differences from the medians are approximately normal, which seems a less big assumption than assuming the actual data are approximately normal.</span>
 As for what we conclude here, well, neither of the variance tests show
 any significance at all, so from that point of view there is no
 evidence against using the pooled <span class="math inline">\(t\)</span>-test. Having said that, the
 samples are small, and so it would be difficult to <em>prove</em> that
 the two methods have different variance, even if they actually
 did.
-<label for="tufte-mn-78" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-78" class="margin-toggle"><span class="marginnote">This is coming back to the <em>power</em> of something like Levene’s test; the power of any test is not going to be very big if the sample sizes are small.</span></p>
+<label for="tufte-mn-85" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-85" class="margin-toggle"><span class="marginnote">This is coming back to the <em>power</em> of something like Levene’s test; the power of any test is not going to be very big if the sample sizes are small.</span></p>
 <p>Things are never as clear-cut as you would like. In the end, it all
 comes down to making a call and defending it.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -938,8 +993,8 @@ normally-distributed data.</li>
 <p>Solution</p>
 <p>That would be Mood’s median test. Since I didn’t say anything
 about building it yourself, feel free to use <code>smmr</code>:</p>
-<div class="sourceCode" id="cb1033"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1033-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb1033-2" title="2"><span class="kw">median_test</span>(carbon, weight, method)</a></code></pre></div>
+<div class="sourceCode" id="cb1082"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1082-1"><a href="writing-reports.html#cb1082-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb1082-2"><a href="writing-reports.html#cb1082-2"></a><span class="kw">median_test</span>(carbon, weight, method)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -956,7 +1011,7 @@ Mann-Whitney or Kruskal-Wallis that applies in this situation, be
 careful about using it here, because they have additional assumptions
 that you may not want to trust. Mann-Whitney started life as a test for
 “equal distributions”.
-<label for="tufte-mn-79" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-79" class="margin-toggle"><span class="marginnote">The test goes back to the 1940s.</span> This
+<label for="tufte-mn-86" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-86" class="margin-toggle"><span class="marginnote">The test goes back to the 1940s.</span> This
 means that the null is equal location <em>and</em> equal spread, and if
 you reject the null, one of those has failed. But here, we suspect that
 equal spread will fail, so that the Mann-Whitney test may end up
@@ -1018,7 +1073,7 @@ not being considered, but I think it’s good practice to draw a
 picture and make a call about which test is appropriate.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="sparrowhawks-1" class="section level2">
+<div id="sparrowhawks-1" class="section level2" number="14.5">
 <h2><span class="header-section-number">14.5</span> Sparrowhawks</h2>
 <p>(This is a report-writing question, but it also uses some regression techniques from later in the course.)</p>
 <p>One of nature’s patterns is the relationship
@@ -1040,7 +1095,7 @@ Author and leave the Default Output Format at HTML. You’ll see a
 template report with the document info at the top. This is my document info:</p>
 <p><img src="sh0.png" /></p>
 <p>This is known in the jargon as a “YAML block”.
-<label for="tufte-mn-80" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-80" class="margin-toggle"><span class="marginnote">YAML stands for <em>Yet Another Markup Language</em>, but we’re not using it in this course, other than as the top bit of an R Markdown document.</span>
+<label for="tufte-mn-87" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-87" class="margin-toggle"><span class="marginnote">YAML stands for <em>Yet Another Markup Language</em>, but we’re not using it in this course, other than as the top bit of an R Markdown document.</span>
 Below that is the template R Markdown document, which you can delete now or later.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -1059,16 +1114,16 @@ backtick characters, put R code, just as you would type it at
 the Console or put in an R notebook. In this case, that would be
 the following code, minus the message that comes out of
 <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb1035"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1035-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1035-2" title="2">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/sparrowhawk.txt&quot;</span></a>
-<a class="sourceLine" id="cb1035-3" title="3">sparrowhawks &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1084"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1084-1"><a href="writing-reports.html#cb1084-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1084-2"><a href="writing-reports.html#cb1084-2"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/sparrowhawk.txt&quot;</span></span>
+<span id="cb1084-3"><a href="writing-reports.html#cb1084-3"></a>sparrowhawks &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   returning = col_double(),
 ##   newadults = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1037"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1037-1" title="1">sparrowhawks</a></code></pre></div>
+<div class="sourceCode" id="cb1086"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1086-1"><a href="writing-reports.html#cb1086-1"></a>sparrowhawks</span></code></pre></div>
 <p>For you, it looks like this:</p>
 <p><img src="sh2.png" /></p>
 <p>We don’t know how many rows of data there are yet, so I’ve left a
@@ -1111,11 +1166,11 @@ suitable text to your report.</li>
 <p>Solution</p>
 <p>The R code you add should look like this, with the results shown
 (when you knit the report again):</p>
-<div class="sourceCode" id="cb1038"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1038-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1038-2" title="2"><span class="kw">ggplot</span>(sparrowhawks, <span class="kw">aes</span>(<span class="dt">x =</span> returning, <span class="dt">y =</span> newadults)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1038-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1087"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1087-1"><a href="writing-reports.html#cb1087-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1087-2"><a href="writing-reports.html#cb1087-2"></a><span class="kw">ggplot</span>(sparrowhawks, <span class="kw">aes</span>(<span class="dt">x =</span> returning, <span class="dt">y =</span> newadults)) <span class="op">+</span></span>
+<span id="cb1087-3"><a href="writing-reports.html#cb1087-3"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-771-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-816-1.png" width="672"  /></p>
 <p><br></p>
 <p>The piece of report that I added looks like this:</p>
 <p><img src="sh4.png" /></p>
@@ -1130,10 +1185,10 @@ you need is <code>cor</code>. You can feed it a data frame.)</li>
 </ol>
 <p>Solution</p>
 <p>The appropriate R code is this, in another code chunk:</p>
-<div class="sourceCode" id="cb1040"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1040-1" title="1"><span class="kw">with</span>(sparrowhawks, <span class="kw">cor</span>(newadults, returning))</a></code></pre></div>
+<div class="sourceCode" id="cb1089"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1089-1"><a href="writing-reports.html#cb1089-1"></a><span class="kw">with</span>(sparrowhawks, <span class="kw">cor</span>(newadults, returning))</span></code></pre></div>
 <pre><code>## [1] -0.7484673</code></pre>
 <p>Or you can ask for the correlations of the whole data frame:</p>
-<div class="sourceCode" id="cb1042"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1042-1" title="1"><span class="kw">cor</span>(sparrowhawks)</a></code></pre></div>
+<div class="sourceCode" id="cb1091"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1091-1"><a href="writing-reports.html#cb1091-1"></a><span class="kw">cor</span>(sparrowhawks)</span></code></pre></div>
 <pre><code>##            returning  newadults
 ## returning  1.0000000 -0.7484673
 ## newadults -0.7484673  1.0000000</code></pre>
@@ -1150,8 +1205,8 @@ adults from the percentage of returning adults.</li>
 </ol>
 <p>Solution</p>
 <p>This R code, in another code chunk:</p>
-<div class="sourceCode" id="cb1044"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1044-1" title="1">newadults<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(newadults <span class="op">~</span><span class="st"> </span>returning, <span class="dt">data =</span> sparrowhawks)</a>
-<a class="sourceLine" id="cb1044-2" title="2"><span class="kw">summary</span>(newadults<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1093"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1093-1"><a href="writing-reports.html#cb1093-1"></a>newadults<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(newadults <span class="op">~</span><span class="st"> </span>returning, <span class="dt">data =</span> sparrowhawks)</span>
+<span id="cb1093-2"><a href="writing-reports.html#cb1093-2"></a><span class="kw">summary</span>(newadults<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = newadults ~ returning, data = sparrowhawks)
@@ -1187,10 +1242,10 @@ I added this to the report. I thought we deserved a new section here:</p>
 <p>This code. Using <code>geom_smooth</code> with
 <code>method="lm"</code>
 will add the regression line to the plot:</p>
-<div class="sourceCode" id="cb1046"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1046-1" title="1"><span class="kw">ggplot</span>(sparrowhawks, <span class="kw">aes</span>(<span class="dt">x =</span> returning, <span class="dt">y =</span> newadults)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb1046-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1095"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1095-1"><a href="writing-reports.html#cb1095-1"></a><span class="kw">ggplot</span>(sparrowhawks, <span class="kw">aes</span>(<span class="dt">x =</span> returning, <span class="dt">y =</span> newadults)) <span class="op">+</span></span>
+<span id="cb1095-2"><a href="writing-reports.html#cb1095-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-775-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-820-1.png" width="672"  /></p>
 <p>I added a bit of text to the report, which I will show in a moment.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -1209,40 +1264,40 @@ discussion of this issue.</li>
 <p>I think that rounds off the report nicely.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="learning-to-code-1" class="section level2">
+<div id="learning-to-code-1" class="section level2" number="14.6">
 <h2><span class="header-section-number">14.6</span> Learning to code</h2>
 <p>A programming course, Comp Sci 101, can be taken either in-person, by attending a class at fixed days and times, or online, by doing sessions that can be taken at times the student chooses. The course coordinator wants to know whether students taking the course in these two different ways learn a different amount, as measured by their scores on the final exam for the course. This example comes from the before-times, so the final exam was taken in person by all students. The final exam was out of 45 marks. A total of 18 students took part in the study. Each student was allowed to choose the section they preferred. The data are in .</p>
 <p>Write a report of a complete and appropriate analysis of these data. Your report should include a description of the data in your own words, any necessary pre-processing steps, appropriate graphs, statistical analysis, assessment of assumptions for your preferred analysis, and a statement of conclusions. Imagine that your report will be read by the department Chair, who does not know about this study, and who still remembers some of their first-year Statistics course.</p>
 <p>Solution</p>
 <p>My report follows. The occasional appearance of “(see note <span class="math inline">\(x\)</span>)” from time to time indicates some extra discussion, at the end. Ignore those on your first read-through. Your report doesn’t have to be the same as mine, but it should be complete and coherent, and readable by someone with a first course in Statistics.</p>
 </div>
-<div id="introduction-1" class="section level2">
+<div id="introduction-1" class="section level2" number="14.7">
 <h2><span class="header-section-number">14.7</span> Introduction</h2>
 <p>Do students learn programming more or less effectively from an online course, completed on their own time, compared with a regular in-person lecture course that meets at the same times every week? In Comp Sci 101, a study was carried out in which 18 students, 9 each in the online and in-person sections, were assessed for learning by means of the course final exam (out of 45 marks). We compare the mean final exam scores for the students in the two sections.</p>
 </div>
-<div id="data-and-pre-processing" class="section level2">
+<div id="data-and-pre-processing" class="section level2" number="14.8">
 <h2><span class="header-section-number">14.8</span> Data and pre-processing</h2>
 <p>We begin by reading in the data:</p>
-<div class="sourceCode" id="cb1048"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1048-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div class="sourceCode" id="cb1049"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1049-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/proggo.csv&quot;</span></a>
-<a class="sourceLine" id="cb1049-2" title="2">prog0 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb1097"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1097-1"><a href="writing-reports.html#cb1097-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb1098"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1098-1"><a href="writing-reports.html#cb1098-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/proggo.csv&quot;</span></span>
+<span id="cb1098-2"><a href="writing-reports.html#cb1098-2"></a>prog0 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   online = col_double(),
 ##   classroom = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb1051"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1051-1" title="1">prog0</a></code></pre></div>
+<div class="sourceCode" id="cb1100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1100-1"><a href="writing-reports.html#cb1100-1"></a>prog0</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["online"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["classroom"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"32","2":"35"},{"1":"37","2":"31"},{"1":"35","2":"29"},{"1":"28","2":"25"},{"1":"41","2":"34"},{"1":"44","2":"40"},{"1":"35","2":"27"},{"1":"31","2":"32"},{"1":"34","2":"31"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>The nine students in each section are in separate columns. This is not an appropriate layout for analysis because each row contains data for <em>two</em> separate, unrelated students, and we need to have each student’s score in its own row. (See note 1.) This means making the data longer (see note 2):</p>
-<div class="sourceCode" id="cb1052"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1052-1" title="1">prog0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), </a>
-<a class="sourceLine" id="cb1052-2" title="2">  <span class="dt">names_to =</span> <span class="st">&quot;instruction&quot;</span>, </a>
-<a class="sourceLine" id="cb1052-3" title="3">  <span class="dt">values_to =</span> <span class="st">&quot;mark&quot;</span>) -&gt;<span class="st"> </span>prog</a>
-<a class="sourceLine" id="cb1052-4" title="4">prog</a></code></pre></div>
+<div class="sourceCode" id="cb1101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1101-1"><a href="writing-reports.html#cb1101-1"></a>prog0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), </span>
+<span id="cb1101-2"><a href="writing-reports.html#cb1101-2"></a>  <span class="dt">names_to =</span> <span class="st">&quot;instruction&quot;</span>, </span>
+<span id="cb1101-3"><a href="writing-reports.html#cb1101-3"></a>  <span class="dt">values_to =</span> <span class="st">&quot;mark&quot;</span>) -&gt;<span class="st"> </span>prog</span>
+<span id="cb1101-4"><a href="writing-reports.html#cb1101-4"></a>prog</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["instruction"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mark"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"online","2":"32"},{"1":"classroom","2":"35"},{"1":"online","2":"37"},{"1":"classroom","2":"31"},{"1":"online","2":"35"},{"1":"classroom","2":"29"},{"1":"online","2":"28"},{"1":"classroom","2":"25"},{"1":"online","2":"41"},{"1":"classroom","2":"34"},{"1":"online","2":"44"},{"1":"classroom","2":"40"},{"1":"online","2":"35"},{"1":"classroom","2":"27"},{"1":"online","2":"31"},{"1":"classroom","2":"32"},{"1":"online","2":"34"},{"1":"classroom","2":"31"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1250,14 +1305,14 @@ discussion of this issue.</li>
 </div>
 <p>Now everything is arranged as we need, and we can proceed to analysis.</p>
 </div>
-<div id="analysis" class="section level2">
+<div id="analysis" class="section level2" number="14.9">
 <h2><span class="header-section-number">14.9</span> Analysis</h2>
 <p>We begin by visualizing the data. With one quantitative variable <code>mark</code> and one categorical variable <code>instruction</code>, a boxplot will give us an overall picture (see note 3):</p>
-<div class="sourceCode" id="cb1053"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1053-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">x=</span> instruction, <span class="dt">y =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-779-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1102-1"><a href="writing-reports.html#cb1102-1"></a><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">x=</span> instruction, <span class="dt">y =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-824-1.png" width="672"  /></p>
 <p>It looks as if the average (median) mark is somewhat higher for the students in the online section. In addition, both distributions look reasonably symmetric with no outliers, and they appear to have similar spread. (see note 4.)</p>
 <p>With that in mind, it seems sensible to compare the mean final exam marks in the two groups by a pooled two-sample <span class="math inline">\(t\)</span>-test, in order to see whether the apparent difference in performance is any more than chance. The aim of the course coordinator was to see whether there was any difference between the two sections, without having any prior idea about which teaching method would be better, so a two-sided test is appropriate: (see note 5.)</p>
-<div class="sourceCode" id="cb1054"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1054-1" title="1"><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1103-1"><a href="writing-reports.html#cb1103-1"></a><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1271,12 +1326,12 @@ discussion of this issue.</li>
 ##                31.55556                35.22222</code></pre>
 <p>The P-value of 0.1185 is not smaller than 0.05, so there is no evidence of any difference between the mean final exam marks of the students in the two sections. The difference between the two groups shown on the boxplot is the kind of thing that could be observed by chance if the students were performing equally well under the two methods of instruction. (See notes 6 and 7.)</p>
 <p>This <span class="math inline">\(t\)</span>-test comes with the assumption that the data in each group come from a normal distribution, at least approximately. With two small samples, this will not be easy to assess, but we can at least look for any gross violations, using a normal quantile plot for each group:</p>
-<div class="sourceCode" id="cb1056"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1056-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">sample =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb1056-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-781-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1105-1"><a href="writing-reports.html#cb1105-1"></a><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">sample =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb1105-2"><a href="writing-reports.html#cb1105-2"></a><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-826-1.png" width="672"  /></p>
 <p>The largest observation in the classroom group and the largest two observations in the online group are a little bigger than expected, but they were not big enough to be flagged as outliers on the boxplots, so I conclude that the normality is good enough to justify the <span class="math inline">\(t\)</span>-test that we did. (See note 8.)</p>
 </div>
-<div id="conclusions-see-note-9" class="section level2">
+<div id="conclusions-see-note-9" class="section level2" number="14.10">
 <h2><span class="header-section-number">14.10</span> Conclusions (see note 9)</h2>
 <p>We found that there is no significant difference in the performance of the students learning in the classroom compared to those learning online. Before leaping to generalize to other classes, however, we should note two limitations of the study (see note 10):</p>
 <ul>
@@ -1298,7 +1353,7 @@ discussion of this issue.</li>
 <li><p>Conclusion <em>in the context of the data</em>, as ever. Writing “we fail to reject the null hypothesis” and then stopping invites your reader to ask “so what?”.</p></li>
 <li><p>You might have chosen to do a different test, but your choice needs to be properly justified. I think the pooled <span class="math inline">\(t\)</span>-test is the best choice here. If you thought those marks were not normal enough, then you need to do Mood’s median test, explaining why. That comes out like this:</p></li>
 </ol>
-<div class="sourceCode" id="cb1057"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1057-1" title="1"><span class="kw">median_test</span>(prog, mark, instruction)</a></code></pre></div>
+<div class="sourceCode" id="cb1106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1106-1"><a href="writing-reports.html#cb1106-1"></a><span class="kw">median_test</span>(prog, mark, instruction)</span></code></pre></div>
 <pre><code>## $table
 ##            above
 ## group       above below
@@ -1312,7 +1367,7 @@ discussion of this issue.</li>
 ## 3   P-value 0.1572992</code></pre>
 <p>The (two-sided) P-value is a little bigger than the one for the pooled <span class="math inline">\(t\)</span>-test, but the conclusion is the same. (If you think the test should be one-sided, justify dividing your P-value by 2, if you can. In the case that your one-sided alternative was that classroom teaching was <em>better</em>, you cannot reject the null in favour of that, because the online students actually have better marks in these samples. In that case, halving the P-value would not be justifiable.)</p>
 <p>If you thought that the normality was all right, but the equal spreads was not, you will need to justify the unequal spreads. Perhaps the best way here is to say that you are unsure whether the spreads are close enough to equal, so you are doing the Welch test to be safe. That looks like this:</p>
-<div class="sourceCode" id="cb1059"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1059-1" title="1"><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog)</a></code></pre></div>
+<div class="sourceCode" id="cb1108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1108-1"><a href="writing-reports.html#cb1108-1"></a><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1333,7 +1388,7 @@ discussion of this issue.</li>
 <p>The rest of this note is an Extra:</p>
 <p>Here is a slightly different way to approach the bootstrap in this case, that takes care of assessing the normality of both groups at once.</p>
 <p>The first step is <code>nest_by</code>, which does two things, one of which is invisible:</p>
-<div class="sourceCode" id="cb1061"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1061-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction)</a></code></pre></div>
+<div class="sourceCode" id="cb1110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1110-1"><a href="writing-reports.html#cb1110-1"></a>prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["instruction"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list<tibble>"],"align":["right"]}],"data":[{"1":"classroom","2":"<list<tibble>>"},{"1":"online","2":"<list<tibble>>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1341,32 +1396,32 @@ discussion of this issue.</li>
 </div>
 <p>This (visibly) creates a list-column containing two mini dataframes <code>data</code>. They are the original data with all the data except <code>instruction</code> in each one: that is, the other column <code>mark</code>. The top one is the nine marks for the students in the <code>classroom</code> section, and the bottom one is the nine marks for the students in the <code>online</code> section. The invisible thing is that <code>nest_by</code> includes a <code>rowwise</code>, so that what we do after this is one for <em>each</em> row, one at a time.</p>
 <p>What we do next is to generate a lot of bootstrap samples, for each group. First, a vector of simulation numbers, one for each method of instruction. This only needs to be said once because <code>nest_by</code> is like <code>group_by</code>:</p>
-<div class="sourceCode" id="cb1062"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1062-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1062-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1111-1"><a href="writing-reports.html#cb1111-1"></a>prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1111-2"><a href="writing-reports.html#cb1111-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["instruction"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list<tibble>"],"align":["right"]},{"label":["sim"],"name":[3],"type":["list"],"align":["right"]}],"data":[{"1":"classroom","2":"<list<tibble>>","3":"<int [10]>"},{"1":"online","2":"<list<tibble>>","3":"<int [10]>"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Then we need to <code>unnest</code> those <code>sim</code>s, so that we can put a bootstrap sample next to each one:</p>
-<div class="sourceCode" id="cb1063"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1063-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1063-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1063-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim)</a></code></pre></div>
+<div class="sourceCode" id="cb1112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1112-1"><a href="writing-reports.html#cb1112-1"></a>prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1112-2"><a href="writing-reports.html#cb1112-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1112-3"><a href="writing-reports.html#cb1112-3"></a><span class="st">  </span><span class="kw">unnest</span>(sim)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["instruction"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list<tibble>"],"align":["right"]},{"label":["sim"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"classroom","2":"<list<tibble>>","3":"1"},{"1":"classroom","2":"<list<tibble>>","3":"2"},{"1":"classroom","2":"<list<tibble>>","3":"3"},{"1":"classroom","2":"<list<tibble>>","3":"4"},{"1":"classroom","2":"<list<tibble>>","3":"5"},{"1":"classroom","2":"<list<tibble>>","3":"6"},{"1":"classroom","2":"<list<tibble>>","3":"7"},{"1":"classroom","2":"<list<tibble>>","3":"8"},{"1":"classroom","2":"<list<tibble>>","3":"9"},{"1":"classroom","2":"<list<tibble>>","3":"10"},{"1":"online","2":"<list<tibble>>","3":"1"},{"1":"online","2":"<list<tibble>>","3":"2"},{"1":"online","2":"<list<tibble>>","3":"3"},{"1":"online","2":"<list<tibble>>","3":"4"},{"1":"online","2":"<list<tibble>>","3":"5"},{"1":"online","2":"<list<tibble>>","3":"6"},{"1":"online","2":"<list<tibble>>","3":"7"},{"1":"online","2":"<list<tibble>>","3":"8"},{"1":"online","2":"<list<tibble>>","3":"9"},{"1":"online","2":"<list<tibble>>","3":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Now we draw a bootstrap sample from the <code>data</code> to the left of each <code>sim</code> (the ones next to <code>classroom</code> are the in-person ones, and the ones next to <code>online</code> are the online ones, so we will be taking bootstrap samples of the right thing). This here is where the <code>rowwise</code> goes:</p>
-<div class="sourceCode" id="cb1064"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1064-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(data<span class="op">$</span>mark, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb1064-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb1064-8" title="8"><span class="st">    </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-787-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb1113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1113-1"><a href="writing-reports.html#cb1113-1"></a>prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-2"><a href="writing-reports.html#cb1113-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-3"><a href="writing-reports.html#cb1113-3"></a><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-4"><a href="writing-reports.html#cb1113-4"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-5"><a href="writing-reports.html#cb1113-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(data<span class="op">$</span>mark, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-6"><a href="writing-reports.html#cb1113-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb1113-7"><a href="writing-reports.html#cb1113-7"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></span>
+<span id="cb1113-8"><a href="writing-reports.html#cb1113-8"></a><span class="st">    </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-832-1.png" width="672"  /></p>
 <p>These are close to their lines, which tells me indeed that the two-sample <span class="math inline">\(t\)</span>-test I did was perfectly reasonable.</p>
 <p>As I say, though, this is very much for <em>you</em>, and not for the report, given who would be reading it. If you were doing a presentation on this, the bootstrap stuff is something you would keep in reserve in case someone asks about the appropriateness of the <span class="math inline">\(t\)</span>-test, and <em>then</em> you could talk about it, but otherwise you wouldn’t mention it at all.</p>
 <ol start="9" style="list-style-type: decimal">
