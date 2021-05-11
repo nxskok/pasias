@@ -63,8 +63,7 @@ Solution
 
 
 First off, `summary` is a quick way to show how many missing
-values there are:
-`r tufte::margin_note("It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using *mutate-if*. However, we don't have any text  columns here, so what we do here is good for this data set.")`
+values there are:^[It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using `mutate` with `where`. However, we don't have any text  columns here, so what we do here is good for this data set.]
 ```{r }
 summary(drugusers)
 ```
@@ -132,8 +131,7 @@ These variables are actually categorical rather than quantitative:
 Most of them have only two levels, so it doesn't matter whether
 we make them categorical or leave them as numbers, but for
 `herco` it matters. Let's give them all sensible values,
-mostly with `ifelse`,
-`r tufte::margin_note("Case-when is much clearer than using nested if-elses when you have three or more categories, as for *herco*.")` thus:
+mostly with `ifelse`,^[`case_when` is much clearer than using nested `if-else`s when you have three or more categories, as for `herco`.] thus:
 ```{r }
 drugusers %>% mutate(
   treat = ifelse(treat == 0, "short", "long"),
@@ -173,8 +171,7 @@ Solution
 This is `Surv` in package `survival`. The response
 variable needs to encode two things: the time until the event of
 interest (return to drug use) and whether or not that event
-happened for each patient.
-`r tufte::margin_note("Some people define the response variable right inside the *coxph*, in the same way as putting something like *log(y)* as a response in an *lm*, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.")`
+happened for each patient.^[Some people define the response variable right inside the `coxph`, in the same way as putting something like `log(y)` as a response in an `lm`, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.]
 In this case, that is
 `censor="returned"`. 
 ```{r }
@@ -318,8 +315,7 @@ Solution
 
 
 `site` and `herco` are the two variables to come
-out.
-`r tufte::margin_note("The researchers were probably relieved that there        was not quite a significant effect of *site*.")` I like
+out.^[The researchers were probably relieved that there        was not quite a significant effect of `site`.] I like
 `update`, but there is no
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
@@ -339,8 +335,7 @@ anova(drugusers.2, drugusers.1)
  
 
 There is no significant difference between these two 
-models,
-`r tufte::margin_note("Not at the 0.05 level, anyway.")` so we can go with the 
+models,^[Not at the 0.05 level, anyway.] so we can go with the 
 smaller, simpler one
 (with just `age`, `ndrugtx` and `treat`).
     
