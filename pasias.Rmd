@@ -1,0 +1,1902 @@
+---
+title: "Problems and Solutions in Applied Statistics"
+author: "Ken Butler"
+date: "2021-04-26"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: []
+biblio-style: apalike
+link-citations: yes
+github-repo: nxskok/pasias
+url: 'http://ritsokiguess.site/pasias'
+description: "A set of problems and solutions, in R, on various parts of applied statistics"
+output:
+  pdf_document:
+    toc: true
+    toc_depth: 0
+---
+
+# Introduction {-}
+
+
+[This book](http://ritsokiguess.site/pasias/) contains a collection
+of problems, and my solutions to them, in applied statistics with
+R. These come from my courses STAC32, STAC33, and STAD29 at the University of
+Toronto Scarborough. 
+
+The problems were originally written in Sweave (that is, LaTeX with R
+code chunks), using the `exam` document class, using data sets stolen
+from numerous places (textbooks, websites etc).  I wrote [a Perl
+program](https://raw.githubusercontent.com/nxskok/pasias/master/convert.pl)
+to strip out the LaTeX and turn each problem into R Markdown for this
+book. You will undoubtedly see bits of LaTeX still embedded in the
+text. I am trying to update my program to catch them, but I am sure to
+miss some. 
+
+You will occasionally
+see question parts beginning with a *; this means that other question
+parts refer back to this one. (One of my favourite question strategies
+is to ask how two different approaches lead to the same answer, or
+more generally to demonstrate that there are different ways to see the
+same thing.)
+
+Thanks to Dann Sioson for spotting some errors and making some useful suggestions.
+
+If *you* see anything, [file an
+issue](https://github.com/nxskok/pasias/issues) on the Github page for
+now. Likely
+problems include:
+
+- some LaTeX construction that I didn't catch (eg. block quotes)
+- disappeared footnotes (that will show up as an apparently missing sentence in the text)
+- references to "in class" or a lecture or a course by course number, which need to be eliminated (in favour of wording like "a previous course")
+- references to other questions or question parts that are *wrong* (likely caused by *not* being "labels" or "refs" in the original LaTeX)
+- my contorted English that is difficult to understand.
+
+As I read through looking for problems like these, I realize that
+there ought to be a textbook that reflects my way of doing
+things. There isn't one (yet), though there are lecture
+notes. Current versions of these are at:
+
+- [the STAC32 website](http://ritsokiguess.site/STAC32/)
+- [the STAC33 website](http://ritsokiguess.site/STAC33/)
+- [the STAD29 website](http://ritsokiguess.site/STAD29/)
+
+A little background:
+
+STAC32 is an introduction to R as
+applied to statistical methods that have (mostly) been learned in
+previous courses. This course is designed for students who have a second non-mathematical applied statistics course 
+such as
+[this](https://utsc.calendar.utoronto.ca/course/stab27h3). The idea is
+that students have already seen a little of regression and analysis of
+variance (and the things that precede them), and need mainly an
+introduction of how to run them in R.
+
+STAC33 is an introduction to R, and applied statistics in general, for students who have a background in mathematical statistics. The way our courses are structured, these students have a strong mathematical background, but not very much experience in applications, which this course is designed to provide. The material covered is similar to STAC32, with a planned addition of some ideas in bootstrap and practical Bayesian statistics. There are some questions on these here.
+
+STAD29 is an overview of a number of advanced statistical methods. I
+start from regression and proceed to some regression-like methods
+(logistic regression, survival analysis, log-linear frequency table
+analysis), then I go a little further with analysis of variance and
+proceed with MANOVA and repeated measures. I finish with a look at
+classical multivariate methods such as discriminant analysis, cluster
+analysis, principal components and factor analysis. I cover a number
+of methods in no great depth; my aim is to convey an understanding of
+what these methods are for, how to run them and how to interpret the
+results. Statistics majors and specialists cannot take this course for
+credit (they have separate courses covering this material with the
+proper mathematical background). D29 is intended for students in other
+disciplines who find themselves wanting to learn more statistics; we
+have an [Applied Statistics Minor
+program](https://utsc.calendar.utoronto.ca/minor-program-applied-statistics-science)
+for which C32 and D29 are two of the last courses.
+
+## Packages used somewhere in this book {-}
+
+The bottom lines are below used with the `conflicted` package: if a function by
+the name shown is in two or more packages, prefer the one from the
+package shown.
+
+```{r, eval=F}
+library(tidyverse)
+library(smmr)
+library(MASS)
+library(nnet)
+library(survival)
+library(survminer)
+library(car)
+library(lme4)
+library(ggbiplot)
+library(ggrepel)
+library(broom)
+library(rpart)
+library(bootstrap)
+library(cmdstanr)
+library(posterior)
+library(bayesplot)
+library(tmaptools)
+library(leaflet)
+library(conflicted)
+conflict_prefer("summarize", "dplyr")
+conflict_prefer("select", "dplyr")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("mutate", "dplyr")
+conflict_prefer("count", "dplyr")
+conflict_prefer("arrange", "dplyr")
+conflict_prefer("rename", "dplyr")
+conflict_prefer("id", "dplyr")
+```
+
+
+<!--chapter:end:index.Rmd-->
+
+
+# Getting used to R and R Studio
+
+My solutions follow the problems. Look ahead if you get stuck. Don't forget `library(tidyverse)` if you need it:
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r, child="r-signup_qq.Rmd"}
+```
+
+```{r, child="r0_qq.Rmd"}
+```
+
+```{r, child="r0a_qq.Rmd"}
+```
+
+```{r different-ways, child="different-ways_qq.Rmd"}
+```
+
+My solutions follow: 
+
+```{r, child="r-signup.Rmd"}
+```
+
+```{r, child="r0.Rmd"}
+```
+
+```{r, child="r0a.Rmd"}
+```
+
+```{r different-ways, child="different-ways.Rmd"}
+```
+
+
+
+
+<!--chapter:end:01-getting-used.Rmd-->
+
+
+# Reading in data
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r, child="oj_qq.Rmd"}
+```
+
+```{r, child="soap_qq.Rmd"}
+```
+
+```{r, child="global_qq.Rmd"}
+```
+
+
+My solutions follow:
+
+```{r, child="oj.Rmd"}
+```
+
+```{r, child="soap.Rmd"}
+```
+
+```{r, child="global.Rmd"}
+```
+
+
+
+<!--chapter:end:02-reading-in.Rmd-->
+
+
+# Drawing graphs
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r, child="oj2_qq.Rmd"}
+```
+
+```{r, child="soap2_qq.Rmd"}
+```
+
+```{r, child="global2_qq.Rmd"}
+```
+
+```{r, child="rainfall2_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, child="oj2.Rmd"}
+```
+
+```{r, child="soap2.Rmd"}
+```
+
+```{r, child="global2.Rmd"}
+```
+
+```{r, child="rainfall2.Rmd"}
+```
+
+
+<!--chapter:end:32-making-graphs.Rmd-->
+
+# Data exploration
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r, child="ncbirths_qq.Rmd"}
+```
+
+```{r, child="ncbirths-extra_qq.Rmd"}
+```
+
+```{r, child="nenana_qq.Rmd"}
+```
+
+```{r, child="compatt_qq.Rmd"}
+```
+
+```{r, child="thomas_qq.Rmd"}
+```
+
+```{r, child="rainfall1_qq.Rmd"}
+```
+
+```{r, child="algebra_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, child="ncbirths.Rmd"}
+```
+
+```{r, child="ncbirths-extra.Rmd"}
+```
+
+```{r, child="nenana.Rmd"}
+```
+
+```{r, child="compatt.Rmd"}
+```
+
+```{r, child="thomas.Rmd"}
+```
+
+```{r, child="rainfall1.Rmd"}
+```
+
+```{r, child="algebra.Rmd"}
+```
+
+
+<!--chapter:end:03-data-summaries.Rmd-->
+
+# Working with dataframes
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r jays-dplyr, child="jays-dplyr_qq.Rmd"}
+```
+
+```{r kencars,child="kencars_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r jays-dplyr, child="jays-dplyr.Rmd"}
+```
+
+```{r kencars,child="kencars.Rmd"}
+```
+
+<!--chapter:end:31-working-with-dataframes.Rmd-->
+
+# One-sample inference
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r, child="hg_qq.Rmd"}
+```
+
+```{r, child="boulder_qq.Rmd"}
+```
+
+```{r, child="ncbirths-inf_qq.Rmd"}
+```
+
+```{r, child="nenana-inf_qq.Rmd"}
+```
+
+```{r, child="trees_qq.Rmd"}
+```
+
+```{r, child="cholest_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, child="hg.Rmd"}
+```
+
+```{r, child="boulder.Rmd"}
+```
+
+```{r, child="ncbirths-inf.Rmd"}
+```
+
+```{r, child="nenana-inf.Rmd"}
+```
+
+```{r, child="trees.Rmd"}
+```
+
+```{r, child="cholest.Rmd"}
+```
+
+
+<!--chapter:end:04-one-sample-inference.Rmd-->
+
+# Two-sample inference
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r devices-r, child="devices-r_qq.Rmd"}
+```
+
+```{r parking, child="parking_qq.Rmd"}
+```
+
+```{r bellpepper, child="bellpepper_qq.Rmd"}
+```
+
+```{r mousebully, child="mousebully_qq.Rmd"}
+```
+
+```{r kids-diet, child="kids-diet_qq.Rmd"}
+```
+
+```{r handspan, child="handspan_a_qq.Rmd"}
+```
+
+```{r ozvus, child="ozvus_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r devices-r, child="devices-r.Rmd"}
+```
+
+```{r parking, child="parking.Rmd"}
+```
+
+```{r bellpepper, child="bellpepper.Rmd"}
+```
+
+```{r mousebully, child="mousebully.Rmd"}
+```
+
+```{r kids-diet, child="kids-diet.Rmd"}
+```
+
+```{r handspan, child="handspan_a.Rmd"}
+```
+
+```{r ozvus, child="ozvus.Rmd"}
+```
+
+
+<!--chapter:end:05-two-sample-inference.Rmd-->
+
+# Power and sample size
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r power-sim, child="power-sim_qq.Rmd"}
+```
+
+```{r power20, child="power20_qq.Rmd"}
+```
+
+```{r, proportion-power-sim, child="proportion-power-sim_qq.Rmd"}
+```
+
+```{r, child="mean_two_qq.Rmd"}
+```
+
+```{r, child="pop_power_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r power-sim, child="power-sim.Rmd"}
+```
+
+```{r power20, child="power20.Rmd"}
+```
+
+```{r, proportion-power-sim, child="proportion-power-sim.Rmd"}
+```
+
+```{r, child="mean_two.Rmd"}
+```
+
+```{r, child="pop_power.Rmd"}
+```
+
+
+<!--chapter:end:06-power.Rmd-->
+
+# The sign test 
+
+```{r}
+library(tidyverse)
+library(smmr)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r maze, child="maze_qq.Rmd"}
+```
+
+```{r cookies-r, child="cookies-r_qq.Rmd"}
+```
+
+```{r signpower, child="signpower_qq.Rmd"}
+```
+
+```{r, child="roethlisberger_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r maze, child="maze.Rmd"}
+```
+
+```{r cookies-r, child="cookies-r.Rmd"}
+```
+
+```{r signpower, child="signpower.Rmd"}
+```
+
+```{r, child="roethlisberger.Rmd"}
+```
+
+
+<!--chapter:end:07-sign.Rmd-->
+
+# Mood's median test
+
+```{r}
+library(tidyverse)
+library(smmr)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r cerealsugar, child="cerealsugar_qq.Rmd"}
+```
+
+```{r mathphobia, child="mathphobia_qq.Rmd"}
+```
+
+```{r forehead, child="forehead_qq.Rmd"}
+```
+
+```{r, child="handspan2_qq.Rmd"}
+```
+
+
+My solutions follow:
+
+```{r cerealsugar, child="cerealsugar.Rmd"}
+```
+
+```{r mathphobia, child="mathphobia.Rmd"}
+```
+
+```{r forehead, child="forehead.Rmd"}
+```
+
+```{r, child="handspan2.Rmd"}
+```
+
+
+<!--chapter:end:33-mood-median.Rmd-->
+
+# Matched pairs t and sign test
+
+```{r, eval=F}
+library(tidyverse)
+library(smmr)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r bodyfat, child="bodyfat_qq.Rmd"}
+```
+
+```{r baseball-softball-r, child="baseball-softball-r_qq.Rmd"}
+```
+
+```{r throw, child="throw_qq.Rmd"}
+```
+
+
+```{r salaryinc, child="salaryinc_qq.Rmd"}
+```
+
+```{r bodyfat-sign, child="bodyfat-sign_qq.Rmd"}
+```
+
+```{r blood-pressure-paired, child="blood_pressure_paired_qq.Rmd"}
+```
+
+```{r, child="french_qq.Rmd"}
+```
+
+My solutions follow:
+
+
+```{r bodyfat, child="bodyfat.Rmd"}
+```
+
+```{r baseball-softball-r, child="baseball-softball-r.Rmd"}
+```
+
+```{r throw, child="throw.Rmd"}
+```
+
+
+```{r salaryinc, child="salaryinc.Rmd"}
+```
+
+```{r bodyfat-sign, child="bodyfat-sign.Rmd"}
+```
+
+```{r blood-pressure-paired, child="blood_pressure_paired.Rmd"}
+```
+
+```{r, child="french.Rmd"}
+```
+
+
+<!--chapter:end:08-matched-pairs-sign.Rmd-->
+
+# Normal quantile plots
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r heliconia, child="heliconia_qq.Rmd"}
+```
+
+```{r aus-qq, child="aus-qq_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r heliconia, child="heliconia.Rmd"}
+```
+
+```{r aus-qq, child="aus-qq.Rmd"}
+```
+
+<!--chapter:end:09-normal-quantile.Rmd-->
+
+# Analysis of variance
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r movies-r, child="movies-r_qq.Rmd"}
+```
+
+```{r deer, child="deer_qq.Rmd"}
+```
+
+```{r movies2, child="movies2_qq.Rmd"}
+```
+
+```{r carbon, child="carbon_qq.Rmd"}
+```
+
+```{r caffeine, child="caffeine_qq.Rmd"}
+```
+
+```{r, child="reggae_qq.Rmd"}
+```
+
+```{r, child="gss_tv_qq.Rmd"}
+```
+
+
+My solutions follow:
+
+```{r movies-r, child="movies-r.Rmd"}
+```
+
+```{r deer, child="deer.Rmd"}
+```
+
+```{r movies2, child="movies2.Rmd"}
+```
+
+```{r carbon, child="carbon.Rmd"}
+```
+
+```{r caffeine, child="caffeine.Rmd"}
+```
+
+```{r, child="reggae.Rmd"}
+```
+
+```{r, child="gss_tv.Rmd"}
+```
+
+
+<!--chapter:end:10-analysis-of-variance.Rmd-->
+
+# Writing reports
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r carbon, child="carbon_qq.Rmd"}
+```
+
+```{r sparrowhawk, child="sparrowhawk_qq.Rmd"}
+```
+
+```{r, child="proggo_qq.Rmd"}
+```
+
+
+My solutions follow:
+
+```{r carbon, child="carbon.Rmd"}
+```
+
+```{r sparrowhawk, child="sparrowhawk.Rmd"}
+```
+
+```{r child="proggo.Rmd"}
+```
+
+
+<!--chapter:end:34-reports.Rmd-->
+
+# Tidying data
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r throw-spaghetti, child="throw-spaghetti_qq.Rmd"}
+```
+
+```{r ethanol, child="ethanol_qq.Rmd"}
+```
+
+```{r tomatoes, child="tomatoes_qq.Rmd"}
+```
+
+```{r migraine,child="migraine_qq.Rmd"}
+```
+
+```{r plants,child="plants_qq.Rmd"}
+```
+
+```{r crickets,child="crickets_qq.Rmd"}
+```
+
+
+
+```{r billboard, child="billboard_qq.Rmd"}
+```
+
+```{r bikes, child="bikes_qq.Rmd"}
+```
+
+```{r heat-r, child="heat-r_qq.Rmd"}
+```
+
+```{r, child="isoflavones_qq.Rmd"}
+```
+
+```{r, child="jocko_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r throw-spaghetti, child="throw-spaghetti.Rmd"}
+```
+
+```{r ethanol, child="ethanol.Rmd"}
+```
+
+```{r tomatoes, child="tomatoes.Rmd"}
+```
+
+```{r migraine,child="migraine.Rmd"}
+```
+
+```{r plants,child="plants.Rmd"}
+```
+
+```{r crickets,child="crickets.Rmd"}
+```
+
+
+
+```{r billboard, child="billboard.Rmd"}
+```
+
+```{r bikes, child="bikes.Rmd"}
+```
+
+```{r heat-r, child="heat-r.Rmd"}
+```
+
+```{r, child="isoflavones.Rmd"}
+```
+
+```{r, child="jocko.Rmd"}
+```
+
+
+<!--chapter:end:11-tidying-data.Rmd-->
+
+# Simple regression
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r calirain,child="calirain_qq.Rmd"}
+```
+
+```{r ftccigar,child="ftccigar_qq.Rmd"}
+```
+
+
+```{r boys, child="youngboys_qq.Rmd"}
+```
+
+
+
+```{r fbfriends, child="fbfriends_qq.Rmd"}
+```
+
+```{r carp, child="carp_qq.Rmd"}
+```
+
+
+
+```{r socwork, child="socwork_qq.Rmd"}
+```
+
+```{r pinetrees, child="pinetrees_qq.Rmd"}
+```
+
+```{r tortoise, child="tortoise_qq.Rmd"}
+```
+
+
+```{r coasters, child="coasters_qq.Rmd"}
+```
+
+```{r diabetic, child="diabetic_qq.Rmd"}
+```
+
+```{r pizza, child="pizza_qq.Rmd"}
+```
+
+```{r fire_damage, child="fire_damage_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r calirain,child="calirain.Rmd"}
+```
+
+```{r ftccigar,child="ftccigar.Rmd"}
+```
+
+
+```{r boys, child="youngboys.Rmd"}
+```
+
+
+
+```{r fbfriends, child="fbfriends.Rmd"}
+```
+
+```{r carp, child="carp.Rmd"}
+```
+
+
+
+```{r socwork, child="socwork.Rmd"}
+```
+
+```{r pinetrees, child="pinetrees.Rmd"}
+```
+
+```{r tortoise, child="tortoise.Rmd"}
+```
+
+
+```{r coasters, child="coasters.Rmd"}
+```
+
+```{r diabetic, child="diabetic.Rmd"}
+```
+
+```{r pizza, child="pizza.Rmd"}
+```
+
+```{r fire_damage, child="fire_damage.Rmd"}
+```
+
+<!--chapter:end:12-simple-regression.Rmd-->
+
+# Multiple regression
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r hospital, child="hospital_qq.Rmd"}
+```
+
+```{r chemical, child="chemical_qq.Rmd"}
+```
+
+```{r mathsal, child="mathsal_qq.Rmd"}
+```
+
+```{r gpa, child="gpa_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r hospital, child="hospital.Rmd"}
+```
+
+```{r chemical, child="chemical.Rmd"}
+```
+
+```{r mathsal, child="mathsal.Rmd"}
+```
+
+```{r gpa, child="gpa.Rmd"}
+```
+
+
+<!--chapter:end:35-multiple-regression.Rmd-->
+
+# Regression with categorical variables
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r crickets-b, child="crickets-b_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r crickets-b, child="crickets-b.Rmd"}
+```
+
+<!--chapter:end:36-regression-categorical.Rmd-->
+
+# Dates and times
+
+The usual to begin with:
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r mizuna-r, child="mizuna-r_qq.Rmd"}
+```
+
+```{r birthtypes, child="birthtypes_qq.Rmd"}
+```
+
+```{r denali, child="denali-r_qq.Rmd"}
+```
+
+```{r whas, child="whas_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r mizuna-r, child="mizuna-r.Rmd"}
+```
+
+```{r birthtypes, child="birthtypes.Rmd"}
+```
+
+```{r denali, child="denali-r.Rmd"}
+```
+
+```{r whas, child="whas.Rmd"}
+```
+
+
+<!--chapter:end:13-dates-and-times.Rmd-->
+
+# Functions
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r func, child="func_qq.Rmd"}
+```
+
+```{r hotpo, child="hotpo_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r func, child="func.Rmd"}
+```
+
+```{r hotpo, child="hotpo.Rmd"}
+```
+
+<!--chapter:end:14-functions.Rmd-->
+
+# Vector and matrix algebra
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r, child="reg_qq.Rmd"}
+```
+
+
+My solutions follow:
+
+```{r, child="reg.Rmd"}
+```
+
+
+<!--chapter:end:51-vector-matrix.Rmd-->
+
+# The Bootstrap
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(tidyverse)
+library(bootstrap)
+```
+
+```{r, child="packages.Rmd", warning=F}
+```
+
+```{r boot_one, child="bootstrap_qq.Rmd"}
+```
+
+```{r boot_two, child="bootstrap_median_qq.Rmd"}
+```
+
+```{r eyesight, child="eyesight_qq.Rmd"}
+```
+
+```{r, child="boot-irs_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r boot_one, child="bootstrap.Rmd"}
+```
+
+```{r boot_two, child="bootstrap_median.Rmd"}
+```
+
+```{r eyesight, child="eyesight.Rmd"}
+```
+
+```{r, child="boot-irs.Rmd"}
+```
+
+
+<!--chapter:end:26-bootstrap.Rmd-->
+
+# Bayesian Statistics with Stan
+
+Packages for this chapter:
+
+```{r eval = FALSE}
+library(tidyverse)
+library(cmdstanr)
+library(posterior)
+library(bayesplot)
+```
+
+```{r, child="packages.Rmd", warning=F}
+```
+
+
+```{r, child="binomial_stan_qq.Rmd"}
+```
+
+```{r, child="regression_stan_qq.Rmd"}
+```
+
+```{r, child="bayesp_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, child="binomial_stan.Rmd"}
+```
+
+```{r, child="regression_stan.Rmd"}
+```
+
+```{r, child="bayesp.Rmd"}
+```
+
+
+<!--chapter:end:27-stan.Rmd-->
+
+# Logistic regression
+
+```{r, eval=F}
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r, wolfspider,child="wolfspider_qq.Rmd"}
+```
+
+```{r, aphids, child="aphids_qq.Rmd"}
+```
+
+```{r, doseresponse, child="doseresponse_qq.Rmd"}
+```
+
+```{r, parasite, child="parasite_qq.Rmd"}
+```
+
+```{r, ethics, child="ethics_qq.Rmd"}
+```
+
+```{r, heart,  child="heart_qq.Rmd"}
+```
+
+```{r, breastfeed, child="breastfeed_qq.Rmd"}
+```
+
+```{r, donner, child="donner_qq.Rmd"}
+```
+
+```{r, apache, child="apache_qq.Rmd"}
+```
+
+```{r, ha2, child="ha2_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, wolfspider,child="wolfspider.Rmd"}
+```
+
+```{r, aphids, child="aphids.Rmd"}
+```
+
+```{r, doseresponse, child="doseresponse.Rmd"}
+```
+
+```{r, parasite, child="parasite.Rmd"}
+```
+
+```{r, ethics, child="ethics.Rmd"}
+```
+
+```{r, heart,  child="heart.Rmd"}
+```
+
+```{r, breastfeed, child="breastfeed.Rmd"}
+```
+
+```{r, donner, child="donner.Rmd"}
+```
+
+```{r, apache, child="apache.Rmd"}
+```
+
+```{r, ha2, child="ha2.Rmd"}
+```
+
+
+<!--chapter:end:15-logistic-regression.Rmd-->
+
+# Logistic regression with ordinal response
+
+```{r, eval=F}
+library(MASS)
+library(tidyverse)
+```
+```{r, child="packages.Rmd"}
+```
+
+```{r mobile, child="mobile_qq.Rmd"}
+```
+
+
+```{r nonmissing, child="nonmissing_qq.Rmd"}
+```
+
+
+
+```{r hsb, child="hsb_qq.Rmd"}
+```
+
+
+```{r steak, child="steak_qq.Rmd"}
+```
+
+```{r steak-data, child="steak-data_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r mobile, child="mobile.Rmd"}
+```
+
+
+```{r nonmissing, child="nonmissing.Rmd"}
+```
+
+
+
+```{r hsb, child="hsb.Rmd"}
+```
+
+
+```{r steak, child="steak.Rmd"}
+```
+
+```{r steak-data, child="steak-data.Rmd"}
+```
+
+<!--chapter:end:16-ordinal-response.Rmd-->
+
+# Logistic regression with nominal response
+
+```{r, eval=F}
+library(nnet)
+library(tidyverse)
+```
+```{r, child="packages.Rmd"}
+```
+
+```{r nonmissing, child="nonmissing_qq.Rmd"}
+```
+
+```{r ess, child="ess_qq.Rmd"}
+```
+
+```{r alligator, child="alligator_qq.Rmd"}
+```
+
+```{r sfcrime, child="sfcrime_qq.Rmd"}
+```
+
+```{r sfcrime-data, child="sfcrime-data_qq.Rmd"}
+```
+
+```{r oz-multi, child="oz-multi_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r nonmissing, child="nonmissing.Rmd"}
+```
+
+```{r ess, child="ess.Rmd"}
+```
+
+```{r alligator, child="alligator.Rmd"}
+```
+
+```{r sfcrime, child="sfcrime.Rmd"}
+```
+
+```{r sfcrime-data, child="sfcrime-data.Rmd"}
+```
+
+```{r oz-multi, child="oz-multi.Rmd"}
+```
+
+
+<!--chapter:end:37-nominal-response.Rmd-->
+
+# Survival analysis
+
+```{r, eval=F}
+library(survival)
+library(tidyverse)
+library(survminer)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r worcester, child="worcester_qq.Rmd"}
+```
+
+```{r drug-treatment, child="drug-treatment_qq.Rmd"}
+```
+
+```{r myeloma, child="myeloma_qq.Rmd"}
+```
+
+```{r ovarian, child="ovarian_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r worcester, child="worcester.Rmd"}
+```
+
+```{r drug-treatment, child="drug-treatment.Rmd"}
+```
+
+```{r myeloma, child="myeloma.Rmd"}
+```
+
+```{r ovarian, child="ovarian.Rmd"}
+```
+
+
+<!--chapter:end:17-survival-analysis.Rmd-->
+
+# Analysis of variance revisited
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(MASS)
+library(car)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r acidrain, child="acidrain_qq.Rmd"}
+```
+
+```{r hayfever, child="hayfever_qq.Rmd"}
+```
+
+```{r q2,child="caffeine-contrast_qq.Rmd"}
+```
+
+```{r studyhours, child="studyhours_qq.Rmd"}
+```
+
+```{r q3,child="mental-context_qq.Rmd"}
+```
+
+```{r shirts, child="shirts_qq.Rmd"}
+```
+
+
+
+My solutions follow:
+
+```{r acidrain, child="acidrain.Rmd"}
+```
+
+```{r hayfever, child="hayfever.Rmd"}
+```
+
+```{r q2,child="caffeine-contrast.Rmd"}
+```
+
+```{r studyhours, child="studyhours.Rmd"}
+```
+
+```{r q3,child="mental-context.Rmd"}
+```
+
+```{r shirts, child="shirts.Rmd"}
+```
+
+
+
+
+
+<!--chapter:end:18-anova-revisited.Rmd-->
+
+# Analysis of covariance
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(MASS)
+library(car)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+
+```{r productivity, child="productivity_qq.Rmd"}
+```
+
+```{r lepro, child="leprosy_qq.Rmd"} 
+```
+
+
+My solutions follow:
+
+```{r productivity, child="productivity.Rmd"}
+```
+
+```{r lepro, child="leprosy.Rmd"} 
+```
+
+
+
+
+<!--chapter:end:38-ancova.Rmd-->
+
+# Multivariate analysis of variance
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(car)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r q7,child="manova1_qq.Rmd"}
+``` 
+
+```{r urine,child="urine_qq.Rmd"}
+```   
+
+```{r athletes-manova, child="athletes-manova_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r q7,child="manova1.Rmd"}
+``` 
+
+```{r urine,child="urine.Rmd"}
+```   
+
+```{r athletes-manova, child="athletes-manova.Rmd"}
+```
+
+
+<!--chapter:end:19-manova.Rmd-->
+
+# Repeated measures
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(car)
+library(lme4)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r ratweight, child="ratweight_qq.Rmd"}
+```
+
+
+```{r oldies,child="geriatrics_qq.Rmd"}
+``` 
+
+```{r airport, child="airport_qq.Rmd"}
+``` 
+
+```{r bodyfat2, child="bodyfat2_qq.Rmd"}
+``` 
+
+```{r king, child="king_qq.Rmd"}
+``` 
+
+```{r rm, child="rm_qq.Rmd"}
+``` 
+
+My solutions follow:
+
+```{r ratweight, child="ratweight.Rmd"}
+```
+
+
+```{r oldies,child="geriatrics.Rmd"}
+``` 
+
+```{r airport, child="airport.Rmd"}
+``` 
+
+```{r bodyfat2, child="bodyfat2.Rmd"}
+``` 
+
+```{r king, child="king.Rmd"}
+``` 
+
+```{r rm, child="rm.Rmd"}
+``` 
+
+<!--chapter:end:20-repeated-measures.Rmd-->
+
+# Discriminant analysis
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(ggbiplot)
+library(MASS)
+library(tidyverse)
+library(car)
+```
+
+(Note: `ggbiplot` loads `plyr`, which overlaps a lot with `dplyr`
+(`filter`, `select` etc.). We want the `dplyr` stuff elsewhere, so we
+load `ggbiplot` *first*, and the things in `plyr` get hidden, as shown
+in the Conflicts. This, despite appearances, is what we want.)
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r sw1,child="swiss-money_qq.Rmd"}
+``` 
+
+```{r ur2,child="urine2_qq.Rmd"}
+``` 
+
+```{r man1a,child="manova1a_qq.Rmd"}
+``` 
+  
+```{r jobs, child="jobs_qq.Rmd"}
+```
+
+```{r adhd, child="adhd_qq.Rmd"}
+```
+
+```{r cornseed, child="cornseed_qq.Rmd"}
+``` 
+
+```{r athletes-d, child="athletes-d_qq.Rmd"}
+``` 
+
+My solutions follow:
+
+```{r sw1,child="swiss-money.Rmd"}
+``` 
+
+```{r ur2,child="urine2.Rmd"}
+``` 
+
+```{r man1a,child="manova1a.Rmd"}
+``` 
+  
+```{r jobs, child="jobs.Rmd"}
+```
+
+```{r adhd, child="adhd.Rmd"}
+```
+
+```{r cornseed, child="cornseed.Rmd"}
+``` 
+
+```{r athletes-d, child="athletes-d.Rmd"}
+``` 
+
+<!--chapter:end:21-discriminant-analysis.Rmd-->
+
+# Hierarchical cluster analysis
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(MASS)
+library(ggbiplot)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r seabed, child="seabed_qq.Rmd"}
+```
+
+
+```{r fruit,child="fruits_qq.Rmd"}
+``` 
+
+```{r species,child="species_qq.Rmd"}
+```
+
+
+```{r pittsburgh, child="pittsburgh_qq.Rmd"}
+``` 
+
+My solutions follow:
+
+```{r seabed, child="seabed.Rmd"}
+```
+
+
+```{r fruit,child="fruits.Rmd"}
+``` 
+
+```{r species,child="species.Rmd"}
+```
+
+
+```{r pittsburgh, child="pittsburgh.Rmd"}
+``` 
+
+
+<!--chapter:end:22-cluster.Rmd-->
+
+# K-means cluster analysis
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(MASS)
+library(ggbiplot)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r athletes-km, child="ais-km_qq.Rmd"}
+```
+
+```{r decathlon, child="decathlon_qq.Rmd"}
+``` 
+
+```{r swiss-cluster, child="swiss-cluster_qq.Rmd"}
+```
+
+
+```{r car-cluster, child="carc_qq.Rmd"}
+```
+
+```{r beer,child="beer_qq.Rmd"}
+``` 
+
+My solutions follow:
+
+```{r athletes-km, child="ais-km.Rmd"}
+```
+
+```{r decathlon, child="decathlon.Rmd"}
+``` 
+
+```{r swiss-cluster, child="swiss-cluster.Rmd"}
+```
+
+
+```{r car-cluster, child="carc.Rmd"}
+```
+
+```{r beer,child="beer.Rmd"}
+``` 
+
+<!--chapter:end:39-kmeans-cluster.Rmd-->
+
+# Drawing maps with Leaflet
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(ggbiplot)
+library(tidyverse)
+library(ggrepel)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r, child="catbrain_qq.Rmd"}
+```
+
+
+```{r wisc, child="wisconsin2_qq.Rmd"}
+``` 
+
+```{r, child="cross-city_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r, child="catbrain.Rmd"}
+```
+
+
+```{r wisc, child="wisconsin2.Rmd"}
+``` 
+
+```{r, child="cross-city.Rmd"}
+```
+
+<!--chapter:end:41-maps.Rmd-->
+
+# Multidimensional Scaling
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(ggbiplot)
+library(tidyverse)
+library(ggrepel)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+
+```{r wisc, child="wisconsin_qq.Rmd"}
+``` 
+
+
+```{r stimuli, child="stimuli_qq.Rmd"}
+```
+  
+```{r letters, child="letterrec_qq.Rmd"}
+``` 
+
+
+```{r beermds, child="beermds_qq.Rmd"}
+```   
+
+```{r stimuli, child="stimuli2_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r wisc, child="wisconsin.Rmd"}
+``` 
+
+
+```{r stimuli, child="stimuli.Rmd"}
+```
+  
+```{r letters, child="letterrec.Rmd"}
+``` 
+
+
+```{r beermds, child="beermds.Rmd"}
+```   
+
+```{r stimuli, child="stimuli2.Rmd"}
+```
+
+
+<!--chapter:end:23-mds.Rmd-->
+
+# Principal Components
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(ggbiplot)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r weather, child="weather_2014_qq.Rmd"}
+``` 
+
+
+My solutions follow:
+
+```{r weather, child="weather_2014.Rmd"}
+``` 
+
+
+	
+
+
+<!--chapter:end:24-pc.Rmd-->
+
+# Factor Analysis
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(ggbiplot)
+library(tidyverse)
+```
+
+```{r, child="packages.Rmd"}
+```
+
+```{r ipip, child="ipip_qq.Rmd"}
+``` 
+
+```{r corrmat, child="corrmat_qq.Rmd"}
+```   
+
+```{r pollution, child="airpollution_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r ipip, child="ipip.Rmd"}
+``` 
+
+```{r corrmat, child="corrmat.Rmd"}
+```   
+
+```{r pollution, child="airpollution.Rmd"}
+```
+
+
+
+<!--chapter:end:42-fa.Rmd-->
+
+# Frequency table analysis
+
+Packages for this chapter:
+
+```{r, eval=F}
+library(tidyverse)
+```
+```{r, child="packages.Rmd"}
+```
+
+```{r college, child="college-plans_qq.Rmd"}
+```
+
+```{r vote, child="vote_qq.Rmd"}
+```
+
+```{r, child="brand_m_qq.Rmd"}
+```
+
+My solutions follow:
+
+```{r college, child="college-plans.Rmd"}
+```
+
+```{r vote, child="vote.Rmd"}
+```
+
+```{r, child="brand_m.Rmd"}
+```
+
+
+<!--chapter:end:25-loglin.Rmd-->
+
