@@ -6,17 +6,14 @@ population depends on the size of the caribou population (since
 wolves hunt and kill caribou). This is a large national park, so
 caribou are found in very large herds, so big, in fact, that the
 well-being of the entire herd is not threatened by wolf
-attacks.
-`r tufte::margin_note("In fact, it is believed that wolves help keep caribou    herds strong by preventing over-population: that is, the weakest    caribou are the ones taken by wolves.")` 
+attacks.^[In fact, it is believed that wolves help keep caribou herds strong by preventing over-population: that is, the weakest caribou are the ones taken by wolves.] 
 Can the size of the caribou population
 be used to predict the size of the wolf population?
 The data can be found at
 [link](http://ritsokiguess.site/datafiles/caribou.txt). The
 columns 
-are: the date of the survey,
-`r tufte::margin_note("The survey is always taken in    the fall, but the date varies.")` 
-the name of the park employee in charge  of the survey, the caribou population (in hundreds) and the wolf  population (actual count).
-`r tufte::margin_note("Counting animals in a region,    especially rare, hard-to-find animals, is a whole science in    itself. These numbers are probably estimates (with some    uncertainty).")` 
+are: the date of the survey,^[The survey is always taken in    the fall, but the date varies.] 
+the name of the park employee in charge  of the survey, the caribou population (in hundreds) and the wolf  population (actual count).^[Counting animals in a region,    especially rare, hard-to-find animals, is a whole science in    itself. Our data are probably themselves estimates (with some    uncertainty).] 
 
 
 (a) Take a look at the data file. How would you describe its
@@ -80,8 +77,7 @@ between the words `caribou` and `wolf` in the header
 line that goes all the way down. Thus four columns, `date`,
 `name`, `caribou` and `wolf`. This means that the
 spaces within the names don't cause any problems at all, since the
-spaces aren't in the same place in *every* line.
-`r tufte::margin_note("The only way this would fail is if *every* first name had the same number of letters in it; then the space between first name and initial of last name *would* be in the same place in every line.")`
+spaces aren't in the same place in *every* line.^[The only way this would fail is if *every* first name had the same number of letters in it; then the space between first name and initial of last name *would* be in the same place in every line.]
 
 $\blacksquare$
 
@@ -94,8 +90,7 @@ Solution
 
 What you do is to look at the format of the dates as they are
 now. They appear to be month-day-year, American
-style.
-`r tufte::margin_note("Not a surprise since Denali National Park is in  Alaska.")`  
+style.^[Not a surprise since Denali National Park is in  Alaska.]  
 Thus the function needed is `mdy`. It doesn't matter
 whether the months are names or numbers:
 ```{r }
@@ -106,8 +101,7 @@ denali
      
 
 I lived on the edge and overwrote both my column and the whole data
-frame.
-`r tufte::margin_note("It's actually not *really* living on the edge,  because if it doesn't work, you go back and read the data in from  the file again.")`
+frame.^[It's actually not *really* living on the edge,  because if it doesn't work, you go back and read the data in from  the file again.]
 
 The dates are displayed in ISO format, year-month-day. You see at the
 top of the column that they now really *are* dates, not just
@@ -171,8 +165,7 @@ ggplot(denali, aes(x = caribou, y = wolf)) + geom_point()
 ```
 
        
-If you like, add a smooth trend to it:
-`r tufte::margin_note("This wiggles more than  I would like, with such a small number of observations. Try putting  someting like *span=2* in the smooth to make it less wiggly.")`
+If you like, add a smooth trend to it:^[This wiggles more than  I would like, with such a small number of observations. Try putting  something like `span=2` in the smooth to make it less wiggly.]
 
 ```{r }
 ggplot(denali, aes(x = caribou, y = wolf)) + geom_point() + geom_smooth(se = F)
@@ -210,8 +203,7 @@ denali %>%
 I thought about joining up the points in year order. This is actually
 *not* `geom_line` as you would have guessed, since what that
 does is to join points in the order of the variable on the
-$x$-axis.
-`r tufte::margin_note("I have to say that I didn't know that until just now.")`
+$x$-axis.^[I have to say that I didn't know that until just now.]
 To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead 
 `geom_path`:
@@ -325,8 +317,7 @@ ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
 What has happened is that we get lines of different colour for each
 animal, with a legend. So far so good. The problem is that the wolf
 numbers are about 2.5 times bigger than the caribou
-numbers,
-`r tufte::margin_note("Which means, if you stop to think about it, that  there are *actually* about 40 times more caribou than wolves.")`
+numbers,^[Which means, if you stop to think about it, that  there are *actually* about 40 times more caribou than wolves.]
 so that
 we don't get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:
@@ -365,8 +356,7 @@ one population was much bigger than the other, or varied much more
 than the other. Lies and statistics.
 
 In my opinion, too many people just plot series against time, possibly
-with a second $y$-axis.
-`r tufte::margin_note("And all too often with Excel (spit).")`
+with a second $y$-axis.^[And all too often with Excel (spit).]
 Variables that vary together, like the wolf
 and caribou populations here, ought to be plotted \emph{against each
 other} on a scatterplot, possibly with the time points labelled.
