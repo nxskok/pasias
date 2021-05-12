@@ -21,54 +21,42 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 2 Reading in data | Problems and Solutions in Applied Statistics</title>
 
-<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
-<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
-<script src="libs/jquery-1.12.4/jquery.min.js"></script>
-<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-1.3.1/leaflet.js"></script>
-<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<script src="libs/proj4-2.6.2/proj4.min.js"></script>
-<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
-<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
-<script src="libs/leaflet-binding-2.0.4.1/leaflet.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -77,9 +65,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -125,12 +113,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li><a href="index.html#introduction">Introduction</a>
-<ul>
+<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a>
-<ul>
+<li class="has-sub"><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a><ul>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><span class="toc-section-number">1.1</span> Getting an R Studio Cloud account</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-started"><span class="toc-section-number">1.2</span> Getting started</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><span class="toc-section-number">1.3</span> Reading data from a file</a></li>
@@ -140,8 +126,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file-1"><span class="toc-section-number">1.7</span> Reading data from a file</a></li>
 <li><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways-1"><span class="toc-section-number">1.8</span> Reading files different ways</a></li>
 </ul></li>
-<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a>
-<ul>
+<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
 <li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
 <li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
@@ -149,8 +134,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
 <li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
 </ul></li>
-<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a>
-<ul>
+<li class="has-sub"><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a><ul>
 <li><a href="drawing-graphs.html#orange-juice-2"><span class="toc-section-number">3.1</span> Orange juice</a></li>
 <li><a href="drawing-graphs.html#making-soap-2"><span class="toc-section-number">3.2</span> Making soap</a></li>
 <li><a href="drawing-graphs.html#handling-shipments-2"><span class="toc-section-number">3.3</span> Handling shipments</a></li>
@@ -162,8 +146,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="drawing-graphs.html#rainfall-in-davis-california-1"><span class="toc-section-number">3.9</span> Rainfall in Davis, California</a></li>
 <li><a href="drawing-graphs.html#xxx-title-here-1"><span class="toc-section-number">3.10</span> xxx title here</a></li>
 </ul></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a>
-<ul>
+<li class="has-sub"><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a><ul>
 <li><a href="data-exploration.html#north-carolina-births"><span class="toc-section-number">4.1</span> North Carolina births</a></li>
 <li><a href="data-exploration.html#more-about-the-nc-births"><span class="toc-section-number">4.2</span> More about the NC births</a></li>
 <li><a href="data-exploration.html#nenana-alaska"><span class="toc-section-number">4.3</span> Nenana, Alaska</a></li>
@@ -179,15 +162,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="data-exploration.html#unprecendented-rainfall-1"><span class="toc-section-number">4.13</span> Unprecendented rainfall</a></li>
 <li><a href="data-exploration.html#learning-algebra-1"><span class="toc-section-number">4.14</span> Learning algebra</a></li>
 </ul></li>
-<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a>
-<ul>
+<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
 <li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
 <li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a>
-<ul>
+<li class="has-sub"><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a><ul>
 <li><a href="one-sample-inference.html#hunter-gatherers-in-australia"><span class="toc-section-number">6.1</span> Hunter-gatherers in Australia</a></li>
 <li><a href="one-sample-inference.html#buses-to-boulder"><span class="toc-section-number">6.2</span> Buses to Boulder</a></li>
 <li><a href="one-sample-inference.html#length-of-gestation-in-north-carolina"><span class="toc-section-number">6.3</span> Length of gestation in North Carolina</a></li>
@@ -201,8 +182,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="one-sample-inference.html#diameters-of-trees-1"><span class="toc-section-number">6.11</span> Diameters of trees</a></li>
 <li><a href="one-sample-inference.html#one-sample-cholesterol-1"><span class="toc-section-number">6.12</span> One-sample cholesterol</a></li>
 </ul></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a>
-<ul>
+<li class="has-sub"><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a><ul>
 <li><a href="two-sample-inference.html#children-and-electronic-devices"><span class="toc-section-number">7.1</span> Children and electronic devices</a></li>
 <li><a href="two-sample-inference.html#parking-close-to-the-curb"><span class="toc-section-number">7.2</span> Parking close to the curb</a></li>
 <li><a href="two-sample-inference.html#bell-peppers-and-too-much-water"><span class="toc-section-number">7.3</span> Bell peppers and too much water</a></li>
@@ -218,8 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#handspans-of-males-and-females-1"><span class="toc-section-number">7.13</span> Handspans of males and females</a></li>
 <li><a href="two-sample-inference.html#the-anchoring-effect-australia-vs-us-1"><span class="toc-section-number">7.14</span> The anchoring effect: Australia vs US</a></li>
 </ul></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a>
-<ul>
+<li class="has-sub"><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a><ul>
 <li><a href="power-and-sample-size.html#simulating-power"><span class="toc-section-number">8.1</span> Simulating power</a></li>
 <li><a href="power-and-sample-size.html#calculating-power-and-sample-size-for-estimating-mean"><span class="toc-section-number">8.2</span> Calculating power and sample size for estimating mean</a></li>
 <li><a href="power-and-sample-size.html#simulating-power-for-proportions"><span class="toc-section-number">8.3</span> Simulating power for proportions</a></li>
@@ -231,8 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="power-and-sample-size.html#designing-a-study-to-have-enough-power-1"><span class="toc-section-number">8.9</span> Designing a study to have enough power</a></li>
 <li><a href="power-and-sample-size.html#power-and-alpha-in-a-skewed-population-1"><span class="toc-section-number">8.10</span> Power and <span class="math inline">\(\alpha\)</span> in a skewed population</a></li>
 </ul></li>
-<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a>
-<ul>
+<li class="has-sub"><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a><ul>
 <li><a href="the-sign-test.html#running-a-maze"><span class="toc-section-number">9.1</span> Running a maze</a></li>
 <li><a href="the-sign-test.html#chocolate-chips"><span class="toc-section-number">9.2</span> Chocolate chips</a></li>
 <li><a href="the-sign-test.html#the-power-of-the-sign-test"><span class="toc-section-number">9.3</span> The power of the sign test</a></li>
@@ -242,8 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a>
-<ul>
+<li class="has-sub"><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a><ul>
 <li><a href="moods-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="moods-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="moods-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -253,8 +230,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="moods-median-test.html#medical-instructions-1"><span class="toc-section-number">10.7</span> Medical instructions</a></li>
 <li><a href="moods-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a>
-<ul>
+<li class="has-sub"><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a><ul>
 <li><a href="matched-pairs-t-and-sign-test.html#measuring-body-fat"><span class="toc-section-number">11.1</span> Measuring body fat</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs"><span class="toc-section-number">11.2</span> Throwing baseballs and softballs</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#throwing-baseballs-and-softballs-again"><span class="toc-section-number">11.3</span> Throwing baseballs and softballs, again</a></li>
@@ -270,366 +246,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="matched-pairs-t-and-sign-test.html#the-dentist-and-blood-pressure-1"><span class="toc-section-number">11.13</span> The dentist and blood pressure</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#french-teachers-1"><span class="toc-section-number">11.14</span> French teachers</a></li>
 </ul></li>
-<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
-<ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
-</ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a>
-<ul>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths"><span class="toc-section-number">13.1</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat"><span class="toc-section-number">13.2</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again"><span class="toc-section-number">13.3</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon"><span class="toc-section-number">13.4</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test"><span class="toc-section-number">13.5</span> Can caffeine improve your performance on a test?</a></li>
-<li><a href="analysis-of-variance.html#reggae-music"><span class="toc-section-number">13.6</span> Reggae music</a></li>
-<li><a href="analysis-of-variance.html#watching-tv-and-education"><span class="toc-section-number">13.7</span> Watching TV and education</a></li>
-<li><a href="analysis-of-variance.html#death-of-poets"><span class="toc-section-number">13.8</span> Death of poets</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-and-lengths-1"><span class="toc-section-number">13.9</span> Movie ratings and lengths</a></li>
-<li><a href="analysis-of-variance.html#deer-and-how-much-they-eat-1"><span class="toc-section-number">13.10</span> Deer and how much they eat</a></li>
-<li><a href="analysis-of-variance.html#movie-ratings-again-1"><span class="toc-section-number">13.11</span> Movie ratings again</a></li>
-<li><a href="analysis-of-variance.html#atomic-weight-of-carbon-1"><span class="toc-section-number">13.12</span> Atomic weight of carbon</a></li>
-<li><a href="analysis-of-variance.html#can-caffeine-improve-your-performance-on-a-test-1"><span class="toc-section-number">13.13</span> Can caffeine improve your performance on a test?</a></li>
-<li><a href="analysis-of-variance.html#reggae-music-1"><span class="toc-section-number">13.14</span> Reggae music</a></li>
-<li><a href="analysis-of-variance.html#watching-tv-and-education-1"><span class="toc-section-number">13.15</span> Watching TV and education</a></li>
-<li><a href="analysis-of-variance.html#death-of-poets-1"><span class="toc-section-number">13.16</span> Death of poets</a></li>
-</ul></li>
-<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a>
-<ul>
-<li><a href="writing-reports.html#atomic-weight-of-carbon-2"><span class="toc-section-number">14.1</span> Atomic weight of carbon</a></li>
-<li><a href="writing-reports.html#sparrowhawks"><span class="toc-section-number">14.2</span> Sparrowhawks</a></li>
-<li><a href="writing-reports.html#learning-to-code"><span class="toc-section-number">14.3</span> Learning to code</a></li>
-<li><a href="writing-reports.html#atomic-weight-of-carbon-3"><span class="toc-section-number">14.4</span> Atomic weight of carbon</a></li>
-<li><a href="writing-reports.html#sparrowhawks-1"><span class="toc-section-number">14.5</span> Sparrowhawks</a></li>
-<li><a href="writing-reports.html#learning-to-code-1"><span class="toc-section-number">14.6</span> Learning to code</a></li>
-<li><a href="writing-reports.html#introduction-1"><span class="toc-section-number">14.7</span> Introduction</a></li>
-<li><a href="writing-reports.html#data-and-pre-processing"><span class="toc-section-number">14.8</span> Data and pre-processing</a></li>
-<li><a href="writing-reports.html#analysis"><span class="toc-section-number">14.9</span> Analysis</a></li>
-<li><a href="writing-reports.html#conclusions-see-note-9"><span class="toc-section-number">14.10</span> Conclusions (see note 9)</a></li>
-</ul></li>
-<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a>
-<ul>
-<li><a href="tidying-data.html#baseball-and-softball-spaghetti"><span class="toc-section-number">15.1</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats"><span class="toc-section-number">15.2</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-data.html#growth-of-tomatoes"><span class="toc-section-number">15.3</span> Growth of tomatoes</a></li>
-<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again"><span class="toc-section-number">15.4</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-data.html#location-species-and-disease-in-plants"><span class="toc-section-number">15.5</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-data.html#mating-songs-in-crickets"><span class="toc-section-number">15.6</span> Mating songs in crickets</a></li>
-<li><a href="tidying-data.html#number-1-songs"><span class="toc-section-number">15.7</span> Number 1 songs</a></li>
-<li><a href="tidying-data.html#bikes-on-college"><span class="toc-section-number">15.8</span> Bikes on College</a></li>
-<li><a href="tidying-data.html#feeling-the-heat"><span class="toc-section-number">15.9</span> Feeling the heat</a></li>
-<li><a href="tidying-data.html#isoflavones"><span class="toc-section-number">15.10</span> Isoflavones</a></li>
-<li><a href="tidying-data.html#jockos-garage"><span class="toc-section-number">15.11</span> Jocko’s Garage</a></li>
-<li><a href="tidying-data.html#tidying-electricity-consumption"><span class="toc-section-number">15.12</span> Tidying electricity consumption</a></li>
-<li><a href="tidying-data.html#baseball-and-softball-spaghetti-1"><span class="toc-section-number">15.13</span> Baseball and softball spaghetti</a></li>
-<li><a href="tidying-data.html#ethanol-and-sleep-time-in-rats-1"><span class="toc-section-number">15.14</span> Ethanol and sleep time in rats</a></li>
-<li><a href="tidying-data.html#growth-of-tomatoes-1"><span class="toc-section-number">15.15</span> Growth of tomatoes</a></li>
-<li><a href="tidying-data.html#pain-relief-in-migraine-headaches-again-1"><span class="toc-section-number">15.16</span> Pain relief in migraine headaches (again)</a></li>
-<li><a href="tidying-data.html#location-species-and-disease-in-plants-1"><span class="toc-section-number">15.17</span> Location, species and disease in plants</a></li>
-<li><a href="tidying-data.html#mating-songs-in-crickets-1"><span class="toc-section-number">15.18</span> Mating songs in crickets</a></li>
-<li><a href="tidying-data.html#number-1-songs-1"><span class="toc-section-number">15.19</span> Number 1 songs</a></li>
-<li><a href="tidying-data.html#bikes-on-college-1"><span class="toc-section-number">15.20</span> Bikes on College</a></li>
-<li><a href="tidying-data.html#feeling-the-heat-1"><span class="toc-section-number">15.21</span> Feeling the heat</a></li>
-<li><a href="tidying-data.html#isoflavones-1"><span class="toc-section-number">15.22</span> Isoflavones</a></li>
-<li><a href="tidying-data.html#jockos-garage-1"><span class="toc-section-number">15.23</span> Jocko’s Garage</a></li>
-<li><a href="tidying-data.html#tidying-electricity-consumption-1"><span class="toc-section-number">15.24</span> Tidying electricity consumption</a></li>
-</ul></li>
-<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a>
-<ul>
-<li><a href="simple-regression.html#rainfall-in-california"><span class="toc-section-number">16.1</span> Rainfall in California</a></li>
-<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes"><span class="toc-section-number">16.2</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys"><span class="toc-section-number">16.3</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="simple-regression.html#facebook-friends-and-grey-matter"><span class="toc-section-number">16.4</span> Facebook friends and grey matter</a></li>
-<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp"><span class="toc-section-number">16.5</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="simple-regression.html#salaries-of-social-workers"><span class="toc-section-number">16.6</span> Salaries of social workers</a></li>
-<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees"><span class="toc-section-number">16.7</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="simple-regression.html#tortoise-shells-and-eggs"><span class="toc-section-number">16.8</span> Tortoise shells and eggs</a></li>
-<li><a href="simple-regression.html#roller-coasters"><span class="toc-section-number">16.9</span> Roller coasters</a></li>
-<li><a href="simple-regression.html#running-and-blood-sugar"><span class="toc-section-number">16.10</span> Running and blood sugar</a></li>
-<li><a href="simple-regression.html#calories-and-fat-in-pizza"><span class="toc-section-number">16.11</span> Calories and fat in pizza</a></li>
-<li><a href="simple-regression.html#where-should-the-fire-stations-be"><span class="toc-section-number">16.12</span> Where should the fire stations be?</a></li>
-<li><a href="simple-regression.html#making-it-stop"><span class="toc-section-number">16.13</span> Making it stop</a></li>
-<li><a href="simple-regression.html#rainfall-in-california-1"><span class="toc-section-number">16.14</span> Rainfall in California</a></li>
-<li><a href="simple-regression.html#carbon-monoxide-in-cigarettes-1"><span class="toc-section-number">16.15</span> Carbon monoxide in cigarettes</a></li>
-<li><a href="simple-regression.html#maximal-oxygen-uptake-in-young-boys-1"><span class="toc-section-number">16.16</span> Maximal oxygen uptake in young boys</a></li>
-<li><a href="simple-regression.html#facebook-friends-and-grey-matter-1"><span class="toc-section-number">16.17</span> Facebook friends and grey matter</a></li>
-<li><a href="simple-regression.html#endogenous-nitrogen-excretion-in-carp-1"><span class="toc-section-number">16.18</span> Endogenous nitrogen excretion in carp</a></li>
-<li><a href="simple-regression.html#salaries-of-social-workers-1"><span class="toc-section-number">16.19</span> Salaries of social workers</a></li>
-<li><a href="simple-regression.html#predicting-volume-of-wood-in-pine-trees-1"><span class="toc-section-number">16.20</span> Predicting volume of wood in pine trees</a></li>
-<li><a href="simple-regression.html#tortoise-shells-and-eggs-1"><span class="toc-section-number">16.21</span> Tortoise shells and eggs</a></li>
-<li><a href="simple-regression.html#roller-coasters-1"><span class="toc-section-number">16.22</span> Roller coasters</a></li>
-<li><a href="simple-regression.html#running-and-blood-sugar-1"><span class="toc-section-number">16.23</span> Running and blood sugar</a></li>
-<li><a href="simple-regression.html#calories-and-fat-in-pizza-1"><span class="toc-section-number">16.24</span> Calories and fat in pizza</a></li>
-<li><a href="simple-regression.html#where-should-the-fire-stations-be-1"><span class="toc-section-number">16.25</span> Where should the fire stations be?</a></li>
-<li><a href="simple-regression.html#making-it-stop-1"><span class="toc-section-number">16.26</span> Making it stop</a></li>
-</ul></li>
-<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a>
-<ul>
-<li><a href="multiple-regression.html#being-satisfied-with-hospital"><span class="toc-section-number">17.1</span> Being satisfied with hospital</a></li>
-<li><a href="multiple-regression.html#handling-shipments-of-chemicals"><span class="toc-section-number">17.2</span> Handling shipments of chemicals</a></li>
-<li><a href="multiple-regression.html#salaries-of-mathematicians"><span class="toc-section-number">17.3</span> Salaries of mathematicians</a></li>
-<li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students"><span class="toc-section-number">17.4</span> Predicting GPA of computer science students</a></li>
-<li><a href="multiple-regression.html#being-satisfied-with-hospital-1"><span class="toc-section-number">17.5</span> Being satisfied with hospital</a></li>
-<li><a href="multiple-regression.html#handling-shipments-of-chemicals-1"><span class="toc-section-number">17.6</span> Handling shipments of chemicals</a></li>
-<li><a href="multiple-regression.html#salaries-of-mathematicians-1"><span class="toc-section-number">17.7</span> Salaries of mathematicians</a></li>
-<li><a href="multiple-regression.html#predicting-gpa-of-computer-science-students-1"><span class="toc-section-number">17.8</span> Predicting GPA of computer science students</a></li>
-</ul></li>
-<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
-<ul>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
-</ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a>
-<ul>
-<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds"><span class="toc-section-number">19.1</span> Growth of Mizuna lettuce seeds</a></li>
-<li><a href="dates-and-times.html#types-of-childbirth"><span class="toc-section-number">19.2</span> Types of childbirth</a></li>
-<li><a href="dates-and-times.html#wolves-and-caribou"><span class="toc-section-number">19.3</span> Wolves and caribou</a></li>
-<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study"><span class="toc-section-number">19.4</span> Dealing with dates in the Worcester Heart Attack study</a></li>
-<li><a href="dates-and-times.html#growth-of-mizuna-lettuce-seeds-1"><span class="toc-section-number">19.5</span> Growth of Mizuna lettuce seeds</a></li>
-<li><a href="dates-and-times.html#types-of-childbirth-1"><span class="toc-section-number">19.6</span> Types of childbirth</a></li>
-<li><a href="dates-and-times.html#wolves-and-caribou-1"><span class="toc-section-number">19.7</span> Wolves and caribou</a></li>
-<li><a href="dates-and-times.html#dealing-with-dates-in-the-worcester-heart-attack-study-1"><span class="toc-section-number">19.8</span> Dealing with dates in the Worcester Heart Attack study</a></li>
-</ul></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a>
-<ul>
-<li><a href="functions.html#making-some-r-functions"><span class="toc-section-number">20.1</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence"><span class="toc-section-number">20.2</span> The Collatz sequence</a></li>
-<li><a href="functions.html#coefficient-of-variationf"><span class="toc-section-number">20.3</span> Coefficient of VariationF</a></li>
-<li><a href="functions.html#making-some-r-functions-1"><span class="toc-section-number">20.4</span> Making some R functions</a></li>
-<li><a href="functions.html#the-collatz-sequence-1"><span class="toc-section-number">20.5</span> The Collatz sequence</a></li>
-<li><a href="functions.html#coefficient-of-variationf-1"><span class="toc-section-number">20.6</span> Coefficient of VariationF</a></li>
-</ul></li>
-<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
-<ul>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
-</ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a>
-<ul>
-<li><a href="the-bootstrap.html#air-conditioning-failures"><span class="toc-section-number">22.1</span> Air conditioning failures</a></li>
-<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median"><span class="toc-section-number">22.2</span> Air conditioning failures: bootstrapping the median</a></li>
-<li><a href="the-bootstrap.html#comparing-eyesight"><span class="toc-section-number">22.3</span> Comparing eyesight</a></li>
-<li><a href="the-bootstrap.html#bootstrapping-the-irs-data"><span class="toc-section-number">22.4</span> Bootstrapping the IRS data</a></li>
-<li><a href="the-bootstrap.html#air-conditioning-failures-1"><span class="toc-section-number">22.5</span> Air conditioning failures</a></li>
-<li><a href="the-bootstrap.html#air-conditioning-failures-bootstrapping-the-median-1"><span class="toc-section-number">22.6</span> Air conditioning failures: bootstrapping the median</a></li>
-<li><a href="the-bootstrap.html#comparing-eyesight-1"><span class="toc-section-number">22.7</span> Comparing eyesight</a></li>
-<li><a href="the-bootstrap.html#bootstrapping-the-irs-data-1"><span class="toc-section-number">22.8</span> Bootstrapping the IRS data</a></li>
-</ul></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a>
-<ul>
-<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey"><span class="toc-section-number">23.1</span> Estimating proportion in favour from a survey</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-regression"><span class="toc-section-number">23.2</span> Bayesian regression</a></li>
-<li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way"><span class="toc-section-number">23.3</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
-<li><a href="bayesian-statistics-with-stan.html#estimating-proportion-in-favour-from-a-survey-1"><span class="toc-section-number">23.4</span> Estimating proportion in favour from a survey</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-regression-1"><span class="toc-section-number">23.5</span> Bayesian regression</a></li>
-<li><a href="bayesian-statistics-with-stan.html#estimating-p-the-bayesian-way-1"><span class="toc-section-number">23.6</span> Estimating <span class="math inline">\(p\)</span> the Bayesian way</a></li>
-</ul></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a>
-<ul>
-<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach"><span class="toc-section-number">24.1</span> Finding wolf spiders on the beach</a></li>
-<li><a href="logistic-regression.html#killing-aphids"><span class="toc-section-number">24.2</span> Killing aphids</a></li>
-<li><a href="logistic-regression.html#the-effects-of-substance-a"><span class="toc-section-number">24.3</span> The effects of Substance A</a></li>
-<li><a href="logistic-regression.html#what-makes-an-animal-get-infected"><span class="toc-section-number">24.4</span> What makes an animal get infected?</a></li>
-<li><a href="logistic-regression.html#the-brain-of-a-cat"><span class="toc-section-number">24.5</span> The brain of a cat</a></li>
-<li><a href="logistic-regression.html#how-not-to-get-heart-disease"><span class="toc-section-number">24.6</span> How not to get heart disease</a></li>
-<li><a href="logistic-regression.html#successful-breastfeeding"><span class="toc-section-number">24.7</span> Successful breastfeeding</a></li>
-<li><a href="logistic-regression.html#making-it-over-the-mountains"><span class="toc-section-number">24.8</span> Making it over the mountains</a></li>
-<li><a href="logistic-regression.html#who-needs-the-most-intensive-care"><span class="toc-section-number">24.9</span> Who needs the most intensive care?</a></li>
-<li><a href="logistic-regression.html#go-away-and-dont-come-back"><span class="toc-section-number">24.10</span> Go away and don’t come back!</a></li>
-<li><a href="logistic-regression.html#finding-wolf-spiders-on-the-beach-1"><span class="toc-section-number">24.11</span> Finding wolf spiders on the beach</a></li>
-<li><a href="logistic-regression.html#killing-aphids-1"><span class="toc-section-number">24.12</span> Killing aphids</a></li>
-<li><a href="logistic-regression.html#the-effects-of-substance-a-1"><span class="toc-section-number">24.13</span> The effects of Substance A</a></li>
-<li><a href="logistic-regression.html#what-makes-an-animal-get-infected-1"><span class="toc-section-number">24.14</span> What makes an animal get infected?</a></li>
-<li><a href="logistic-regression.html#the-brain-of-a-cat-1"><span class="toc-section-number">24.15</span> The brain of a cat</a></li>
-<li><a href="logistic-regression.html#how-not-to-get-heart-disease-1"><span class="toc-section-number">24.16</span> How not to get heart disease</a></li>
-<li><a href="logistic-regression.html#successful-breastfeeding-1"><span class="toc-section-number">24.17</span> Successful breastfeeding</a></li>
-<li><a href="logistic-regression.html#making-it-over-the-mountains-1"><span class="toc-section-number">24.18</span> Making it over the mountains</a></li>
-<li><a href="logistic-regression.html#who-needs-the-most-intensive-care-1"><span class="toc-section-number">24.19</span> Who needs the most intensive care?</a></li>
-<li><a href="logistic-regression.html#go-away-and-dont-come-back-1"><span class="toc-section-number">24.20</span> Go away and don’t come back!</a></li>
-</ul></li>
-<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a>
-<ul>
-<li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone"><span class="toc-section-number">25.1</span> Do you like your mobile phone?</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values"><span class="toc-section-number">25.2</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond"><span class="toc-section-number">25.3</span> High School and Beyond</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak"><span class="toc-section-number">25.4</span> How do you like your steak?</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data"><span class="toc-section-number">25.5</span> How do you like your steak – the data</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#do-you-like-your-mobile-phone-1"><span class="toc-section-number">25.6</span> Do you like your mobile phone?</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#finding-non-missing-values-1"><span class="toc-section-number">25.7</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#high-school-and-beyond-1"><span class="toc-section-number">25.8</span> High School and Beyond</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-1"><span class="toc-section-number">25.9</span> How do you like your steak?</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#how-do-you-like-your-steak-the-data-1"><span class="toc-section-number">25.10</span> How do you like your steak – the data</a></li>
-</ul></li>
-<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a>
-<ul>
-<li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-2"><span class="toc-section-number">26.1</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting"><span class="toc-section-number">26.2</span> European Social Survey and voting</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#alligator-food"><span class="toc-section-number">26.3</span> Alligator food</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco"><span class="toc-section-number">26.4</span> Crimes in San Francisco</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data"><span class="toc-section-number">26.5</span> Crimes in San Francisco – the data</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play"><span class="toc-section-number">26.6</span> What sports do these athletes play?</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#finding-non-missing-values-3"><span class="toc-section-number">26.7</span> Finding non-missing values</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#european-social-survey-and-voting-1"><span class="toc-section-number">26.8</span> European Social Survey and voting</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#alligator-food-1"><span class="toc-section-number">26.9</span> Alligator food</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-1"><span class="toc-section-number">26.10</span> Crimes in San Francisco</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#crimes-in-san-francisco-the-data-1"><span class="toc-section-number">26.11</span> Crimes in San Francisco – the data</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#what-sports-do-these-athletes-play-1"><span class="toc-section-number">26.12</span> What sports do these athletes play?</a></li>
-</ul></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a>
-<ul>
-<li><a href="survival-analysis.html#the-worcester-survey"><span class="toc-section-number">27.1</span> The Worcester survey</a></li>
-<li><a href="survival-analysis.html#drug-treatment-programs"><span class="toc-section-number">27.2</span> Drug treatment programs</a></li>
-<li><a href="survival-analysis.html#multiple-myeloma"><span class="toc-section-number">27.3</span> Multiple myeloma</a></li>
-<li><a href="survival-analysis.html#ovarian-cancer"><span class="toc-section-number">27.4</span> Ovarian cancer</a></li>
-<li><a href="survival-analysis.html#the-worcester-survey-1"><span class="toc-section-number">27.5</span> The Worcester survey</a></li>
-<li><a href="survival-analysis.html#drug-treatment-programs-1"><span class="toc-section-number">27.6</span> Drug treatment programs</a></li>
-<li><a href="survival-analysis.html#multiple-myeloma-1"><span class="toc-section-number">27.7</span> Multiple myeloma</a></li>
-<li><a href="survival-analysis.html#ovarian-cancer-1"><span class="toc-section-number">27.8</span> Ovarian cancer</a></li>
-</ul></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a>
-<ul>
-<li><a href="analysis-of-variance-revisited.html#acid-rain"><span class="toc-section-number">28.1</span> Acid rain</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-hay-fever"><span class="toc-section-number">28.2</span> Treating hay fever</a></li>
-<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine"><span class="toc-section-number">28.3</span> Focused comparisons of the effect of caffeine</a></li>
-<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class"><span class="toc-section-number">28.4</span> Who studies the most outside class?</a></li>
-<li><a href="analysis-of-variance-revisited.html#mental-context"><span class="toc-section-number">28.5</span> Mental context</a></li>
-<li><a href="analysis-of-variance-revisited.html#trying-on-shirts"><span class="toc-section-number">28.6</span> Trying on shirts</a></li>
-<li><a href="analysis-of-variance-revisited.html#acid-rain-1"><span class="toc-section-number">28.7</span> Acid rain</a></li>
-<li><a href="analysis-of-variance-revisited.html#treating-hay-fever-1"><span class="toc-section-number">28.8</span> Treating hay fever</a></li>
-<li><a href="analysis-of-variance-revisited.html#focused-comparisons-of-the-effect-of-caffeine-1"><span class="toc-section-number">28.9</span> Focused comparisons of the effect of caffeine</a></li>
-<li><a href="analysis-of-variance-revisited.html#who-studies-the-most-outside-class-1"><span class="toc-section-number">28.10</span> Who studies the most outside class?</a></li>
-<li><a href="analysis-of-variance-revisited.html#mental-context-1"><span class="toc-section-number">28.11</span> Mental context</a></li>
-<li><a href="analysis-of-variance-revisited.html#trying-on-shirts-1"><span class="toc-section-number">28.12</span> Trying on shirts</a></li>
-</ul></li>
-<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a>
-<ul>
-<li><a href="analysis-of-covariance.html#productivity-and-research-and-development"><span class="toc-section-number">29.1</span> Productivity and research-and-development</a></li>
-<li><a href="analysis-of-covariance.html#treating-leprosy"><span class="toc-section-number">29.2</span> Treating leprosy</a></li>
-<li><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><span class="toc-section-number">29.3</span> Productivity and research-and-development</a></li>
-<li><a href="analysis-of-covariance.html#treating-leprosy-1"><span class="toc-section-number">29.4</span> Treating leprosy</a></li>
-</ul></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a>
-<ul>
-<li><a href="multivariate-analysis-of-variance.html#fabricated-data"><span class="toc-section-number">30.1</span> Fabricated data</a></li>
-<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><span class="toc-section-number">30.2</span> Do characteristics of urine depend on obesity?</a></li>
-<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><span class="toc-section-number">30.3</span> How do height and weight depend on sport played by elite athletes?</a></li>
-<li><a href="multivariate-analysis-of-variance.html#fabricated-data-1"><span class="toc-section-number">30.4</span> Fabricated data</a></li>
-<li><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1"><span class="toc-section-number">30.5</span> Do characteristics of urine depend on obesity?</a></li>
-<li><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1"><span class="toc-section-number">30.6</span> How do height and weight depend on sport played by elite athletes?</a></li>
-</ul></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a>
-<ul>
-<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight"><span class="toc-section-number">31.1</span> Effect of drug on rat weight</a></li>
-<li><a href="repeated-measures.html#social-interaction-among-old-people"><span class="toc-section-number">31.2</span> Social interaction among old people</a></li>
-<li><a href="repeated-measures.html#childrens-stress-levels-and-airports"><span class="toc-section-number">31.3</span> Children’s stress levels and airports</a></li>
-<li><a href="repeated-measures.html#body-fat-as-repeated-measures"><span class="toc-section-number">31.4</span> Body fat as repeated measures</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats"><span class="toc-section-number">31.5</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background"><span class="toc-section-number">31.6</span> Repeated measures with no background</a></li>
-<li><a href="repeated-measures.html#effect-of-drug-on-rat-weight-1"><span class="toc-section-number">31.7</span> Effect of drug on rat weight</a></li>
-<li><a href="repeated-measures.html#social-interaction-among-old-people-1"><span class="toc-section-number">31.8</span> Social interaction among old people</a></li>
-<li><a href="repeated-measures.html#childrens-stress-levels-and-airports-1"><span class="toc-section-number">31.9</span> Children’s stress levels and airports</a></li>
-<li><a href="repeated-measures.html#body-fat-as-repeated-measures-1"><span class="toc-section-number">31.10</span> Body fat as repeated measures</a></li>
-<li><a href="repeated-measures.html#investigating-motor-activity-in-rats-1"><span class="toc-section-number">31.11</span> Investigating motor activity in rats</a></li>
-<li><a href="repeated-measures.html#repeated-measures-with-no-background-1"><span class="toc-section-number">31.12</span> Repeated measures with no background</a></li>
-</ul></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a>
-<ul>
-<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit"><span class="toc-section-number">32.1</span> Telling whether a banknote is real or counterfeit</a></li>
-<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference"><span class="toc-section-number">32.2</span> Urine and obesity: what makes a difference?</a></li>
-<li><a href="discriminant-analysis.html#understanding-a-manova"><span class="toc-section-number">32.3</span> Understanding a MANOVA</a></li>
-<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs"><span class="toc-section-number">32.4</span> What distinguishes people who do different jobs?</a></li>
-<li><a href="discriminant-analysis.html#observing-children-with-adhd"><span class="toc-section-number">32.5</span> Observing children with ADHD</a></li>
-<li><a href="discriminant-analysis.html#growing-corn"><span class="toc-section-number">32.6</span> Growing corn</a></li>
-<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender"><span class="toc-section-number">32.7</span> Understanding athletes’ height, weight, sport and gender</a></li>
-<li><a href="discriminant-analysis.html#telling-whether-a-banknote-is-real-or-counterfeit-1"><span class="toc-section-number">32.8</span> Telling whether a banknote is real or counterfeit</a></li>
-<li><a href="discriminant-analysis.html#urine-and-obesity-what-makes-a-difference-1"><span class="toc-section-number">32.9</span> Urine and obesity: what makes a difference?</a></li>
-<li><a href="discriminant-analysis.html#understanding-a-manova-1"><span class="toc-section-number">32.10</span> Understanding a MANOVA</a></li>
-<li><a href="discriminant-analysis.html#what-distinguishes-people-who-do-different-jobs-1"><span class="toc-section-number">32.11</span> What distinguishes people who do different jobs?</a></li>
-<li><a href="discriminant-analysis.html#observing-children-with-adhd-1"><span class="toc-section-number">32.12</span> Observing children with ADHD</a></li>
-<li><a href="discriminant-analysis.html#growing-corn-1"><span class="toc-section-number">32.13</span> Growing corn</a></li>
-<li><a href="discriminant-analysis.html#understanding-athletes-height-weight-sport-and-gender-1"><span class="toc-section-number">32.14</span> Understanding athletes’ height, weight, sport and gender</a></li>
-</ul></li>
-<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a>
-<ul>
-<li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed"><span class="toc-section-number">33.1</span> Sites on the sea bed</a></li>
-<li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits"><span class="toc-section-number">33.2</span> Dissimilarities between fruits</a></li>
-<li><a href="hierarchical-cluster-analysis.html#similarity-of-species"><span class="toc-section-number">33.3</span> Similarity of species</a></li>
-<li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh"><span class="toc-section-number">33.4</span> Bridges in Pittsburgh</a></li>
-<li><a href="hierarchical-cluster-analysis.html#sites-on-the-sea-bed-1"><span class="toc-section-number">33.5</span> Sites on the sea bed</a></li>
-<li><a href="hierarchical-cluster-analysis.html#dissimilarities-between-fruits-1"><span class="toc-section-number">33.6</span> Dissimilarities between fruits</a></li>
-<li><a href="hierarchical-cluster-analysis.html#similarity-of-species-1"><span class="toc-section-number">33.7</span> Similarity of species</a></li>
-<li><a href="hierarchical-cluster-analysis.html#bridges-in-pittsburgh-1"><span class="toc-section-number">33.8</span> Bridges in Pittsburgh</a></li>
-</ul></li>
-<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a>
-<ul>
-<li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes"><span class="toc-section-number">34.1</span> Clustering the Australian athletes</a></li>
-<li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing"><span class="toc-section-number">34.2</span> Running, jumping, and throwing</a></li>
-<li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills"><span class="toc-section-number">34.3</span> Clustering the Swiss bills</a></li>
-<li><a href="k-means-cluster-analysis.html#grouping-similar-cars"><span class="toc-section-number">34.4</span> Grouping similar cars</a></li>
-<li><a href="k-means-cluster-analysis.html#rating-beer"><span class="toc-section-number">34.5</span> Rating beer</a></li>
-<li><a href="k-means-cluster-analysis.html#clustering-the-australian-athletes-1"><span class="toc-section-number">34.6</span> Clustering the Australian athletes</a></li>
-<li><a href="k-means-cluster-analysis.html#running-jumping-and-throwing-1"><span class="toc-section-number">34.7</span> Running, jumping, and throwing</a></li>
-<li><a href="k-means-cluster-analysis.html#clustering-the-swiss-bills-1"><span class="toc-section-number">34.8</span> Clustering the Swiss bills</a></li>
-<li><a href="k-means-cluster-analysis.html#grouping-similar-cars-1"><span class="toc-section-number">34.9</span> Grouping similar cars</a></li>
-<li><a href="k-means-cluster-analysis.html#rating-beer-1"><span class="toc-section-number">34.10</span> Rating beer</a></li>
-</ul></li>
-<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a>
-<ul>
-<li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited"><span class="toc-section-number">35.1</span> The brain of a cat, revisited</a></li>
-<li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin"><span class="toc-section-number">35.2</span> Making a map of Wisconsin</a></li>
-<li><a href="drawing-maps-with-leaflet.html#the-cross-city-line"><span class="toc-section-number">35.3</span> The Cross-City Line</a></li>
-<li><a href="drawing-maps-with-leaflet.html#the-brain-of-a-cat-revisited-1"><span class="toc-section-number">35.4</span> The brain of a cat, revisited</a></li>
-<li><a href="drawing-maps-with-leaflet.html#making-a-map-of-wisconsin-1"><span class="toc-section-number">35.5</span> Making a map of Wisconsin</a></li>
-<li><a href="drawing-maps-with-leaflet.html#the-cross-city-line-1"><span class="toc-section-number">35.6</span> The Cross-City Line</a></li>
-</ul></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a>
-<ul>
-<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-2"><span class="toc-section-number">36.1</span> Making a map of Wisconsin</a></li>
-<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other"><span class="toc-section-number">36.2</span> Things that feel similar to each other</a></li>
-<li><a href="multidimensional-scaling.html#confusing-letters"><span class="toc-section-number">36.3</span> Confusing letters</a></li>
-<li><a href="multidimensional-scaling.html#more-beer-please"><span class="toc-section-number">36.4</span> More beer please</a></li>
-<li><a href="multidimensional-scaling.html#feeling-similar-again"><span class="toc-section-number">36.5</span> Feeling similar, again</a></li>
-<li><a href="multidimensional-scaling.html#making-a-map-of-wisconsin-3"><span class="toc-section-number">36.6</span> Making a map of Wisconsin</a></li>
-<li><a href="multidimensional-scaling.html#things-that-feel-similar-to-each-other-1"><span class="toc-section-number">36.7</span> Things that feel similar to each other</a></li>
-<li><a href="multidimensional-scaling.html#confusing-letters-1"><span class="toc-section-number">36.8</span> Confusing letters</a></li>
-<li><a href="multidimensional-scaling.html#more-beer-please-1"><span class="toc-section-number">36.9</span> More beer please</a></li>
-<li><a href="multidimensional-scaling.html#feeling-similar-again-1"><span class="toc-section-number">36.10</span> Feeling similar, again</a></li>
-</ul></li>
-<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
-<ul>
-<li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
-</ul></li>
-<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a>
-<ul>
-<li><a href="factor-analysis.html#the-interpersonal-circumplex"><span class="toc-section-number">38.1</span> The Interpersonal Circumplex</a></li>
-<li><a href="factor-analysis.html#a-correlation-matrix"><span class="toc-section-number">38.2</span> A correlation matrix</a></li>
-<li><a href="factor-analysis.html#air-pollution"><span class="toc-section-number">38.3</span> Air pollution</a></li>
-<li><a href="factor-analysis.html#the-interpersonal-circumplex-1"><span class="toc-section-number">38.4</span> The Interpersonal Circumplex</a></li>
-<li><a href="factor-analysis.html#a-correlation-matrix-1"><span class="toc-section-number">38.5</span> A correlation matrix</a></li>
-<li><a href="factor-analysis.html#air-pollution-1"><span class="toc-section-number">38.6</span> Air pollution</a></li>
-</ul></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a>
-<ul>
-<li><a href="frequency-table-analysis.html#college-plans"><span class="toc-section-number">39.1</span> College plans</a></li>
-<li><a href="frequency-table-analysis.html#predicting-voting"><span class="toc-section-number">39.2</span> Predicting voting</a></li>
-<li><a href="frequency-table-analysis.html#brand-m-laundry-detergent"><span class="toc-section-number">39.3</span> Brand M laundry detergent</a></li>
-<li><a href="frequency-table-analysis.html#college-plans-1"><span class="toc-section-number">39.4</span> College plans</a></li>
-<li><a href="frequency-table-analysis.html#predicting-voting-1"><span class="toc-section-number">39.5</span> Predicting voting</a></li>
-<li><a href="frequency-table-analysis.html#brand-m-laundry-detergent-1"><span class="toc-section-number">39.6</span> Brand M laundry detergent</a></li>
-</ul></li>
 </ul>
 </div>
 </div>
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="reading-in-data" class="section level1" number="2">
+<div id="reading-in-data" class="section level1">
 <h1><span class="header-section-number">Chapter 2</span> Reading in data</h1>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="reading-in-data.html#cb36-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
-<div id="orange-juice" class="section level2" number="2.1">
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div id="orange-juice" class="section level2">
 <h2><span class="header-section-number">2.1</span> Orange juice</h2>
 <p>The quality of orange juice produced by a manufacturer
 (identity unknown) is constantly being monitored. The manufacturer has
@@ -651,7 +277,7 @@ have data for all 24 runs?</p></li>
 come from? How did R know where to get them from?</p></li>
 </ol>
 </div>
-<div id="making-soap" class="section level2" number="2.2">
+<div id="making-soap" class="section level2">
 <h2><span class="header-section-number">2.2</span> Making soap</h2>
 <p>A company operates two production lines in a factory for
 making soap bars. The production lines are
@@ -666,7 +292,7 @@ can no longer be made into soap bars and will have to be thrown away).</p>
 rows. Are there? What columns are there?</p></li>
 </ol>
 </div>
-<div id="handling-shipments" class="section level2" number="2.3">
+<div id="handling-shipments" class="section level2">
 <h2><span class="header-section-number">2.3</span> Handling shipments</h2>
 <p>A company called Global Electronics from
 time to time imports shipments of a certain large part used as a
@@ -683,7 +309,7 @@ the <code>warehouse</code> (A or B) that handled each shipment.</p>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="orange-juice-1" class="section level2" number="2.4">
+<div id="orange-juice-1" class="section level2">
 <h2><span class="header-section-number">2.4</span> Orange juice</h2>
 <p>The quality of orange juice produced by a manufacturer
 (identity unknown) is constantly being monitored. The manufacturer has
@@ -702,16 +328,16 @@ into a “tibble”.</li>
 </ol>
 <p>Solution</p>
 <p>Start with this (almost always):</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="reading-in-data.html#cb37-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <p>The appropriate function, the data values being separated by a space,
 will be <code>read_delim</code>. Put the URL as the first thing in
 <code>read_delim</code>, or (better) define it into a variable
 first:
 <label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote">I say <em>better</em> because otherwise the read line gets rather long. This way you read it as <em>the URL is some long thing that I don’t care about especially, and I what I need to do is to read the data from that URL, separated by spaces.</em></span></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="reading-in-data.html#cb38-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ojuice.txt&quot;</span></span>
-<span id="cb38-2"><a href="reading-in-data.html#cb38-2"></a>juice &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ojuice.txt&quot;</span></a>
+<a class="sourceLine" id="cb41-2" title="2">juice &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   run = col_double(),
 ##   sweetness = col_double(),
@@ -738,7 +364,7 @@ a “tibble”, which is what <code>read_delim</code> reads in,
 you’ll only actually see the first 10 lines, but it will tell
 you how many lines there are altogether, and you can click on
 the appropriate thing to see the rest of it.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="reading-in-data.html#cb40-1"></a>juice</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">juice</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["run"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sweetness"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["pectin"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"5.2","3":"220"},{"1":"2","2":"5.5","3":"227"},{"1":"3","2":"6.0","3":"259"},{"1":"4","2":"5.9","3":"210"},{"1":"5","2":"5.8","3":"224"},{"1":"6","2":"6.0","3":"215"},{"1":"7","2":"5.8","3":"231"},{"1":"8","2":"5.6","3":"268"},{"1":"9","2":"5.6","3":"239"},{"1":"10","2":"5.9","3":"212"},{"1":"11","2":"5.4","3":"410"},{"1":"12","2":"5.6","3":"256"},{"1":"13","2":"5.8","3":"306"},{"1":"14","2":"5.5","3":"259"},{"1":"15","2":"5.3","3":"284"},{"1":"16","2":"5.3","3":"383"},{"1":"17","2":"5.7","3":"271"},{"1":"18","2":"5.5","3":"264"},{"1":"19","2":"5.7","3":"227"},{"1":"20","2":"5.3","3":"263"},{"1":"21","2":"5.9","3":"232"},{"1":"22","2":"5.8","3":"220"},{"1":"23","2":"5.8","3":"246"},{"1":"24","2":"5.9","3":"241"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -774,9 +400,9 @@ with file <code>a.txt</code> thus:</p>
 5 6</code></pre>
 <p>you could read the same data but call the columns <code>x</code> and
 <code>y</code> thus:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="reading-in-data.html#cb42-1"></a><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="dt">skip =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="dt">skip =</span> <span class="dv">1</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double()
@@ -788,7 +414,7 @@ with file <code>a.txt</code> thus:</p>
 </div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="making-soap-1" class="section level2" number="2.5">
+<div id="making-soap-1" class="section level2">
 <h2><span class="header-section-number">2.5</span> Making soap</h2>
 <p>A company operates two production lines in a factory for
 making soap bars. The production lines are
@@ -802,17 +428,17 @@ can no longer be made into soap bars and will have to be thrown away).</p>
 </ol>
 <p>Solution</p>
 <p>Read directly from the URL, most easily:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="reading-in-data.html#cb44-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/soap.txt&quot;</span></span>
-<span id="cb44-2"><a href="reading-in-data.html#cb44-2"></a>soap &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/soap.txt&quot;</span></a>
+<a class="sourceLine" id="cb47-2" title="2">soap &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   case = col_double(),
 ##   scrap = col_double(),
 ##   speed = col_double(),
 ##   line = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="reading-in-data.html#cb46-1"></a>soap</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">soap</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["case"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["scrap"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["speed"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["line"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"218","3":"100","4":"a"},{"1":"2","2":"248","3":"125","4":"a"},{"1":"3","2":"360","3":"220","4":"a"},{"1":"4","2":"351","3":"205","4":"a"},{"1":"5","2":"470","3":"300","4":"a"},{"1":"6","2":"394","3":"255","4":"a"},{"1":"7","2":"332","3":"225","4":"a"},{"1":"8","2":"321","3":"175","4":"a"},{"1":"9","2":"410","3":"270","4":"a"},{"1":"10","2":"260","3":"170","4":"a"},{"1":"11","2":"241","3":"155","4":"a"},{"1":"12","2":"331","3":"190","4":"a"},{"1":"13","2":"275","3":"140","4":"a"},{"1":"14","2":"425","3":"290","4":"a"},{"1":"15","2":"367","3":"265","4":"a"},{"1":"16","2":"140","3":"105","4":"b"},{"1":"17","2":"277","3":"215","4":"b"},{"1":"18","2":"384","3":"270","4":"b"},{"1":"19","2":"341","3":"255","4":"b"},{"1":"20","2":"215","3":"175","4":"b"},{"1":"21","2":"180","3":"135","4":"b"},{"1":"22","2":"260","3":"200","4":"b"},{"1":"23","2":"361","3":"275","4":"b"},{"1":"24","2":"252","3":"155","4":"b"},{"1":"25","2":"422","3":"320","4":"b"},{"1":"26","2":"273","3":"190","4":"b"},{"1":"27","2":"410","3":"295","4":"b"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -828,7 +454,7 @@ rows. Are there? What columns are there?</li>
 <p>This seems like an odd place to end this question, but later we’ll be using these data to draw some graphs.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="handling-shipments-1" class="section level2" number="2.6">
+<div id="handling-shipments-1" class="section level2">
 <h2><span class="header-section-number">2.6</span> Handling shipments</h2>
 <p>A company called Global Electronics from
 time to time imports shipments of a certain large part used as a
@@ -848,10 +474,10 @@ open as a spreadsheet, which is not really very helpful, since
 then it is not clear what to do with it. You could, I suppose,
 save it and upload it to R Studio Cloud, but it requires much less
 brainpower to open it directly from the URL:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="reading-in-data.html#cb47-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/global.csv&quot;</span></span>
-<span id="cb47-2"><a href="reading-in-data.html#cb47-2"></a>shipments &lt;-<span class="st"> </span><span class="kw">read_csv</span>(url)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/global.csv&quot;</span></a>
+<a class="sourceLine" id="cb50-2" title="2">shipments &lt;-<span class="st"> </span><span class="kw">read_csv</span>(url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   warehouse = col_character(),
 ##   size = col_double(),
@@ -859,7 +485,7 @@ brainpower to open it directly from the URL:</p>
 ## )</code></pre>
 <p>If you display your data frame and it looks like this, you are good
 (you can give the data frame any name):</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="reading-in-data.html#cb49-1"></a>shipments</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">shipments</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["warehouse"],"name":[1],"type":["chr"],"align":["left"]},{"label":["size"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cost"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"225","3":"11.95"},{"1":"B","2":"350","3":"14.13"},{"1":"A","2":"150","3":"8.93"},{"1":"A","2":"200","3":"10.98"},{"1":"A","2":"175","3":"10.03"},{"1":"A","2":"180","3":"10.13"},{"1":"B","2":"325","3":"13.75"},{"1":"B","2":"290","3":"13.30"},{"1":"B","2":"400","3":"15.00"},{"1":"A","2":"125","3":"7.97"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
