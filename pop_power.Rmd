@@ -52,7 +52,7 @@ ggplot(pop, aes(x=v)) + geom_histogram()
 but if you do this, you need to say something that indicates some conscious thought, such as saying "this number of bins gives a good picture of the shape of the distribution", which I am OK with. *Have a reason for doing what you do*.
 
 
-This is skewed to the right, or has a long right tail. This is a better description than "outliers": there are indeed some very large values (almost invisible on the histogram), but to say that is to imply that the rest of the distribution apart from the outliers has a regular shape, not something you can say here. `r tufte::margin_note("The question to ask yourself is whether the shape comes from the entire distribution, as it does here (skewness), or whether it comes from a few unusual observations (outliers).")`
+This is skewed to the right, or has a long right tail. This is a better description than "outliers": there are indeed some very large values (almost invisible on the histogram), but to say that is to imply that the rest of the distribution apart from the outliers has a regular shape, not something you can say here.^[The question to ask yourself is whether the shape comes from the entire distribution, as it does here (skewness), or whether it comes from a few unusual observations (outliers).]
 
 Extra: The issue that's coming up is whether this is normally-distributed, which of course it is not. This is a normal quantile plot. (Idea: if the points follow the line, at least approximately, the variable is normally distributed; if not, not.):
 
@@ -117,7 +117,7 @@ The power is now much bigger, around 73%. This is as expected because with a lar
 
 The reason for this is that the mean of a bigger sample should be closer to the population mean, because of the Law of Large Numbers, and thus further away from the incorrect null hypothesis and more likely far enough away to reject it. In this case, as you will see shortly, the population mean is 5, and so, with a bigger sample, the sample mean will almost certainly be closer to 5 and further away from 4.
 
-I have a feeling you could formalize this kind of argument with Chebyshev's inequality, which would apply to any kind of population. `r tufte::margin_note("It has to have a standard deviation, though, which rules out Cauchy, but our population seems well-enough behaved to have a standard deviation.")` I think I'd have to write it down to get it right, though.
+I have a feeling you could formalize this kind of argument with Chebyshev's inequality, which would apply to any kind of population.^[It has to have a standard deviation, though, but our population seems well-enough behaved to have a standard deviation.] I think I'd have to write it down to get it right, though.
 
 
 $\blacksquare$
@@ -180,7 +180,7 @@ ggplot(mean_sd, aes(x=xbar, y=s)) + geom_point() + geom_smooth(se=F)
 
 *When the sample mean is bigger, so is the sample standard deviation!*
 
-This actually does make sense, if you stop to think about it. A sample with a large mean will have some of those values from the long right tail in it, and having those values will also make the sample more spread out. The same does not happen at the low end: if the mean is small, all the sample values must be close together and the SD will be small also. `r tufte::margin_note("You might have something lurking in your mind about the sample mean and sample SD/variance being independent, which they clearly are not here. That is true if the samples come from a normal distribution, and from that comes independence of the top and bottom of the t-statistic. But here is an example of how everything fails once you go away from normality, and how you have to rely on the central limit theorem, or large sample sizes more generally, for most of your theory to be any good.")`
+This actually does make sense, if you stop to think about it. A sample with a large mean will have some of those values from the long right tail in it, and having those values will also make the sample more spread out. The same does not happen at the low end: if the mean is small, all the sample values must be close together and the SD will be small also.^[You might have something lurking in your mind about the sample mean and sample SD/variance being *independent*, which they clearly are not here. That is true if the samples come from a normal distribution, and from that comes independence of the top and bottom of the $t$-statistic. But here is an example of how everything fails once you go away from normality, and how you have to rely on the central limit theorem, or large sample sizes more generally, for most of your theory to be any good.]
 
 It wasn't clear to me what that would do to the $t$-statistic. A larger sample mean would make the top of the test statistic bigger, but a larger sample mean would also go with a larger sample SD, and so the bottom of the test statistic would be bigger as well. That's why I included this in the simulation too:
 

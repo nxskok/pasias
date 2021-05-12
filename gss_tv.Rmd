@@ -173,23 +173,26 @@ gamesHowellTest(tvhours~factor(degree), data=gss)
 The conclusions are actually identical to our Mood test, and the P-values are actually not all that much different. Which makes me wonder just how bad the sampling distributions of the sample means are. Bootstrap to the rescue:
 
 ```{r}
-gss %>% nest(d=c(tvhours)) %>% 
-mutate(samp=map(d, ~rerun(1000, sample(.$tvhours, replace = T)))) %>% 
-mutate(means=map(samp, ~map_dbl(., ~mean(.x)))) %>% 
-unnest(means) %>% 
-ggplot(aes(x=means)) + geom_histogram(bins=30) + 
-facet_wrap(~degree)
+gss %>% 
+  nest_by(degree) %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(data$tvhours, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 12) +
+  facet_wrap(~degree, scales = "free")
 ```
 
 Coding this made my head hurt, but building it one line at a time, I pretty much got it right first time. In words:
 
-- get a separate data frame `d` for each education level (with just the data for that one)
-- create a column called `samp` with 1000 bootstrap samples of `tvhours` (for each education level)
-- calculate the mean of each bootstrap sample (thus 1000 of those for each education level)
-- display each bootstrapped mean along with its education level
-- make a histogram of each.
+- "compress" the dataframe to get one row per degree and a list-column called `data` with the number of hours of TV watched for each person with that `degree`
+- generate 1000 `sim`s for each `degree` (to guide the taking of bootstrap samples shortly)
+- organize into one row per `sim`
+- then take bootstrap samples as normal and work out the mean of each one
+- make histograms for each `degree`, using a different scale for each one. (This has the advantage that the normal number of `bins` will work for all the histograms.)
 
-I had to use a lot of bins because `bins` is a total and each sampling distribution has a different mean. So each histogram has something like 10 bins.
+If you are not sure about what happened, run it one line at a time and see what the results look like after each one.
 
 Anyway, even though the data was very much not normal, these sampling distributions are very normal-looking, suggesting that something like Welch ANOVA would have been not nearly as bad as you would have guessed. This is evidently because of the big sample sizes. (This also explains why the two other flavours of ANOVA gave results very similar to Mood's median test.)
 

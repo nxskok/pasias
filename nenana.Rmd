@@ -163,8 +163,7 @@ That hugs the line pretty well, so I would call it close to
 normally-distributed. It bulges away from the line because there are
 more values just below 120 than you would expect for a
 normal. This corresponds to the histogram bar centred just below 120
-being taller than you would have expected.
-`r tufte::margin_note("That is to say, the  principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too *tall*.")`
+being taller than you would have expected.^[That is to say, the  principal deviation from normality is not the hole on the histogram, the bar centred around 123 being too short, but that the bar centred just below 120 is too *tall*.]
 
 Extra: looking *way* ahead (to almost the end of the R stuff),
 this is how you handle the dates and times:
@@ -193,45 +192,7 @@ nenana2
 nenana2 %>% select(JulianDate, jd, datetime)
 ```
 
- 
-
-Hmm, some of those are off by one. What do the off-by-one ones have in common? Let's look at more of them. `round` 
-rounds off to the nearest integer (since these are actually decimal numbers):
-
-```{r }
-nenana2 %>%
-  filter(round(JulianDate) != round(jd)) %>%
-  select(JulianDate, jd, datetime)
-```
-
-
-
-The ones shown here are all *after noon*, and the Julian date in
-the data file appears as one more than the one calculated by
-`lubridate`. What has actually happened is a quirk of how tibbles
-are displayed: they show 3 significant digits, *rounded*. The
-Julian dates given by `yday` are the whole-number part, so the
-ones in the data value are that plus more than 0.5, which will round
-*up*. The first line of code below displays 6 significant digits
-rather than only three:
-
-```{r }
-options(pillar.sigfig = 6)
-nenana2 %>%
-  filter(round(JulianDate) != round(jd)) %>%
-  select(JulianDate, jd, datetime)
-```
-
-
-
-Displaying more decimals shows that I was right: `jd` is (to this accuracy) a whole number, but `JulianDate` is a decimal with fractional part greater than 0.50.
-
-Now I have to turn the extra signficant digits off:
-
-```{r }
-options(pillar.sigfig = 3)
-```
-
+ The Julian days as calculated are the same. Note that these are not rounded; the Julian day begins at midnight and lasts until the next midnight. Thus Julian day 132 is May 12 (in a non-leap year like 1922) and the reason that the Julian date given in the file for that year would round to 133  is that it is after noon (1:20pm as you see). 
 
 
 
