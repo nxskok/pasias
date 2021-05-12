@@ -105,35 +105,62 @@ Extra: the issue is really about the sampling distribution of the mean within ea
 
 ```{r}
 reggae %>% filter(home=="big city") -> bigs
-rerun(1000, sample(bigs$rating, replace = T)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 12)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(bigs$rating, replace = T))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 12)
 ```
 
 Not too much wrong with that. This shows that the sample size is indeed big enough to cope with the skewness. 
 
-You can do any of the others the same way. The rural students are the next smallest group:
+You can do any of the others the same way. 
+
+If you're feeling bold, you can get hold of all three bootstrapped sampling distributions at once, like this:
 
 ```{r}
-reggae %>% filter(home=="rural") -> rurals
-rerun(1000, sample(rurals$rating, replace = T)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 12)
+reggae %>% 
+  nest_by(home) %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(data$rating, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 12) +
+  facet_wrap(~home, scales = "free")
 ```
 
-and the suburban students are the biggest group, which should have no problems at all:
+All of these distributions look very much normal, so there is no cause for concern anywhere.
+
+This was rather a lot of code, so let me take you through it. The first thing is that we want to treat the different students' homes separately, so the first step is this:
 
 ```{r}
-reggae %>% filter(home=="suburban") -> subs
-rerun(1000, sample(subs$rating, replace = T)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 12)
+reggae %>% 
+  nest_by(home) 
 ```
 
-Absolutely fine. We'll see how this plays out below.
+This subdivides the students' reggae ratings according to where their home is. The things in `data` are data frames containing a column `rating` for in each case the students who had the `home` shown.
+
+Normally, we would start by making a dataframe with a column called `sim` that labels the 1000 or so simulations. This time, we want *four* sets of simulations, one for each `home`, which we can set up this way:
+
+```{r}
+reggae %>% 
+  nest_by(home) %>% 
+  mutate(sim = list(1:1000)) 
+```
+
+The definition of `sim` happens by group, or rowwise, by `home` (however you want to look at it). Next, we need to spread out those `sim` values so that we'll have one row per bootstrap sample:
+
+```{r}
+reggae %>% 
+  nest_by(home) %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) 
+```
+
+$4 \times 1000 = 4000$ rows. Note that the `data` column now contains multiple copies of all the ratings for the students with that `home`, which seems wasteful, but it makes our life easier because what we want is a bootstrap sample from the right set of students, namely the `rating` column from the dataframe `data` in each row. Thus, from here out, everything is the same as we have done before: work rowwise, get a bootstrap sample , find its mean, plot it. The one thing we need to be careful of is to make a *separate* histogram for each `home`, since each of the *four* distributions need to look normal. I used different scales for each one, since they are centred in different places; this has the side benefit of simplifying the choice of the number of bins. (See what happens if you omit the `scales = "free"`.)
+
+In any case, all is absolutely fine. We'll see how this plays out below.
 
 
 $\blacksquare$
@@ -203,7 +230,7 @@ TukeyHSD()
 
 Again, almost identical.
 
-Extra 2: some Bob Marley and the Wailers for you, the first from 1980, \url{https://www.youtube.com/watch?v=RhJ0q7X3DLM}, and the second from 1973: \url{https://www.youtube.com/watch?v=rf8GjhXvOjU}.
+Extra 2: some Bob Marley and the Wailers for you, the first from 1980, \url{https://www.youtube.com/watch?v=RhJ0q7X3DLM}, and the second from 1973: \url{https://www.youtube.com/watch?v=rf8GjhXvOjU}. Reggae music at its finest.
 
 
 $\blacksquare$
