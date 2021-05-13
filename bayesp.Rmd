@@ -11,7 +11,7 @@ In this question, use `cmdstanr` (see [this site](https://mc-stan.org/cmdstanr/a
 Solution
 
 
-File, New and Stan. Leave the template program there if you like, as a reminder of what to do. In the `model` section is where the likelihood goes, like this: `r tufte::margin_note("The comment line, with two slashes on the front, is optional but will help you keep track of what's what.")`
+File, New and Stan. Leave the template program there if you like, as a reminder of what to do. In the `model` section is where the likelihood goes, like this:^[The comment line, with two slashes on the front, is optional but will help you keep track of what's what.]
 
 ```
 model {
@@ -25,7 +25,7 @@ The right one here is `bernoulli` since your data are Bernoulli trials (successe
 
 Thinking ahead, `x` is going to be data, and `p` is a parameter, so `p` will need a prior distribution.  The standard one for a Bernoulli success probability is a beta distribution. This is actually the conjugate prior, if you have learned about those: if `p` has a beta prior and the likelihood is Bernoulli, then the posterior is also beta. Back in the days when algebra was your only hope for this kind of thing, conjugate priors were very helpful, but now that we can sample from any posterior, the fact that a prior is conjugate is neither here nor there. Having said that, the beta distribution is a nice choice for a prior for this, because it is restricted to $[0, 1]$ the same way that a Bernoulli `p` is. 
 
-I'm going leave the prior parameters for `p` unknown for now; we'll just call them `a` and `b`. `r tufte::margin_note("We'll come back later to the question of what a and b should be for our situation.")` Here's our completed `model` section:
+I'm going leave the prior parameters for `p` unknown for now; we'll just call them `a` and `b`.^[We'll come back later to the question of what a and b should be for our situation.] Here's our completed `model` section:
 
 ```
 model {
@@ -266,7 +266,7 @@ Rather annoyingly, this plot function passes `binwidth` on to `geom_histogram`, 
 This is skewed to the left. The reason for the skewness here is that the upper limit for $p$ is 1, and there is a reasonable chance of $p$ being close to 1, so the distribution is skewed in the opposite direction. There is basically no chance of $p$ being close to zero. If we had had more data, it is more likely that the values of $p$ near 0 and 1 would be ruled out, and then we might have ended up with something more symmetric.
 
 Extra:
-If you remember the algebra for this, the posterior distribution for `p` actually has a beta distribution, with parameters $2+6=8$ and $2+2=4$. `r tufte::margin_note("The first 2 in each case is the parameter of the prior distribution and the second number is the number of successes or failures observed in the data.")` Our simulated posterior looks to have the right kind of shape to be this, being skewed to the left.
+If you remember the algebra for this, the posterior distribution for `p` actually has a beta distribution, with parameters $2+6=8$ and $2+2=4$.^[The first 2 in each case is the parameter of the prior distribution and the second number is the number of successes or failures observed in the data.] Our simulated posterior looks to have the right kind of shape to be this, being skewed to the left.
 
 
 $\blacksquare$
@@ -276,7 +276,7 @@ $\blacksquare$
 
 Solution
 
-With `cmdstanr`, start from what I called `bern.2`. `r tufte::margin_note("I am writing this a couple of days after the Ever Given was freed from blocking the Suez Canal. One of the memes I saw about this was actually a meme-upon-a-meme: on the picture of the tiny tractor and the huge ship, someone had superimposed that picture of Bernie Sanders sitting on his chair. Feel the bern.2.")`
+With `cmdstanr`, start from what I called `bern.2`.^[I am writing this a couple of days after the Ever Given was freed from blocking the Suez Canal. One of the memes I saw about this was actually a meme-upon-a-meme: on the picture of the tiny tractor and the huge ship, someone had superimposed that picture of Bernie Sanders sitting on his chair. Feel the `bern.2`.]
 
 
 The way to obtain the (sampled) posterior predictive distribution is to get the posterior distribution of values of $p$ in a dataframe, and make a new column as random values from the data-generating mechanism (here Bernoulli). This is easier to do and then talk about:
