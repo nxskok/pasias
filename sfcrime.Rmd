@@ -153,8 +153,7 @@ Solution
 
 I left this one fairly open, because you've done this kind of thing
 before, so what you need to do ought to be fairly clear:
-Construct the values to predict for with plural names:
-`r tufte::margin_note("You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.")`
+Construct the values to predict for with plural names:^[You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.]
 
 ```{r }
 DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
@@ -205,12 +204,11 @@ I can work out from this that `type` should be `probs`,
 since the other one makes the best guess at which category of response
 you'll get (the one with the highest probability). The predicted
 probabilities are more informative, since then you can see how they
-change, even if the predicted category stays the same.
-`r tufte::margin_note("This is something we'll see again in discriminant analysis.")`
+change, even if the predicted category stays the same.^[This is something we'll see again in discriminant analysis.]
 
 Finally, display the results. I thought `cbind` wouldn't work
 here, because some of the variables are factors and some are numbers,
-but `cbind`  is smarter than that:
+but `cbind`  is smarter than that:^[The old base-R stuff like `cbind` makes some guesses about what you want. If it guesses right, it makes things work very smoothly, but if not, you can end up with some mysterious problems to debug. The old `read.table` for reading in data, likewise, used to turn text into `factor`s, *without telling you*. The tidyverse, on the other hand, requires you to be more explicit about what you want, or to have things be the same type, so that you don't run into these kinds of things.]
 
 ```{r }
 cbind(sfcrime.new,p)
@@ -240,8 +238,7 @@ changes from weekday to weekend are actually pretty small (but the
 changes from one weekday to another are even smaller). This supports
 what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
-significant.
-`r tufte::margin_note("Statistical significance as an idea grew up in    the days before *big data*.")`
+significant.^[Statistical significance as an idea grew up in    the days before "big data".]
 I want to compare another district. What districts do we have?
 ```{r }
 sfcrime %>% count(PdDistrict)
