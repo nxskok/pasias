@@ -268,8 +268,7 @@ chisq.test(tab2, correct = F)
 
  
 
-Either is correct, or, actually, without the `correct=F`.
-`r tufte::margin_note("see discussion elsewhere about Yates' Correction and fixed margins.")`
+Either is correct, or, actually, without the `correct=F`.^[See discussion elsewhere about Yates' Correction and fixed margins.]
 
 The conclusion (iv) is the same either way: the null of no association
 is clearly rejected (with a P-value of 0.0028 or 0.0036 as
@@ -463,8 +462,7 @@ The easiest way around that is to do a so-called Bonferroni
 adjustment: instead of rejecting if the P-value is less than 0.05, we
 only reject if it is less than $0.05/6$, since we are doing 6
 tests. This is a fiddly calculation to do by hand, but it's easy to
-build in another `mutate`, thus:
-`r tufte::margin_note("In the pairwise median  test in *smmr*, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.")`
+build in another `mutate`, thus:^[In the pairwise median  test in `smmr`, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.]
 ```{r }
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%

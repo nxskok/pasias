@@ -42,11 +42,11 @@ My report follows. Extra comments are in footnotes (at the end) or the multitudi
 Shampoos are often claimed to be effective at treating dandruff. In a study, the dandruff-treating properties of four shampoos were compared. These four shampoos were, as referred to in the dataset:
 
 - `PyrI`: 1% pyrithione zinc shampoo
-- `PyrII`: as `PyrI` but with instructions to shampoo two times at each wash. `r tufte::margin_note("The piece in the problem statement about why these two labels were used is clarification for you and doesn't belong in the report. If you leave it in, you need to at least paraphrase it; simply copying it without having a reason to do so shows that you are not thinking.")`
+- `PyrII`: as `PyrI` but with instructions to shampoo two times at each wash.^[The piece in the problem statement about why these two labels were used is clarification for you and doesn't belong in the report. If you leave it in, you need to at least paraphrase it; simply copying it without having a reason to do so shows that you are not thinking.]
 - `Keto`: 2% ketoconazole shampoo
 - `Placebo`: a placebo shampoo
 
-Each of the experimental subjects was randomly given one of the shampoos. After using their shampoo for six weeks, eight sections of the subject's scalp were examined for each subject. Each section of the scalp was given a score that measured the amount of flaking on a scale of 0-10. The response variable, called `Flaking`, was the sum of these eight scores, and is a whole number for each subject. A smaller value of `Flaking` indicates less dandruff.xxx tufte::margin_note{I'm using a fair few of my own words from the question. This is OK if you think they are clear, but the aim is to write a report that sounds like you rather than me.}
+Each of the experimental subjects was randomly given one of the shampoos. After using their shampoo for six weeks, eight sections of the subject's scalp were examined for each subject. Each section of the scalp was given a score that measured the amount of flaking on a scale of 0-10. The response variable, called `Flaking`, was the sum of these eight scores, and is a whole number for each subject. A smaller value of `Flaking` indicates less dandruff.^[I'm using a fair few of my own words from the question. This is OK if you think they are clear, but the aim is to write a report that sounds like you rather than me.]
 
 Our aim is to see which shampoo or shampoos are most effective at treating dandruff, that is, have the smallest value of `Flaking` on average.
 
@@ -76,7 +76,7 @@ With a categorical `Treatment` and a quantitative `Flakes`, a suitable graph is 
 ```{r}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() 
 ```
-Once again, we see that the flaking for the Placebo shampoo is much higher than for the others. There are outliers in the `PyrI` group, but given that the data values are all whole numbers, they are not far different from the rest of the data. Considering these outliers, the spreads of the groups all look fairly similar and the distributions appear more or less symmetric.xxx tufte::margin_note{Offer supported opinions of your own here, which don't need to be the same as mine. Alternatively, you can get the graph and numerical summaries first and comment on them both at once.}
+Once again, we see that the flaking for the Placebo shampoo is much higher than for the others. There are outliers in the `PyrI` group, but given that the data values are all whole numbers, they are not far different from the rest of the data. Considering these outliers, the spreads of the groups all look fairly similar and the distributions appear more or less symmetric.^[Offer supported opinions of your own here, which don't need to be the same as mine. Alternatively, you can get the graph and numerical summaries first and comment on them both at once.]
 
 ## Analysis of Variance
 
@@ -102,11 +102,11 @@ dandruff %>% group_by(Treatment) %>%
 summarise(n=n(), fl_mean=mean(Flaking), fl_sd=sd(Flaking))
 ```
 
-The placebo shampoo has significantly more flaking than all the others, and the ketoconazolexxx tufte::margin_note{Use the full name of the shampoo if you are making a conclusion about it.} shampoo has significantly less flaking than all the others. From this analysis, therefore, we would recommend the ketoconazole shampoo over all the others.
+The placebo shampoo has significantly more flaking than all the others, and the ketoconazole^[Use the full name of the shampoo if you are making a conclusion about it.] shampoo has significantly less flaking than all the others. From this analysis, therefore, we would recommend the ketoconazole shampoo over all the others.
 
 ## Assessment of Assumptions
 
-The analysis of variance done above requires that the observations within each treatment group (shampoo) be approximately normally distributed, given the sample sizes, with approximately equal spreads. To assess this, we look at normal quantile plotsxxx tufte::margin_note{I've used scales = ``free'' to get the plots to fill their boxes, for the best assessment of normality. The downside of doing it this way is that you cannot use the slopes of the lines to compare spreads. I think this way is still better, though, because the mean for placebo is so much bigger than the others that if you use the same scale for each plot, you'll be wasting a lot of plot real estate that you could use to get a better picture of the normality.} for each shampoo:xxx tufte::margin_note{It's also good, arguably clearer, to use this as your exploratory plot. This enables you to get to a discussion about normality earlier and you might decide in that case that you don't even need this discussion. You can do the assessment of assumptions first, and then do the corresponding analysis, or you can pick an apparently reasonable analysis and then critique it afterwards. Either way is logical here. In other cases it might be different; for example, in a regression, you might need to fit a model first and improve it after, since it may not be so clear what a good model might be off the top.}
+The analysis of variance done above requires that the observations within each treatment group (shampoo) be approximately normally distributed, given the sample sizes, with approximately equal spreads. To assess this, we look at normal quantile plots^[I've used `scales = "free"` to get the plots to fill their boxes, for the best assessment of normality. The downside of doing it this way is that you cannot use the slopes of the lines to compare spreads. I think this way is still better, though, because the mean for placebo is so much bigger than the others that if you use the same scale for each plot, you'll be wasting a lot of plot real estate that you could use to get a better picture of the normality.] for each shampoo:^[It's also good, arguably clearer, to use this as your exploratory plot. This enables you to get to a discussion about normality earlier and you might decide in that case that you don't even need this discussion. You can do the assessment of assumptions first, and then do the corresponding analysis, or you can pick an apparently reasonable analysis and then critique it afterwards. Either way is logical here. In other cases it might be different; for example, in a regression, you might need to fit a model first and improve it after, since it may not be so clear what a good model might be off the top.]
 
 
 ```{r}
@@ -114,7 +114,7 @@ ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment, scales = "free")
 ```
 
-Given that the data are whole numbers, the distributions each appear close to the lines, indicating that the distributions are close to normal in shape.xxx tufte::margin_note{This is a way to write it if you suspect your reader won't remember what a normal quantile plot is, and by writing it this way you won't insult their intelligence if they \emph{do} remember after all. The other side benefit of writing it this way is that it shows \emph{your} understanding as well.} The distribution of the `PyrI` values is slightly long-tailed, but with over 100 observations in that group, this shape is not enough to invalidate the normality assumption.xxx tufte::margin_note{If you have any doubts about sufficient normality, you need to make sure you have also considered the relevant sample size, but if you are already happy with the normality, there is no need. The placebo group, for example, is the smallest, but its shape is if anything short-tailed, so its non-normality will be no problem no matter how small the sample is.}
+Given that the data are whole numbers, the distributions each appear close to the lines, indicating that the distributions are close to normal in shape.xxx tufte::margin_note{This is a way to write it if you suspect your reader won't remember what a normal quantile plot is, and by writing it this way you won't insult their intelligence if they \emph{do} remember after all. The other side benefit of writing it this way is that it shows \emph{your} understanding as well.} The distribution of the `PyrI` values is slightly long-tailed, but with over 100 observations in that group, this shape is not enough to invalidate the normality assumption.^[If you have any doubts about sufficient normality, you need to make sure you have also considered the relevant sample size, but if you are already happy with the normality, there is no need. The placebo group, for example, is the smallest, but its shape is if anything short-tailed, so its non-normality will be no problem no matter how small the sample is.]
 
 Having concluded that the normality is sufficient, we need to assess the equality of spreads. Referring back to our summary table:
 
@@ -123,7 +123,7 @@ dandruff %>% group_by(Treatment) %>%
 summarise(n=n(), fl_mean=mean(Flaking), fl_sd=sd(Flaking))
 ```
 
-we note that the spreads are not greatly different, and so the equal-spread assumption appears to be satisfied.xxx tufte::margin_note{I'd rather assess equality of spreads by eyeballing them than by doing a test, but if you really want to, you could use Levene's test, illustrated in problem 12.4 in PASIAS and in Extra 4 for these data. It works for any number of groups, not just two.}
+we note that the spreads are not greatly different, and so the equal-spread assumption appears to be satisfied.^[I'd rather assess equality of spreads by eyeballing them than by doing a test, but if you really want to, you could use Levene's test, illustrated elsewhere in PASIAS and in Extra 4 for these data. It works for any number of groups, not just two.]
 
 In summary, the assumptions for the analysis of variance we did seem to be reasonably well satisfied, and we can have some confidence in our conclusions.
 
@@ -135,9 +135,9 @@ The difference in means between the ketoconazole and the two pyrithione shampoos
 
 ## End
 
-That is the end of my report. You, of course, don't need the word "end" or any of the footnotes I had. These were to draw your attention to other things that don't necessarily belong in the report, but I would like you to be aware of them. When you reach the end of your report, you can just stop.xxx tufte::margin_note{I wanted to make it clear where my report ended and where the additional chat began.}
+That is the end of my report. You, of course, don't need the word "end" or any of the footnotes I had. These were to draw your attention to other things that don't necessarily belong in the report, but I would like you to be aware of them. When you reach the end of your report, you can just stop.^[I wanted to make it clear where my report ended and where the additional chat began.]
 
-Some extra, bigger, thoughts (there are quite a few of these. I hope I don't repeat things I also say in the footnotes):
+Some extra, bigger, thoughts (there are quite a few of these. I hope I don't repeat things I also say in the "sidenotes"):
 
 Extra 1: The placebo group is much smaller than the others, but all the groups are pretty big by ANOVA standards. Apparently what happened is that originally the three "real" treatments had 112 subjects each, but the placebo had 28 (ie., a quarter of the subjects that the other groups had), and a few subjects dropped out. There's no problem, in one-way ANOVAs of this kind, with having groups of unequal sizes; the $F$-test is fine, and as long as you use a suitable extension of Tukey that deals with unequal sample sizes, you are OK there too. `TukeyHSD`, according to the help file, "incorporates an adjustment for sample size that produces sensible intervals for mildly unbalanced designs". In this case, we might be holding our breath a bit, depending on what "mildly unbalanced" actually means. Usually in this kind of study, you have the groups about the same size, because proving that the smallest group differs from any of the others is more difficult. I guess these researchers were pretty confident that the placebo shampoo would be clearly worse than the others! (Additional: `TukeyHSD` uses the so-called Tukey-Kramer test when sample sizes within groups are unequal. My understanding is that this is good no matter what the sample sizes are.)
 
@@ -170,14 +170,14 @@ geom_boxplot() + geom_point()
 ```
 
 But there are a lot more data points than this! What happened is that a point at, say, 20 is *all* the observations in that group that were 20, of which there might be a lot, 
-but we cannot see how many, because they are printed on top of each other. To see all the observations, we can **jitter** them: that is, plot them all *not* in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a `geom_jitter` that does exactly this:xxx tufte::margin_note{I explain the \emph{height=0} below the plot.} 
+but we cannot see how many, because they are printed on top of each other. To see all the observations, we can **jitter** them: that is, plot them all *not* in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a `geom_jitter` that does exactly this:^[I explain the \emph{height=0} below the plot.] 
 
 ```{r}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() + 
 geom_jitter(height = 0)
 ```
 
-The plot is rather messy,xxx tufte::margin_note{It looks to me as if the boxplot has been attacked by mosquitoes.}  but now you see everything. The `height=0` means not to do any vertical jittering: just spread the points left and right.xxx tufte::margin_note{The default jittering is up to a maximum of not quite halfway to the next value. Here that means that each observation is nearest to the box it belongs with.} Where the points are exactly on the $x$-scale is now irrelevant; this is just a device to spread the points out so that you can see them all.
+The plot is rather messy,^[It looks to me as if the boxplot has been attacked by mosquitoes.]  but now you see everything. The `height=0` means not to do any vertical jittering: just spread the points left and right.xxx tufte::margin_note{The default jittering is up to a maximum of not quite halfway to the next value. Here that means that each observation is nearest to the box it belongs with.} Where the points are exactly on the $x$-scale is now irrelevant; this is just a device to spread the points out so that you can see them all.
 
 I left the vertical alone so that you can still see the actual data values. Even though the highest and lowest values in `PyrI` were shown as outliers on the original boxplot, you can see that they are really not. When the data values are discrete (separated) like this, an apparent outlier may be only one bigger or smaller than the next value, and thus not really an outlier at all.
 
@@ -189,7 +189,7 @@ ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() + geom_jitter()
 
 This maybe spreads the points out better, so you can be more certain that you're seeing them all, but you lose the clear picture of the data values being whole numbers. 
 
-When Tukey popularized the boxplot, his idea was that it would be drawn by hand with relatively small samples, and when you draw boxplots for large samples, you can get an apparently large number of outliers, that are not in retrospect quite as extreme as they may look at first. This may also have happened here. Tukey, however, did not invent the boxplot; credit for that goes to [Mary Eleanor Spear](https://en.wikipedia.org/wiki/Mary_Eleanor_Spear) with her "range plot".xxx tufte::margin_note{I learned this today.}
+When Tukey popularized the boxplot, his idea was that it would be drawn by hand with relatively small samples, and when you draw boxplots for large samples, you can get an apparently large number of outliers, that are not in retrospect quite as extreme as they may look at first. This may also have happened here. Tukey, however, did not invent the boxplot; credit for that goes to [Mary Eleanor Spear](https://en.wikipedia.org/wiki/Mary_Eleanor_Spear) with her "range plot".^[I learned this today.]
 
 Extra 4: More discussion of normality. The assumptions for a standard ANOVA (that is to say, not a Welch ANOVA) are normally-distributed data within each treatment group, with equal spreads. What that means in practice is that you want normal *enough* data given the sample sizes, and approximately equal spreads. My normal quantile plots are a long way back, so let's get them again:
 
@@ -233,7 +233,7 @@ Oh yes, no problem with the normality there. (The discreteness of the population
 
 The other question is whether those spreads are equal enough. The easiest way is to look back at your summary table (that I reproduced above), cast your eye down the SD column, and make a call about whether they are equal enough. The large sample sizes  *don't* help here, although see the end of the question for more discussion. I would call these "not grossly unequal" and call standard ANOVA good, but you are also entitled to call them different enough, and then you need to say that in your opinion we should have done a Welch ANOVA. Or, if you got your normal quantile plots before you did your ANOVA, you could actually *do* a Welch ANOVA.
 
-I am not a fan of doing one test to see whether you can do another test,xxx tufte::margin_note{Because the true alpha for the combined procedure in which the test you do second depends on the result of the first test is no longer 0.05; you need to think about what that true alpha is. It might not be too bad here, because regular ANOVA and Welch ANOVA tend to come out similar unless the sample variances are very different, in the same way that the Welch and pooled two-sample tests do. But it is not something to take for granted.} but if you really want to, you can use something like Levene's test to test the null hypothesis that all the groups have the same variance.xxx tufte::margin_note{There are other tests you could use here. I like Levene's test because it works best when the samples are not normal, but the normality is OK here, so this is not so much of an issue. Of course, the time you want to be assessing equality of variances is when you have already seen sufficient normality, but that might have been because the samples were large rather than that they were especially normal in shape themselves.} Levene's test lives in the package `car` that you might have to install first:
+I am not a fan of doing one test to see whether you can do another test,^[Because the true alpha for the combined procedure in which the test you do second depends on the result of the first test is no longer 0.05; you need to think about what that true alpha is. It might not be too bad here, because regular ANOVA and Welch ANOVA tend to come out similar unless the sample variances are very different, in the same way that the Welch and pooled two-sample tests do. But it is not something to take for granted.] but if you really want to, you can use something like Levene's test to test the null hypothesis that all the groups have the same variance.^[There are other tests you could use here. I like Levene's test because it works best when the samples are not normal, but the normality is OK here, so this is not so much of an issue. Of course, the time you want to be assessing equality of variances is when you have already seen sufficient normality, but that might have been because the samples were large rather than that they were especially normal in shape themselves.] Levene's test lives in the package `car` that you might have to install first:
 
 ```{r}
 library(car)
@@ -384,7 +384,7 @@ prop.test(921, 10000, p = 0.05)
 
 
 
-Ah, now, that's interesting. A supposed $\alpha = 0.05$ test is actually rejecting around 9% of the time, which is significantly different from 0.05. This surprises me. The confidence interval says that the test is rejecting *more* than 0.05 of the time. So the ANOVA is actually *not* all that accurate.xxx tufte::margin_note{When you get a simulation result that is not what you were expecting, there are two options to explore: either it really is different from your expectation, or there is something wrong with your code. I think my code is OK here, but do let me know if you see a problem with it.}
+Ah, now, that's interesting. A supposed $\alpha = 0.05$ test is actually rejecting around 9% of the time, which is significantly different from 0.05. This surprises me. The confidence interval says that the test is rejecting *more* than 0.05 of the time. So the ANOVA is actually *not* all that accurate.^[When you get a simulation result that is not what you were expecting, there are two options to explore: either it really is different from your expectation, or there is something wrong with your code. I think my code is OK here, but do let me know if you see a problem with it.]
 
 So now let's do the same simulation for the Welch ANOVA to see whether it's better:
 
