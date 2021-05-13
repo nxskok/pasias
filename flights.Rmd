@@ -93,7 +93,7 @@ slice_max(n, n=5)
 ```
 I can't remember (as I write this) whether I've shown you this last one anywhere or not. It's probably a good idea to cite your source if you do it this way. The first way is definitely something you've seen in lecture.
 
-Now you need to think about your reader. I happen to know four of these airports (Chicago, `r tufte::margin_note("The abbreviation comes from O'Hare Field, which is the original name of Chicago's airport.")`
+Now you need to think about your reader. I happen to know four of these airports (Chicago,^[The abbreviation comes from O'Hare Field, which is the original name of Chicago's airport.]
 Atlanta, Los Angeles and Boston are the first four), but it's asking a lot to expect your reader to know that. So you need to translate these to actual airport names. You could do this by looking in the `airports` dataframe for these abbreviations by hand and then adding the names to your answer, but I think you should be suspecting that there is a better, code, way to do this, and it's the same idea as the Extra to the previous part: look up the abbreviations in the `airports` dataframe using `left_join`, and then grab only the columns you want to display, like this:
 
 ```{r}
@@ -157,7 +157,7 @@ JetBlue for sure, but what happened to Southwest? Do they fly out of New York at
 airlines %>% 
 filter(str_detect(name, "Southwest"))
 ```
-I did something a little different here: I didn't know what the exact `name` would be, so I asked for the rows where the text `Southwest` was found in the name somewhere.xxx tufte::margin_note{This is actually a regular expression match.}
+I did something a little different here: I didn't know what the exact `name` would be, so I asked for the rows where the text `Southwest` was found in the name somewhere.^[This is actually a regular expression match.]
 
 All right, let's find the flights with this carrier, count their destinations, and look them up:
 
@@ -183,7 +183,7 @@ Obtain and save a dataframe that contains, for each flight, its departure delay,
 Solution
 
 
-This is rather a lot to think about, but the weather will have to be looked up for each flight. The keyxxx tufte::margin_note{A joke. The most important column, and also the one the database lookup is going to be based on.} column is the one called `time_hour` in `flights`. What does `weather` contain?
+This is rather a lot to think about, but the weather will have to be looked up for each flight. The key^[A joke. The most important column, and also the one the database lookup is going to be based on.] column is the one called `time_hour` in `flights`. What does `weather` contain?
 
 ```{r}
 weather
@@ -245,7 +245,7 @@ geom_point() + geom_line()
 Not all the median delays are large when visibility is under 2.5 miles, but at least some of them are, and the implication is that you could be delayed a long time if the visibility is bad. This also shows that the median delay drops when the visibility is best. The median delay is actually *negative* when the visibility is good, which means that the flights on average left *early*, which they can do if all the booked passengers, their baggage and the crew are on board the plane.
 
 
-What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first: `r tufte::margin_note("The \emph{factor} thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.")`
+What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first:^[The `factor` thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.]
 
 ```{r}
 d %>% 
@@ -256,7 +256,7 @@ q3 = quantile(dep_delay, 0.75)) -> d_summ
 d_summ
 ```
 
-Well, this I can do now.xxx tufte::margin_note{If I remember to put quotes around the names of my new columns, that is.} Let's make this longer, since we want *one* column of delay summaries to plot:
+Well, this I can do now.^[If I remember to put quotes around the names of my new columns, that is.] Let's make this longer, since we want *one* column of delay summaries to plot:
 
 ```{r}
 d_summ %>% 
@@ -295,7 +295,7 @@ d %>%
 group_by(visib) %>% 
 summarize(q_delay =  quantile(dep_delay, qs))
 ```
-This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:`r tufte::margin_note("Or be cleverer than I am capable of.")`
+This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:^[Or be cleverer than I am capable of.]
 
 ```{r}
 qs <- c(0.25, 0.5, 0.75)
@@ -334,7 +334,7 @@ geom_point() + geom_line()
 
 as we had before.
 
-Extra 3: an attempt to be clever.`r tufte::margin_note("And thus most likely doomed to failure.")`
+Extra 3: an attempt to be clever.^[And thus most likely doomed to failure.]
 
 `quantile` does actually keep track of which quantile is which (using the same `qs` as above):
 
