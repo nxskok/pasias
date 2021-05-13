@@ -1,19 +1,19 @@
 ## xxx title here
 
  Many students at a certain university were asked about the importance of religion in their lives (categorized as "not", "fairly", or "very" important), and also about the number of 
-hours they spent studying per week. (This was part of a much larger survey.) We want to see whether there is any kind of relationship between these two variables. The data are in [here](http://ritsokiguess.site/datafiles/STAC32/student_relig.csv). 
+hours they spent studying per week. (This was part of a much larger survey.) We want to see whether there is any kind of relationship between these two variables. The data are in [here](http://ritsokiguess.site/datafiles/student_relig.csv). 
 
 
 
-(a)[2] Read in and display (some of) the data.
+(a) Read in and display (some of) the data.
 
-xxx Solution
+Solution
 
 
 The usual. This is a straightforward one:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/student_relig.csv"
+my_url <- "http://ritsokiguess.site/datafiles/student_relig.csv"
 student <- read_csv(my_url)
 student
 ```
@@ -25,7 +25,7 @@ Extra:
 I said this came from a bigger survey, actually this one:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/student0405.csv"
+my_url <- "http://ritsokiguess.site/datafiles/student0405.csv"
 student0 <- read_csv(my_url)
 student0
 ```
@@ -71,9 +71,9 @@ Another (better, but more complicated) option is to use the package `pointblank`
 $\blacksquare$
 
 
-(a)[2] Obtain the number of observations and the mean and standard deviation of study hours for each level of importance.
+(b) Obtain the number of observations and the mean and standard deviation of study hours for each level of importance.
 
-xxx Solution
+Solution
 
 
 `group_by` and `summarize` (spelling the latter with s or z as you prefer):
@@ -88,9 +88,9 @@ summarize(n=n(), mean_sh=mean(StudyHrs), sd_sh=sd(StudyHrs))
 $\blacksquare$
 
 
-(a)[2] Comment briefly on how the groups compare in terms of study hours.
+(c) Comment briefly on how the groups compare in terms of study hours.
 
-xxx Solution
+Solution
 
 
 The students who think religion is very important have a higher mean number of study hours. The other two groups seem similar. 
@@ -102,9 +102,9 @@ I would actually favour the second one, but this is going to be a question about
 $\blacksquare$
 
 
-(a)[2] Make a suitable graph of this data set.
+(d) Make a suitable graph of this data set.
 
-xxx Solution
+Solution
 
 
 This kind of data is one quantitative and one categorical variable, so once again a boxplot:
@@ -117,11 +117,11 @@ ggplot(student, aes(x=ReligImp, y=StudyHrs)) + geom_boxplot()
 $\blacksquare$
 
 
-(a)[3] The statistician in this study decided that the data were sufficiently normal in shape given the (very large) sample sizes, but was concerned about unequal spreads among the three groups. 
+(e) The statistician in this study decided that the data were sufficiently normal in shape given the (very large) sample sizes, but was concerned about unequal spreads among the three groups. 
 Given this,
 run a suitable analysis and display the output. (This includes a suitable follow-up test, if warranted.)
 
-xxx Solution
+Solution
 
 
 Normal-enough data (in the statistician's estimation) and unequal spreads means a Welch ANOVA:
@@ -158,9 +158,9 @@ All this means is that in a larger sample, you are more likely to see a small nu
 $\blacksquare$
 
 
-(a)[2] What do you conclude from your analysis of the previous part, in the context of the data?
+(f) What do you conclude from your analysis of the previous part, in the context of the data?
 
-xxx Solution
+Solution
 
 
 The Welch ANOVA was significant, so the religious-importance groups are not all the same in terms of mean study hours, and we need to figure out which groups differ from which. (Or say this in the previous part if you wish.)
@@ -175,12 +175,15 @@ Enough? Well, that is hard to judge.
 My take on this is to bootstrap the sampling distribution of the sample mean for each group. If *that* looks normal, then we ought to be able to trust the $F$-test (regular or Welch, as appropriate). The code is complicated (I'll explain the ideas below):
 
 ```{r}
-student %>% nest(-ReligImp) %>% 
-mutate(samp=map(data, ~rerun(1000, sample(.$StudyHrs, replace = T)))) %>% 
-mutate(means=map(samp, ~map_dbl(., ~mean(.x)))) %>% 
-unnest(means) %>% 
-ggplot(aes(sample=means)) + stat_qq() + stat_qq_line() +
-facet_wrap(~ReligImp, scales = "free")
+student %>% 
+  nest_by(ReligImp) %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(data$StudyHrs, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line() +
+  facet_wrap(~ReligImp, scales = "free")
 ```
 
 To truly understand what's going on, you probably need to run this code one line at a time.
@@ -191,9 +194,10 @@ the sample sizes are definitely large enough to overcome the apparently bad skew
 The code, line by line:
 
 - create mini-data-frames called `data`, containing one column called `StudyHrs`, for each `ReligImp` group
-- generate 1000 bootstrap samples for each group (this is rather hairy, which plays out in the next line, because within each group you have 1000 different bootstrap samples, and we will want the mean of each one in a moment.)
-- work out the mean of each bootstrap sample within each group. The inner `map_dbl` works out the mean for each bootstrap sample, and the outer `map` does this for each religious-importance group. Hairy indeed!
-- make a column of all the means
+- set up for 1000 bootstrap samples for each group, and (next line) arrange for one row per bootstrap sample
+- work rowwise
+- generate the bootstrap samples
+- work out the mean of each bootstrap sample 
 - plot normal quantile plots of them, using different facets for each group.
 
 Finally, you might have wondered whether we needed to do Welch:
