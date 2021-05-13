@@ -212,12 +212,10 @@ basically didn't change at all, and if anything went *down*
 between times 1 and 2, a completely different pattern to the others.
 The two treatments `bt` and `ro` are not exactly
 parallel, but they do at least  have qualitatively the same
-pattern.
-`r tufte::margin_note("That is to say, it's the same kind of shape.")` It
+pattern.^[That is to say, it's the same kind of shape.] It
 is, I think, the fact that the control group has a
 *completely* different pattern over time that makes the
-interaction come out significant.
-`r tufte::margin_note("I am kind of wrong about    that, as we see.")`
+interaction come out significant.^[I am kind of wrong about    that, as we see.]
 I'm going to explore that some more later, but first I want to get
 you to draw a spaghetti plot.
     
@@ -267,8 +265,7 @@ up and down, and the green lines do basically nothing.
 
 I said that the control subjects' time pattern was noticeably
 different from the others. Which made me think: what if we remove the
-control subjects? Would there still be an interaction?
-`r tufte::margin_note("This is rather like removing time zero in the example in class.")`
+control subjects? Would there still be an interaction?^[This is rather like removing time zero in the example in lecture.]
 
 All right, we need to start with the original wide data frame, and
 from *that* select everything but `ctrl`:
@@ -281,8 +278,7 @@ gg
  
 
 So now there are two treatments left, seven people on
-each:
-`r tufte::margin_note("The factor *treatment* still has three levels,  but only two of them have any remaining data.")` 
+each:^[The factor `treatment` still has three levels,  but only two of them have any remaining data.] 
 
 ```{r }
 gg %>% count(treatment)
@@ -295,17 +291,14 @@ the same stuff over again: construct the response, run the
 `lm`, create the stuff for `idata` and `idesign`,
 and run the `Manova`. There's really nothing new here:
 
-************************ edit the attach and detach
 
 ```{r }
-attach(gg)
-response <- cbind(t1, t2, t3, t4)
-gg.1 <- lm(response ~ treatment)
+response <- with(gg, cbind(t1, t2, t3, t4))
+gg.1 <- lm(response ~ treatment, data = gg)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 gg.2 <- Manova(gg.1, idata = times.df, idesign = ~times)
 gg.2
-detach(gg)
 ```
 
  
@@ -327,8 +320,7 @@ would say that the interaction is not significant. Then we look at the
 main effects: there is no effect of treatment, but there is an effect
 of time. Or, to put it another way, once you allow for an effect of
 time, there is no difference between the two remaining
-treatments.
-`r tufte::margin_note("There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.")`
+treatments.^[There is often an effect of time, which is why you would be taking multiple time measurements, but the issue is when you take that into account, you are giving yourself an improved chance, in general, to find a treatment effect. This is exactly the same idea as using a matched pairs design to give yourself an improved chance of finding a treatment effect, even though the subjects might be quite different from each other. In fact, repeated measures *is* matched pairs with more than two measurements on each person. Which makes me think, I should have you do a matched pairs as repeated measures.]
 
 Thinking back to our spaghetti plot, we are now comparing the red and
 blue treatments. They both go up at time 2 and down afterwards, which
@@ -429,8 +421,7 @@ end.
 This is the kind of thing you'd have to do in a function, I think,
 since you'd have to have some way of telling the function which are
 the "time" columns. Anyway, hope you haven't forgotten what we were
-doing:
-`r tufte::margin_note("I got sidetracked, surprise surprise.")`
+doing:^[I got sidetracked, surprise surprise.]
 
 ```{r }
 fake.2
@@ -463,8 +454,7 @@ something by getting a lower P-value for `drug`, but we
 haven't really, because we have done so by cheating.
 
 What we could do instead is to average the scores for each subject
-over all the times,
-`r tufte::margin_note("This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.")` for
+over all the times,^[This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.] for
 which we go back to the original data frame:
 
 ```{r }
