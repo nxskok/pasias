@@ -22,7 +22,7 @@ map_dbl("p.value") -> pvals
 tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-The power is (estimated as) a disappointing 0.361. Your answer won't (most likely) be the same as this, but it should be somewhere close. I would like to see you demonstrate that you know what power is, for example "if the population mean is actually 2, the null hypothesis $H_0: \mu = 0$, which is wrong, will only be rejected about 36% of the time". `r tufte::margin_note("This is why I called my result disappointing. I would like to reject a lot more of the time than this, but, given that the truth was not very far away from the null given the (large) population SD, I can't. See Extra 1.")`
+The power is (estimated as) a disappointing 0.361. Your answer won't (most likely) be the same as this, but it should be somewhere close. I would like to see you demonstrate that you know what power is, for example "if the population mean is actually 2, the null hypothesis $H_0: \mu = 0$, which is wrong, will only be rejected about 36% of the time".^[This is why I called my result disappointing. I would like to reject a lot more of the time than this, but, given that the truth was not very far away from the null given the (large) population SD, I can't. See Extra 1.]
 
 The test we are doing is one-sided, so you need the `alternative` in there. If you omit it, you'll have the answer to a different problem:
 
@@ -114,7 +114,7 @@ map_dbl("p.value") -> pvals
 tibble(pvals) %>% count(pvals<=0.05)
 ```
 
-This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get. `r tufte::margin_note("If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.")` This is the middle 95% of that distribution.
+This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get.^[If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.] This is the middle 95% of that distribution.
 
 ```{r}
 qbinom(c(0.025,0.975), 10000, 0.8)
@@ -130,7 +130,7 @@ qbinom(c(0.025,0.975), 1000, 0.8)
 
 and any sample sizes that produce an estimated power between these are as accurate as you'll get. (Here you see the advantage of doing more simulations.)
 
-If you've been using 10,000 simulations each time like me, you'll have noticed that these actually take a noticeable time to run. This is why coders always have a coffee or something else to sip on while their code runs; coders, like us, need to see the output to decide what to do next. Or you could install the [beepr package](https://www.r-project.org/nosvn/pandoc/beepr.html), and get some kind of sound when your simulation finishes, so that you'll know to get off Twitter `r tufte::margin_note("Or Reddit or Quora or whatever your favourite time-killer is.")` and see what happened. There are also packages that will send you a text message or will send a notification to all your devices.
+If you've been using 10,000 simulations each time like me, you'll have noticed that these actually take a noticeable time to run. This is why coders always have a coffee or something else to sip on while their code runs; coders, like us, need to see the output to decide what to do next. Or you could install the [beepr package](https://www.r-project.org/nosvn/pandoc/beepr.html), and get some kind of sound when your simulation finishes, so that you'll know to get off Twitter^[Or Reddit or Quora or whatever your favourite time-killer is.] and see what happened. There are also packages that will send you a text message or will send a notification to all your devices.
 
 What I want to see from you here is some kind of trial and error that proceeds logically, sensibly increasing or decreasing the sample size at each trial, until you have gotten reasonably close to power 0.8.
 
