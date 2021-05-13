@@ -1,6 +1,6 @@
 ## Isoflavones
 
- The plant called kudzu was imported to the US South from Japan. It is rich in isoflavones, which are believed to be beneficial for bones. In a study, rats were randomly assigned to one of three diets: one with a low dose of isoflavones from kudzu, one with a high dose, and a control diet with no extra isoflavones. At the end of the study, each rat's bone density was measured, in milligrams per square centimetre. The data as recorded are shown in \url{http://ritsokiguess.site/isoflavones.txt}. ` r tufte::margin_note("Evidently the units were chosen for ease of recording; had the values been in grams instead, the person recording the data would have had to put a 0 and a decimal point on the front of each value. This is the old meaning of the word coding; making the data values be whole numbers and/or small deviations from something makes them easier to record, and in pre-computer days easier to calculate with. You will also see the same word used for classifying survey responses into categories, which is similar but not quite the same thing.")` There are 15 observations for each treatment, and hence 45 altogether.
+ The plant called kudzu was imported to the US South from Japan. It is rich in isoflavones, which are believed to be beneficial for bones. In a study, rats were randomly assigned to one of three diets: one with a low dose of isoflavones from kudzu, one with a high dose, and a control diet with no extra isoflavones. At the end of the study, each rat's bone density was measured, in milligrams per square centimetre. The data as recorded are shown in \url{http://ritsokiguess.site/isoflavones.txt}.^[Evidently the units were chosen for ease of recording; had the values been in grams instead, the person recording the data would have had to put a 0 and a decimal point on the front of each value. This is the old meaning of the word coding; making the data values be whole numbers and/or small deviations from something makes them easier to record, and in pre-computer days easier to calculate with. You will also see the same word used for classifying survey responses into categories, which is similar but not quite the same thing.] There are 15 observations for each treatment, and hence 45 altogether.
 
 Here are some code ideas you might need to use later, all part of the `tidyverse`. You may need to find out how they work.
 
@@ -25,7 +25,7 @@ Solution
 
 
 The data values are (at least kind of) aligned in columns, suggesting `read_table`. There are up to six bone density values in each row, with a header that spans all of them (by the looks of it). The treatment column looks all right except that some of the rows are blank.
-The blank treatments are the same as the ones in the row(s) above them, you can infer, because there are 15 observations for each treatment, six, six, and then three. (This is how a spreadsheet is often laid out: blank means the same as the previous line.) `r tufte::margin_note("It shouldn't be, but it often is.")`
+The blank treatments are the same as the ones in the row(s) above them, you can infer, because there are 15 observations for each treatment, six, six, and then three. (This is how a spreadsheet is often laid out: blank means the same as the previous line.)^[It shouldn't be, but it often is.]
 
 This, you might observe, will need some tidying. 
 
@@ -61,7 +61,7 @@ Run this one line at a time to see how it works. `fill` takes a column with miss
 
 So that straightens out the treatment column. It needs renaming; you can do that now, or wait until later. I'm going to wait on that. 
 
-You need to organize the treatment column first, before you do the `pivot_longer`, or else that won't work. `r tufte::margin_note("Data tidying has a lot of this kind of thing: try something, see that it doesn't work, figure out what went wrong, fix that, repeat. The work you hand in won't necessarily look very much like your actual process.")`
+You need to organize the treatment column first, before you do the `pivot_longer`, or else that won't work.^[Data tidying has a lot of this kind of thing: try something, see that it doesn't work, figure out what went wrong, fix that, repeat. The work you hand in, or show to your boss, won't necessarily look very much like your actual process.]
 
 Now, we need to get one column of bone mass densities, instead of six. This you'll recognize as a standard `pivot_longer`, with one tweak: those missing values in `X5` through `X7`, which we want to get rid of. You might remember that this is what `values_drop_na` does:
 
@@ -244,7 +244,7 @@ median_test(bmd1b, bmd, treatment)
 
 Not *any* significant differences, although it is a close thing.
 
-The table of aboves and belows suggests the same thing as the Welch test: the high-dose values are mainly high, and the others are mostly low. But with these sample sizes it is not strong enough evidence. My guess is that the median test is lacking power compared to the Welch test; having seen that the Welch test is actually fine, it is better to use that here. `r tufte::margin_note("This is the opposite way to the usual: when two tests disagree, it is usually the one with fewer assumptions that is preferred, but in this case, the Welch ANOVA is fine, and the median test fails to give significance because it is not using the data as efficiently.")`
+The table of aboves and belows suggests the same thing as the Welch test: the high-dose values are mainly high, and the others are mostly low. But with these sample sizes it is not strong enough evidence. My guess is that the median test is lacking power compared to the Welch test; having seen that the Welch test is actually fine, it is better to use that here.^[This is the opposite way to the usual: when two tests disagree, it is usually the one with fewer assumptions that is preferred, but in this case, the Welch ANOVA is fine, and the median test fails to give significance because it is not using the data as efficiently.]
 
 
 
