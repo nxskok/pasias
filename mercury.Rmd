@@ -1,6 +1,6 @@
-## xxx title here
+## Fish and mercury
 
- the C32 folks have already had one on mercury -  Eating fish is generally healthy, but sometimes the fish is contaminated with mercury. What might affect the amount of mercury in a fish? Large-mouth bass were studied in Florida lakes to examine factors that might affect the amount of mercury contamination. 38 lakes were used for the study. Water samples were taken from each lake and analyzed. Also, samples of fish were caught in each lake and the mercury concentration in their muscle tissue was measured. The resulting data are in \url{http://ritsokiguess.site/datafiles/STAC32/mercury.txt}, separated by single spaces. The variables measured were as follows:
+Eating fish is generally healthy, but sometimes the fish is contaminated with mercury. What might affect the amount of mercury in a fish? Large-mouth bass were studied in Florida lakes to examine factors that might affect the amount of mercury contamination. 38 lakes were used for the study. Water samples were taken from each lake and analyzed. Also, samples of fish were caught in each lake and the mercury concentration in their muscle tissue was measured. The resulting data are in \url{http://ritsokiguess.site/datafiles/mercury.txt}, separated by single spaces. The variables measured were as follows:
 
 -   standardized mercury level (parts per million in 3-year-old fish)
 -   alkalinity of water (milligrams per litre)
@@ -11,13 +11,13 @@
 
 (a) Read in and display (some of) the data.
 
-xxx Solution
+Solution
 
 
 The data values were separated by single spaces, so this one is `read_delim`:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/mercury.txt"
+my_url <- "http://ritsokiguess.site/datafiles/mercury.txt"
 mercury <- read_delim(my_url, " ")
 mercury
 ```
@@ -82,9 +82,9 @@ and then I uploaded the file to the course website.
 $\blacksquare$
 
 
-(a) Plot the mercury levels against each of the explanatory variables.
+(b) Plot the mercury levels against each of the explanatory variables.
 
-xxx Solution
+Solution
 
 
 The best way to do this is in one shot, using facets. This means organizing the dataframe so that there is one column of $y$-values, and also one column of $x$-values, with an additional column labelling which $x$ it is. This, as you'll recall, is exactly what `pivot_longer` does. To show you:
@@ -120,9 +120,9 @@ If you are stuck, get three separate graphs, but note that you are making more w
 $\blacksquare$
 
 
-(a) Describe any trends (or lack thereof) that you see on your graphs.
+(c) Describe any trends (or lack thereof) that you see on your graphs.
 
-xxx Solution
+Solution
 
 
 Think about "form, direction, strength" to guide you in interpreting what you see: is it a line or a curve, does it go up or down, and are the points mostly close to the trend or not? I think it makes most sense to talk about those things for the three trends one after the other:
@@ -139,9 +139,9 @@ Extra: most of the outliers are *above* the trends, which suggests that somethin
 $\blacksquare$
 
 
-(a) Concerned by some of what you see on your plots, you consult with a fisheries scientist, who says that using the logs of `alkalinity` and `calcium` are often used in modelling this kind of data. Add columns containing the logs of these two variables to your dataframe, and run a regression predicting `mercury` from `ph` and the two new variables. Display the output from your regression.
+(d) Concerned by some of what you see on your plots, you consult with a fisheries scientist, who says that using the logs of `alkalinity` and `calcium` are often used in modelling this kind of data. Add columns containing the logs of these two variables to your dataframe, and run a regression predicting `mercury` from `ph` and the two new variables. Display the output from your regression.
 
-xxx Solution
+Solution
 
 
 I would create the two new variables and save them back into the original dataframe, myself:
@@ -165,9 +165,9 @@ summary(mercury.1)
 $\blacksquare$
 
 
-(a) What might you learn from running Box-Cox here? Explain briefly, then run it (on the same variables as your regression above) and describe what the results tell you.
+(e) What might you learn from running Box-Cox here? Explain briefly, then run it (on the same variables as your regression above) and describe what the results tell you.
 
-xxx Solution
+Solution
 
 
 Box-Cox is to find out whether you need to transform the response variable, here `mercury`. The hint is that we have already transformed two of the explanatory variables, the ones that had some unusually large values, and so those are presumably now all right now.
@@ -186,8 +186,9 @@ Extra: I looked at the residual plots of the regression `mercury.1`, in the hope
 $\blacksquare$
 
 
-(a) Using the results of the Box-Cox procedure and your previous work in the question, what seems to be the most appropriate regression now? Fit it, and display the results. 
-xxx Solution
+(f) Using the results of the Box-Cox procedure and your previous work in the question, what seems to be the most appropriate regression now? Fit it, and display the results. 
+
+Solution
 
 
 This says to predict log-mercury (Box-Cox) from log-alkalinity, log-calcium (the fisheries scientist) and pH:
@@ -203,9 +204,9 @@ There's no need to define a new column containing log-mercury in the dataframe, 
 $\blacksquare$
 
 
-(a) Obtain all the standard residual plots (the ones we have seen in this course) for this model. Describe any problems you see.
+(g) Obtain all the standard residual plots (the ones we have seen in this course) for this model. Describe any problems you see.
 
-xxx Solution
+Solution
 
 
 residuals against fitted
@@ -259,97 +260,4 @@ This was a *much* higher mercury value than expected, given the other variables.
 
 $\blacksquare$
 
-
-(a) Is there any other way your model could be improved
-
-
-
-
-
-
-
-
-
-
-
-
-
-build model
-
-```{r}
-tidy(mercury.1) %>% arrange(p.value)
-```
-
-remove ph
-
-```{r}
-mercury.2 <- update(mercury.1, .~. - ph)
-tidy(mercury.2)
-```
-
-or step
-
-```{r}
-mercury.4 <- step(mercury.1, direction = "backward")
-```
-
-```{r}
-summary(mercury.4)
-```
-
-residuals for this one
-
-```{r}
-ggplot(mercury.4, aes(x = .fitted, y = .resid)) + geom_point()
-```
-
-```{r}
-ggplot(mercury.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
-```
-
-```{r}
-mercury.4 %>% augment(mercury) %>% 
-pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
-ggplot(aes(x = xval, y = .resid)) + geom_point() +
-facet_wrap(~xname, scales = "free")
-```
-
-residual plot with outlier
-
-make up some data
-
-```{r}
-d <- tribble(
-~x, ~y,
-10, 100,
-11, 108,
-12, 112,
-13, 119,
-14, 126,
-15, 148,
-16, 135,
-17, 142
-)
-d
-```
-
-regression
-
-```{r}
-d.1 <- lm(y~x, data = d)
-summary(d.1)
-```
-
-```{r}
-ggplot(d.1, aes(x = .fitted, y = .resid)) + geom_point()
-```
-
-```{r}
-d <- tibble(err = rnorm(200), x=as.numeric(gl(20, 10)))
-d %>% mutate(y = 10+3*x+err) -> d
-```
-
-```{r}
-ggplot(d, aes(x=x, y=y)) + geom_point()
-```
 
