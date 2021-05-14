@@ -160,7 +160,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
 <li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
@@ -437,7 +439,7 @@ factor, so we need to <em>make</em> it into a factor.</li>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-41-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-43-1.png" width="672"  /></p>
 <p>The <code>fct_inorder</code> trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.</p>
 <p>The median for 2009 is noticeably higher, and there is no skewness or
@@ -450,7 +452,7 @@ get around that, you can define year-as-factor <em>first</em>, using
 like this. There is a wrinkle that I explain afterwards:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb37-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-42-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
 <p>You could even redefine <code>year</code> to be the factor version of
 itself (if you don’t need the year-as-number anywhere else). The
 wrinkle I mentioned above is that in the <code>ggplot</code> you  name the data frame first; the data frame used is the
@@ -461,7 +463,7 @@ wrinkle I mentioned above is that in the <code>ggplot</code> you  name the data 
 <p>If you forget to make <code>year</code> into a factor, this happens:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-43-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-45-1.png" width="672"  /></p>
 <p>You get <em>one</em> boxplot, for all the hours, without distinguishing
 by year, and a warning message that tries (and fails) to read our
 mind: yes, we have a continuous, quantitative <code>x</code>, but
@@ -762,7 +764,7 @@ gender seem to be better at parking than the other? Explain briefly.</li>
 <p>Solution</p>
 <p>With the right data set, this is a piece of cake:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> gender, <span class="dt">y =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-56-1.png" width="672"  /></p>
 <p>The outcome variable is distance from the curb, so smaller should be
 better (more accurate parking). With that in mind, the median for
 females is a little smaller than for males (about 8.5 vs. about 10),
@@ -775,7 +777,7 @@ above-and-below histograms, as another way of comparing males and
 females (two or more groups, in general). First, we make a histogram of all
 the distances, without distinguishing by gender:</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">8</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-55-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-57-1.png" width="672"  /></p>
 <p>That big outlier is the very inaccurate male driver.</p>
 <p>Now, how do we get a <em>separate</em> histogram for each
 <code>gender</code>? In <code>ggplot</code>, separate plots for each
@@ -785,7 +787,7 @@ the code first, and then explain how it works:</p>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb59-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb59-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-56-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-58-1.png" width="672"  /></p>
 <p><code>facet_grid</code> takes a “model formula” with a squiggle, with <span class="math inline">\(y\)</span>
 on the left and <span class="math inline">\(x\)</span> on the right. We want to compare our two
 histograms, one for males and one for females, and I think the best
@@ -804,7 +806,7 @@ for comparing distributions). You can make it work by using
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb60-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb60-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-57-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
 <p>The centres of both histograms are somewhere around 10, so it’s hard
 to see any real difference between males and females here. Maybe this
 is further evidence that the small difference we saw between the
@@ -853,7 +855,7 @@ the right with outlier.</p>
 <pre><code>## [1] 14</code></pre>
 <p>and that leads to this histogram:</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">14</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-63-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-65-1.png" width="672"  /></p>
 <p>That gives rather more detail (a lot more bars: the binwidth in the
 Sturges-rule histogram is about 7, or twice what you see here), but in
 this case the overall story is about the same.</p>
@@ -1091,7 +1093,7 @@ but the median for <code>a</code> is actually <em>lower</em>.</p>
 <p>The other reasonable plot is a facetted histogram, something like this:</p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb88-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(field <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-73-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-75-1.png" width="672"  /></p>
 <p>The distribution of water content in field <code>b</code> is actually
 bimodal, which is probably the explanation of the funny thing with the
 median. What actually seems to be happening (at least for these data)
@@ -1348,7 +1350,7 @@ chance. So I do not see a problem.</p></li>
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each <code>Environment</code>:</p>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb104-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-81-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-83-1.png" width="672"  /></p>
 <p>For the <code>Enriched</code> group, the upper-end outlier shows up. In a
 way this plot is no more illuminating than the boxplot, because you
 still have to make a call about whether this is “too big”. Bear in
@@ -1360,7 +1362,7 @@ at all.</p>
 <p>What happens if we change the shape of the plots?</p>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb105-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-82-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-84-1.png" width="672"  /></p>
 <p>This makes the plots come out in one column, that is, short and
 squat. I prefer these. I’d still call the highest value in
 <code>Enriched</code> an outlier, but the lowest value now looks pretty
@@ -1413,7 +1415,7 @@ are different? Comment briefly.</li>
 <p>Solution</p>
 <p>The boxplot is the kind of thing we’ve seen before:</p>
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">ggplot</span>(diet, <span class="kw">aes</span>(<span class="dt">x =</span> sect, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-84-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-86-1.png" width="672"  /></p>
 <p>It looks to me as if the boys in Sect B are taller on average.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1436,7 +1438,7 @@ two samples are mixed up, but using facets is the way to go. Philosophically, we
 <div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1">diet <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb110-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb110-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>sect, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-85-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-87-1.png" width="672"  /></p>
 <p>I decided that I wanted short squat plots rather than tall skinny ones.</p>
 <p>With the sizes of the samples, I really don’t see any problems
 here. Most of the evidence for the left skewness in Sect B is actually coming
@@ -1523,8 +1525,8 @@ the P-value is so far from 0.05.</p>
 you can. The distance between the tip of your thumb and the tip of
 your little (pinky) finger is your handspan. The students in a
 Statistics class at Penn State measured their handspans and also
-whether they identified as male or female. The data are at
-, with handspans
+whether they identified as male or female. The data are at <a href="http://ritsokiguess.site/datafiles/handspan.txt">http://ritsokiguess.site/datafiles/handspan.txt</a>,
+with handspans
 measured in inches. Thinking of these as a random sample of all
 possible students, is it true that males have a larger mean handspan
 than females? This is what we will explore.</p>
@@ -1555,7 +1557,7 @@ than females? This is what we will explore.</p>
 <p>Solution</p>
 <p>One quantitative variable and one categorical one, so a boxplot:</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-90-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-92-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Run a suitable two-sample <span class="math inline">\(t\)</span>-test to address the question
@@ -1657,7 +1659,7 @@ times, once for the females and once for the males.</p>
 <a class="sourceLine" id="cb126-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
 <p>Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-96-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-98-1.png" width="672"  /></p>
 <p>I don’t know what you think of this. There are a few more extreme values than I would like, and
 it looks otherwise a bit left-skewed to me. But maybe I am worrying too much.</p>
 <p>The males one works exactly the same way:</p>
@@ -1667,7 +1669,7 @@ it looks otherwise a bit left-skewed to me. But maybe I am worrying too much.</p
 <a class="sourceLine" id="cb128-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(males<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb128-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
 <div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-98-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-100-1.png" width="672"  /></p>
 <p>There is a similar story here. I think these are good enough overall, and so I am happy with the two-sample <span class="math inline">\(t\)</span>-test, but it is not as clear-cut as I was expecting.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
@@ -1705,7 +1707,7 @@ US as an anchor will be higher than for the students given Australia as an ancho
 <p>Solution</p>
 <p>One categorical variable and one quantitative one, so a boxplot:</p>
 <div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">ggplot</span>(canada, <span class="kw">aes</span>(<span class="dt">x =</span> anchor, <span class="dt">y =</span> estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-100-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-102-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Explain briefly why a Welch <span class="math inline">\(t\)</span>-test would be better than a pooled <span class="math inline">\(t\)</span>-test in this case.</li>
@@ -1749,7 +1751,7 @@ It’s if you want a <em>pooled</em> test that you have to ask for it specifical
 <a class="sourceLine" id="cb136-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(oz<span class="op">$</span>estimate, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb136-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb136-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-103-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-105-1.png" width="672"  /></p>
 <p>This is indeed skewed to the right (though, with 11 observations, not nearly so non-normal as the original data), and so the P-value we got from the <span class="math inline">\(t\)</span>-test may not be reliable. But, as discussed in Extra 1, the “correct” P-value is, if anything, <em>even smaller</em> than the one we got, and so the conclusion we drew earlier (that there is a significant anchoring effect) is not going to change.</p>
 <p>Extra 3: looking even further ahead, there is a test that definitely <em>does</em> apply here, called Mood’s Median Test. You won’t have installed the package yet, so this won’t work for you just yet (<a href="http://ritsokiguess.site/STAC33/inference_5_R_slides.pdf">read ahead</a> if you want to learn more), but here’s how it goes:</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1"><span class="kw">library</span>(smmr)</a>

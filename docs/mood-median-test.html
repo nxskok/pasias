@@ -154,7 +154,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
 <li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
@@ -348,7 +350,7 @@ types of cereal. What do you see that is out of the ordinary?</li>
 <p>Solution</p>
 <p>The usual:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-42-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
 <p>I see outliers: two high ones on the adults’ cereals, and one high and
 one low on the children’s cereals.</p>
 <p>My thought above about the means being very different is definitely supported by the medians being very different on the boxplots. We should have no trouble declaring that the “typical” amounts of sugar in the adults’ and children’s cereals are different.</p>
@@ -513,7 +515,7 @@ line of code). What is the most striking thing that you notice?</li>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">x =</span> course, <span class="dt">y =</span> phobia)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-50-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-52-1.png" width="672"  /></p>
 <p>Boxplot <code>a</code> is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
 like this is enough.) Boxplot <code>b</code> is hugely spread
@@ -565,7 +567,7 @@ We have the machinery to assess the normality for these, in one shot:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">sample =</span> phobia)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb53-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb53-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>course, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-52-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
 <p>I don’t know what <em>you</em> make of those, but they both look pretty
 straight to me (and there are only five observations, so it’s hard to
 judge). Course <code>b</code> maybe has a “hole” in it (three large
@@ -695,13 +697,13 @@ assumptions for a two-sample <span class="math inline">\(t\)</span>-test.</li>
 <p>We need the values in each group to be approximately normally
 distributed. Side-by-side boxplots will do it:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">x =</span> group, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-57-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
 <p>or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:</p>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">sample =</span> score)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb64-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb64-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-58-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-60-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Why might you have doubts about using a two-sample <span class="math inline">\(t\)</span>-test here?</li>
@@ -897,8 +899,8 @@ values above.)</p>
 you can. The distance between the tip of your thumb and the tip of
 your little (pinky) finger is your handspan. The students in a
 Statistics class at Penn State measured their handspans and also
-whether they identified as male or female. The data are at
-, with handspans
+whether they identified as male or female. The data are at <a href="http://ritsokiguess.site/datafiles/handspan.txt">http://ritsokiguess.site/datafiles/handspan.txt</a>,
+with handspans
 measured in inches. We want to
 see whether male students have a larger mean handspan than female students.</p>
 <ol style="list-style-type: lower-alpha">
@@ -930,7 +932,7 @@ mind what is supposed to have a normal distribution.)</li>
 normal, so make normal quantile plots of handspan, facetted by sex:</p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">sample=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb82-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>sex)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-66-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Discuss briefly whether you might prefer to use Mood’s median
@@ -967,7 +969,7 @@ outliers in the females.</p>
 <a class="sourceLine" id="cb84-4" title="4"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">mean</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb84-5" title="5"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb84-6" title="6"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
 <p>My take is that the sampling distribution of the sample mean for the females is normal enough, therefore the one for the males is also normal enough, therefore the two-sample <span class="math inline">\(t\)</span>-test is actually fine.</p>
 <p>The reason that this one is close to normal is different from the other one, though. In the other question, we had milder non-normality but a smaller sample; in this one, the data distribution is less normal, but we had a much larger sample size to compensate.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
