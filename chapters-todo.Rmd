@@ -22,9 +22,7 @@ lines %>% str_remove_all("\"") %>%
   mutate(chapter_text = str_replace(chapter_text, "# ", ""),
          chapter_text = str_replace_all(chapter_text, " ", "-"),
          chapter_text = tolower(chapter_text)
-  )
-
-%>% 
+  ) %>% 
   mutate(chapter_title = str_c("../docs/", chapter_text, ".html")) %>% 
   mutate(chapter_mtime = file.mtime(chapter_title)) %>% 
   select(chapter, chapter_mtime) %>% 
@@ -36,9 +34,15 @@ lines %>% str_remove_all("\"") %>%
   mutate(file_mtime = file.mtime(str_c("../", fname))) %>% 
   arrange(desc(file_mtime)) %>% 
   filter(!str_detect(fname, "_qq")) %>% 
-  mutate(file_later = file_mtime > chapter_mtime) %>% View("chapters")
+  mutate(file_later = file_mtime > chapter_mtime) -> d
+d %>% filter(file_later)
 ```
 
-not quite right; I want the last build time of the chapter
+```{r}
+d %>% 
+  filter(file_later) %>% 
+  distinct(chapter) %>% 
+  slice(1:5) 
+```
 
 

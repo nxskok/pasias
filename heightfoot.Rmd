@@ -1,0 +1,254 @@
+## Predicting height from foot length
+
+ Is it possible to estimate the height of a person from the length of their foot? To find out, 33 (male) students had their height and foot length measured. The data are in 
+\url{http://ritsokiguess.site/datafiles/heightfoot.csv}.
+
+
+
+(a) Read in and display (some of) the data. (If you are having trouble, make sure you have *exactly* the right URL. The correct URL has no spaces or other strange characters in it.)
+
+Solution
+
+
+The usual:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/heightfoot.csv"
+hf <- read_csv(my_url)
+hf
+```
+
+Call the data frame whatever you like, but keeping away from the names `height` and `foot` is probably wise, since those are the names of the columns.
+
+There are indeed 33 rows as promised.
+
+Extra: my comment in the question was to help you if you copy-pasted the file URL into R Studio. Depending on your setup, this might have gotten pasted with a space in it, at the point where it is split over two lines. The *best* way to proceed, one that won't run into this problem, is to *right*-click on the URL and select Copy Link Address (or the equivalent on your system), and then it will put the whole URL on the clipboard in one piece, even if it is split over two lines in the original document, so that pasting it will work without problems.
+
+
+
+
+$\blacksquare$
+
+
+(b) Make a suitable plot of the two variables in the data frame.
+
+Solution
+
+
+They are both quantitative, so a scatter plot is called for:
+
+
+```{r}
+ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth()
+```
+
+I added a smooth trend, or you could just plot the points. (This is better than plotting a regression line at this stage, because we haven't yet thought about whether the trend is straight.)
+
+Now that we've seen the scatterplot, the trend looks more or less straight (but you should take a look at the scatterplot first, with or without smooth trend, before you put a regression line on it). That point top left is  a concern, though, which brings us to...
+
+
+$\blacksquare$
+
+
+(c) Are there any observations not on the trend of the other points? What is unusual about those observations? 
+
+Solution
+
+
+The observation with height greater than 80 at the top of the graph looks like an outlier and does not follow the trend of the rest of the points. Or, this individual is much taller than you would expect for someone with a foot length of 27 inches. Or, this person is over 7 feet tall, which makes little sense as a height. Say something about what makes this person be off the trend.
+
+
+$\blacksquare$
+
+
+(d) Fit a regression predicting height from foot length, *including* any observations that you identified in the previous part. For that regression, plot the residuals against the fitted values and make a normal quantile plot of the residuals.
+
+Solution
+
+
+These things. Displaying the `summary` of the regression is optional, but gives the grader an opportunity to check that your work is all right so far.
+
+```{r}
+hf.1 <- lm(height~foot, data=hf)
+summary(hf.1)
+ggplot(hf.1, aes(x=.fitted, y=.resid)) + geom_point()
+ggplot(hf.1, aes(sample=.resid)) + stat_qq() + stat_qq_line()
+```
+
+Note that we did not exclude the off-trend point. Removing points *because they are outliers* is a **bad** idea. [This](https://statisticsbyjim.com/basics/remove-outliers/) is a good discussion of the issues.
+
+
+$\blacksquare$
+
+
+
+(e) Earlier, you identified one or more observations that were off the trend. How does this point or points show up on each of the plots you drew in the previous part?
+
+Solution
+
+
+On its own at the top in both cases; the large positive residual on the first plot, and the unusually large value at the top right of the normal quantile plot. (You need to say one thing about each graph, or say as I did that the same kind of thing happens on both graphs.)
+
+Extra: in the residuals vs. fitted values, the other residuals show a slight upward trend. This is because the regression line for these data, with the outlier, is pulled (slightly) closer to the outlier and thus slightly further away from the other points, particularly the ones on the left, compared to the same data but with the outlier removed (which you will be seeing shortly). If the unusual point had happened to have an extreme $x$ (foot length) as well, the effect would have been more pronounced.
+
+This is the kind of thing I mean (made-up data):
+
+```{r, echo=FALSE}
+set.seed(457299)
+```
+
+
+```{r}
+tibble(x = 1:10) %>% 
+mutate(y = rnorm(10, 10+2*x, 1)) %>% 
+mutate(y = ifelse(x == 9, 40, y)) -> madeup
+madeup
+```
+
+```{r}
+ggplot(madeup, aes(x=x, y=y)) + geom_point() + geom_smooth()
+```
+
+The second-last point is off a clearly linear trend otherwise (the smooth gets "distracted" by the outlying off-trend point). Fitting a regression anyway and looking at the residual plot gives this:
+
+```{r}
+madeup.1 <- lm(y~x, data = madeup)
+ggplot(madeup.1, aes(x = .fitted, y = .resid)) + geom_point()
+```
+
+This time you see a rather more obvious downward trend in the other residuals. The problem is not with them, but with the one very positive residual, corresponding to the outlier that is way off the trend on the scatterplot.
+
+The residuals in a regression have to add up to zero. If one of them is very positive (as in the one you did and the example I just showed you), at least some of the other residuals have to become more negative to compensate -- the ones on the right just above and the ones on the left in the one you did. If you have done STAC67, you will have some kind of sense of why that is: think about the two equations you have to solve to get the estimates of intercept and slope, and how they are related to the residuals. Slide 6 of [this](https://statweb.stanford.edu/~jtaylo/courses/stats203/notes/introduction.pdf) shows them; at the least squares estimates, these two partial derivatives both have to be zero, and the things inside the brackets are the residuals.
+
+
+$\blacksquare$
+
+
+(f) Any data points that concerned you earlier were actually errors.
+Create and save a new data frame that does not contain any of those data points. 
+
+Solution
+
+
+Find a way to not pick that outlying point. For example, you can choose the observations with height less than 80:
+
+```{r}
+hf %>% filter(height<80) -> hfx
+hfx
+```
+
+Only 32 rows left.
+
+There are many other possibilities. Find one.
+
+
+$\blacksquare$
+
+
+(g) Run a regression predicting height from foot length for your data set without errors. Obtain a plot of the residuals against fitted values and a normal quantile plot of the residuals for this regression.
+
+Solution
+
+
+Code-wise, the same as before, but with the new data set:
+
+```{r}
+hf.2 <- lm(height~foot, data=hfx)
+summary(hf.2)
+ggplot(hf.2, aes(x=.fitted, y=.resid)) + geom_point()
+ggplot(hf.2, aes(sample=.resid)) + stat_qq() + stat_qq_line()
+```
+
+
+$\blacksquare$
+
+
+
+(h) Do you see any problems on the plots you drew in the previous part? Explain briefly. 
+
+Solution
+
+
+For myself, I see a random scatter of points on the first plot, and points close to the line on the second one. Thus I don't see any problems at all. I would declare myself happy with the second regression, after removing the outlier. (Remember that we removed the outlier *because it was an error*, not just because it was an outlier. Outliers can be perfectly correct data points, and if they are, they have to be included in the modelling.)
+
+You might have a different point of view, in which case you need to make the case for it. You might see a (very mild) case of fanning out in the first plot, or the two most negative residuals might be a bit too low. These are not really outliers, though, not at least in comparison to what we had before. 
+
+Extra: a standard diagnostic for fanning-out is to plot the *absolute values* of the residuals against the fitted values, with a smooth trend. If this looks like an increasing trend, there is fanning-out; a decreasing trend shows fanning-in. The idea is that we want to see whether the residuals are changing in *size* (for example, getting more positive *and* more negative both):
+
+```{r}
+ggplot(hf.2, aes(x=.fitted, y=abs(.resid))) + geom_point() + geom_smooth()
+```
+
+No evidence of fanning-out at all. In fact, the residuals seem to be smallest in size *in the middle*.
+
+Another thing you might think of is to try Box-Cox:
+
+```{r}
+boxcox(height~foot, data=hfx)
+```
+
+It looks as if the best $\lambda$ is $-1$, and we should predict one over height from foot length. But this plot is deceiving, since it doesn't even show the whole confidence interval for $\lambda$!
+We should zoom out (a lot) more:
+
+```{r}
+boxcox(height~foot, data=hfx, lambda = seq(-8, 8, 0.1))
+```
+
+This shows that the confidence interval for $\lambda$ goes from about $-7$ to almost 5: that is, *any* value of $\lambda$ in that interval is supported by the data! This very definitely includes the do-nothing $\lambda=1$, so there is really no support for any kind of transformation.
+
+
+$\blacksquare$
+
+
+(i) Find a way to plot the data and *both* regression lines on the same plot, in such a way that you can see which regression line is which. If you get help from anything outside the course materials, cite your source(s).
+
+Solution
+
+
+This is the same idea as with [the windmill data](http://ritsokiguess.site/STAC33/windmill_slides.pdf), page 22, though this one is a bit easier since everything is linear (no curves).
+
+The easiest way is to use `geom_smooth` twice, once with the original data set, and then on the one with the outlier removed:
+
+```{r}
+ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth(method = "lm", se=F) +
+geom_smooth(data=hfx, method="lm", colour="red", se=F)
+```
+
+I would use the original data set as the "base", since we want to plot its points (including the outlier) as well as its line. 
+Then we want to plot just the line for the second data set. This entails using a `data=` in the second `geom_smooth`, to say that we want to get *this* regression line from a different data set, and also
+entails drawing this line in a different colour (or in some way distinguishing it from the first one). Putting the `colour` *outside* an `aes` is a way to make the *whole line* red. (Compare how you make points different colours according to their value on a third variable.)
+
+This is, I think, the best way to do it. You can mimic the idea that I used for the windmill data:
+
+```{r}
+ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth(method = "lm", se=F) +
+geom_line(data=hf.2, aes(y = .fitted))
+```
+
+but this is not as good, because you don't need to use the trickery with `geom_line`: the second trend is another regression line not a curve, and we know how to draw regression lines with `geom_smooth` without having to actually fit them. (Doing it this way reveals that you are copying without thinking, instead of wondering whether there is a better way to do it.)
+
+The idea of using a different data set in different "layers" of a plot is quite well-known. For example, the idea is the one in [here](https://bookdown.org/yih_huynh/Guide-to-R-Book/graphing-with-different-datasets.html), though used for a different purpose there (plotting different sets of points instead of different lines).
+
+
+$\blacksquare$
+
+
+(j) Discuss briefly how removing the observation(s) that were errors has changed where the regression line goes, and whether that is what you expected.
+
+Solution
+
+
+The regression line for the original data (my blue line) is pulled up compared to the one with outliers removed (red).
+
+This is not very surprising, because we know that regression lines tend to get pulled towards outliers. What was surprising to me was that the difference wasn't very big. Even at the low end, where the lines differ the most, the difference in predicted height is only about one inch. 
+Since regression lines are based on means, I would have expected a big outlier to have moved the line a lot more.
+
+Say something about what you expected, and say something insightful about whether that was what you saw.
+
+Extra: the regression lines are very similar, but their R-squared values are not: 32% and 57% respectively. Having a point far from the line has a big (downward) impact on R-squared.
+
+
+$\blacksquare$
+
+
+

@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
 <li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
 <li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a></li>
+<li><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
 <li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
@@ -145,7 +145,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
 <li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
@@ -218,10 +220,23 @@ the one from the <span class="math inline">\(t\)</span>-test. What does that tel
 <li><p>Make suitable residual plots for the regression
 <code>pulse.1</code>.</p></li>
 </ol>
+</div>
+<div id="pulse-rates-and-marching" class="section level2">
+<h2><span class="header-section-number">18.2</span> Pulse rates and marching</h2>
+<p>Forty students, some male and some female, measured their resting pulse rates. Then they marched in place for one minute and measured their pulse rate again.
+Our aim is to use regression to predict the pulse rate after the marching from the pulse rate before, and to see whether that is different for males and females. The data is in .</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Read in and display (some of) the data.</p></li>
+<li><p>Make a suitable graph using all three variables, adding appropriate regression line(s) to the plot.</p></li>
+<li><p>Explain briefly but carefully how any effects of pulse rate before on pulse rate after, and also of sex on pulse rate after, show up on your plot. (If either explanatory variable has no effect, explain how you know.)</p></li>
+<li><p>Run a regression predicting pulse rate after from the other two variables. Display the output.</p></li>
+<li><p>Looking at your graph, does the significance (or lack of) of each of your two explanatory variables surprise you? Explain briefly.</p></li>
+<li><p>What does the numerical value of the Estimate for <code>Sex</code> in your regression output mean, in the context of this data set? Explain briefly.</p></li>
+</ol>
 <p>My solutions follow:</p>
 </div>
 <div id="crickets-revisited-1" class="section level2">
-<h2><span class="header-section-number">18.2</span> Crickets revisited</h2>
+<h2><span class="header-section-number">18.3</span> Crickets revisited</h2>
 <p>This is a continuation of the crickets problem that you
 may have seen before (minus the data tidying).</p>
 <p>Male tree crickets produce “mating songs” by rubbing their wings
@@ -353,7 +368,7 @@ from.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><inp
 the obvious thing works:</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="kw">ggplot</span>(crickets, <span class="kw">aes</span>(<span class="dt">x =</span> temperature, <span class="dt">y =</span> pulse_rate, <span class="dt">colour =</span> species)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb61-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-56-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>What does the plot tell you that the <span class="math inline">\(t\)</span>-test doesn’t? How
@@ -515,7 +530,7 @@ for each species to our plot, thus:</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="kw">ggplot</span>(crickets, <span class="kw">aes</span>(<span class="dt">x =</span> temperature, <span class="dt">y =</span> pulse_rate, <span class="dt">colour =</span> species)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb69-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-61-1.png" width="672"  /></p>
 <p>The lines are almost exactly parallel, so having the same slope for
 each species makes perfect sense.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -527,7 +542,7 @@ each species makes perfect sense.</p>
 <p>First, the plot of residuals against fitted values (after all,
 it <em>is</em> a regression):</p>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-60-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-62-1.png" width="672"  /></p>
 <p>This looks nice and random.</p>
 <p>Now, we plot the residuals against the explanatory variables. There
 are two, temperature and species, but the latter is categorical. We’ll
@@ -538,14 +553,14 @@ around that. Perhaps the simplest is to use <code>pulse.1</code> as our
 “default” data frame and then get <code>temperature</code> from the
 right place:</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> crickets<span class="op">$</span>temperature, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-61-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-63-1.png" width="672"  /></p>
 <p>I don’t see anything untoward there.</p>
 <p>Species. We want to compare the residuals for the two species, which
 is categorical. Since the residuals are quantitative, this suggests a
 boxplot. Remembering to get species from the right place again, that
 goes like this:</p>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> crickets<span class="op">$</span>species, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-62-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-64-1.png" width="672"  /></p>
 <p>For the residuals, the median should be zero within each group, and
 the two groups should be approximately normal with mean 0 and about
 the same spread. Same spread looks OK, since the boxes are almost
@@ -558,13 +573,231 @@ mean higher than the median.</p>
 <p>Is that non-normality really problematic? Well, I could look at the
 normal quantile plot of all the residuals together:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-63-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-65-1.png" width="672"  /></p>
 <p>There’s a little weirdness at the top, and a tiny indication of a
 curve (that would suggest a little right-skewedness), but not really
 much to worry about. If that third-highest residual were a bit
 lower (say, 3 rather than 3.5) and maybe if the lowest residual was a
 bit lower, I don’t think we’d have anything to complain about at all.</p>
 <p>So, I’m not worried.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+</div>
+<div id="pulse-rates-and-marching-1" class="section level2">
+<h2><span class="header-section-number">18.4</span> Pulse rates and marching</h2>
+<p>Forty students, some male and some female, measured their resting pulse rates. Then they marched in place for one minute and measured their pulse rate again.
+Our aim is to use regression to predict the pulse rate after the marching from the pulse rate before, and to see whether that is different for males and females. The data is in .</p>
+<ol style="list-style-type: lower-alpha">
+<li>Read in and display (some of) the data.</li>
+</ol>
+<p>Solution</p>
+<p>As usual:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/pulsemarch.csv&quot;</span></a>
+<a class="sourceLine" id="cb75-2" title="2">march &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<pre><code>## 
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## cols(
+##   Sex = col_character(),
+##   Before = col_double(),
+##   After = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">march</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Before"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["After"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Female","2":"72","3":"84"},{"1":"Male","2":"60","3":"72"},{"1":"Female","2":"68","3":"80"},{"1":"Male","2":"70","3":"72"},{"1":"Male","2":"68","3":"80"},{"1":"Male","2":"61","3":"75"},{"1":"Male","2":"80","3":"84"},{"1":"Male","2":"72","3":"76"},{"1":"Female","2":"64","3":"80"},{"1":"Female","2":"62","3":"92"},{"1":"Male","2":"60","3":"76"},{"1":"Female","2":"96","3":"100"},{"1":"Female","2":"64","3":"72"},{"1":"Female","2":"76","3":"88"},{"1":"Male","2":"55","3":"64"},{"1":"Male","2":"60","3":"68"},{"1":"Female","2":"46","3":"64"},{"1":"Female","2":"56","3":"64"},{"1":"Male","2":"88","3":"100"},{"1":"Male","2":"80","3":"88"},{"1":"Male","2":"66","3":"68"},{"1":"Female","2":"80","3":"104"},{"1":"Male","2":"68","3":"80"},{"1":"Male","2":"80","3":"88"},{"1":"Male","2":"76","3":"84"},{"1":"Female","2":"70","3":"80"},{"1":"Male","2":"59","3":"80"},{"1":"Male","2":"68","3":"76"},{"1":"Female","2":"64","3":"68"},{"1":"Male","2":"74","3":"84"},{"1":"Male","2":"84","3":"88"},{"1":"Male","2":"72","3":"80"},{"1":"Male","2":"60","3":"72"},{"1":"Male","2":"75","3":"88"},{"1":"Male","2":"76","3":"72"},{"1":"Female","2":"76","3":"96"},{"1":"Female","2":"64","3":"68"},{"1":"Female","2":"64","3":"68"},{"1":"Male","2":"60","3":"60"},{"1":"Female","2":"76","3":"104"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Make a suitable graph using all three variables, adding appropriate regression line(s) to the plot.</li>
+</ol>
+<p>Solution</p>
+<p>Two quantitative and one categorical says scatterplot, with colour distinguishing the categories (two here). <code>geom_smooth</code> adds a regression line to the plot for each <code>Sex</code>, which is what we want. I used <code>se=F</code> to remove the grey envelopes from the plot (because I thought they confused the issue):</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb78-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)</a></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-67-1.png" width="672"  /></p>
+<p>Having only one regression line is not so good because that only shows that pulse rate after goes up with pulse rate before, but not if and how the sexes differ.</p>
+<p>Extra: I took a shortcut of the process here, to make the question shorter. In practice, what you’d do is to put smooth trends on the plot first:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb80-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">se=</span>F)</a></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
+<p>The red trend looks curved, but if you look carefully, pretty much all of<label for="tufte-sn-13" class="margin-toggle sidenote-number">13</label><input type="checkbox" id="tufte-sn-13" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">13</span> My mind just jumped to a former German soccer player by the name of Klaus Allofs.</span> the evidence for the curve comes from that point on the right with pulse rate before over 90 and pulse rate after around 100. If it weren’t for that, the red trend would be pretty close to linear. As you’ll recall, a decision about the kind of trend based on <em>one</em> observation is a pretty flimsy decision.</p>
+<p><em>Then</em>, having seen that the trends are not obviously curved, you would draw the plot with the straight lines. (Fitting separate <em>curves</em> is a whole different story that I didn’t want to get into.)</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="3" style="list-style-type: lower-alpha">
+<li>Explain briefly but carefully how any effects of pulse rate before on pulse rate after, and also of sex on pulse rate after, show up on your plot. (If either explanatory variable has no effect, explain how you know.)</li>
+</ol>
+<p>Solution</p>
+<p>There is an upward trend, so
+if the pulse rate before is higher, so is the pulse rate after. This is true for both males and females. (Or, holding <code>Sex</code> fixed, that is, comparing two people of the same sex.)</p>
+<p>The red line is always above the blue line, so at any given <code>Before</code> pulse rate, the <code>After</code> pulse rate for a female is predicted to be higher than that for a male.</p>
+<p>Note that you have to be careful: when talking about the effect of each explanatory variable, you have to <em>hold the other one constant</em> (in general, hold all the other ones constant). If you can word that in a way that makes sense in the context of the data you are looking at, so much the better.</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="4" style="list-style-type: lower-alpha">
+<li>Run a regression predicting pulse rate after from the other two variables. Display the output.</li>
+</ol>
+<p>Solution</p>
+<p>Thus:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">march<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>Before<span class="op">+</span>Sex, <span class="dt">data=</span>march)</a>
+<a class="sourceLine" id="cb82-2" title="2"><span class="kw">summary</span>(march<span class="fl">.1</span>)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = After ~ Before + Sex, data = march)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.8653  -4.6319  -0.4271   3.3856  16.0047 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  19.8003     7.9217   2.499   0.0170 *  
+## Before        0.9064     0.1127   8.046  1.2e-09 ***
+## SexMale      -4.8191     2.2358  -2.155   0.0377 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.918 on 37 degrees of freedom
+## Multiple R-squared:  0.6468, Adjusted R-squared:  0.6277 
+## F-statistic: 33.87 on 2 and 37 DF,  p-value: 4.355e-09</code></pre>
+<p>Extra: if you want “all the other variables except the response” as explanatory, there is also this shortcut:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">march<span class="fl">.1</span>a &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>., <span class="dt">data=</span>march)</a>
+<a class="sourceLine" id="cb84-2" title="2"><span class="kw">summary</span>(march<span class="fl">.1</span>a)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = After ~ ., data = march)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.8653  -4.6319  -0.4271   3.3856  16.0047 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  19.8003     7.9217   2.499   0.0170 *  
+## SexMale      -4.8191     2.2358  -2.155   0.0377 *  
+## Before        0.9064     0.1127   8.046  1.2e-09 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.918 on 37 degrees of freedom
+## Multiple R-squared:  0.6468, Adjusted R-squared:  0.6277 
+## F-statistic: 33.87 on 2 and 37 DF,  p-value: 4.355e-09</code></pre>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="5" style="list-style-type: lower-alpha">
+<li>Looking at your graph, does the significance (or lack of) of each of your two explanatory variables surprise you? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>We noted a clear upward trend before, for both sexes, so there is no surprise that the <code>Before</code> pulse rate is significant.</p>
+<p>The red dots (females) on the graph seemed to be on average above the blue ones (males), at least for similar before pulse rates. (This is not completely convincing, so you are entitled to be surprised also; note that the P-value, while significant, is not <em>that</em> small).</p>
+<p>Extra: comparing the <em>lines</em> is less convincing, because how do we get a feel for whether these lines are more different than chance? One deceiving way to (fail to) get a feel for this is to re-draw our plot but with the grey envelopes:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="pasias_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
+<p>The grey envelopes overlap substantially, which would make you think the lines are <em>not</em> significantly different. But, this is not the right way to compare the lines. It is a similar problem to that of comparing two <em>means</em> (that we would normally do with a two-sample test of some kind) by working out the two <em>one</em>-sample confidence intervals, and seeing whether they overlap. If they <em>do not</em>, then you can be sure that the means differ, but if they do overlap, then you cannot say anything about whether the means differ: maybe they do, maybe they don’t. This one is analogous; the grey envelopes overlap, so maybe the lines differ, maybe they don’t. Looking at the grey envelopes in this case gives you <em>no</em> insight about whether males and females differ.</p>
+<p><a href="https://www.cscu.cornell.edu/news/statnews/stnews73.pdf">Here</a> is a short discussion of this issue (in the context of comparing two means).</p>
+<p><span class="math inline">\(\blacksquare\)</span></p>
+<ol start="6" style="list-style-type: lower-alpha">
+<li>What does the numerical value of the Estimate for <code>Sex</code> in your regression output mean, in the context of this data set? Explain briefly.</li>
+</ol>
+<p>Solution</p>
+<p>The estimate is labelled <code>SexMale</code>, and its value is <span class="math inline">\(-4.8\)</span>.</p>
+<p><code>Sex</code> is a categorical variable, so it has a baseline category, which is the first one, <code>Female</code>. The Estimate <code>SexMale</code> shows how males compare to the baseline (females), at a fixed <code>Before</code> pulse rate.
+This value is <span class="math inline">\(-4.8\)</span>, so, at any <code>Before</code> pulse rate, the male <code>After</code> pulse rate is predicted to be 4.8 <em>less</em> than the female one.</p>
+<p>I think you have to mention the value <span class="math inline">\(-4.8\)</span>, so that you can talk intelligently about what it means for these data.</p>
+<p>Extra: the implication of our model is that the predicted difference is the <em>same</em> all the way along. You might have your doubts about that; you might think the lines are closer together on the left and further apart on the right. Another way to think about this is whether the lines are <em>parallel</em>: that is, whether they have the same slope. I’m inclined to think they do; the data points are fairly scattered, and I think the slopes would have to be a lot more different to be significantly different. But you don’t have to take my word for it: we can test this by adding an <strong>interaction term</strong> to the model. You might have seen this in ANOVA, where you are assessing the effect of one factor at different levels of the other. This is more or less the same idea. Note the <code>*</code> rather than the <code>+</code> in the model formula:<label for="tufte-sn-14" class="margin-toggle sidenote-number">14</label><input type="checkbox" id="tufte-sn-14" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">14</span> To be precise, the * means “the main effects and the interaction together”; if you want to talk about just the interaction term, you denote it by <code>:</code>; note the <code>Before:SexMale</code> term in the summary table.</span></p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">march<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>Before<span class="op">*</span>Sex, <span class="dt">data=</span>march)</a>
+<a class="sourceLine" id="cb88-2" title="2"><span class="kw">summary</span>(march<span class="fl">.2</span>)</a></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = After ~ Before * Sex, data = march)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -11.2831  -4.3638  -0.3965   3.4077  16.6188 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)     13.4390    11.1416   1.206    0.236    
+## Before           0.9991     0.1604   6.230 3.43e-07 ***
+## SexMale          7.9470    15.8095   0.503    0.618    
+## Before:SexMale  -0.1846     0.2263  -0.816    0.420    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 6.949 on 36 degrees of freedom
+## Multiple R-squared:  0.6532, Adjusted R-squared:  0.6243 
+## F-statistic:  22.6 on 3 and 36 DF,  p-value: 2.11e-08</code></pre>
+<p>The <code>Before:SexMale</code> term tests the interaction, and you see it is nowhere near significant. There is no justification for having lines with different slopes for males and females.</p>
+<p>We were lucky here in that <code>Sex</code> has only two levels, so looking at the <code>summary</code> gave us what we wanted. If we had had an <code>Other</code> category for <code>Sex</code>, for people who don’t identify with either male or female, there would be two Estimates in the <code>summary</code> table, one comparing Male with Female, and one comparing Other with Female.<label for="tufte-sn-15" class="margin-toggle sidenote-number">15</label><input type="checkbox" id="tufte-sn-15" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">15</span> Female is the baseline, so everything gets compared with that, whether you like it or not.</span>
+But maybe the significant difference is Male vs. Other, and we would never see it.</p>
+<p>To look for <em>any</em> effect of a categorical variable, the right way is to use <code>drop1</code>, to see which variables, including categorical ones, can be removed as a whole, thus:<label for="tufte-sn-16" class="margin-toggle sidenote-number">16</label><input type="checkbox" id="tufte-sn-16" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">16</span> The <code>test</code> piece says to do an <span class="math inline">\(F\)</span>-test, which is different from without the quotes, which would mean not to do any tests, <code>F</code> without quotes meaning <code>FALSE</code>.</span></p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">drop1</span>(march<span class="fl">.2</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"1738.512","4":"158.8762","5":"NA","6":"NA","_rn_":"<none>"},{"1":"1","2":"32.13734","3":"1770.649","4":"157.6089","5":"0.6654795","6":"0.4199971","_rn_":"Before:Sex"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>This <em>only</em> lists things that can be removed, in this case the interaction. It is not significant, so out it comes (resulting in our model <code>march.1</code>):</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="kw">drop1</span>(march<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["Df"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Sum of Sq"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["RSS"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["F value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Pr(>F)"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"NA","2":"NA","3":"1770.649","4":"157.6089","5":"NA","6":"NA","_rn_":"<none>"},{"1":"1","2":"3097.976","3":"4868.625","4":"196.0675","5":"64.736188","6":"1.203225e-09","_rn_":"Before"},{"1":"1","2":"222.337","3":"1992.986","4":"160.3404","5":"4.646017","6":"3.770029e-02","_rn_":"Sex"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>Both remaining explanatory variables are significant, so we need to keep them both.</p>
+<p>Our categorical explanatory variable has only two levels, so <code>drop1</code> and <code>summary</code> give the exact same P-values.</p>
+<p>Extra 2:</p>
+<p>Let’s go back and look at our data set again:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">march</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Before"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["After"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"Female","2":"72","3":"84"},{"1":"Male","2":"60","3":"72"},{"1":"Female","2":"68","3":"80"},{"1":"Male","2":"70","3":"72"},{"1":"Male","2":"68","3":"80"},{"1":"Male","2":"61","3":"75"},{"1":"Male","2":"80","3":"84"},{"1":"Male","2":"72","3":"76"},{"1":"Female","2":"64","3":"80"},{"1":"Female","2":"62","3":"92"},{"1":"Male","2":"60","3":"76"},{"1":"Female","2":"96","3":"100"},{"1":"Female","2":"64","3":"72"},{"1":"Female","2":"76","3":"88"},{"1":"Male","2":"55","3":"64"},{"1":"Male","2":"60","3":"68"},{"1":"Female","2":"46","3":"64"},{"1":"Female","2":"56","3":"64"},{"1":"Male","2":"88","3":"100"},{"1":"Male","2":"80","3":"88"},{"1":"Male","2":"66","3":"68"},{"1":"Female","2":"80","3":"104"},{"1":"Male","2":"68","3":"80"},{"1":"Male","2":"80","3":"88"},{"1":"Male","2":"76","3":"84"},{"1":"Female","2":"70","3":"80"},{"1":"Male","2":"59","3":"80"},{"1":"Male","2":"68","3":"76"},{"1":"Female","2":"64","3":"68"},{"1":"Male","2":"74","3":"84"},{"1":"Male","2":"84","3":"88"},{"1":"Male","2":"72","3":"80"},{"1":"Male","2":"60","3":"72"},{"1":"Male","2":"75","3":"88"},{"1":"Male","2":"76","3":"72"},{"1":"Female","2":"76","3":"96"},{"1":"Female","2":"64","3":"68"},{"1":"Female","2":"64","3":"68"},{"1":"Male","2":"60","3":"60"},{"1":"Female","2":"76","3":"104"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>You might have been thinking, when we started, that these are before and after measurements <em>on the same people</em>, and so what we have here is matched pairs. So we do, but it’s not the kind of matched pairs we are accustomed to. Let’s begin by taking differences, getting rid of the <code>Before</code> and <code>After</code> columns, and see what we have left:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">march <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb93-2" title="2"><span class="kw">mutate</span>(<span class="dt">difference=</span>After<span class="op">-</span>Before) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb93-3" title="3"><span class="kw">select</span>(<span class="op">-</span>After, <span class="op">-</span>Before) -&gt;<span class="st"> </span>march_paired</a>
+<a class="sourceLine" id="cb93-4" title="4">march_paired</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["difference"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"Female","2":"12"},{"1":"Male","2":"12"},{"1":"Female","2":"12"},{"1":"Male","2":"2"},{"1":"Male","2":"12"},{"1":"Male","2":"14"},{"1":"Male","2":"4"},{"1":"Male","2":"4"},{"1":"Female","2":"16"},{"1":"Female","2":"30"},{"1":"Male","2":"16"},{"1":"Female","2":"4"},{"1":"Female","2":"8"},{"1":"Female","2":"12"},{"1":"Male","2":"9"},{"1":"Male","2":"8"},{"1":"Female","2":"18"},{"1":"Female","2":"8"},{"1":"Male","2":"12"},{"1":"Male","2":"8"},{"1":"Male","2":"2"},{"1":"Female","2":"24"},{"1":"Male","2":"12"},{"1":"Male","2":"8"},{"1":"Male","2":"8"},{"1":"Female","2":"10"},{"1":"Male","2":"21"},{"1":"Male","2":"8"},{"1":"Female","2":"4"},{"1":"Male","2":"10"},{"1":"Male","2":"4"},{"1":"Male","2":"8"},{"1":"Male","2":"12"},{"1":"Male","2":"13"},{"1":"Male","2":"-4"},{"1":"Female","2":"20"},{"1":"Female","2":"4"},{"1":"Female","2":"4"},{"1":"Male","2":"0"},{"1":"Female","2":"28"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>In matched pairs, we are used to having <em>one</em> column of differences, and we test that for a mean or median of zero, to express no difference between before and after (or whatever it was). But now, we have an extra column <code>Sex</code>. We are not interested here in whether the differences average out to zero;<label for="tufte-sn-17" class="margin-toggle sidenote-number">17</label><input type="checkbox" id="tufte-sn-17" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">17</span> I think it’s a given that pulse rates will be higher after exercise than before.</span> we care more about whether the differences differ (!) between males and females. That is to say, we have a two-sample matched pairs test!</p>
+<p>At this point, your head ought to be hurting!</p>
+<p>However, at this point what we are saying is that <em>if</em> you believe that the difference is a good way to summarize the effect of the exercise, then we have one measurement for each person, independent because different people’s measurements will be independent. It doesn’t matter where they came from. We have measurements on two groups, so some kind of two-sample test will be good. Which kind? Let’s look at a graph, a good one now being a boxplot:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1"><span class="kw">ggplot</span>(march_paired, <span class="kw">aes</span>(<span class="dt">x=</span>Sex, <span class="dt">y=</span>difference)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-77-1.png" width="672"  /></p>
+<p>Or, if you like, a facetted normal quantile plot:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">ggplot</span>(march_paired, <span class="kw">aes</span>(<span class="dt">sample=</span>difference)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb95-2" title="2"><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb95-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sex)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-78-1.png" width="672"  /></p>
+<p>It seems to me that these are normal enough for a <span class="math inline">\(t\)</span>-test, given the sample sizes (feel free to disagree):</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">march_paired <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Sex)</a></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"Female","2":"16"},{"1":"Male","2":"24"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<p>The spreads look a bit different, so I think I would prefer the Welch test here:</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1"><span class="kw">t.test</span>(difference<span class="op">~</span>Sex, <span class="dt">data=</span>march_paired)</a></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  difference by Sex
+## t = 2.0307, df = 23.296, p-value = 0.05386
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.08848652  9.92181986
+## sample estimates:
+## mean in group Female   mean in group Male 
+##            13.375000             8.458333</code></pre>
+<p>This time, there is not quite a significant difference between males and females. (The P-value is just the other side of 0.05.) Though the conclusion is different, the P-values are fairly similar.</p>
+<p>Which test is better? I think treating it as matched pairs is assuming that the differences after minus before are the things to be looking at. This assumes that the after measurements are the before measurement plus a something that depends on treatment, but <em>not</em> on the before measurement. This would fail, for example, if all the after measurements are two times the before ones (so that the difference would be bigger if the before score was bigger).
+The regression approach is more flexible, because <em>any</em> linear relationship is taken care of. A matched-pairs model of this kind is a special case of the regression model but with the slope set to be 1. In our regression, the slope is less than 1, but not by much.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 
 </div>

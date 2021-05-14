@@ -139,7 +139,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="the-sign-test.html#the-power-of-the-sign-test-1"><span class="toc-section-number">9.7</span> The power of the sign test</a></li>
 <li><a href="the-sign-test.html#ben-roethlisberger-1"><span class="toc-section-number">9.8</span> Ben Roethlisberger</a></li>
 </ul></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a></li>
+<li><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
 <li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
@@ -154,7 +154,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
 <li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
@@ -569,7 +571,7 @@ bisection idea, because I thought that would be more accurate.</p>
 <p>This is a more accurate interval than we got above. (The
 <code>while</code> loop for the bisection keeps going until the two
 guesses at the appropriate end of the interval are less than 0.01
-apart, by default.)<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> You can change this by adding something like <em>tol=1e-4</em> to the end of your <em>ci-median</em>.</span></p>
+apart, by default.)<label for="tufte-sn-4" class="margin-toggle sidenote-number">4</label><input type="checkbox" id="tufte-sn-4" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">4</span> You can change this by adding something like <em>tol=1e-4</em> to the end of your <em>ci-median</em>.</span></p>
 <p>If you want some other confidence level, you add <code>conf.level</code>
 on the end, as you would for <code>t.test</code>:</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">ci_median</span>(times, time, <span class="dt">conf.level =</span> <span class="fl">0.75</span>)</a></code></pre></div>
@@ -764,7 +766,7 @@ SD 15, so we use <code>rnorm</code> with this mean and SD, obtaining
 10 values:</p>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1">x=<span class="kw">rnorm</span>(<span class="dv">10</span>,<span class="dv">50</span>,<span class="dv">15</span>)  </a>
 <a class="sourceLine" id="cb107-2" title="2">x</a></code></pre></div>
-<pre><code>##  [1] 59.62951 43.44898 44.35837 54.47797 50.23692 40.02055 40.56845 39.50100 67.70321 35.47873</code></pre>
+<pre><code>##  [1] 37.36895 62.03067 57.35868 55.37511 63.82707 67.56063 40.27352 67.00210 50.30781 45.97520</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What code would count how many of the sampled values are less
@@ -775,7 +777,7 @@ than 40 and how many are greater (or equal)?</li>
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">tibble</span>(x) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(x<span class="op">&lt;</span><span class="dv">40</span>)</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["x < 40"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"8"},{"1":"TRUE","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["x < 40"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"FALSE","2":"9"},{"1":"TRUE","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>2 values less (and 8 greater-or-equal).</p>
@@ -797,7 +799,7 @@ whose minimum value you want. I add to my pipeline:</p>
 <a class="sourceLine" id="cb110-3" title="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span>))</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["the_min"],"name":[1],"type":["int"],"align":["right"]},{"label":["is_rejected"],"name":[2],"type":["lgl"],"align":["right"]}],"data":[{"1":"2","2":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["the_min"],"name":[1],"type":["int"],"align":["right"]},{"label":["is_rejected"],"name":[2],"type":["lgl"],"align":["right"]}],"data":[{"1":"1","2":"TRUE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>This will fail sometimes. If all 10 of your sample values are greater
@@ -810,7 +812,7 @@ should not reject. The fix is</p>
 <a class="sourceLine" id="cb111-3" title="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>))</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["the_min"],"name":[1],"type":["int"],"align":["right"]},{"label":["is_rejected"],"name":[2],"type":["lgl"],"align":["right"]}],"data":[{"1":"2","2":"FALSE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["the_min"],"name":[1],"type":["int"],"align":["right"]},{"label":["is_rejected"],"name":[2],"type":["lgl"],"align":["right"]}],"data":[{"1":"1","2":"TRUE"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>The above is almost the right thing, but not quite: we only want that value
@@ -820,7 +822,7 @@ so a <code>pull</code> will grab it:</p>
 <a class="sourceLine" id="cb112-2" title="2"><span class="kw">summarize</span>(<span class="dt">the_min=</span><span class="kw">min</span>(n)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb112-3" title="3"><span class="kw">mutate</span>(<span class="dt">is_rejected=</span>(the_min<span class="op">&lt;=</span><span class="dv">1</span> <span class="op">|</span><span class="st"> </span>the_min<span class="op">==</span><span class="dv">10</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb112-4" title="4"><span class="kw">pull</span>(is_rejected)</a></code></pre></div>
-<pre><code>## [1] FALSE</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 <p>You might be wondering where the “1 or less” came from. Getting a
 P-value for the sign test involves the binomial distribution: if the
 null is correct, each data value is independently either above or
@@ -978,8 +980,7 @@ sample sizes is called the <em>relative efficiency</em> of the two
 tests: in this case, the <span class="math inline">\(t\)</span>-test is <span class="math inline">\(10/6=1.67\)</span> times more
 efficient. The data that you have are being used “more efficiently”
 by the <span class="math inline">\(t\)</span>-test.
-It is possible to derive
-<label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote">Meaning, I forget how to do it. But it has something to do with looking at alternatives that are very close to the null.</span><br />
+It is possible to derive<label for="tufte-sn-5" class="margin-toggle sidenote-number">5</label><input type="checkbox" id="tufte-sn-5" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">5</span> Meaning, I forget how to do it. But it has something to do with looking at alternatives that are very close to the null.</span><br />
 the limiting relative efficiency of
 the <span class="math inline">\(t\)</span> test relative to the sign test when the data are actually
 normal, as the sample size gets larger. This turns out not to
@@ -996,8 +997,7 @@ above/below rather than the actual values).</p>
 story can be very different.
 Of course you knew I would investigate this. There is a
 distribution called the “Laplace” or “double exponential”
-distribution, that has very long tails.
-<label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote">If you’ve ever run into the exponential distribution, you’ll recall that this is right skewed with a very long tail. The Laplace distribution looks like two of these glued back to back.</span>
+distribution, that has very long tails.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> If you’ve ever run into the exponential distribution, you’ll recall that this is right skewed with a very long tail. The Laplace distribution looks like two of these glued back to back.</span>
 The distribution is not in
 base R, but there is a package called <code>smoothmest</code> that
 contains a function <code>rdoublex</code> to generate random values from
@@ -1005,8 +1005,7 @@ this distribution. So we’re going to do a simulation investigation
 of the power of the sign test for Laplace data, by the same
 simulation technique that we did above. Like the normal, the Laplace
 distribution is symmetric, so its mean and median are the same
-(which makes our life easier).
-<label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote">This is about the <em>only</em> way in which the normal and Laplace distributions are alike.</span></p>
+(which makes our life easier).<label for="tufte-sn-7" class="margin-toggle sidenote-number">7</label><input type="checkbox" id="tufte-sn-7" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">7</span> This is about the <em>only</em> way in which the normal and Laplace distributions are alike.</span></p>
 <p>Let’s test the hypothesis that the median is zero. We’ll suppose that
 the true median is 0.5 (this is called <code>mu</code> in
 <code>rdoublex</code>). The first problem we run into is that we can’t use
@@ -1019,18 +1018,16 @@ these simulations.</p>
 <div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">library</span>(smoothmest)</a>
 <a class="sourceLine" id="cb129-2" title="2">rl &lt;-<span class="st"> </span><span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)</a>
 <a class="sourceLine" id="cb129-3" title="3">rl</a></code></pre></div>
-<pre><code>##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.87221482  0.49250051  0.26700527  1.90236874
-##  [9]  0.53288312  1.37374732  0.72743434  0.46634071  0.43581431 -0.01545866  0.18594908 -0.40403202
-## [17] -0.13540289  0.83862694 -0.23360644 -0.74050354  2.92089551 -2.72173880  0.51571185  1.23636045
-## [25]  0.82921382  1.72456334  0.07903058  0.74789589  0.90487190  2.52310082  3.13629814  0.81851434
-## [33]  0.74615575 -0.26068744  2.70683355  1.46981530  1.45646489  1.20232517  6.65249860 -0.51575026
-## [41] -0.07606399  2.11338640 -1.20427995  1.70986104 -1.66466321  0.55346854  0.33908531  0.72100677
-## [49]  0.92025176  0.98922656</code></pre>
+<pre><code>##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.87221482  0.49250051  0.26700527  1.90236874  0.53288312  1.37374732
+## [11]  0.72743434  0.46634071  0.43581431 -0.01545866  0.18594908 -0.40403202 -0.13540289  0.83862694 -0.23360644 -0.74050354
+## [21]  2.92089551 -2.72173880  0.51571185  1.23636045  0.82921382  1.72456334  0.07903058  0.74789589  0.90487190  2.52310082
+## [31]  3.13629814  0.81851434  0.74615575 -0.26068744  2.70683355  1.46981530  1.45646489  1.20232517  6.65249860 -0.51575026
+## [41] -0.07606399  2.11338640 -1.20427995  1.70986104 -1.66466321  0.55346854  0.33908531  0.72100677  0.92025176  0.98922656</code></pre>
 <p>This seems to have some unusual values, far away from zero:</p>
 <div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1"><span class="kw">tibble</span>(rl) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb131-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>rl))<span class="op">+</span></a>
 <a class="sourceLine" id="cb131-3" title="3"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-91-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-93-1.png" width="672"  /></p>
 <p>You see the long tails compared to the normal.</p>
 <p>Now, we feed these values into <code>t.test</code> and see whether we
 reject a null median of zero (at <span class="math inline">\(\alpha=0.05\)</span>):</p>
@@ -1163,25 +1160,25 @@ powerful relative to the <span class="math inline">\(t\)</span>-test than you wo
 <p>Solution</p>
 <p>Don’t be tempted to think <em>too</em> hard about the choice of graph (though I talk more about this below). One quantitative variable, so a histogram again. There are only 12 observations, so 5 bins is about as high as you should go:</p>
 <div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-100-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-102-1.png" width="672"  /></p>
 <p>This one shows an outlier: there is one number of completed passes that is noticeably higher than the rest. A normal distribution doesn’t have outliers, and so this, coupled with a small sample in which normality is important, means that we should not be using a <span class="math inline">\(t\)</span>-test or confidence interval.</p>
 <p>If you chose a different number of bins, you might get a different look. Here’s 4 bins:</p>
 <div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">4</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-101-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-103-1.png" width="672"  /></p>
 <p>That looks more like right-skewness, but the conclusion is the same.</p>
 <p>Extra: if you have read, for example, <a href="http://ritsokiguess.site/datafiles/pasias/one-sample-inference.html#hunter-gatherers-in-australia">Problem 6.1 in PASIAS</a>, you’ll have seen that another possibility is a one-group boxplot. This might have been the context in which you first saw the boxplot, maybe at about the time you first saw the five-number summary, but I don’t talk about that so much in this course because <code>ggplot</code> boxplots have both an <code>x</code> and a <code>y</code>, and it makes more sense to think about using boxplots to <em>compare</em> groups. But, you can certainly get R to make you a one-sample boxplot. What you do is to set the grouping variable to a “dummy” thing like the number 1:</p>
 <div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-102-1.png" width="672"  />
+<p><img src="pasias_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
 and then you ignore the <span class="math inline">\(x\)</span>-axis.</p>
 <p>This really shows off the outlier; it is actually <em>much</em> bigger than the other observations. It didn’t show up so much on the histograms because of where the bin boundaries happened to come. On the four-bin histogram, the highest value 30 was in the 27.5–32.5 bin, and the second-highest value 23 was at the bottom of the 22.5–27.5 bin. So the highest and second-highest values looked closer together than they actually were.</p>
 <p>If you have been reading ahead, you might also be thinking about a normal quantile plot. That is for specifically assessing normality, and here this is something that interests us, because a <span class="math inline">\(t\)</span>-test will be doubtful if the normality fails:</p>
 <div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">sample=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-103-1.png" width="672"  />
+<p><img src="pasias_files/figure-html/unnamed-chunk-105-1.png" width="672"  />
 This again shows off the outlier at the high end. It is a reasonable choice of plot <em>here</em> because normality is of specific interest to us.</p>
 <p>A note: you are absolutely not required to read ahead to future lectures. Each assignment can be done using the material in the indicated lectures only. If you want to use something from future lectures, go ahead, but make sure you are using it appropriately.</p>
 <p>Don’t be tempted to plot the number of completed passes against something like week number:</p>
 <div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb152-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>week, <span class="dt">y=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-104-1.png" width="672"  />
+<p><img src="pasias_files/figure-html/unnamed-chunk-106-1.png" width="672"  />
 That is quite interesting (a mostly increasing trend over weeks, with the outlier performance in week 10), but it doesn’t tell us what we want to know <em>here</em>: namely, is a <span class="math inline">\(t\)</span>-test any good?</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1271,21 +1268,21 @@ That is quite interesting (a mostly increasing trend over weeks, with the outlie
 <a class="sourceLine" id="cb163-2" title="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">mean</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb163-3" title="3"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb163-4" title="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-111-1.png" width="672"  />
+<p><img src="pasias_files/figure-html/unnamed-chunk-113-1.png" width="672"  />
 This is a little bit skewed to the right (it goes further up from the peak than down), but not so bad, which is why the CI for the mean went up a bit higher, but only a bit, than the one for the median.</p>
 <p>Finally, bootstrapping the median is not something you’d want to do, since the sign test doesn’t depend on anything being normally-distributed. This is a good thing, since bootstrapping the sample median is weird:</p>
 <div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(ben<span class="op">$</span>completed, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb164-2" title="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">median</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb164-3" title="3"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb164-4" title="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-112-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-114-1.png" width="672"  /></p>
 <p>The “clumpiness” in the distribution comes about because there are not all that many different possible sample medians when you sample with replacement. For one thing, the values are all whole numbers, so the median can only be something or something and a half. Even then, the bar heights look kind of irregular.</p>
 <p>I used a large number of bins to emphasize this, but even a more reasonable number looks strange:</p>
 <div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" title="1"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(ben<span class="op">$</span>completed, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb165-2" title="2"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">median</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb165-3" title="3"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb165-4" title="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>value)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-113-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-115-1.png" width="672"  /></p>
 <p>A sample median of 19 or 20 is more likely than one of 19.5.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 
@@ -1293,7 +1290,7 @@ This is a little bit skewed to the right (it goes further up from the peak than 
 </div>
 <p style="text-align: center;">
 <a href="power-and-sample-size.html"><button class="btn btn-default">Previous</button></a>
-<a href="moods-median-test.html"><button class="btn btn-default">Next</button></a>
+<a href="mood-median-test.html"><button class="btn btn-default">Next</button></a>
 </p>
 </div>
 </div>
