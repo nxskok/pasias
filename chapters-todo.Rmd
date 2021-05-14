@@ -35,6 +35,7 @@ lines %>% str_remove_all("\"") %>%
   arrange(desc(file_mtime)) %>% 
   filter(!str_detect(fname, "_qq")) %>% 
   mutate(file_later = file_mtime > chapter_mtime) -> d
+d %>% arrange(fname)
 d %>% filter(file_later)
 ```
 
@@ -42,7 +43,8 @@ d %>% filter(file_later)
 d %>% 
   filter(file_later) %>% 
   distinct(chapter) %>% 
-  slice(1:5) 
+  slice(1:5) %>% 
+  mutate(thing = walk(chapter, ~bookdown::preview_chapter(.)))
 ```
 
 
