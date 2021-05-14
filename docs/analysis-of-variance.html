@@ -130,7 +130,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
 <li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
 <li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a></li>
+<li><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a></li>
 <li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
 <li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
@@ -164,7 +164,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
 <li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
+<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
+<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
@@ -515,7 +517,7 @@ trustworthy. Discuss your graph and its implications briefly.</li>
 <p>Solution</p>
 <p>The obvious graph is a boxplot:</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-64-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-66-1.png" width="672"  /></p>
 <p>For ANOVA, we are looking for approximately normal distributions
 within each group and approximately equal spreads. Without the
 outliers, I would be more or less happy with that, but the G movies
@@ -632,7 +634,7 @@ month. Comment briefly on what you see.</li>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-69-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
 <p>This offers the suggestion that maybe November will be significantly
 higher than the rest and May significantly lower, or at least they
 will be significantly different from each other.</p>
@@ -648,7 +650,7 @@ sizes, is a “dot plot”: instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
 scatterplot:</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-72-1.png" width="672"  /></p>
 <p>Wait a minute. There were five deer in February and six in
 August. Where did they go?</p>
 <p>The problem is <em>overplotting</em>: more than one of the deer plotted
@@ -658,7 +660,7 @@ One way to solve this is to randomly
 move the points around so that no two of them plot in the same
 place. This is called <em>jittering</em>, and is done like this:</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="kw">ggplot</span>(deer, <span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> food)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="dv">0</span>, <span class="dt">height =</span> <span class="fl">0.05</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-71-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-73-1.png" width="672"  /></p>
 <p>Now you see all the deer, and you can see that two pairs of points in
 August and one pair of points in February are close enough on the
 jittered plot that they would have been the same to one decimal place.</p>
@@ -929,7 +931,7 @@ briefly.</li>
 <p>Solution</p>
 <p>The graph would seem to be a boxplot, side by side for each group:</p>
 <div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">x =</span> rating, <span class="dt">y =</span> length)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-84-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-86-1.png" width="672"  /></p>
 <p>We are looking for approximate normal distributions with approximately
 equal spreads, which I don’t think we have: there are outliers, at the
 low end for G movies, and at the high end for PG and PG-13
@@ -954,7 +956,7 @@ then the normal quantile plot part, then the facetting:</p>
 <div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">ggplot</span>(movies, <span class="kw">aes</span>(<span class="dt">sample =</span> length)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb101-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb101-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>rating)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-85-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-87-1.png" width="672"  /></p>
 <p>Since there are four movie ratings, <code>facet_wrap</code> has arranged
 them into a <span class="math inline">\(2\times 2\)</span> grid, which satisfyingly means that each
 normal quantile plot is more or less square and thus easy to
@@ -1462,11 +1464,11 @@ weight, is something like a boxplot. If you’re not careful,
 which you don’t want; the easiest way around that, for a boxplot
 at least, is to turn it into a factor like this:</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(method), <span class="dt">y =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-109-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-111-1.png" width="672"  /></p>
 <p>If you insist, you could do a faceted histogram (above and below, for preference):</p>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">x =</span> weight)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb138-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-110-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-112-1.png" width="672"  /></p>
 <p>There are really not enough data values for a histogram to be of much
 help, so I don’t like this as much.</p>
 <p>If you are thinking ahead (we are going to be doing a <span class="math inline">\(t\)</span>-test), then
@@ -1477,7 +1479,7 @@ observations:</p>
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="kw">ggplot</span>(carbon, <span class="kw">aes</span>(<span class="dt">sample =</span> weight)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb139-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb139-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-111-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-113-1.png" width="672"  /></p>
 <p>I don’t mind these coming out side by side, though I would rather have
 them squarer.</p>
 <p>I would say, boxplots are the best, normal quantile plots are also
@@ -1783,7 +1785,7 @@ so get used to seeing where it will be useful.</p>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1"><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">x =</span> amount, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-121-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-123-1.png" width="672"  /></p>
 <p>Note that this is <em>much more difficult</em> if you don’t have a tidy data frame. (Try it and see.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -1860,7 +1862,7 @@ because the confidence interval is rather long.<label for="tufte-sn-16" class="m
 <p>Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don’t think there’s any reason to consider any other test. You might like to assess that with normal quantile plots:</p>
 <div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1"><span class="kw">ggplot</span>(caffeine, <span class="kw">aes</span>(<span class="dt">sample=</span>score)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb160-2" title="2"><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>amount, <span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-124-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-126-1.png" width="672"  /></p>
 <p>There’s nothing to worry about there normality-wise. If anything, there’s a little evidence of <em>short</em> tails (in the None group especially), but you’ll recall that short tails don’t affect the mean and thus pose no problems for the ANOVA. Those three lines also have pretty much the same slope, indicating very similar spreads. Regular ANOVA is the best test here. (Running eg. Mood’s median test would be a mistake here, because it doesn’t use the data as efficiently (counting only aboves and belows) as the ANOVA does, and so the ANOVA will give a better picture of what differs from what.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
@@ -1869,7 +1871,7 @@ because the confidence interval is rather long.<label for="tufte-sn-16" class="m
 <p>Reggae is a music genre that originated in Jamaica in the late 1960s. One of the most famous reggae bands was Bob Marley and the Wailers.
 In a survey, 729 students were asked to rate reggae music on a scale from 1, “don’t like it at all” to 6, “like it a lot”.
 We will treat the ratings as quantitative.
-Each student was also asked to classify their home town as one of “big city”, “suburban”, “small town”, “rural”. Does a student’s opinion of reggae depend on the kind of home town they come from? The data are in .</p>
+Each student was also asked to classify their home town as one of “big city”, “suburban”, “small town”, “rural”. Does a student’s opinion of reggae depend on the kind of home town they come from? The data are in <a href="http://ritsokiguess.site/datafiles/reggae.csv">http://ritsokiguess.site/datafiles/reggae.csv</a>.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Read in and display (some of) the data.</li>
 </ol>
@@ -1918,14 +1920,14 @@ Each student was also asked to classify their home town as one of “big city”
 <p>Solution</p>
 <p>One quantitative, one categorical: a boxplot, as ever:</p>
 <div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1"><span class="kw">ggplot</span>(reggae, <span class="kw">aes</span>(<span class="dt">x=</span>home, <span class="dt">y=</span>rating)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-128-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-130-1.png" width="672"  /></p>
 <p>Extra 1: the last three boxplots really are identical, because the medians, means, quartiles and extreme values are all equal. However, the <em>data values</em> are not all the same, as you see below.</p>
 <p>Extra 2: I said that the ratings should be treated as quantitative, to guide you towards this plot.
 You could otherwise have taken the point of view that the ratings were (ordered) categorical, in which case the right graph would have been a grouped bar chart, as below.
 There is a question about which variable should be <code>x</code> and which should be <code>fill</code>.
 I am taking the point of view that we want to compare ratings within each category of <code>home</code>, which I think makes sense here (see discussion below), which breaks my “rule” that the categorical variable with fewer categories should be <code>x</code>.<label for="tufte-sn-17" class="margin-toggle sidenote-number">17</label><input type="checkbox" id="tufte-sn-17" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">17</span> Perhaps a better word here would be <em>principle</em>, to convey the idea that you can do something else if it works better for your purposes.</span></p>
 <div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="kw">ggplot</span>(reggae, <span class="kw">aes</span>(<span class="dt">x=</span>home, <span class="dt">fill=</span><span class="kw">factor</span>(rating))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-129-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-131-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Discuss briefly why you might prefer to run Mood’s median test to compare ratings among home towns.</li>
@@ -1949,7 +1951,7 @@ Remember the process: first we assess normality. If that fails, we use Mood’s 
 <a class="sourceLine" id="cb168-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(bigs<span class="op">$</span>rating, <span class="dt">replace =</span> T))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb168-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb168-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-130-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-132-1.png" width="672"  /></p>
 <p>Not too much wrong with that. This shows that the sample size is indeed big enough to cope with the skewness.</p>
 <p>You can do any of the others the same way.</p>
 <p>If you’re feeling bold, you can get hold of all three bootstrapped sampling distributions at once, like this:</p>
@@ -1962,7 +1964,7 @@ Remember the process: first we assess normality. If that fails, we use Mood’s 
 <a class="sourceLine" id="cb169-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb169-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb169-9" title="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>home, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-131-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-133-1.png" width="672"  /></p>
 <p>All of these distributions look very much normal, so there is no cause for concern anywhere.</p>
 <p>This was rather a lot of code, so let me take you through it. The first thing is that we want to treat the different students’ homes separately, so the first step is this:</p>
 <div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1">reggae <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2071,7 +2073,12 @@ Remember the process: first we assess normality. If that fails, we use Mood’s 
 ## suburban-rural       0.11277174 -0.3735106  0.5990540 0.9329253
 ## suburban-small town -0.08893281 -0.4778062  0.2999406 0.9354431</code></pre>
 <p>Again, almost identical.</p>
-<p>Extra 2: some Bob Marley and the Wailers for you, the first from 1980, , and the second from 1973: . Reggae music at its finest.</p>
+<p>Extra 2: some Bob Marley and the Wailers for you:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=RhJ0q7X3DLM">from 1980</a></li>
+<li><a href="https://www.youtube.com/watch?v=rf8GjhXvOjU">from 1973</a></li>
+</ul>
+<p>Reggae music at its finest.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
 <div id="watching-tv-and-education-1" class="section level2">
@@ -2128,7 +2135,7 @@ Remember the process: first we assess normality. If that fails, we use Mood’s 
 <p>Solution</p>
 <p>One quantitative variable and one categorical one, so a boxplot. (I hope you are getting the hang of this by now.)</p>
 <div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" title="1"><span class="kw">ggplot</span>(gss, <span class="kw">aes</span>(<span class="dt">x=</span>degree, <span class="dt">y=</span>tvhours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-142-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-144-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Does your plot indicate that your guess about the distribution shape was correct? Explain briefly.</li>
@@ -2256,7 +2263,7 @@ I thought I would investigate this in more detail:</p>
 <a class="sourceLine" id="cb210-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb210-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb210-9" title="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>degree, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-150-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-152-1.png" width="672"  /></p>
 <p>Coding this made my head hurt, but building it one line at a time, I pretty much got it right first time. In words:</p>
 <ul>
 <li>“compress” the dataframe to get one row per degree and a list-column called <code>data</code> with the number of hours of TV watched for each person with that <code>degree</code></li>
@@ -2305,7 +2312,7 @@ I thought I would investigate this in more detail:</p>
 <p>Solution</p>
 <p>As usual, one quantitative and one categorical, so a boxplot:</p>
 <div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="kw">ggplot</span>(writers, <span class="kw">aes</span>(<span class="dt">x=</span>Type, <span class="dt">y=</span>Age)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-152-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-154-1.png" width="672"  /></p>
 <p>At this point, a boxplot is best, since right now you are mostly after a general sense of what is going on, rather than assessing normality in particular (that will come later).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -2355,7 +2362,7 @@ I thought I would investigate this in more detail:</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" title="1"><span class="kw">ggplot</span>(writers, <span class="kw">aes</span>(<span class="dt">sample =</span> Age)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb220-2" title="2"><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb220-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>Type)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-156-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-158-1.png" width="672"  /></p>
 <p>I see that the Nonfiction writers have two outliers at the low end (and are otherwise not bad); the writers of Novels don’t go up high enough (it’s almost as if there is some magic that stops them living beyond 90!); the writers of Poems have a short-tailed distribution. You’ll remember that short tails are not a problem, since the mean is still descriptive of such a distribution; it’s <em>long</em> tails or outliers or skewness that you need to be worried about. The outliers in the Nonfiction writers are the biggest concern.</p>
 <p>Are you concerned that these outliers are a problem, given the sample size? There are only 24 nonfiction writers (from your table of means earlier), so the Central Limit Theorem will help a bit. Make a call about whether these outliers are a big enough problem. You can go either way on this, as long as you raise the relevant issues.</p>
 <p>Another approach you might take is to look at the P-values. The one in the <span class="math inline">\(F\)</span>-test is really small, and so is one of the ones in the Tukey. So even if you think the analysis is a bit off, those conclusions are not likely to change. The 0.02 P-value in the Tukey, however, is another story. This could become non-significant in actual fact if the P-value is not to be trusted.</p>
@@ -2433,7 +2440,7 @@ I thought I would investigate this in more detail:</p>
 <a class="sourceLine" id="cb228-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample))</a></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Type"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list<tibble>"],"align":["right"]},{"label":["sim"],"name":[3],"type":["int"],"align":["right"]},{"label":["my_sample"],"name":[4],"type":["list"],"align":["right"]},{"label":["my_mean"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Nonfiction","2":"<list<tibble>>","3":"1","4":"<dbl [24]>","5":"78.79167"},{"1":"Nonfiction","2":"<list<tibble>>","3":"2","4":"<dbl [24]>","5":"75.87500"},{"1":"Nonfiction","2":"<list<tibble>>","3":"3","4":"<dbl [24]>","5":"82.70833"},{"1":"Nonfiction","2":"<list<tibble>>","3":"4","4":"<dbl [24]>","5":"74.66667"},{"1":"Nonfiction","2":"<list<tibble>>","3":"5","4":"<dbl [24]>","5":"81.45833"},{"1":"Novels","2":"<list<tibble>>","3":"1","4":"<dbl [67]>","5":"71.38806"},{"1":"Novels","2":"<list<tibble>>","3":"2","4":"<dbl [67]>","5":"70.20896"},{"1":"Novels","2":"<list<tibble>>","3":"3","4":"<dbl [67]>","5":"71.25373"},{"1":"Novels","2":"<list<tibble>>","3":"4","4":"<dbl [67]>","5":"67.52239"},{"1":"Novels","2":"<list<tibble>>","3":"5","4":"<dbl [67]>","5":"70.85075"},{"1":"Poems","2":"<list<tibble>>","3":"1","4":"<dbl [32]>","5":"65.34375"},{"1":"Poems","2":"<list<tibble>>","3":"2","4":"<dbl [32]>","5":"61.15625"},{"1":"Poems","2":"<list<tibble>>","3":"3","4":"<dbl [32]>","5":"63.75000"},{"1":"Poems","2":"<list<tibble>>","3":"4","4":"<dbl [32]>","5":"65.56250"},{"1":"Poems","2":"<list<tibble>>","3":"5","4":"<dbl [32]>","5":"66.12500"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Type"],"name":[1],"type":["chr"],"align":["left"]},{"label":["data"],"name":[2],"type":["list<tibble>"],"align":["right"]},{"label":["sim"],"name":[3],"type":["int"],"align":["right"]},{"label":["my_sample"],"name":[4],"type":["list"],"align":["right"]},{"label":["my_mean"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"Nonfiction","2":"<list<tibble>>","3":"1","4":"<dbl [24]>","5":"79.87500"},{"1":"Nonfiction","2":"<list<tibble>>","3":"2","4":"<dbl [24]>","5":"78.83333"},{"1":"Nonfiction","2":"<list<tibble>>","3":"3","4":"<dbl [24]>","5":"76.91667"},{"1":"Nonfiction","2":"<list<tibble>>","3":"4","4":"<dbl [24]>","5":"80.83333"},{"1":"Nonfiction","2":"<list<tibble>>","3":"5","4":"<dbl [24]>","5":"82.25000"},{"1":"Novels","2":"<list<tibble>>","3":"1","4":"<dbl [67]>","5":"69.83582"},{"1":"Novels","2":"<list<tibble>>","3":"2","4":"<dbl [67]>","5":"72.44776"},{"1":"Novels","2":"<list<tibble>>","3":"3","4":"<dbl [67]>","5":"69.59701"},{"1":"Novels","2":"<list<tibble>>","3":"4","4":"<dbl [67]>","5":"72.91045"},{"1":"Novels","2":"<list<tibble>>","3":"5","4":"<dbl [67]>","5":"72.71642"},{"1":"Poems","2":"<list<tibble>>","3":"1","4":"<dbl [32]>","5":"65.87500"},{"1":"Poems","2":"<list<tibble>>","3":"2","4":"<dbl [32]>","5":"61.25000"},{"1":"Poems","2":"<list<tibble>>","3":"3","4":"<dbl [32]>","5":"63.59375"},{"1":"Poems","2":"<list<tibble>>","3":"4","4":"<dbl [32]>","5":"62.68750"},{"1":"Poems","2":"<list<tibble>>","3":"5","4":"<dbl [32]>","5":"63.21875"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>and then you could plot those means. This seems to be working, so let’s scale up to 1000 simulations, and make normal quantile plots of the bootstrapped sampling distributions, one for each Type of writer:</p>
@@ -2445,7 +2452,7 @@ I thought I would investigate this in more detail:</p>
 <a class="sourceLine" id="cb229-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb229-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb229-8" title="8"><span class="st">  </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Type, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-164-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-166-1.png" width="672"  /></p>
 <p>These three normal quantile plots are all acceptable, to my mind, although the Nonfiction one, with the two outliers and the smallest sample size, is still a tiny bit skewed to the left. Apart from that, the three sampling distributions of the sample means are close to normal, so our <code>aov</code> is much better than you might have thought from looking at the boxplots. That’s the result of having large enough samples to get help from the Central Limit Theorem.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
@@ -2497,14 +2504,22 @@ hours they spent studying per week. (This was part of a much larger survey.) We 
 <p>There are four extra rows here. Why? Let’s look at a <code>summary</code> of the dataframe:</p>
 
 <div class="sourceCode" id="cb236"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb236-1" title="1"><span class="kw">summary</span>(student0) </a></code></pre></div>
-<pre><code>##      Sex                 GPA          ReligImp           MissClass          Seat             PartyDays         StudyHrs    
-##  Length:690         Min.   :1.500   Length:690         Min.   :0.0000   Length:690         Min.   : 0.000   Min.   : 0.00  
-##  Class :character   1st Qu.:2.930   Class :character   1st Qu.:0.0000   Class :character   1st Qu.: 3.000   1st Qu.: 6.25  
-##  Mode  :character   Median :3.200   Mode  :character   Median :1.0000   Mode  :character   Median : 7.000   Median :10.00  
-##                     Mean   :3.179                      Mean   :0.9064                      Mean   : 7.501   Mean   :13.16  
-##                     3rd Qu.:3.515                      3rd Qu.:1.0000                      3rd Qu.:11.000   3rd Qu.:16.00  
-##                     Max.   :4.000                      Max.   :6.0000                      Max.   :31.000   Max.   :70.00  
-##                     NA&#39;s   :3                          NA&#39;s   :1                                            NA&#39;s   :4</code></pre>
+<pre><code>##      Sex                 GPA          ReligImp           MissClass          Seat             PartyDays     
+##  Length:690         Min.   :1.500   Length:690         Min.   :0.0000   Length:690         Min.   : 0.000  
+##  Class :character   1st Qu.:2.930   Class :character   1st Qu.:0.0000   Class :character   1st Qu.: 3.000  
+##  Mode  :character   Median :3.200   Mode  :character   Median :1.0000   Mode  :character   Median : 7.000  
+##                     Mean   :3.179                      Mean   :0.9064                      Mean   : 7.501  
+##                     3rd Qu.:3.515                      3rd Qu.:1.0000                      3rd Qu.:11.000  
+##                     Max.   :4.000                      Max.   :6.0000                      Max.   :31.000  
+##                     NA&#39;s   :3                          NA&#39;s   :1                                           
+##     StudyHrs    
+##  Min.   : 0.00  
+##  1st Qu.: 6.25  
+##  Median :10.00  
+##  Mean   :13.16  
+##  3rd Qu.:16.00  
+##  Max.   :70.00  
+##  NA&#39;s   :4</code></pre>
 
 <p>You get information about each variable. For the text variables, you don’t learn much, only how many there are. (See later for more on this.)
 For each of the four quantitative variables, you see
@@ -2563,7 +2578,7 @@ I would actually favour the second one, but this is going to be a question about
 <p>Solution</p>
 <p>This kind of data is one quantitative and one categorical variable, so once again a boxplot:</p>
 <div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="kw">ggplot</span>(student, <span class="kw">aes</span>(<span class="dt">x=</span>ReligImp, <span class="dt">y=</span>StudyHrs)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-171-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-173-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>The statistician in this study decided that the data were sufficiently normal in shape given the (very large) sample sizes, but was concerned about unequal spreads among the three groups.
@@ -2596,7 +2611,7 @@ Tukey envisaged a boxplot as something you could draw by hand for a smallish dat
 <a class="sourceLine" id="cb251-2" title="2"><span class="kw">mutate</span>(<span class="dt">samp=</span><span class="kw">map</span>(n, <span class="op">~</span><span class="kw">rnorm</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb251-3" title="3"><span class="kw">unnest</span>(samp) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb251-4" title="4"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(n), <span class="dt">y=</span>samp)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-174-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-176-1.png" width="672"  /></p>
 <p>As the sample size gets bigger, the number of outliers gets bigger, and the whiskers get longer.
 All this means is that in a larger sample, you are more likely to see a small number of values that are further out, and that is not necessarily a reason for concern. Here, the outliers are only one value out of 100 and two out of 300, but they have what looks like an outsize influence on the plot. In the boxplot for our data, the distributions were a bit skewed, but the outliers may not have been as much of a problem as they looked.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -2620,7 +2635,7 @@ Enough? Well, that is hard to judge.</p>
 <a class="sourceLine" id="cb252-7" title="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb252-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb252-9" title="9"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>ReligImp, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-175-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-177-1.png" width="672"  /></p>
 <p>To truly understand what’s going on, you probably need to run this code one line at a time.</p>
 <p>Anyway, these normal quantile plots are <em>very</em> normal. This says that the sampling distributions of the sample means are <em>very much</em> normal in shape, which means that
 the sample sizes are definitely large enough to overcome the apparently bad skewness that we saw on the boxplots. In other words, using a regular or Welch ANOVA will be perfectly good; there is no need to reach for Mood’s median test here, despite what you might think from looking at the boxplots, because the sample sizes are so large.</p>
