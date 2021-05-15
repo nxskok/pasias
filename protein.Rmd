@@ -105,21 +105,23 @@ This interval is entirely below 6 (the null median), so evidently the reason tha
 Extra: the CI for the median is not that different from the one for the mean, which suggests that maybe the $t$-test was not so bad after all. If you want to investigate further, you can try finding a bootstrapped sampling distribution of the sample mean, and see how non-normal it looks:
 
 ```{r}
-rerun(1000, sample(meals$protein, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() -> d
-ggplot(d, aes(x = value)) + geom_histogram(bins = 10)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(meals$protein, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) -> d
+ggplot(d, aes(x = my_mean)) + geom_histogram(bins = 10)
 ```
-That is pretty close to normal. So the $t$-test would in actual fact have been fine. To confirm, a normal quantile plot:
+
+That is pretty close to normal. So the $t$-test would in actual fact have been fine. To confirm, a normal quantile plot of the bootstrapped sampling distribution:
 
 ```{r}
-ggplot(d, aes(sample = value)) + stat_qq() + stat_qq_line()
+ggplot(d, aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 A *tiny bit* skewed to the left.
 
 But I didn't ask you to do this, because I wanted to give you a chance to do a sign test for what seemed like a good reason. 
 
-Extra 2: I mentioned in an endnote that the endpoints of the CI for the median are actually data points, only we didn't see it because of the accuracy to which `ci_median` was working. You can control this accuracy by an extra input `tol`. Let's do something silly here:
+Extra 2: I mentioned in an note that the endpoints of the CI for the median are actually data points, only we didn't see it because of the accuracy to which `ci_median` was working. You can control this accuracy by an extra input `tol`. Let's do something silly here:
 
 ```{r}
 ci_median(meals, protein, conf.level = 0.90, tol = 0.00000001)

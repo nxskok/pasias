@@ -170,7 +170,8 @@ tibble(sim = 1:1000) %>%
 mean_sd
 ```
 
-As for coding, I turned the simulated samples into a dataframe, got out the individual values, obtaining a column `sim` that numbers the individual samples, and then was able to get what I wanted by `group_by` and `summarize` as usual. Try it one line at a time to see how it works. The `enframe` turns a `list` (which is what comes out of `rerun`) into a dataframe. I'm never quite sure how it will come out, but I try it first and then deal with what it produces. When I was working this out, I started with a `rerun(2, ...)` so that I could see what it was doing, and when I was happy that it was all working, I did it again with the final number of simulations.
+As for coding, I made a dataframe with a column `sim` that numbers the individual samples, made sure I said that I wanted to work rowwise, generated a random sample from the population in each row of size 10, and found its mean, SD and the calculated-by-me $t$-statistic.^[This is not bootstrapping, but generating ordinary random samples from a presumed-known population, so there is no `replace = TRUE` here.]
+
 
 After that, I played around with several things, but I found something interesting when I plotted the sample mean and SD *against each other*:
 

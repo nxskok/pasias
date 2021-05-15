@@ -1,0 +1,247 @@
+## Dolphins
+
+ Dolphins and other large marine mammals are at the top of the marine food chain, and so if there is any heavy metal pollution in the sea, it will find its way into the dolphins. The study we look at is of the concentration of mercury. This is expected to be different in males and females because the mercury in a female is transferred to her offspring during gestation and nursing. In this study, there were 28 males and 17 females of various ages. There are three columns in the data file:
+
+- `mercury`, the concentration in the liver, in micrograms per gram
+- `age` in years
+- `sex` of the dolphin, male or female.
+
+The data are in [http://ritsokiguess.site/datafiles/dolphins.csv](http://ritsokiguess.site/datafiles/dolphins.csv) as a CSV file. This question appears to have a lot of parts, but most of them ought not to take you too long.
+
+
+
+(a) Read in and display (some of) the data.
+
+Solution
+
+
+Exactly the usual:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/dolphins.csv"
+dolphins <- read_csv(my_url)
+dolphins
+```
+There are indeed 45 dolphins, with the males listed first and the females listed at the end (as you can check).
+
+
+$\blacksquare$
+
+
+(b) Display only the two columns `mercury` and `sex`.
+
+Solution
+
+
+Two ways to do it: either list both columns:
+
+```{r}
+dolphins %>% select(mercury, sex)
+```
+
+or say "everything but age":
+
+```{r}
+dolphins %>% select(-age)
+```
+
+The second one is easier coding, so is better.
+
+Note that `mercury:sex` won't do it, because that will get you `age` as well ("`mercury` through `sex`").
+
+
+$\blacksquare$
+
+
+(c) Display all the columns whose names have exactly three characters, without naming any columns.
+
+Solution
+
+
+Evidently this is `age` and `sex`. We are selecting columns on the basis of their names, so we will need a select-helper. The one that works is `matches` with a regular expression. This is like the one in the lecture notes where we selected height and weight by selecting columns whose names had two letters and the second one was "t". In this case, the three letters can be anything, so it's three dots between the start of text and end of text:
+
+```{r}
+dolphins %>% 
+select(matches("^...$"))
+```
+
+
+$\blacksquare$
+
+
+(d) Display only the mercury levels for the females. 
+
+Solution
+
+
+This is selecting rows *and* columns, so you'll have a `select` and a `filter`. If you do the `select` first, you'll only have the mercury levels left, and you won't know which dolphins are female. So do the `filter` first:
+
+```{r}
+dolphins %>% filter(sex == "female") %>% 
+select(mercury)
+```
+
+
+$\blacksquare$
+
+
+(e) What is the mean mercury concentration for all the dolphins whose age is less than 15?
+
+Solution
+
+
+Grab only the dolphins with age less than 15 first, and then work out their mean `mercury` with `summarize`:
+
+```{r}
+dolphins %>% filter(age<15) %>% 
+summarize(m = mean(mercury))
+```
+
+55.5 (micrograms per gram), as you should say.
+
+Another way is to define a new column that indicates whether the age is less than 15 or not, and do group-by and summarize:
+
+```{r}
+dolphins %>% 
+mutate(young = ifelse(age<15, "yes", "no")) %>% 
+group_by(young) %>% 
+summarize(m = mean(mercury))
+```
+
+Here, you *definitely* need to extract the right number out of the output. You can also define groups by logical condition directly, which saves you a step:
+
+```{r}
+dolphins %>% 
+group_by(age<15) %>% 
+summarize(m = mean(mercury))
+```
+
+Doing it this way, you are probably getting some suspicions about the relationship between age and mercury concentration, but that's coming up.
+
+
+$\blacksquare$
+
+
+(f) What is the mean mercury concentration for all  the dolphins whose age is greater than 25?
+
+Solution
+
+
+The same three choices of method:
+
+```{r}
+dolphins %>% filter(age>25) %>% 
+summarize(m = mean(mercury))
+```
+
+309.2 (micrograms per gram), as you should say.
+
+Or define a new column:
+
+```{r}
+dolphins %>% 
+mutate(young = ifelse(age>25, "yes", "no")) %>% 
+group_by(young) %>% 
+summarize(m = mean(mercury))
+```
+
+Or:
+
+```{r}
+dolphins %>% 
+group_by(age>25) %>% 
+summarize(m = mean(mercury))
+```
+
+In any of these ways, 309.2 micrograms per gram.
+
+
+$\blacksquare$
+
+
+(g) Make a suitable graph of these data (all three columns).
+
+Solution
+
+
+This one ought to be a gimme, but I am using the result in the next part. With two quantitative variables and one categorical, a scatterplot with the sexes indicated by colour:
+
+```{r}
+ggplot(dolphins, aes(x = age, y = mercury, colour = sex)) + geom_point()
+```
+
+I think this is clearer without regression lines; the upward trend is clear enough, and it is not clear that the trends are linear (look at the males of the largest ages). Add a smooth trend if you like:
+
+```{r}
+ggplot(dolphins, aes(x = age, y = mercury, colour = sex)) + geom_point() +
+geom_smooth()
+```
+
+Mercury concentration increases with age for the females, and also does  with age for the males up to about age 25, after which it levels off or decreases.
+
+
+$\blacksquare$
+
+
+(h) Explain briefly how your graph and your calculations of mean mercury concentration are telling a similar story.
+
+Solution
+
+
+I wanted to get to a point where we were saying something interesting about the data, rather than just playing with `select` and friends.
+
+The graph is showing an increasing trend of mercury concentration with age (at least, for all but the oldest males). The mean calculations are showing that the younger dolphins have a small mercury concentration on average, and the older dolphins have a much larger mean. These are both saying that mercury concentration is increasing with age, so they are consistent.
+
+Extra:
+
+I tried to make this fairly obvious for you by choice of age groups to compare, and this pattern holds for both males and females, so that the mean calculations didn't need to depend on `sex`. But there is no great difficulty in making it work by sex as well -- insert a `group_by` before the `summarize`:
+
+```{r}
+dolphins %>% filter(age<15) %>% 
+group_by(sex) %>% 
+summarize(m = mean(mercury))
+```
+
+and
+
+```{r}
+dolphins %>% filter(age>25) %>% 
+group_by(sex) %>% 
+summarize(m = mean(mercury))
+```
+
+The male means are slightly bigger in the two cases, though the difference between the sexes is small compared to the age effect. (I ran a regression predicting mercury concentration from age and sex, and the sex effect wasn't even significant.)
+
+A second extra: what if you wanted to divide age up into age groups for comparison of mercury concentration? This isn't always a good idea (for reasons I get into below), but if you want to do it, `cut` is your friend:
+
+```{r}
+dolphins %>% mutate(age_group = cut(age, breaks=c(0,15,25,60))) -> dolphinsx
+dolphinsx
+```
+
+Note that `cut` needs input `breaks` whose first value is lower than all the ages and whose last value is higher than all the ages. The age group intervals are what mathematicians would call "half-open": the upper limit is included in the interval and the lower limit is not. The age of 15 is thus in the 0-15  interval and not in 15-25.
+
+Now we can work out mean mercury concentration for each age group:
+
+```{r}
+dolphinsx %>% group_by(age_group) %>% 
+summarize(m = mean(mercury))
+```
+
+or even do it by sex as well:
+
+```{r}
+dolphinsx %>% group_by(age_group, sex) %>% 
+summarize(m = mean(mercury))
+```
+
+Note that there is still no evidence here of the levelling off of the male mercury levels, which happened after age 25, and there was quite a lot of variability there as well.
+
+My take is that if you have numerical data, that's what you should use, rather than breaking it up into categories. Those dolphins in the 25-60 age group, we don't know much about their actual ages, and we've seen that age and mercury concentration are closely related, so we are throwing away information by categorizing. Some people break things up into categories because that's what they know how to analyze, but that is never a good reason for you: it means that you need to go learn how to handle the original quantitative data!
+
+
+$\blacksquare$
+
+
+
+

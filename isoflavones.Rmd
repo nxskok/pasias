@@ -214,10 +214,11 @@ set.seed(457299)
 ```{r}
 bmd1b %>% 
 filter(treatment == "control") -> d
-rerun(1000, sample(d$bmd, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(sample = value)) + stat_qq() + stat_qq_line()
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(d$bmd, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 
 No problems there. The Welch ANOVA is fine.

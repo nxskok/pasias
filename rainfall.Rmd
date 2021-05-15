@@ -1,0 +1,277 @@
+## Unprecendented rainfall
+
+ In 1997, a company in Davis, California, had problems with
+odour in its wastewater facility. According to a company official, the
+problems were caused by "unprecedented weather conditions" and "because
+rainfall was at 170 to 180 percent of its normal level, the water in
+the holding ponds took longer to exit for irrigation, giving it more
+time to develop an odour."
+
+Annual rainfall data for the Davis area is [here](http://ritsokiguess.site/datafiles/rainfall.txt).
+Note that clicking on the link will display the file, and *right*-clicking on the link will give you some options, one of which is Copy Link Address, which you can then paste into your R Notebook.
+
+The rainfall is
+measured in inches.
+
+
+
+
+
+(a) Read in and display (some of) the data.
+
+Solution
+
+
+
+
+Look at the data file, and see that the values are separated by a
+single space, so \verb=read_delim= will do it. Read straight from
+the URL; the hint above tells you how to copy it, which would even work if the link spans two lines.
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
+rain <- read_delim(my_url, " ")
+rain
+```
+
+Note for later that the \verb=Year= and the \verb=Rainfall= have
+Capital Letters. You can call the data frame whatever you like, but I
+think something descriptive is better than eg.\ \verb=mydata=.
+
+
+
+Extra: this works because there is exactly one space between the year and the
+rainfall amount. But the year is always four digits, so the columns
+line up, and there is a space all the way down between the year and
+the rainfall. That means that this will also work: 
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
+rain <- read_table(my_url)
+rain
+```
+
+
+This is therefore also good.
+
+It also looks as if it could be tab-separated values, since the rainfall
+column always starts in the same place, but if you try it, you'll find
+that it doesn't work:
+
+```{r}
+my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
+rain_nogood <- read_tsv(my_url)
+rain_nogood
+```
+
+
+This looks as if it worked, but it didn't, because there is only
+\emph{one} column, of years and rainfalls smooshed together as text,
+and if you try to do anything else with them later it won't work.
+
+Hence those values that might have been tabs actually were
+not. There's no way to be sure about this; you have to try something
+and see what works. An indication, though: if you have more than one
+space, and the things in the later columns are \emph{left}-justified,
+that could be tab-separated; if the things in the later columns are
+\emph{right}-justified, so that they finish in the same place but
+don't start in the same place, that is probably aligned columns. 
+
+
+
+$\blacksquare$
+
+
+(b) Summarize the data frame.
+
+Solution
+
+
+I almost gave the game away: this is `summary`.
+
+```{r}
+summary(rain)
+```
+
+The summary of the years may not be very helpful, but the summary of the annual rainfall values might be. It's not clear yet why I asked you to do this, but it will become clearer later.
+
+
+$\blacksquare$
+
+
+(c) Make a suitable plot of the rainfall values. (We are not,
+for the time being, concerned about the years.)
+
+Solution
+
+
+This is one quantitative variable, so a histogram is your first
+thought. This means picking a number of bins. Not too many, since
+you want a picture of the shape:
+
+```{r}
+ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=8)
+```
+
+If you picked fewer bins, you'll get a different picture:
+
+```{r}
+ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=6)
+```
+
+The choice of the number of bins depends on what you think the story
+about shape is that you want to tell (see next part). You will
+probably need to try some different numbers of bins to see which one
+you like best. You can say something about what you tried, for example "I also tried 8 bins, but I like the histogram with 6 bins better."
+
+
+
+$\blacksquare$
+
+
+(d) How would you describe the shape of the distribution of
+rainfall values?
+
+Solution
+
+
+This will depend on the histogram you drew in the previous
+part. If it looks like the first one, the best answer is
+"bimodal": that is, it has two peaks with a gap between them. If
+it looks like the second one, you have an easier time; this is
+ordinary right-skewness.
+
+
+$\blacksquare$
+
+
+(e) In the quote at the beginning of the question, where do you
+think the assertion that the 1997 rainfall was "at 170 to 180
+percent of its normal level" came from? Explain briefly.
+
+Solution
+
+
+First we
+need the 1997 rainfall. Go back and find it in the data. I am borrowing an idea from later in the course (because I am lazy):
+
+```{r}
+rain %>% filter(Year==1997)
+```
+
+29.7 inches.
+
+Now, what would be a "normal level" of rainfall? Some kind of average, like a mean or a median, maybe. But we have those, from our summary that we made earlier, repeated here for (my) convenience:
+
+```{r}
+summary(rain)
+```
+
+The mean is 18.69 and the median is 16.72 inches.
+
+So divide the 1997 rainfall by each of the summaries, and see what happens, using
+your calculator, or using R as a calculator:
+
+```{r}
+29.7/18.69
+29.7/16.72
+```
+
+The 1997 rainfall was about 178 percent of the normal level if the normal
+level was the \emph{median}.
+
+
+
+$\blacksquare$
+
+
+(f) Do you think the official's calculation was reasonable? 
+Explain briefly. (Note that this is not the same as asking whether
+the official's calculation was \emph{correct}. This is an important
+distinction for you to make.)
+
+Solution
+
+There are several approaches to take. Argue for yours.
+
+If you came to the conclusion that the distribution was
+right-skewed, you can say that the sensible "normal level" is
+the median, and therefore the official did the right thing. Using
+the mean would have been the wrong thing.
+
+If you thought the distribution was bimodal, you can go a couple
+of ways: (i) it makes no sense to use any measure of location for
+"normal" (in fact, the mean rainfall is almost in that low-frequency bar,
+and so is not really a "normal level" at all). Or, (ii) it looks
+as if the years split into two kinds: low-rainfall years with
+around 15 inches, and high-rainfall years with more than 25
+inches. Evidently 1997 was a high-rainfall year, but 29.7 inches
+was not especially high for a high-rainfall year, so the
+official's statement was an exaggeration. (I think (ii) is more
+insightful than (i), so ought to get more points.)
+
+You could even also take a more conspiratorial approach and say
+that the official was trying to make 1997 look like a freak year,
+and picked the measure of location that made 1997 look more
+unusual. 
+
+"Normal level" here has nothing to do with a normal
+\emph{distribution}; for this to make sense, the official would
+have needed to say something like "normal shape". This is why
+language skills are also important for a statistician to have.
+
+
+$\blacksquare$
+
+
+(g) Do you think that the official was right to use the word
+"unprecedented" to describe the 1997 rainfall? Justify your answer
+briefly. 
+
+Solution
+
+"Unprecedented" means "never seen before" or "never having
+happened or existed in the past".^[Searching for "define" followed by a word is a good way to find out exactly what that word means, if you are not sure, but you should at least say where you got the definition from if you had to look it up.] 
+That came out of my head; [this link](https://www.dictionary.com/browse/unprecedented) has a very similar "never before known or experienced").
+
+If you look back at your histogram, there are several years that
+had over about 30 inches of rain: five or six, depending on your
+histogram. One of them was 1997, but there were others too, so
+1997 was in no way "unprecedented". 
+
+Another approach that you have seen is to `View` your dataframe:
+
+```{r, eval=FALSE}
+View(rain)
+```
+
+That will come out as a  separate tab in your R Studio and you can look at it (yourself; it won't appear in the Preview). You can look at the 1997 rainfall (29.69 inches) and count how many were bigger than that, 4 of them. Or, save yourself some effort^[When you have a computer at your disposal, it's worth taking a few minutes to figure out how to use it to make your life easier.]     and sort the rainfall values in descending order (with the biggest one first), by clicking on the little arrows next to Rainfall (twice). Mine looks like this:
+
+![](Screenshot_2020-09-11_15-17-51.png){height=50%}
+
+Later, we learn how to sort in code, which goes like this (to sort highest first):
+
+```{r}
+rain %>% arrange(desc(Rainfall))
+``` 
+
+
+A more sophisticated way that we learn later:
+
+```{r}
+rain %>% summarize(max=max(Rainfall))
+```
+
+This is greater than the rainfall for 1997, ruling out "unprecedented".
+
+
+1997 was only the \emph{fifth} highest rainfall, and two of the
+higher ones were also in the 1990s. Definitely not
+"unprecedented". The official needs to get a new dictionary!
+
+
+$\blacksquare$
+
+
+
+
