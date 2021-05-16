@@ -142,13 +142,14 @@ Tukey envisaged a boxplot as something you could draw by hand for a smallish dat
 set.seed(457299)
 ```
 
-
 ```{r}
 tibble(n=c(10, 30, 100, 300)) %>% 
-mutate(samp=map(n, ~rnorm(.))) %>% 
-unnest(samp) %>% 
-ggplot(aes(x=factor(n), y=samp)) + geom_boxplot()
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(n))) %>% 
+  unnest(my_sample) %>% 
+  ggplot(aes(x = factor(n), y = my_sample)) + geom_boxplot()
 ```
+
 
 As the sample size gets bigger, the number of outliers gets bigger, and the whiskers get longer. 
 All this means is that in a larger sample, you are more likely to see a small number of values that are further out, and that is not necessarily a reason for concern. Here, the outliers are only one value out of 100 and two out of 300, but they have what looks like an outsize influence on the plot. In the boxplot for our data, the distributions were a bit skewed, but the outliers may not have been as much of a problem as they looked.

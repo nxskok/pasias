@@ -279,17 +279,19 @@ Just to check that this does contain what you think it does:
 tibble(x = list(z, c(3,3,3))) %>% unnest(x)
 ```
 
-So now, for each of those two input vectors, what happens when we run `rescale0` on them? This is `map`:
+So now, for each of those two input vectors, what happens when we run `rescale0` on them? 
 
 ```{r}
 tibble(x = list(z, c(3,3,3))) %>% 
-  mutate(ans = map(x, ~rescale0(.)))
+  rowwise() %>% 
+  mutate(ans = list(rescale0(x)))
 ```
 The first `ans` is a vector of 3 numbers, and the second one is one piece of text (the "error message"). I was actually surprised it got this far. So what happens when we `unnest` the second column?
 
 ```{r, error=TRUE}
 tibble(x = list(z, c(3,3,3))) %>% 
-  mutate(ans = map(x, ~rescale0(.))) %>% 
+  rowwise() %>% 
+  mutate(ans = list(rescale0(x))) %>% 
   unnest(ans)
 ```
 
@@ -297,11 +299,12 @@ Now we get a confusing error: it's *here* that combining some numbers and some t
 
 ```{r, error=TRUE}
 tibble(x = list(z, c(3,3,3))) %>% 
-  mutate(ans = map(x, ~rescale(.))) %>% 
+  rowwise() %>% 
+  mutate(ans = list(rescale(x))) %>% 
   unnest(ans)
 ```
 
-because this is the error we anticipated: it says "somewhere within the list-column `x` is a vector where everything is the same".
+because this is the error we anticipated: it says "within the list-column `x`, specifically on its second row, is a vector where everything is the same".
 
 Extra 3a (or wherever we are now): these also work with `rowwise`, if you find that easier to think about:
 
