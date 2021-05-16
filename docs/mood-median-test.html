@@ -21,42 +21,45 @@ MathJax.Hub.Config({
   TeX: { equationNumbers: { autoNumber: "AMS" } }
 });
 </script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
 
 <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
 
 <title>Chapter 10 Mood median test | Problems and Solutions in Applied Statistics</title>
 
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
 <link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 <link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
 <script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -65,9 +68,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -113,24 +116,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="col-sm-12">
 <div id="TOC">
 <ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
+<li><a href="index.html#introduction">Introduction</a>
+<ul>
 <li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
 </ul></li>
 <li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a></li>
 <li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a></li>
 <li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a></li>
 <li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
-</ul></li>
+<li><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a></li>
 <li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a></li>
 <li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
 <li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
 <li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li class="has-sub"><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a><ul>
+<li><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a>
+<ul>
 <li><a href="mood-median-test.html#sugar-in-breakfast-cereals"><span class="toc-section-number">10.1</span> Sugar in breakfast cereals</a></li>
 <li><a href="mood-median-test.html#fear-of-math"><span class="toc-section-number">10.2</span> Fear of math</a></li>
 <li><a href="mood-median-test.html#medical-instructions"><span class="toc-section-number">10.3</span> Medical instructions</a></li>
@@ -141,7 +141,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="mood-median-test.html#handspans-revisited-1"><span class="toc-section-number">10.8</span> Handspans revisited</a></li>
 </ul></li>
 <li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
+<li><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a>
+<ul>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
 <li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
 <li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
@@ -152,7 +153,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a></li>
 <li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a></li>
 <li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
+<li><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a>
+<ul>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
 <li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
 <li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
@@ -160,7 +162,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
 <li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
+<li><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a>
+<ul>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
 <li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
 </ul></li>
@@ -179,7 +182,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a></li>
 <li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a></li>
 <li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
+<li><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a>
+<ul>
 <li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
 <li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
 </ul></li>
@@ -191,11 +195,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div class="row">
 <div class="col-sm-12">
-<div id="mood-median-test" class="section level1">
+<div id="mood-median-test" class="section level1" number="10">
 <h1><span class="header-section-number">Chapter 10</span> Mood median test</h1>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb30-2" title="2"><span class="kw">library</span>(smmr)</a></code></pre></div>
-<div id="sugar-in-breakfast-cereals" class="section level2">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="mood-median-test.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="mood-median-test.html#cb1-2"></a><span class="kw">library</span>(smmr)</span></code></pre></div>
+<div id="sugar-in-breakfast-cereals" class="section level2" number="10.1">
 <h2><span class="header-section-number">10.1</span> Sugar in breakfast cereals</h2>
 <p>The data for this question are in
 <a href="http://ritsokiguess.site/datafiles/cereal-sugar.txt">http://ritsokiguess.site/datafiles/cereal-sugar.txt</a>. The
@@ -220,7 +224,7 @@ package, if that is easier for you.) What do you conclude, in the
 context of the data?</p></li>
 </ol>
 </div>
-<div id="fear-of-math" class="section level2">
+<div id="fear-of-math" class="section level2" number="10.2">
 <h2><span class="header-section-number">10.2</span> Fear of math</h2>
 <p>Two new short courses have been proposed for helping
 students who suffer from severe math phobia. The courses are labelled
@@ -236,7 +240,7 @@ with R for this question.</p>
 observations, 5 from each course.</p></li>
 <li><p>Do a two-sample <span class="math inline">\(t\)</span>-test to assess whether there is a
 difference in mean phobia scores after the students have taken the two
-courses. What do you conclude? (You have no <label for="tufte-sn-4" class="margin-toggle sidenote-number">4</label><input type="checkbox" id="tufte-sn-4" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">4</span> That is, before looking at the data. This is Latin. It’s also the place that the Bayesian “prior distribution” comes from. The “posterior distribution” comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
+courses. What do you conclude? (You have no <label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> That is, before looking at the data. This is Latin. It’s also the place that the Bayesian “prior distribution” comes from. The “posterior distribution” comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
 reason to
 suppose that a particular one of the tests will produce a higher mean
 than the other, so do a two-sided test.)</p></li>
@@ -249,7 +253,7 @@ two courses. (You can use the version from a package rather than
 building your own.) What do you conclude?</p></li>
 </ol>
 </div>
-<div id="medical-instructions" class="section level2">
+<div id="medical-instructions" class="section level2" number="10.3">
 <h2><span class="header-section-number">10.3</span> Medical instructions</h2>
 <p>Do people understand medical instructions better at certain
 times of the day? In a study, students in a grade 12 class are
@@ -275,14 +279,14 @@ which you can ignore here.)</p></li>
 package, and verify that you get the same answer.</p></li>
 </ol>
 </div>
-<div id="handspans-revisited" class="section level2">
+<div id="handspans-revisited" class="section level2" number="10.4">
 <h2><span class="header-section-number">10.4</span> Handspans revisited</h2>
 <p>Take your right hand, and stretch the fingers out as far as
 you can. The distance between the tip of your thumb and the tip of
 your little (pinky) finger is your handspan. The students in a
 Statistics class at Penn State measured their handspans and also
-whether they identified as male or female. The data are at
-, with handspans
+whether they identified as male or female. The data are at <a href="http://ritsokiguess.site/datafiles/handspan.txt">http://ritsokiguess.site/datafiles/handspan.txt</a>,
+with handspans
 measured in inches. We want to
 see whether male students have a larger mean handspan than female students.</p>
 <ol style="list-style-type: lower-alpha">
@@ -296,7 +300,7 @@ compared to a two-sample <span class="math inline">\(t\)</span>-test.</p></li>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="sugar-in-breakfast-cereals-1" class="section level2">
+<div id="sugar-in-breakfast-cereals-1" class="section level2" number="10.5">
 <h2><span class="header-section-number">10.5</span> Sugar in breakfast cereals</h2>
 <p>The data for this question are in
 <a href="http://ritsokiguess.site/datafiles/cereal-sugar.txt">http://ritsokiguess.site/datafiles/cereal-sugar.txt</a>. The
@@ -309,15 +313,15 @@ a variable that distinguishes the children’s cereals from the
 adults’ cereals, and another that contains the amount of sugar?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">my_url=<span class="st">&quot;http://ritsokiguess.site/datafiles/cereal-sugar.txt&quot;</span></a>
-<a class="sourceLine" id="cb31-2" title="2">cereals=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="mood-median-test.html#cb2-1"></a>my_url=<span class="st">&quot;http://ritsokiguess.site/datafiles/cereal-sugar.txt&quot;</span></span>
+<span id="cb2-2"><a href="mood-median-test.html#cb2-2"></a>cereals=<span class="kw">read_delim</span>(my_url,<span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   who = col_character(),
 ##   sugar = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">cereals</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="mood-median-test.html#cb4-1"></a>cereals</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["who"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sugar"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"children","2":"40.3"},{"1":"children","2":"55.0"},{"1":"children","2":"45.7"},{"1":"children","2":"43.3"},{"1":"children","2":"50.3"},{"1":"children","2":"45.9"},{"1":"children","2":"53.5"},{"1":"children","2":"43.0"},{"1":"children","2":"44.2"},{"1":"children","2":"44.0"},{"1":"children","2":"47.4"},{"1":"children","2":"44.0"},{"1":"children","2":"20.0"},{"1":"children","2":"55.1"},{"1":"children","2":"48.8"},{"1":"children","2":"50.4"},{"1":"children","2":"37.8"},{"1":"children","2":"70.3"},{"1":"children","2":"46.6"},{"1":"adults","2":"20.0"},{"1":"adults","2":"40.2"},{"1":"adults","2":"2.2"},{"1":"adults","2":"7.5"},{"1":"adults","2":"4.4"},{"1":"adults","2":"37.2"},{"1":"adults","2":"16.6"},{"1":"adults","2":"14.5"},{"1":"adults","2":"4.1"},{"1":"adults","2":"15.8"},{"1":"adults","2":"4.1"},{"1":"adults","2":"2.4"},{"1":"adults","2":"3.5"},{"1":"adults","2":"8.5"},{"1":"adults","2":"10.0"},{"1":"adults","2":"1.0"},{"1":"adults","2":"4.4"},{"1":"adults","2":"1.3"},{"1":"adults","2":"8.1"},{"1":"adults","2":"4.7"},{"1":"adults","2":"18.4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -333,8 +337,8 @@ adults’ ones and the children’s ones). Do they look similar or different?</l
 </ol>
 <p>Solution</p>
 <p><code>group_by</code> and <code>summarize</code>:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">cereals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(who) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb34-2" title="2"><span class="kw">summarize</span>(<span class="dt">sugar_mean=</span><span class="kw">mean</span>(sugar))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="mood-median-test.html#cb5-1"></a>cereals <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(who) <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="mood-median-test.html#cb5-2"></a><span class="kw">summarize</span>(<span class="dt">sugar_mean=</span><span class="kw">mean</span>(sugar))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["who"],"name":[1],"type":["chr"],"align":["left"]},{"label":["sugar_mean"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"adults","2":"10.90000"},{"1":"children","2":"46.61053"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -349,8 +353,8 @@ types of cereal. What do you see that is out of the ordinary?</li>
 </ol>
 <p>Solution</p>
 <p>The usual:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="mood-median-test.html#cb6-1"></a><span class="kw">ggplot</span>(cereals,<span class="kw">aes</span>(<span class="dt">x=</span>who,<span class="dt">y=</span>sugar))<span class="op">+</span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-20-1.png" width="672"  /></p>
 <p>I see outliers: two high ones on the adults’ cereals, and one high and
 one low on the children’s cereals.</p>
 <p>My thought above about the means being very different is definitely supported by the medians being very different on the boxplots. We should have no trouble declaring that the “typical” amounts of sugar in the adults’ and children’s cereals are different.</p>
@@ -380,8 +384,8 @@ context of the data?</li>
 <p>Having ruled out the two-sample <span class="math inline">\(t\)</span>-test, we are left with Mood’s
 median test. I didn’t need you to build it yourself, so you can
 use package <code>smmr</code> to run it with:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb36-2" title="2"><span class="kw">median_test</span>(cereals,sugar,who)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="mood-median-test.html#cb7-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb7-2"><a href="mood-median-test.html#cb7-2"></a><span class="kw">median_test</span>(cereals,sugar,who)</span></code></pre></div>
 <pre><code>## $table
 ##           above
 ## group      above below
@@ -410,7 +414,7 @@ Wheat and <em>Bran Flakes</em>. Go figure. (Her current favourite is
 Raisin Bran, even though she doesn’t like raisins by themselves.)</p>
 <p>Mood’s median test is the test we should trust, but you might be
 curious about how the <span class="math inline">\(t\)</span>-test stacks up here:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">t.test</span>(sugar<span class="op">~</span>who,<span class="dt">data=</span>cereals)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="mood-median-test.html#cb9-1"></a><span class="kw">t.test</span>(sugar<span class="op">~</span>who,<span class="dt">data=</span>cereals)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -428,7 +432,7 @@ getting a confidence interval for the difference in means: from about
 units were.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="fear-of-math-1" class="section level2">
+<div id="fear-of-math-1" class="section level2" number="10.6">
 <h2><span class="header-section-number">10.6</span> Fear of math</h2>
 <p>Two new short courses have been proposed for helping
 students who suffer from severe math phobia. The courses are labelled
@@ -445,15 +449,15 @@ observations, 5 from each course.</li>
 </ol>
 <p>Solution</p>
 <p>This doesn’t need much comment:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/mathphobia.txt&quot;</span></a>
-<a class="sourceLine" id="cb40-2" title="2">math &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="mood-median-test.html#cb11-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/mathphobia.txt&quot;</span></span>
+<span id="cb11-2"><a href="mood-median-test.html#cb11-2"></a>math &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   course = col_character(),
 ##   phobia = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">math</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="mood-median-test.html#cb13-1"></a>math</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["phobia"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"a","2":"8"},{"1":"a","2":"7"},{"1":"a","2":"7"},{"1":"a","2":"6"},{"1":"a","2":"6"},{"1":"b","2":"9"},{"1":"b","2":"8"},{"1":"b","2":"7"},{"1":"b","2":"2"},{"1":"b","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -461,7 +465,7 @@ observations, 5 from each course.</li>
 </div>
 <p>This will do, counting the <code>a</code> and <code>b</code>. Or, to save
 yourself that trouble:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(course)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="mood-median-test.html#cb14-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(course)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"5"},{"1":"b","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -469,14 +473,14 @@ yourself that trouble:</p>
 </div>
 <p>Five each. The story is to get the computer to do the grunt work for
 you, if you can make it do so. Other ways:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(course) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="mood-median-test.html#cb15-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(course) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">count =</span> <span class="kw">n</span>())</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["course"],"name":[1],"type":["chr"],"align":["left"]},{"label":["count"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"a","2":"5"},{"1":"b","2":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>and this:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">with</span>(math, <span class="kw">table</span>(course))</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="mood-median-test.html#cb16-1"></a><span class="kw">with</span>(math, <span class="kw">table</span>(course))</span></code></pre></div>
 <pre><code>## course
 ## a b 
 ## 5 5</code></pre>
@@ -486,14 +490,14 @@ you, if you can make it do so. Other ways:</p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Do a two-sample <span class="math inline">\(t\)</span>-test to assess whether there is a
 difference in mean phobia scores after the students have taken the two
-courses. What do you conclude? (You have no <label for="tufte-sn-5" class="margin-toggle sidenote-number">5</label><input type="checkbox" id="tufte-sn-5" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">5</span> That is, before looking at the data. This is Latin. It’s also the place that the Bayesian “prior distribution” comes from. The “posterior distribution” comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
+courses. What do you conclude? (You have no <label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> That is, before looking at the data. This is Latin. It’s also the place that the Bayesian “prior distribution” comes from. The “posterior distribution” comes from the Latin <em>a posteriori</em>, which means <em>afterwards</em>, that is, after you have looked at the data.</span>
 reason to
 suppose that a particular one of the tests will produce a higher mean
 than the other, so do a two-sided test.)</li>
 </ol>
 <p>Solution</p>
 <p>A two-sided test is the default, so there is not much to do here:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">t.test</span>(phobia <span class="op">~</span><span class="st"> </span>course, <span class="dt">data =</span> math)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="mood-median-test.html#cb18-1"></a><span class="kw">t.test</span>(phobia <span class="op">~</span><span class="st"> </span>course, <span class="dt">data =</span> math)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -514,23 +518,23 @@ mean math phobia scores are different between the two courses.</p>
 line of code). What is the most striking thing that you notice?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">x =</span> course, <span class="dt">y =</span> phobia)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-52-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="mood-median-test.html#cb20-1"></a><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">x =</span> course, <span class="dt">y =</span> phobia)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-28-1.png" width="672"  /></p>
 <p>Boxplot <code>a</code> is just weird. The bar across the middle is
 actually at the top, and it has no bottom. (Noting something sensible
 like this is enough.) Boxplot <code>b</code> is hugely spread
-out.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> The two groups have very different spreads, but that is not a problem as long as we remember to do the Welch-Satterthwaite test that does not assume equal spreads. This is the default in R, so we are good, at least with that.</span></p>
+out.<label for="tufte-sn-3" class="margin-toggle sidenote-number">3</label><input type="checkbox" id="tufte-sn-3" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">3</span> The two groups have very different spreads, but that is not a problem as long as we remember to do the Welch-Satterthwaite test that does not assume equal spreads. This is the default in R, so we are good, at least with that.</span></p>
 <p>By way of explanation: the course <code>a</code> scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
 also that the first quartile and the minimum value are the same:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">tmp &lt;-<span class="st"> </span>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(course <span class="op">==</span><span class="st"> &quot;a&quot;</span>)</a>
-<a class="sourceLine" id="cb50-2" title="2">tmp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="mood-median-test.html#cb21-1"></a>tmp &lt;-<span class="st"> </span>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(course <span class="op">==</span><span class="st"> &quot;a&quot;</span>)</span>
+<span id="cb21-2"><a href="mood-median-test.html#cb21-2"></a>tmp <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["phobia"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"6","2":"2"},{"1":"7","2":"2"},{"1":"8","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">summary</span>(tmp)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="mood-median-test.html#cb22-1"></a><span class="kw">summary</span>(tmp)</span></code></pre></div>
 <pre><code>##     course              phobia   
 ##  Length:5           Min.   :6.0  
 ##  Class :character   1st Qu.:6.0  
@@ -564,10 +568,10 @@ only 5 values in each group, and so they can certainly look
 non-normal even if they actually are normal, but these values are
 all integers, so it is perhaps wise to be cautious.)
 We have the machinery to assess the normality for these, in one shot:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">sample =</span> phobia)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb53-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb53-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>course, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-54-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="mood-median-test.html#cb24-1"></a><span class="kw">ggplot</span>(math, <span class="kw">aes</span>(<span class="dt">sample =</span> phobia)) <span class="op">+</span></span>
+<span id="cb24-2"><a href="mood-median-test.html#cb24-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb24-3"><a href="mood-median-test.html#cb24-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>course, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-30-1.png" width="672"  /></p>
 <p>I don’t know what <em>you</em> make of those, but they both look pretty
 straight to me (and there are only five observations, so it’s hard to
 judge). Course <code>b</code> maybe has a “hole” in it (three large
@@ -596,8 +600,8 @@ building your own.) What do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>This is an invite to use <code>smmr</code>:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb54-2" title="2"><span class="kw">median_test</span>(math, phobia, course)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="mood-median-test.html#cb25-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb25-2"><a href="mood-median-test.html#cb25-2"></a><span class="kw">median_test</span>(math, phobia, course)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -615,13 +619,13 @@ very close to 50–50 above and below the overall median.</p>
 something: there were 10 observations, but there are only <span class="math inline">\(1+2+2+2=7\)</span>
 in the table. This is because three of the observations were equal to
 the overall median, and had to be thrown away:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(phobia))</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="mood-median-test.html#cb27-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(phobia))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["med"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"7"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1">math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="mood-median-test.html#cb28-1"></a>math <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(phobia)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["phobia"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"1"},{"1":"2","2":"1"},{"1":"6","2":"2"},{"1":"7","2":"3"},{"1":"8","2":"2"},{"1":"9","2":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -634,10 +638,10 @@ begin with). The other thing to say is that with small sample sizes,
 the frequencies in the table have to be <em>very</em> lopsided for you
 to have a chance of rejecting the null. Something like this is what
 you’d need:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb58-2" title="2">g &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb58-3" title="3">d &lt;-<span class="st"> </span><span class="kw">tibble</span>(x, g)</a>
-<a class="sourceLine" id="cb58-4" title="4"><span class="kw">median_test</span>(d, x, g)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="mood-median-test.html#cb29-1"></a>x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
+<span id="cb29-2"><a href="mood-median-test.html#cb29-2"></a>g &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb29-3"><a href="mood-median-test.html#cb29-3"></a>d &lt;-<span class="st"> </span><span class="kw">tibble</span>(x, g)</span>
+<span id="cb29-4"><a href="mood-median-test.html#cb29-4"></a><span class="kw">median_test</span>(d, x, g)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -654,10 +658,10 @@ equal to the overall median. Of the rest, all the small ones were in
 group 1 and all the large ones were in group 2. This is lopsided
 enough to reject with, though, because of the small frequencies, there
 actually was a warning about
-“chi-squared approximation may be inaccurate.”<label for="tufte-sn-7" class="margin-toggle sidenote-number">7</label><input type="checkbox" id="tufte-sn-7" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">7</span> There <em>was</em>, in the <code>chisq.test</code> inside <code>median_test</code>, but in <code>smmr</code> I didn’t pass that warning back to the outside world.</span></p>
+“chi-squared approximation may be inaccurate.”<label for="tufte-sn-4" class="margin-toggle sidenote-number">4</label><input type="checkbox" id="tufte-sn-4" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">4</span> There <em>was</em>, in the <code>chisq.test</code> inside <code>median_test</code>, but in <code>smmr</code> I didn’t pass that warning back to the outside world.</span></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="medical-instructions-1" class="section level2">
+<div id="medical-instructions-1" class="section level2" number="10.7">
 <h2><span class="header-section-number">10.7</span> Medical instructions</h2>
 <p>Do people understand medical instructions better at certain
 times of the day? In a study, students in a grade 12 class are
@@ -674,15 +678,15 @@ separated by spaces).</p>
 </ol>
 <p>Solution</p>
 <p>Separated by spaces, so <code>read_delim</code>:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/forehead.txt&quot;</span></a>
-<a class="sourceLine" id="cb60-2" title="2">instr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="mood-median-test.html#cb31-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/forehead.txt&quot;</span></span>
+<span id="cb31-2"><a href="mood-median-test.html#cb31-2"></a>instr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   group = col_character(),
 ##   score = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">instr</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="mood-median-test.html#cb33-1"></a>instr</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["group"],"name":[1],"type":["chr"],"align":["left"]},{"label":["score"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"88"},{"1":"A","2":"89"},{"1":"A","2":"79"},{"1":"A","2":"100"},{"1":"A","2":"98"},{"1":"A","2":"89"},{"1":"A","2":"65"},{"1":"A","2":"94"},{"1":"A","2":"95"},{"1":"A","2":"91"},{"1":"B","2":"87"},{"1":"B","2":"69"},{"1":"B","2":"78"},{"1":"B","2":"79"},{"1":"B","2":"83"},{"1":"B","2":"90"},{"1":"B","2":"85"},{"1":"B","2":"58"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -696,14 +700,14 @@ assumptions for a two-sample <span class="math inline">\(t\)</span>-test.</li>
 <p>Solution</p>
 <p>We need the values in each group to be approximately normally
 distributed. Side-by-side boxplots will do it:</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">x =</span> group, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-59-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="mood-median-test.html#cb34-1"></a><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">x =</span> group, <span class="dt">y =</span> score)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-35-1.png" width="672"  /></p>
 <p>or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">sample =</span> score)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb64-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb64-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-60-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="mood-median-test.html#cb35-1"></a><span class="kw">ggplot</span>(instr, <span class="kw">aes</span>(<span class="dt">sample =</span> score)) <span class="op">+</span></span>
+<span id="cb35-2"><a href="mood-median-test.html#cb35-2"></a><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb35-3"><a href="mood-median-test.html#cb35-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>group, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-36-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Why might you have doubts about using a two-sample <span class="math inline">\(t\)</span>-test here?</li>
@@ -733,7 +737,7 @@ which you can ignore here.)</li>
 </ol>
 <p>Solution</p>
 <p>The overall median first:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1">instr <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(score))</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="mood-median-test.html#cb36-1"></a>instr <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(score))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["med"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"87.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -744,8 +748,8 @@ integers). This will avoid any issues with values-equal-to-median later.</p>
 <p>Then, create and save a table of the value by group and above/below
 median. You can count either above or below (it comes out equivalently
 either way):</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">tab &lt;-<span class="st"> </span><span class="kw">with</span>(instr, <span class="kw">table</span>(group, score <span class="op">&gt;</span><span class="st"> </span><span class="fl">87.5</span>))</a>
-<a class="sourceLine" id="cb66-2" title="2">tab</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="mood-median-test.html#cb37-1"></a>tab &lt;-<span class="st"> </span><span class="kw">with</span>(instr, <span class="kw">table</span>(group, score <span class="op">&gt;</span><span class="st"> </span><span class="fl">87.5</span>))</span>
+<span id="cb37-2"><a href="mood-median-test.html#cb37-2"></a>tab</span></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -755,7 +759,7 @@ some kind (the alternative). The <code>correct=F</code> is saying not to
 do Yates’s correction, so that it would come out the same if you were
 doing it by hand (“observed minus expected, squared, divided by expected”
 and all that stuff).</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="mood-median-test.html#cb39-1"></a><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</span></code></pre></div>
 <pre><code>## Warning in chisq.test(tab, correct = F): Chi-squared approximation may be incorrect</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
@@ -777,7 +781,7 @@ are safe.</p>
 your boxplots and see that the median for group A (8:30 am) is
 substantially higher than for group B (3:00pm). But you can also see
 it from your frequency table, if you displayed it:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1">tab</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="mood-median-test.html#cb42-1"></a>tab</span></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -804,7 +808,7 @@ totals are <em>not</em> all fixed. Consider a survey in which you want
 to see whether males and females agree or disagree on some burning
 issue of the day. You collect random samples of, say, 500 males and
 500 females, and you count how many of them say Yes or No to your
-statement.<label for="tufte-sn-8" class="margin-toggle sidenote-number">8</label><input type="checkbox" id="tufte-sn-8" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">8</span> To simplify things, we’ll assume that everyone gave a Yes or a No answer, though you could add a column like “No answer” if you wanted to make it more realistic.</span>
+statement.<label for="tufte-sn-5" class="margin-toggle sidenote-number">5</label><input type="checkbox" id="tufte-sn-5" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">5</span> To simplify things, we’ll assume that everyone gave a Yes or a No answer, though you could add a column like “No answer” if you wanted to make it more realistic.</span>
 You might get results like this:</p>
 <pre><code>
 Yes  No  Total
@@ -850,7 +854,7 @@ and especially if you use Yates’s correction.</p>
 get a publication out of drinking tea.</p>
 <p>How does that apply to Mood’s median test? Well, let’s remind
 ourselves of the table we had:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">tab</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="mood-median-test.html#cb46-1"></a>tab</span></code></pre></div>
 <pre><code>##      
 ## group FALSE TRUE
 ##     A     2    8
@@ -859,7 +863,7 @@ ourselves of the table we had:</p>
 B. So the row totals are fixed. What about the columns? These are
 whether each observation was above or below the overall median. There
 were 18 observations altogether, so there <em>must</em> be 9 above and 9
-below.<label for="tufte-sn-9" class="margin-toggle sidenote-number">9</label><input type="checkbox" id="tufte-sn-9" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">9</span> Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span>
+below.<label for="tufte-sn-6" class="margin-toggle sidenote-number">6</label><input type="checkbox" id="tufte-sn-6" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">6</span> Except in the case of the previous problem, where there were multiple observations equal to the overall median. Which we ignore for the moment.</span>
 So the column totals are fixed as well. All
 totals fixed, so we should be using Yates’s correction. I didn’t,
 because I wanted to keep things simple, but I should have done.</p>
@@ -873,8 +877,8 @@ package, and verify that you get the same answer.</li>
 </ol>
 <p>Solution</p>
 <p>Not much to it, since the data is already read in:</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb77-2" title="2"><span class="kw">median_test</span>(instr, score, group)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="mood-median-test.html#cb48-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb48-2"><a href="mood-median-test.html#cb48-2"></a><span class="kw">median_test</span>(instr, score, group)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -893,7 +897,7 @@ whereas in my build-it-yourself I counted the number of
 values above.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="handspans-revisited-1" class="section level2">
+<div id="handspans-revisited-1" class="section level2" number="10.8">
 <h2><span class="header-section-number">10.8</span> Handspans revisited</h2>
 <p>Take your right hand, and stretch the fingers out as far as
 you can. The distance between the tip of your thumb and the tip of
@@ -908,15 +912,15 @@ see whether male students have a larger mean handspan than female students.</p>
 </ol>
 <p>Solution</p>
 <p>Delimited by a single space, so:</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></a>
-<a class="sourceLine" id="cb79-2" title="2">span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="mood-median-test.html#cb50-1"></a>my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></span>
+<span id="cb50-2"><a href="mood-median-test.html#cb50-2"></a>span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   sex = col_character(),
 ##   handspan = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">span</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="mood-median-test.html#cb52-1"></a>span</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["handspan"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"M","2":"21.50"},{"1":"M","2":"22.50"},{"1":"M","2":"23.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.50"},{"1":"F","2":"20.25"},{"1":"M","2":"23.00"},{"1":"M","2":"24.50"},{"1":"M","2":"23.00"},{"1":"F","2":"20.00"},{"1":"M","2":"26.00"},{"1":"M","2":"23.00"},{"1":"F","2":"18.00"},{"1":"M","2":"21.50"},{"1":"F","2":"20.50"},{"1":"M","2":"21.50"},{"1":"F","2":"22.00"},{"1":"M","2":"24.50"},{"1":"F","2":"20.00"},{"1":"F","2":"21.50"},{"1":"M","2":"23.50"},{"1":"F","2":"17.00"},{"1":"F","2":"16.00"},{"1":"M","2":"22.00"},{"1":"F","2":"22.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"M","2":"23.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"24.50"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.70"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.25"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.00"},{"1":"F","2":"20.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"19.50"},{"1":"M","2":"22.50"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"20.50"},{"1":"M","2":"21.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"21.50"},{"1":"M","2":"25.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.50"},{"1":"F","2":"21.00"},{"1":"F","2":"22.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.00"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"22.50"},{"1":"F","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"21.50"},{"1":"M","2":"21.50"},{"1":"M","2":"18.00"},{"1":"M","2":"20.00"},{"1":"M","2":"22.00"},{"1":"M","2":"24.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"25.50"},{"1":"M","2":"24.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"22.50"},{"1":"F","2":"20.00"},{"1":"F","2":"13.00"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"F","2":"19.50"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"17.50"},{"1":"F","2":"18.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"18.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.50"},{"1":"F","2":"20.00"},{"1":"F","2":"22.50"},{"1":"M","2":"23.50"},{"1":"M","2":"21.00"},{"1":"M","2":"25.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"21.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.50"},{"1":"M","2":"23.00"},{"1":"M","2":"18.50"},{"1":"M","2":"21.00"},{"1":"M","2":"24.00"},{"1":"M","2":"23.50"},{"1":"M","2":"24.50"},{"1":"M","2":"23.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"24.00"},{"1":"M","2":"24.50"},{"1":"F","2":"21.00"},{"1":"F","2":"18.00"},{"1":"F","2":"22.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"22.00"},{"1":"F","2":"12.50"},{"1":"F","2":"18.00"},{"1":"F","2":"20.50"},{"1":"F","2":"19.00"},{"1":"F","2":"20.00"},{"1":"F","2":"21.00"},{"1":"F","2":"19.00"},{"1":"F","2":"19.00"},{"1":"F","2":"21.00"},{"1":"F","2":"18.50"},{"1":"F","2":"19.00"},{"1":"F","2":"21.50"},{"1":"F","2":"21.50"},{"1":"F","2":"23.00"},{"1":"F","2":"23.25"},{"1":"F","2":"20.00"},{"1":"F","2":"18.80"},{"1":"F","2":"21.00"},{"1":"F","2":"17.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"F","2":"20.50"},{"1":"F","2":"20.00"},{"1":"F","2":"19.50"},{"1":"F","2":"21.00"},{"1":"F","2":"21.00"},{"1":"F","2":"20.00"},{"1":"M","2":"20.50"},{"1":"M","2":"24.00"},{"1":"M","2":"22.00"},{"1":"M","2":"23.00"},{"1":"M","2":"21.00"},{"1":"M","2":"22.50"},{"1":"M","2":"21.50"},{"1":"M","2":"24.50"},{"1":"M","2":"22.00"},{"1":"M","2":"22.00"},{"1":"M","2":"21.00"},{"1":"M","2":"23.00"},{"1":"M","2":"22.50"},{"1":"M","2":"24.00"},{"1":"M","2":"22.50"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"23.00"},{"1":"M","2":"21.50"},{"1":"M","2":"19.00"},{"1":"M","2":"21.50"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -930,9 +934,9 @@ mind what is supposed to have a normal distribution.)</li>
 <p>Solution</p>
 <p>Here, we need  group to be approximately
 normal, so make normal quantile plots of handspan, facetted by sex:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">sample=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb82-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>sex)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-68-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="mood-median-test.html#cb53-1"></a><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">sample=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></span>
+<span id="cb53-2"><a href="mood-median-test.html#cb53-2"></a><span class="kw">facet_wrap</span>(<span class="op">~</span>sex)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Discuss briefly whether you might prefer to use Mood’s median
@@ -954,7 +958,7 @@ because neither group is close enough to normal), we would prefer
 to use Mood’s median test. (Say this.) You do yourself a favour by making it clear that you know that <em>both</em> groups have to be normal enough;
 if one is good but the other is not, that is not enough.</p>
 <p>The other relevant issue is sample size. The best answer discusses that as well, even though you have a lot to think about already. This data set has 190 observations in it, so the samples must be pretty big:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="mood-median-test.html#cb54-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"F","2":"103"},{"1":"M","2":"87"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -963,13 +967,14 @@ if one is good but the other is not, that is not enough.</p>
 <p>With these sample sizes, we can expect a lot of help from the central limit theorem. The apparent outliers in the males won’t be a problem, and maybe we could even get away with those
 outliers in the females.</p>
 <p>Extra: you could also think about bootstrapped sampling distributions of the sample mean here. The one we are most concerned about is the females; if it turns out that they are all right, then the males must be all right too, since the plot for them is showing less non-normality (or, without the double negative, is closer to being normal). So let’s do the females:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb84-2" title="2"><span class="kw">filter</span>(sex <span class="op">==</span><span class="st"> &quot;F&quot;</span>) -&gt;<span class="st"> </span>females </a>
-<a class="sourceLine" id="cb84-3" title="3"><span class="kw">rerun</span>(<span class="dv">1000</span>, <span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb84-4" title="4"><span class="kw">map_dbl</span>(<span class="op">~</span><span class="kw">mean</span>(.)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb84-5" title="5"><span class="kw">enframe</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb84-6" title="6"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-70-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="mood-median-test.html#cb55-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-2"><a href="mood-median-test.html#cb55-2"></a><span class="st">  </span><span class="kw">filter</span>(sex <span class="op">==</span><span class="st"> &quot;F&quot;</span>) -&gt;<span class="st"> </span>females </span>
+<span id="cb55-3"><a href="mood-median-test.html#cb55-3"></a><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-4"><a href="mood-median-test.html#cb55-4"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-5"><a href="mood-median-test.html#cb55-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-6"><a href="mood-median-test.html#cb55-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb55-7"><a href="mood-median-test.html#cb55-7"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
 <p>My take is that the sampling distribution of the sample mean for the females is normal enough, therefore the one for the males is also normal enough, therefore the two-sample <span class="math inline">\(t\)</span>-test is actually fine.</p>
 <p>The reason that this one is close to normal is different from the other one, though. In the other question, we had milder non-normality but a smaller sample; in this one, the data distribution is less normal, but we had a much larger sample size to compensate.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -977,8 +982,8 @@ outliers in the females.</p>
 <li>Run Mood’s median test. What do you conclude from the test, in the context of the data?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb85-2" title="2"><span class="kw">median_test</span>(span, handspan, sex)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="mood-median-test.html#cb56-1"></a><span class="kw">library</span>(smmr)</span>
+<span id="cb56-2"><a href="mood-median-test.html#cb56-2"></a><span class="kw">median_test</span>(span, handspan, sex)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1008,31 +1013,31 @@ terms of median.</p>
 <p>Extra: you are probably expecting a confidence interval now for
 the difference in medians. I haven’t talked about that in lecture, because the ideas are a bit trickier than they were for the confidence interval for the sign test. The sign test could be used for testing any median, so we could try a bunch of medians and see whether each one was rejected or not. The problem with Mood’s median test is that it only tests that the medians are <em>the same</em>. If you could easily test that the difference in medians was 3, say, you would know whether 3 was inside or outside the confidence interval for the difference in medians.</p>
 <p>What were the actual sample medians, anyway?</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb87-2" title="2"><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(handspan))</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="mood-median-test.html#cb58-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb58-2"><a href="mood-median-test.html#cb58-2"></a><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(handspan))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["med"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"F","2":"20.0"},{"1":"M","2":"22.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Here’s an idea: if we shift all the female handspans up by 2.5 inches, the medians would be the same:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">x =</span> <span class="kw">ifelse</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>, handspan<span class="fl">+2.5</span>, handspan)) -&gt;<span class="st"> </span>d</a>
-<a class="sourceLine" id="cb88-2" title="2">d</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="mood-median-test.html#cb59-1"></a>span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">x =</span> <span class="kw">ifelse</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>, handspan<span class="fl">+2.5</span>, handspan)) -&gt;<span class="st"> </span>d</span>
+<span id="cb59-2"><a href="mood-median-test.html#cb59-2"></a>d</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["handspan"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["x"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"23.50","3":"23.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"20.50","3":"23.00"},{"1":"F","2":"20.50","3":"23.00"},{"1":"F","2":"20.25","3":"22.75"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"24.50","3":"24.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"F","2":"20.00","3":"22.50"},{"1":"M","2":"26.00","3":"26.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"F","2":"18.00","3":"20.50"},{"1":"M","2":"21.50","3":"21.50"},{"1":"F","2":"20.50","3":"23.00"},{"1":"M","2":"21.50","3":"21.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"M","2":"24.50","3":"24.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"21.50","3":"24.00"},{"1":"M","2":"23.50","3":"23.50"},{"1":"F","2":"17.00","3":"19.50"},{"1":"F","2":"16.00","3":"18.50"},{"1":"M","2":"22.00","3":"22.00"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"M","2":"23.50","3":"23.50"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"24.50","3":"24.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"21.70","3":"24.20"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"20.25","3":"22.75"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"19.50","3":"19.50"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"20.50","3":"20.50"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"25.00","3":"25.00"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"22.50","3":"25.00"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"20.50","3":"23.00"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"22.50","3":"25.00"},{"1":"F","2":"22.50","3":"25.00"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"18.00","3":"18.00"},{"1":"M","2":"20.00","3":"20.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"25.50","3":"25.50"},{"1":"M","2":"24.00","3":"24.00"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"22.50","3":"25.00"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"13.00","3":"15.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"22.50","3":"25.00"},{"1":"F","2":"19.50","3":"22.00"},{"1":"F","2":"18.50","3":"21.00"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"17.50","3":"20.00"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"19.50","3":"22.00"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"21.50","3":"24.00"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"19.50","3":"22.00"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"22.50","3":"25.00"},{"1":"M","2":"23.50","3":"23.50"},{"1":"M","2":"21.00","3":"21.00"},{"1":"M","2":"25.50","3":"25.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"18.50","3":"18.50"},{"1":"M","2":"21.00","3":"21.00"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"23.50","3":"23.50"},{"1":"M","2":"24.50","3":"24.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"24.50","3":"24.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"18.50","3":"21.00"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"22.00","3":"24.50"},{"1":"F","2":"12.50","3":"15.00"},{"1":"F","2":"18.00","3":"20.50"},{"1":"F","2":"20.50","3":"23.00"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"18.50","3":"21.00"},{"1":"F","2":"19.00","3":"21.50"},{"1":"F","2":"21.50","3":"24.00"},{"1":"F","2":"21.50","3":"24.00"},{"1":"F","2":"23.00","3":"25.50"},{"1":"F","2":"23.25","3":"25.75"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"18.80","3":"21.30"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"17.00","3":"19.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"20.50","3":"23.00"},{"1":"F","2":"20.00","3":"22.50"},{"1":"F","2":"19.50","3":"22.00"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"21.00","3":"23.50"},{"1":"F","2":"20.00","3":"22.50"},{"1":"M","2":"20.50","3":"20.50"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"21.00","3":"21.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"24.50","3":"24.50"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"22.00","3":"22.00"},{"1":"M","2":"21.00","3":"21.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"24.00","3":"24.00"},{"1":"M","2":"22.50","3":"22.50"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"23.00","3":"23.00"},{"1":"M","2":"21.50","3":"21.50"},{"1":"M","2":"19.00","3":"19.00"},{"1":"M","2":"21.50","3":"21.50"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Dataframe <code>d</code> has a new column <code>x</code> that is the handspan plus 2.5 inches for females, and the unchanged handspan for males. So the median of <code>x</code> should be the same for males and females:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb89-2" title="2"><span class="kw">summarize</span>(<span class="dt">med_x =</span> <span class="kw">median</span>(x))</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="mood-median-test.html#cb60-1"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb60-2"><a href="mood-median-test.html#cb60-2"></a><span class="kw">summarize</span>(<span class="dt">med_x =</span> <span class="kw">median</span>(x))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["med_x"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"F","2":"22.5"},{"1":"M","2":"22.5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>and also the medians of <code>x</code> cannot possibly be significantly different:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">median_test</span>(d, x, sex)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="mood-median-test.html#cb61-1"></a><span class="kw">median_test</span>(d, x, sex)</span></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1046,43 +1051,45 @@ the difference in medians. I haven’t talked about that in lecture, because the
 ## 3   P-value 0.78602526</code></pre>
 <p>Quite a lot of the values of <code>x</code> are exactly equal to the overall median (and are discarded), so the P-value is not exactly 1 as you would expect. But it is definitely not significant, and so a difference of 2.5 inches smaller for females is going to be in a confidence interval for the difference in medians.</p>
 <p>The strategy now is to try shifting the female handspans by different amounts, run Mood’s median test for each one, and see which shifts are not rejected. These are the ones for which that difference in medians would be in the confidence interval. Before we get to that, though, I want to simplify the procedure we have, so that it is easier to run it lots of times. First, let’s get just the P-value out of the median test:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">d<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">median_test</span>(d, x, sex)</a>
-<a class="sourceLine" id="cb92-2" title="2">d<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="mood-median-test.html#cb63-1"></a>d<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">median_test</span>(d, x, sex)</span>
+<span id="cb63-2"><a href="mood-median-test.html#cb63-2"></a>d<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] 0.7860253</code></pre>
 <p>That’s the P-value. <code>pluck</code> pulls individual things out of bigger things. The variable I called <code>d.1</code> has two things in it. The one called <code>table</code> has the numbers of data values above and below the overall median; the one called <code>test</code> has the test statistic and P-value in it. <code>test</code> is a dataframe; inside <em>that</em> is a column called <code>what</code> and a column called <code>value</code> with the number we want in it, and we want the third thing in that (the other two are the chi-squared test statistic and its degrees of freedom). Hence the <code>pluck</code> statement got the right thing.</p>
 <p>Let’s think strategy: we want to shift the female handspans by a bunch of different amounts, run the test on each one, and get the P-value each time. When you’re running a big for-each like this, you want the thing you do each time to be as simple as possible. So let’s write a function that takes the shift as input, works out the new <code>x</code>, runs the test, and returns the P-value. We have all the ingredients, so it’s a matter of putting them together:</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1">shift_pval &lt;-<span class="st"> </span><span class="cf">function</span>(shift) {</a>
-<a class="sourceLine" id="cb94-2" title="2">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">x =</span> <span class="kw">ifelse</span>(sex <span class="op">==</span><span class="st"> &quot;F&quot;</span>, handspan <span class="op">+</span><span class="st"> </span>shift, handspan)) -&gt;<span class="st"> </span>d</a>
-<a class="sourceLine" id="cb94-3" title="3">d<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">median_test</span>(d, x, sex)</a>
-<a class="sourceLine" id="cb94-4" title="4">d<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb94-5" title="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="mood-median-test.html#cb65-1"></a>shift_pval &lt;-<span class="st"> </span><span class="cf">function</span>(shift) {</span>
+<span id="cb65-2"><a href="mood-median-test.html#cb65-2"></a>  span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">x =</span> <span class="kw">ifelse</span>(sex <span class="op">==</span><span class="st"> &quot;F&quot;</span>, handspan <span class="op">+</span><span class="st"> </span>shift, handspan)) -&gt;<span class="st"> </span>d</span>
+<span id="cb65-3"><a href="mood-median-test.html#cb65-3"></a>  d<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">median_test</span>(d, x, sex)</span>
+<span id="cb65-4"><a href="mood-median-test.html#cb65-4"></a>  d<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pluck</span>(<span class="st">&quot;test&quot;</span>, <span class="st">&quot;value&quot;</span>, <span class="dv">3</span>)</span>
+<span id="cb65-5"><a href="mood-median-test.html#cb65-5"></a>}</span></code></pre></div>
 <p>In the function, the <code>shift</code> is input. The first line computes the handspans shifted by the input amount, whatever it is; the second line runs the median test on the shifted data; the last line pulls out, and returns, the P-value.</p>
 <p>I am being a little sloppy here (but R is letting me get away with it): the function is also using a dataframe called <code>span</code>, which is the one we read in from the file earlier. That <em>was not input to the function</em>, so, if you have experience with other programming languages, you might be wondering whether that is “in the scope” of inside the function: that is, whether R will know about it. R does; anything the function needs that is not part of the input, it will take from your workspace. This is, you might imagine, dangerous; if the input to your function is called, say, <code>x</code>, you might easily have an <code>x</code> lying around in your workspace from some other analysis that has nothing to do with the <code>x</code> you want as the input to your function. The safe way to do it, and what I should have done, is to have <code>span</code> be input to my function as well. However, that clutters up the discussion below, so we’ll leave things as I did them here.</p>
 <p>Let’s test this on a shift of 2.5 inches, and on the original data (a shift of zero):</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">shift_pval</span>(<span class="fl">2.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="mood-median-test.html#cb66-1"></a><span class="kw">shift_pval</span>(<span class="fl">2.5</span>)</span></code></pre></div>
 <pre><code>## [1] 0.7860253</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1"><span class="kw">shift_pval</span>(<span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="mood-median-test.html#cb68-1"></a><span class="kw">shift_pval</span>(<span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## [1] 2.66404e-19</code></pre>
 <p>Those are the same P-values we got before, so good.</p>
 <p>Now, let’s get a bunch of shifts, say from 0 to 5 in steps of 0.5:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="mood-median-test.html#cb70-1"></a><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["shift"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.0"},{"1":"0.5"},{"1":"1.0"},{"1":"1.5"},{"1":"2.0"},{"1":"2.5"},{"1":"3.0"},{"1":"3.5"},{"1":"4.0"},{"1":"4.5"},{"1":"5.0"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
-<p>work out the P-value for each one (this is <code>map_dbl</code> because each P-value is a single number):</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb100-2" title="2"><span class="kw">mutate</span>(<span class="dt">p_value =</span> <span class="kw">map_dbl</span>(shift, <span class="op">~</span><span class="kw">shift_pval</span>(.)))</a></code></pre></div>
+<p>work out the P-value for each one, rowwise:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="mood-median-test.html#cb71-1"></a><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb71-2"><a href="mood-median-test.html#cb71-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb71-3"><a href="mood-median-test.html#cb71-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_value =</span> <span class="kw">shift_pval</span>(shift))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["shift"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["p_value"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"0.0","2":"2.664040e-19"},{"1":"0.5","2":"7.383053e-15"},{"1":"1.0","2":"6.407439e-09"},{"1":"1.5","2":"5.463857e-05"},{"1":"2.0","2":"5.288111e-02"},{"1":"2.5","2":"7.860253e-01"},{"1":"3.0","2":"5.152925e-03"},{"1":"3.5","2":"1.127859e-05"},{"1":"4.0","2":"1.885053e-09"},{"1":"4.5","2":"1.841319e-14"},{"1":"5.0","2":"1.609545e-18"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>and finally decide whether each shift is inside or outside the CI (because I am too lazy to figure out the scientific notation):</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb101-2" title="2"><span class="kw">mutate</span>(<span class="dt">p_value =</span> <span class="kw">map_dbl</span>(shift, <span class="op">~</span><span class="kw">shift_pval</span>(.))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb101-3" title="3"><span class="kw">mutate</span>(<span class="dt">where =</span> <span class="kw">ifelse</span>(p_value<span class="op">&lt;</span><span class="fl">0.05</span>, <span class="st">&quot;outside&quot;</span>, <span class="st">&quot;inside&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="mood-median-test.html#cb72-1"></a><span class="kw">tibble</span>(<span class="dt">shift =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.5</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb72-2"><a href="mood-median-test.html#cb72-2"></a><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-3"><a href="mood-median-test.html#cb72-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_value =</span> <span class="kw">shift_pval</span>(shift)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb72-4"><a href="mood-median-test.html#cb72-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">where =</span> <span class="kw">ifelse</span>(p_value<span class="op">&lt;</span><span class="fl">0.05</span>, <span class="st">&quot;outside&quot;</span>, <span class="st">&quot;inside&quot;</span>))</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["shift"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["p_value"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["where"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"0.0","2":"2.664040e-19","3":"outside"},{"1":"0.5","2":"7.383053e-15","3":"outside"},{"1":"1.0","2":"6.407439e-09","3":"outside"},{"1":"1.5","2":"5.463857e-05","3":"outside"},{"1":"2.0","2":"5.288111e-02","3":"inside"},{"1":"2.5","2":"7.860253e-01","3":"inside"},{"1":"3.0","2":"5.152925e-03","3":"outside"},{"1":"3.5","2":"1.127859e-05","3":"outside"},{"1":"4.0","2":"1.885053e-09","3":"outside"},{"1":"4.5","2":"1.841319e-14","3":"outside"},{"1":"5.0","2":"1.609545e-18","3":"outside"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -1092,7 +1099,7 @@ the difference in medians. I haven’t talked about that in lecture, because the
 <p>You, of course, would do just the last pipeline; I showed you the steps so you could see what was going on.</p>
 <p>The final observation is that this interval is a long way from containing zero, because the P-value was so tiny.</p>
 <p>Let’s see how the <span class="math inline">\(t\)</span>-interval looks in comparison (two-sided, because we want the confidence interval):</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data =</span> span)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="mood-median-test.html#cb73-1"></a><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data =</span> span)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
