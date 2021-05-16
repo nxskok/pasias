@@ -9,7 +9,7 @@
 
 Each subject was randomly assigned to a shampoo. After six weeks of treatment, eight sections of the scalp were examined for each subject. Each section of the scalp was given a score that measured the amount of flaking on a scale of 0-10, less flaking being better. The response variable, called `Flaking`, was the sum of these eight scores, and is a whole number for each subject. 
 
-The data are in [http://ritsokiguess.site/datafiles/STAC32/dandruff.txt](http://ritsokiguess.site/datafiles/STAC32/dandruff.txt), 
+The data are in [http://ritsokiguess.site/datafiles/dandruff.txt](http://ritsokiguess.site/datafiles/dandruff.txt), 
 with the data values separated by *tabs*.
 
 
@@ -33,7 +33,7 @@ Your aim is to produce a report, suitable for the intended audience, with all th
 Solution
 
 
-My report follows. Extra comments are in footnotes (at the end) or the multitudinous Extras after.
+My report follows. Extra comments are in footnotes or the multitudinous Extras after.
 
 
 # A comparison of four shampoos in treating dandruff
@@ -56,7 +56,7 @@ Our aim is to see which shampoo or shampoos are most effective at treating dandr
 We begin by reading in the data:
 
 ```{r}
-my_url <- "http://ritsokiguess.site/datafiles/STAC32/dandruff.txt"
+my_url <- "http://ritsokiguess.site/datafiles/dandruff.txt"
 dandruff <- read_tsv(my_url)
 dandruff
 ```
@@ -220,14 +220,20 @@ kable(summary)
 End of aside.
 
 Before I got distracted, we were talking about whether the distribution of PyrI was normal enough, given the sample size.
-Another way of thinking about this is to look at the bootstrapped sampling distribution of the sample mean for  this group:
+Another way of thinking about this is to look at the bootstrapped sampling distribution of the sample mean for  this group. I set the random number seed so that the results will be the same even if I run this again:
+
+```{r}
+set.seed(457299)
+```
+
 
 ```{r}
 dandruff %>% filter(Treatment == "PyrI") -> pyri
-rerun(10000, sample(pyri$Flaking, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(sample = value)) + stat_qq() + stat_qq_line()
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(pyri$Flaking, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 
 Oh yes, no problem with the normality there. (The discreteness of the population implies that each sample mean is some number of one-hundred-and-twelfths, so that the sampling distribution is also discrete, just less discrete than the data distribution. This is the reason for the little stair-steps in the plot.) In addition, the fact that the least normal distribution is normal enough means that the other distributions must also be OK. If you wanted to be careful, you would assess the smallest Placebo group as well, though that if anything is short-tailed and so would not be a problem anyway.
@@ -290,26 +296,58 @@ sim_from <- tribble(
 sim_from
 ```
 
-The way that comes to mind now is to make a list-column that contains a random sample from each group, and then use `unnest` to break this out into a dataframe that is the same shape as my `dandruff`. The list-column goes like this:
+Starting from here, we want to set up drawing a lot of random samples from a normal distribution with the mean and SD shown, and the sample size shown. The way I like to do it^[At this moment, subject to change, etc etc.] is to set up a list-column called `sim` that will index the simulations. I'm going to pretend I'm doing just three simulations, while I get my head around this, and then up it later after I have things working:
 
 ```{r}
 sim_from %>% 
-mutate(sample = pmap(list(n, mean, sd), ~rnorm(..1, ..2, ..3)))
+  mutate(sim = list(1:3))
 ```
 
-You have probably not seen `pmap` before. The problem is that the for-each has three things in parallel: the sample size, the mean, and the SD. There is a `map2`, but not a `map3` for three things, so what you do is to put the things to be for-eached over in a `list`, then use `pmap`, then refer to the things in your what-to-do (here `rnorm`) with two dots and a number, referring to the first, second, and third things in your `list` in that order. `rnorm` requires the number of random values to generate first, then the mean, then the SD.
-
-OK, so let's unnest these:
+Then I `unnest` `sim` so that I have a place to draw each sample:
 
 ```{r}
 sim_from %>% 
-mutate(sample = pmap(list(n, mean, sd), ~rnorm(..1, ..2, ..3))) %>% 
-unnest(sample)
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim)
 ```
 
-and if you were to scroll (way!) down, you would see that we have representatives from each treatment group. 
+Now, working rowwise, I can draw a random sample from each normal distribution. The inputs to `rnorm` are the sample size, the mean, and the SD, in that order.^[Or you can remember or look up the names to the inputs, and then you can have them in any order you like. But I know which order they come, which is good enough for me.]
 
-Next, we have to run the ANOVA and get the P-value from it (with the aim, in our simulation, of checking that about 5% of the simulated P-values are less than 0.05). I'll have some things to explain after:
+```{r}
+sim_from %>% 
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd)))
+```
+
+This is looking similar in procedure to a bootstrap sampling distribution. If we were doing *that*, we would now make a new column containing something like the mean of each of those samples (and then make a picture of what we had). But this is different: we want to combine all of the random samples for each of the four treatments for one of the simulations, run an ANOVA on it, and get hold of the P-value. So we need to `unnest` those samples, and then combine them together properly. That goes something like this:
+
+```{r}
+sim_from %>% 
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim)
+```
+
+What this has done is to create three mini-dataframes in the list-column `data` that have our generated random `y` and a column called `treatment`. What we want to do is to run the ordinary ANOVA on each of those dataframes in `data`, and, in a minute, get hold of the P-value. I think I need another `rowwise` first, because I want to work with the rows of the *new* dataframe: 
+
+```{r}
+sim_from %>% 
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim) %>% 
+  rowwise() %>% 
+  mutate(my_anova = list(aov(y ~ trt, data = data)))
+```
+
+I know the P-value is in there somewhere, but I can't remember how to get hold of it. The easiest way is to load `broom` and pass the models into `tidy`, then take a look at that:
 
 ```{r}
 library(broom)
@@ -318,106 +356,104 @@ library(broom)
 
 ```{r}
 sim_from %>% 
-mutate(sample = pmap(list(n, mean, sd), 
-~rnorm(..1, ..2, ..3))) %>% 
-unnest(sample) %>% 
-aov(sample ~ trt, data = .) %>% 
-tidy() %>% 
-pluck("p.value", 1)
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim) %>% 
+  rowwise() %>% 
+  mutate(my_anova = list(aov(y ~ trt, data = data))) %>% 
+  mutate(my_tidy = list(tidy(my_anova))) %>% 
+  unnest(my_tidy)
 ```
 
-All right:
-
-- The output of `aov` is designed for human reading, not for computing with. Package `broom` produces "tidy" output in the form of a dataframe, that we can extract things from.
-- The dataframe that `aov` is to be run on is the one coming out of the previous step of the pipeline, which has the special name "`.`". I read this as "data equals dot".
-- `tidy` (from `broom`) produces the ANOVA table as a dataframe, with a column called `p.value`. There are actually two values in here: remember that when you do an ANOVA table by hand it looks like this in form (with made-up numbers):
-
-```
-Source   df Sum of Squares  Mean Square   F    P-value
-Groups    3         21            7     3.5     0.01
-Error   351        702            2
-Total   354        723
-```
-R doesn't have a Total line (that goes back to the days of Fisher and his recommendations for laying out the hand calculation so that you get it right), but there *is* an Error line (called Residual), and if the dataframe is to have two rows, it must have two values in all the columns; the second one in the P-value column is missing.
-
-- `pluck` pulls values out of dataframes. This one says "go to the column called `p.value` and get just the first value". The result is a simulated P-value from simulated data where the null hypothesis is true.
-
-Now, we want to repeat that a bunch of times. `rerun` is the tool for this, but the thing we're rerunning is kind of complicated. So before we `rerun`, let's make the thing we're rerunning into a function:
+Almost there. The rows that have P-values in them are the ones that have `trt` (the explanatory variable) in the `term`, so:
 
 ```{r}
-sim1 <- function(sim_from) {
 sim_from %>% 
-mutate(sample = pmap(list(n, mean, sd), 
-~rnorm(..1, ..2, ..3))) %>% 
-unnest(sample) %>% 
-aov(sample ~ trt, data = .) %>% 
-tidy() %>% 
-pluck("p.value", 1)
-}
+  mutate(sim = list(1:3)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim) %>% 
+  rowwise() %>% 
+  mutate(my_anova = list(aov(y ~ trt, data = data))) %>% 
+  mutate(my_tidy = list(tidy(my_anova))) %>% 
+  unnest(my_tidy) %>% 
+  filter(term == "trt") %>% 
+  select(sim, p.value)
 ```
+
+Three simulated samples, each time one from each of the four treatments, and three P-values. So this works, and the remaining thing is to change the number of simulations from 3 to 1000 and run it again, saving the result:
 
 ```{r}
-sim1(sim_from)
+sim_from %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim) %>% 
+  rowwise() %>% 
+  mutate(my_anova = list(aov(y ~ trt, data = data))) %>% 
+  mutate(my_tidy = list(tidy(my_anova))) %>% 
+  unnest(my_tidy) %>% 
+  filter(term == "trt") %>% 
+  select(sim, p.value) -> sim_pval
+sim_pval
 ```
 
-yep, that's plausible.
+Now, the reason we were doing this was to see whether regular ANOVA worked properly on data from populations with different SDs. We know that the null hypothesis is true here (because all the true treatment means were equal to 0), so the probability of making a type I error by rejecting the null (that all the means are the same) should be 0.05. How close is it?
 
-```{r, echo=FALSE}
-set.seed((457298))
+```{r}
+sim_pval %>% 
+  count(p.value <= 0.05)
 ```
 
-
-And then:
-
-```{r, cache=TRUE}
-rerun(10000, sim1(sim_from)) %>% 
-enframe() %>% 
-unnest(value) %>% 
-count(value <= 0.05)
-```
-(this may take an appreciable amount of time).
+$91/1000 = 0.091$. We are *too likely* to falsely reject the null. The regular ANOVA does not behave properly for data like ours. 
 
 That looks rather high. Is the proportion of times I am rejecting significantly different from 0.05? Testing null hypotheses about (single) proportions is done using `prop.test`. This uses the normal approximation to the binomial, with continuity correction:
 
 ```{r}
-prop.test(921, 10000, p = 0.05)
+prop.test(91, 1000, p = 0.05)
 ```
 
-
-
-Ah, now, that's interesting. A supposed $\alpha = 0.05$ test is actually rejecting around 9% of the time, which is significantly different from 0.05. This surprises me. The confidence interval says that the test is rejecting *more* than 0.05 of the time. So the ANOVA is actually *not* all that accurate.^[When you get a simulation result that is not what you were expecting, there are two options to explore: either it really is different from your expectation, or there is something wrong with your code. I think my code is OK here, but do let me know if you see a problem with it.]
+Ah, now, that's interesting. A supposed $\alpha = 0.05$ test is actually rejecting around 9% of the time, which is significantly different from 0.05. This surprises me. So the ANOVA is actually *not* all that accurate.^[When you get a simulation result that is not what you were expecting, there are two options to explore: either it really is different from your expectation, or there is something wrong with your code. I think my code is OK here, but do let me know if you see a problem with it.]
 
 So now let's do the same simulation for the Welch ANOVA to see whether it's better:
 
+```{r}
+sim_from %>% 
+  mutate(sim = list(1:1000)) %>% 
+  unnest(sim) %>% 
+  rowwise() %>% 
+  mutate(y = list(rnorm(n, mean, sd))) %>% 
+  unnest(y) %>% 
+  nest_by(sim) %>% 
+  rowwise() %>% 
+  mutate(my_anova = list(oneway.test(y ~ trt, data = data))) %>%
+  mutate(pval = my_anova$p.value) -> sim_pval2
+sim_pval2
+```
+
+This one is a bit easier because `oneway.test` has a thing called `p.value` that you can just pull out. No need to use `tidy` here. 
+
+How many of *those* P-values are less than 0.05?
 
 ```{r}
-sim2 <- function(sim_from) {
-sim_from %>%
-mutate(sample = pmap(list(n, mean, sd),
-~rnorm(..1, ..2, ..3))) %>%
-unnest(sample) %>%
-oneway.test(sample ~ trt, data = .) %>%
-.$p.value
-}
+sim_pval2 %>% 
+  count(pval <= 0.05)
 ```
 
-`tidy` doesn't know about `oneway.test`, so I had to pull out the thing called `p.value` myself.
-
-Then:
-
-
-```{r, cache=TRUE}
-rerun(10000, sim2(sim_from)) %>%
-enframe() %>%
-unnest(value) %>%
-count(value <= 0.05)
-```
+That couldn't be much closer to the mark:
 
 ```{r}
-prop.test(504, 10000, p = 0.05)
+prop.test(49, 1000, p = 0.05)
 ```
 
-This one is right on the money. So this investigation says that the Welch ANOVA is much more trustworthy for data resembling what we observed.
+This one is on the money.^[You could redo this with 10,000 simulations to convince yourself further.] The proportion of times our simulation falsely rejects is not significantly different from 0.05. So this investigation says that the Welch ANOVA is much more trustworthy for data resembling what we observed.
 
 
 $\blacksquare$

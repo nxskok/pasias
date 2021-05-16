@@ -75,11 +75,12 @@ Extra: you could also think about bootstrapped sampling distributions of the sam
 
 ```{r}
 span %>% 
-filter(sex == "F") -> females 
-rerun(1000, sample(females$handspan, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(sample = value)) + stat_qq() + stat_qq_line()
+  filter(sex == "F") -> females 
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(females$handspan, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 
 My take is that the sampling distribution of the sample mean for the females is normal enough, therefore the one for the males is also normal enough, therefore the two-sample $t$-test is actually fine.
@@ -161,9 +162,9 @@ Let's think strategy: we want to shift the female handspans by a bunch of differ
 
 ```{r}
 shift_pval <- function(shift) {
-span %>% mutate(x = ifelse(sex == "F", handspan + shift, handspan)) -> d
-d.1 <- median_test(d, x, sex)
-d.1 %>% pluck("test", "value", 3)
+  span %>% mutate(x = ifelse(sex == "F", handspan + shift, handspan)) -> d
+  d.1 <- median_test(d, x, sex)
+  d.1 %>% pluck("test", "value", 3)
 }
 ```
 
@@ -186,20 +187,21 @@ Now, let's get a bunch of shifts, say from 0 to 5 in steps of 0.5:
 tibble(shift = seq(0, 5, 0.5))
 ```
 
-work out the P-value for each one (this is `map_dbl` because each P-value is a single number):
+work out the P-value for each one, rowwise: 
 
 ```{r}
-tibble(shift = seq(0, 5, 0.5)) %>% 
-mutate(p_value = map_dbl(shift, ~shift_pval(.)))
+tibble(shift = seq(0, 5, 0.5)) %>%
+  rowwise() %>% 
+  mutate(p_value = shift_pval(shift))
 ```
 
 and finally decide whether each shift is inside or outside the CI (because I am too lazy to figure out the scientific notation):
 
 ```{r}
-tibble(shift = seq(0, 5, 0.5)) %>% 
-mutate(p_value = map_dbl(shift, ~shift_pval(.))) %>% 
-mutate(where = ifelse(p_value<0.05, "outside", "inside"))
-
+tibble(shift = seq(0, 5, 0.5)) %>%
+  rowwise() %>% 
+  mutate(p_value = shift_pval(shift)) %>% 
+  mutate(where = ifelse(p_value<0.05, "outside", "inside"))
 ```
 
 The confidence interval goes from 2 inches to 2.5 inches on this scale. I checked and it goes up to 3 really, except that 3 itself is outside the interval. So let's call it 2 to 3 inches. This means that the median female handspan is between 2 and 3 inches *smaller* than the median male handspan, because we had to shift the female handspans up by that much to make them not significantly different.

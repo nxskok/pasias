@@ -177,10 +177,11 @@ set.seed(457299)
 
 
 ```{r}
-rerun(1000, sample(french1$gain, replace = T)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(sample=value)) + stat_qq() + stat_qq_line()
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(french1$gain, replace = T))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 
 
