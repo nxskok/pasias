@@ -13,24 +13,31 @@ Solution
 set.seed(457299)
 ```
 
-This is `rerun`. Use at least 1000 simulations (more, if you're willing to wait for it). In `rnorm`, the sample size is first, then the (true) population mean, then the (assumed) population SD:
+Use at least 1000 simulations (more, if you're willing to wait for it). In `rnorm`, the sample size is first, then the (true) population mean, then the (assumed) population SD:
 
 ```{r}
-rerun(1000, rnorm(100, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(100, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
+
+
+
 
 The power is (estimated as) a disappointing 0.361. Your answer won't (most likely) be the same as this, but it should be somewhere close. I would like to see you demonstrate that you know what power is, for example "if the population mean is actually 2, the null hypothesis $H_0: \mu = 0$, which is wrong, will only be rejected about 36% of the time".^[This is why I called my result disappointing. I would like to reject a lot more of the time than this, but, given that the truth was not very far away from the null given the (large) population SD, I can't. See Extra 1.]
 
 The test we are doing is one-sided, so you need the `alternative` in there. If you omit it, you'll have the answer to a different problem:
 
 ```{r}
-rerun(1000, rnorm(100, 2, 15)) %>% 
-map(~t.test(., mu=0)) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(100, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
 
 This is the probability that you reject $H_0: \mu=0$ in favour of $H_a: \mu \ne 0$. This is smaller, because the test is "wasting effort" allowing the possibility of rejecting when the sample mean is far enough *less* than zero, when most of the time the samples drawn from the true distribution have mean greater than zero. (If you get a sample mean of 2.5, say, the P-value for a one-sided test will be smaller than for a two-sided one.)
@@ -71,48 +78,64 @@ The simulation approach does not immediately give you a sample size for fixed po
 
 First off, for a sample size of 100, the power was too small, so the answer had better be bigger than 100. I'll try 200. For these, copy and paste the code, changing the sample size each time:
 
-```{r, cache=TRUE}
-rerun(10000, rnorm(200, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(200, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
+
+
 
 A sample size of 200 isn't big enough yet. I'll double again to 400:
 
-```{r, cache=TRUE}
-rerun(10000, rnorm(400, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(400, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
 
 Getting closer. 400 is too big, but closer than 200. 350?
 
-```{r, cache=TRUE}
-rerun(10000, rnorm(350, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(350, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
 
 Close! I reckon you could call that good (see below), or try again with a sample size a bit less than 350:
 
-```{r, cache=TRUE}
-rerun(10000, rnorm(340, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(345, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
+
+
 
 340 is definitely too small:
 
-```{r, cache=TRUE}
-rerun(10000, rnorm(347, 2, 15)) %>% 
-map(~t.test(., mu=0, alternative = "greater")) %>% 
-map_dbl("p.value") -> pvals
-tibble(pvals) %>% count(pvals<=0.05)
+```{r}
+tibble(sim = 1:10000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(rnorm(340, 2, 15))) %>% 
+  mutate(t_test = list(t.test(my_sample, mu = 0, alternative = "greater"))) %>% 
+  mutate(p_value = t_test$p.value) %>% 
+  count(p_value <= 0.05)
 ```
+
+
 
 This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get.^[If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.] This is the middle 95% of that distribution.
 

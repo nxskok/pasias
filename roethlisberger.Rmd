@@ -197,33 +197,40 @@ This is higher at both ends than the interval for the median, though possibly no
 Extra: this is one of those cases where the bootstrap might shed some light on the sampling distribution of the sample mean:
 
 ```{r}
-rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
-map_dbl(~mean(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 10)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 
+  mutate(my_mean = mean(my_sample)) %>% 
+  ggplot(aes(x = my_mean)) + geom_histogram(bins = 10)
 ```
-This is a little bit skewed to the right (it goes further up from the peak than down), but not so bad, which is why the CI for the mean went up a bit higher, but only a bit, than the one for the median.
+
+
+This is noticeably skewed to the right (it goes further up from the peak than down), which is why the CI for the mean went up a bit higher than the one for the median.
 
 Finally, bootstrapping the median is not something you'd want to do, since the sign test doesn't depend on anything being normally-distributed. This is a good thing, since bootstrapping the sample median is weird:
 
 ```{r}
-rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
-map_dbl(~median(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 30)
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 
+  mutate(my_median = median(my_sample)) %>% 
+  ggplot(aes(x = my_median)) + geom_histogram(bins = 30)
 ```
 
-The "clumpiness" in the distribution comes about because there are not all that many different possible sample medians when you sample with replacement. For one thing, the values are all whole numbers, so the median can only be something or something and a half. Even then, the bar heights look kind of irregular.
+The "holes" in the distribution comes about because there are not all that many different possible sample medians when you sample with replacement. For one thing, the values are all whole numbers, so the median can only be something or something and a half. Even then, the bar heights look kind of irregular.
 
 I used a large number of bins to emphasize this, but even a more reasonable number looks strange:
 
 ```{r}
-rerun(1000, sample(ben$completed, replace = TRUE)) %>% 
-map_dbl(~median(.)) %>% 
-enframe() %>% 
-ggplot(aes(x=value)) + geom_histogram(bins = 10)
-
+tibble(sim = 1:1000) %>% 
+  rowwise() %>% 
+  mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 
+  mutate(my_median = median(my_sample)) %>% 
+  ggplot(aes(x = my_median)) + geom_histogram(bins = 10)
 ```
+
+
+
 
 A sample median of 19 or 20 is more likely than one of 19.5.
 
