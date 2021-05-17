@@ -1,13 +1,6 @@
----
-title: "Sparrowhawks"
-author: "Ken Butler"
-date: "October 13, 2015"
-output: html_document
----
 
-The data
-========
-  
+## The data
+
 We begin by reading in the data:
   
 ```{r}
@@ -19,8 +12,7 @@ sparrowhawks
 
 There are 13 rows of data altogether, with a value of the number of returning and new adults for each one.
 
-Exploratory analysis
-====================
+## Exploratory analysis
 
 We should look at a scatterplot of the data, to see what, if any, relationship there is. We add a smooth trend, to guide the eye:
 
@@ -39,13 +31,12 @@ with(sparrowhawks,cor(newadults,returning))
 The correlation is about -0.75. This seems close to -1 to me, since I didn't think the trend was that strong, but it is no surprise that it is negative, since the trend is definitely downward rather than upward.
 
 
-Regression analysis
-===================
+## Regression analysis
 
 The regression for predicting the number of new adults from the percentage of returning adults is as shown:
 
 ```{r}
-newadults.1=lm(newadults~returning,data=sparrowhawks)
+newadults.1 <- lm(newadults~returning,data=sparrowhawks)
 summary(newadults.1)
 ```
 
@@ -59,8 +50,7 @@ A plot of the data with the regression line superimposed is as shown:
 ggplot(sparrowhawks,aes(x=returning,y=newadults))+geom_point()+geom_smooth(method="lm")
 ```
 
-Conclusions
-===========
+## Conclusions
 
 The association is negative, as seen from the scatterplot and
 correlation, and also from the negative slope of the regression

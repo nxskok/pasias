@@ -2,47 +2,62 @@
 <html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Chapter 5 Working with dataframes | Problems and Solutions in Applied Statistics" />
-<meta property="og:type" content="book" />
-<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Working with dataframes | Problems and Solutions in Applied Statistics</title>
+  <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-<meta name="github-repo" content="nxskok/pasias" />
+  <meta property="og:title" content="Chapter 5 Working with dataframes | Problems and Solutions in Applied Statistics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  
+  <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="github-repo" content="nxskok/pasias" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Working with dataframes | Problems and Solutions in Applied Statistics" />
+  
+  <meta name="twitter:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  
 
 <meta name="author" content="Ken Butler" />
 
-<meta name="date" content="2021-04-26" />
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-</script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<meta name="date" content="2021-05-17" />
 
-<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="data-exploration.html"/>
+<link rel="next" href="one-sample-inference.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
-<title>Chapter 5 Working with dataframes | Problems and Solutions in Applied Statistics</title>
-
-<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
-<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+
+
+
+
+
+
 <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -100,91 +115,108 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
-<link rel="stylesheet" href="toc.css" type="text/css" />
-
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
 
 
 
-<div class="row">
-<div class="col-sm-12">
-<div id="TOC">
-<ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
-<li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Problems and Solutions in Applied Statistics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a></li>
-<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a></li>
-<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
-<li><a href="working-with-dataframes.html#dolphins"><span class="toc-section-number">5.3</span> Dolphins</a></li>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.4</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.5</span> Cars</a></li>
-<li><a href="working-with-dataframes.html#dolphins-1"><span class="toc-section-number">5.6</span> Dolphins</a></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
+<li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
+<li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
+<li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
+<li class="chapter" data-level="5" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html"><i class="fa fa-check"></i><b>5</b> Working with dataframes</a><ul>
+<li class="chapter" data-level="5.1" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#tidying-the-jays-data"><i class="fa fa-check"></i><b>5.1</b> Tidying the Jays data</a></li>
+<li class="chapter" data-level="5.2" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#cars"><i class="fa fa-check"></i><b>5.2</b> Cars</a></li>
+<li class="chapter" data-level="5.3" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#dolphins"><i class="fa fa-check"></i><b>5.3</b> Dolphins</a></li>
+<li class="chapter" data-level="5.4" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#tidying-the-jays-data-1"><i class="fa fa-check"></i><b>5.4</b> Tidying the Jays data</a></li>
+<li class="chapter" data-level="5.5" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#cars-1"><i class="fa fa-check"></i><b>5.5</b> Cars</a></li>
+<li class="chapter" data-level="5.6" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html#dolphins-1"><i class="fa fa-check"></i><b>5.6</b> Dolphins</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
-<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li><a href="mood-median-test.html#mood-median-test"><span class="toc-section-number">10</span> Mood median test</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
+<li class="chapter" data-level="6" data-path="one-sample-inference.html"><a href="one-sample-inference.html"><i class="fa fa-check"></i><b>6</b> One-sample inference</a></li>
+<li class="chapter" data-level="7" data-path="two-sample-inference.html"><a href="two-sample-inference.html"><i class="fa fa-check"></i><b>7</b> Two-sample inference</a></li>
+<li class="chapter" data-level="8" data-path="power-and-sample-size.html"><a href="power-and-sample-size.html"><i class="fa fa-check"></i><b>8</b> Power and sample size</a></li>
+<li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
+<li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
+<li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
+<li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.4" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality-1"><i class="fa fa-check"></i><b>12.4</b> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a></li>
-<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a></li>
-<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a></li>
-<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a></li>
-<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><span class="toc-section-number">18.2</span> Pulse rates and marching</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.3</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><span class="toc-section-number">18.4</span> Pulse rates and marching</a></li>
+<li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
+<li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
+<li class="chapter" data-level="15" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>15</b> Tidying data</a></li>
+<li class="chapter" data-level="16" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>16</b> Simple regression</a></li>
+<li class="chapter" data-level="17" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>17</b> Multiple regression</a></li>
+<li class="chapter" data-level="18" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>18</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="18.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>18.1</b> Crickets revisited</a></li>
+<li class="chapter" data-level="18.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>18.2</b> Pulse rates and marching</a></li>
+<li class="chapter" data-level="18.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>18.3</b> Crickets revisited</a></li>
+<li class="chapter" data-level="18.4" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><i class="fa fa-check"></i><b>18.4</b> Pulse rates and marching</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="19" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>19</b> Dates and times</a></li>
+<li class="chapter" data-level="20" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>20</b> Functions</a></li>
+<li class="chapter" data-level="21" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>21</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="21.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>21.1</b> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="21.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>21.2</b> Heights and foot lengths again</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a></li>
-<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a></li>
-<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a></li>
-<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a></li>
-<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
-<li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
+<li class="chapter" data-level="22" data-path="the-bootstrap.html"><a href="the-bootstrap.html"><i class="fa fa-check"></i><b>22</b> The Bootstrap</a></li>
+<li class="chapter" data-level="23" data-path="bayesian-statistics-with-stan.html"><a href="bayesian-statistics-with-stan.html"><i class="fa fa-check"></i><b>23</b> Bayesian Statistics with Stan</a></li>
+<li class="chapter" data-level="24" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>24</b> Logistic regression</a></li>
+<li class="chapter" data-level="25" data-path="logistic-regression-with-ordinal-response.html"><a href="logistic-regression-with-ordinal-response.html"><i class="fa fa-check"></i><b>25</b> Logistic regression with ordinal response</a></li>
+<li class="chapter" data-level="26" data-path="logistic-regression-with-nominal-response.html"><a href="logistic-regression-with-nominal-response.html"><i class="fa fa-check"></i><b>26</b> Logistic regression with nominal response</a></li>
+<li class="chapter" data-level="27" data-path="survival-analysis.html"><a href="survival-analysis.html"><i class="fa fa-check"></i><b>27</b> Survival analysis</a></li>
+<li class="chapter" data-level="28" data-path="analysis-of-variance-revisited.html"><a href="analysis-of-variance-revisited.html"><i class="fa fa-check"></i><b>28</b> Analysis of variance revisited</a></li>
+<li class="chapter" data-level="29" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>29</b> Analysis of covariance</a></li>
+<li class="chapter" data-level="30" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html"><i class="fa fa-check"></i><b>30</b> Multivariate analysis of variance</a></li>
+<li class="chapter" data-level="31" data-path="repeated-measures.html"><a href="repeated-measures.html"><i class="fa fa-check"></i><b>31</b> Repeated measures</a></li>
+<li class="chapter" data-level="32" data-path="discriminant-analysis.html"><a href="discriminant-analysis.html"><i class="fa fa-check"></i><b>32</b> Discriminant analysis</a></li>
+<li class="chapter" data-level="33" data-path="hierarchical-cluster-analysis.html"><a href="hierarchical-cluster-analysis.html"><i class="fa fa-check"></i><b>33</b> Hierarchical cluster analysis</a></li>
+<li class="chapter" data-level="34" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>34</b> K-means cluster analysis</a></li>
+<li class="chapter" data-level="35" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>35</b> Drawing maps with Leaflet</a></li>
+<li class="chapter" data-level="36" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>36</b> Multidimensional Scaling</a></li>
+<li class="chapter" data-level="37" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>37</b> Principal Components</a><ul>
+<li class="chapter" data-level="37.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>37.1</b> The weather, somewhere</a></li>
+<li class="chapter" data-level="37.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>37.2</b> The weather, somewhere</a></li>
 </ul></li>
-<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a></li>
+<li class="chapter" data-level="38" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>38</b> Factor Analysis</a></li>
+<li class="chapter" data-level="39" data-path="frequency-table-analysis.html"><a href="frequency-table-analysis.html"><i class="fa fa-check"></i><b>39</b> Frequency table analysis</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
-</div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
-<div id="working-with-dataframes" class="section level1 tabset">
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Problems and Solutions in Applied Statistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="working-with-dataframes" class="section level1">
 <h1><span class="header-section-number">Chapter 5</span> Working with dataframes</h1>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <div id="tidying-the-jays-data" class="section level2">
@@ -239,7 +271,7 @@ horsepower 70 or less.</p></li>
 <li><code>age</code> in years</li>
 <li><code>sex</code> of the dolphin, male or female.</li>
 </ul>
-<p>The data are in  as a CSV file. This question appears to have a lot of parts, but most of them ought not to take you too long.</p>
+<p>The data are in <a href="http://ritsokiguess.site/datafiles/dolphins.csv">http://ritsokiguess.site/datafiles/dolphins.csv</a> as a CSV file. This question appears to have a lot of parts, but most of them ought not to take you too long.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Read in and display (some of) the data.</p></li>
 <li><p>Display only the two columns <code>mercury</code> and <code>sex</code>.</p></li>
@@ -282,17 +314,26 @@ it into R. Check that you have 25 rows and a bunch of variables.</li>
 ## )
 ## ℹ Use `spec()` for the full column specifications.</code></pre>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">jays</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["row"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["game"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["date"],"name":[3],"type":["chr"],"align":["left"]},{"label":["box"],"name":[4],"type":["chr"],"align":["left"]},{"label":["team"],"name":[5],"type":["chr"],"align":["left"]},{"label":["venue"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["opp"],"name":[7],"type":["chr"],"align":["left"]},{"label":["result"],"name":[8],"type":["chr"],"align":["left"]},{"label":["runs"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Oppruns"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["innings"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["wl"],"name":[12],"type":["chr"],"align":["left"]},{"label":["position"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["gb"],"name":[14],"type":["chr"],"align":["left"]},{"label":["winner"],"name":[15],"type":["chr"],"align":["left"]},{"label":["loser"],"name":[16],"type":["chr"],"align":["left"]},{"label":["save"],"name":[17],"type":["chr"],"align":["left"]},{"label":["game time"],"name":[18],"type":["time"],"align":["right"]},{"label":["Daynight"],"name":[19],"type":["chr"],"align":["left"]},{"label":["attendance"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["streak"],"name":[21],"type":["chr"],"align":["left"]}],"data":[{"1":"82","2":"7","3":"Monday, Apr 13","4":"boxscore","5":"TOR","6":"NA","7":"TBR","8":"L","9":"1","10":"2","11":"NA","12":"4-3","13":"2","14":"1","15":"Odorizzi","16":"Dickey","17":"Boxberger","18":"02:30:00","19":"N","20":"48414","21":"-"},{"1":"83","2":"8","3":"Tuesday, Apr 14","4":"boxscore","5":"TOR","6":"NA","7":"TBR","8":"L","9":"2","10":"3","11":"NA","12":"4-4","13":"3","14":"2","15":"Geltz","16":"Castro","17":"Jepsen","18":"03:06:00","19":"N","20":"17264","21":"--"},{"1":"84","2":"9","3":"Wednesday, Apr 15","4":"boxscore","5":"TOR","6":"NA","7":"TBR","8":"W","9":"12","10":"7","11":"NA","12":"5-4","13":"2","14":"1","15":"Buehrle","16":"Ramirez","17":"NA","18":"03:02:00","19":"N","20":"15086","21":"+"},{"1":"85","2":"10","3":"Thursday, Apr 16","4":"boxscore","5":"TOR","6":"NA","7":"TBR","8":"L","9":"2","10":"4","11":"NA","12":"5-5","13":"4","14":"1.5","15":"Archer","16":"Sanchez","17":"Boxberger","18":"03:00:00","19":"N","20":"14433","21":"-"},{"1":"86","2":"11","3":"Friday, Apr 17","4":"boxscore","5":"TOR","6":"NA","7":"ATL","8":"L","9":"7","10":"8","11":"NA","12":"5-6","13":"4","14":"2.5","15":"Martin","16":"Cecil","17":"Grilli","18":"03:09:00","19":"N","20":"21397","21":"--"},{"1":"87","2":"12","3":"Saturday, Apr 18","4":"boxscore","5":"TOR","6":"NA","7":"ATL","8":"W-wo","9":"6","10":"5","11":"10","12":"6-6","13":"3","14":"1.5","15":"Cecil","16":"Marimon","17":"NA","18":"02:41:00","19":"D","20":"34743","21":"+"},{"1":"88","2":"13","3":"Sunday, Apr 19","4":"boxscore","5":"TOR","6":"NA","7":"ATL","8":"L","9":"2","10":"5","11":"NA","12":"6-7","13":"4","14":"1.5","15":"Miller","16":"Norris","17":"Grilli","18":"02:41:00","19":"D","20":"44794","21":"-"},{"1":"89","2":"14","3":"Tuesday, Apr 21","4":"boxscore","5":"TOR","6":"NA","7":"BAL","8":"W","9":"13","10":"6","11":"NA","12":"7-7","13":"2","14":"2","15":"Buehrle","16":"Norris","17":"NA","18":"02:53:00","19":"N","20":"14184","21":"+"},{"1":"90","2":"15","3":"Wednesday, Apr 22","4":"boxscore","5":"TOR","6":"NA","7":"BAL","8":"W","9":"4","10":"2","11":"NA","12":"8-7","13":"2","14":"1","15":"Sanchez","16":"Jimenez","17":"Castro","18":"02:36:00","19":"N","20":"15606","21":"++"},{"1":"91","2":"16","3":"Thursday, Apr 23","4":"boxscore","5":"TOR","6":"NA","7":"BAL","8":"W","9":"7","10":"6","11":"NA","12":"9-7","13":"1","14":"Tied","15":"Hutchison","16":"Tillman","17":"Castro","18":"02:36:00","19":"N","20":"18581","21":"+++"},{"1":"92","2":"27","3":"Monday, May 4","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"3","10":"1","11":"NA","12":"13-14","13":"4","14":"3.5","15":"Dickey","16":"Martin","17":"Cecil","18":"02:18:00","19":"N","20":"19217","21":"+"},{"1":"93","2":"28","3":"Tuesday, May 5","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"L","9":"3","10":"6","11":"NA","12":"13-15","13":"5","14":"4.5","15":"Pineda","16":"Estrada","17":"Miller","18":"02:54:00","19":"N","20":"21519","21":"-"},{"1":"94","2":"29","3":"Wednesday, May 6","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"5","10":"1","11":"NA","12":"14-15","13":"3","14":"3.5","15":"Buehrle","16":"Sabathia","17":"NA","18":"02:30:00","19":"N","20":"21312","21":"+"},{"1":"95","2":"30","3":"Friday, May 8","4":"boxscore","5":"TOR","6":"NA","7":"BOS","8":"W","9":"7","10":"0","11":"NA","12":"15-15","13":"3","14":"4","15":"Sanchez","16":"Miley","17":"NA","18":"02:41:00","19":"N","20":"30430","21":"++"},{"1":"96","2":"31","3":"Saturday, May 9","4":"boxscore","5":"TOR","6":"NA","7":"BOS","8":"W","9":"7","10":"1","11":"NA","12":"16-15","13":"3","14":"3","15":"Hutchison","16":"Kelly","17":"NA","18":"03:12:00","19":"D","20":"42917","21":"+++"},{"1":"97","2":"32","3":"Sunday, May 10","4":"boxscore","5":"TOR","6":"NA","7":"BOS","8":"L","9":"3","10":"6","11":"NA","12":"16-16","13":"3","14":"4","15":"Buchholz","16":"Dickey","17":"Uehara","18":"02:38:00","19":"D","20":"42419","21":"-"},{"1":"98","2":"40","3":"Monday, May 18","4":"boxscore","5":"TOR","6":"NA","7":"LAA","8":"W","9":"10","10":"6","11":"NA","12":"18-22","13":"5","14":"4.5","15":"Osuna","16":"Morin","17":"NA","18":"03:28:00","19":"D","20":"29306","21":"+"},{"1":"99","2":"41","3":"Tuesday, May 19","4":"boxscore","5":"TOR","6":"NA","7":"LAA","8":"L","9":"2","10":"3","11":"NA","12":"18-23","13":"5","14":"4.5","15":"Santiago","16":"Sanchez","17":"Street","18":"02:32:00","19":"N","20":"15062","21":"-"},{"1":"100","2":"42","3":"Wednesday, May 20","4":"boxscore","5":"TOR","6":"NA","7":"LAA","8":"L","9":"3","10":"4","11":"NA","12":"18-24","13":"5","14":"4.5","15":"Weaver","16":"Hutchison","17":"Street","18":"02:36:00","19":"N","20":"16402","21":"--"},{"1":"101","2":"43","3":"Thursday, May 21","4":"boxscore","5":"TOR","6":"NA","7":"LAA","8":"W","9":"8","10":"4","11":"NA","12":"19-24","13":"5","14":"4.5","15":"Dickey","16":"Shoemaker","17":"NA","18":"02:22:00","19":"N","20":"19014","21":"+"},{"1":"102","2":"44","3":"Friday, May 22","4":"boxscore","5":"TOR","6":"NA","7":"SEA","8":"L","9":"3","10":"4","11":"NA","12":"19-25","13":"5","14":"5.5","15":"Hernandez","16":"Estrada","17":"Rodney","18":"02:30:00","19":"N","20":"21195","21":"-"},{"1":"103","2":"45","3":"Saturday, May 23","4":"boxscore","5":"TOR","6":"NA","7":"SEA","8":"L","9":"2","10":"3","11":"NA","12":"19-26","13":"5","14":"5.5","15":"Paxton","16":"Buehrle","17":"Rodney","18":"02:25:00","19":"D","20":"33086","21":"--"},{"1":"104","2":"46","3":"Sunday, May 24","4":"boxscore","5":"TOR","6":"NA","7":"SEA","8":"W","9":"8","10":"2","11":"NA","12":"20-26","13":"5","14":"4.5","15":"Sanchez","16":"Walker","17":"NA","18":"02:50:00","19":"D","20":"37929","21":"+"},{"1":"105","2":"47","3":"Monday, May 25","4":"boxscore","5":"TOR","6":"NA","7":"CHW","8":"W","9":"6","10":"0","11":"NA","12":"21-26","13":"5","14":"3.5","15":"Hutchison","16":"Noesi","17":"NA","18":"02:10:00","19":"N","20":"15168","21":"++"},{"1":"106","2":"48","3":"Tuesday, May 26","4":"boxscore","5":"TOR","6":"NA","7":"CHW","8":"W-wo","9":"10","10":"9","11":"NA","12":"22-26","13":"4","14":"3","15":"Delabar","16":"Robertson","17":"NA","18":"03:12:00","19":"N","20":"17276","21":"+++"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 25 x 21
+##      row  game date      box    team  venue opp   result  runs Oppruns innings wl    position gb    winner  loser save  
+##    &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; 
+##  1    82     7 Monday, … boxsc… TOR   NA    TBR   L          1       2      NA 4-3          2 1     Odoriz… Dick… Boxbe…
+##  2    83     8 Tuesday,… boxsc… TOR   NA    TBR   L          2       3      NA 4-4          3 2     Geltz   Cast… Jepsen
+##  3    84     9 Wednesda… boxsc… TOR   NA    TBR   W         12       7      NA 5-4          2 1     Buehrle Rami… &lt;NA&gt;  
+##  4    85    10 Thursday… boxsc… TOR   NA    TBR   L          2       4      NA 5-5          4 1.5   Archer  Sanc… Boxbe…
+##  5    86    11 Friday, … boxsc… TOR   NA    ATL   L          7       8      NA 5-6          4 2.5   Martin  Cecil Grilli
+##  6    87    12 Saturday… boxsc… TOR   NA    ATL   W-wo       6       5      10 6-6          3 1.5   Cecil   Mari… &lt;NA&gt;  
+##  7    88    13 Sunday, … boxsc… TOR   NA    ATL   L          2       5      NA 6-7          4 1.5   Miller  Norr… Grilli
+##  8    89    14 Tuesday,… boxsc… TOR   NA    BAL   W         13       6      NA 7-7          2 2     Buehrle Norr… &lt;NA&gt;  
+##  9    90    15 Wednesda… boxsc… TOR   NA    BAL   W          4       2      NA 8-7          2 1     Sanchez Jime… Castro
+## 10    91    16 Thursday… boxsc… TOR   NA    BAL   W          7       6      NA 9-7          1 Tied  Hutchi… Till… Castro
+## # … with 15 more rows, and 4 more variables: game time &lt;time&gt;, Daynight &lt;chr&gt;, attendance &lt;dbl&gt;, streak &lt;chr&gt;</code></pre>
 <p>If you must, copy and paste the spreadsheet into R Studio, and read it
 in with <code>read_delim</code> (or possibly <code>read_tsv</code>), but
 this runs the risk of being defeated by spreadsheet cells that contain
 spaces. I don’t think there are any here, but you might run into a
 pitcher whose name has more than one word, like (Andy) Van Hekken, who
-is in the Seattle Mariners farm system.<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> I found this by googling, after I had scrolled past all the pages of articles about the baseball pitcher who <em>lives</em> in a van.</span></p>
+is in the Seattle Mariners farm system.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <p>Anyway, 25 rows and 21 columns. As usual, it’s a tibble, so you see 10
 rows and as many columns as will fit. This is often enough to see
 whether we have the right thing (as we appear to have, here). You can
@@ -303,7 +344,7 @@ minutes, which is turned into an R <code>time</code> in hours, minutes and
 seconds.</p>
 <p>With all those columns, <code>read_csv</code> doesn’t tell you what
 column specification it inferred for all of them, but you can type</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">spec</span>(jays)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">spec</span>(jays)</a></code></pre></div>
 <pre><code>## cols(
 ##   row = col_double(),
 ##   game = col_double(),
@@ -336,18 +377,20 @@ the columns. What do you notice about these games?</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["row"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["game"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["date"],"name":[3],"type":["chr"],"align":["left"]},{"label":["box"],"name":[4],"type":["chr"],"align":["left"]},{"label":["team"],"name":[5],"type":["chr"],"align":["left"]},{"label":["venue"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["opp"],"name":[7],"type":["chr"],"align":["left"]},{"label":["result"],"name":[8],"type":["chr"],"align":["left"]},{"label":["runs"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Oppruns"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["innings"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["wl"],"name":[12],"type":["chr"],"align":["left"]},{"label":["position"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["gb"],"name":[14],"type":["chr"],"align":["left"]},{"label":["winner"],"name":[15],"type":["chr"],"align":["left"]},{"label":["loser"],"name":[16],"type":["chr"],"align":["left"]},{"label":["save"],"name":[17],"type":["chr"],"align":["left"]},{"label":["game time"],"name":[18],"type":["time"],"align":["right"]},{"label":["Daynight"],"name":[19],"type":["chr"],"align":["left"]},{"label":["attendance"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["streak"],"name":[21],"type":["chr"],"align":["left"]}],"data":[{"1":"92","2":"27","3":"Monday, May 4","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"3","10":"1","11":"NA","12":"13-14","13":"4","14":"3.5","15":"Dickey","16":"Martin","17":"Cecil","18":"02:18:00","19":"N","20":"19217","21":"+"},{"1":"93","2":"28","3":"Tuesday, May 5","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"L","9":"3","10":"6","11":"NA","12":"13-15","13":"5","14":"4.5","15":"Pineda","16":"Estrada","17":"Miller","18":"02:54:00","19":"N","20":"21519","21":"-"},{"1":"94","2":"29","3":"Wednesday, May 6","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"5","10":"1","11":"NA","12":"14-15","13":"3","14":"3.5","15":"Buehrle","16":"Sabathia","17":"NA","18":"02:30:00","19":"N","20":"21312","21":"+"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 21
+##     row  game date       box     team  venue opp   result  runs Oppruns innings wl    position gb    winner loser  save 
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;
+## 1    92    27 Monday, M… boxsco… TOR   NA    NYY   W          3       1      NA 13-14        4 3.5   Dickey Martin Cecil
+## 2    93    28 Tuesday, … boxsco… TOR   NA    NYY   L          3       6      NA 13-15        5 4.5   Pineda Estra… Mill…
+## 3    94    29 Wednesday… boxsco… TOR   NA    NYY   W          5       1      NA 14-15        3 3.5   Buehr… Sabat… &lt;NA&gt; 
+## # … with 4 more variables: game time &lt;time&gt;, Daynight &lt;chr&gt;, attendance &lt;dbl&gt;, streak &lt;chr&gt;</code></pre>
 <p>but you will probably need to click the little right-arrow at the top
 to see more columns.</p>
 <p>What I notice is that these games are all on consecutive nights
 (against the same team). This is quite common, and goes back to the
 far-off days when teams travelled by train: teams play several games
-on one visit, rather than coming back many times.<label for="tufte-sn-2" class="margin-toggle sidenote-number">2</label><input type="checkbox" id="tufte-sn-2" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">2</span> Hockey is similar: teams go on road trips, playing several different teams before returning home. Hockey teams, though, tend to play each team only once on a road trip: for example, a west coast team like the Canucks might play a game in each of Toronto, Montreal, Boston and New York on a road trip. Well, maybe three games in the New York area: one each against the Rangers, Islanders and Devils.</span>
+on one visit, rather than coming back many times.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>
 You might have noticed something else;
 that’s fine for this. For example,
 “each of the games lasted less than three hours”,
@@ -356,18 +399,20 @@ looked at all the attendances in class). I just want you to notice
 something meaningful that seems to be interesting about these games.</p>
 <p>You could also print all the columns in two or more goes, using
 <code>select</code>, for example:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(row<span class="op">:</span>innings)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["row"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["game"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["date"],"name":[3],"type":["chr"],"align":["left"]},{"label":["box"],"name":[4],"type":["chr"],"align":["left"]},{"label":["team"],"name":[5],"type":["chr"],"align":["left"]},{"label":["venue"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["opp"],"name":[7],"type":["chr"],"align":["left"]},{"label":["result"],"name":[8],"type":["chr"],"align":["left"]},{"label":["runs"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["Oppruns"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["innings"],"name":[11],"type":["dbl"],"align":["right"]}],"data":[{"1":"92","2":"27","3":"Monday, May 4","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"3","10":"1","11":"NA"},{"1":"93","2":"28","3":"Tuesday, May 5","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"L","9":"3","10":"6","11":"NA"},{"1":"94","2":"29","3":"Wednesday, May 6","4":"boxscore","5":"TOR","6":"NA","7":"NYY","8":"W","9":"5","10":"1","11":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(wl<span class="op">:</span>streak)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["wl"],"name":[1],"type":["chr"],"align":["left"]},{"label":["position"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["gb"],"name":[3],"type":["chr"],"align":["left"]},{"label":["winner"],"name":[4],"type":["chr"],"align":["left"]},{"label":["loser"],"name":[5],"type":["chr"],"align":["left"]},{"label":["save"],"name":[6],"type":["chr"],"align":["left"]},{"label":["game time"],"name":[7],"type":["time"],"align":["right"]},{"label":["Daynight"],"name":[8],"type":["chr"],"align":["left"]},{"label":["attendance"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["streak"],"name":[10],"type":["chr"],"align":["left"]}],"data":[{"1":"13-14","2":"4","3":"3.5","4":"Dickey","5":"Martin","6":"Cecil","7":"02:18:00","8":"N","9":"19217","10":"+"},{"1":"13-15","2":"5","3":"4.5","4":"Pineda","5":"Estrada","6":"Miller","7":"02:54:00","8":"N","9":"21519","10":"-"},{"1":"14-15","2":"3","3":"3.5","4":"Buehrle","5":"Sabathia","6":"NA","7":"02:30:00","8":"N","9":"21312","10":"+"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(row<span class="op">:</span>innings)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 11
+##     row  game date             box      team  venue opp   result  runs Oppruns innings
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;            &lt;chr&gt;    &lt;chr&gt; &lt;lgl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+## 1    92    27 Monday, May 4    boxscore TOR   NA    NYY   W          3       1      NA
+## 2    93    28 Tuesday, May 5   boxscore TOR   NA    NYY   L          3       6      NA
+## 3    94    29 Wednesday, May 6 boxscore TOR   NA    NYY   W          5       1      NA</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">jays <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(opp <span class="op">==</span><span class="st"> &quot;NYY&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(wl<span class="op">:</span>streak)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 10
+##   wl    position gb    winner  loser    save   `game time` Daynight attendance streak
+##   &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;time&gt;      &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt; 
+## 1 13-14        4 3.5   Dickey  Martin   Cecil  02:18       N             19217 +     
+## 2 13-15        5 4.5   Pineda  Estrada  Miller 02:54       N             21519 -     
+## 3 14-15        3 3.5   Buehrle Sabathia &lt;NA&gt;   02:30       N             21312 +</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>From the whole data frame, pick out only the games where the
@@ -378,36 +423,48 @@ attendance was more than 30,000, showing only the columns
 </ol>
 <p>Solution</p>
 <p>Two steps, since we selecting rows <em>and</em> columns.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">jays <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(attendance, Daynight))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["attendance"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Daynight"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"48414","2":"N"},{"1":"34743","2":"D"},{"1":"44794","2":"D"},{"1":"30430","2":"N"},{"1":"42917","2":"D"},{"1":"42419","2":"D"},{"1":"33086","2":"D"},{"1":"37929","2":"D"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">jays <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb14-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(attendance, Daynight))</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 2
+##   attendance Daynight
+##        &lt;dbl&gt; &lt;chr&gt;   
+## 1      48414 N       
+## 2      34743 D       
+## 3      44794 D       
+## 4      30430 N       
+## 5      42917 D       
+## 6      42419 D       
+## 7      33086 D       
+## 8      37929 D</code></pre>
 <p>Or this way, since we are selecting
 <em>consecutive</em> columns:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">jays <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb11-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(Daynight<span class="op">:</span>attendance))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Daynight"],"name":[1],"type":["chr"],"align":["left"]},{"label":["attendance"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"N","2":"48414"},{"1":"D","2":"34743"},{"1":"D","2":"44794"},{"1":"N","2":"30430"},{"1":"D","2":"42917"},{"1":"D","2":"42419"},{"1":"D","2":"33086"},{"1":"D","2":"37929"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">jays <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="st">  </span><span class="kw">select</span>(<span class="kw">c</span>(Daynight<span class="op">:</span>attendance))</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 2
+##   Daynight attendance
+##   &lt;chr&gt;         &lt;dbl&gt;
+## 1 N             48414
+## 2 D             34743
+## 3 D             44794
+## 4 N             30430
+## 5 D             42917
+## 6 D             42419
+## 7 D             33086
+## 8 D             37929</code></pre>
 <p>There are eight games selected (see the eight rows in the
 result). Only two of them are night games, while the other six are day
 (weekend) games.</p>
 <p>If you wanted to, you could automate the counting, like this:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">jays <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span><span class="kw">count</span>(Daynight)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Daynight"],"name":[1],"type":["chr"],"align":["left"]},{"label":["n"],"name":[2],"type":["int"],"align":["right"]}],"data":[{"1":"D","2":"6"},{"1":"N","2":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">jays <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">filter</span>(attendance <span class="op">&gt;</span><span class="st"> </span><span class="dv">30000</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span><span class="kw">count</span>(Daynight)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   Daynight     n
+##   &lt;chr&gt;    &lt;int&gt;
+## 1 D            6
+## 2 N            2</code></pre>
 <p>Six day games and two night games.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -419,44 +476,44 @@ day and night games.</li>
 summarizing according to what I want to summarize by. Since I am
 summarizing, only the summaries find their way into the final data
 frame, so I don’t need to “select out” the other variables:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">jays <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(</a>
-<a class="sourceLine" id="cb13-4" title="4">    <span class="dt">mean.att =</span> <span class="kw">mean</span>(attendance),</a>
-<a class="sourceLine" id="cb13-5" title="5">    <span class="dt">sd.att =</span> <span class="kw">sd</span>(attendance)</a>
-<a class="sourceLine" id="cb13-6" title="6">  )</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Daynight"],"name":[1],"type":["chr"],"align":["left"]},{"label":["mean.att"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sd.att"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"D","2":"37884.86","3":"5775.180"},{"1":"N","2":"20086.67","3":"8083.636"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">jays <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(</a>
+<a class="sourceLine" id="cb20-4" title="4">    <span class="dt">mean.att =</span> <span class="kw">mean</span>(attendance),</a>
+<a class="sourceLine" id="cb20-5" title="5">    <span class="dt">sd.att =</span> <span class="kw">sd</span>(attendance)</a>
+<a class="sourceLine" id="cb20-6" title="6">  )</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   Daynight mean.att sd.att
+##   &lt;chr&gt;       &lt;dbl&gt;  &lt;dbl&gt;
+## 1 D          37885.  5775.
+## 2 N          20087.  8084.</code></pre>
 <p>The mean attendances are about 38 thousand and about 20 thousand. Note
 that the night games have much the larger SD, possibly because of the
 large outlier night attendance (opening night). Which we can also
 investigate.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">jays <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(</a>
-<a class="sourceLine" id="cb14-4" title="4">    <span class="dt">median.att =</span> <span class="kw">median</span>(attendance),</a>
-<a class="sourceLine" id="cb14-5" title="5">    <span class="dt">iqr.att =</span> <span class="kw">IQR</span>(attendance)</a>
-<a class="sourceLine" id="cb14-6" title="6">  )</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Daynight"],"name":[1],"type":["chr"],"align":["left"]},{"label":["median.att"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["iqr.att"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"D","2":"37929.0","3":"8753.50"},{"1":"N","2":"17928.5","3":"6005.25"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">jays <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(Daynight) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb22-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(</a>
+<a class="sourceLine" id="cb22-4" title="4">    <span class="dt">median.att =</span> <span class="kw">median</span>(attendance),</a>
+<a class="sourceLine" id="cb22-5" title="5">    <span class="dt">iqr.att =</span> <span class="kw">IQR</span>(attendance)</a>
+<a class="sourceLine" id="cb22-6" title="6">  )</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 3
+##   Daynight median.att iqr.att
+##   &lt;chr&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+## 1 D            37929    8754.
+## 2 N            17928.   6005.</code></pre>
 <p>This time, the night attendances have a <em>smaller</em> spread and a
 noticeably smaller median (compared to the mean), so it must have been
 the outlier that made the difference. There was another high value
 that R marked as an outlier:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">ggplot</span>(jays, <span class="kw">aes</span>(<span class="dt">x =</span> Daynight, <span class="dt">y =</span> attendance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-27-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">ggplot</span>(jays, <span class="kw">aes</span>(<span class="dt">x =</span> Daynight, <span class="dt">y =</span> attendance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>So when you take away those unusual values, the night game attendances
 are indeed less variable.</p>
 <p>The right test, as you might have guessed, for comparing the medians
 of these non-normal data, is Mood’s median test:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="kw">median_test</span>(jays, attendance, Daynight)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="kw">median_test</span>(jays, attendance, Daynight)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -478,7 +535,7 @@ on the conclusion.</p>
 games had attendance less than that. With the small frequencies, the
 accuracy of the P-value is a bit questionable, but taking it at face
 value, there <em>is</em> a significant difference between median
-attendances at day and night games.<label for="tufte-sn-3" class="margin-toggle sidenote-number">3</label><input type="checkbox" id="tufte-sn-3" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">3</span> If you do this by hand, you’ll get a warning about the chi-squared approximation being inaccurate. This is because of the small frequencies, and <em>not</em> because of the outliers. Those are not damaging the test at all.</span></p>
+attendances at day and night games.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>Make normal quantile plots of the day attendances and the night
@@ -489,10 +546,10 @@ opening-night value.)</li>
 <p>Solution</p>
 <p>The best way to do this is facetted normal quantile
 plots. Remember that the facetting part goes right at the end:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">ggplot</span>(jays, <span class="kw">aes</span>(<span class="dt">sample =</span> attendance)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Daynight, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-29-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">ggplot</span>(jays, <span class="kw">aes</span>(<span class="dt">sample =</span> attendance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-2" title="2"><span class="st">  </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb27-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Daynight, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
 <p>The day attendances are pretty normal, though it is hard to be sure
 with only 7 of them.</p>
 <p>The night attendances are not normal. The lone point top right is the
@@ -537,8 +594,8 @@ is all you need here; there’s no need to display all the lines.</p>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code> will do it:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/cars.csv&quot;</span></a>
-<a class="sourceLine" id="cb19-2" title="2">cars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/cars.csv&quot;</span></a>
+<a class="sourceLine" id="cb28-2" title="2">cars &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
@@ -549,30 +606,57 @@ is all you need here; there’s no need to display all the lines.</p>
 ##   hp = col_double(),
 ##   country = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">cars</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["car"],"name":[1],"type":["chr"],"align":["left"]},{"label":["MPG"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cylinders"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["hp"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["country"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Buick Skylark","2":"28.4","3":"2.670","4":"4","5":"90","6":"U.S."},{"1":"Dodge Omni","2":"30.9","3":"2.230","4":"4","5":"75","6":"U.S."},{"1":"Mercury Zephyr","2":"20.8","3":"3.070","4":"6","5":"85","6":"U.S."},{"1":"Fiat Strada","2":"37.3","3":"2.130","4":"4","5":"69","6":"Italy"},{"1":"Peugeot 694 SL","2":"16.2","3":"3.410","4":"6","5":"133","6":"France"},{"1":"VW Rabbit","2":"31.9","3":"1.925","4":"4","5":"71","6":"Germany"},{"1":"Plymouth Horizon","2":"34.2","3":"2.200","4":"4","5":"70","6":"U.S."},{"1":"Mazda GLC","2":"34.1","3":"1.975","4":"4","5":"65","6":"Japan"},{"1":"Buick Estate Wagon","2":"16.9","3":"4.360","4":"8","5":"155","6":"U.S."},{"1":"Audi 5000","2":"20.3","3":"2.830","4":"5","5":"103","6":"Germany"},{"1":"Chevy Malibu Wagon","2":"19.2","3":"3.605","4":"8","5":"125","6":"U.S."},{"1":"Dodge Aspen","2":"18.6","3":"3.620","4":"6","5":"110","6":"U.S."},{"1":"VW Dasher","2":"30.5","3":"2.190","4":"4","5":"78","6":"Germany"},{"1":"Ford Mustang 4","2":"26.5","3":"2.585","4":"4","5":"88","6":"U.S."},{"1":"Dodge Colt","2":"35.1","3":"1.915","4":"4","5":"80","6":"Japan"},{"1":"Datsun 810","2":"22.0","3":"2.815","4":"6","5":"97","6":"Japan"},{"1":"VW Scirocco","2":"31.5","3":"1.990","4":"4","5":"71","6":"Germany"},{"1":"Chevy Citation","2":"28.8","3":"2.595","4":"6","5":"115","6":"U.S."},{"1":"Olds Omega","2":"26.8","3":"2.700","4":"6","5":"115","6":"U.S."},{"1":"Chrysler LeBaron Wagon","2":"18.5","3":"3.940","4":"8","5":"150","6":"U.S."},{"1":"Datsun 510","2":"27.2","3":"2.300","4":"4","5":"97","6":"Japan"},{"1":"AMC Concord D/L","2":"18.1","3":"3.410","4":"6","5":"120","6":"U.S."},{"1":"Buick Century Special","2":"20.6","3":"3.380","4":"6","5":"105","6":"U.S."},{"1":"Saab 99 GLE","2":"21.6","3":"2.795","4":"4","5":"115","6":"Sweden"},{"1":"Datsun 210","2":"31.8","3":"2.020","4":"4","5":"65","6":"Japan"},{"1":"Ford LTD","2":"17.6","3":"3.725","4":"8","5":"129","6":"U.S."},{"1":"Volvo 240 GL","2":"17.0","3":"3.140","4":"6","5":"125","6":"Sweden"},{"1":"Dodge St Regis","2":"18.2","3":"3.830","4":"8","5":"135","6":"U.S."},{"1":"Toyota Corona","2":"27.5","3":"2.560","4":"4","5":"95","6":"Japan"},{"1":"Chevette","2":"30.0","3":"2.155","4":"4","5":"68","6":"U.S."},{"1":"Ford Mustang Ghia","2":"21.9","3":"2.910","4":"6","5":"109","6":"U.S."},{"1":"AMC Spirit","2":"27.4","3":"2.670","4":"4","5":"80","6":"U.S."},{"1":"Ford Country Squire Wagon","2":"15.5","3":"4.054","4":"8","5":"142","6":"U.S."},{"1":"BMW 320i","2":"21.5","3":"2.600","4":"4","5":"110","6":"Germany"},{"1":"Pontiac Phoenix","2":"33.5","3":"2.556","4":"4","5":"90","6":"U.S."},{"1":"Honda Accord LX","2":"29.5","3":"2.135","4":"4","5":"68","6":"Japan"},{"1":"Mercury Grand Marquis","2":"16.5","3":"3.955","4":"8","5":"138","6":"U.S."},{"1":"Chevy Caprice Classic","2":"17.0","3":"3.840","4":"8","5":"130","6":"U.S."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">cars</a></code></pre></div>
+<pre><code>## # A tibble: 38 x 6
+##    car                  MPG weight cylinders    hp country
+##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+##  1 Buick Skylark       28.4   2.67         4    90 U.S.   
+##  2 Dodge Omni          30.9   2.23         4    75 U.S.   
+##  3 Mercury Zephyr      20.8   3.07         6    85 U.S.   
+##  4 Fiat Strada         37.3   2.13         4    69 Italy  
+##  5 Peugeot 694 SL      16.2   3.41         6   133 France 
+##  6 VW Rabbit           31.9   1.92         4    71 Germany
+##  7 Plymouth Horizon    34.2   2.2          4    70 U.S.   
+##  8 Mazda GLC           34.1   1.98         4    65 Japan  
+##  9 Buick Estate Wagon  16.9   4.36         8   155 U.S.   
+## 10 Audi 5000           20.3   2.83         5   103 Germany
+## # … with 28 more rows</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Display only the car names and the countries they come from.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(car, country)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["car"],"name":[1],"type":["chr"],"align":["left"]},{"label":["country"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"Buick Skylark","2":"U.S."},{"1":"Dodge Omni","2":"U.S."},{"1":"Mercury Zephyr","2":"U.S."},{"1":"Fiat Strada","2":"Italy"},{"1":"Peugeot 694 SL","2":"France"},{"1":"VW Rabbit","2":"Germany"},{"1":"Plymouth Horizon","2":"U.S."},{"1":"Mazda GLC","2":"Japan"},{"1":"Buick Estate Wagon","2":"U.S."},{"1":"Audi 5000","2":"Germany"},{"1":"Chevy Malibu Wagon","2":"U.S."},{"1":"Dodge Aspen","2":"U.S."},{"1":"VW Dasher","2":"Germany"},{"1":"Ford Mustang 4","2":"U.S."},{"1":"Dodge Colt","2":"Japan"},{"1":"Datsun 810","2":"Japan"},{"1":"VW Scirocco","2":"Germany"},{"1":"Chevy Citation","2":"U.S."},{"1":"Olds Omega","2":"U.S."},{"1":"Chrysler LeBaron Wagon","2":"U.S."},{"1":"Datsun 510","2":"Japan"},{"1":"AMC Concord D/L","2":"U.S."},{"1":"Buick Century Special","2":"U.S."},{"1":"Saab 99 GLE","2":"Sweden"},{"1":"Datsun 210","2":"Japan"},{"1":"Ford LTD","2":"U.S."},{"1":"Volvo 240 GL","2":"Sweden"},{"1":"Dodge St Regis","2":"U.S."},{"1":"Toyota Corona","2":"Japan"},{"1":"Chevette","2":"U.S."},{"1":"Ford Mustang Ghia","2":"U.S."},{"1":"AMC Spirit","2":"U.S."},{"1":"Ford Country Squire Wagon","2":"U.S."},{"1":"BMW 320i","2":"Germany"},{"1":"Pontiac Phoenix","2":"U.S."},{"1":"Honda Accord LX","2":"Japan"},{"1":"Mercury Grand Marquis","2":"U.S."},{"1":"Chevy Caprice Classic","2":"U.S."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(car, country)</a></code></pre></div>
+<pre><code>## # A tibble: 38 x 2
+##    car                country
+##    &lt;chr&gt;              &lt;chr&gt;  
+##  1 Buick Skylark      U.S.   
+##  2 Dodge Omni         U.S.   
+##  3 Mercury Zephyr     U.S.   
+##  4 Fiat Strada        Italy  
+##  5 Peugeot 694 SL     France 
+##  6 VW Rabbit          Germany
+##  7 Plymouth Horizon   U.S.   
+##  8 Mazda GLC          Japan  
+##  9 Buick Estate Wagon U.S.   
+## 10 Audi 5000          Germany
+## # … with 28 more rows</code></pre>
 <p>This <em>almost</em> works, but not quite:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;c&quot;</span>))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["car"],"name":[1],"type":["chr"],"align":["left"]},{"label":["cylinders"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["country"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"Buick Skylark","2":"4","3":"U.S."},{"1":"Dodge Omni","2":"4","3":"U.S."},{"1":"Mercury Zephyr","2":"6","3":"U.S."},{"1":"Fiat Strada","2":"4","3":"Italy"},{"1":"Peugeot 694 SL","2":"6","3":"France"},{"1":"VW Rabbit","2":"4","3":"Germany"},{"1":"Plymouth Horizon","2":"4","3":"U.S."},{"1":"Mazda GLC","2":"4","3":"Japan"},{"1":"Buick Estate Wagon","2":"8","3":"U.S."},{"1":"Audi 5000","2":"5","3":"Germany"},{"1":"Chevy Malibu Wagon","2":"8","3":"U.S."},{"1":"Dodge Aspen","2":"6","3":"U.S."},{"1":"VW Dasher","2":"4","3":"Germany"},{"1":"Ford Mustang 4","2":"4","3":"U.S."},{"1":"Dodge Colt","2":"4","3":"Japan"},{"1":"Datsun 810","2":"6","3":"Japan"},{"1":"VW Scirocco","2":"4","3":"Germany"},{"1":"Chevy Citation","2":"6","3":"U.S."},{"1":"Olds Omega","2":"6","3":"U.S."},{"1":"Chrysler LeBaron Wagon","2":"8","3":"U.S."},{"1":"Datsun 510","2":"4","3":"Japan"},{"1":"AMC Concord D/L","2":"6","3":"U.S."},{"1":"Buick Century Special","2":"6","3":"U.S."},{"1":"Saab 99 GLE","2":"4","3":"Sweden"},{"1":"Datsun 210","2":"4","3":"Japan"},{"1":"Ford LTD","2":"8","3":"U.S."},{"1":"Volvo 240 GL","2":"6","3":"Sweden"},{"1":"Dodge St Regis","2":"8","3":"U.S."},{"1":"Toyota Corona","2":"4","3":"Japan"},{"1":"Chevette","2":"4","3":"U.S."},{"1":"Ford Mustang Ghia","2":"6","3":"U.S."},{"1":"AMC Spirit","2":"4","3":"U.S."},{"1":"Ford Country Squire Wagon","2":"8","3":"U.S."},{"1":"BMW 320i","2":"4","3":"Germany"},{"1":"Pontiac Phoenix","2":"4","3":"U.S."},{"1":"Honda Accord LX","2":"4","3":"Japan"},{"1":"Mercury Grand Marquis","2":"8","3":"U.S."},{"1":"Chevy Caprice Classic","2":"8","3":"U.S."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;c&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 38 x 3
+##    car                cylinders country
+##    &lt;chr&gt;                  &lt;dbl&gt; &lt;chr&gt;  
+##  1 Buick Skylark              4 U.S.   
+##  2 Dodge Omni                 4 U.S.   
+##  3 Mercury Zephyr             6 U.S.   
+##  4 Fiat Strada                4 Italy  
+##  5 Peugeot 694 SL             6 France 
+##  6 VW Rabbit                  4 Germany
+##  7 Plymouth Horizon           4 U.S.   
+##  8 Mazda GLC                  4 Japan  
+##  9 Buick Estate Wagon         8 U.S.   
+## 10 Audi 5000                  5 Germany
+## # … with 28 more rows</code></pre>
 <p>It gets <em>all</em> the columns that start with <code>c</code>, which
 includes <code>cylinders</code> as well.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -581,12 +665,21 @@ includes <code>cylinders</code> as well.</p>
 </ol>
 <p>Solution</p>
 <p>Naming what you <em>don’t</em> want is sometimes easier:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>hp)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["car"],"name":[1],"type":["chr"],"align":["left"]},{"label":["MPG"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cylinders"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["country"],"name":[5],"type":["chr"],"align":["left"]}],"data":[{"1":"Buick Skylark","2":"28.4","3":"2.670","4":"4","5":"U.S."},{"1":"Dodge Omni","2":"30.9","3":"2.230","4":"4","5":"U.S."},{"1":"Mercury Zephyr","2":"20.8","3":"3.070","4":"6","5":"U.S."},{"1":"Fiat Strada","2":"37.3","3":"2.130","4":"4","5":"Italy"},{"1":"Peugeot 694 SL","2":"16.2","3":"3.410","4":"6","5":"France"},{"1":"VW Rabbit","2":"31.9","3":"1.925","4":"4","5":"Germany"},{"1":"Plymouth Horizon","2":"34.2","3":"2.200","4":"4","5":"U.S."},{"1":"Mazda GLC","2":"34.1","3":"1.975","4":"4","5":"Japan"},{"1":"Buick Estate Wagon","2":"16.9","3":"4.360","4":"8","5":"U.S."},{"1":"Audi 5000","2":"20.3","3":"2.830","4":"5","5":"Germany"},{"1":"Chevy Malibu Wagon","2":"19.2","3":"3.605","4":"8","5":"U.S."},{"1":"Dodge Aspen","2":"18.6","3":"3.620","4":"6","5":"U.S."},{"1":"VW Dasher","2":"30.5","3":"2.190","4":"4","5":"Germany"},{"1":"Ford Mustang 4","2":"26.5","3":"2.585","4":"4","5":"U.S."},{"1":"Dodge Colt","2":"35.1","3":"1.915","4":"4","5":"Japan"},{"1":"Datsun 810","2":"22.0","3":"2.815","4":"6","5":"Japan"},{"1":"VW Scirocco","2":"31.5","3":"1.990","4":"4","5":"Germany"},{"1":"Chevy Citation","2":"28.8","3":"2.595","4":"6","5":"U.S."},{"1":"Olds Omega","2":"26.8","3":"2.700","4":"6","5":"U.S."},{"1":"Chrysler LeBaron Wagon","2":"18.5","3":"3.940","4":"8","5":"U.S."},{"1":"Datsun 510","2":"27.2","3":"2.300","4":"4","5":"Japan"},{"1":"AMC Concord D/L","2":"18.1","3":"3.410","4":"6","5":"U.S."},{"1":"Buick Century Special","2":"20.6","3":"3.380","4":"6","5":"U.S."},{"1":"Saab 99 GLE","2":"21.6","3":"2.795","4":"4","5":"Sweden"},{"1":"Datsun 210","2":"31.8","3":"2.020","4":"4","5":"Japan"},{"1":"Ford LTD","2":"17.6","3":"3.725","4":"8","5":"U.S."},{"1":"Volvo 240 GL","2":"17.0","3":"3.140","4":"6","5":"Sweden"},{"1":"Dodge St Regis","2":"18.2","3":"3.830","4":"8","5":"U.S."},{"1":"Toyota Corona","2":"27.5","3":"2.560","4":"4","5":"Japan"},{"1":"Chevette","2":"30.0","3":"2.155","4":"4","5":"U.S."},{"1":"Ford Mustang Ghia","2":"21.9","3":"2.910","4":"6","5":"U.S."},{"1":"AMC Spirit","2":"27.4","3":"2.670","4":"4","5":"U.S."},{"1":"Ford Country Squire Wagon","2":"15.5","3":"4.054","4":"8","5":"U.S."},{"1":"BMW 320i","2":"21.5","3":"2.600","4":"4","5":"Germany"},{"1":"Pontiac Phoenix","2":"33.5","3":"2.556","4":"4","5":"U.S."},{"1":"Honda Accord LX","2":"29.5","3":"2.135","4":"4","5":"Japan"},{"1":"Mercury Grand Marquis","2":"16.5","3":"3.955","4":"8","5":"U.S."},{"1":"Chevy Caprice Classic","2":"17.0","3":"3.840","4":"8","5":"U.S."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>hp)</a></code></pre></div>
+<pre><code>## # A tibble: 38 x 5
+##    car                  MPG weight cylinders country
+##    &lt;chr&gt;              &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  
+##  1 Buick Skylark       28.4   2.67         4 U.S.   
+##  2 Dodge Omni          30.9   2.23         4 U.S.   
+##  3 Mercury Zephyr      20.8   3.07         6 U.S.   
+##  4 Fiat Strada         37.3   2.13         4 Italy  
+##  5 Peugeot 694 SL      16.2   3.41         6 France 
+##  6 VW Rabbit           31.9   1.92         4 Germany
+##  7 Plymouth Horizon    34.2   2.2          4 U.S.   
+##  8 Mazda GLC           34.1   1.98         4 Japan  
+##  9 Buick Estate Wagon  16.9   4.36         8 U.S.   
+## 10 Audi 5000           20.3   2.83         5 Germany
+## # … with 28 more rows</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Display only the cars that have 8-cylinder engines (but
@@ -594,12 +687,18 @@ display all the variables for those cars).</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">8</span>)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["car"],"name":[1],"type":["chr"],"align":["left"]},{"label":["MPG"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["weight"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["cylinders"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["hp"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["country"],"name":[6],"type":["chr"],"align":["left"]}],"data":[{"1":"Buick Estate Wagon","2":"16.9","3":"4.360","4":"8","5":"155","6":"U.S."},{"1":"Chevy Malibu Wagon","2":"19.2","3":"3.605","4":"8","5":"125","6":"U.S."},{"1":"Chrysler LeBaron Wagon","2":"18.5","3":"3.940","4":"8","5":"150","6":"U.S."},{"1":"Ford LTD","2":"17.6","3":"3.725","4":"8","5":"129","6":"U.S."},{"1":"Dodge St Regis","2":"18.2","3":"3.830","4":"8","5":"135","6":"U.S."},{"1":"Ford Country Squire Wagon","2":"15.5","3":"4.054","4":"8","5":"142","6":"U.S."},{"1":"Mercury Grand Marquis","2":"16.5","3":"3.955","4":"8","5":"138","6":"U.S."},{"1":"Chevy Caprice Classic","2":"17.0","3":"3.840","4":"8","5":"130","6":"U.S."}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">8</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 6
+##   car                         MPG weight cylinders    hp country
+##   &lt;chr&gt;                     &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  
+## 1 Buick Estate Wagon         16.9   4.36         8   155 U.S.   
+## 2 Chevy Malibu Wagon         19.2   3.60         8   125 U.S.   
+## 3 Chrysler LeBaron Wagon     18.5   3.94         8   150 U.S.   
+## 4 Ford LTD                   17.6   3.72         8   129 U.S.   
+## 5 Dodge St Regis             18.2   3.83         8   135 U.S.   
+## 6 Ford Country Squire Wagon  15.5   4.05         8   142 U.S.   
+## 7 Mercury Grand Marquis      16.5   3.96         8   138 U.S.   
+## 8 Chevy Caprice Classic      17     3.84         8   130 U.S.</code></pre>
 <p>8 of them, all from the US.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -608,12 +707,16 @@ horsepower 70 or less.</li>
 </ol>
 <p>Solution</p>
 <p>This one is selecting some observations and some variables:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hp <span class="op">&lt;=</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(cylinders<span class="op">:</span>hp)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["cylinders"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["hp"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"4","2":"69"},{"1":"4","2":"70"},{"1":"4","2":"65"},{"1":"4","2":"65"},{"1":"4","2":"68"},{"1":"4","2":"68"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(hp <span class="op">&lt;=</span><span class="st"> </span><span class="dv">70</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(cylinders<span class="op">:</span>hp)</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 2
+##   cylinders    hp
+##       &lt;dbl&gt; &lt;dbl&gt;
+## 1         4    69
+## 2         4    70
+## 3         4    65
+## 4         4    65
+## 5         4    68
+## 6         4    68</code></pre>
 <p>Cylinders and horsepower are consecutive columns, so we can select
 them either using the colon <code>:</code> or by
 <code>c(cylinders,hp)</code>.</p>
@@ -629,31 +732,31 @@ chosen the columns, there is no <code>mpg</code> any more.</p>
 <li>Find the mean and SD of gas mileage of the cars with 4 cylinders.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["m"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["s"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"30.02105","2":"4.182447"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 2
+##       m     s
+##   &lt;dbl&gt; &lt;dbl&gt;
+## 1  30.0  4.18</code></pre>
 <p>Or you can get the mean and SD of gas mileage for all numbers of
 cylinders, and pick out the one you want:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cylinders) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["cylinders"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["s"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"4","2":"30.02105","3":"4.182447"},{"1":"5","2":"20.30000","3":"NA"},{"1":"6","2":"21.08000","3":"4.077526"},{"1":"8","2":"17.42500","3":"1.192536"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">cars <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cylinders) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##   cylinders     m     s
+##       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1         4  30.0  4.18
+## 2         5  20.3 NA   
+## 3         6  21.1  4.08
+## 4         8  17.4  1.19</code></pre>
 <p>Top row is the same as before. And since the output is a data frame,
 you can do any of these things with <em>that</em>, for example:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">cars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(cylinders) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">4</span>)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["cylinders"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["s"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"4","2":"30.02105","3":"4.182447"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">cars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb46-2" title="2"><span class="st">  </span><span class="kw">group_by</span>(cylinders) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb46-3" title="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(MPG), <span class="dt">s =</span> <span class="kw">sd</span>(MPG)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb46-4" title="4"><span class="st">  </span><span class="kw">filter</span>(cylinders <span class="op">==</span><span class="st"> </span><span class="dv">4</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 3
+##   cylinders     m     s
+##       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1         4  30.0  4.18</code></pre>
 <p>to pick out just the right row.
 This is a very easy kind of question to set on an exam. Just so you know.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -672,8 +775,8 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 </ol>
 <p>Solution</p>
 <p>Exactly the usual:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/dolphins.csv&quot;</span></a>
-<a class="sourceLine" id="cb30-2" title="2">dolphins &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/dolphins.csv&quot;</span></a>
+<a class="sourceLine" id="cb48-2" title="2">dolphins &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
@@ -681,12 +784,21 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 ##   age = col_double(),
 ##   sex = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">dolphins</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["mercury"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[3],"type":["chr"],"align":["left"]}],"data":[{"1":"1.70","2":"0.21","3":"male"},{"1":"1.72","2":"0.33","3":"male"},{"1":"8.80","2":"2.00","3":"male"},{"1":"5.90","2":"2.20","3":"male"},{"1":"101.00","2":"8.50","3":"male"},{"1":"85.40","2":"11.50","3":"male"},{"1":"118.00","2":"11.50","3":"male"},{"1":"183.00","2":"13.50","3":"male"},{"1":"168.00","2":"16.50","3":"male"},{"1":"218.00","2":"16.50","3":"male"},{"1":"180.00","2":"17.50","3":"male"},{"1":"264.00","2":"20.50","3":"male"},{"1":"481.00","2":"22.50","3":"male"},{"1":"485.00","2":"24.50","3":"male"},{"1":"221.00","2":"24.50","3":"male"},{"1":"406.00","2":"25.50","3":"male"},{"1":"252.00","2":"26.50","3":"male"},{"1":"329.00","2":"26.50","3":"male"},{"1":"316.00","2":"26.50","3":"male"},{"1":"445.00","2":"26.50","3":"male"},{"1":"278.00","2":"27.50","3":"male"},{"1":"286.00","2":"28.50","3":"male"},{"1":"315.00","2":"29.50","3":"male"},{"1":"241.00","2":"31.50","3":"male"},{"1":"397.00","2":"31.50","3":"male"},{"1":"209.00","2":"36.50","3":"male"},{"1":"314.00","2":"37.50","3":"male"},{"1":"318.00","2":"39.50","3":"male"},{"1":"2.50","2":"0.80","3":"female"},{"1":"9.35","2":"1.50","3":"female"},{"1":"4.01","2":"1.75","3":"female"},{"1":"29.80","2":"5.50","3":"female"},{"1":"45.30","2":"7.50","3":"female"},{"1":"101.00","2":"8.50","3":"female"},{"1":"135.00","2":"11.50","3":"female"},{"1":"142.00","2":"17.50","3":"female"},{"1":"180.00","2":"17.50","3":"female"},{"1":"174.00","2":"18.50","3":"female"},{"1":"247.00","2":"19.50","3":"female"},{"1":"223.00","2":"21.50","3":"female"},{"1":"167.00","2":"21.50","3":"female"},{"1":"157.00","2":"25.50","3":"female"},{"1":"177.00","2":"25.50","3":"female"},{"1":"475.00","2":"32.50","3":"female"},{"1":"342.00","2":"34.50","3":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">dolphins</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 3
+##    mercury   age sex  
+##      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;
+##  1    1.7   0.21 male 
+##  2    1.72  0.33 male 
+##  3    8.8   2    male 
+##  4    5.9   2.2  male 
+##  5  101     8.5  male 
+##  6   85.4  11.5  male 
+##  7  118    11.5  male 
+##  8  183    13.5  male 
+##  9  168    16.5  male 
+## 10  218    16.5  male 
+## # … with 35 more rows</code></pre>
 <p>There are indeed 45 dolphins, with the males listed first and the females listed at the end (as you can check).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -694,19 +806,37 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 </ol>
 <p>Solution</p>
 <p>Two ways to do it: either list both columns:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mercury, sex)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["mercury"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1.70","2":"male"},{"1":"1.72","2":"male"},{"1":"8.80","2":"male"},{"1":"5.90","2":"male"},{"1":"101.00","2":"male"},{"1":"85.40","2":"male"},{"1":"118.00","2":"male"},{"1":"183.00","2":"male"},{"1":"168.00","2":"male"},{"1":"218.00","2":"male"},{"1":"180.00","2":"male"},{"1":"264.00","2":"male"},{"1":"481.00","2":"male"},{"1":"485.00","2":"male"},{"1":"221.00","2":"male"},{"1":"406.00","2":"male"},{"1":"252.00","2":"male"},{"1":"329.00","2":"male"},{"1":"316.00","2":"male"},{"1":"445.00","2":"male"},{"1":"278.00","2":"male"},{"1":"286.00","2":"male"},{"1":"315.00","2":"male"},{"1":"241.00","2":"male"},{"1":"397.00","2":"male"},{"1":"209.00","2":"male"},{"1":"314.00","2":"male"},{"1":"318.00","2":"male"},{"1":"2.50","2":"female"},{"1":"9.35","2":"female"},{"1":"4.01","2":"female"},{"1":"29.80","2":"female"},{"1":"45.30","2":"female"},{"1":"101.00","2":"female"},{"1":"135.00","2":"female"},{"1":"142.00","2":"female"},{"1":"180.00","2":"female"},{"1":"174.00","2":"female"},{"1":"247.00","2":"female"},{"1":"223.00","2":"female"},{"1":"167.00","2":"female"},{"1":"157.00","2":"female"},{"1":"177.00","2":"female"},{"1":"475.00","2":"female"},{"1":"342.00","2":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(mercury, sex)</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 2
+##    mercury sex  
+##      &lt;dbl&gt; &lt;chr&gt;
+##  1    1.7  male 
+##  2    1.72 male 
+##  3    8.8  male 
+##  4    5.9  male 
+##  5  101    male 
+##  6   85.4  male 
+##  7  118    male 
+##  8  183    male 
+##  9  168    male 
+## 10  218    male 
+## # … with 35 more rows</code></pre>
 <p>or say “everything but age”:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>age)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["mercury"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"1.70","2":"male"},{"1":"1.72","2":"male"},{"1":"8.80","2":"male"},{"1":"5.90","2":"male"},{"1":"101.00","2":"male"},{"1":"85.40","2":"male"},{"1":"118.00","2":"male"},{"1":"183.00","2":"male"},{"1":"168.00","2":"male"},{"1":"218.00","2":"male"},{"1":"180.00","2":"male"},{"1":"264.00","2":"male"},{"1":"481.00","2":"male"},{"1":"485.00","2":"male"},{"1":"221.00","2":"male"},{"1":"406.00","2":"male"},{"1":"252.00","2":"male"},{"1":"329.00","2":"male"},{"1":"316.00","2":"male"},{"1":"445.00","2":"male"},{"1":"278.00","2":"male"},{"1":"286.00","2":"male"},{"1":"315.00","2":"male"},{"1":"241.00","2":"male"},{"1":"397.00","2":"male"},{"1":"209.00","2":"male"},{"1":"314.00","2":"male"},{"1":"318.00","2":"male"},{"1":"2.50","2":"female"},{"1":"9.35","2":"female"},{"1":"4.01","2":"female"},{"1":"29.80","2":"female"},{"1":"45.30","2":"female"},{"1":"101.00","2":"female"},{"1":"135.00","2":"female"},{"1":"142.00","2":"female"},{"1":"180.00","2":"female"},{"1":"174.00","2":"female"},{"1":"247.00","2":"female"},{"1":"223.00","2":"female"},{"1":"167.00","2":"female"},{"1":"157.00","2":"female"},{"1":"177.00","2":"female"},{"1":"475.00","2":"female"},{"1":"342.00","2":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>age)</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 2
+##    mercury sex  
+##      &lt;dbl&gt; &lt;chr&gt;
+##  1    1.7  male 
+##  2    1.72 male 
+##  3    8.8  male 
+##  4    5.9  male 
+##  5  101    male 
+##  6   85.4  male 
+##  7  118    male 
+##  8  183    male 
+##  9  168    male 
+## 10  218    male 
+## # … with 35 more rows</code></pre>
 <p>The second one is easier coding, so is better.</p>
 <p>Note that <code>mercury:sex</code> won’t do it, because that will get you <code>age</code> as well (“<code>mercury</code> through <code>sex</code>”).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -715,59 +845,82 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 </ol>
 <p>Solution</p>
 <p>Evidently this is <code>age</code> and <code>sex</code>. We are selecting columns on the basis of their names, so we will need a select-helper. The one that works is <code>matches</code> with a regular expression. This is like the one in the lecture notes where we selected height and weight by selecting columns whose names had two letters and the second one was “t”. In this case, the three letters can be anything, so it’s three dots between the start of text and end of text:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb35-2" title="2"><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&quot;^...$&quot;</span>))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]}],"data":[{"1":"0.21","2":"male"},{"1":"0.33","2":"male"},{"1":"2.00","2":"male"},{"1":"2.20","2":"male"},{"1":"8.50","2":"male"},{"1":"11.50","2":"male"},{"1":"11.50","2":"male"},{"1":"13.50","2":"male"},{"1":"16.50","2":"male"},{"1":"16.50","2":"male"},{"1":"17.50","2":"male"},{"1":"20.50","2":"male"},{"1":"22.50","2":"male"},{"1":"24.50","2":"male"},{"1":"24.50","2":"male"},{"1":"25.50","2":"male"},{"1":"26.50","2":"male"},{"1":"26.50","2":"male"},{"1":"26.50","2":"male"},{"1":"26.50","2":"male"},{"1":"27.50","2":"male"},{"1":"28.50","2":"male"},{"1":"29.50","2":"male"},{"1":"31.50","2":"male"},{"1":"31.50","2":"male"},{"1":"36.50","2":"male"},{"1":"37.50","2":"male"},{"1":"39.50","2":"male"},{"1":"0.80","2":"female"},{"1":"1.50","2":"female"},{"1":"1.75","2":"female"},{"1":"5.50","2":"female"},{"1":"7.50","2":"female"},{"1":"8.50","2":"female"},{"1":"11.50","2":"female"},{"1":"17.50","2":"female"},{"1":"17.50","2":"female"},{"1":"18.50","2":"female"},{"1":"19.50","2":"female"},{"1":"21.50","2":"female"},{"1":"21.50","2":"female"},{"1":"25.50","2":"female"},{"1":"25.50","2":"female"},{"1":"32.50","2":"female"},{"1":"34.50","2":"female"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb56-2" title="2"><span class="kw">select</span>(<span class="kw">matches</span>(<span class="st">&quot;^...$&quot;</span>))</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 2
+##      age sex  
+##    &lt;dbl&gt; &lt;chr&gt;
+##  1  0.21 male 
+##  2  0.33 male 
+##  3  2    male 
+##  4  2.2  male 
+##  5  8.5  male 
+##  6 11.5  male 
+##  7 11.5  male 
+##  8 13.5  male 
+##  9 16.5  male 
+## 10 16.5  male 
+## # … with 35 more rows</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Display only the mercury levels for the females.</li>
 </ol>
 <p>Solution</p>
 <p>This is selecting rows <em>and</em> columns, so you’ll have a <code>select</code> and a <code>filter</code>. If you do the <code>select</code> first, you’ll only have the mercury levels left, and you won’t know which dolphins are female. So do the <code>filter</code> first:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb36-2" title="2"><span class="kw">select</span>(mercury)</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["mercury"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"2.50"},{"1":"9.35"},{"1":"4.01"},{"1":"29.80"},{"1":"45.30"},{"1":"101.00"},{"1":"135.00"},{"1":"142.00"},{"1":"180.00"},{"1":"174.00"},{"1":"247.00"},{"1":"223.00"},{"1":"167.00"},{"1":"157.00"},{"1":"177.00"},{"1":"475.00"},{"1":"342.00"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb58-2" title="2"><span class="kw">select</span>(mercury)</a></code></pre></div>
+<pre><code>## # A tibble: 17 x 1
+##    mercury
+##      &lt;dbl&gt;
+##  1    2.5 
+##  2    9.35
+##  3    4.01
+##  4   29.8 
+##  5   45.3 
+##  6  101   
+##  7  135   
+##  8  142   
+##  9  180   
+## 10  174   
+## 11  247   
+## 12  223   
+## 13  167   
+## 14  157   
+## 15  177   
+## 16  475   
+## 17  342</code></pre>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>What is the mean mercury concentration for all the dolphins whose age is less than 15?</li>
 </ol>
 <p>Solution</p>
 <p>Grab only the dolphins with age less than 15 first, and then work out their mean <code>mercury</code> with <code>summarize</code>:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["m"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"55.49867"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb60-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##       m
+##   &lt;dbl&gt;
+## 1  55.5</code></pre>
 <p>55.5 (micrograms per gram), as you should say.</p>
 <p>Another way is to define a new column that indicates whether the age is less than 15 or not, and do group-by and summarize:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb38-2" title="2"><span class="kw">mutate</span>(<span class="dt">young =</span> <span class="kw">ifelse</span>(age<span class="op">&lt;</span><span class="dv">15</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb38-3" title="3"><span class="kw">group_by</span>(young) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb38-4" title="4"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["young"],"name":[1],"type":["chr"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"no","2":"280.23333"},{"1":"yes","2":"55.49867"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-2" title="2"><span class="kw">mutate</span>(<span class="dt">young =</span> <span class="kw">ifelse</span>(age<span class="op">&lt;</span><span class="dv">15</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-3" title="3"><span class="kw">group_by</span>(young) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-4" title="4"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   young     m
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 no    280. 
+## 2 yes    55.5</code></pre>
 <p>Here, you <em>definitely</em> need to extract the right number out of the output. You can also define groups by logical condition directly, which saves you a step:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="kw">group_by</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age < 15"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"FALSE","2":"280.23333"},{"1":"TRUE","2":"55.49867"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-2" title="2"><span class="kw">group_by</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb64-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   `age &lt; 15`     m
+##   &lt;lgl&gt;      &lt;dbl&gt;
+## 1 FALSE      280. 
+## 2 TRUE        55.5</code></pre>
 <p>Doing it this way, you are probably getting some suspicions about the relationship between age and mercury concentration, but that’s coming up.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="6" style="list-style-type: lower-alpha">
@@ -775,33 +928,32 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 </ol>
 <p>Solution</p>
 <p>The same three choices of method:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb40-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["m"],"name":[1],"type":["dbl"],"align":["right"]}],"data":[{"1":"309.2353"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb66-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 1 x 1
+##       m
+##   &lt;dbl&gt;
+## 1  309.</code></pre>
 <p>309.2 (micrograms per gram), as you should say.</p>
 <p>Or define a new column:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">mutate</span>(<span class="dt">young =</span> <span class="kw">ifelse</span>(age<span class="op">&gt;</span><span class="dv">25</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-3" title="3"><span class="kw">group_by</span>(young) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["young"],"name":[1],"type":["chr"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"no","2":"142.2314"},{"1":"yes","2":"309.2353"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-2" title="2"><span class="kw">mutate</span>(<span class="dt">young =</span> <span class="kw">ifelse</span>(age<span class="op">&gt;</span><span class="dv">25</span>, <span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-3" title="3"><span class="kw">group_by</span>(young) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-4" title="4"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   young     m
+##   &lt;chr&gt; &lt;dbl&gt;
+## 1 no     142.
+## 2 yes    309.</code></pre>
 <p>Or:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-2" title="2"><span class="kw">group_by</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age > 25"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"FALSE","2":"142.2314"},{"1":"TRUE","2":"309.2353"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-2" title="2"><span class="kw">group_by</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb70-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   `age &gt; 25`     m
+##   &lt;lgl&gt;      &lt;dbl&gt;
+## 1 FALSE       142.
+## 2 TRUE        309.</code></pre>
 <p>In any of these ways, 309.2 micrograms per gram.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="7" style="list-style-type: lower-alpha">
@@ -809,13 +961,13 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 </ol>
 <p>Solution</p>
 <p>This one ought to be a gimme, but I am using the result in the next part. With two quantitative variables and one categorical, a scatterplot with the sexes indicated by colour:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">ggplot</span>(dolphins, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> mercury, <span class="dt">colour =</span> sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-50-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">ggplot</span>(dolphins, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> mercury, <span class="dt">colour =</span> sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
 <p>I think this is clearer without regression lines; the upward trend is clear enough, and it is not clear that the trends are linear (look at the males of the largest ages). Add a smooth trend if you like:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">ggplot</span>(dolphins, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> mercury, <span class="dt">colour =</span> sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb44-2" title="2"><span class="kw">geom_smooth</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">ggplot</span>(dolphins, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> mercury, <span class="dt">colour =</span> sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb73-2" title="2"><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-51-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
 <p>Mercury concentration increases with age for the females, and also does with age for the males up to about age 25, after which it levels off or decreases.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="8" style="list-style-type: lower-alpha">
@@ -826,64 +978,149 @@ This is a very easy kind of question to set on an exam. Just so you know.</p>
 <p>The graph is showing an increasing trend of mercury concentration with age (at least, for all but the oldest males). The mean calculations are showing that the younger dolphins have a small mercury concentration on average, and the older dolphins have a much larger mean. These are both saying that mercury concentration is increasing with age, so they are consistent.</p>
 <p>Extra:</p>
 <p>I tried to make this fairly obvious for you by choice of age groups to compare, and this pattern holds for both males and females, so that the mean calculations didn’t need to depend on <code>sex</code>. But there is no great difficulty in making it work by sex as well – insert a <code>group_by</code> before the <code>summarize</code>:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb46-2" title="2"><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb46-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"female","2":"46.70857"},{"1":"male","2":"63.19000"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&lt;</span><span class="dv">15</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-2" title="2"><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb75-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   sex        m
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 female  46.7
+## 2 male    63.2</code></pre>
 <p>and</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb47-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"female","2":"287.7500"},{"1":"male","2":"315.8462"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(age<span class="op">&gt;</span><span class="dv">25</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-2" title="2"><span class="kw">group_by</span>(sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb77-3" title="3"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+##   sex        m
+##   &lt;chr&gt;  &lt;dbl&gt;
+## 1 female  288.
+## 2 male    316.</code></pre>
 <p>The male means are slightly bigger in the two cases, though the difference between the sexes is small compared to the age effect. (I ran a regression predicting mercury concentration from age and sex, and the sex effect wasn’t even significant.)</p>
 <p>A second extra: what if you wanted to divide age up into age groups for comparison of mercury concentration? This isn’t always a good idea (for reasons I get into below), but if you want to do it, <code>cut</code> is your friend:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">age_group =</span> <span class="kw">cut</span>(age, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">15</span>,<span class="dv">25</span>,<span class="dv">60</span>))) -&gt;<span class="st"> </span>dolphinsx</a>
-<a class="sourceLine" id="cb48-2" title="2">dolphinsx</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["mercury"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["sex"],"name":[3],"type":["chr"],"align":["left"]},{"label":["age_group"],"name":[4],"type":["fct"],"align":["left"]}],"data":[{"1":"1.70","2":"0.21","3":"male","4":"(0,15]"},{"1":"1.72","2":"0.33","3":"male","4":"(0,15]"},{"1":"8.80","2":"2.00","3":"male","4":"(0,15]"},{"1":"5.90","2":"2.20","3":"male","4":"(0,15]"},{"1":"101.00","2":"8.50","3":"male","4":"(0,15]"},{"1":"85.40","2":"11.50","3":"male","4":"(0,15]"},{"1":"118.00","2":"11.50","3":"male","4":"(0,15]"},{"1":"183.00","2":"13.50","3":"male","4":"(0,15]"},{"1":"168.00","2":"16.50","3":"male","4":"(15,25]"},{"1":"218.00","2":"16.50","3":"male","4":"(15,25]"},{"1":"180.00","2":"17.50","3":"male","4":"(15,25]"},{"1":"264.00","2":"20.50","3":"male","4":"(15,25]"},{"1":"481.00","2":"22.50","3":"male","4":"(15,25]"},{"1":"485.00","2":"24.50","3":"male","4":"(15,25]"},{"1":"221.00","2":"24.50","3":"male","4":"(15,25]"},{"1":"406.00","2":"25.50","3":"male","4":"(25,60]"},{"1":"252.00","2":"26.50","3":"male","4":"(25,60]"},{"1":"329.00","2":"26.50","3":"male","4":"(25,60]"},{"1":"316.00","2":"26.50","3":"male","4":"(25,60]"},{"1":"445.00","2":"26.50","3":"male","4":"(25,60]"},{"1":"278.00","2":"27.50","3":"male","4":"(25,60]"},{"1":"286.00","2":"28.50","3":"male","4":"(25,60]"},{"1":"315.00","2":"29.50","3":"male","4":"(25,60]"},{"1":"241.00","2":"31.50","3":"male","4":"(25,60]"},{"1":"397.00","2":"31.50","3":"male","4":"(25,60]"},{"1":"209.00","2":"36.50","3":"male","4":"(25,60]"},{"1":"314.00","2":"37.50","3":"male","4":"(25,60]"},{"1":"318.00","2":"39.50","3":"male","4":"(25,60]"},{"1":"2.50","2":"0.80","3":"female","4":"(0,15]"},{"1":"9.35","2":"1.50","3":"female","4":"(0,15]"},{"1":"4.01","2":"1.75","3":"female","4":"(0,15]"},{"1":"29.80","2":"5.50","3":"female","4":"(0,15]"},{"1":"45.30","2":"7.50","3":"female","4":"(0,15]"},{"1":"101.00","2":"8.50","3":"female","4":"(0,15]"},{"1":"135.00","2":"11.50","3":"female","4":"(0,15]"},{"1":"142.00","2":"17.50","3":"female","4":"(15,25]"},{"1":"180.00","2":"17.50","3":"female","4":"(15,25]"},{"1":"174.00","2":"18.50","3":"female","4":"(15,25]"},{"1":"247.00","2":"19.50","3":"female","4":"(15,25]"},{"1":"223.00","2":"21.50","3":"female","4":"(15,25]"},{"1":"167.00","2":"21.50","3":"female","4":"(15,25]"},{"1":"157.00","2":"25.50","3":"female","4":"(25,60]"},{"1":"177.00","2":"25.50","3":"female","4":"(25,60]"},{"1":"475.00","2":"32.50","3":"female","4":"(25,60]"},{"1":"342.00","2":"34.50","3":"female","4":"(25,60]"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1">dolphins <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">age_group =</span> <span class="kw">cut</span>(age, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">15</span>,<span class="dv">25</span>,<span class="dv">60</span>))) -&gt;<span class="st"> </span>dolphinsx</a>
+<a class="sourceLine" id="cb79-2" title="2">dolphinsx</a></code></pre></div>
+<pre><code>## # A tibble: 45 x 4
+##    mercury   age sex   age_group
+##      &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;fct&gt;    
+##  1    1.7   0.21 male  (0,15]   
+##  2    1.72  0.33 male  (0,15]   
+##  3    8.8   2    male  (0,15]   
+##  4    5.9   2.2  male  (0,15]   
+##  5  101     8.5  male  (0,15]   
+##  6   85.4  11.5  male  (0,15]   
+##  7  118    11.5  male  (0,15]   
+##  8  183    13.5  male  (0,15]   
+##  9  168    16.5  male  (15,25]  
+## 10  218    16.5  male  (15,25]  
+## # … with 35 more rows</code></pre>
 <p>Note that <code>cut</code> needs input <code>breaks</code> whose first value is lower than all the ages and whose last value is higher than all the ages. The age group intervals are what mathematicians would call “half-open”: the upper limit is included in the interval and the lower limit is not. The age of 15 is thus in the 0-15 interval and not in 15-25.</p>
 <p>Now we can work out mean mercury concentration for each age group:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">dolphinsx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(age_group) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age_group"],"name":[1],"type":["fct"],"align":["left"]},{"label":["m"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"(0,15]","2":"55.49867"},{"1":"(15,25]","2":"242.30769"},{"1":"(25,60]","2":"309.23529"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1">dolphinsx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(age_group) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb81-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##   age_group     m
+##   &lt;fct&gt;     &lt;dbl&gt;
+## 1 (0,15]     55.5
+## 2 (15,25]   242. 
+## 3 (25,60]   309.</code></pre>
 <p>or even do it by sex as well:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">dolphinsx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(age_group, sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb50-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1">dolphinsx <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(age_group, sex) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb83-2" title="2"><span class="kw">summarize</span>(<span class="dt">m =</span> <span class="kw">mean</span>(mercury))</a></code></pre></div>
 <pre><code>## `summarise()` has grouped output by &#39;age_group&#39;. You can override using the `.groups` argument.</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["age_group"],"name":[1],"type":["fct"],"align":["left"]},{"label":["sex"],"name":[2],"type":["chr"],"align":["left"]},{"label":["m"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"(0,15]","2":"female","3":"46.70857"},{"1":"(0,15]","2":"male","3":"63.19000"},{"1":"(15,25]","2":"female","3":"188.83333"},{"1":"(15,25]","2":"male","3":"288.14286"},{"1":"(25,60]","2":"female","3":"287.75000"},{"1":"(25,60]","2":"male","3":"315.84615"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<pre><code>## # A tibble: 6 x 3
+## # Groups:   age_group [3]
+##   age_group sex        m
+##   &lt;fct&gt;     &lt;chr&gt;  &lt;dbl&gt;
+## 1 (0,15]    female  46.7
+## 2 (0,15]    male    63.2
+## 3 (15,25]   female 189. 
+## 4 (15,25]   male   288. 
+## 5 (25,60]   female 288. 
+## 6 (25,60]   male   316.</code></pre>
 <p>Note that there is still no evidence here of the levelling off of the male mercury levels, which happened after age 25, and there was quite a lot of variability there as well.</p>
 <p>My take is that if you have numerical data, that’s what you should use, rather than breaking it up into categories. Those dolphins in the 25-60 age group, we don’t know much about their actual ages, and we’ve seen that age and mercury concentration are closely related, so we are throwing away information by categorizing. Some people break things up into categories because that’s what they know how to analyze, but that is never a good reason for you: it means that you need to go learn how to handle the original quantitative data!</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 
 </div>
 </div>
-<p style="text-align: center;">
-<a href="data-exploration.html"><button class="btn btn-default">Previous</button></a>
-<a href="one-sample-inference.html"><button class="btn btn-default">Next</button></a>
-</p>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>I found this by googling, after I had scrolled past all the pages of articles about the baseball pitcher who <em>lives</em> in a van.<a href="working-with-dataframes.html#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Hockey is similar: teams go on road trips, playing several different teams before returning home. Hockey teams, though, tend to play each team only once on a road trip: for example, a west coast team like the Canucks might play a game in each of Toronto, Montreal, Boston and New York on a road trip. Well, maybe three games in the New York area: one each against the Rangers, Islanders and Devils.<a href="working-with-dataframes.html#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>If you do this by hand, you’ll get a warning about the chi-squared approximation being inaccurate. This is because of the small frequencies, and <em>not</em> because of the outliers. Those are not damaging the test at all.<a href="working-with-dataframes.html#fnref3" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
-</div>
+            </section>
 
+          </div>
+        </div>
+      </div>
+<a href="data-exploration.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="one-sample-inference.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pasias.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
 
-
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
+
 </html>

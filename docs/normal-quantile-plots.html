@@ -2,47 +2,62 @@
 <html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Chapter 12 Normal quantile plots | Problems and Solutions in Applied Statistics" />
-<meta property="og:type" content="book" />
-<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 12 Normal quantile plots | Problems and Solutions in Applied Statistics</title>
+  <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-<meta name="github-repo" content="nxskok/pasias" />
+  <meta property="og:title" content="Chapter 12 Normal quantile plots | Problems and Solutions in Applied Statistics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  
+  <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="github-repo" content="nxskok/pasias" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 12 Normal quantile plots | Problems and Solutions in Applied Statistics" />
+  
+  <meta name="twitter:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  
 
 <meta name="author" content="Ken Butler" />
 
-<meta name="date" content="2021-04-26" />
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-</script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+<meta name="date" content="2021-05-17" />
 
-<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="matched-pairs-t-and-sign-test.html"/>
+<link rel="next" href="analysis-of-variance.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
-<title>Chapter 12 Normal quantile plots | Problems and Solutions in Applied Statistics</title>
-
-<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
-<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+
+
+
+
+
+
 <style type="text/css">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -100,89 +115,117 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
-<link rel="stylesheet" href="toc.css" type="text/css" />
-
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
 
 
 
-<div class="row">
-<div class="col-sm-12">
-<div id="TOC">
-<ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
-<li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Problems and Solutions in Applied Statistics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a></li>
-<li><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a></li>
-<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
+<li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
+<li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
+<li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
+<li class="chapter" data-level="5" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html"><i class="fa fa-check"></i><b>5</b> Working with dataframes</a></li>
+<li class="chapter" data-level="6" data-path="one-sample-inference.html"><a href="one-sample-inference.html"><i class="fa fa-check"></i><b>6</b> One-sample inference</a></li>
+<li class="chapter" data-level="7" data-path="two-sample-inference.html"><a href="two-sample-inference.html"><i class="fa fa-check"></i><b>7</b> Two-sample inference</a></li>
+<li class="chapter" data-level="8" data-path="power-and-sample-size.html"><a href="power-and-sample-size.html"><i class="fa fa-check"></i><b>8</b> Power and sample size</a></li>
+<li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
+<li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
+<li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
+<li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.4" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality-1"><i class="fa fa-check"></i><b>12.4</b> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
-<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
+<li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
+<li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
+<li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
+<li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
+<li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a></li>
-<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a></li>
-<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a></li>
-<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a></li>
-<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li class="chapter" data-level="16" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> A comparison of four shampoos in treating dandruff</a><ul>
+<li class="chapter" data-level="16.1" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
+<li class="chapter" data-level="16.2" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
+<li class="chapter" data-level="16.3" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
+<li class="chapter" data-level="16.4" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#assessment-of-assumptions"><i class="fa fa-check"></i><b>16.4</b> Assessment of Assumptions</a></li>
+<li class="chapter" data-level="16.5" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#conclusions"><i class="fa fa-check"></i><b>16.5</b> Conclusions</a></li>
+<li class="chapter" data-level="16.6" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#end"><i class="fa fa-check"></i><b>16.6</b> End</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
+<li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
+<li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
+<li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
+<li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
+<li class="chapter" data-level="20.4" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><i class="fa fa-check"></i><b>20.4</b> Pulse rates and marching</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a></li>
-<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a></li>
-<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a></li>
-<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a></li>
-<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
-<li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
+<li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
+<li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
-<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a></li>
+<li class="chapter" data-level="24" data-path="the-bootstrap.html"><a href="the-bootstrap.html"><i class="fa fa-check"></i><b>24</b> The Bootstrap</a></li>
+<li class="chapter" data-level="25" data-path="bayesian-statistics-with-stan.html"><a href="bayesian-statistics-with-stan.html"><i class="fa fa-check"></i><b>25</b> Bayesian Statistics with Stan</a></li>
+<li class="chapter" data-level="26" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>26</b> Logistic regression</a></li>
+<li class="chapter" data-level="27" data-path="logistic-regression-with-ordinal-response.html"><a href="logistic-regression-with-ordinal-response.html"><i class="fa fa-check"></i><b>27</b> Logistic regression with ordinal response</a></li>
+<li class="chapter" data-level="28" data-path="logistic-regression-with-nominal-response.html"><a href="logistic-regression-with-nominal-response.html"><i class="fa fa-check"></i><b>28</b> Logistic regression with nominal response</a></li>
+<li class="chapter" data-level="29" data-path="survival-analysis.html"><a href="survival-analysis.html"><i class="fa fa-check"></i><b>29</b> Survival analysis</a></li>
+<li class="chapter" data-level="30" data-path="analysis-of-variance-revisited.html"><a href="analysis-of-variance-revisited.html"><i class="fa fa-check"></i><b>30</b> Analysis of variance revisited</a></li>
+<li class="chapter" data-level="31" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>31</b> Analysis of covariance</a></li>
+<li class="chapter" data-level="32" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html"><i class="fa fa-check"></i><b>32</b> Multivariate analysis of variance</a></li>
+<li class="chapter" data-level="33" data-path="repeated-measures.html"><a href="repeated-measures.html"><i class="fa fa-check"></i><b>33</b> Repeated measures</a></li>
+<li class="chapter" data-level="34" data-path="discriminant-analysis.html"><a href="discriminant-analysis.html"><i class="fa fa-check"></i><b>34</b> Discriminant analysis</a></li>
+<li class="chapter" data-level="35" data-path="hierarchical-cluster-analysis.html"><a href="hierarchical-cluster-analysis.html"><i class="fa fa-check"></i><b>35</b> Hierarchical cluster analysis</a></li>
+<li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
+<li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
+<li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
+<li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
+</ul></li>
+<li class="chapter" data-level="40" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>40</b> Factor Analysis</a></li>
+<li class="chapter" data-level="41" data-path="frequency-table-analysis.html"><a href="frequency-table-analysis.html"><i class="fa fa-check"></i><b>41</b> Frequency table analysis</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
-</div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Problems and Solutions in Applied Statistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 <div id="normal-quantile-plots" class="section level1">
 <h1><span class="header-section-number">Chapter 12</span> Normal quantile plots</h1>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <div id="lengths-of-heliconia-flowers" class="section level2">
 <h2><span class="header-section-number">12.1</span> Lengths of heliconia flowers</h2>
 <p>The tropical flower <em>Heliconia</em> is
@@ -259,7 +302,7 @@ frame? (Look at all the rows, not just the first ten.)</li>
 </ol>
 <p>Solution</p>
 <p>The usual <code>read_csv</code>:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">heliconia=<span class="kw">read_csv</span>(<span class="st">&quot;heliconia.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">heliconia=<span class="kw">read_csv</span>(<span class="st">&quot;heliconia.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
@@ -268,12 +311,21 @@ frame? (Look at all the rows, not just the first ten.)</li>
 ##   caribaea_yellow = col_double()
 ## )</code></pre>
 <p>I suggested to look at <em>all</em> the rows. Here’s why:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">heliconia </a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["bihai"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["caribaea_red"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["caribaea_yellow"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"47.12","2":"41.90","3":"36.78"},{"1":"46.75","2":"42.01","3":"37.02"},{"1":"46.81","2":"41.93","3":"36.52"},{"1":"47.12","2":"43.09","3":"36.11"},{"1":"46.67","2":"41.47","3":"36.03"},{"1":"47.43","2":"41.69","3":"35.45"},{"1":"46.44","2":"39.78","3":"38.13"},{"1":"46.64","2":"40.57","3":"37.10"},{"1":"48.07","2":"39.63","3":"35.17"},{"1":"48.34","2":"42.18","3":"36.82"},{"1":"48.15","2":"40.66","3":"36.66"},{"1":"50.26","2":"37.87","3":"35.68"},{"1":"50.12","2":"39.16","3":"36.03"},{"1":"46.34","2":"37.40","3":"34.57"},{"1":"46.94","2":"38.20","3":"34.63"},{"1":"48.36","2":"38.07","3":"NA"},{"1":"NA","2":"38.10","3":"NA"},{"1":"NA","2":"37.97","3":"NA"},{"1":"NA","2":"38.79","3":"NA"},{"1":"NA","2":"38.23","3":"NA"},{"1":"NA","2":"38.87","3":"NA"},{"1":"NA","2":"37.78","3":"NA"},{"1":"NA","2":"38.01","3":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">heliconia </a></code></pre></div>
+<pre><code>## # A tibble: 23 x 3
+##    bihai caribaea_red caribaea_yellow
+##    &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
+##  1  47.1         41.9            36.8
+##  2  46.8         42.0            37.0
+##  3  46.8         41.9            36.5
+##  4  47.1         43.1            36.1
+##  5  46.7         41.5            36.0
+##  6  47.4         41.7            35.4
+##  7  46.4         39.8            38.1
+##  8  46.6         40.6            37.1
+##  9  48.1         39.6            35.2
+## 10  48.3         42.2            36.8
+## # … with 13 more rows</code></pre>
 <p>The varieties with fewer values have missings (NAs) attached to the
 end. This is because all the columns in a data frame have to have the
 same number of values. (The missings won’t impact what we do below —
@@ -288,10 +340,10 @@ offended by them, in which case you can read what I do later on.)</p>
 <p>Solution</p>
 <p>There’s a certain amount of repetitiveness here (that we work
 around later):</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>bihai))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>bihai))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <pre><code>## Warning: Removed 7 rows containing non-finite values (stat_qq).</code></pre>
 <pre><code>## Warning: Removed 7 rows containing non-finite values (stat_qq_line).</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-38-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
 <p>I’m saving the comments until we’ve seen all three.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -301,8 +353,8 @@ frame has an underscore in it).</li>
 </ol>
 <p>Solution</p>
 <p>Same idea again:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_red))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-39-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_red))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Make a normal quantile plot for the variety
@@ -310,10 +362,10 @@ frame has an underscore in it).</li>
 </ol>
 <p>Solution</p>
 <p>And, one more time:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_yellow))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">ggplot</span>(heliconia,<span class="kw">aes</span>(<span class="dt">sample=</span>caribaea_yellow))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <pre><code>## Warning: Removed 8 rows containing non-finite values (stat_qq).</code></pre>
 <pre><code>## Warning: Removed 8 rows containing non-finite values (stat_qq_line).</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-40-1.png" width="672"  /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>I did a lot of copying and pasting there.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -363,23 +415,32 @@ might expect, it uses several of the tools from the “tidyverse”.
 First, tidy the data. The three columns of the data frame are all
 lengths, just lengths of different things, which need to be
 labelled. This is <code>pivot_longer</code> from <code>tidyr</code>:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">heliconia <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;variety&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;length&quot;</span>, <span class="dt">values_drop_na =</span> T) -&gt;<span class="st"> </span>heliconia.long</a>
-<a class="sourceLine" id="cb41-3" title="3">heliconia.long  </a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["variety"],"name":[1],"type":["chr"],"align":["left"]},{"label":["length"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"bihai","2":"47.12"},{"1":"caribaea_red","2":"41.90"},{"1":"caribaea_yellow","2":"36.78"},{"1":"bihai","2":"46.75"},{"1":"caribaea_red","2":"42.01"},{"1":"caribaea_yellow","2":"37.02"},{"1":"bihai","2":"46.81"},{"1":"caribaea_red","2":"41.93"},{"1":"caribaea_yellow","2":"36.52"},{"1":"bihai","2":"47.12"},{"1":"caribaea_red","2":"43.09"},{"1":"caribaea_yellow","2":"36.11"},{"1":"bihai","2":"46.67"},{"1":"caribaea_red","2":"41.47"},{"1":"caribaea_yellow","2":"36.03"},{"1":"bihai","2":"47.43"},{"1":"caribaea_red","2":"41.69"},{"1":"caribaea_yellow","2":"35.45"},{"1":"bihai","2":"46.44"},{"1":"caribaea_red","2":"39.78"},{"1":"caribaea_yellow","2":"38.13"},{"1":"bihai","2":"46.64"},{"1":"caribaea_red","2":"40.57"},{"1":"caribaea_yellow","2":"37.10"},{"1":"bihai","2":"48.07"},{"1":"caribaea_red","2":"39.63"},{"1":"caribaea_yellow","2":"35.17"},{"1":"bihai","2":"48.34"},{"1":"caribaea_red","2":"42.18"},{"1":"caribaea_yellow","2":"36.82"},{"1":"bihai","2":"48.15"},{"1":"caribaea_red","2":"40.66"},{"1":"caribaea_yellow","2":"36.66"},{"1":"bihai","2":"50.26"},{"1":"caribaea_red","2":"37.87"},{"1":"caribaea_yellow","2":"35.68"},{"1":"bihai","2":"50.12"},{"1":"caribaea_red","2":"39.16"},{"1":"caribaea_yellow","2":"36.03"},{"1":"bihai","2":"46.34"},{"1":"caribaea_red","2":"37.40"},{"1":"caribaea_yellow","2":"34.57"},{"1":"bihai","2":"46.94"},{"1":"caribaea_red","2":"38.20"},{"1":"caribaea_yellow","2":"34.63"},{"1":"bihai","2":"48.36"},{"1":"caribaea_red","2":"38.07"},{"1":"caribaea_red","2":"38.10"},{"1":"caribaea_red","2":"37.97"},{"1":"caribaea_red","2":"38.79"},{"1":"caribaea_red","2":"38.23"},{"1":"caribaea_red","2":"38.87"},{"1":"caribaea_red","2":"37.78"},{"1":"caribaea_red","2":"38.01"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">heliconia <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;variety&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;length&quot;</span>, <span class="dt">values_drop_na =</span> T) -&gt;<span class="st"> </span>heliconia.long</a>
+<a class="sourceLine" id="cb13-3" title="3">heliconia.long  </a></code></pre></div>
+<pre><code>## # A tibble: 54 x 2
+##    variety         length
+##    &lt;chr&gt;            &lt;dbl&gt;
+##  1 bihai             47.1
+##  2 caribaea_red      41.9
+##  3 caribaea_yellow   36.8
+##  4 bihai             46.8
+##  5 caribaea_red      42.0
+##  6 caribaea_yellow   37.0
+##  7 bihai             46.8
+##  8 caribaea_red      41.9
+##  9 caribaea_yellow   36.5
+## 10 bihai             47.1
+## # … with 44 more rows</code></pre>
 <p>This is now aesthetic as well as tidy: all those <code>NA</code> lines
 have gone (you can check that
 there are now <span class="math inline">\(16+23+15=54\)</span> rows of actual data, as there should be). This was accomplished by the last thing in the <code>pivot_longer</code>: “in the values (that is, the lengths), drop any missing values.”</p>
 <p>Now, how to get a normal quantile plot for each variety? This is
 <code>facet_wrap</code> on the end of the <code>ggplot</code> again.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb42-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb42-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-42-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>These are a bit elongated vertically. The <code>scale="free"</code> allows
 a different vertical scale for each plot (otherwise there would be one
 vertical scale for all three plots); I decided that was best here
@@ -393,21 +454,21 @@ cells of a <span class="math inline">\(2 \times 2\)</span> grid. <code>facet_wra
 and <code>ncol</code> which you can use one or both of to make this
 happen. This creates an array of plots with two columns and as many
 rows as needed:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb43-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb43-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-43-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">sample=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>I think the squarer plots make it easier to see the shape of these:
 curved, S-bend, straightish.
 Almost the same code will get a histogram for each variety, which I’ll
 also make squarish:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">x=</span>length))<span class="op">+</span></a>
-<a class="sourceLine" id="cb44-2" title="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-44-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">ggplot</span>(heliconia.long,<span class="kw">aes</span>(<span class="dt">x=</span>length))<span class="op">+</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)<span class="op">+</span><span class="kw">facet_wrap</span>(<span class="op">~</span>variety,<span class="dt">scale=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
 <p><em>bihai</em> has those two outliers, <em>caribaea</em> red has no tails
 to speak of (or you might say “it’s bimodal”, which would be another
 explanation of the pattern on the normal quantile
-plot<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> If you have studied a thing called kurtosis, the fourth moment about the mean, you’ll know that this measures <em>both</em> tail length <em>and</em> peakedness, so a short-tailed distribution also has a strong peak. Or, maybe, in this case, two strong peaks.</span>) and
+plot<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>) and
 <em>caribaea</em> yellow is shoulder-shruggingly normal (I looked at
 that and said, “well, I <em>guess</em> it’s normal”.) After you’ve
 looked at the normal quantile plots, you see what a crude tool a
@@ -427,8 +488,8 @@ one of the variables in the data set for normality.</p>
 </ol>
 <p>Solution</p>
 <p><code>read_tsv</code> is the right thing:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">my_url=<span class="st">&quot;http://ritsokiguess.site/datafiles/ais.txt&quot;</span></a>
-<a class="sourceLine" id="cb45-2" title="2">athletes=<span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">my_url=<span class="st">&quot;http://ritsokiguess.site/datafiles/ais.txt&quot;</span></a>
+<a class="sourceLine" id="cb18-2" title="2">athletes=<span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
@@ -446,12 +507,21 @@ one of the variables in the data set for normality.</p>
 ##   Ht = col_double(),
 ##   Wt = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">athletes</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Sex"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Sport"],"name":[2],"type":["chr"],"align":["left"]},{"label":["RCC"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["WCC"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["Hc"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Hg"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["Ferr"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["BMI"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["SSF"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["%Bfat"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["LBM"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["Ht"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["Wt"],"name":[13],"type":["dbl"],"align":["right"]}],"data":[{"1":"female","2":"Netball","3":"4.56","4":"13.30","5":"42.2","6":"13.6","7":"20","8":"19.16","9":"49.0","10":"11.29","11":"53.14","12":"176.8","13":"59.90"},{"1":"female","2":"Netball","3":"4.15","4":"6.00","5":"38.0","6":"12.7","7":"59","8":"21.15","9":"110.2","10":"25.26","11":"47.09","12":"172.6","13":"63.00"},{"1":"female","2":"Netball","3":"4.16","4":"7.60","5":"37.5","6":"12.3","7":"22","8":"21.40","9":"89.0","10":"19.39","11":"53.44","12":"176.0","13":"66.30"},{"1":"female","2":"Netball","3":"4.32","4":"6.40","5":"37.7","6":"12.3","7":"30","8":"21.03","9":"98.3","10":"19.63","11":"48.78","12":"169.9","13":"60.70"},{"1":"female","2":"Netball","3":"4.06","4":"5.80","5":"38.7","6":"12.8","7":"78","8":"21.77","9":"122.1","10":"23.11","11":"56.05","12":"183.0","13":"72.90"},{"1":"female","2":"Netball","3":"4.12","4":"6.10","5":"36.6","6":"11.8","7":"21","8":"21.38","9":"90.4","10":"16.86","11":"56.45","12":"178.2","13":"67.90"},{"1":"female","2":"Netball","3":"4.17","4":"5.00","5":"37.4","6":"12.7","7":"109","8":"21.47","9":"106.9","10":"21.32","11":"53.11","12":"177.3","13":"67.50"},{"1":"female","2":"Netball","3":"3.80","4":"6.60","5":"36.5","6":"12.4","7":"102","8":"24.45","9":"156.6","10":"26.57","11":"54.41","12":"174.1","13":"74.10"},{"1":"female","2":"Netball","3":"3.96","4":"5.50","5":"36.3","6":"12.4","7":"71","8":"22.63","9":"101.1","10":"17.93","11":"55.97","12":"173.6","13":"68.20"},{"1":"female","2":"Netball","3":"4.44","4":"9.70","5":"41.4","6":"14.1","7":"64","8":"22.80","9":"126.4","10":"24.97","11":"51.62","12":"173.7","13":"68.80"},{"1":"female","2":"Netball","3":"4.27","4":"10.60","5":"37.7","6":"12.5","7":"68","8":"23.58","9":"114.0","10":"22.62","11":"58.27","12":"178.7","13":"75.30"},{"1":"female","2":"Netball","3":"3.90","4":"6.30","5":"35.9","6":"12.1","7":"78","8":"20.06","9":"70.0","10":"15.01","11":"57.28","12":"183.3","13":"67.40"},{"1":"female","2":"Netball","3":"4.02","4":"9.10","5":"37.7","6":"12.7","7":"107","8":"23.01","9":"77.0","10":"18.14","11":"57.30","12":"174.4","13":"70.00"},{"1":"female","2":"Netball","3":"4.39","4":"9.60","5":"38.3","6":"12.5","7":"39","8":"24.64","9":"148.9","10":"26.78","11":"54.18","12":"173.3","13":"74.00"},{"1":"female","2":"Netball","3":"4.52","4":"5.10","5":"38.8","6":"13.1","7":"58","8":"18.26","9":"80.1","10":"17.22","11":"42.96","12":"168.6","13":"51.90"},{"1":"female","2":"Netball","3":"4.25","4":"10.70","5":"39.5","6":"13.2","7":"127","8":"24.47","9":"156.6","10":"26.50","11":"54.46","12":"174.0","13":"74.10"},{"1":"female","2":"Netball","3":"4.46","4":"10.90","5":"39.7","6":"13.7","7":"102","8":"23.99","9":"115.9","10":"23.01","11":"57.20","12":"176.0","13":"74.30"},{"1":"female","2":"Netball","3":"4.40","4":"9.30","5":"40.4","6":"13.6","7":"86","8":"26.24","9":"181.7","10":"30.10","11":"54.38","12":"172.2","13":"77.80"},{"1":"female","2":"Netball","3":"4.83","4":"8.40","5":"41.8","6":"13.4","7":"40","8":"20.04","9":"71.6","10":"13.93","11":"57.58","12":"182.7","13":"66.90"},{"1":"female","2":"Netball","3":"4.23","4":"6.90","5":"38.3","6":"12.6","7":"50","8":"25.72","9":"143.5","10":"26.65","11":"61.46","12":"180.5","13":"83.80"},{"1":"female","2":"Netball","3":"4.24","4":"8.40","5":"37.6","6":"12.5","7":"58","8":"25.64","9":"200.8","10":"35.52","11":"53.46","12":"179.8","13":"82.90"},{"1":"female","2":"Netball","3":"3.95","4":"6.60","5":"38.4","6":"12.8","7":"33","8":"19.87","9":"68.9","10":"15.59","11":"54.11","12":"179.6","13":"64.10"},{"1":"female","2":"Netball","3":"4.03","4":"8.50","5":"37.7","6":"13.0","7":"51","8":"23.35","9":"103.6","10":"19.61","11":"55.35","12":"171.7","13":"68.85"},{"1":"female","2":"BBall","3":"3.96","4":"7.50","5":"37.5","6":"12.3","7":"60","8":"20.56","9":"109.1","10":"19.75","11":"63.32","12":"195.9","13":"78.90"},{"1":"female","2":"BBall","3":"4.41","4":"8.30","5":"38.2","6":"12.7","7":"68","8":"20.67","9":"102.8","10":"21.30","11":"58.55","12":"189.7","13":"74.40"},{"1":"female","2":"BBall","3":"4.14","4":"5.00","5":"36.4","6":"11.6","7":"21","8":"21.86","9":"104.6","10":"19.88","11":"55.36","12":"177.8","13":"69.10"},{"1":"female","2":"BBall","3":"4.11","4":"5.30","5":"37.3","6":"12.6","7":"69","8":"21.88","9":"126.4","10":"23.66","11":"57.18","12":"185.0","13":"74.90"},{"1":"female","2":"BBall","3":"4.45","4":"6.80","5":"41.5","6":"14.0","7":"29","8":"18.96","9":"80.3","10":"17.64","11":"53.20","12":"184.6","13":"64.60"},{"1":"female","2":"BBall","3":"4.10","4":"4.40","5":"37.4","6":"12.5","7":"42","8":"21.04","9":"75.2","10":"15.58","11":"53.77","12":"174.0","13":"63.70"},{"1":"female","2":"BBall","3":"4.31","4":"5.30","5":"39.6","6":"12.8","7":"73","8":"21.69","9":"87.2","10":"19.99","11":"60.17","12":"186.2","13":"75.20"},{"1":"female","2":"BBall","3":"4.42","4":"5.70","5":"39.9","6":"13.2","7":"44","8":"20.62","9":"97.9","10":"22.43","11":"48.33","12":"173.8","13":"62.30"},{"1":"female","2":"BBall","3":"4.30","4":"8.90","5":"41.1","6":"13.5","7":"41","8":"22.64","9":"75.1","10":"17.95","11":"54.57","12":"171.4","13":"66.50"},{"1":"female","2":"BBall","3":"4.51","4":"4.40","5":"41.6","6":"12.7","7":"44","8":"19.44","9":"65.1","10":"15.07","11":"53.42","12":"179.9","13":"62.90"},{"1":"female","2":"BBall","3":"4.71","4":"5.30","5":"41.4","6":"14.0","7":"38","8":"25.75","9":"171.1","10":"28.83","11":"68.53","12":"193.4","13":"96.30"},{"1":"female","2":"BBall","3":"4.62","4":"7.30","5":"43.8","6":"14.7","7":"26","8":"21.20","9":"76.8","10":"18.08","11":"61.85","12":"188.7","13":"75.50"},{"1":"female","2":"BBall","3":"4.35","4":"7.80","5":"41.4","6":"14.1","7":"30","8":"22.03","9":"117.8","10":"23.30","11":"48.32","12":"169.1","13":"63.00"},{"1":"female","2":"Row","3":"4.26","4":"6.20","5":"41.0","6":"13.9","7":"48","8":"25.44","9":"90.2","10":"17.71","11":"66.24","12":"177.9","13":"80.50"},{"1":"female","2":"Row","3":"4.63","4":"6.00","5":"43.7","6":"14.7","7":"30","8":"22.63","9":"97.2","10":"18.77","11":"57.92","12":"177.5","13":"71.30"},{"1":"female","2":"Row","3":"4.36","4":"5.80","5":"40.3","6":"13.3","7":"29","8":"21.86","9":"99.9","10":"19.83","11":"56.52","12":"179.6","13":"70.50"},{"1":"female","2":"Row","3":"3.91","4":"7.30","5":"37.6","6":"12.9","7":"43","8":"22.27","9":"125.9","10":"25.16","11":"54.78","12":"181.3","13":"73.20"},{"1":"female","2":"Row","3":"4.51","4":"8.30","5":"43.7","6":"14.7","7":"34","8":"21.27","9":"69.9","10":"18.04","11":"56.31","12":"179.7","13":"68.70"},{"1":"female","2":"Row","3":"4.37","4":"8.10","5":"41.8","6":"14.3","7":"53","8":"23.47","9":"98.0","10":"21.79","11":"62.96","12":"185.2","13":"80.50"},{"1":"female","2":"Row","3":"4.90","4":"6.90","5":"44.0","6":"14.5","7":"59","8":"23.19","9":"96.8","10":"22.25","11":"56.68","12":"177.3","13":"72.90"},{"1":"female","2":"Row","3":"4.46","4":"5.70","5":"39.2","6":"13.0","7":"43","8":"23.17","9":"80.3","10":"16.25","11":"62.39","12":"179.3","13":"74.50"},{"1":"female","2":"Row","3":"3.95","4":"3.30","5":"36.9","6":"12.5","7":"40","8":"24.54","9":"74.9","10":"16.38","11":"63.05","12":"175.3","13":"75.40"},{"1":"female","2":"Row","3":"4.46","4":"9.50","5":"41.5","6":"14.5","7":"92","8":"22.96","9":"83.0","10":"19.35","11":"56.05","12":"174.0","13":"69.50"},{"1":"female","2":"Row","3":"5.02","4":"6.40","5":"44.8","6":"15.2","7":"48","8":"19.76","9":"91.0","10":"19.20","11":"53.65","12":"183.3","13":"66.40"},{"1":"female","2":"Row","3":"4.26","4":"5.80","5":"41.2","6":"14.1","7":"77","8":"23.36","9":"76.2","10":"17.89","11":"65.45","12":"184.7","13":"79.70"},{"1":"female","2":"Row","3":"4.46","4":"5.60","5":"41.1","6":"14.3","7":"71","8":"22.67","9":"52.6","10":"12.20","11":"64.62","12":"180.2","13":"73.60"},{"1":"female","2":"Row","3":"4.16","4":"5.80","5":"39.8","6":"13.3","7":"37","8":"24.24","9":"111.1","10":"23.70","11":"60.05","12":"180.2","13":"78.70"},{"1":"female","2":"Row","3":"4.49","4":"7.60","5":"41.8","6":"14.4","7":"71","8":"24.21","9":"110.7","10":"24.69","11":"56.48","12":"176.0","13":"75.00"},{"1":"female","2":"Row","3":"4.21","4":"7.50","5":"38.4","6":"13.2","7":"73","8":"20.46","9":"74.7","10":"16.58","11":"41.54","12":"156.0","13":"49.80"},{"1":"female","2":"Row","3":"4.57","4":"6.60","5":"42.8","6":"14.5","7":"85","8":"20.81","9":"113.5","10":"21.47","11":"52.78","12":"179.7","13":"67.20"},{"1":"female","2":"Row","3":"4.87","4":"6.40","5":"44.8","6":"15.0","7":"64","8":"20.17","9":"99.8","10":"20.12","11":"52.72","12":"180.9","13":"66.00"},{"1":"female","2":"Row","3":"4.44","4":"10.10","5":"42.7","6":"14.0","7":"19","8":"23.06","9":"80.3","10":"17.51","11":"61.29","12":"179.5","13":"74.30"},{"1":"female","2":"Row","3":"4.45","4":"6.60","5":"42.6","6":"14.1","7":"39","8":"24.40","9":"109.5","10":"23.70","11":"59.59","12":"178.9","13":"78.10"},{"1":"female","2":"Row","3":"4.41","4":"5.90","5":"41.1","6":"13.5","7":"41","8":"23.97","9":"123.6","10":"22.39","11":"61.70","12":"182.1","13":"79.50"},{"1":"female","2":"Row","3":"4.87","4":"7.30","5":"44.1","6":"14.8","7":"13","8":"22.62","9":"91.2","10":"20.43","11":"62.46","12":"186.3","13":"78.50"},{"1":"female","2":"Swim","3":"4.36","4":"5.50","5":"41.4","6":"13.8","7":"82","8":"22.42","9":"71.3","10":"14.52","11":"55.39","12":"170.0","13":"64.80"},{"1":"female","2":"Swim","3":"4.07","4":"5.90","5":"39.5","6":"13.3","7":"25","8":"20.42","9":"54.6","10":"11.47","11":"52.23","12":"170.0","13":"59.00"},{"1":"female","2":"Swim","3":"4.17","4":"4.90","5":"38.9","6":"12.9","7":"86","8":"22.13","9":"88.2","10":"17.71","11":"59.33","12":"180.5","13":"72.10"},{"1":"female","2":"Swim","3":"4.23","4":"8.10","5":"38.2","6":"12.7","7":"22","8":"25.17","9":"95.4","10":"18.48","11":"61.63","12":"173.3","13":"75.60"},{"1":"female","2":"Swim","3":"4.46","4":"8.30","5":"42.2","6":"14.4","7":"30","8":"23.72","9":"47.5","10":"11.22","11":"63.39","12":"173.5","13":"71.40"},{"1":"female","2":"Swim","3":"4.38","4":"5.80","5":"42.0","6":"14.0","7":"27","8":"21.28","9":"55.6","10":"13.61","11":"60.22","12":"181.0","13":"69.70"},{"1":"female","2":"Swim","3":"4.31","4":"5.30","5":"41.1","6":"13.9","7":"60","8":"20.87","9":"62.9","10":"12.78","11":"55.73","12":"175.0","13":"63.90"},{"1":"female","2":"Swim","3":"4.51","4":"5.10","5":"40.9","6":"14.0","7":"115","8":"19.00","9":"52.5","10":"11.85","11":"48.57","12":"170.3","13":"55.10"},{"1":"female","2":"Swim","3":"4.13","4":"7.00","5":"39.7","6":"13.1","7":"124","8":"22.04","9":"62.6","10":"13.35","11":"51.99","12":"165.0","13":"60.00"},{"1":"female","2":"Field","3":"4.48","4":"9.50","5":"36.5","6":"13.3","7":"54","8":"20.12","9":"49.9","10":"11.77","11":"51.17","12":"169.8","13":"58.00"},{"1":"female","2":"T400m","3":"5.31","4":"9.50","5":"47.1","6":"15.9","7":"29","8":"21.35","9":"57.9","10":"11.07","11":"57.54","12":"174.1","13":"64.70"},{"1":"female","2":"Field","3":"4.58","4":"5.80","5":"42.1","6":"14.7","7":"164","8":"28.57","9":"109.6","10":"21.30","11":"68.86","12":"175.0","13":"87.50"},{"1":"female","2":"Field","3":"4.81","4":"6.80","5":"42.7","6":"15.3","7":"50","8":"26.95","9":"98.5","10":"20.10","11":"63.04","12":"171.1","13":"78.90"},{"1":"female","2":"Field","3":"4.51","4":"9.00","5":"39.7","6":"14.3","7":"36","8":"28.13","9":"136.3","10":"24.88","11":"63.03","12":"172.7","13":"83.90"},{"1":"female","2":"Field","3":"4.77","4":"7.10","5":"40.6","6":"14.6","7":"40","8":"26.85","9":"103.6","10":"19.26","11":"66.85","12":"175.6","13":"82.80"},{"1":"female","2":"Field","3":"5.33","4":"9.30","5":"47.0","6":"15.0","7":"62","8":"25.27","9":"102.8","10":"19.51","11":"59.89","12":"171.6","13":"74.40"},{"1":"female","2":"Field","3":"4.75","4":"7.50","5":"43.8","6":"15.2","7":"90","8":"31.93","9":"131.9","10":"23.01","11":"72.98","12":"172.3","13":"94.80"},{"1":"female","2":"T400m","3":"4.11","4":"7.30","5":"38.7","6":"12.4","7":"12","8":"16.75","9":"33.8","10":"8.07","11":"45.23","12":"171.4","13":"49.20"},{"1":"female","2":"TSprnt","3":"4.76","4":"7.60","5":"42.9","6":"13.4","7":"36","8":"19.54","9":"43.5","10":"11.05","11":"55.06","12":"178.0","13":"61.90"},{"1":"female","2":"T400m","3":"4.27","4":"6.90","5":"44.1","6":"14.7","7":"45","8":"20.42","9":"46.2","10":"12.39","11":"46.96","12":"162.0","13":"53.60"},{"1":"female","2":"T400m","3":"4.44","4":"6.10","5":"42.6","6":"13.9","7":"43","8":"22.76","9":"73.9","10":"15.95","11":"53.54","12":"167.3","13":"63.70"},{"1":"female","2":"T400m","3":"4.20","4":"6.50","5":"39.1","6":"13.0","7":"51","8":"20.12","9":"36.8","10":"9.91","11":"47.57","12":"162.0","13":"52.80"},{"1":"female","2":"T400m","3":"4.71","4":"6.90","5":"43.5","6":"13.8","7":"22","8":"22.35","9":"67.0","10":"16.20","11":"54.63","12":"170.8","13":"65.20"},{"1":"female","2":"T400m","3":"4.09","4":"6.40","5":"40.1","6":"13.2","7":"44","8":"19.16","9":"41.1","10":"9.02","11":"46.31","12":"163.0","13":"50.90"},{"1":"female","2":"T400m","3":"4.24","4":"6.60","5":"38.2","6":"12.6","7":"26","8":"20.77","9":"59.4","10":"14.26","11":"49.13","12":"166.1","13":"57.30"},{"1":"female","2":"T400m","3":"3.90","4":"6.00","5":"38.9","6":"13.5","7":"16","8":"19.37","9":"48.4","10":"10.48","11":"53.71","12":"176.0","13":"60.00"},{"1":"female","2":"TSprnt","3":"4.82","4":"7.60","5":"43.2","6":"14.4","7":"58","8":"22.37","9":"50.0","10":"11.64","11":"53.11","12":"163.9","13":"60.10"},{"1":"female","2":"T400m","3":"4.32","4":"6.80","5":"40.6","6":"13.7","7":"46","8":"17.54","9":"54.6","10":"12.16","11":"46.12","12":"173.0","13":"52.50"},{"1":"female","2":"T400m","3":"4.77","4":"7.20","5":"43.3","6":"14.8","7":"43","8":"19.06","9":"42.3","10":"10.53","11":"53.41","12":"177.0","13":"59.70"},{"1":"female","2":"TSprnt","3":"5.16","4":"8.20","5":"45.3","6":"14.7","7":"34","8":"20.30","9":"46.1","10":"10.15","11":"51.48","12":"168.0","13":"57.30"},{"1":"female","2":"TSprnt","3":"4.97","4":"7.80","5":"44.7","6":"14.2","7":"41","8":"20.15","9":"46.3","10":"10.74","11":"53.20","12":"172.0","13":"59.60"},{"1":"female","2":"Tennis","3":"4.00","4":"4.20","5":"36.6","6":"12.0","7":"57","8":"25.36","9":"109.0","10":"20.86","11":"56.58","12":"167.9","13":"71.50"},{"1":"female","2":"Tennis","3":"4.40","4":"4.00","5":"40.8","6":"13.9","7":"73","8":"22.12","9":"98.1","10":"19.64","11":"56.01","12":"177.5","13":"69.70"},{"1":"female","2":"Tennis","3":"4.38","4":"7.90","5":"39.8","6":"13.5","7":"88","8":"21.25","9":"80.6","10":"17.07","11":"46.52","12":"162.5","13":"56.10"},{"1":"female","2":"Tennis","3":"4.08","4":"6.60","5":"37.8","6":"12.1","7":"182","8":"20.53","9":"68.3","10":"15.31","11":"51.75","12":"172.5","13":"61.10"},{"1":"female","2":"Tennis","3":"4.98","4":"6.40","5":"44.8","6":"14.8","7":"80","8":"17.06","9":"47.6","10":"11.07","11":"42.15","12":"166.7","13":"47.40"},{"1":"female","2":"Tennis","3":"5.16","4":"7.20","5":"44.3","6":"14.5","7":"88","8":"18.29","9":"61.9","10":"12.92","11":"48.76","12":"175.0","13":"56.00"},{"1":"female","2":"Tennis","3":"4.66","4":"6.40","5":"40.9","6":"13.9","7":"109","8":"18.37","9":"38.2","10":"8.45","11":"41.93","12":"157.9","13":"45.80"},{"1":"female","2":"Gym","3":"4.19","4":"9.00","5":"39.0","6":"13.4","7":"69","8":"18.93","9":"43.5","10":"10.16","11":"42.95","12":"158.9","13":"47.80"},{"1":"female","2":"Gym","3":"4.53","4":"5.00","5":"40.7","6":"14.0","7":"41","8":"17.79","9":"56.8","10":"12.55","11":"38.30","12":"156.9","13":"43.80"},{"1":"female","2":"Gym","3":"4.09","4":"4.90","5":"36.0","6":"12.5","7":"66","8":"17.05","9":"41.6","10":"9.10","11":"34.36","12":"148.9","13":"37.80"},{"1":"female","2":"Gym","3":"4.42","4":"6.40","5":"42.8","6":"14.5","7":"63","8":"20.31","9":"58.9","10":"13.46","11":"39.03","12":"149.0","13":"45.10"},{"1":"male","2":"Swim","3":"5.13","4":"7.10","5":"46.8","6":"15.9","7":"34","8":"22.46","9":"44.5","10":"8.47","11":"61.00","12":"172.7","13":"67.00"},{"1":"male","2":"Swim","3":"4.83","4":"7.60","5":"45.2","6":"15.2","7":"97","8":"23.88","9":"41.8","10":"7.68","11":"69.00","12":"176.5","13":"74.40"},{"1":"male","2":"Swim","3":"5.09","4":"4.70","5":"46.6","6":"15.9","7":"55","8":"23.68","9":"33.7","10":"6.16","11":"74.00","12":"183.0","13":"79.30"},{"1":"male","2":"Swim","3":"5.17","4":"4.10","5":"44.9","6":"15.0","7":"76","8":"23.15","9":"50.9","10":"8.56","11":"80.00","12":"194.4","13":"87.50"},{"1":"male","2":"Swim","3":"5.11","4":"6.70","5":"46.1","6":"15.6","7":"93","8":"22.32","9":"40.5","10":"6.86","11":"78.00","12":"193.4","13":"83.50"},{"1":"male","2":"Swim","3":"5.03","4":"7.10","5":"45.1","6":"15.2","7":"46","8":"24.02","9":"51.2","10":"9.40","11":"71.00","12":"180.2","13":"78.00"},{"1":"male","2":"Swim","3":"5.32","4":"6.00","5":"47.5","6":"16.3","7":"155","8":"23.29","9":"54.4","10":"9.17","11":"71.00","12":"183.0","13":"78.00"},{"1":"male","2":"Swim","3":"4.75","4":"8.60","5":"45.5","6":"15.2","7":"99","8":"25.11","9":"52.3","10":"8.54","11":"78.00","12":"184.0","13":"85.00"},{"1":"male","2":"Swim","3":"5.34","4":"6.60","5":"48.6","6":"16.5","7":"35","8":"22.81","9":"57.0","10":"9.20","11":"77.00","12":"192.7","13":"84.70"},{"1":"male","2":"Swim","3":"4.87","4":"4.80","5":"44.9","6":"15.4","7":"124","8":"26.25","9":"65.3","10":"11.72","11":"81.00","12":"187.2","13":"92.00"},{"1":"male","2":"Swim","3":"5.33","4":"5.20","5":"47.8","6":"16.1","7":"176","8":"21.38","9":"52.0","10":"8.44","11":"66.00","12":"183.9","13":"72.30"},{"1":"male","2":"Swim","3":"4.81","4":"6.20","5":"45.2","6":"15.3","7":"107","8":"22.52","9":"42.7","10":"7.19","11":"77.00","12":"192.0","13":"83.00"},{"1":"male","2":"Swim","3":"4.32","4":"4.30","5":"41.6","6":"14.0","7":"177","8":"26.73","9":"35.2","10":"6.46","11":"91.00","12":"190.4","13":"96.90"},{"1":"male","2":"Row","3":"4.87","4":"8.20","5":"43.8","6":"15.0","7":"130","8":"23.57","9":"49.2","10":"9.00","11":"78.00","12":"190.7","13":"85.70"},{"1":"male","2":"Row","3":"5.04","4":"7.10","5":"44.0","6":"14.8","7":"64","8":"25.84","9":"61.8","10":"12.61","11":"75.00","12":"181.8","13":"85.40"},{"1":"male","2":"Row","3":"4.40","4":"5.30","5":"42.5","6":"14.5","7":"109","8":"24.06","9":"46.5","10":"9.03","11":"78.00","12":"188.3","13":"85.30"},{"1":"male","2":"Row","3":"4.95","4":"5.90","5":"45.4","6":"15.5","7":"125","8":"23.85","9":"34.8","10":"6.96","11":"87.00","12":"198.0","13":"93.50"},{"1":"male","2":"Row","3":"4.78","4":"9.30","5":"43.0","6":"14.7","7":"150","8":"25.09","9":"60.2","10":"10.05","11":"78.00","12":"186.0","13":"86.80"},{"1":"male","2":"Row","3":"5.21","4":"6.80","5":"44.5","6":"15.4","7":"115","8":"23.84","9":"48.1","10":"9.56","11":"79.00","12":"192.0","13":"87.90"},{"1":"male","2":"Row","3":"5.22","4":"8.40","5":"47.5","6":"16.2","7":"89","8":"25.31","9":"44.5","10":"9.36","11":"79.00","12":"185.6","13":"87.20"},{"1":"male","2":"Row","3":"5.18","4":"6.50","5":"45.4","6":"14.9","7":"93","8":"19.69","9":"54.0","10":"10.81","11":"48.00","12":"165.3","13":"53.80"},{"1":"male","2":"Row","3":"5.40","4":"6.80","5":"49.5","6":"17.3","7":"183","8":"26.07","9":"44.7","10":"8.61","11":"82.00","12":"185.6","13":"89.80"},{"1":"male","2":"Row","3":"4.92","4":"5.40","5":"46.2","6":"15.8","7":"84","8":"25.50","9":"64.9","10":"9.53","11":"82.00","12":"189.0","13":"91.10"},{"1":"male","2":"Row","3":"5.24","4":"7.50","5":"46.5","6":"15.5","7":"70","8":"23.69","9":"43.8","10":"7.42","11":"82.00","12":"193.4","13":"88.60"},{"1":"male","2":"Row","3":"5.09","4":"10.10","5":"44.9","6":"14.8","7":"118","8":"26.79","9":"58.3","10":"9.79","11":"83.00","12":"185.6","13":"92.30"},{"1":"male","2":"Row","3":"4.83","4":"5.00","5":"43.8","6":"15.1","7":"61","8":"25.61","9":"52.8","10":"8.97","11":"88.00","12":"194.6","13":"97.00"},{"1":"male","2":"Row","3":"5.22","4":"6.00","5":"46.6","6":"15.7","7":"72","8":"25.06","9":"43.1","10":"7.49","11":"83.00","12":"189.0","13":"89.50"},{"1":"male","2":"Row","3":"4.71","4":"8.00","5":"45.5","6":"15.6","7":"91","8":"24.93","9":"78.0","10":"11.95","11":"78.00","12":"188.1","13":"88.20"},{"1":"male","2":"BBall","3":"5.24","4":"7.20","5":"46.6","6":"15.9","7":"58","8":"22.96","9":"40.8","10":"7.35","11":"85.00","12":"200.4","13":"92.20"},{"1":"male","2":"BBall","3":"4.54","4":"5.90","5":"44.4","6":"15.6","7":"97","8":"20.69","9":"41.5","10":"7.16","11":"73.00","12":"195.3","13":"78.90"},{"1":"male","2":"BBall","3":"5.13","4":"5.80","5":"46.1","6":"15.9","7":"110","8":"23.97","9":"50.9","10":"8.77","11":"82.00","12":"194.1","13":"90.30"},{"1":"male","2":"BBall","3":"5.00","4":"6.70","5":"45.3","6":"15.7","7":"72","8":"24.64","9":"49.6","10":"9.56","11":"79.00","12":"187.9","13":"87.00"},{"1":"male","2":"BBall","3":"5.17","4":"8.00","5":"47.9","6":"16.4","7":"36","8":"25.93","9":"88.9","10":"14.53","11":"97.00","12":"209.4","13":"113.70"},{"1":"male","2":"BBall","3":"4.89","4":"7.50","5":"41.6","6":"14.4","7":"53","8":"23.69","9":"48.3","10":"8.51","11":"90.00","12":"203.4","13":"98.00"},{"1":"male","2":"BBall","3":"4.50","4":"9.20","5":"40.7","6":"13.7","7":"72","8":"25.38","9":"61.8","10":"10.64","11":"90.00","12":"198.7","13":"100.20"},{"1":"male","2":"BBall","3":"4.84","4":"8.30","5":"46.3","6":"15.9","7":"39","8":"22.68","9":"43.0","10":"7.06","11":"74.00","12":"187.1","13":"79.40"},{"1":"male","2":"BBall","3":"4.13","4":"8.90","5":"40.3","6":"13.5","7":"61","8":"23.36","9":"61.1","10":"8.87","11":"82.00","12":"196.6","13":"90.30"},{"1":"male","2":"BBall","3":"4.87","4":"7.40","5":"43.5","6":"15.0","7":"49","8":"22.44","9":"43.8","10":"7.88","11":"72.00","12":"186.1","13":"77.70"},{"1":"male","2":"BBall","3":"4.82","4":"6.40","5":"44.3","6":"14.8","7":"35","8":"22.57","9":"54.2","10":"9.20","11":"76.00","12":"192.8","13":"83.90"},{"1":"male","2":"BBall","3":"4.73","4":"6.70","5":"42.8","6":"14.9","7":"8","8":"19.81","9":"41.8","10":"7.19","11":"70.00","12":"195.2","13":"75.50"},{"1":"male","2":"T400m","3":"4.55","4":"5.55","5":"42.6","6":"14.4","7":"106","8":"21.19","9":"34.1","10":"6.06","11":"57.00","12":"169.1","13":"60.60"},{"1":"male","2":"T400m","3":"4.71","4":"7.20","5":"43.6","6":"14.0","7":"32","8":"20.39","9":"30.5","10":"5.63","11":"67.00","12":"186.6","13":"71.00"},{"1":"male","2":"T400m","3":"4.93","4":"7.30","5":"46.2","6":"15.1","7":"41","8":"21.12","9":"34.0","10":"6.59","11":"67.00","12":"184.4","13":"71.80"},{"1":"male","2":"T400m","3":"5.21","4":"7.50","5":"47.5","6":"16.5","7":"20","8":"21.89","9":"46.7","10":"9.50","11":"70.00","12":"187.3","13":"76.80"},{"1":"male","2":"Field","3":"5.09","4":"8.90","5":"46.3","6":"15.4","7":"44","8":"29.97","9":"71.1","10":"13.97","11":"88.00","12":"185.1","13":"102.70"},{"1":"male","2":"Field","3":"5.11","4":"9.60","5":"48.2","6":"16.7","7":"103","8":"27.39","9":"65.9","10":"11.66","11":"83.00","12":"185.5","13":"94.25"},{"1":"male","2":"Field","3":"4.94","4":"6.30","5":"45.7","6":"15.5","7":"50","8":"23.11","9":"34.3","10":"6.43","11":"74.00","12":"184.9","13":"79.00"},{"1":"male","2":"T400m","3":"4.87","4":"6.30","5":"45.8","6":"16.1","7":"41","8":"21.75","9":"34.6","10":"6.99","11":"62.00","12":"175.0","13":"66.60"},{"1":"male","2":"T400m","3":"4.41","4":"4.50","5":"44.2","6":"15.0","7":"101","8":"20.89","9":"31.8","10":"6.00","11":"67.00","12":"185.4","13":"71.80"},{"1":"male","2":"T400m","3":"4.86","4":"3.90","5":"44.9","6":"15.4","7":"73","8":"22.83","9":"34.5","10":"6.56","11":"70.00","12":"181.0","13":"74.80"},{"1":"male","2":"T400m","3":"4.91","4":"9.00","5":"46.3","6":"15.4","7":"56","8":"22.02","9":"31.0","10":"6.03","11":"64.00","12":"176.0","13":"68.20"},{"1":"male","2":"T400m","3":"4.93","4":"7.30","5":"45.2","6":"15.8","7":"74","8":"20.07","9":"32.6","10":"6.33","11":"58.00","12":"176.2","13":"62.30"},{"1":"male","2":"T400m","3":"4.20","4":"4.50","5":"41.2","6":"14.3","7":"58","8":"20.15","9":"31.5","10":"6.82","11":"57.00","12":"174.0","13":"61.00"},{"1":"male","2":"T400m","3":"5.10","4":"6.10","5":"45.3","6":"14.9","7":"87","8":"21.24","9":"32.6","10":"6.20","11":"73.00","12":"191.0","13":"77.50"},{"1":"male","2":"T400m","3":"4.50","4":"6.10","5":"42.2","6":"14.7","7":"139","8":"19.63","9":"31.0","10":"5.93","11":"54.00","12":"171.0","13":"57.40"},{"1":"male","2":"TSprnt","3":"4.89","4":"5.80","5":"45.5","6":"15.6","7":"82","8":"23.58","9":"28.0","10":"5.80","11":"67.00","12":"174.0","13":"71.40"},{"1":"male","2":"TSprnt","3":"5.13","4":"4.00","5":"44.1","6":"15.2","7":"87","8":"21.65","9":"33.7","10":"6.56","11":"66.00","12":"180.2","13":"70.30"},{"1":"male","2":"TSprnt","3":"4.88","4":"4.30","5":"45.6","6":"15.5","7":"80","8":"25.17","9":"30.3","10":"6.76","11":"75.00","12":"178.5","13":"80.20"},{"1":"male","2":"Field","3":"5.00","4":"8.20","5":"46.8","6":"14.7","7":"67","8":"23.25","9":"38.0","10":"7.22","11":"78.00","12":"190.3","13":"84.20"},{"1":"male","2":"Field","3":"5.48","4":"4.60","5":"49.4","6":"18.0","7":"132","8":"32.52","9":"55.7","10":"8.51","11":"102.00","12":"185.0","13":"111.30"},{"1":"male","2":"Field","3":"5.93","4":"6.40","5":"49.1","6":"16.1","7":"43","8":"22.59","9":"37.5","10":"7.72","11":"74.00","12":"189.0","13":"80.70"},{"1":"male","2":"Field","3":"5.01","4":"8.90","5":"46.0","6":"15.9","7":"212","8":"30.18","9":"112.5","10":"19.94","11":"78.00","12":"180.1","13":"97.90"},{"1":"male","2":"Field","3":"5.48","4":"6.20","5":"48.2","6":"16.3","7":"94","8":"34.42","9":"82.7","10":"13.91","11":"106.00","12":"189.2","13":"123.20"},{"1":"male","2":"TSprnt","3":"5.16","4":"8.40","5":"44.4","6":"15.5","7":"213","8":"21.86","9":"29.7","10":"6.10","11":"68.00","12":"182.6","13":"72.90"},{"1":"male","2":"TSprnt","3":"4.64","4":"9.00","5":"42.9","6":"14.9","7":"122","8":"23.99","9":"38.9","10":"7.52","11":"77.00","12":"186.0","13":"83.00"},{"1":"male","2":"TSprnt","3":"6.72","4":"7.10","5":"59.7","6":"19.2","7":"76","8":"24.81","9":"44.8","10":"9.56","11":"69.00","12":"174.9","13":"75.90"},{"1":"male","2":"T400m","3":"4.83","4":"6.60","5":"43.8","6":"14.3","7":"53","8":"21.68","9":"30.9","10":"6.06","11":"66.00","12":"180.6","13":"70.70"},{"1":"male","2":"T400m","3":"5.34","4":"7.60","5":"48.3","6":"16.2","7":"91","8":"21.04","9":"44.0","10":"7.35","11":"62.00","12":"178.6","13":"67.10"},{"1":"male","2":"T400m","3":"5.13","4":"4.60","5":"45.3","6":"16.8","7":"36","8":"23.12","9":"37.5","10":"6.00","11":"65.00","12":"173.0","13":"69.20"},{"1":"male","2":"T400m","3":"4.68","4":"4.80","5":"43.0","6":"14.8","7":"101","8":"20.76","9":"37.6","10":"6.92","11":"62.00","12":"179.7","13":"67.05"},{"1":"male","2":"TSprnt","3":"5.00","4":"5.20","5":"45.1","6":"15.1","7":"184","8":"23.13","9":"31.7","10":"6.33","11":"66.00","12":"174.6","13":"70.50"},{"1":"male","2":"TSprnt","3":"4.99","4":"7.20","5":"41.4","6":"14.9","7":"44","8":"22.35","9":"36.6","10":"5.90","11":"67.00","12":"178.0","13":"70.80"},{"1":"male","2":"T400m","3":"5.49","4":"5.90","5":"47.7","6":"15.9","7":"66","8":"22.28","9":"48.0","10":"8.84","11":"65.00","12":"178.5","13":"71.00"},{"1":"male","2":"TSprnt","3":"5.59","4":"7.90","5":"49.7","6":"17.2","7":"220","8":"23.55","9":"41.9","10":"8.94","11":"63.00","12":"171.3","13":"69.10"},{"1":"male","2":"T400m","3":"5.03","4":"6.60","5":"44.7","6":"15.9","7":"191","8":"19.85","9":"30.9","10":"6.53","11":"59.00","12":"178.0","13":"62.90"},{"1":"male","2":"TSprnt","3":"5.50","4":"6.40","5":"48.1","6":"16.5","7":"40","8":"26.51","9":"52.8","10":"9.40","11":"86.00","12":"189.1","13":"94.80"},{"1":"male","2":"Field","3":"5.11","4":"9.30","5":"45.4","6":"15.8","7":"189","8":"24.78","9":"43.2","10":"8.18","11":"87.00","12":"195.4","13":"94.60"},{"1":"male","2":"Field","3":"4.96","4":"8.30","5":"45.3","6":"15.7","7":"141","8":"33.73","9":"113.5","10":"17.41","11":"89.00","12":"179.1","13":"108.20"},{"1":"male","2":"Field","3":"5.01","4":"8.90","5":"46.0","6":"15.9","7":"212","8":"30.18","9":"96.9","10":"18.08","11":"80.00","12":"180.1","13":"97.90"},{"1":"male","2":"Field","3":"5.11","4":"8.70","5":"46.5","6":"16.3","7":"97","8":"23.31","9":"49.3","10":"9.86","11":"68.00","12":"179.6","13":"75.20"},{"1":"male","2":"TSprnt","3":"5.69","4":"10.80","5":"50.5","6":"18.5","7":"53","8":"24.51","9":"42.3","10":"7.29","11":"69.00","12":"174.7","13":"74.80"},{"1":"male","2":"WPolo","3":"4.63","4":"9.10","5":"42.1","6":"14.4","7":"126","8":"25.37","9":"96.3","10":"18.72","11":"77.00","12":"192.7","13":"94.20"},{"1":"male","2":"WPolo","3":"4.91","4":"10.20","5":"45.0","6":"15.2","7":"234","8":"23.67","9":"56.5","10":"10.12","11":"68.00","12":"179.3","13":"76.10"},{"1":"male","2":"WPolo","3":"4.95","4":"7.50","5":"44.5","6":"15.0","7":"50","8":"24.28","9":"105.7","10":"19.17","11":"77.00","12":"197.5","13":"94.70"},{"1":"male","2":"WPolo","3":"5.34","4":"10.00","5":"46.8","6":"16.2","7":"94","8":"25.82","9":"100.7","10":"17.24","11":"71.00","12":"182.7","13":"86.20"},{"1":"male","2":"WPolo","3":"5.16","4":"12.90","5":"47.6","6":"15.6","7":"156","8":"21.93","9":"56.8","10":"9.89","11":"72.00","12":"190.5","13":"79.60"},{"1":"male","2":"WPolo","3":"5.29","4":"12.70","5":"48.0","6":"16.2","7":"124","8":"23.38","9":"75.9","10":"13.06","11":"74.00","12":"191.0","13":"85.30"},{"1":"male","2":"WPolo","3":"5.02","4":"6.10","5":"43.6","6":"14.8","7":"87","8":"23.07","9":"52.8","10":"8.84","11":"68.00","12":"179.6","13":"74.40"},{"1":"male","2":"WPolo","3":"5.01","4":"9.80","5":"46.5","6":"15.8","7":"97","8":"25.21","9":"47.8","10":"8.87","11":"85.00","12":"192.6","13":"93.50"},{"1":"male","2":"WPolo","3":"5.03","4":"7.50","5":"43.6","6":"14.4","7":"102","8":"23.25","9":"76.0","10":"14.69","11":"75.00","12":"194.1","13":"87.60"},{"1":"male","2":"WPolo","3":"5.25","4":"7.40","5":"47.3","6":"15.8","7":"55","8":"22.93","9":"61.2","10":"8.64","11":"78.00","12":"193.0","13":"85.40"},{"1":"male","2":"WPolo","3":"5.08","4":"8.50","5":"46.3","6":"15.6","7":"117","8":"26.86","9":"75.6","10":"14.98","11":"86.00","12":"193.9","13":"101.00"},{"1":"male","2":"WPolo","3":"5.04","4":"6.00","5":"45.9","6":"15.0","7":"52","8":"21.26","9":"43.3","10":"7.82","11":"69.00","12":"187.7","13":"74.90"},{"1":"male","2":"WPolo","3":"4.63","4":"14.30","5":"44.8","6":"15.0","7":"133","8":"25.43","9":"49.5","10":"8.97","11":"79.00","12":"185.3","13":"87.30"},{"1":"male","2":"WPolo","3":"5.11","4":"7.00","5":"47.7","6":"15.8","7":"214","8":"24.54","9":"70.0","10":"11.63","11":"80.00","12":"191.5","13":"90.00"},{"1":"male","2":"WPolo","3":"5.34","4":"6.20","5":"49.8","6":"17.2","7":"143","8":"27.79","9":"75.7","10":"13.49","11":"82.00","12":"184.6","13":"94.70"},{"1":"male","2":"WPolo","3":"4.86","4":"8.90","5":"46.9","6":"15.8","7":"65","8":"23.58","9":"57.7","10":"10.25","11":"68.00","12":"179.9","13":"76.30"},{"1":"male","2":"WPolo","3":"4.90","4":"7.60","5":"45.6","6":"16.0","7":"90","8":"27.56","9":"67.2","10":"11.79","11":"82.00","12":"183.9","13":"93.20"},{"1":"male","2":"Tennis","3":"5.66","4":"8.30","5":"50.2","6":"17.7","7":"38","8":"23.76","9":"56.5","10":"10.05","11":"72.00","12":"183.5","13":"80.00"},{"1":"male","2":"Tennis","3":"5.03","4":"6.40","5":"42.7","6":"14.3","7":"122","8":"22.01","9":"47.6","10":"8.51","11":"68.00","12":"183.1","13":"73.80"},{"1":"male","2":"Tennis","3":"4.97","4":"8.80","5":"43.0","6":"14.9","7":"233","8":"22.34","9":"60.4","10":"11.50","11":"63.00","12":"178.4","13":"71.10"},{"1":"male","2":"Tennis","3":"5.38","4":"6.30","5":"46.0","6":"15.7","7":"32","8":"21.07","9":"34.9","10":"6.26","11":"72.00","12":"190.8","13":"76.70"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">athletes</a></code></pre></div>
+<pre><code>## # A tibble: 202 x 13
+##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
+##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 female Netball  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.  59.9
+##  2 female Netball  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.  63  
+##  3 female Netball  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176   66.3
+##  4 female Netball  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.  60.7
+##  5 female Netball  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183   72.9
+##  6 female Netball  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.  67.9
+##  7 female Netball  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.  67.5
+##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
+##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
+## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
+## # … with 192 more rows</code></pre>
 <p>I listed the data to check that I had it right, but I didn’t ask you
 to. (If you didn’t have it right, that will show up soon enough.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -463,9 +533,9 @@ conclude about the shape of the distribution? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>As you would expect:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span></a>
-<a class="sourceLine" id="cb48-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-46-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span></a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>This is almost a classic right skew: the values are too bunched up at
 the bottom and too spread out at the top. The curved shape should be
 making you think “skewed” and then you can work out which way it’s
@@ -480,9 +550,9 @@ plot for each sport, collected together on one plot.</li>
 <p>Solution</p>
 <p>Your previous plot had all the sports mixed together. To that
 you add something that will put each sport in its own facet:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">ggplot</span>(athletes,<span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
-<a class="sourceLine" id="cb49-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sport)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-47-1.png" width="672"  /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">ggplot</span>(athletes,<span class="kw">aes</span>(<span class="dt">sample=</span>Ferr))<span class="op">+</span><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()<span class="op">+</span></a>
+<a class="sourceLine" id="cb23-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sport)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Looking at the plots in the previous part, would you say
@@ -515,14 +585,82 @@ Decide what you think and then discuss how you see it.</p>
 
 </div>
 </div>
-<p style="text-align: center;">
-<a href="matched-pairs-t-and-sign-test.html"><button class="btn btn-default">Previous</button></a>
-<a href="analysis-of-variance.html"><button class="btn btn-default">Next</button></a>
-</p>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>If you have studied a thing called kurtosis, the fourth moment about the mean, you’ll know that this measures <em>both</em> tail length <em>and</em> peakedness, so a short-tailed distribution also has a strong peak. Or, maybe, in this case, two strong peaks.<a href="normal-quantile-plots.html#fnref1" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
-</div>
+            </section>
 
+          </div>
+        </div>
+      </div>
+<a href="matched-pairs-t-and-sign-test.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="analysis-of-variance.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pasias.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
 
-
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
+
 </html>
