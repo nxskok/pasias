@@ -2,61 +2,79 @@
 <html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta property="og:title" content="Chapter 2 Reading in data | Problems and Solutions in Applied Statistics" />
-<meta property="og:type" content="book" />
-<meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Reading in data | Problems and Solutions in Applied Statistics</title>
+  <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-<meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-<meta name="github-repo" content="nxskok/pasias" />
+  <meta property="og:title" content="Chapter 2 Reading in data | Problems and Solutions in Applied Statistics" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
+  
+  <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  <meta name="github-repo" content="nxskok/pasias" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Reading in data | Problems and Solutions in Applied Statistics" />
+  
+  <meta name="twitter:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
+  
 
 <meta name="author" content="Ken Butler" />
 
+
 <meta name="date" content="2021-04-26" />
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-</script>
-  <script src="/usr/share/javascript/mathjax/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="getting-used-to-r-and-r-studio.html"/>
+<link rel="next" href="drawing-graphs.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
-<meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics">
-
-<title>Chapter 2 Reading in data | Problems and Solutions in Applied Statistics</title>
-
-<link href="libs/tufte-css-2015.12.29/tufte-fonts.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-background.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte-italics.css" rel="stylesheet" />
-<link href="libs/tufte-css-2015.12.29/tufte.css" rel="stylesheet" />
-<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
-<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -65,9 +83,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -100,100 +118,117 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-
-<link rel="stylesheet" href="toc.css" type="text/css" />
-
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
 
 
 
-<div class="row">
-<div class="col-sm-12">
-<div id="TOC">
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Problems and Solutions in Applied Statistics</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
 <ul>
-<li class="has-sub"><a href="index.html#introduction">Introduction</a><ul>
-<li><a href="index.html#packages-used-somewhere-in-this-book">Packages used somewhere in this book</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li><a href="getting-used-to-r-and-r-studio.html#getting-used-to-r-and-r-studio"><span class="toc-section-number">1</span> Getting used to R and R Studio</a></li>
-<li class="has-sub"><a href="reading-in-data.html#reading-in-data"><span class="toc-section-number">2</span> Reading in data</a><ul>
-<li><a href="reading-in-data.html#orange-juice"><span class="toc-section-number">2.1</span> Orange juice</a></li>
-<li><a href="reading-in-data.html#making-soap"><span class="toc-section-number">2.2</span> Making soap</a></li>
-<li><a href="reading-in-data.html#handling-shipments"><span class="toc-section-number">2.3</span> Handling shipments</a></li>
-<li><a href="reading-in-data.html#orange-juice-1"><span class="toc-section-number">2.4</span> Orange juice</a></li>
-<li><a href="reading-in-data.html#making-soap-1"><span class="toc-section-number">2.5</span> Making soap</a></li>
-<li><a href="reading-in-data.html#handling-shipments-1"><span class="toc-section-number">2.6</span> Handling shipments</a></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
+<li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="reading-in-data.html"><a href="reading-in-data.html#orange-juice"><i class="fa fa-check"></i><b>2.1</b> Orange juice</a></li>
+<li class="chapter" data-level="2.2" data-path="reading-in-data.html"><a href="reading-in-data.html#making-soap"><i class="fa fa-check"></i><b>2.2</b> Making soap</a></li>
+<li class="chapter" data-level="2.3" data-path="reading-in-data.html"><a href="reading-in-data.html#handling-shipments"><i class="fa fa-check"></i><b>2.3</b> Handling shipments</a></li>
+<li class="chapter" data-level="2.4" data-path="reading-in-data.html"><a href="reading-in-data.html#orange-juice-1"><i class="fa fa-check"></i><b>2.4</b> Orange juice</a></li>
+<li class="chapter" data-level="2.5" data-path="reading-in-data.html"><a href="reading-in-data.html#making-soap-1"><i class="fa fa-check"></i><b>2.5</b> Making soap</a></li>
+<li class="chapter" data-level="2.6" data-path="reading-in-data.html"><a href="reading-in-data.html#handling-shipments-1"><i class="fa fa-check"></i><b>2.6</b> Handling shipments</a></li>
 </ul></li>
-<li><a href="drawing-graphs.html#drawing-graphs"><span class="toc-section-number">3</span> Drawing graphs</a></li>
-<li><a href="data-exploration.html#data-exploration"><span class="toc-section-number">4</span> Data exploration</a></li>
-<li class="has-sub"><a href="working-with-dataframes.html#working-with-dataframes"><span class="toc-section-number">5</span> Working with dataframes</a><ul>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data"><span class="toc-section-number">5.1</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars"><span class="toc-section-number">5.2</span> Cars</a></li>
-<li><a href="working-with-dataframes.html#tidying-the-jays-data-1"><span class="toc-section-number">5.3</span> Tidying the Jays data</a></li>
-<li><a href="working-with-dataframes.html#cars-1"><span class="toc-section-number">5.4</span> Cars</a></li>
+<li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
+<li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
+<li class="chapter" data-level="5" data-path="working-with-dataframes.html"><a href="working-with-dataframes.html"><i class="fa fa-check"></i><b>5</b> Working with dataframes</a></li>
+<li class="chapter" data-level="6" data-path="one-sample-inference.html"><a href="one-sample-inference.html"><i class="fa fa-check"></i><b>6</b> One-sample inference</a></li>
+<li class="chapter" data-level="7" data-path="two-sample-inference.html"><a href="two-sample-inference.html"><i class="fa fa-check"></i><b>7</b> Two-sample inference</a></li>
+<li class="chapter" data-level="8" data-path="power-and-sample-size.html"><a href="power-and-sample-size.html"><i class="fa fa-check"></i><b>8</b> Power and sample size</a></li>
+<li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
+<li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
+<li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
+<li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
+<li class="chapter" data-level="12.4" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality-1"><i class="fa fa-check"></i><b>12.4</b> Ferritin and normality</a></li>
 </ul></li>
-<li><a href="one-sample-inference.html#one-sample-inference"><span class="toc-section-number">6</span> One-sample inference</a></li>
-<li><a href="two-sample-inference.html#two-sample-inference"><span class="toc-section-number">7</span> Two-sample inference</a></li>
-<li><a href="power-and-sample-size.html#power-and-sample-size"><span class="toc-section-number">8</span> Power and sample size</a></li>
-<li><a href="the-sign-test.html#the-sign-test"><span class="toc-section-number">9</span> The sign test</a></li>
-<li><a href="moods-median-test.html#moods-median-test"><span class="toc-section-number">10</span> Mood’s median test</a></li>
-<li><a href="matched-pairs-t-and-sign-test.html#matched-pairs-t-and-sign-test"><span class="toc-section-number">11</span> Matched pairs t and sign test</a></li>
-<li class="has-sub"><a href="normal-quantile-plots.html#normal-quantile-plots"><span class="toc-section-number">12</span> Normal quantile plots</a><ul>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><span class="toc-section-number">12.1</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality"><span class="toc-section-number">12.2</span> Ferritin and normality</a></li>
-<li><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><span class="toc-section-number">12.3</span> Lengths of heliconia flowers</a></li>
-<li><a href="normal-quantile-plots.html#ferritin-and-normality-1"><span class="toc-section-number">12.4</span> Ferritin and normality</a></li>
+<li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
+<li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
+<li class="chapter" data-level="15" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>15</b> Tidying data</a></li>
+<li class="chapter" data-level="16" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>16</b> Simple regression</a></li>
+<li class="chapter" data-level="17" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>17</b> Multiple regression</a></li>
+<li class="chapter" data-level="18" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>18</b> Regression with categorical variables</a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>18.1</b> Crickets revisited</a></li>
+<li class="chapter" data-level="18.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>18.2</b> Pulse rates and marching</a></li>
+<li class="chapter" data-level="18.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>18.3</b> Crickets revisited</a></li>
+<li class="chapter" data-level="18.4" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1"><i class="fa fa-check"></i><b>18.4</b> Pulse rates and marching</a></li>
 </ul></li>
-<li><a href="analysis-of-variance.html#analysis-of-variance"><span class="toc-section-number">13</span> Analysis of variance</a></li>
-<li><a href="writing-reports.html#writing-reports"><span class="toc-section-number">14</span> Writing reports</a></li>
-<li><a href="tidying-data.html#tidying-data"><span class="toc-section-number">15</span> Tidying data</a></li>
-<li><a href="simple-regression.html#simple-regression"><span class="toc-section-number">16</span> Simple regression</a></li>
-<li><a href="multiple-regression.html#multiple-regression"><span class="toc-section-number">17</span> Multiple regression</a></li>
-<li class="has-sub"><a href="regression-with-categorical-variables.html#regression-with-categorical-variables"><span class="toc-section-number">18</span> Regression with categorical variables</a><ul>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited"><span class="toc-section-number">18.1</span> Crickets revisited</a></li>
-<li><a href="regression-with-categorical-variables.html#crickets-revisited-1"><span class="toc-section-number">18.2</span> Crickets revisited</a></li>
+<li class="chapter" data-level="19" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>19</b> Dates and times</a></li>
+<li class="chapter" data-level="20" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>20</b> Functions</a></li>
+<li class="chapter" data-level="21" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>21</b> Vector and matrix algebra</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>21.1</b> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="21.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>21.2</b> Heights and foot lengths again</a></li>
 </ul></li>
-<li><a href="dates-and-times.html#dates-and-times"><span class="toc-section-number">19</span> Dates and times</a></li>
-<li><a href="functions.html#functions"><span class="toc-section-number">20</span> Functions</a></li>
-<li class="has-sub"><a href="vector-and-matrix-algebra.html#vector-and-matrix-algebra"><span class="toc-section-number">21</span> Vector and matrix algebra</a><ul>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><span class="toc-section-number">21.1</span> Heights and foot lengths again</a></li>
-<li><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><span class="toc-section-number">21.2</span> Heights and foot lengths again</a></li>
+<li class="chapter" data-level="22" data-path="the-bootstrap.html"><a href="the-bootstrap.html"><i class="fa fa-check"></i><b>22</b> The Bootstrap</a></li>
+<li class="chapter" data-level="23" data-path="bayesian-statistics-with-stan.html"><a href="bayesian-statistics-with-stan.html"><i class="fa fa-check"></i><b>23</b> Bayesian Statistics with Stan</a></li>
+<li class="chapter" data-level="24" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i><b>24</b> Logistic regression</a></li>
+<li class="chapter" data-level="25" data-path="logistic-regression-with-ordinal-response.html"><a href="logistic-regression-with-ordinal-response.html"><i class="fa fa-check"></i><b>25</b> Logistic regression with ordinal response</a></li>
+<li class="chapter" data-level="26" data-path="logistic-regression-with-nominal-response.html"><a href="logistic-regression-with-nominal-response.html"><i class="fa fa-check"></i><b>26</b> Logistic regression with nominal response</a></li>
+<li class="chapter" data-level="27" data-path="survival-analysis.html"><a href="survival-analysis.html"><i class="fa fa-check"></i><b>27</b> Survival analysis</a></li>
+<li class="chapter" data-level="28" data-path="analysis-of-variance-revisited.html"><a href="analysis-of-variance-revisited.html"><i class="fa fa-check"></i><b>28</b> Analysis of variance revisited</a></li>
+<li class="chapter" data-level="29" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>29</b> Analysis of covariance</a></li>
+<li class="chapter" data-level="30" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html"><i class="fa fa-check"></i><b>30</b> Multivariate analysis of variance</a></li>
+<li class="chapter" data-level="31" data-path="repeated-measures.html"><a href="repeated-measures.html"><i class="fa fa-check"></i><b>31</b> Repeated measures</a></li>
+<li class="chapter" data-level="32" data-path="discriminant-analysis.html"><a href="discriminant-analysis.html"><i class="fa fa-check"></i><b>32</b> Discriminant analysis</a></li>
+<li class="chapter" data-level="33" data-path="hierarchical-cluster-analysis.html"><a href="hierarchical-cluster-analysis.html"><i class="fa fa-check"></i><b>33</b> Hierarchical cluster analysis</a></li>
+<li class="chapter" data-level="34" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>34</b> K-means cluster analysis</a></li>
+<li class="chapter" data-level="35" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>35</b> Drawing maps with Leaflet</a></li>
+<li class="chapter" data-level="36" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>36</b> Multidimensional Scaling</a></li>
+<li class="chapter" data-level="37" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>37</b> Principal Components</a>
+<ul>
+<li class="chapter" data-level="37.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>37.1</b> The weather, somewhere</a></li>
+<li class="chapter" data-level="37.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>37.2</b> The weather, somewhere</a></li>
 </ul></li>
-<li><a href="the-bootstrap.html#the-bootstrap"><span class="toc-section-number">22</span> The Bootstrap</a></li>
-<li><a href="bayesian-statistics-with-stan.html#bayesian-statistics-with-stan"><span class="toc-section-number">23</span> Bayesian Statistics with Stan</a></li>
-<li><a href="logistic-regression.html#logistic-regression"><span class="toc-section-number">24</span> Logistic regression</a></li>
-<li><a href="logistic-regression-with-ordinal-response.html#logistic-regression-with-ordinal-response"><span class="toc-section-number">25</span> Logistic regression with ordinal response</a></li>
-<li><a href="logistic-regression-with-nominal-response.html#logistic-regression-with-nominal-response"><span class="toc-section-number">26</span> Logistic regression with nominal response</a></li>
-<li><a href="survival-analysis.html#survival-analysis"><span class="toc-section-number">27</span> Survival analysis</a></li>
-<li><a href="analysis-of-variance-revisited.html#analysis-of-variance-revisited"><span class="toc-section-number">28</span> Analysis of variance revisited</a></li>
-<li><a href="analysis-of-covariance.html#analysis-of-covariance"><span class="toc-section-number">29</span> Analysis of covariance</a></li>
-<li><a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance"><span class="toc-section-number">30</span> Multivariate analysis of variance</a></li>
-<li><a href="repeated-measures.html#repeated-measures"><span class="toc-section-number">31</span> Repeated measures</a></li>
-<li><a href="discriminant-analysis.html#discriminant-analysis"><span class="toc-section-number">32</span> Discriminant analysis</a></li>
-<li><a href="hierarchical-cluster-analysis.html#hierarchical-cluster-analysis"><span class="toc-section-number">33</span> Hierarchical cluster analysis</a></li>
-<li><a href="k-means-cluster-analysis.html#k-means-cluster-analysis"><span class="toc-section-number">34</span> K-means cluster analysis</a></li>
-<li><a href="drawing-maps-with-leaflet.html#drawing-maps-with-leaflet"><span class="toc-section-number">35</span> Drawing maps with Leaflet</a></li>
-<li><a href="multidimensional-scaling.html#multidimensional-scaling"><span class="toc-section-number">36</span> Multidimensional Scaling</a></li>
-<li class="has-sub"><a href="principal-components.html#principal-components"><span class="toc-section-number">37</span> Principal Components</a><ul>
-<li><a href="principal-components.html#the-weather-somewhere"><span class="toc-section-number">37.1</span> The weather, somewhere</a></li>
-<li><a href="principal-components.html#the-weather-somewhere-1"><span class="toc-section-number">37.2</span> The weather, somewhere</a></li>
-</ul></li>
-<li><a href="factor-analysis.html#factor-analysis"><span class="toc-section-number">38</span> Factor Analysis</a></li>
-<li><a href="frequency-table-analysis.html#frequency-table-analysis"><span class="toc-section-number">39</span> Frequency table analysis</a></li>
+<li class="chapter" data-level="38" data-path="factor-analysis.html"><a href="factor-analysis.html"><i class="fa fa-check"></i><b>38</b> Factor Analysis</a></li>
+<li class="chapter" data-level="39" data-path="frequency-table-analysis.html"><a href="frequency-table-analysis.html"><i class="fa fa-check"></i><b>39</b> Frequency table analysis</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
 </ul>
-</div>
-</div>
-</div>
-<div class="row">
-<div class="col-sm-12">
-<div id="reading-in-data" class="section level1">
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Problems and Solutions in Applied Statistics</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="reading-in-data" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Reading in data</h1>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<pre><code>## Warning: package &#39;MASS&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;nnet&#39; was built under R version 4.0.5</code></pre>
-<pre><code>## Warning: package &#39;Matrix&#39; was built under R version 4.0.5</code></pre>
-<div id="orange-juice" class="section level2">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="reading-in-data.html#cb1-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
+<div id="orange-juice" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Orange juice</h2>
 <p>The quality of orange juice produced by a manufacturer
 (identity unknown) is constantly being monitored. The manufacturer has
@@ -215,7 +250,7 @@ have data for all 24 runs?</p></li>
 come from? How did R know where to get them from?</p></li>
 </ol>
 </div>
-<div id="making-soap" class="section level2">
+<div id="making-soap" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Making soap</h2>
 <p>A company operates two production lines in a factory for
 making soap bars. The production lines are
@@ -230,7 +265,7 @@ can no longer be made into soap bars and will have to be thrown away).</p>
 rows. Are there? What columns are there?</p></li>
 </ol>
 </div>
-<div id="handling-shipments" class="section level2">
+<div id="handling-shipments" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Handling shipments</h2>
 <p>A company called Global Electronics from
 time to time imports shipments of a certain large part used as a
@@ -247,7 +282,7 @@ the <code>warehouse</code> (A or B) that handled each shipment.</p>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="orange-juice-1" class="section level2">
+<div id="orange-juice-1" class="section level2" number="2.4">
 <h2><span class="header-section-number">2.4</span> Orange juice</h2>
 <p>The quality of orange juice produced by a manufacturer
 (identity unknown) is constantly being monitored. The manufacturer has
@@ -266,15 +301,15 @@ into a “tibble”.</li>
 </ol>
 <p>Solution</p>
 <p>Start with this (almost always):</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="reading-in-data.html#cb2-1"></a><span class="kw">library</span>(tidyverse)</span></code></pre></div>
 <p>The appropriate function, the data values being separated by a space,
 will be <code>read_delim</code>. Put the URL as the first thing in
 <code>read_delim</code>, or (better) define it into a variable
-first:<label for="tufte-sn-1" class="margin-toggle sidenote-number">1</label><input type="checkbox" id="tufte-sn-1" class="margin-toggle"><span class="sidenote"><span class="sidenote-number">1</span> I say “better” because otherwise the read line gets rather long. This way you read it as “the URL is some long thing that I don’t care about especially, and I what I need to do is to read the data from that URL, separated by spaces.”</span></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ojuice.txt&quot;</span></a>
-<a class="sourceLine" id="cb6-2" title="2">juice &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+first:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="reading-in-data.html#cb3-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ojuice.txt&quot;</span></span>
+<span id="cb3-2"><a href="reading-in-data.html#cb3-2"></a>juice &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────────────────
 ## cols(
 ##   run = col_double(),
 ##   sweetness = col_double(),
@@ -301,12 +336,7 @@ a “tibble”, which is what <code>read_delim</code> reads in,
 you’ll only actually see the first 10 lines, but it will tell
 you how many lines there are altogether, and you can click on
 the appropriate thing to see the rest of it.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">juice</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["run"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["sweetness"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["pectin"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"5.2","3":"220"},{"1":"2","2":"5.5","3":"227"},{"1":"3","2":"6.0","3":"259"},{"1":"4","2":"5.9","3":"210"},{"1":"5","2":"5.8","3":"224"},{"1":"6","2":"6.0","3":"215"},{"1":"7","2":"5.8","3":"231"},{"1":"8","2":"5.6","3":"268"},{"1":"9","2":"5.6","3":"239"},{"1":"10","2":"5.9","3":"212"},{"1":"11","2":"5.4","3":"410"},{"1":"12","2":"5.6","3":"256"},{"1":"13","2":"5.8","3":"306"},{"1":"14","2":"5.5","3":"259"},{"1":"15","2":"5.3","3":"284"},{"1":"16","2":"5.3","3":"383"},{"1":"17","2":"5.7","3":"271"},{"1":"18","2":"5.5","3":"264"},{"1":"19","2":"5.7","3":"227"},{"1":"20","2":"5.3","3":"263"},{"1":"21","2":"5.9","3":"232"},{"1":"22","2":"5.8","3":"220"},{"1":"23","2":"5.8","3":"246"},{"1":"24","2":"5.9","3":"241"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="reading-in-data.html#cb5-1"></a>juice</span></code></pre></div>
 <p>I appear to have all the data. If you want further convincing, click
 Next a couple of times (on yours) to be sure that the runs go down to
 number 24.</p>
@@ -337,21 +367,16 @@ with file <code>a.txt</code> thus:</p>
 5 6</code></pre>
 <p>you could read the same data but call the columns <code>x</code> and
 <code>y</code> thus:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="dt">skip =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="reading-in-data.html#cb7-1"></a><span class="kw">read_delim</span>(<span class="st">&quot;a.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>), <span class="dt">skip =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────────────────
 ## cols(
 ##   x = col_double(),
 ##   y = col_double()
 ## )</code></pre>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["x"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["y"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"1","2":"2"},{"1":"3","2":"4"},{"1":"5","2":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="making-soap-1" class="section level2">
+<div id="making-soap-1" class="section level2" number="2.5">
 <h2><span class="header-section-number">2.5</span> Making soap</h2>
 <p>A company operates two production lines in a factory for
 making soap bars. The production lines are
@@ -365,22 +390,17 @@ can no longer be made into soap bars and will have to be thrown away).</p>
 </ol>
 <p>Solution</p>
 <p>Read directly from the URL, most easily:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/soap.txt&quot;</span></a>
-<a class="sourceLine" id="cb12-2" title="2">soap &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="reading-in-data.html#cb9-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/soap.txt&quot;</span></span>
+<span id="cb9-2"><a href="reading-in-data.html#cb9-2"></a>soap &lt;-<span class="st"> </span><span class="kw">read_delim</span>(url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────────────────
 ## cols(
 ##   case = col_double(),
 ##   scrap = col_double(),
 ##   speed = col_double(),
 ##   line = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">soap</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["case"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["scrap"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["speed"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["line"],"name":[4],"type":["chr"],"align":["left"]}],"data":[{"1":"1","2":"218","3":"100","4":"a"},{"1":"2","2":"248","3":"125","4":"a"},{"1":"3","2":"360","3":"220","4":"a"},{"1":"4","2":"351","3":"205","4":"a"},{"1":"5","2":"470","3":"300","4":"a"},{"1":"6","2":"394","3":"255","4":"a"},{"1":"7","2":"332","3":"225","4":"a"},{"1":"8","2":"321","3":"175","4":"a"},{"1":"9","2":"410","3":"270","4":"a"},{"1":"10","2":"260","3":"170","4":"a"},{"1":"11","2":"241","3":"155","4":"a"},{"1":"12","2":"331","3":"190","4":"a"},{"1":"13","2":"275","3":"140","4":"a"},{"1":"14","2":"425","3":"290","4":"a"},{"1":"15","2":"367","3":"265","4":"a"},{"1":"16","2":"140","3":"105","4":"b"},{"1":"17","2":"277","3":"215","4":"b"},{"1":"18","2":"384","3":"270","4":"b"},{"1":"19","2":"341","3":"255","4":"b"},{"1":"20","2":"215","3":"175","4":"b"},{"1":"21","2":"180","3":"135","4":"b"},{"1":"22","2":"260","3":"200","4":"b"},{"1":"23","2":"361","3":"275","4":"b"},{"1":"24","2":"252","3":"155","4":"b"},{"1":"25","2":"422","3":"320","4":"b"},{"1":"26","2":"273","3":"190","4":"b"},{"1":"27","2":"410","3":"295","4":"b"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="reading-in-data.html#cb11-1"></a>soap</span></code></pre></div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>There should be 27
@@ -391,7 +411,7 @@ rows. Are there? What columns are there?</li>
 <p>This seems like an odd place to end this question, but later we’ll be using these data to draw some graphs.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="handling-shipments-1" class="section level2">
+<div id="handling-shipments-1" class="section level2" number="2.6">
 <h2><span class="header-section-number">2.6</span> Handling shipments</h2>
 <p>A company called Global Electronics from
 time to time imports shipments of a certain large part used as a
@@ -411,10 +431,10 @@ open as a spreadsheet, which is not really very helpful, since
 then it is not clear what to do with it. You could, I suppose,
 save it and upload it to R Studio Cloud, but it requires much less
 brainpower to open it directly from the URL:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/global.csv&quot;</span></a>
-<a class="sourceLine" id="cb15-2" title="2">shipments &lt;-<span class="st"> </span><span class="kw">read_csv</span>(url)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="reading-in-data.html#cb12-1"></a>url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/global.csv&quot;</span></span>
+<span id="cb12-2"><a href="reading-in-data.html#cb12-2"></a>shipments &lt;-<span class="st"> </span><span class="kw">read_csv</span>(url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ─────────────────────────────────────────────────
 ## cols(
 ##   warehouse = col_character(),
 ##   size = col_double(),
@@ -422,12 +442,7 @@ brainpower to open it directly from the URL:</p>
 ## )</code></pre>
 <p>If you display your data frame and it looks like this, you are good
 (you can give the data frame any name):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">shipments</a></code></pre></div>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["warehouse"],"name":[1],"type":["chr"],"align":["left"]},{"label":["size"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["cost"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"A","2":"225","3":"11.95"},{"1":"B","2":"350","3":"14.13"},{"1":"A","2":"150","3":"8.93"},{"1":"A","2":"200","3":"10.98"},{"1":"A","2":"175","3":"10.03"},{"1":"A","2":"180","3":"10.13"},{"1":"B","2":"325","3":"13.75"},{"1":"B","2":"290","3":"13.30"},{"1":"B","2":"400","3":"15.00"},{"1":"A","2":"125","3":"7.97"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="reading-in-data.html#cb14-1"></a>shipments</span></code></pre></div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Describe how many rows and columns your data frame has, and what they contain.</li>
@@ -442,14 +457,82 @@ warehouse it was handled at.</p>
 
 </div>
 </div>
-<p style="text-align: center;">
-<a href="getting-used-to-r-and-r-studio.html"><button class="btn btn-default">Previous</button></a>
-<a href="drawing-graphs.html"><button class="btn btn-default">Next</button></a>
-</p>
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>I say “better” because otherwise the read line gets rather long. This way you read it as “the URL is some long thing that I don’t care about especially, and I what I need to do is to read the data from that URL, separated by spaces.”<a href="reading-in-data.html#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
-</div>
+            </section>
 
+          </div>
+        </div>
+      </div>
+<a href="getting-used-to-r-and-r-studio.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="drawing-graphs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["pasias.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
 
-
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
+
 </html>
