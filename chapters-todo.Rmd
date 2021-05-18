@@ -47,4 +47,16 @@ d %>%
   mutate(thing = walk(chapter, ~bookdown::preview_chapter(.)))
 ```
 
+build all
+
+```{r}
+lines <- readLines("~/teaching/pasias/_bookdown.yml")
+lines %>% str_remove_all("\"") %>% 
+  str_remove_all(",") %>% 
+  enframe(name = NULL, value = "chapter") %>% 
+  filter(str_detect(chapter, "^[0-9][0-9]")) %>% 
+  rowwise() %>% 
+  slice(1:3) %>% 
+  mutate(thing = walk(chapter, ~bookdown::preview_chapter(.)))
+```
 
