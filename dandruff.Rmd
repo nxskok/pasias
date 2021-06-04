@@ -77,7 +77,7 @@ ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment, scales = "free")
 ```
 
-Given that the data are whole numbers, the distributions each appear close to the lines, indicating that the distributions are close to normal in shape.^[This is a way to write it if you suspect your reader won't remember what a normal quantile plot is, and by writing it this way you won't insult their intelligence if they \emph{do} remember after all. The other side benefit of writing it this way is that it shows \emph{your} understanding as well.] The distribution of the `PyrI` values is slightly long-tailed, but with over 100 observations in that group, this shape is not enough to invalidate the normality assumption.^[If you have any doubts about sufficient normality, you need to make sure you have also considered the relevant sample size, but if you are already happy with the normality, there is no need. The placebo group, for example, is the smallest, but its shape is if anything short-tailed, so its non-normality will be no problem no matter how small the sample is.]
+Given that the data are whole numbers, the distributions each appear close to the lines, indicating that the distributions are close to normal in shape.^[This is a way to write it if you suspect your reader won't remember what a normal quantile plot is, and by writing it this way you won't insult their intelligence if they *do* remember after all. The other side benefit of writing it this way is that it shows *your* understanding as well.] The distribution of the `PyrI` values is slightly long-tailed, but with over 100 observations in that group, this shape is not enough to invalidate the normality assumption.^[If you have any doubts about sufficient normality, you need to make sure you have also considered the relevant sample size, but if you are already happy with the normality, there is no need. The placebo group, for example, is the smallest, but its shape is if anything short-tailed, so its non-normality will be no problem no matter how small the sample is.]
 
 Having concluded that the normality is sufficient, we need to assess the equality of spreads. Referring back to our summary table:
 
@@ -133,7 +133,7 @@ geom_boxplot() + geom_point()
 ```
 
 But there are a lot more data points than this! What happened is that a point at, say, 20 is *all* the observations in that group that were 20, of which there might be a lot, 
-but we cannot see how many, because they are printed on top of each other. To see all the observations, we can **jitter** them: that is, plot them all *not* in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a `geom_jitter` that does exactly this:^[I explain the \emph{height=0} below the plot.] 
+but we cannot see how many, because they are printed on top of each other. To see all the observations, we can **jitter** them: that is, plot them all *not* in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a `geom_jitter` that does exactly this:^[I explain the `height=0` below the plot.] 
 
 ```{r}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() + 

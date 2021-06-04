@@ -24,7 +24,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-03" />
+<meta name="date" content="2021-06-04" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -246,17 +246,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="exploratory-analysis" class="section level2">
 <h2><span class="header-section-number">16.2</span> Exploratory analysis</h2>
 <p>We begin by reading in the data:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/dandruff.txt&quot;</span></a>
-<a class="sourceLine" id="cb93-2" title="2">dandruff &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/dandruff.txt&quot;</span></a>
+<a class="sourceLine" id="cb89-2" title="2">dandruff &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   OBS = col_double(),
 ##   Treatment = col_character(),
 ##   GroupNum = col_double(),
 ##   Flaking = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1">dandruff</a></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1">dandruff</a></code></pre></div>
 <pre><code>## # A tibble: 355 x 4
 ##      OBS Treatment GroupNum Flaking
 ##    &lt;dbl&gt; &lt;chr&gt;        &lt;dbl&gt;   &lt;dbl&gt;
@@ -273,8 +273,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## # … with 345 more rows</code></pre>
 <p>355 subjects took part in the study altogether. The shampoo used is indicated in the <code>Treatment</code> column. The remaining columns <code>OBS</code> and <code>GroupNum</code> will not be used in this analysis.</p>
 <p>Numerical summaries of the data are as shown:</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb97-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb93-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 4
 ##   Treatment     n fl_mean fl_sd
 ##   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -284,15 +284,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 4 PyrII       109    17.2 1.35</code></pre>
 <p>There are approximately 100 observations in each group, apart from the Placebo group, which had only 28. The mean number of flakes is much higher for the Placebo group than for the others, which seem similar. The group standard deviations are fairly similar.</p>
 <p>With a categorical <code>Treatment</code> and a quantitative <code>Flakes</code>, a suitable graph is a side-by-side boxplot:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-76-1.png" width="672" />
 Once again, we see that the flaking for the Placebo shampoo is much higher than for the others. There are outliers in the <code>PyrI</code> group, but given that the data values are all whole numbers, they are not far different from the rest of the data. Considering these outliers, the spreads of the groups all look fairly similar and the distributions appear more or less symmetric.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
 </div>
 <div id="analysis-of-variance-1" class="section level2">
 <h2><span class="header-section-number">16.3</span> Analysis of Variance</h2>
 <p>For comparing four groups, we need some kind of analysis of variance. Having seen that the <code>Flaking</code> values within the four groups are more or less normal with more or less equal spreads, we run a standard ANOVA:</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1">dandruff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data=</span>dandruff)</a>
-<a class="sourceLine" id="cb100-2" title="2"><span class="kw">summary</span>(dandruff<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">dandruff<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data=</span>dandruff)</a>
+<a class="sourceLine" id="cb96-2" title="2"><span class="kw">summary</span>(dandruff<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##              Df Sum Sq Mean Sq F value Pr(&gt;F)    
 ## Treatment     3   4151  1383.8   967.8 &lt;2e-16 ***
 ## Residuals   351    502     1.4                   
@@ -300,7 +300,7 @@ Once again, we see that the flaking for the Placebo shampoo is much higher than 
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>With an extremely small P-value, we conclude that the four shampoos do not all have the same mean value of <code>Flaking</code>.</p>
 <p>To find out which ones are different from which, we use Tukey’s method:</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">TukeyHSD</span>(dandruff<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1"><span class="kw">TukeyHSD</span>(dandruff<span class="fl">.1</span>)</a></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -315,8 +315,8 @@ Once again, we see that the flaking for the Placebo shampoo is much higher than 
 ## PyrII-Placebo -12.1910223 -12.8449971 -11.5370475 0.0000000
 ## PyrII-PyrI     -0.1910223  -0.6063270   0.2242825 0.6352706</code></pre>
 <p>All of the shampoo treatments are significantly different from each other except for the two pyrithione ones. To see which shampoos are best and worst, we remind ourselves of the treatment means:</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb104-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb100-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 4
 ##   Treatment     n fl_mean fl_sd
 ##   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -329,13 +329,13 @@ Once again, we see that the flaking for the Placebo shampoo is much higher than 
 <div id="assessment-of-assumptions" class="section level2">
 <h2><span class="header-section-number">16.4</span> Assessment of Assumptions</h2>
 <p>The analysis of variance done above requires that the observations within each treatment group (shampoo) be approximately normally distributed, given the sample sizes, with approximately equal spreads. To assess this, we look at normal quantile plots<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> for each shampoo:<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb106-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb102-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
 <p>Given that the data are whole numbers, the distributions each appear close to the lines, indicating that the distributions are close to normal in shape.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> The distribution of the <code>PyrI</code> values is slightly long-tailed, but with over 100 observations in that group, this shape is not enough to invalidate the normality assumption.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a></p>
 <p>Having concluded that the normality is sufficient, we need to assess the equality of spreads. Referring back to our summary table:</p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb107-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb103-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">fl_mean=</span><span class="kw">mean</span>(Flaking), <span class="dt">fl_sd=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 4
 ##   Treatment     n fl_mean fl_sd
 ##   &lt;chr&gt;     &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -358,38 +358,38 @@ Once again, we see that the flaking for the Placebo shampoo is much higher than 
 <p>Extra 1: The placebo group is much smaller than the others, but all the groups are pretty big by ANOVA standards. Apparently what happened is that originally the three “real” treatments had 112 subjects each, but the placebo had 28 (ie., a quarter of the subjects that the other groups had), and a few subjects dropped out. There’s no problem, in one-way ANOVAs of this kind, with having groups of unequal sizes; the <span class="math inline">\(F\)</span>-test is fine, and as long as you use a suitable extension of Tukey that deals with unequal sample sizes, you are OK there too. <code>TukeyHSD</code>, according to the help file, “incorporates an adjustment for sample size that produces sensible intervals for mildly unbalanced designs”. In this case, we might be holding our breath a bit, depending on what “mildly unbalanced” actually means. Usually in this kind of study, you have the groups about the same size, because proving that the smallest group differs from any of the others is more difficult. I guess these researchers were pretty confident that the placebo shampoo would be clearly worse than the others! (Additional: <code>TukeyHSD</code> uses the so-called Tukey-Kramer test when sample sizes within groups are unequal. My understanding is that this is good no matter what the sample sizes are.)</p>
 <p>Extra 2: The mean for <code>Placebo</code> is quite a lot bigger than for the other groups, so a plot with different scales for each facet is best.
 Otherwise you get this kind of thing, which is much harder to read:</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb109-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb105-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment)</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
 <p>The points fill less than half their facets, which makes the plots harder to understand. This also makes it look as if the distributions are more normal, because the vertical scale has been compressed. Having a better basis for assessing the normality is a good idea, given that the purpose of the plot <em>is</em> assessing the normality! Hence, using <code>scales = "free"</code> is best.</p>
 <p>Extra 3: You might have been wondering why the boxplots, which are the usual thing in these circumstances, look worse than the normal quantile plots.</p>
 <p>Let’s revisit them and see what happened:</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-83-1.png" width="672" /></p>
 <p>The <code>Placebo</code> group has the largest IQR, and the <code>PyrI</code> group appears to have two outliers. We need to bear in mind, though, that the data values are whole numbers and there might be repeats; also, what looks like an outlier here might not look quite so much like one when we see all the data.</p>
 <p>What you can do is to add a <code>geom_point</code> on to the plot to plot the observations as points:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb111-2" title="2"><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb107-2" title="2"><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-84-1.png" width="672" /></p>
 <p>But there are a lot more data points than this! What happened is that a point at, say, 20 is <em>all</em> the observations in that group that were 20, of which there might be a lot,
 but we cannot see how many, because they are printed on top of each other. To see all the observations, we can <strong>jitter</strong> them: that is, plot them all <em>not</em> in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a <code>geom_jitter</code> that does exactly this:<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb112-2" title="2"><span class="kw">geom_jitter</span>(<span class="dt">height =</span> <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb108-2" title="2"><span class="kw">geom_jitter</span>(<span class="dt">height =</span> <span class="dv">0</span>)</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-85-1.png" width="672" /></p>
 <p>The plot is rather messy,<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a> but now you see everything. The <code>height=0</code> means not to do any vertical jittering: just spread the points left and right.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a> Where the points are exactly on the <span class="math inline">\(x\)</span>-scale is now irrelevant; this is just a device to spread the points out so that you can see them all.</p>
 <p>I left the vertical alone so that you can still see the actual data values. Even though the highest and lowest values in <code>PyrI</code> were shown as outliers on the original boxplot, you can see that they are really not. When the data values are discrete (separated) like this, an apparent outlier may be only one bigger or smaller than the next value, and thus not really an outlier at all.</p>
 <p>To try the vertical jittering too, use the defaults on <code>geom_jitter</code>:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">x=</span>Treatment, <span class="dt">y=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-86-1.png" width="672" /></p>
 <p>This maybe spreads the points out better, so you can be more certain that you’re seeing them all, but you lose the clear picture of the data values being whole numbers.</p>
 <p>When Tukey popularized the boxplot, his idea was that it would be drawn by hand with relatively small samples, and when you draw boxplots for large samples, you can get an apparently large number of outliers, that are not in retrospect quite as extreme as they may look at first. This may also have happened here. Tukey, however, did not invent the boxplot; credit for that goes to <a href="https://en.wikipedia.org/wiki/Mary_Eleanor_Spear">Mary Eleanor Spear</a> with her “range plot.”<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a></p>
 <p>Extra 4: More discussion of normality. The assumptions for a standard ANOVA (that is to say, not a Welch ANOVA) are normally-distributed data within each treatment group, with equal spreads. What that means in practice is that you want normal <em>enough</em> data given the sample sizes, and approximately equal spreads. My normal quantile plots are a long way back, so let’s get them again:</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb114-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb110-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
 <p>The data values are all whole numbers, so we get those horizontal stripes of <code>Flaking</code> values that are all the same. As long as these more or less hug the line, we are all right. The <code>PyrII</code> values certainly do. In my top row, <code>Keto</code> and <code>Placebo</code> are not quite so good, but they have <em>short</em> tails compared to the normal, so there will be no problem using the means for these groups, as ANOVA does. The only one that is problematic at all is <code>PyrI</code>. That has slightly long tails compared to a normal. (You could, I suppose, call those highest and lowest values “outliers”, but I don’t think they are far enough away from the rest of the data to justify that.) Are these long tails a problem? That depends on how many observations we have:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb115-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">mean_flaking=</span><span class="kw">mean</span>(Flaking), <span class="dt">sd_flaking=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-2" title="2"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">mean_flaking=</span><span class="kw">mean</span>(Flaking), <span class="dt">sd_flaking=</span><span class="kw">sd</span>(Flaking))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 4
 ##   Treatment     n mean_flaking sd_flaking
 ##   &lt;chr&gt;     &lt;int&gt;        &lt;dbl&gt;      &lt;dbl&gt;
@@ -399,10 +399,10 @@ but we cannot see how many, because they are printed on top of each other. To se
 ## 4 PyrII       109         17.2      1.35</code></pre>
 <p>There are 112 of them. Easily enough to overcome those long tails. So, to my mind, normality is no problem.</p>
 <p>Aside: you might be wondering whether you can make nicer-looking tables in your reports. There are several ways. The <code>gt</code> package is the <a href="https://gt.rstudio.com/">most comprehensive</a> one I know, and has links to a large number of others (at the bottom of its webpage). The simplest one I know of is <code>kable</code> in the <code>knitr</code> package. You may well have that package already installed, but you’ll need to load it, preferably at the beginning of your report:</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="kw">library</span>(knitr)</a>
-<a class="sourceLine" id="cb117-2" title="2">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb117-3" title="3"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">mean_flaking=</span><span class="kw">mean</span>(Flaking), <span class="dt">sd_flaking=</span><span class="kw">sd</span>(Flaking)) -&gt;<span class="st"> </span>summary</a>
-<a class="sourceLine" id="cb117-4" title="4"><span class="kw">kable</span>(summary)</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb113-2" title="2">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Treatment) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb113-3" title="3"><span class="kw">summarise</span>(<span class="dt">n=</span><span class="kw">n</span>(), <span class="dt">mean_flaking=</span><span class="kw">mean</span>(Flaking), <span class="dt">sd_flaking=</span><span class="kw">sd</span>(Flaking)) -&gt;<span class="st"> </span>summary</a>
+<a class="sourceLine" id="cb113-4" title="4"><span class="kw">kable</span>(summary)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -442,21 +442,20 @@ but we cannot see how many, because they are printed on top of each other. To se
 <p>End of aside.</p>
 <p>Before I got distracted, we were talking about whether the distribution of PyrI was normal enough, given the sample size.
 Another way of thinking about this is to look at the bootstrapped sampling distribution of the sample mean for this group. I set the random number seed so that the results will be the same even if I run this again:</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Treatment <span class="op">==</span><span class="st"> &quot;PyrI&quot;</span>) -&gt;<span class="st"> </span>pyri</a>
-<a class="sourceLine" id="cb119-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb119-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb119-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(pyri<span class="op">$</span>Flaking, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb119-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb119-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">dandruff <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(Treatment <span class="op">==</span><span class="st"> &quot;PyrI&quot;</span>) -&gt;<span class="st"> </span>pyri</a>
+<a class="sourceLine" id="cb115-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(pyri<span class="op">$</span>Flaking, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb115-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-91-1.png" width="672" /></p>
 <p>Oh yes, no problem with the normality there. (The discreteness of the population implies that each sample mean is some number of one-hundred-and-twelfths, so that the sampling distribution is also discrete, just less discrete than the data distribution. This is the reason for the little stair-steps in the plot.) In addition, the fact that the least normal distribution is normal enough means that the other distributions must also be OK. If you wanted to be careful, you would assess the smallest Placebo group as well, though that if anything is short-tailed and so would not be a problem anyway.</p>
 <p>The other question is whether those spreads are equal enough. The easiest way is to look back at your summary table (that I reproduced above), cast your eye down the SD column, and make a call about whether they are equal enough. The large sample sizes <em>don’t</em> help here, although see the end of the question for more discussion. I would call these “not grossly unequal” and call standard ANOVA good, but you are also entitled to call them different enough, and then you need to say that in your opinion we should have done a Welch ANOVA. Or, if you got your normal quantile plots before you did your ANOVA, you could actually <em>do</em> a Welch ANOVA.</p>
 <p>I am not a fan of doing one test to see whether you can do another test,<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> but if you really want to, you can use something like Levene’s test to test the null hypothesis that all the groups have the same variance.<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a> Levene’s test lives in the package <code>car</code> that you might have to install first:</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb120-2" title="2"><span class="kw">leveneTest</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data =</span> dandruff)</a></code></pre></div>
-<pre><code>## Warning in leveneTest.default(y = y, group = group, ...): group coerced to
-## factor.</code></pre>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="kw">library</span>(car)</a>
+<a class="sourceLine" id="cb116-2" title="2"><span class="kw">leveneTest</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data =</span> dandruff)</a></code></pre></div>
+<pre><code>## Warning in leveneTest.default(y = y, group = group, ...): group coerced to factor.</code></pre>
 <pre><code>## Levene&#39;s Test for Homogeneity of Variance (center = median)
 ##        Df F value    Pr(&gt;F)    
 ## group   3  6.2001 0.0004096 ***
@@ -465,8 +464,8 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>Equal variances are resoundingly <em>rejected</em> here; the samples here have variances that are less equal than they would be if the populations all had the same variances. But that is really asking the wrong question: the one that matters is “does the inequality of variances that we saw here <em>matter</em> when it comes to doing the ANOVA?”. With samples as big as we had, the variances could be declared unequal even if they were actually quite similar. This is another (different) angle on statistical significance (rather similar variances can be significantly different with large samples) vs. practical importance (does the fact that our sample variances are as different as they are matter to the ANOVA?). I do the Welch ANOVA in Extra 6, and you will see there whether it comes out much different than the regular ANOVA. See also Extra 7.</p>
 <p>If your normal quantile plots looked like this:</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb123-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment)</a></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1"><span class="kw">ggplot</span>(dandruff, <span class="kw">aes</span>(<span class="dt">sample=</span>Flaking)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb119-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>Treatment)</a></code></pre></div>
 <p><img src="pasias_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
 <p>with the <em>same</em> scales, you can use the slopes of the lines to judge equal spreads: either equal enough, or the <code>Placebo</code> line is a bit steeper than the others. If you did <code>scales = "free"</code>, you <em>cannot</em> do this, because you have essentially standardized your data before making the normal quantile plots.</p>
 <p>It is <em>hugely</em> important to distinguish the null hypothesis (all the means are the same) from the assumptions behind the test (how you know that the P-value obtained from testing your null hypothesis can be trusted). These are separate things, and getting them straight is a vital part of being a good statistician. You might say that this is part of somebody else knowing how they, as someone hiring a statistician, can trust <em>you</em>.</p>
@@ -483,13 +482,13 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 <li>the mean flaking for the treatments is different (this says that they are <em>all</em> different, but you don’t know that yet.)</li>
 </ul>
 <p>Extra 6: You might have been wondering how Welch’s ANOVA would have played out, given that the placebo group measurements looked more variable than the others. Wonder no more:</p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" title="1"><span class="kw">oneway.test</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data=</span>dandruff)</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="kw">oneway.test</span>(Flaking<span class="op">~</span>Treatment, <span class="dt">data=</span>dandruff)</a></code></pre></div>
 <pre><code>## 
 ##  One-way analysis of means (not assuming equal variances)
 ## 
 ## data:  Flaking and Treatment
 ## F = 595.03, num df = 3.00, denom df = 105.91, p-value &lt; 2.2e-16</code></pre>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" title="1"><span class="kw">gamesHowellTest</span>(Flaking<span class="op">~</span><span class="kw">factor</span>(Treatment), <span class="dt">data=</span>dandruff)</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="kw">gamesHowellTest</span>(Flaking<span class="op">~</span><span class="kw">factor</span>(Treatment), <span class="dt">data=</span>dandruff)</a></code></pre></div>
 <pre><code>## 
 ##  Pairwise comparisons using Games-Howell test</code></pre>
 <pre><code>## data: Flaking by factor(Treatment)</code></pre>
@@ -503,14 +502,14 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 <p>The results are almost exactly the same: the conclusions are identical, and the P-values are even pretty much the same. The place where it would make a difference is when you are close to the boundary between rejecting and not. Here, our Tukey and Games-Howell P-values were all either close to 0 or about 0.6, whichever way we did it. So it didn’t matter which one we did; you could justify using either. The regular ANOVA might have been a better choice for your report, though, because this is something your audience could reasonably be expected to have heard of. The Welch ANOVA deserves to be as well-used as the Welch two-sample <span class="math inline">\(t\)</span>-test, but it doesn’t often appear in Statistics courses. (This course is an exception, of course!)</p>
 <p>Extra 7: the general principle when you are not sure of the choice between two tests is to run them both. If the conclusions agree, as they do here, then it doesn’t matter which one you run. If they disagree, then it matters, and you need to think more carefully about which test is the more appropriate one. (Usually, this is the test with the fewer assumptions, but not always.)</p>
 <p>Another way to go is to do a simulation (of the ordinary ANOVA). Generate some data that are like what you actually have, and then in your simulation see whether your <span class="math inline">\(\alpha\)</span> is near to 0.05. Since we are talking about <span class="math inline">\(\alpha\)</span> here, the simulated data needs to have the same <em>mean</em> in every group, so that the null hypothesis is true, but SDs and sample sizes like the ones in the data (and of a normal shape). Let me build up the process. Let’s start by making a dataframe that contains the sample sizes, means and SDs for the data we want to generate. The treatment names don’t matter:</p>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1">sim_from &lt;-<span class="st"> </span><span class="kw">tribble</span>(</a>
-<a class="sourceLine" id="cb132-2" title="2"><span class="op">~</span>trt, <span class="op">~</span>n, <span class="op">~</span>mean, <span class="op">~</span>sd,</a>
-<a class="sourceLine" id="cb132-3" title="3"><span class="st">&quot;A&quot;</span>, <span class="dv">106</span>, <span class="dv">0</span>, <span class="fl">0.93</span>,</a>
-<a class="sourceLine" id="cb132-4" title="4"><span class="st">&quot;B&quot;</span>, <span class="dv">28</span>, <span class="dv">0</span>, <span class="fl">1.59</span>,</a>
-<a class="sourceLine" id="cb132-5" title="5"><span class="st">&quot;C&quot;</span>, <span class="dv">112</span>, <span class="dv">0</span>, <span class="fl">1.14</span>,</a>
-<a class="sourceLine" id="cb132-6" title="6"><span class="st">&quot;D&quot;</span>, <span class="dv">109</span>, <span class="dv">0</span>, <span class="fl">1.35</span></a>
-<a class="sourceLine" id="cb132-7" title="7">)</a>
-<a class="sourceLine" id="cb132-8" title="8">sim_from</a></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" title="1">sim_from &lt;-<span class="st"> </span><span class="kw">tribble</span>(</a>
+<a class="sourceLine" id="cb128-2" title="2"><span class="op">~</span>trt, <span class="op">~</span>n, <span class="op">~</span>mean, <span class="op">~</span>sd,</a>
+<a class="sourceLine" id="cb128-3" title="3"><span class="st">&quot;A&quot;</span>, <span class="dv">106</span>, <span class="dv">0</span>, <span class="fl">0.93</span>,</a>
+<a class="sourceLine" id="cb128-4" title="4"><span class="st">&quot;B&quot;</span>, <span class="dv">28</span>, <span class="dv">0</span>, <span class="fl">1.59</span>,</a>
+<a class="sourceLine" id="cb128-5" title="5"><span class="st">&quot;C&quot;</span>, <span class="dv">112</span>, <span class="dv">0</span>, <span class="fl">1.14</span>,</a>
+<a class="sourceLine" id="cb128-6" title="6"><span class="st">&quot;D&quot;</span>, <span class="dv">109</span>, <span class="dv">0</span>, <span class="fl">1.35</span></a>
+<a class="sourceLine" id="cb128-7" title="7">)</a>
+<a class="sourceLine" id="cb128-8" title="8">sim_from</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 4
 ##   trt       n  mean    sd
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -519,8 +518,8 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 3 C       112     0  1.14
 ## 4 D       109     0  1.35</code></pre>
 <p>Starting from here, we want to set up drawing a lot of random samples from a normal distribution with the mean and SD shown, and the sample size shown. The way I like to do it<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a> is to set up a list-column called <code>sim</code> that will index the simulations. I’m going to pretend I’m doing just three simulations, while I get my head around this, and then up it later after I have things working:</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb134-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb130-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>))</a></code></pre></div>
 <pre><code>## # A tibble: 4 x 5
 ##   trt       n  mean    sd sim      
 ##   &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;   
@@ -529,9 +528,9 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 3 C       112     0  1.14 &lt;int [3]&gt;
 ## 4 D       109     0  1.35 &lt;int [3]&gt;</code></pre>
 <p>Then I <code>unnest</code> <code>sim</code> so that I have a place to draw each sample:</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb136-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb136-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim)</a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb132-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb132-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb132-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim)</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 5
 ##    trt       n  mean    sd   sim
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
@@ -548,11 +547,11 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 11 D       109     0  1.35     2
 ## 12 D       109     0  1.35     3</code></pre>
 <p>Now, working rowwise, I can draw a random sample from each normal distribution. The inputs to <code>rnorm</code> are the sample size, the mean, and the SD, in that order.<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a></p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb138-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb138-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb138-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb138-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd)))</a></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb134-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb134-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb134-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb134-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd)))</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 6
 ## # Rowwise: 
 ##    trt       n  mean    sd   sim y          
@@ -570,13 +569,13 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 11 D       109     0  1.35     2 &lt;dbl [109]&gt;
 ## 12 D       109     0  1.35     3 &lt;dbl [109]&gt;</code></pre>
 <p>This is looking similar in procedure to a bootstrap sampling distribution. If we were doing <em>that</em>, we would now make a new column containing something like the mean of each of those samples (and then make a picture of what we had). But this is different: we want to combine all of the random samples for each of the four treatments for one of the simulations, run an ANOVA on it, and get hold of the P-value. So we need to <code>unnest</code> those samples, and then combine them together properly. That goes something like this:</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb140-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim)</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb136-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim)</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 2
 ## # Rowwise:  sim
 ##     sim               data
@@ -585,15 +584,15 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 2     2          [355 × 5]
 ## 3     3          [355 × 5]</code></pre>
 <p>What this has done is to create three mini-dataframes in the list-column <code>data</code> that have our generated random <code>y</code> and a column called <code>treatment</code>. What we want to do is to run the ordinary ANOVA on each of those dataframes in <code>data</code>, and, in a minute, get hold of the P-value. I think I need another <code>rowwise</code> first, because I want to work with the rows of the <em>new</em> dataframe:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb142-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb142-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data)))</a></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb138-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data)))</a></code></pre></div>
 <pre><code>## # A tibble: 3 x 3
 ## # Rowwise: 
 ##     sim               data my_anova
@@ -602,9 +601,50 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 2     2          [355 × 5] &lt;aov&gt;   
 ## 3     3          [355 × 5] &lt;aov&gt;</code></pre>
 <p>I know the P-value is in there somewhere, but I can’t remember how to get hold of it. The easiest way is to load <code>broom</code> and pass the models into <code>tidy</code>, then take a look at that:</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" title="1"><span class="kw">library</span>(broom)</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1"><span class="kw">library</span>(broom)</a></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_tidy =</span> <span class="kw">list</span>(<span class="kw">tidy</span>(my_anova))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb141-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy)</a></code></pre></div>
+<pre><code>## # A tibble: 6 x 9
+##     sim               data my_anova term         df  sumsq meansq statistic p.value
+##   &lt;int&gt; &lt;list&lt;tibble[,5]&gt;&gt; &lt;list&gt;   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1     1          [355 × 5] &lt;aov&gt;    trt           3  13.1    4.38     3.19   0.0239
+## 2     1          [355 × 5] &lt;aov&gt;    Residuals   351 482.     1.37    NA     NA     
+## 3     2          [355 × 5] &lt;aov&gt;    trt           3   3.23   1.08     0.895  0.444 
+## 4     2          [355 × 5] &lt;aov&gt;    Residuals   351 422.     1.20    NA     NA     
+## 5     3          [355 × 5] &lt;aov&gt;    trt           3   5.35   1.78     1.19   0.313 
+## 6     3          [355 × 5] &lt;aov&gt;    Residuals   351 525.     1.50    NA     NA</code></pre>
+<p>Almost there. The rows that have P-values in them are the ones that have <code>trt</code> (the explanatory variable) in the <code>term</code>, so:</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_tidy =</span> <span class="kw">list</span>(<span class="kw">tidy</span>(my_anova))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-12" title="12"><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;trt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb143-13" title="13"><span class="st">  </span><span class="kw">select</span>(sim, p.value)</a></code></pre></div>
+<pre><code>## # A tibble: 3 x 2
+##     sim p.value
+##   &lt;int&gt;   &lt;dbl&gt;
+## 1     1   0.817
+## 2     2   0.273
+## 3     3   0.169</code></pre>
+<p>Three simulated samples, each time one from each of the four treatments, and three P-values. So this works, and the remaining thing is to change the number of simulations from 3 to 1000 and run it again, saving the result:</p>
 <div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb145-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb145-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb145-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb145-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb145-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -613,51 +653,10 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 <a class="sourceLine" id="cb145-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb145-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb145-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_tidy =</span> <span class="kw">list</span>(<span class="kw">tidy</span>(my_anova))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb145-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy)</a></code></pre></div>
-<pre><code>## # A tibble: 6 x 9
-##     sim             data my_anova term        df  sumsq meansq statistic p.value
-##   &lt;int&gt; &lt;list&lt;tibble[,5&gt; &lt;list&gt;   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1     1        [355 × 5] &lt;aov&gt;    trt          3  13.1    4.38     3.19   0.0239
-## 2     1        [355 × 5] &lt;aov&gt;    Residua…   351 482.     1.37    NA     NA     
-## 3     2        [355 × 5] &lt;aov&gt;    trt          3   3.23   1.08     0.895  0.444 
-## 4     2        [355 × 5] &lt;aov&gt;    Residua…   351 422.     1.20    NA     NA     
-## 5     3        [355 × 5] &lt;aov&gt;    trt          3   5.35   1.78     1.19   0.313 
-## 6     3        [355 × 5] &lt;aov&gt;    Residua…   351 525.     1.50    NA     NA</code></pre>
-<p>Almost there. The rows that have P-values in them are the ones that have <code>trt</code> (the explanatory variable) in the <code>term</code>, so:</p>
-<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_tidy =</span> <span class="kw">list</span>(<span class="kw">tidy</span>(my_anova))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-12" title="12"><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;trt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb147-13" title="13"><span class="st">  </span><span class="kw">select</span>(sim, p.value)</a></code></pre></div>
-<pre><code>## # A tibble: 3 x 2
-##     sim p.value
-##   &lt;int&gt;   &lt;dbl&gt;
-## 1     1   0.817
-## 2     2   0.273
-## 3     3   0.169</code></pre>
-<p>Three simulated samples, each time one from each of the four treatments, and three P-values. So this works, and the remaining thing is to change the number of simulations from 3 to 1000 and run it again, saving the result:</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">aov</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_tidy =</span> <span class="kw">list</span>(<span class="kw">tidy</span>(my_anova))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-12" title="12"><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;trt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb149-13" title="13"><span class="st">  </span><span class="kw">select</span>(sim, p.value) -&gt;<span class="st"> </span>sim_pval</a>
-<a class="sourceLine" id="cb149-14" title="14">sim_pval</a></code></pre></div>
+<a class="sourceLine" id="cb145-11" title="11"><span class="st">  </span><span class="kw">unnest</span>(my_tidy) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb145-12" title="12"><span class="st">  </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;trt&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb145-13" title="13"><span class="st">  </span><span class="kw">select</span>(sim, p.value) -&gt;<span class="st"> </span>sim_pval</a>
+<a class="sourceLine" id="cb145-14" title="14">sim_pval</a></code></pre></div>
 <pre><code>## # A tibble: 1,000 x 2
 ##      sim p.value
 ##    &lt;int&gt;   &lt;dbl&gt;
@@ -673,8 +672,8 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 10    10  0.0301
 ## # … with 990 more rows</code></pre>
 <p>Now, the reason we were doing this was to see whether regular ANOVA worked properly on data from populations with different SDs. We know that the null hypothesis is true here (because all the true treatment means were equal to 0), so the probability of making a type I error by rejecting the null (that all the means are the same) should be 0.05. How close is it?</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">sim_pval <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb151-2" title="2"><span class="st">  </span><span class="kw">count</span>(p.value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1">sim_pval <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb147-2" title="2"><span class="st">  </span><span class="kw">count</span>(p.value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   `p.value &lt;= 0.05`     n
 ##   &lt;lgl&gt;             &lt;int&gt;
@@ -682,7 +681,7 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 2 TRUE                 91</code></pre>
 <p><span class="math inline">\(91/1000 = 0.091\)</span>. We are <em>too likely</em> to falsely reject the null. The regular ANOVA does not behave properly for data like ours.</p>
 <p>That looks rather high. Is the proportion of times I am rejecting significantly different from 0.05? Testing null hypotheses about (single) proportions is done using <code>prop.test</code>. This uses the normal approximation to the binomial, with continuity correction:</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1"><span class="kw">prop.test</span>(<span class="dv">91</span>, <span class="dv">1000</span>, <span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="kw">prop.test</span>(<span class="dv">91</span>, <span class="dv">1000</span>, <span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## 
 ##  1-sample proportions test with continuity correction
 ## 
@@ -696,17 +695,17 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 0.091</code></pre>
 <p>Ah, now, that’s interesting. A supposed <span class="math inline">\(\alpha = 0.05\)</span> test is actually rejecting around 9% of the time, which is significantly different from 0.05. This surprises me. So the ANOVA is actually <em>not</em> all that accurate.<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a></p>
 <p>So now let’s do the same simulation for the Welch ANOVA to see whether it’s better:</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb155-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">oneway.test</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb155-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> my_anova<span class="op">$</span>p.value) -&gt;<span class="st"> </span>sim_pval2</a>
-<a class="sourceLine" id="cb155-11" title="11">sim_pval2</a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">sim_from <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">y =</span> <span class="kw">list</span>(<span class="kw">rnorm</span>(n, mean, sd))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-6" title="6"><span class="st">  </span><span class="kw">unnest</span>(y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-7" title="7"><span class="st">  </span><span class="kw">nest_by</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-8" title="8"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb151-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_anova =</span> <span class="kw">list</span>(<span class="kw">oneway.test</span>(y <span class="op">~</span><span class="st"> </span>trt, <span class="dt">data =</span> data))) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb151-10" title="10"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">pval =</span> my_anova<span class="op">$</span>p.value) -&gt;<span class="st"> </span>sim_pval2</a>
+<a class="sourceLine" id="cb151-11" title="11">sim_pval2</a></code></pre></div>
 <pre><code>## # A tibble: 1,000 x 4
 ## # Rowwise: 
 ##      sim               data my_anova  pval
@@ -724,8 +723,8 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## # … with 990 more rows</code></pre>
 <p>This one is a bit easier because <code>oneway.test</code> has a thing called <code>p.value</code> that you can just pull out. No need to use <code>tidy</code> here.</p>
 <p>How many of <em>those</em> P-values are less than 0.05?</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1">sim_pval2 <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb157-2" title="2"><span class="st">  </span><span class="kw">count</span>(pval <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1">sim_pval2 <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb153-2" title="2"><span class="st">  </span><span class="kw">count</span>(pval <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ## # Rowwise: 
 ##   `pval &lt;= 0.05`     n
@@ -733,7 +732,7 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 ## 1 FALSE            951
 ## 2 TRUE              49</code></pre>
 <p>That couldn’t be much closer to the mark:</p>
-<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1"><span class="kw">prop.test</span>(<span class="dv">49</span>, <span class="dv">1000</span>, <span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1"><span class="kw">prop.test</span>(<span class="dv">49</span>, <span class="dv">1000</span>, <span class="dt">p =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <pre><code>## 
 ##  1-sample proportions test with continuity correction
 ## 
@@ -759,11 +758,11 @@ Another way of thinking about this is to look at the bootstrapped sampling distr
 <li id="fn5"><p>Use the full name of the shampoo if you are making a conclusion about it.<a href="treating-dandruff.html#fnref5" class="footnote-back">↩</a></p></li>
 <li id="fn6"><p>I’ve used <code>scales = "free"</code> to get the plots to fill their boxes, for the best assessment of normality. The downside of doing it this way is that you cannot use the slopes of the lines to compare spreads. I think this way is still better, though, because the mean for placebo is so much bigger than the others that if you use the same scale for each plot, you’ll be wasting a lot of plot real estate that you could use to get a better picture of the normality.<a href="treating-dandruff.html#fnref6" class="footnote-back">↩</a></p></li>
 <li id="fn7"><p>It’s also good, arguably clearer, to use this as your exploratory plot. This enables you to get to a discussion about normality earlier and you might decide in that case that you don’t even need this discussion. You can do the assessment of assumptions first, and then do the corresponding analysis, or you can pick an apparently reasonable analysis and then critique it afterwards. Either way is logical here. In other cases it might be different; for example, in a regression, you might need to fit a model first and improve it after, since it may not be so clear what a good model might be off the top.<a href="treating-dandruff.html#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p>This is a way to write it if you suspect your reader won’t remember what a normal quantile plot is, and by writing it this way you won’t insult their intelligence if they  remember after all. The other side benefit of writing it this way is that it shows  understanding as well.<a href="treating-dandruff.html#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p>This is a way to write it if you suspect your reader won’t remember what a normal quantile plot is, and by writing it this way you won’t insult their intelligence if they <em>do</em> remember after all. The other side benefit of writing it this way is that it shows <em>your</em> understanding as well.<a href="treating-dandruff.html#fnref8" class="footnote-back">↩</a></p></li>
 <li id="fn9"><p>If you have any doubts about sufficient normality, you need to make sure you have also considered the relevant sample size, but if you are already happy with the normality, there is no need. The placebo group, for example, is the smallest, but its shape is if anything short-tailed, so its non-normality will be no problem no matter how small the sample is.<a href="treating-dandruff.html#fnref9" class="footnote-back">↩</a></p></li>
 <li id="fn10"><p>I’d rather assess equality of spreads by eyeballing them than by doing a test, but if you really want to, you could use Levene’s test, illustrated elsewhere in PASIAS and in Extra 4 for these data. It works for any number of groups, not just two.<a href="treating-dandruff.html#fnref10" class="footnote-back">↩</a></p></li>
 <li id="fn11"><p>I wanted to make it clear where my report ended and where the additional chat began.<a href="treating-dandruff.html#fnref11" class="footnote-back">↩</a></p></li>
-<li id="fn12"><p>I explain the  below the plot.<a href="treating-dandruff.html#fnref12" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p>I explain the <code>height=0</code> below the plot.<a href="treating-dandruff.html#fnref12" class="footnote-back">↩</a></p></li>
 <li id="fn13"><p>It looks to me as if the boxplot has been attacked by mosquitoes.<a href="treating-dandruff.html#fnref13" class="footnote-back">↩</a></p></li>
 <li id="fn14"><p>The default jittering is up to a maximum of not quite halfway to the next value. Here that means that each observation is nearest to the box it belongs with.<a href="treating-dandruff.html#fnref14" class="footnote-back">↩</a></p></li>
 <li id="fn15"><p>I learned this today.<a href="treating-dandruff.html#fnref15" class="footnote-back">↩</a></p></li>

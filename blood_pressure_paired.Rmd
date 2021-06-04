@@ -92,7 +92,7 @@ Solution
 
 The *differences* are supposed to be approximately normal if a matched-pairs $t$-test is the thing:
 
-```{r}
+```{r vilingers}
 ggplot(blood_pressure, aes(sample=difference)) + stat_qq() + stat_qq_line()
 ```
 
@@ -120,7 +120,7 @@ What has happened, I think, is that we have only a small sample (10 people), and
 
 If you wanted to, you could bootstrap the sampling distribution of the sample mean and see how normal it looks:
 
-```{r}
+```{r haschin}
 tibble(sim =  1:10000) %>% 
   rowwise() %>% 
   mutate(the_sample = list(sample(blood_pressure$difference, replace = TRUE))) %>% 

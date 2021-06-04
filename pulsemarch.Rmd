@@ -29,7 +29,7 @@ Solution
 
 Two quantitative and one categorical says scatterplot, with colour distinguishing the categories (two here). `geom_smooth` adds a regression line to the plot for each `Sex`, which is what we want. I used `se=F` to remove the grey envelopes from the plot (because I thought they confused the issue):
 
-```{r}
+```{r fus}
 ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
 geom_smooth(method = "lm", se=F)
 ```
@@ -38,7 +38,7 @@ Having only one regression line is not so good because that only shows that puls
 
 Extra: I took a shortcut of the process here, to make the question shorter. In practice, what you'd do is to put smooth trends on the plot first:
 
-```{r} 
+```{r hearter} 
 ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
 geom_smooth(se=F)
 ```
@@ -103,7 +103,7 @@ The red dots (females) on the graph seemed to be on average above the blue ones 
 
 Extra: comparing the *lines* is less convincing, because how do we get a feel for whether these lines are more different than chance? One deceiving way to (fail to) get a feel for this is to re-draw our plot but with the grey envelopes:
 
-```{r}
+```{r buttin}
 ggplot(march, aes(x=Before, y=After, colour=Sex)) + geom_point() + 
 geom_smooth(method = "lm")
 ```
@@ -181,13 +181,13 @@ At this point, your head ought to be hurting!
 
 However, at this point what we are saying is that *if* you believe that the difference is a good way to summarize the effect of the exercise, then we have one measurement for each person, independent because different people's measurements will be independent. It doesn't matter where they came from. We have measurements on two groups, so some kind of two-sample test will be good. Which kind? Let's look at a graph, a good one now being a boxplot:
 
-```{r}
+```{r fridingen}
 ggplot(march_paired, aes(x=Sex, y=difference)) + geom_boxplot()
 ```
 
 Or, if you like, a facetted normal quantile plot:
 
-```{r}
+```{r brugg}
 ggplot(march_paired, aes(sample=difference)) +
 stat_qq() + stat_qq_line() +
 facet_wrap(~Sex)

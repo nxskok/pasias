@@ -68,7 +68,7 @@ Solution
 
 There is one quantitative variable, so a histogram, as ever:
 
-```{r}
+```{r luprands}
 ggplot(cholest, aes(x=control)) + geom_histogram(bins=6)
 ```     
 
@@ -120,8 +120,8 @@ I like the first version better because a lot of what we do later
 involves giving a data frame, and then working with things in that
 data frame. This is more like that.
 
-This test is \emph{one}-sided because we are looking for evidence of
-\emph{less}; if the mean is actually \emph{more} than 200, we don't
+This test is *one*-sided because we are looking for evidence of
+*less*; if the mean is actually *more* than 200, we don't
 care about that. For a one-sided test, R requires you to say which
 side you are testing.
 
@@ -133,7 +133,7 @@ conclude that this mean is equal to 200. Or, we conclude that this
 mean could be 200. Any of those.
 
 If you chose a different $\alpha$, draw the right conclusion for the
-$\alpha$ you chose. For example, with $\alpha=0.10$, we \emph{do} have
+$\alpha$ you chose. For example, with $\alpha=0.10$, we *do* have
 evidence that the mean is less than 200. Being consistent is more
 important than getting the same answer as me.  
 
@@ -166,10 +166,10 @@ with(cholest, t.test(control))
 With 95\% confidence, the population mean cholesterol level is between
 184.8 and 201.5. 
 
-\emph{You need to state the interval, and you also need to round off
-the decimal places to something sensible.} This is because in your
-statistical life, you are providing results to someone else \emph{in a
-manner that they can read and understand.} They do not have time to go
+*You need to state the interval, and you also need to round off
+the decimal places to something sensible.* This is because in your
+statistical life, you are providing results to someone else *in a
+manner that they can read and understand.* They do not have time to go
 searching in some output, or to fish through some excessive number of
 decimal places. If that's what you give them, they will ask you to
 rewrite your report, wasting everybody's time when you could have done
@@ -180,7 +180,7 @@ this case, the cholesterol values are whole numbers (zero decimal
 places). A confidence interval is talking about a mean. In this case,
 we have a sample size of 30, which is between 10 and 100, so we can
 justify one extra decimal place beyond the data, here one decimal
-altogether, or two \emph{at the absolute outside}. (Two is more
+altogether, or two *at the absolute outside*. (Two is more
 justifiable if the sample size is bigger than 100.) See, for example,
 [this](https://www2.southeastern.edu/Academics/Faculty/dgurney/Math241/StatTopics/SciNot.htm), 
 in particular the piece at the bottom.
@@ -230,8 +230,7 @@ more, then the $z$ numbers.
 
 Extra 2: By now you are probably thinking that this is very
 subjective, and so it is. What actually matters is the shape of
-the thing called the \emph{sampling distribution of the sample
-mean}. That is to say, what kind of sample means you might get
+the thing called the *sampling distribution of the sample mean*. That is to say, what kind of sample means you might get
 in repeated samples from your population. The problem is that you
 don't know what the population looks like.^[If you did, all
 your problems would be over.] But we can fake it up, in a couple
@@ -239,7 +238,7 @@ of ways: we can play what-if and pretend we know what the population
 looks like (to get some understanding for "populations like
 that"), or we can use a technique called the "bootstrap" that
 will tell us what kind of sample means we might get from the
-population that \emph{our} sample came from (this seems like magic
+population that *our* sample came from (this seems like magic
 and, indeed, is).
 
 The moral of the story is that the central limit theorem is more
@@ -264,9 +263,9 @@ ggplot(toplot, aes(x=x, y=y)) + geom_line()
 
 Only values between 0 and 1 are possible, and each of those is equally
 likely. Not very normal in shape. So let's take some random samples of
-size \emph{three}, not in any sense a large sample, from this "uniform"
+size *three*, not in any sense a large sample, from this "uniform"
 population, and see what kind of sample means we get. This technique
-is called \emph{simulation}: rather than working out the answer by
+is called **simulation**: rather than working out the answer by
 math, we're letting the computer approximate the answer for us. Here's
 one simulated sample:
 
@@ -279,7 +278,7 @@ mean(u)
 and here's the same thing 1000 times, including a histogram of the
 sample means:
 
-```{r}
+```{r toeber}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(runif(3))) %>% 
@@ -293,13 +292,13 @@ normal distribution?
 
 Let's take a moment to realize what this is saying. If the population
 looks like the flat-topped uniform distribution, the central limit
-theorem kicks in for a sample of size \emph{three}, and thus if your
+theorem kicks in for a sample of size *three*, and thus if your
 population looks like this, $t$ procedures will be perfectly good for
-$n=3$ or bigger, \emph{even though the population isn't normal}.
+$n=3$ or bigger, *even though the population isn't normal*.
 
 Thus, when you're thinking about whether to use a $t$-test or
 something else (that we'll learn about later), the distribution shape
-matters, \emph{but so does the sample size}.
+matters, *but so does the sample size*.
 
 I should say a little about my code. I'm not expecting you to figure
 out details now (we see the ideas properly in simulating power of
@@ -318,7 +317,7 @@ Now, the central limit theorem doesn't always work as nicely as this,
 but maybe a sample size of 30 is large enough to overcome the skewness
 that we had:
 
-```{r}
+```{r schauffhusen}
 ggplot(cholest, aes(x=control)) + geom_histogram(bins=6)
 ```     
 
@@ -327,8 +326,8 @@ That brings us to my second idea above.
 The sample that we had is in some sense an "estimate of the
 population". To think about the sampling distribution of the sample
 mean, we need more estimates of the population. How might we get
-those? The curious answer is to \emph{sample from the sample}. This is
-the idea behind the \emph{bootstrap}. (This is what Lecture 3c is about.) The name comes from the
+those? The curious answer is to *sample from the sample*. This is
+the idea behind the *bootstrap*. (This is what Lecture 3c is about.) The name comes from the
 expression "pulling yourself up by your own bootstraps", meaning
 "to begin an enterprise or recover from a setback without any outside
 help" (from [here](https://www.yourdictionary.com/pull-oneself-up-by-one-s-bootstraps)), 
@@ -336,8 +335,8 @@ something that should be difficult or impossible. How is it
 possible to understand a sampling distribution with only one sample?
 
 We have to be a bit careful. Taking a sample from the sample would
-give us the original sample back. So, instead, we sample \emph{with
-replacement}, so that each bootstrap sample is different:
+give us the original sample back. So, instead, we sample 
+*with replacement*, so that each bootstrap sample is different:
 
 ```{r}
 sort(cholest$control)
@@ -358,7 +357,7 @@ So now we know what to do: take lots of bootstrap samples, work out
 the mean of each, plot the means, and see how normal it looks. The
 only new idea here is the sampling with replacement:
 
-```{r}
+```{r schuomarchers}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(cholest$control, replace = TRUE))) %>% 
