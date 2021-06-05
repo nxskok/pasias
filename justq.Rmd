@@ -1,10 +1,10 @@
 create a file without the solution
 
-```{r}
+```{r justq-1}
 library(tidyverse)
 ```
 
-```{r}
+```{r justq-2}
 extract_q <- function(base) {
   print(base)
   fname <- str_c(base, ".Rmd")
@@ -21,7 +21,7 @@ extract_q <- function(base) {
 ```
 
 
-```{r}
+```{r justq-3}
 extract_chapter_files <- function(chapter_name) {
   print(chapter_name)
   lines <- readLines(chapter_name)
@@ -34,7 +34,7 @@ extract_chapter_files <- function(chapter_name) {
 }
 ```
 
-```{r}
+```{r justq-4}
 make_chapter_q <- function(chapter_name) {
   v <- extract_chapter_files(chapter_name)
   walk(v, ~extract_q(.))
@@ -42,14 +42,14 @@ make_chapter_q <- function(chapter_name) {
 ```
 
 
-```{r}
+```{r justq-5}
 extract_chapter_files("42-fa.Rmd")
 make_chapter_q("01-getting-used.Rmd")
 ```
 
 grab chapters
 
-```{r}
+```{r justq-6}
 readLines("_bookdown.yml") %>% 
   enframe(name = NULL) %>% 
   mutate(ch_name = str_replace_all(value, '"', '')) %>% 
@@ -61,7 +61,7 @@ walk(z, ~make_chapter_q(.))
 
 find chapters that don't have "answers follow"
 
-```{r}
+```{r justq-7}
 has_follow <- function(chapter) {
   v <- readLines(chapter)
   enframe(v, name = NULL) %>% 
@@ -74,7 +74,7 @@ has_follow("41-maps.Rmd")
 
 find chapters without "my solutions follow:" in them
 
-```{r}
+```{r justq-8}
 readLines("_bookdown.yml") %>% 
   enframe(name = NULL) %>% 
   mutate(ch_name = str_replace_all(value, '"', '')) %>% 

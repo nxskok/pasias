@@ -48,7 +48,7 @@ Solution
 
 
 Read into a temporary data frame, and then process:
-```{r message=F}
+```{r weather-2014-1, message=F}
 my_url <- "http://ritsokiguess.site/datafiles/weather_2014.csv"
 weather.0 <- read_csv(my_url)
 weather.0
@@ -58,7 +58,7 @@ weather.0
 
 There are lots of columns, of which we only want a few:
 
-```{r }
+```{r weather-2014-2 }
 (weather.0 %>% select(l.temp:ave.temp, rain:gust.wind) -> weather)
 ```
 
@@ -73,7 +73,7 @@ Solution
 
 I think this is the easiest way:
 
-```{r}
+```{r weather-2014-3}
 weather %>% 
   summarize(across(everything(), ~quantile(.)))
 ```
@@ -84,7 +84,7 @@ Another way to do it is to make a column of column names, using
 `pivot_longer`, and then use `nest` and list-columns to find
 the quantiles for each variable:
 
-```{r }
+```{r weather-2014-4 }
 weather %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>%
   nest_by(xname) %>%
@@ -117,7 +117,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r weather-2014-5 }
 weather.1 <- princomp(weather, cor = T)
 ```
 
@@ -130,7 +130,7 @@ analysis. How many components do you think are worth investigating?
 Solution
 
 
-```{r }
+```{r weather-2014-6 }
 summary(weather.1)
 ```
 
@@ -174,7 +174,7 @@ large or small?)
 Solution
 
 
-```{r }
+```{r weather-2014-7 }
 weather.1$loadings
 ```
 
@@ -208,7 +208,7 @@ is either *in* a factor or *out* of it. Such a varimax rotation
 is the default for `factanal`, which I presume I now have to
 show you (so this is looking ahead): 
 
-```{r }
+```{r weather-2014-8 }
 weather.2 <- factanal(weather, 3, scores = "r")
 weather.2$loadings
 ```
@@ -226,7 +226,7 @@ These factors are rather pleasantly interpretable.
 `ggbiplot` mysteriously doesn't handle factor analyses, so we
 have to go back to the base-graphics version, which goes a bit like this:
 
-```{r }
+```{r weather-2014-9 }
 biplot(weather.2$scores, weather.2$loadings)
 ```
 
@@ -249,13 +249,13 @@ Solution
 Something like this. I begin by turning the component scores
 (which are a matrix) into a data frame, and selecting the ones I
 want (the first three):
-```{r echo=F}
+```{r weather-2014-10, echo=F}
 ww <- getOption("width")
 options(width = ww + 20)
 ```
 
       
-```{r size="footnotesize"}
+```{r weather-2014-11, size="footnotesize"}
 as_tibble(weather.1$scores) %>%
   select(1:3) %>%
   bind_cols(weather) %>%
@@ -276,7 +276,7 @@ Solution
 
 We can do this one and the ones following by running
 `arrange` appropriately:
-```{r }
+```{r weather-2014-12 }
 d %>% arrange(Comp.1)
 ```
 
@@ -296,7 +296,7 @@ briefly why it came out that way.
 Solution
 
 
-```{r }
+```{r weather-2014-13 }
 d %>% arrange(desc(Comp.2))
 ```
 
@@ -312,7 +312,7 @@ briefly why it came out high.
 Solution
 
 
-```{r }
+```{r weather-2014-14 }
 d %>% arrange(desc(Comp.3))
 ```
 
@@ -335,7 +335,7 @@ out how to label the points by a variable and how to control the
 size of the labels, and I also went digging in the data frame
 that I read in from the file to get the count of the day in the
 year, which was called `day.count`:
-```{r }
+```{r weather-2014-15 }
 ggbiplot(weather.1, labels = weather.0$day.count, labels.size = 2)
 ```
 
@@ -370,7 +370,7 @@ Solution
 Day 37 is at the top left of the plot, at the pointy end of
 the arrows for rain, wind gust and average wind. This suggests a
 rainy, windy day:
-```{r }
+```{r weather-2014-16 }
 weather %>% slice(37)
 ```
 
@@ -383,7 +383,7 @@ are unremarkable.
 Day 211 is towards the pointy end of the arrows for temperature, so
 this is a hot day:
 
-```{r }
+```{r weather-2014-17 }
 weather %>% slice(211)
 ```
 
@@ -397,7 +397,7 @@ surprising).
 I can do a couple more. Points away from the pointy end of the arrows
 are *low* on the variables in question, for example day 265:
 
-```{r }
+```{r weather-2014-18 }
 weather %>% slice(265)
 ```
 
@@ -406,7 +406,7 @@ weather %>% slice(265)
 This is not really low rain, but it is definitely low
 *wind*. What about day 47?
 
-```{r }
+```{r weather-2014-19 }
 weather %>% slice(47)
 ```
 
@@ -421,7 +421,7 @@ arrows as well.
 Having done these by percentile ranks in one of the other questions,
 let's see if we can do that here as well:
 
-```{r}
+```{r weather-2014-20}
 weather %>% mutate(across(everything(), ~percent_rank(.))) %>% 
     slice(c(37, 211, 265, 47))
 ```

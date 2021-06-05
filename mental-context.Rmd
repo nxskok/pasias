@@ -91,7 +91,7 @@ Solution
 
 The usual thing --- read in the data appropriately and look at the
 data frame you got:
-```{r }
+```{r mental-context-1 }
 my_url <- "http://ritsokiguess.site/datafiles/smith.txt"
 smith <- read_delim(my_url, " ")
 smith
@@ -113,7 +113,7 @@ Solution
 
 Use `mutate` and assign everything back to what it was
 before:
-```{r }
+```{r mental-context-2 }
 smith <- smith %>% mutate(context = factor(context))
 smith
 ```
@@ -135,7 +135,7 @@ Solution
 You have lots of choices now, since `context` is a factor
 (and can also be treated as text). 
 The most obvious factor-based way is this:
-```{r }
+```{r mental-context-3 }
 levels(smith$context)
 ```
 
@@ -143,14 +143,14 @@ levels(smith$context)
 
 or use `summary`:
 
-```{r }
+```{r mental-context-4 }
 smith %>% select(context) %>% summary()
 ```
 
  
 
 Or treat `context` as text, such as this way:
-```{r }
+```{r mental-context-5 }
 smith %>% count(context)
 ```
 
@@ -160,7 +160,7 @@ These all display the contexts in alphabetical order.
 
 Or display the distinct values:
 
-```{r }
+```{r mental-context-6 }
 smith %>% distinct(context)
 ```
 
@@ -168,7 +168,7 @@ smith %>% distinct(context)
 
 or, without using the `tidyverse`,
 
-```{r }
+```{r mental-context-7 }
 unique(smith$context)
 ```
 
@@ -195,14 +195,14 @@ All right, let's go from the bottom:
 
 
 * Different and placebo have same means. These are 1st and 4th.
-```{r }
+```{r mental-context-8 }
 c4 <- c(1, 0, 0, -1, 0)
 ```
 
          
 
 * Imaginary and photograph have same means. 2nd and 3rd:
-```{r }
+```{r mental-context-9 }
 c3 <- c(0, 1, -1, 0, 0)
 ```
 
@@ -212,7 +212,7 @@ c3 <- c(0, 1, -1, 0, 0)
 * Imaginary and photograph together same as `same`. This
 time we have two means being compared with one, so we need to give
 the two means half weight. 2nd and 3rd against 5th:
-```{r }
+```{r mental-context-10 }
 c2 <- c(0, 1 / 2, 1 / 2, 0, -1)
 ```
 
@@ -222,7 +222,7 @@ c2 <- c(0, 1 / 2, 1 / 2, 0, -1)
 * (Same and imaginary and photograph) vs.\ (different or placebo):
 2nd, 3rd and 5th with weight $1/3$ (three of them) against 1st and
 4th with weight $1/2$ (2 of them):
-```{r }
+```{r mental-context-11 }
 c1 <- c(-1 / 2, 1 / 3, 1 / 3, -1 / 2, 1 / 3)
 ```
 
@@ -232,7 +232,7 @@ Variations: you can switch the sign on everything within a
 contrast (since it doesn't matter which is plus and which is
 minus). You can also multiply through by anything to get rid of
 the fractions, for example these:
-```{r eval=F}
+```{r mental-context-12, eval=F}
 c2 <- c(0, 1, 1, 0, -2)
 c1 <- c(-3, 2, 2, -3, 2)
 ```
@@ -253,7 +253,7 @@ Solution
 
 Multiply your chosen contrasts together elementwise, and show
 that the results add to zero, eg. by showing the whole thing:
-```{r }
+```{r mental-context-13 }
 c1 * c2
 ```
 
@@ -261,7 +261,7 @@ c1 * c2
 which adds to zero because it is $2/6$ minus $1/3$,
 or by explicitly summing the elementwise product:
 
-```{r }
+```{r mental-context-14 }
 sum(c1 * c3)
 ```
 
@@ -280,7 +280,7 @@ Solution
 
 
 This:
-```{r }
+```{r mental-context-15 }
 m <- cbind(c1, c2, c3, c4)
 contrasts(smith$context) <- m
 ```
@@ -297,7 +297,7 @@ matter, *transposing* a matrix interchanges rows and columns, so
 that in math, we want to look at the matrix $M^T M$. In R,
 `%*%` means "matrix multiply".^[In R, percents around something mean that it is a special version of that something. Hence the notation for matrix-multiply and the pipe symbol. A regular * when used for multiplying matrices in R will multiply them element by element.] Thus,
 
-```{r }
+```{r mental-context-16 }
 t(m) %*% m
 ```
 
@@ -320,7 +320,7 @@ Solution
 
 
 We're past the hard part:
-```{r }
+```{r mental-context-17 }
 smith.1 <- lm(words ~ context, data = smith)
 summary(smith.1)
 ```

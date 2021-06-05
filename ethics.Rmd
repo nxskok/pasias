@@ -85,7 +85,7 @@ Solution
 
 
 So, like this, using the name `decide` in my case:
-```{r }
+```{r ethics-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/decision.csv"
 decide <- read_csv(my_url)
 decide
@@ -110,7 +110,7 @@ Solution
 
 Turn the response into a `factor` somehow, either by
 creating a new variable in the data frame or like this:
-```{r }
+```{r ethics-2 }
 decide.1 <- glm(factor(decision) ~ gender, data = decide, family = "binomial")
 summary(decide.1)
 ```
@@ -124,7 +124,7 @@ the next part, and we'll revisit this slope coefficient in a moment.
 Categorical *explanatory* variables are perfectly all right
 as text.
 Should I have used `drop1` to assess the significance? Maybe:
-```{r }
+```{r ethics-3 }
 drop1(decide.1, test = "Chisq")
 ```
 
@@ -146,7 +146,7 @@ this tell you?
 Solution
 
 
-```{r }
+```{r ethics-4 }
 with(decide, table(decision, gender))
 ```
 
@@ -161,7 +161,7 @@ If you want the column percents as well, you can use
 variable, then feed *that* into `prop.table`, calling for
 column percentages rather than row percentages:
 
-```{r }
+```{r ethics-5 }
 tab <- with(decide, table(decision, gender))
 prop.table(tab, 2)
 ```
@@ -182,7 +182,7 @@ stop. That's a giant-sized difference. No wonder it was significant.
 The other way of making the table is to use `xtabs`, with the
 same result:
 
-```{r }
+```{r ethics-6 }
 xtabs(~ decision + gender, data = decide)
 ```
 
@@ -224,7 +224,7 @@ one whose probability is being modelled.
 That's why I made you do that contingency table. Another way to
 think about
 this is to do a prediction, which would go like this:
-```{r }
+```{r ethics-7 }
 genders <- c("Female", "Male")
 new <- tibble(gender = genders)
 p <- predict(decide.1, new, type = "response")
@@ -257,7 +257,7 @@ Solution
 The obvious way of doing this is to type out the entire model,
 with the two new variables on the end. You have to remember to
 turn `decision` into a `factor` again:
-```{r }
+```{r ethics-8 }
 decide.2 <- glm(factor(decision) ~ gender + idealism + relativism,
   data = decide, family = "binomial"
 )
@@ -270,7 +270,7 @@ This is not so bad, copying and pasting. But
 the way I like better, when you're making a smallish change to a
 longish model, is to use `update`:
 
-```{r }
+```{r ethics-9 }
 decide.2 <- update(decide.1, . ~ . + idealism + relativism)
 summary(decide.2)
 ```
@@ -282,7 +282,7 @@ have something to add, because their P-values are both less than 0.05.
 
 Or (and perhaps better) you can look at `drop1` of either of these:
 
-```{r }
+```{r ethics-10 }
 drop1(decide.2, test = "Chisq")
 ```
 
@@ -298,7 +298,7 @@ Solution
 
 
 To my mind, `update` wins hands down here:
-```{r }
+```{r ethics-11 }
 decide.3 <- update(decide.2, . ~ . + scenario)
 ```
 
@@ -325,7 +325,7 @@ Solution
 
 
 These are the models that you fit in the last two parts:
-```{r }
+```{r ethics-12 }
 anova(decide.2, decide.3, test = "Chisq")
 ```
 
@@ -344,7 +344,7 @@ thing in regression because the right way to do the test is not an F
 test, but now a chi-squared test (this is true for all generalized
 linear models of which logistic regression is one):
 
-```{r }
+```{r ethics-13 }
 drop1(decide.3, test = "Chisq")
 ```
 
@@ -368,7 +368,7 @@ Solution
 
 
 All right. This is the model I called `decide.3`:
-```{r }
+```{r ethics-14 }
 summary(decide.3)
 ```
 
@@ -399,7 +399,7 @@ This also lends itself to a `predict` solution, but it's a
 little fiddly. I need some "average" values for the other variables,
 and I don't know what they are yet:
 
-```{r }
+```{r ethics-15 }
 decide %>% summarize(across(where(is.numeric), ~median(.)))
 ```
 
@@ -410,7 +410,7 @@ decide %>% summarize(across(where(is.numeric), ~median(.)))
 The other thing we need is a list of all the scenarios. Here's a cute
 way to do that:
 
-```{r }
+```{r ethics-16 }
 scenarios <- decide %>% count(scenario) %>% pull(scenario)
 scenarios
 ```
@@ -427,7 +427,7 @@ scenarios for, let's say, females. (We don't have an interaction, so
 according to the model, the pattern is the same for males and
 females. So I could just as well have looked at males.)
 
-```{r }
+```{r ethics-17 }
 new <- crossing(idealism = 6.5, relativism = 6.1, gender = "Female", scenario = scenarios)
 new
 p <- predict(decide.3, new, type = "response")
@@ -445,7 +445,7 @@ test that. This works most nicely using `update` and then
 `anova`, to fit the model with interaction and compare it with
 the model without:
 
-```{r }
+```{r ethics-18 }
 decide.4 <- update(decide.3, . ~ . + gender * scenario)
 anova(decide.3, decide.4, test = "Chisq")
 ```
@@ -455,7 +455,7 @@ anova(decide.3, decide.4, test = "Chisq")
 No evidence at all that the scenarios have different effects for the
 different genders. The appropriate `predict` should show that too:
 
-```{r }
+```{r ethics-19 }
 genders <- decide %>% count(gender) %>% pull(gender)
 new <- crossing(idealism = 6.5, relativism = 6.1, gender = genders, scenario = scenarios)
 new
@@ -476,7 +476,7 @@ and the lowest one for
 *exactly* the same because these predictions came from the model
 with interaction. If you use the model without interaction, you get this:
 
-```{r }
+```{r ethics-20 }
 p <- predict(decide.3, new, type = "response")
 cbind(new, p)
 ```
@@ -539,7 +539,7 @@ This will also lead to a `predict`. We need "low" and
 "high" scores on the idealism and relativism tests. Let's use
 the quartiles:
 
-```{r }
+```{r ethics-21 }
 decide %>% summarize(
   i_q1 = quantile(idealism, 0.25),
   i_q3 = quantile(idealism, 0.75),
@@ -553,7 +553,7 @@ decide %>% summarize(
 There is a more elegant way, but this works.
 Let's use the scenario `cosmetic` that was middling in its
 effects, and think about females:
-```{r }
+```{r ethics-22 }
 new <- crossing(
   idealism = c(5.6, 7.5), relativism = c(5.4, 6.8),
   gender = "Female", scenario = "cosmetic"
@@ -584,7 +584,7 @@ file.^[If you took STAB23, you'll have used PSPP, which is  a free version of SP
 could think of was to use `import` from the `rio`
 package, which I think I mentioned before:
 
-```{r }
+```{r ethics-23 }
 library(rio)
 x <- import("/home/ken/Downloads/Logistic.sav")
 str(x)
@@ -615,7 +615,7 @@ values to translate. For that kind of job, I think `case_when`
 is a lot easier to read. It also lets us have a catch-all for catching
 errors --- "impossible" values occur distressingly often in real data:
 
-```{r }
+```{r ethics-24 }
 xx <- x %>%
   mutate(
     decision = case_when(
@@ -662,7 +662,7 @@ risky, but then I'd have more things to get rid of later.
 
 My next step is to check that I don't actually have any errors:
 
-```{r }
+```{r ethics-25 }
 xx %>% count(scenario, gender, decision)
 ```
 
@@ -673,7 +673,7 @@ Don't see any errors there.
 So now let's write what we have to a file. I think a `.csv`
 would be smart:
 
-```{r }
+```{r ethics-26 }
 xx %>%
   select(decision, idealism, relatvsm, gender, scenario) %>%
   write_csv("decision.csv")

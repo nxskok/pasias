@@ -12,7 +12,7 @@ Solution
 
 As usual:
 
-```{r}
+```{r pulsemarch-1}
 my_url <- "http://ritsokiguess.site/datafiles/pulsemarch.csv"
 march <- read_csv(my_url)
 march
@@ -75,14 +75,14 @@ Solution
 Thus:
 
 
-```{r}
+```{r pulsemarch-2}
 march.1 <- lm(After~Before+Sex, data=march)
 summary(march.1)
 ```
 
 Extra: if you want "all the other variables except the response" as explanatory, there is also this shortcut:
 
-```{r}
+```{r pulsemarch-3}
 march.1a <- lm(After~., data=march)
 summary(march.1a)
 ```
@@ -132,7 +132,7 @@ I think you have to mention the value $-4.8$, so that you can talk intelligently
 
 Extra: the implication of our model is that the predicted difference is the *same* all the way along. You might have your doubts about that; you might think the lines are closer together on the left and further apart on the right. Another way to think about this is whether the lines are *parallel*: that is, whether they have the same slope. I'm inclined to think they do; the data points are fairly scattered, and I think the slopes would have to be a lot more different to be significantly different. But you don't have to take my word for it: we can test this by adding an **interaction term** to the model. You might have seen this in ANOVA, where you are assessing the effect of one factor at different levels of the other. This is more or less the same idea. Note the `*` rather than the `+` in the model formula:^[To be precise, the * means "the main effects and the interaction together"; if you want to talk about just the interaction term, you denote it by `:`; note the `Before:SexMale` term in the summary table.]
 
-```{r}
+```{r pulsemarch-4}
 march.2 <- lm(After~Before*Sex, data=march)
 summary(march.2)
 ```
@@ -144,13 +144,13 @@ But maybe the significant difference is Male vs. Other, and we would never see i
 
 To look for *any* effect of a categorical variable, the right way is to use `drop1`, to see which variables, including categorical ones, can be removed as a whole, thus:^[The `test` piece says to do an $F$-test, which is different from without the quotes, which would mean not to do any tests, `F` without quotes meaning `FALSE`.]
 
-```{r}
+```{r pulsemarch-5}
 drop1(march.2, test="F")
 ```
 
 This *only* lists things that can be removed, in this case the interaction. It is not significant, so out it comes (resulting in our model `march.1`):
 
-```{r}
+```{r pulsemarch-6}
 drop1(march.1, test="F")
 ```
 
@@ -162,13 +162,13 @@ Extra 2:
 
 Let's go back and look at our data set again:
 
-```{r}
+```{r pulsemarch-7}
 march
 ```
 
 You might have been thinking, when we started, that these are before and after measurements *on the same people*, and so what we have here is matched pairs. So we do, but it's not the kind of matched pairs we are accustomed to. Let's begin by taking differences, getting rid of the `Before` and `After` columns, and see what we have left:
 
-```{r}
+```{r pulsemarch-8}
 march %>% 
 mutate(difference=After-Before) %>% 
 select(-After, -Before) -> march_paired
@@ -196,13 +196,13 @@ facet_wrap(~Sex)
 
 It seems to me that these are normal enough for a $t$-test, given the sample sizes (feel free to disagree):
 
-```{r}
+```{r pulsemarch-9}
 march_paired %>% count(Sex)
 ```
 
 The spreads look a bit different, so I think I would prefer the Welch test here:
 
-```{r}
+```{r pulsemarch-10}
 t.test(difference~Sex, data=march_paired)
 ```
 

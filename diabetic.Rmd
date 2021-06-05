@@ -20,7 +20,7 @@ Solution
 
 From the URL is easiest. These are delimited by one space, as
 you can tell by looking at the file:
-```{r }
+```{r diabetic-1 }
 my_url <- "http://ritsokiguess.site/datafiles/runner.txt"
 runs <- read_delim(my_url, " ")
 runs
@@ -73,7 +73,7 @@ Solution
 
 
 Two steps: `lm` and then `summary`:
-```{r }
+```{r diabetic-2 }
 runs.1 <- lm(blood_sugar ~ distance, data = runs)
 summary(runs.1)
 ```
@@ -130,7 +130,7 @@ interval for the mean response would be).
 The procedure is to set up a data frame with the two
 `distance` values in it, and then feed that and the
 regression object into `predict`, coming up in a moment.
-```{r }
+```{r diabetic-3 }
 dists <- c(3, 5)
 dist.new <- tibble(distance = dists)
 dist.new
@@ -144,7 +144,7 @@ won't work. At least, it won't work properly.^[It won't give you an error, but i
 
 Then, `predict`:
 
-```{r }
+```{r diabetic-4 }
 pp <- predict(runs.1, dist.new, interval = "p")
 pp
 ```
@@ -153,7 +153,7 @@ pp
 
 and display this with the distances by the side:
 
-```{r }
+```{r diabetic-5 }
 cbind(dist.new, pp)
 ```
 
@@ -161,7 +161,7 @@ cbind(dist.new, pp)
 
 or
 
-```{r }
+```{r diabetic-6 }
 data.frame(dist.new, pp)
 ```
 
@@ -178,7 +178,7 @@ but they are a bit more particular about what they will take:
 `bind_cols` takes vectors or data frames. The problem here is
 that `pp` is not either of those:
 
-```{r }
+```{r diabetic-7 }
 class(pp)
 ```
 
@@ -187,7 +187,7 @@ class(pp)
 so that we have to use `as_tibble` first to turn it into a
 data frame, and thus:
 
-```{r }
+```{r diabetic-8 }
 pp %>% as_tibble() %>% bind_cols(dist.new)
 ```
 
@@ -195,7 +195,7 @@ pp %>% as_tibble() %>% bind_cols(dist.new)
 
 which puts things backwards, unless you do it like this:
 
-```{r }
+```{r diabetic-9 }
 dist.new %>% bind_cols(as_tibble(pp))
 ```
 
@@ -205,7 +205,7 @@ which is a pretty result from very ugly code.
 
 I also remembered that if you finish with a `select`, you get the columns in the order they were in the `select`:
 
-```{r }
+```{r diabetic-10 }
 pp %>%
   as_tibble() %>%
   bind_cols(dist.new) %>%

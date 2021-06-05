@@ -28,7 +28,7 @@ Look at the data file, and see that the values are separated by a
 single space, so \verb=read_delim= will do it. Read straight from
 the URL; the hint above tells you how to copy it, which would even work if the link spans two lines.
 
-```{r}
+```{r rainfall-1}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain <- read_delim(my_url, " ")
 rain
@@ -45,7 +45,7 @@ rainfall amount. But the year is always four digits, so the columns
 line up, and there is a space all the way down between the year and
 the rainfall. That means that this will also work: 
 
-```{r}
+```{r rainfall-2}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain <- read_table(my_url)
 rain
@@ -58,7 +58,7 @@ It also looks as if it could be tab-separated values, since the rainfall
 column always starts in the same place, but if you try it, you'll find
 that it doesn't work:
 
-```{r}
+```{r rainfall-3}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain_nogood <- read_tsv(my_url)
 rain_nogood
@@ -89,7 +89,7 @@ Solution
 
 I almost gave the game away: this is `summary`.
 
-```{r}
+```{r rainfall-4}
 summary(rain)
 ```
 
@@ -109,13 +109,13 @@ This is one quantitative variable, so a histogram is your first
 thought. This means picking a number of bins. Not too many, since
 you want a picture of the shape:
 
-```{r}
+```{r rainfall-5}
 ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=8)
 ```
 
 If you picked fewer bins, you'll get a different picture:
 
-```{r}
+```{r rainfall-6}
 ggplot(rain, aes(x=Rainfall)) + geom_histogram(bins=6)
 ```
 
@@ -155,7 +155,7 @@ Solution
 First we
 need the 1997 rainfall. Go back and find it in the data. I am borrowing an idea from later in the course (because I am lazy):
 
-```{r}
+```{r rainfall-7}
 rain %>% filter(Year==1997)
 ```
 
@@ -163,7 +163,7 @@ rain %>% filter(Year==1997)
 
 Now, what would be a "normal level" of rainfall? Some kind of average, like a mean or a median, maybe. But we have those, from our summary that we made earlier, repeated here for (my) convenience:
 
-```{r}
+```{r rainfall-8}
 summary(rain)
 ```
 
@@ -172,7 +172,7 @@ The mean is 18.69 and the median is 16.72 inches.
 So divide the 1997 rainfall by each of the summaries, and see what happens, using
 your calculator, or using R as a calculator:
 
-```{r}
+```{r rainfall-9}
 29.7/18.69
 29.7/16.72
 ```
@@ -241,7 +241,7 @@ histogram. One of them was 1997, but there were others too, so
 
 Another approach that you have seen is to `View` your dataframe:
 
-```{r, eval=FALSE}
+```{r rainfall-10, eval=FALSE}
 View(rain)
 ```
 
@@ -251,14 +251,14 @@ That will come out as a  separate tab in your R Studio and you can look at it (y
 
 Later, we learn how to sort in code, which goes like this (to sort highest first):
 
-```{r}
+```{r rainfall-11}
 rain %>% arrange(desc(Rainfall))
 ``` 
 
 
 A more sophisticated way that we learn later:
 
-```{r}
+```{r rainfall-12}
 rain %>% summarize(max=max(Rainfall))
 ```
 

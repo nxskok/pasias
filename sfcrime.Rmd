@@ -100,7 +100,7 @@ Solution
 
 
 Same idea. Write it out, or use `update`:
-```{r }
+```{r sfcrime-1 }
 sfcrime.2 <- update(sfcrime.1,.~.-DayOfWeek)
 ```
 
@@ -118,7 +118,7 @@ Solution
 
 This:
 
-```{r }
+```{r sfcrime-2 }
 anova(sfcrime.2,sfcrime.1)
 ```
 
@@ -155,7 +155,7 @@ I left this one fairly open, because you've done this kind of thing
 before, so what you need to do ought to be fairly clear:
 Construct the values to predict for with plural names:^[You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.]
 
-```{r }
+```{r sfcrime-3 }
 DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
 DayOfWeeks
 PdDistricts <- "TENDERLOIN"
@@ -174,7 +174,7 @@ Then, make data frame of combinations. The nice thing is that if we
 had more than one district, we'd just define `PdDistricts`
 appropriately above and the rest of it would be the same:
 
-```{r }
+```{r sfcrime-4 }
 sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
 sfcrime.new
 ```
@@ -183,7 +183,7 @@ sfcrime.new
 
 Then do the predictions:
 
-```{r }
+```{r sfcrime-5 }
 p <- predict(sfcrime.1,sfcrime.new,type="probs")
 ```
 
@@ -194,7 +194,7 @@ they are *all different*. I just make a guess, and if I guess
 something that this version of `predict` doesn't know about,
 it'll tell me:
 
-```{r error=T}
+```{r sfcrime-6, error=T}
 p <- predict(sfcrime.1,sfcrime.new,type="bananas")
 ```
 
@@ -210,7 +210,7 @@ Finally, display the results. I thought `cbind` wouldn't work
 here, because some of the variables are factors and some are numbers,
 but `cbind`  is smarter than that:^[The old base-R stuff like `cbind` makes some guesses about what you want. If it guesses right, it makes things work very smoothly, but if not, you can end up with some mysterious problems to debug. The old `read.table` for reading in data, likewise, used to turn text into `factor`s, *without telling you*. The tidyverse, on the other hand, requires you to be more explicit about what you want, or to have things be the same type, so that you don't run into these kinds of things.]
 
-```{r }
+```{r sfcrime-7 }
 cbind(sfcrime.new,p)
 ```
 
@@ -240,7 +240,7 @@ what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
 significant.^[Statistical significance as an idea grew up in    the days before "big data".]
 I want to compare another district. What districts do we have?
-```{r }
+```{r sfcrime-8 }
 sfcrime %>% count(PdDistrict)
 ```
 
@@ -251,13 +251,13 @@ district. Let's look at the lowest-crime district `RICHMOND`. I
 copy and paste my code. Since I want to compare two districts, I
 include both:
 
-```{r echo=F}
+```{r sfcrime-9, echo=F}
 options(width=90)
 ```
 
  
 
-```{r size="footnotesize"}
+```{r sfcrime-10, size="footnotesize"}
 DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
 PdDistricts <- c("RICHMOND","TENDERLOIN")
 sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
@@ -314,7 +314,7 @@ different districts might not be very big. We can even assess that; we
 have all the machinery for the predictions, and we just have to apply
 them to this model:
 
-```{r size="footnotesize"}
+```{r sfcrime-11, size="footnotesize"}
 p3 <- predict(sfcrime.3,sfcrime.new,type="probs")
 d3 <- cbind(sfcrime.new,p3) ; d3
 ```
@@ -329,7 +329,7 @@ between them, and glue it back onto the district and day of week. I
 rounded the prediction differences off to 4 decimals to make the
 largest ones easier to find:
 
-```{r size="footnotesize"}
+```{r sfcrime-12, size="footnotesize"}
 pdiff <- round(p3-p1, 4)
 cbind(sfcrime.new, pdiff)
 ```
@@ -349,7 +349,7 @@ I have to put those little "backticks" around `VEHICLE THEFT`
 since the variable name has a space in it. My code inefficiently sorts
 the differences twice:
 
-```{r }
+```{r sfcrime-13 }
 cbind(sfcrime.new,pdiff) %>% 
   pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to="crimetype", values_to = "difference") -> d1
 d1 %>% arrange(difference) %>% slice(1:6)
@@ -362,7 +362,7 @@ I don't know what, if anything, you make of those.
 
 Extra: there is a better way of doing those in one go:
 
-```{r }
+```{r sfcrime-14 }
 d1 %>% top_n(6, difference)
 d1 %>% top_n(6, -difference)
 ```

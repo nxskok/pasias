@@ -5,7 +5,7 @@ output: html_notebook
 
 ## packages
 
-```{r}
+```{r bootstrap-play-1}
 library(tidyverse)
 library(boot)
 library(bootstrap)
@@ -15,24 +15,24 @@ library(conflicted)
 
 ## air-conditioning data
 
-```{r}
+```{r bootstrap-play-2}
 (aircondit %>% rownames_to_column("failure") -> aircon)
 ```
 
-```{r}
+```{r bootstrap-play-3}
 aircon %>% summarize(m=mean(hours))
 ```
 
 
 ### save these and copy to website
 
-```{r}
+```{r bootstrap-play-4}
 write_csv(aircon, "air_conditioning.csv")
 ```
 
 ## read back in from website
 
-```{r}
+```{r bootstrap-play-5}
 my_url="https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv"
 aircon=read_csv(my_url)
 aircon
@@ -40,35 +40,35 @@ aircon
 
 ## What do you notice about the *shape* of the distribution of failure times?
 
-```{r}
+```{r bootstrap-play-6}
 ggplot(aircon, aes(x=hours))+ geom_histogram(bins=7)
 ```
 
-```{r}
+```{r bootstrap-play-7}
 nbins=nclass.FD(aircon$hours)
 nbins
 ```
 
 or a normal quantile plot
 
-```{r}
+```{r bootstrap-play-8}
 ggplot(aircon, aes(sample=hours))+stat_qq()+stat_qq_line()
 ```
 
 or a one-group boxplot:
 
-```{r}
+```{r bootstrap-play-9}
 ggplot(aircon, aes(y=hours, x=1))+geom_boxplot()
 ```
 
 ## Bootstrapping the mean
 
-```{r}
+```{r bootstrap-play-10}
 rerun(1000, sample(aircon$hours, replace=T)) %>% 
   map_dbl(~mean(.)) -> means
 ```
 
-```{r}
+```{r bootstrap-play-11}
 ggplot(tibble(means), aes(sample=means))+stat_qq()+stat_qq_line()
 ```
 
@@ -76,7 +76,7 @@ still right-skewed
 
 bootstrap t and percentile:
 
-```{r}
+```{r bootstrap-play-12}
 t_star=qt(0.975, 11)
 t_star
 mean(means)+c(-1, 1)* t_star* sd(means)
@@ -84,33 +84,33 @@ mean(means)+c(-1, 1)* t_star* sd(means)
 
 percentile interval
 
-```{r}
+```{r bootstrap-play-13}
 quantile(means, c(0.025, 0.975))
 ```
 
 BCA interval
 
-```{r}
+```{r bootstrap-play-14}
 bcanon(aircon$hours, 1000, mean)$confpoints -> bca
 bca
 ```
 
 ## bootstrapping for median
 
-```{r}
+```{r bootstrap-play-15}
 rerun(1000, sample(aircon$hours, replace=T)) %>% 
   map_dbl(~median(.)) -> medians
 ```
 
 plot them
 
-```{r}
+```{r bootstrap-play-16}
 ggplot(tibble(medians), aes(sample=medians))+stat_qq()+stat_qq_line()
 ```
 
 or
 
-```{r}
+```{r bootstrap-play-17}
 ggplot(tibble(medians), aes(x=medians))+geom_histogram(bins=30)
 ```
 

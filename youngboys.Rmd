@@ -32,7 +32,7 @@ of body weight)
 Solution
 
 
-```{r }
+```{r youngboys-1 }
 my_url <- "http://ritsokiguess.site/datafiles/youngboys.txt"
 boys <- read_delim(my_url, " ")
 boys
@@ -53,7 +53,7 @@ Solution
 
 Fitting four explanatory variables with only ten observations is likely to be pretty shaky, but we 
 press ahead regardless:
-```{r }
+```{r youngboys-2 }
 boys.1 <- lm(uptake ~ age + height + weight + chest, data = boys)
 summary(boys.1)
 ```
@@ -135,7 +135,7 @@ Only `height` is significant, so that's the
 only explanatory variable we need to keep. I would
 just do the regression straight rather than using
 `update` here:
-```{r }
+```{r youngboys-3 }
 boys.2 <- lm(uptake ~ height, data = boys)
 summary(boys.2)
 ```
@@ -144,7 +144,7 @@ summary(boys.2)
 
 If you want, you can use `update` here, which looks like this:
 
-```{r }
+```{r youngboys-4 }
 boys.2a <- update(boys.1, . ~ . - age - weight - chest)
 summary(boys.2a)
 ```
@@ -187,7 +187,7 @@ compares two models differing by more than one $x$ uses
 are equally good, against the alternative that the bigger (first) one
 is better. Feed `anova` two fitted model objects, smaller first:
 
-```{r }
+```{r youngboys-5 }
 anova(boys.2, boys.1)
 ```
 
@@ -230,7 +230,7 @@ Solution
 
 Correlations first:
 
-```{r }
+```{r youngboys-6 }
 cor(boys)
 ```
 
@@ -266,7 +266,7 @@ Another way to think about these things is via pairwise
 scatterplots. The nicest way to produce these is via `ggpairs`
 from package `GGally`:
 
-```{r }
+```{r youngboys-7 }
 boys %>% ggpairs(progress = FALSE)
 ```
 

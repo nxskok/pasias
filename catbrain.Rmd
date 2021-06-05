@@ -11,21 +11,21 @@ Solution
 
 Make sure you have these two packages loaded:
 
-```{r }
+```{r catbrain-1 }
 library(leaflet)
 library(tmaptools)
 ```
 
 To find the latitude and longitude of Catbrain:
 
-```{r}
+```{r catbrain-2}
 catbrain <- tibble(place = "Catbrain UK")
 catbrain %>% mutate(ll = list(geocode_OSM(place))) %>% 
   unnest_wider(ll) %>% 
   unnest_wider(coords) -> catbrain
 ```
 
-```{r}
+```{r catbrain-3}
 catbrain
 ```
 
@@ -41,7 +41,7 @@ Solution
 
 That goes this way:
 
-```{r}
+```{r catbrain-4}
 leaflet(data = catbrain) %>% 
   addTiles() %>% 
   addCircleMarkers(lng = ~x, lat = ~y) -> catbrain_map
@@ -72,7 +72,7 @@ Solution
 
 I chose the cities below, mostly somewhere near Catbrain. You could fire up a Google map, zoom it out until it contains something you know, and pick some places you've heard of. (I happen to know British geography pretty well, so I just picked some mostly nearby places out of my head. I didn't really want to pick London, but I figured this was the one *you* might know.)
 
-```{r cache=T}
+```{r catbrain-5, cache=T}
 catbrain2 <- tribble(
   ~where,
   "Catbrain UK",
@@ -92,7 +92,7 @@ catbrain2 %>%
   unnest_wider(coords) -> catbrain2
 ```
 
-```{r}
+```{r catbrain-6}
 catbrain2
 ```
 
@@ -107,7 +107,7 @@ Solution
 
 The map-drawing is almost the same, just changing the dataframe:
 
-```{r}
+```{r catbrain-7}
 leaflet(data = catbrain2) %>% 
   addTiles() %>% 
   addCircleMarkers(lng = ~x, lat = ~y)

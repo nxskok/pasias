@@ -90,7 +90,7 @@ mercury %>%
 
 and now we plot `mercury` against `xval` in facets according to `xname`. The other thing to remember is that the explanatory variables are on different scales, so we should use `scales="free"` to allow each facet to have its own scales:
 
-```{r}
+```{r radegg}
 mercury %>% 
   pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
   ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
@@ -99,7 +99,7 @@ mercury %>%
 
 I did one more thing, which is to note that I am going to be assessing these relationships in a moment, so I would rather have squarer plots than the tall skinny ones that come out by default (that is to say these):
 
-```{r}
+```{r bearler}
 mercury %>% 
   pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
   ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
@@ -189,19 +189,19 @@ There's no need to define a new column containing log-mercury in the dataframe, 
 
 residuals against fitted
 
-```{r}
+```{r stahillin}
 ggplot(mercury.2, aes(x=.fitted, y=.resid)) + geom_point()
 ```
 
 normal quantile plot of residuals
 
-```{r}
+```{r wysshar}
 ggplot(mercury.2, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
 against the explanatory variables. This uses the ideas of `augment` (from `broom`) and pivoting longer:
 
-```{r}
+```{r truchtinger}
 mercury.2 %>% augment(mercury) %>% 
   pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
   ggplot(aes(x = xval, y = .resid)) + geom_point() +
@@ -276,15 +276,15 @@ summary(mercury.4)
 
 residuals for this one
 
-```{r}
+```{r lux}
 ggplot(mercury.4, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
-```{r}
+```{r bissler}
 ggplot(mercury.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
-```{r}
+```{r vontalhain}
 mercury.4 %>% augment(mercury) %>% 
   pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
   ggplot(aes(x = xval, y = .resid)) + geom_point() +
@@ -317,7 +317,7 @@ d.1 <- lm(y~x, data = d)
 summary(d.1)
 ```
 
-```{r}
+```{r gierings}
 ggplot(d.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -326,7 +326,7 @@ d <- tibble(err = rnorm(200), x=as.numeric(gl(20, 10)))
 d %>% mutate(y = 10+3*x+err) -> d
 ```
 
-```{r}
+```{r vonlouffen}
 ggplot(d, aes(x=x, y=y)) + geom_point()
 ```
 

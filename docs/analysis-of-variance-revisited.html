@@ -618,20 +618,20 @@ Try to use one of the explanatory variables as <code>x</code> and the other
 one as <code>fill</code> (or <code>colour</code>):</p>
 <div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1"><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> rain_pH, <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb259-2" title="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-161-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/acidrain-2-1.png" width="672" /></p>
 <p>That looks as if it worked, but it didn’t. See the boxplot below for
 how it’s supposed to be. I need <code>x</code> for the boxplot needs to
 be categorical. The easiest way to make it such is to wrap it in
 <code>factor</code>:</p>
 <div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">fill =</span> soil_depth)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb260-2" title="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-162-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/acidrain-3-1.png" width="672" /></p>
 <p>Even though <code>soil_depth</code> looks like numbers, the printout of
 the data frame reveals that it is text, so that is OK.</p>
 <p>If you prefer, exchange <code>x</code> and <code>fill</code>:</p>
 <div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">ggplot</span>(acidrain, <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(rain_pH), <span class="dt">y =</span> soil_acidity, <span class="dt">x =</span> soil_depth)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb261-2" title="2"><span class="st">  </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-163-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/acidrain-4-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>What does your grouped boxplot say about likely
@@ -798,15 +798,15 @@ name you gave it. I’m going to use my proper-order data frame for
 this:</p>
 <div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" title="1"><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb278-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-169-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/zellerin-1.png" width="672" /></p>
 <p>Or, you probably had this:</p>
 <div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb279-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-170-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bapplin-1.png" width="672" /></p>
 <p>Since <code>a</code> and <code>b</code> both have three levels, you could just as well use them the other way around:</p>
 <div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1"><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> b, <span class="dt">y =</span> m, <span class="dt">colour =</span> a, <span class="dt">group =</span> a)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb280-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-171-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/vonmengen-1.png" width="672" /></p>
 <p>The plot looks different depending on how you draw it, but the
 conclusion from it (below) will be the same.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -828,7 +828,7 @@ data, taken from the original data frame:</p>
 <div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1"><span class="kw">ggplot</span>(d2, <span class="kw">aes</span>(<span class="dt">x =</span> a, <span class="dt">y =</span> m, <span class="dt">colour =</span> b, <span class="dt">group =</span> b)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb281-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb281-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> hayfever, <span class="kw">aes</span>(<span class="dt">y =</span> relief))</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-172-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/swaub-1.png" width="672" /></p>
 <p>Technique: for that last <code>geom_point</code>, put in anything that
 changes: a new data frame, and a new <code>y</code> for the plot, but the
 <code>x</code> and <code>colour</code> and <code>group</code> are the same as they
@@ -1369,7 +1369,7 @@ trouble:</p>
 ## # … with 65 more rows</code></pre>
 <p>So far so good. 75 students, in tidy format.</p>
 <div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1"><span class="kw">ggplot</span>(studyhours, <span class="kw">aes</span>(<span class="dt">x =</span> major, <span class="dt">y =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-201-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/studyhours-2-1.png" width="672" /></p>
 <p>This suggests that the math students study more than the others, but
 the English and social science students study about the same amount.</p>
 <p>I see some rather consistent right-skewness here (but no outliers). We
@@ -1382,7 +1382,7 @@ lowest on both.</p>
 <p>Extra: Box-Cox also works on ANOVA-type data, since that is an <code>lm</code>
 kind of model:</p>
 <div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1"><span class="kw">boxcox</span>(hours <span class="op">~</span><span class="st"> </span>major, <span class="dt">data =</span> studyhours)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-202-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/studyhours-3-1.png" width="672" /></p>
 <p>This suggests that some kind of transformation would be a good idea
 (no transformation, power 1, is not supported by the data). My guess
 of 0.5 is not bad; that, or something a bit less like 0.25 (fourth

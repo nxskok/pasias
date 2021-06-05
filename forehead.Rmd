@@ -22,7 +22,7 @@ Solution
 
 Separated by spaces, so `read_delim`:
 
-```{r }
+```{r forehead-1 }
 my_url <- "http://ritsokiguess.site/datafiles/forehead.txt"
 instr <- read_delim(my_url, " ")
 instr
@@ -42,7 +42,7 @@ Solution
 
 We need the values in each group to be approximately normally
 distributed. Side-by-side boxplots will do it:
-```{r }
+```{r forehead-2 }
 ggplot(instr, aes(x = group, y = score)) + geom_boxplot()
 ```
 
@@ -51,7 +51,7 @@ ggplot(instr, aes(x = group, y = score)) + geom_boxplot()
 or, if you like, separate (facetted) normal quantile plots, which I
 would do this way:
 
-```{r }
+```{r forehead-3 }
 ggplot(instr, aes(sample = score)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~group, ncol = 1)
@@ -97,7 +97,7 @@ Solution
 
 
 The overall median first:
-```{r }
+```{r forehead-4 }
 instr %>% summarize(med = median(score))
 ```
 
@@ -110,7 +110,7 @@ Then, create and save a table of the value by group and above/below
 median. You can count either above or below (it comes out equivalently
 either way):
 
-```{r }
+```{r forehead-5 }
 tab <- with(instr, table(group, score > 87.5))
 tab
 ```
@@ -123,7 +123,7 @@ do Yates's correction, so that it would come out the same if you were
 doing it by hand ("observed minus expected, squared, divided by expected" 
 and all that stuff).
 
-```{r }
+```{r forehead-6 }
 chisq.test(tab, correct = F)
 ```
 
@@ -147,7 +147,7 @@ your boxplots and see that the median for group A (8:30 am) is
 substantially higher than for group B (3:00pm). But you can also see
 it from your frequency table, if you displayed it:
 
-```{r }
+```{r forehead-7 }
 tab
 ```
 
@@ -240,7 +240,7 @@ get a publication out of drinking tea.
 How does that apply to Mood's median test? Well, let's remind
 ourselves of the table we had:
 
-```{r }
+```{r forehead-8 }
 tab
 ```
 
@@ -270,7 +270,7 @@ Solution
 
 
 Not much to it, since the data is already read in:
-```{r }
+```{r forehead-9 }
 library(smmr)
 median_test(instr, score, group)
 ```

@@ -30,7 +30,7 @@ Solution
 
 
 Tab-separated, so `read_tsv`; no column names, so `col_names=F`:
-```{r }
+```{r crickets-1 }
 my_url <- "http://ritsokiguess.site/datafiles/crickets.txt"
 crickets <- read_tsv(my_url, col_names = F)
 crickets
@@ -42,7 +42,7 @@ As promised.
 
 If you didn't catch the tab-separated part, this probably happened to you:
 
-```{r }
+```{r crickets-2 }
 d <- read_delim(my_url, " ", col_names = F)
 ```
 
@@ -50,7 +50,7 @@ d <- read_delim(my_url, " ", col_names = F)
 
 This doesn't look good:
 
-```{r }
+```{r crickets-3 }
 problems(d)
 ```
 
@@ -60,7 +60,7 @@ The "expected columns" being 1 should bother you, since we know
 there are supposed to be 4 columns. At this point, we take a look at
 what got read in:
 
-```{r }
+```{r crickets-4 }
 d
 ```
 
@@ -82,7 +82,7 @@ Solution
 
 Take this one piece of the pipeline at a time: that is, first check that you got the renaming right and looking at what you have, before proceeding to the `pivot_longer`. The syntax of `rename` is new name equals old name, and I like to split this over several lines to make it easier to read:
 
-```{r}
+```{r crickets-5}
 crickets %>% 
   mutate(row=row_number()) %>% 
   rename(
@@ -95,7 +95,7 @@ crickets %>%
 
 The first part of each column name is the species and the second part is what was measured each time, separated by an underscore. To handle that in `pivot_longer`, you give *two* names of new columns to create (in `names_to`), and say what they're separated by:
 
-```{r}
+```{r crickets-6}
 crickets %>% 
   mutate(row=row_number()) %>% 
   rename(
@@ -109,7 +109,7 @@ crickets %>%
 
 This is tidy now, but we went a step too far: that column `measurement` should be *two* columns, called `temperature` and `pulserate`, which means it should be made wider:
 
-```{r}
+```{r crickets-7}
 crickets %>% 
   mutate(row=row_number()) %>% 
   rename(
@@ -149,7 +149,7 @@ Solution
 
 Breathe, and then begin. `unite` creates new columns by
 joining together old ones:^[As `str_c` or `paste` do, actually, but the advantage of `unite` is that it gets rid of the other columns, which you probably no longer need.]
-```{r }
+```{r crickets-8 }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4)
@@ -166,7 +166,7 @@ won't often find those in data.
 Digression: `unite`-ing with a space could cause problems if
 the data values have spaces in them already. Consider this list of names:
 
-```{r }
+```{r crickets-9 }
 names <- c("Cameron McDonald", "Durwin Yang", "Ole Gunnar Solskjaer", "Mahmudullah")
 ```
 
@@ -175,7 +175,7 @@ names <- c("Cameron McDonald", "Durwin Yang", "Ole Gunnar Solskjaer", "Mahmudull
 Two very former students of mine, a Norwegian soccer player, and a
 Bangladeshi cricketer. Only one of these has played for Manchester United:
 
-```{r }
+```{r crickets-10 }
 manu <- c(F, F, T, F)
 ```
 
@@ -183,7 +183,7 @@ manu <- c(F, F, T, F)
 
 and let's make a data frame:
 
-```{r }
+```{r crickets-11 }
 d <- tibble(name = names, manu = manu)
 d
 ```
@@ -193,7 +193,7 @@ d
 Now, what happens if we `unite` those columns, separating them
 by a space?
 
-```{r }
+```{r crickets-12 }
 d %>% unite(joined, name:manu, sep = " ")
 ```
 
@@ -201,7 +201,7 @@ d %>% unite(joined, name:manu, sep = " ")
 
 If we then try to separate them again, what happens?
 
-```{r }
+```{r crickets-13 }
 d %>%
   unite(joined, name:manu, sep = " ") %>%
   separate(joined, c("one", "two"), " ")
@@ -214,7 +214,7 @@ and some of the names. If we use a different separator character,
 either choosing one deliberately or going with the default underscore,
 everything works swimmingly:
 
-```{r }
+```{r crickets-14 }
 d %>%
   unite(joined, name:manu, sep = ":") %>%
   separate(joined, c("one", "two"), ":")
@@ -243,7 +243,7 @@ Thus, this, naming the new column `temp_pulse` since it
 contains both of those things. Add to the end of the pipe you
 started building in the previous part:
 
-```{r }
+```{r crickets-15 }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
@@ -275,7 +275,7 @@ The text to split by is an underscore (in quotes), since
 values it pastes together. Glue the `separate` onto the
 end. We are creating two new variables `temperature` and
 `pulse_rate`:
-```{r }
+```{r crickets-16 }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
@@ -311,7 +311,7 @@ Solution
 `mutate`-ing into a column that already exists overwrites
 the variable that's already there (which saves us some effort
 here). 
-```{r }
+```{r crickets-17 }
 crickets.1 <- crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
@@ -345,7 +345,7 @@ and when you are doing the same thing on a number of columns, here a
 that we used way
 back to compute numerical summaries of a bunch of columns:
 
-```{r }
+```{r crickets-18 }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
@@ -358,7 +358,7 @@ crickets %>%
 
 Can't I just say that these are columns 2 and 3?
 
-```{r }
+```{r crickets-19 }
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%

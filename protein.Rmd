@@ -12,7 +12,7 @@ Solution
 
 The usual. This is one column only, so you can pretend the columns are separated by anything at all and it will still work:
 
-```{r}
+```{r protein-1}
 my_url <- "http://ritsokiguess.site/datafiles/protein.txt"
 meals <- read_table(my_url)
 meals %>% arrange(protein)
@@ -30,7 +30,7 @@ Solution
 
 One quantitative variable, so a histogram with a sufficiently small number of bins:
 
-```{r}
+```{r protein-2}
 ggplot(meals, aes(x=protein)) + geom_histogram(bins = 5)
 ```
 
@@ -58,7 +58,7 @@ Solution
 
 First, if you have not already done so, install `smmr` *following the instructions in the lecture notes*. (This one is not just `install.packages`.) Then, make sure you have a `library(smmr)` somewhere above where you are going to use something from it. Once that is in place, remember what we were interested in: was the median protein content 6 ounces, or is there evidence that it is something different? (The "not accurate" in the question says that the median could be higher or lower, either of which would be a problem, and so we need a two-sided alternative.) Thus, the null median is 6 and we need a two-sided test, which goes this way:
 
-```{r}
+```{r protein-3}
 sign_test(meals, protein, 6)
 ```
 
@@ -68,7 +68,7 @@ Make sure you give the actual P-value you are comparing with 0.05, since otherwi
 
 Extra: we already decided that a $t$-test is not the best here, but I am curious as to how different its P-value is:
 
-```{r}
+```{r protein-4}
 with(meals, t.test(protein, mu=6))
 ```
 
@@ -95,7 +95,7 @@ Solution
 
 This is `ci_median`, but you need to be paying attention: it's not the default 95% confidence level, so you have to specify that as well:
 
-```{r}
+```{r protein-5}
 ci_median(meals, protein, conf.level = 0.90)
 ```
 The interval goes from 4.91 to 5.79. (The data values have one decimal place, so you could justify two decimals in the CI for the median, but anything beyond that is noise and you shouldn't give it in your answer.^[There is actually slightly more to it here: the ends of this confidence interval for the median are always data values, because of the way it is constructed, so the actual end points really ought to be given to the *same* number of decimals as the data, here 4.9 to 5.8. The output given is not exactly 4.9 and 5.8 because of inaccuracy in the bisection.])
@@ -104,7 +104,7 @@ This interval is entirely below 6 (the null median), so evidently the reason tha
 
 Extra: the CI for the median is not that different from the one for the mean, which suggests that maybe the $t$-test was not so bad after all. If you want to investigate further, you can try finding a bootstrapped sampling distribution of the sample mean, and see how non-normal it looks:
 
-```{r}
+```{r protein-6}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(meals$protein, replace = TRUE))) %>% 
@@ -114,7 +114,7 @@ ggplot(d, aes(x = my_mean)) + geom_histogram(bins = 10)
 
 That is pretty close to normal. So the $t$-test would in actual fact have been fine. To confirm, a normal quantile plot of the bootstrapped sampling distribution:
 
-```{r}
+```{r protein-7}
 ggplot(d, aes(sample = my_mean)) + stat_qq() + stat_qq_line()
 ```
 A *tiny bit* skewed to the left.
@@ -123,7 +123,7 @@ But I didn't ask you to do this, because I wanted to give you a chance to do a s
 
 Extra 2: I mentioned in an note that the endpoints of the CI for the median are actually data points, only we didn't see it because of the accuracy to which `ci_median` was working. You can control this accuracy by an extra input `tol`. Let's do something silly here:
 
-```{r}
+```{r protein-8}
 ci_median(meals, protein, conf.level = 0.90, tol = 0.00000001)
 ```
 

@@ -47,7 +47,7 @@ Solution
 
 
 This is a `.csv` file (I tried to make it easy for you):
-```{r }
+```{r hsb-1 }
 my_url <- "http://ritsokiguess.site/datafiles/hsb.csv"
 hsb <- read_csv(my_url)
 hsb
@@ -79,7 +79,7 @@ Solution
 
 It has to be an `ordered` factor, which you can create in
 the data frame (or outside, if you prefer):
-```{r }
+```{r hsb-2 }
 hsb <- hsb %>% mutate(ses = ordered(ses, c("low", "middle", "high")))
 hsb
 ```
@@ -90,7 +90,7 @@ hsb
 
 
 
-```{r}
+```{r hsb-3}
 ses.1 <- polr(ses ~ read + write + math + science + socst, data = hsb)
 ```
 
@@ -106,7 +106,7 @@ time. Use `drop1` to decide which one to remove next.
 Solution
 
 
-```{r }
+```{r hsb-4 }
 drop1(ses.1, test = "Chisq")
 ```
 
@@ -116,7 +116,7 @@ I would have expected the AIC column to come out in order, but it
 doesn't. Never mind. Scan for the largest P-value, which belongs to
 `read`. (This also has the lowest AIC.) So, remove `read`:
 
-```{r }
+```{r hsb-5 }
 ses.2 <- update(ses.1, . ~ . - read)
 drop1(ses.2, test = "Chisq")
 ```
@@ -128,7 +128,7 @@ Note how the P-value for `science` has come down a long way.
 A close call, but `math` goes next.  The `update`
 doesn't take long to type:
 
-```{r }
+```{r hsb-6 }
 ses.3 <- update(ses.2, . ~ . - math)
 drop1(ses.3, test = "Chisq")
 ```
@@ -144,7 +144,7 @@ them.
 I think we can guess what will happen now: `write` comes out,
 and the other two variables will stay, so that'll be where we stop:
 
-```{r }
+```{r hsb-7 }
 ses.4 <- update(ses.3, . ~ . - write)
 drop1(ses.4, test = "Chisq")
 ```
@@ -162,7 +162,7 @@ not too much, if that's not there).
 Extras: I talked about correlation among the explanatory variables
 earlier, which I can explore:
 
-```{r }
+```{r hsb-8 }
 hsb %>% dplyr::select(read:socst) %>% cor()
 ```
 
@@ -184,7 +184,7 @@ So there was not as much insight there as I expected.
 The other thing is that you can use `step` for the
 variable-elimination task as well:
 
-```{r size="footnotesize"}
+```{r hsb-9, size="footnotesize"}
 ses.5 <- step(ses.1, direction = "backward", test = "Chisq")
 ```
 
@@ -206,7 +206,7 @@ Solution
 
 
 Thus, most obviously:
-```{r }
+```{r hsb-10 }
 sciences <- c(44, 58)
 socsts <- c(46, 61)
 new <- crossing(science = sciences, socst = socsts)
@@ -224,7 +224,7 @@ find the median of any other variables you had, and put that into your
 `new`. For example, if you still had `math`, you'd do
 this:^[That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.]
 
-```{r }
+```{r hsb-11 }
 hsb %>% summarize(m = median(math))
 maths <- 52
 new2 <- crossing(science = sciences, socst = socsts, math = maths)
@@ -245,7 +245,7 @@ Solution
 
 This is `predict`, and we've done the setup. My best model
 was called `ses.4`:
-```{r }
+```{r hsb-12 }
 p <- predict(ses.4, new, type = "probs")
 cbind(new, p)
 ```

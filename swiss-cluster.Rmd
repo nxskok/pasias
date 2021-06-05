@@ -15,7 +15,7 @@ Solution
 
 
 The data file was aligned in columns, so:
-```{r }
+```{r swiss-cluster-1 }
 my_url <- "http://ritsokiguess.site/datafiles/swiss1.txt"
 swiss <- read_table(my_url)
 swiss
@@ -31,7 +31,7 @@ deviation 1. (Don't try to standardize the `status` column!)
 Solution
 
 
-```{r }
+```{r swiss-cluster-2 }
 swiss.s <- swiss %>%
   select(-status) %>%
   scale()
@@ -41,7 +41,7 @@ swiss.s <- swiss %>%
 
 What kind of thing do we have?
 
-```{r }
+```{r swiss-cluster-3 }
 class(swiss.s)
 ```
 
@@ -50,7 +50,7 @@ class(swiss.s)
 so something like this is needed to display some of it (rather than
 all of it):
 
-```{r }
+```{r swiss-cluster-4 }
 head(swiss.s)
 ```
 
@@ -70,21 +70,21 @@ steeped in the Tidyverse a while, I think `rowwise` is much
 clearer, so I'll do that first.
 Start by making a `tibble` that has one column called `clusters` containing the numbers 2 through 10:
 
-```{r }
+```{r swiss-cluster-5 }
 tibble(clusters = 2:10)
 ```
 
  
 Now, for each of these numbers of clusters, calculate the total within-cluster sum of squares for *it* (that number of clusters). To do that, think about how you'd do it for something like three clusters:
 
-```{r }
+```{r swiss-cluster-6 }
 kmeans(swiss.s, 3, nstart = 20)$tot.withinss
 ```
 
  
 
 and then use that within your `rowwise`:
-```{r }
+```{r swiss-cluster-7 }
 tibble(clusters = 2:10) %>%
   rowwise() %>% 
   mutate(wss = kmeans(swiss.s, clusters, nstart = 20)$tot.withinss) -> wssq
@@ -94,7 +94,7 @@ wssq
  
 
 Another way is to save *all* the output from the `kmeans`, in a list-column, and then *extract* the thing you want, thus:
-```{r }
+```{r swiss-cluster-8 }
 tibble(clusters = 2:10) %>%
   rowwise() %>% 
   mutate(km = list(kmeans(swiss.s, clusters, nstart = 20))) %>%
@@ -108,7 +108,7 @@ The most important thing in both of these is to remember the `rowwise`. Without 
  
  
 If you insist, do it Python-style as a loop, like this:        
-```{r }
+```{r swiss-cluster-9 }
 clus <- 2:10
 wss.1 <- numeric(0)
 for (i in clus)
@@ -146,7 +146,7 @@ Solution
 The easiest is to use the output from the `rowwise`,
 which I called `wssq`, this already being a dataframe:
 
-```{r error=T}
+```{r swiss-cluster-10, error=T}
 ggplot(wssq, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
@@ -185,14 +185,14 @@ I'm going to start by setting the random number seed (so that
 my results don't change every time I run this). You don't need
 to do that, though you might want to in something like R
 Markdown code (for example, in an R Notebook):
-```{r }
+```{r swiss-cluster-11 }
 set.seed(457299)
 ```
 
 
 
 Now, down to business:
-```{r }
+```{r swiss-cluster-12 }
 swiss.7 <- kmeans(swiss.s, 4, nstart = 20)
 swiss.7$size
 ```
@@ -206,7 +206,7 @@ Extra: you might remember that back before I actually *ran*
 K-means on each of the numbers of clusters from 2 to 10. How can we
 extract that output? Something like this. Here's where the output was:
 
-```{r }
+```{r swiss-cluster-13 }
 wssq.2
 ```
 
@@ -214,7 +214,7 @@ wssq.2
 
 Now we need to pull out the 4th row and the `km` column. We need the output as an actual thing, not a data frame, so:
 
-```{r }
+```{r swiss-cluster-14 }
 wssq.2 %>%
   filter(clusters == 4) %>%
   pull(km) -> swiss.7a
@@ -224,7 +224,7 @@ wssq.2 %>%
 
 Is that the right thing?
 
-```{r }
+```{r swiss-cluster-15 }
 swiss.7a
 ```
 
@@ -232,7 +232,7 @@ swiss.7a
 
 Looks like it. But I should check:
 
-```{r }
+```{r swiss-cluster-16 }
 swiss.7a$centers
 ```
 
@@ -240,7 +240,7 @@ swiss.7a$centers
 
 Ah. `swiss.7a` is actually a `list`, as evidenced by the `[[1]]` at the top of the output, so I get things from it thus:
 
-```{r }
+```{r swiss-cluster-17 }
 swiss.7a[[1]]$centers
 ```
 
@@ -259,7 +259,7 @@ Solution
 
 `table`. `swiss.7$cluster` shows the actual
 cluster numbers:
-```{r }
+```{r swiss-cluster-18 }
 table(swiss$status, swiss.7$cluster)
 ```
 
@@ -267,7 +267,7 @@ table(swiss$status, swiss.7$cluster)
 
 Or, if you prefer,
 
-```{r }
+```{r swiss-cluster-19 }
 tibble(obs = swiss$status, pred = swiss.7$cluster) %>%
   count(obs, pred)
 ```
@@ -276,7 +276,7 @@ tibble(obs = swiss$status, pred = swiss.7$cluster) %>%
 
 or even
 
-```{r }
+```{r swiss-cluster-20 }
 tibble(obs = swiss$status, pred = swiss.7$cluster) %>%
   count(obs, pred) %>%
   pivot_wider(names_from = obs, values_from = n, values_fill = 0)

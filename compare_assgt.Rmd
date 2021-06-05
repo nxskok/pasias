@@ -1,27 +1,27 @@
 compare old assignment qs with current ones
 
-```{r}
+```{r compare-assgt-1}
 library(tidyverse)
 ```
-```{r}
+```{r compare-assgt-2}
 old <- list.files(path = "old_assgt", pattern = "*.Rmd")
 old
 ```
 
-```{r}
+```{r compare-assgt-3}
 current <- list.files(path = ".", pattern = "*.Rmd")
 current
 ```
 find the ones in old but not in current
 
-```{r}
+```{r compare-assgt-4}
 old %>% enframe(name = NULL) -> df_old
 current %>% enframe(name = NULL) -> df_current
 df_old %>% anti_join(df_current) %>% pull(value) -> to_add
 to_add
 ```
 
-```{r}
+```{r compare-assgt-5}
 sample(to_add, 5)
 ```
 

@@ -23,7 +23,7 @@ Solution
 
 
 Nothing very new here:
-```{r }
+```{r donner-1 }
 my_url <- "http://ritsokiguess.site/datafiles/donner.txt"
 donner <- read_delim(my_url, " ")
 donner
@@ -70,7 +70,7 @@ for gender and survival. I'll take any mixture of graphs and
 numerical summaries that addresses each pair of variables somehow
 and summarizes them in a sensible way.
 Starting with `age` vs. `gender`:
-```{r }
+```{r donner-2 }
 ggplot(donner, aes(x = gender, y = age)) + geom_boxplot()
 ```
 
@@ -78,14 +78,14 @@ ggplot(donner, aes(x = gender, y = age)) + geom_boxplot()
 
 or:
 
-```{r }
+```{r donner-3 }
 ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(gender ~ .)
 ```
 
 
 or:
 
-```{r }
+```{r donner-4 }
 donner %>% group_by(gender) %>% summarize(m = mean(age))
 ```
 
@@ -93,7 +93,7 @@ donner %>% group_by(gender) %>% summarize(m = mean(age))
 
 Age vs. `survived` is the same idea:
 
-```{r }
+```{r donner-5 }
 ggplot(donner, aes(x = survived, y = age)) + geom_boxplot()
 ```
 
@@ -101,14 +101,14 @@ ggplot(donner, aes(x = survived, y = age)) + geom_boxplot()
 
 or:
 
-```{r }
+```{r donner-6 }
 ggplot(donner, aes(x = age)) + geom_histogram(bins = 10) + facet_grid(survived ~ .)
 ```
 
 
 or:
 
-```{r }
+```{r donner-7 }
 donner %>% group_by(survived) %>% summarize(m = mean(age))
 ```
 
@@ -117,7 +117,7 @@ donner %>% group_by(survived) %>% summarize(m = mean(age))
 For `survived` against `gender`, the obvious thing is a
 cross-tabulation, gotten like this:
 
-```{r }
+```{r donner-8 }
 with(donner, table(gender, survived))
 ```
 
@@ -125,7 +125,7 @@ with(donner, table(gender, survived))
 
 or like this:
 
-```{r }
+```{r donner-9 }
 donner %>% group_by(gender, survived) %>% summarize(n = n())
 ```
 
@@ -133,7 +133,7 @@ donner %>% group_by(gender, survived) %>% summarize(n = n())
 
 For a graph, borrow the grouped bar-plot idea from the parasites question:
 
-```{r }
+```{r donner-10 }
 ggplot(donner, aes(x = gender, fill = survived)) + geom_bar(position = "dodge")
 ```
 
@@ -184,7 +184,7 @@ However, the response variable `survived` is a categorical
 variable expressed as text, so we need to make it into a
 `factor` first. Either create a new variable that is the
 factor version of `survived`, or do it right in the `glm`:
-```{r }
+```{r donner-11 }
 donner.1 <- glm(factor(survived) ~ age + gender, family = "binomial", data = donner)
 summary(donner.1)
 ```
@@ -192,7 +192,7 @@ summary(donner.1)
    
 We ought to take a moment to think about what is being predicted here:
 
-```{r }
+```{r donner-12 }
 levels(factor(donner$survived))
 ```
 
@@ -280,7 +280,7 @@ There is a lazy way to do step 1 (which I'll show first), and a way
 that is more work but more reliable (because you have to concentrate
 less).
 Step 1, the lazy way:
-```{r }
+```{r donner-13 }
 donner %>% select(age) %>% summary()
 donner %>% count(gender)
 ```
@@ -290,7 +290,7 @@ donner %>% count(gender)
 Then construct vectors called `ages` and `genders` by
 literally copying the values output from above:
 
-```{r }
+```{r donner-14 }
 ages <- c(24, 28, 40)
 genders <- c("female", "male")
 ```
@@ -305,7 +305,7 @@ quartiles etc.\ will still work, whereas your copying above won't.
 
 So, let's get the median and quartiles of age:
 
-```{r }
+```{r donner-15 }
 donner %>%
   summarize(
     q1 = quantile(age, 0.25),
@@ -318,7 +318,7 @@ donner %>%
 
 only these came out sideways, so we can "transpose" them:
 
-```{r }
+```{r donner-16 }
 donner %>%
   summarize(
     q1 = quantile(age, 0.25),
@@ -332,7 +332,7 @@ donner %>%
 
 and now if we "pull out" the `value` column, we are good:
 
-```{r }
+```{r donner-17 }
 ages <- donner %>%
   summarize(
     q1 = quantile(age, 0.25),
@@ -348,7 +348,7 @@ ages
 
 The same kind of idea will get us both genders without typing any genders:
 
-```{r }
+```{r donner-18 }
 genders <- donner %>%
   count(gender) %>%
   pull(gender)
@@ -360,7 +360,7 @@ genders
 We don't care how many there are of each gender; it's just a device to
 get the different genders.^[The counts are in a column called  `n` which we calculate and then ignore.] This is another way:
 
-```{r }
+```{r donner-19 }
 genders <- donner %>%
   select(gender) %>%
   distinct() %>%
@@ -380,7 +380,7 @@ principle of the thing.
 
 Step 2: 
 
-```{r }
+```{r donner-20 }
 donner.new <- crossing(age = ages, gender = genders)
 donner.new
 ```
@@ -391,7 +391,7 @@ All combinations of the three ages and two genders.
 
 Step 3:
 
-```{r }
+```{r donner-21 }
 p <- predict(donner.1, donner.new, type = "response")
 p
 ```
@@ -400,7 +400,7 @@ p
 
 Step 4:
 
-```{r }
+```{r donner-22 }
 cbind(donner.new, p)
 ```
 

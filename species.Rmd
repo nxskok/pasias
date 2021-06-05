@@ -17,7 +17,7 @@ Solution
 
 
 Nothing much new here:
-```{r }
+```{r species-1 }
 my_url <- "http://ritsokiguess.site/datafiles/species.txt"
 species <- read_delim(my_url, " ")
 species
@@ -50,7 +50,7 @@ The point here is that the values you have are *already*
 dissimilarities, so no conversion of the numbers is required. Thus
 this is a job for `as.dist`, which merely changes how it
 looks. Use a pipeline to get rid of the first column first:
-```{r }
+```{r species-2 }
 species %>%
   select(-what) %>%
   as.dist() -> d
@@ -68,7 +68,7 @@ appears only in a row and one of them (Man) only in a column.
 
 This also works, to select only the numerical columns:
 
-```{r }
+```{r species-3 }
 species %>%
   select(where(is.numeric)) %>%
   as.dist()
@@ -107,7 +107,7 @@ Solution
 
 
 Something like this:
-```{r }
+```{r species-4 }
 species.1 <- hclust(d, method = "single")
 plot(species.1)
 ```
@@ -124,7 +124,7 @@ Solution
 
 Not much changes  here in the code, but the result is noticeably
 different:
-```{r }
+```{r species-5 }
 species.2 <- hclust(d, method = "ward.D")
 plot(species.2)
 ```
@@ -182,7 +182,7 @@ number of clusters of that sort is supported by the data.
 To draw those clusters, you need `rect.hclust`, and
 before that you'll need to plot the cluster object again. For 2
 clusters, that would look like this:
-```{r }
+```{r species-6 }
 plot(species.2)
 rect.hclust(species.2, 2)
 ```
@@ -194,7 +194,7 @@ seem to have gone off the side, sorry.)
 
 Or we could go to the other end of the scale:
 
-```{r }
+```{r species-7 }
 plot(species.2)
 rect.hclust(species.2, 5)
 ```
@@ -216,7 +216,7 @@ Solution
 
 
 This is `cutree`. For 2 clusters it would be this:
-```{r }
+```{r species-8 }
 cutree(species.2, 2)
 ```
 
@@ -224,7 +224,7 @@ cutree(species.2, 2)
 
 For 5 it would be this:
 
-```{r }
+```{r species-9 }
 cutree(species.2, 5)
 ```
 

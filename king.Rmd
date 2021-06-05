@@ -55,7 +55,7 @@ Solution
 
 
 The usual:
-```{r }
+```{r king-1 }
 my_url <- "http://ritsokiguess.site/datafiles/king.csv"
 king <- read_csv(my_url)
 king
@@ -80,7 +80,7 @@ Solution
 
 
 `cbind` the appropriate columns together, to make a matrix:
-```{r }
+```{r king-2 }
 response <- with(king, cbind(i1, i2, i3, i4, i5, i6))
 ```
 
@@ -89,7 +89,7 @@ response <- with(king, cbind(i1, i2, i3, i4, i5, i6))
 This is the "simple" but tedious way, and produces a matrix because
 the `i1` through `i6` are vectors (single columns):
 
-```{r }
+```{r king-3 }
 class(response)
 ```
 
@@ -104,7 +104,7 @@ The clever way to get the response is to `select` the columns
 and then turn them into a matrix. This *does* permit the colon
 because we are now in the `tidyverse`:
 
-```{r }
+```{r king-4 }
 response <- king %>%
   select(i1:i6) %>%
   as.matrix()
@@ -119,7 +119,7 @@ another column `id` that starts with `i` that I do
 *not* want to be part of the response. So I had to abandon that
 idea, but not before trying this:
 
-```{r }
+```{r king-5 }
 response <- king %>%
   select(matches("i[0-9]")) %>%
   as.matrix()
@@ -147,7 +147,7 @@ different times, saving them, and also making a data frame out of them:
 Solution
 
 
-```{r }
+```{r king-6 }
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 ```
@@ -165,7 +165,7 @@ Solution
 
 Fit the `lm` first, and then pass that into `Manova`
 from `car`:
-```{r }
+```{r king-7 }
 king.1 <- lm(response ~ context, data = king)
 king.2 <- Manova(king.1, idata = times.df, idesign = ~times)
 king.2
@@ -206,7 +206,7 @@ Solution
 
 This is `pivot_longer` yet again: gather up columns `i1`
 through `i6` and call them something like `activity`:
-```{r }
+```{r king-8 }
 king %>% 
   pivot_longer(i1:i6, names_to="time", values_to="activity") -> king.long
 king.long
@@ -231,7 +231,7 @@ Solution
 
 That means this, using `group` to indicate which points to
 join by lines, since it's different from the `colour`: 
-```{r }
+```{r king-9 }
 ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
   geom_point() + geom_line()
 ```
@@ -240,7 +240,7 @@ ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
 
 I'd say the `geom_point` is optional, so that this is also
 good, perhaps better even:
-```{r }
+```{r king-10 }
 ggplot(king.long, aes(x = time, y = activity, colour = context, group = id)) +
   geom_line()
 ```
@@ -268,7 +268,7 @@ beyond time 2, whereas the rats in the `control` and
 decreasing so much after that.
 If you like, you can draw an interaction plot by working out the
 means for each `context`-`time` group first:
-```{r }
+```{r king-11 }
 king.long %>%
   group_by(context, time) %>%
   summarize(m = mean(activity)) %>%
@@ -286,7 +286,7 @@ This kind of thing also runs with `lmer` from package
 `lme4`. It uses the long data frame, thus, treating `id`
 (identifying the rats) as a random effect:
 
-```{r }
+```{r king-12 }
 king.3 <- lmer(activity ~ context * time + (1 | id), data = king.long)
 ```
 
@@ -294,7 +294,7 @@ king.3 <- lmer(activity ~ context * time + (1 | id), data = king.long)
 
 What can we drop? The only thing under consideration is the interaction:
 
-```{r }
+```{r king-13 }
 drop1(king.3, test = "Chisq")
 ```
 

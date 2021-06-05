@@ -26,7 +26,7 @@ score.
 Solution
 
 
-```{r }
+```{r ha2-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ha2.txt"
 ha <- read_delim(my_url, " ")
 ha
@@ -50,7 +50,7 @@ Solution
 
 This:
 
-```{r }
+```{r ha2-2 }
 ha.1 <- glm(factor(second) ~ anger + anxiety, family = "binomial", data = ha)
 summary(ha.1)
 ```
@@ -93,7 +93,7 @@ This time, I give you the values I want the predictions for (as
 opposed to calculating something like quartiles from the data), so
 we might as well just type them in.
 Step 1 is to save them (my preference is under plural names):
-```{r }
+```{r ha2-3 }
 anxieties <- c(40, 50, 60)
 angers <- c("y", "n")
 ```
@@ -103,7 +103,7 @@ angers <- c("y", "n")
 Step 2 is to make a data frame of combinations using
 `crossing`. I'll call mine `new`:
 
-```{r }
+```{r ha2-4 }
 new <- crossing(anxiety = anxieties, anger = angers)
 new
 ```
@@ -114,7 +114,7 @@ Step 3 is to do the predictions. Into `predict` go (in order)
 the fitted model, the new data frame that we just made, and something
 to make the predictions be probabilities:
 
-```{r }
+```{r ha2-5 }
 p <- predict(ha.1, new, type = "response")
 ```
 
@@ -124,7 +124,7 @@ Step 4 is to put these next to the data frame we
 created. `cbind` is easiest, since we don't know what kind of
 thing `p` might be, and `bind_cols` is pickier:
 
-```{r }
+```{r ha2-6 }
 cbind(new, p)
 ```
 
@@ -195,7 +195,7 @@ P-values.
 `anxiety` is significant, so it definitely has an effect on
 the probability of a second heart attack. The pattern is clear
 enough even with this small data set. Here's a visual:
-```{r }
+```{r ha2-7 }
 ggplot(ha, aes(x = second, y = anxiety)) + geom_boxplot()
 ```
 
@@ -219,7 +219,7 @@ wide, and for the two levels of `anger` at a fixed
 Another way of seeing that is a visual, which would be a side-by-side
 bar chart:
 
-```{r }
+```{r ha2-8 }
 ggplot(ha, aes(x = anger, fill = second)) + geom_bar(position = "dodge")
 ```
 
@@ -231,7 +231,7 @@ did.^[Read that carefully.] But with these small numbers, the
 difference, even though it points the way we would have guessed, is
 not large enough to be significant:
 
-```{r }
+```{r ha2-9 }
 with(ha, table(anger, second))
 ```
 

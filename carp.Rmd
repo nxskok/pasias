@@ -28,7 +28,7 @@ Solution
 
 Just this. Listing the data is up to you, but doing so and
 commenting that the values appear to be correct will improve your report.
-```{r }
+```{r carp-1 }
 my_url <- "http://ritsokiguess.site/datafiles/carp.txt"
 carp <- read_delim(my_url, " ")
 carp
@@ -45,7 +45,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r marttis}
 ggplot(carp, aes(x = bodyweight, y = ENE)) + geom_point() +
   geom_smooth()
 ```
@@ -83,7 +83,7 @@ Solution
 `lm`. The first stage is to fit the straight line, saving
 the result in a  variable, and the second stage is to look at the
 "fitted model object", here via `summary`:
-```{r }
+```{r carp-2 }
 carp.1 <- lm(ENE ~ bodyweight, data = carp)
 summary(carp.1)
 ```
@@ -110,7 +110,7 @@ Solution
 This is the easiest way: feed the output of the regression
 straight into `ggplot`:
 
-```{r }
+```{r goeslingerin}
 ggplot(carp.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -129,7 +129,7 @@ Solution
 
 Add bodyweight-squared to
 the regression. Don't forget the `I()`:
-```{r }
+```{r carp-3 }
 carp.2 <- lm(ENE ~ bodyweight + I(bodyweight^2), data = carp)
 summary(carp.2)
 ```
@@ -191,7 +191,7 @@ starting with the regression object `carp.2` as my base
 data frame, since we want (or I want) to do two things with
 that: plot the fitted values and join them with lines. Then I
 want to add the original data, just the points:
-```{r }
+```{r bletz}
 ggplot(carp.2, aes(x = carp$bodyweight, y = .fitted), colour = "blue") +
   geom_line(colour = "blue") +
   geom_point(data = carp, aes(x = bodyweight, y = ENE))
@@ -216,7 +216,7 @@ carp.2a
 
 so now you see what `carp.2a` has in it, and then:
 
-```{r error=TRUE}
+```{r koetman, error=TRUE}
 g <- ggplot(carp.2a, aes(x = bodyweight, y = .fitted)) +
   geom_line(colour = "blue") +
   geom_point(aes(y = ENE))
@@ -232,7 +232,7 @@ the $x$ coordinate `bodyweight` is correct so that we don't
 have to change that; we only have to change the $y$-coordinate, which
 is `ENE`. The plot is this:
 
-```{r error=T}
+```{r carp-4, error=T}
 g
 ```
 
@@ -269,7 +269,7 @@ $\blacksquare$
 The same idea as before for the other residual plot.  Use the
 fitted model object `carp.2` as your data frame for the
 `ggplot`:
-```{r }
+```{r ohem}
 ggplot(carp.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -287,7 +287,7 @@ example, that we should try an asymptote model. Note how I specify it,
 with the `I()` thing again, since `/` has a special meaning 
 to `lm` in the same way that 
 `^` does:
-```{r }
+```{r carp-5 }
 carp.3 <- lm(ENE ~ I(1 / bodyweight), data = carp)
 summary(carp.3)
 ```
@@ -320,7 +320,7 @@ convince us that we have the shape of the trend right.
 And, as ever, the residual plot. That's a lot easier than the plot we
 just did:
 
-```{r error=T}
+```{r sailer, error=T}
 ggplot(carp.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 

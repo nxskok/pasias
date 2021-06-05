@@ -26,7 +26,7 @@ Solution
 
 
 Data values separated by one space, so:
-```{r }
+```{r apache-1 }
 my_url <- "http://ritsokiguess.site/datafiles/apache.txt"
 icu <- read_delim(my_url, " ")
 icu
@@ -85,7 +85,7 @@ that didn't happen (survived). We don't actually have the numbers
 of survivals, but we can calculate these by subtracting from the
 numbers of patients (since a patient must have either lived or
 died): 
-```{r }
+```{r apache-2 }
 response <- icu %>%
   mutate(survivals = patients - deaths) %>%
   select(deaths, survivals) %>%
@@ -104,7 +104,7 @@ that row.
 Or do everything outside of the data
 frame: 
 
-```{r }
+```{r apache-3 }
 survivals <- with(icu, patients - deaths)
 resp <- with(icu, cbind(deaths, survivals))
 resp
@@ -126,7 +126,7 @@ death from the `apache` score, and display the results.
 Solution
 
 
-```{r }
+```{r apache-4 }
 apache.1 <- glm(response ~ apache, family = "binomial", data = icu)
 summary(apache.1)
 ```
@@ -179,7 +179,7 @@ Solution
 
 This is the easier version of `predict` since we don't have
 to make a new data frame of values to predict from:
-```{r }
+```{r apache-5 }
 p <- predict(apache.1, type = "response")
 cbind(icu, p)
 ```
@@ -205,7 +205,7 @@ Solution
 
 This means calculating the observed proportions first, adding the
 predicted probabilities, and then making the plot, like this:
-```{r }
+```{r apache-6 }
 icu %>%
   mutate(obs_prop = deaths / patients) %>%
   mutate(pred = p) %>%
@@ -239,7 +239,7 @@ point^[By size is meant the *area* of the circle,  which is what our brains perc
 according to the number of patients it was based on. This is not hard
 to do, since we have exactly that in `patients`:
 
-```{r }
+```{r apache-7 }
 icu %>%
   mutate(obs_prop = deaths / patients) %>%
   mutate(pred = p) %>%
@@ -255,7 +255,7 @@ prediction. Note that the `size`, because it is based on one of
 the variables, goes *inside* the `aes`. If you wanted the
 points all to be of size 5, say, you'd do it this way:
 
-```{r eval=F}
+```{r apache-8, eval=F}
 geom_point(aes(y = obs_prop), size = 5)
 ```
 

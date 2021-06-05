@@ -17,7 +17,7 @@ Our aim is to see which shampoo or shampoos are most effective at treating dandr
 
 We begin by reading in the data:
 
-```{r}
+```{r dandruff-1}
 my_url <- "http://ritsokiguess.site/datafiles/dandruff.txt"
 dandruff <- read_tsv(my_url)
 dandruff
@@ -27,7 +27,7 @@ dandruff
 
 Numerical summaries of the data are as shown:
 
-```{r}
+```{r dandruff-2}
 dandruff %>% group_by(Treatment) %>% 
 summarise(n=n(), fl_mean=mean(Flaking), fl_sd=sd(Flaking))
 ```
@@ -36,7 +36,7 @@ There are approximately 100 observations in each group, apart from the Placebo g
 
 With a categorical `Treatment` and a quantitative `Flakes`, a suitable graph is a side-by-side boxplot:
 
-```{r}
+```{r dandruff-3}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() 
 ```
 Once again, we see that the flaking for the Placebo shampoo is much higher than for the others. There are outliers in the `PyrI` group, but given that the data values are all whole numbers, they are not far different from the rest of the data. Considering these outliers, the spreads of the groups all look fairly similar and the distributions appear more or less symmetric.^[Offer supported opinions of your own here, which don't need to be the same as mine. Alternatively, you can get the graph and numerical summaries first and comment on them both at once.]
@@ -45,7 +45,7 @@ Once again, we see that the flaking for the Placebo shampoo is much higher than 
 
 For comparing four groups, we need some kind of analysis of variance. Having seen that the `Flaking` values within the four groups are more or less normal with more or less equal spreads, we run a standard ANOVA:
 
-```{r}
+```{r dandruff-4}
 dandruff.1 <- aov(Flaking~Treatment, data=dandruff)
 summary(dandruff.1)
 ```
@@ -54,13 +54,13 @@ With an extremely small P-value, we conclude that the four shampoos do not all h
 
 To find out which ones are different from which, we use Tukey's method:
 
-```{r}
+```{r dandruff-5}
 TukeyHSD(dandruff.1)
 ```
 
 All of the shampoo treatments are significantly different from each other except for the two pyrithione ones. To see which shampoos are best and worst, we remind ourselves of the treatment means:
 
-```{r}
+```{r dandruff-6}
 dandruff %>% group_by(Treatment) %>% 
 summarise(n=n(), fl_mean=mean(Flaking), fl_sd=sd(Flaking))
 ```
@@ -72,7 +72,7 @@ The placebo shampoo has significantly more flaking than all the others, and the 
 The analysis of variance done above requires that the observations within each treatment group (shampoo) be approximately normally distributed, given the sample sizes, with approximately equal spreads. To assess this, we look at normal quantile plots^[I've used `scales = "free"` to get the plots to fill their boxes, for the best assessment of normality. The downside of doing it this way is that you cannot use the slopes of the lines to compare spreads. I think this way is still better, though, because the mean for placebo is so much bigger than the others that if you use the same scale for each plot, you'll be wasting a lot of plot real estate that you could use to get a better picture of the normality.] for each shampoo:^[It's also good, arguably clearer, to use this as your exploratory plot. This enables you to get to a discussion about normality earlier and you might decide in that case that you don't even need this discussion. You can do the assessment of assumptions first, and then do the corresponding analysis, or you can pick an apparently reasonable analysis and then critique it afterwards. Either way is logical here. In other cases it might be different; for example, in a regression, you might need to fit a model first and improve it after, since it may not be so clear what a good model might be off the top.]
 
 
-```{r}
+```{r dandruff-7}
 ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment, scales = "free")
 ```
@@ -81,7 +81,7 @@ Given that the data are whole numbers, the distributions each appear close to th
 
 Having concluded that the normality is sufficient, we need to assess the equality of spreads. Referring back to our summary table:
 
-```{r}
+```{r dandruff-8}
 dandruff %>% group_by(Treatment) %>% 
 summarise(n=n(), fl_mean=mean(Flaking), fl_sd=sd(Flaking))
 ```
@@ -108,7 +108,7 @@ Extra 2: The mean for `Placebo` is quite a lot bigger than for the other groups,
 Otherwise you get this kind of thing, which is much harder to read:
 
 
-```{r}
+```{r dandruff-9}
 ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment)
 ```
@@ -119,7 +119,7 @@ Extra 3: You might have been wondering why the boxplots, which are the usual thi
 
 Let's revisit them and see what happened:
 
-```{r}
+```{r dandruff-10}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() 
 ```
 
@@ -127,7 +127,7 @@ The `Placebo` group has the largest IQR, and the `PyrI` group appears to have tw
 
 What you can do is to add a `geom_point` on to the plot to plot the observations as points:
 
-```{r}
+```{r dandruff-11}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + 
 geom_boxplot() + geom_point()
 ```
@@ -135,7 +135,7 @@ geom_boxplot() + geom_point()
 But there are a lot more data points than this! What happened is that a point at, say, 20 is *all* the observations in that group that were 20, of which there might be a lot, 
 but we cannot see how many, because they are printed on top of each other. To see all the observations, we can **jitter** them: that is, plot them all *not* in the same place. In this case, we have the whole width of the boxplot boxes to use; we could also jitter vertically, but I decided not to do that here. There is a `geom_jitter` that does exactly this:^[I explain the `height=0` below the plot.] 
 
-```{r}
+```{r dandruff-12}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() + 
 geom_jitter(height = 0)
 ```
@@ -146,7 +146,7 @@ I left the vertical alone so that you can still see the actual data values. Even
 
 To try the vertical jittering too, use the defaults on `geom_jitter`:
 
-```{r}
+```{r dandruff-13}
 ggplot(dandruff, aes(x=Treatment, y=Flaking)) + geom_boxplot() + geom_jitter()
 ```
 
@@ -156,14 +156,14 @@ When Tukey popularized the boxplot, his idea was that it would be drawn by hand 
 
 Extra 4: More discussion of normality. The assumptions for a standard ANOVA (that is to say, not a Welch ANOVA) are normally-distributed data within each treatment group, with equal spreads. What that means in practice is that you want normal *enough* data given the sample sizes, and approximately equal spreads. My normal quantile plots are a long way back, so let's get them again:
 
-```{r}
+```{r dandruff-14}
 ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment, scales = "free")
 ```
 
 The data values are all whole numbers, so we get those horizontal stripes of `Flaking` values that are all the same. As long as these more or less hug the line, we are all right. The `PyrII` values certainly do. In my top row, `Keto` and `Placebo` are not quite so good, but they have *short* tails compared to the normal, so there will be no problem using the means for these groups, as ANOVA does. The only one that is problematic at all is `PyrI`. That has slightly long tails compared to a normal. (You could, I suppose, call those highest and lowest values "outliers", but I don't think they are far enough away from the rest of the data to justify that.) Are these long tails a problem? That depends on how many observations we have:
 
-```{r}
+```{r dandruff-15}
 dandruff %>% group_by(Treatment) %>% 
 summarise(n=n(), mean_flaking=mean(Flaking), sd_flaking=sd(Flaking))
 ```
@@ -172,7 +172,7 @@ There are 112 of them. Easily enough to overcome those long tails. So, to my min
 
 Aside: you might be wondering whether you can make nicer-looking tables in your reports. There are several ways. The `gt` package is the [most comprehensive](https://gt.rstudio.com/) one I know, and has links to a large number of others (at the bottom of its webpage). The simplest one I know of is `kable` in the `knitr` package. You may well have that package already installed, but you'll need to load it, preferably at the beginning of your report:
 
-```{r}
+```{r dandruff-16}
 library(knitr)
 dandruff %>% group_by(Treatment) %>% 
 summarise(n=n(), mean_flaking=mean(Flaking), sd_flaking=sd(Flaking)) -> summary
@@ -184,12 +184,12 @@ End of aside.
 Before I got distracted, we were talking about whether the distribution of PyrI was normal enough, given the sample size.
 Another way of thinking about this is to look at the bootstrapped sampling distribution of the sample mean for  this group. I set the random number seed so that the results will be the same even if I run this again:
 
-```{r}
+```{r dandruff-17}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r dandruff-18}
 dandruff %>% filter(Treatment == "PyrI") -> pyri
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -204,7 +204,7 @@ The other question is whether those spreads are equal enough. The easiest way is
 
 I am not a fan of doing one test to see whether you can do another test,^[Because the true alpha for the combined procedure in which the test you do second depends on the result of the first test is no longer 0.05; you need to think about what that true alpha is. It might not be too bad here, because regular ANOVA and Welch ANOVA tend to come out similar unless the sample variances are very different, in the same way that the Welch and pooled two-sample tests do. But it is not something to take for granted.] but if you really want to, you can use something like Levene's test to test the null hypothesis that all the groups have the same variance.^[There are other tests you could use here. I like Levene's test because it works best when the samples are not normal, but the normality is OK here, so this is not so much of an issue. Of course, the time you want to be assessing equality of variances is when you have already seen sufficient normality, but that might have been because the samples were large rather than that they were especially normal in shape themselves.] Levene's test lives in the package `car` that you might have to install first:
 
-```{r}
+```{r dandruff-19}
 library(car)
 leveneTest(Flaking~Treatment, data = dandruff)
 ```
@@ -212,7 +212,7 @@ Equal variances are resoundingly *rejected* here; the samples here have variance
 
 If your normal quantile plots looked like this:
 
-```{r}
+```{r dandruff-20}
 ggplot(dandruff, aes(sample=Flaking)) + stat_qq() + stat_qq_line() +
 facet_wrap(~Treatment)
 ```
@@ -236,7 +236,7 @@ Some wrong or incomplete ways to say it:
 
 Extra 6: You might have been wondering how Welch's ANOVA would have played out, given that the placebo group measurements looked more variable than the others. Wonder no more:
 
-```{r}
+```{r dandruff-21}
 oneway.test(Flaking~Treatment, data=dandruff)
 gamesHowellTest(Flaking~factor(Treatment), data=dandruff)
 ```
@@ -247,7 +247,7 @@ Extra 7: the general principle when you are not sure of the choice between two t
 
 Another way to go is to do a simulation (of the ordinary ANOVA). Generate some data that are like what you actually have, and then in your simulation see whether your $\alpha$ is near to 0.05. Since we are talking about $\alpha$ here, the simulated data needs to have the same *mean* in every group, so that the null hypothesis is true, but SDs and sample sizes like the ones in the data (and of a normal shape). Let me build up the process. Let's start by making a dataframe that contains the sample sizes, means and SDs for the data we want to generate. The treatment names don't matter:
 
-```{r}
+```{r dandruff-22}
 sim_from <- tribble(
 ~trt, ~n, ~mean, ~sd,
 "A", 106, 0, 0.93,
@@ -260,14 +260,14 @@ sim_from
 
 Starting from here, we want to set up drawing a lot of random samples from a normal distribution with the mean and SD shown, and the sample size shown. The way I like to do it^[At this moment, subject to change, etc etc.] is to set up a list-column called `sim` that will index the simulations. I'm going to pretend I'm doing just three simulations, while I get my head around this, and then up it later after I have things working:
 
-```{r}
+```{r dandruff-23}
 sim_from %>% 
   mutate(sim = list(1:3))
 ```
 
 Then I `unnest` `sim` so that I have a place to draw each sample:
 
-```{r}
+```{r dandruff-24}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim)
@@ -275,7 +275,7 @@ sim_from %>%
 
 Now, working rowwise, I can draw a random sample from each normal distribution. The inputs to `rnorm` are the sample size, the mean, and the SD, in that order.^[Or you can remember or look up the names to the inputs, and then you can have them in any order you like. But I know which order they come, which is good enough for me.]
 
-```{r}
+```{r dandruff-25}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim) %>% 
@@ -285,7 +285,7 @@ sim_from %>%
 
 This is looking similar in procedure to a bootstrap sampling distribution. If we were doing *that*, we would now make a new column containing something like the mean of each of those samples (and then make a picture of what we had). But this is different: we want to combine all of the random samples for each of the four treatments for one of the simulations, run an ANOVA on it, and get hold of the P-value. So we need to `unnest` those samples, and then combine them together properly. That goes something like this:
 
-```{r}
+```{r dandruff-26}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim) %>% 
@@ -297,7 +297,7 @@ sim_from %>%
 
 What this has done is to create three mini-dataframes in the list-column `data` that have our generated random `y` and a column called `treatment`. What we want to do is to run the ordinary ANOVA on each of those dataframes in `data`, and, in a minute, get hold of the P-value. I think I need another `rowwise` first, because I want to work with the rows of the *new* dataframe: 
 
-```{r}
+```{r dandruff-27}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim) %>% 
@@ -311,12 +311,12 @@ sim_from %>%
 
 I know the P-value is in there somewhere, but I can't remember how to get hold of it. The easiest way is to load `broom` and pass the models into `tidy`, then take a look at that:
 
-```{r}
+```{r dandruff-28}
 library(broom)
 ```
 
 
-```{r}
+```{r dandruff-29}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim) %>% 
@@ -332,7 +332,7 @@ sim_from %>%
 
 Almost there. The rows that have P-values in them are the ones that have `trt` (the explanatory variable) in the `term`, so:
 
-```{r}
+```{r dandruff-30}
 sim_from %>% 
   mutate(sim = list(1:3)) %>% 
   unnest(sim) %>% 
@@ -350,7 +350,7 @@ sim_from %>%
 
 Three simulated samples, each time one from each of the four treatments, and three P-values. So this works, and the remaining thing is to change the number of simulations from 3 to 1000 and run it again, saving the result:
 
-```{r}
+```{r dandruff-31}
 sim_from %>% 
   mutate(sim = list(1:1000)) %>% 
   unnest(sim) %>% 
@@ -369,7 +369,7 @@ sim_pval
 
 Now, the reason we were doing this was to see whether regular ANOVA worked properly on data from populations with different SDs. We know that the null hypothesis is true here (because all the true treatment means were equal to 0), so the probability of making a type I error by rejecting the null (that all the means are the same) should be 0.05. How close is it?
 
-```{r}
+```{r dandruff-32}
 sim_pval %>% 
   count(p.value <= 0.05)
 ```
@@ -378,7 +378,7 @@ $91/1000 = 0.091$. We are *too likely* to falsely reject the null. The regular A
 
 That looks rather high. Is the proportion of times I am rejecting significantly different from 0.05? Testing null hypotheses about (single) proportions is done using `prop.test`. This uses the normal approximation to the binomial, with continuity correction:
 
-```{r}
+```{r dandruff-33}
 prop.test(91, 1000, p = 0.05)
 ```
 
@@ -386,7 +386,7 @@ Ah, now, that's interesting. A supposed $\alpha = 0.05$ test is actually rejecti
 
 So now let's do the same simulation for the Welch ANOVA to see whether it's better:
 
-```{r}
+```{r dandruff-34}
 sim_from %>% 
   mutate(sim = list(1:1000)) %>% 
   unnest(sim) %>% 
@@ -404,14 +404,14 @@ This one is a bit easier because `oneway.test` has a thing called `p.value` that
 
 How many of *those* P-values are less than 0.05?
 
-```{r}
+```{r dandruff-35}
 sim_pval2 %>% 
   count(pval <= 0.05)
 ```
 
 That couldn't be much closer to the mark:
 
-```{r}
+```{r dandruff-36}
 prop.test(49, 1000, p = 0.05)
 ```
 

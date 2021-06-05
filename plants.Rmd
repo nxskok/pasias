@@ -35,7 +35,7 @@ Solution
 at the data file, which of course you did (didn't you?), you saw
 that the data values were aligned by columns with multiple spaces
 between them:
-```{r }
+```{r plants-1 }
 my_url <- "http://ritsokiguess.site/datafiles/disease.txt"
 tbl <- read_table(my_url)
 tbl
@@ -87,7 +87,7 @@ They are frequencies in disease-location combinations, so
 I'll call the column of "names" `disloc`. Feel
 free to call it `temp` for now if you prefer:
 
-```{r}
+```{r plants-2}
 tbl %>% pivot_longer(-Species, names_to="disloc", values_to = "frequency") -> tbl.2
 tbl.2
         
@@ -124,7 +124,7 @@ Solution
 
 This means splitting up `disloc` into two separate columns,
 splitting after the first character, thus:
-```{r }
+```{r plants-3 }
 (tbl.2 %>% separate(disloc, c("disease", "location"), 1) -> tbl.3)
 ```
 
@@ -136,7 +136,7 @@ and note that the issues you found there have all been resolved now.)
 
 Extra: my reading of one of the vignettes (the one called `pivot`) for `tidyr` suggests that `pivot_longer` can do both the making longer and the separating in one shot:
 
-```{r}
+```{r plants-4}
 tbl %>% pivot_longer(-Species, names_to=c("disease", "location"), names_sep=1, values_to="frequency")
 ```
 
@@ -162,7 +162,7 @@ result in a variable and display the result.
 Solution
 
 
-```{r }
+```{r plants-5 }
 tbl.4 <- xtabs(frequency ~ Species + disease + location, data = tbl.3)
 tbl.4
 ```
@@ -188,7 +188,7 @@ Solution
 
 
 This:
-```{r }
+```{r plants-6 }
 ftable(tbl.4)
 ```
 
@@ -215,7 +215,7 @@ able to follow the logic if you don't. [Chapter 29](http://ritsokiguess.site/pas
 First, fit a model predicting frequency from everything, including all
 the interactions. (The reason for doing it this way will become clear later):
 
-```{r }
+```{r plants-7 }
 model.1 <- glm(frequency ~ Species * location * disease, data = tbl.3, family = "poisson")
 drop1(model.1, test = "Chisq")
 ```
@@ -243,7 +243,7 @@ Let's get rid of that three-way interaction. This is another use for
 `update` that you might have seen in connection with multiple regression
 (to make small changes to a big model):
 
-```{r }
+```{r plants-8 }
 model.2 <- update(model.1, . ~ . - Species:location:disease)
 drop1(model.2, test = "Chisq")
 ```
@@ -259,7 +259,7 @@ Now the three two-way interactions are up for grabs:
 so out it comes. I did some copying and pasting, but I had to remember
 which model I was working with and what I was removing:
 
-```{r }
+```{r plants-9 }
 model.3 <- update(model.2, . ~ . - location:disease)
 drop1(model.3, test = "Chisq")
 ```
@@ -269,7 +269,7 @@ drop1(model.3, test = "Chisq")
 `Species:disease` comes out, but it looks as if
 `Species:location` will have to stay:
 
-```{r }
+```{r plants-10 }
 model.4 <- update(model.3, . ~ . - Species:disease)
 drop1(model.4, test = "Chisq")
 ```
@@ -281,7 +281,7 @@ drop1(model.4, test = "Chisq")
 effect. So the only candidate for removal now is `disease`: not
 significant, out it comes:
 
-```{r }
+```{r plants-11 }
 model.5 <- update(model.4, . ~ . - disease)
 drop1(model.5, test = "Chisq")
 ```
@@ -295,7 +295,7 @@ on the `Species:location` combination, but not on anything
 else. To see how, we make a contingency table of species by location
 (totalling up over disease status, since that is not significant):
 
-```{r }
+```{r plants-12 }
 xtabs(frequency ~ Species + location, data = tbl.3)
 ```
 
@@ -323,7 +323,7 @@ stayed in the model, that something would have been associated with
 disease. For example, if the `disease:Species` table had looked
 like this:
 
-```{r }
+```{r plants-13 }
 disease <- c("a", "a", "p", "p")
 Species <- c("A", "B", "A", "B")
 frequency <- c(10, 50, 30, 30)
@@ -337,7 +337,7 @@ For species A, disease is present 75\% of the time, but for species B
 it's present less than 40\% of the time. So in this one there ought to be a
 significant association between disease and species:
 
-```{r }
+```{r plants-14 }
 xx.1 <- glm(frequency ~ disease * Species, data = xx, family = "poisson")
 drop1(xx.1, test = "Chisq")
 ```

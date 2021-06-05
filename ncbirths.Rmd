@@ -21,7 +21,7 @@ Solution
 This is a `.csv` file (it came from a spreadsheet), so it
 needs reading in accordingly. Work directly from the URL (rather
 than downloading the file, unless you are working offline):
-```{r }
+```{r ncbirths-1 }
 myurl <- "http://ritsokiguess.site/datafiles/ncbirths.csv"
 bw <- read_csv(myurl)
 ```
@@ -35,7 +35,7 @@ the birth weight (a decimal number).
 The easiest way to find out how many rows and columns there are is
 simply to list the data frame:
 
-```{r }
+```{r ncbirths-2 }
 bw
 ```
 
@@ -43,7 +43,7 @@ bw
 
 or you can take a "glimpse" of it:
 
-```{r }
+```{r ncbirths-3 }
 glimpse(bw)
 ```
 
@@ -115,7 +115,7 @@ Solution
 You'll have seen that I often start with 10 bins, or maybe not quite
 that many if I don't have much data, and this is a decent general
 principle. That would give
-```{r }
+```{r ncbirths-4 }
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 10)
 ```
 
@@ -126,7 +126,7 @@ bit less, and see how you like it in comparison. What you are looking
 for is a nice clear picture of *shape*. If you have too few bins,
 you'll lose the shape:
 
-```{r }
+```{r ncbirths-5 }
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 4)
 ```
 
@@ -139,7 +139,7 @@ And if you have too many, the shape will be there, but
 it will be hard to make out in all the noise, with frequencies going
 up and down:
 
-```{r }
+```{r ncbirths-6 }
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 30)
 ```
 
@@ -162,7 +162,7 @@ that, which is here $512=2^9$. You then take that power and add 1,
 to get 10 bins. If you don't like that, you can get R to calculate
 it for you:
 
-```{r }
+```{r ncbirths-7 }
 nclass.Sturges(bw$`Weight (pounds)`)
 ```
 
@@ -190,7 +190,7 @@ The nice thing about this is that it uses the interquartile range, so
 it won't be distorted by outliers. `geom_histogram` can take a
 bin width, so we can use it as follows:
 
-```{r }
+```{r ncbirths-8 }
 w <- 2 * IQR(bw$`Weight (pounds)`) * 500^(-1 / 3)
 w
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(binwidth = w)
@@ -200,7 +200,7 @@ ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(binwidth = w)
 
 R also has
 
-```{r }
+```{r ncbirths-9 }
 nc <- nclass.FD(bw$`Weight (pounds)`)
 nc
 ```
@@ -216,7 +216,7 @@ for you to make your own call.
 
 Another way to go is a "density plot". This is a smoothed-out version of a histogram that is not obviously frequencies in bins, but which does have a theoretical basis. It goes something like this:
 
-```{r }
+```{r ncbirths-10 }
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_density()
 ```
 
@@ -247,7 +247,7 @@ quantitative variable. You can draw a boxplot for that, too, but the
 `y`. What you do to make a single boxplot is to set the
 `x` equal 1, which produces a weird $x$-axis (that you ignore):
 
-```{r }
+```{r ncbirths-11 }
 ggplot(bw, aes(x = 1, y = `Weight (pounds)`)) + geom_boxplot()
 ```
 

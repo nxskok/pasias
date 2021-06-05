@@ -17,7 +17,7 @@ Solution
 
 
 This kind of thing:
-```{r }
+```{r tomatoes-1 }
 my_url="http://ritsokiguess.site/datafiles/tomatoes.txt"
 toms1=read_delim(my_url," ")
 toms1
@@ -43,7 +43,7 @@ Solution
 
 This is a job for `pivot_longer`:
 
-```{r }
+```{r tomatoes-2 }
 toms1 %>% 
    pivot_longer(-plant, names_to="colour", values_to="growthrate") -> toms2
 toms2
@@ -78,7 +78,7 @@ Solution
 
 
 The code is easy enough:
-```{r }
+```{r tomatoes-3 }
 write_csv(toms2,"tomatoes2.csv")
 ```
 
@@ -88,7 +88,7 @@ If no error, it worked. That's all you need.
 
 To verify (for my satisfaction) that it was saved correctly:
 
-```{r engine="bash"}
+```{r tomatoes-4, engine="bash"}
 cat tomatoes2.csv 
 ```
 
@@ -110,7 +110,8 @@ Solution
 
 Nothing terribly surprising here. My data frame is called
 `toms2`, for some reason:
-```{r }
+
+```{r vonneckerburg}
 ggplot(toms2,aes(x=colour, y=growthrate))+geom_boxplot()
 ```
 
@@ -139,7 +140,7 @@ the Levene test, if you insist on going this way. It lives in package
 `car`, and *does not* take a `data=`, so you need
 to do the `with` thing:
 
-```{r }
+```{r tomatoes-5 }
 library(car)
 with(toms2,leveneTest(growthrate,colour))
 ```
@@ -177,7 +178,7 @@ Solution
 
 `aov`, bearing in mind that Tukey is likely to follow:
 
-```{r }
+```{r tomatoes-6 }
 toms.1=aov(growthrate~colour,data=toms2)
 summary(toms.1)
 ```
@@ -194,7 +195,7 @@ This, remember, is as far as we go right now.
 Extra: if you thought that normality was OK but not equal spreads,
 then Welch ANOVA is the way to go:
 
-```{r }
+```{r tomatoes-7 }
 toms.2=oneway.test(growthrate~colour,data=toms2)
 toms.2
 ```
@@ -208,7 +209,7 @@ If you had doubts about the normality (that were sufficiently great,
 even given the small sample sizes), then go with Mood's median test
 for multiple groups:
 
-```{r }
+```{r tomatoes-8 }
 library(smmr)
 median_test(toms2,growthrate,colour)
 ```
@@ -260,7 +261,7 @@ right one for the analysis you did. Looking at the boxplots suggests that red is
 and green clearly worst, and it is possible that all the colours
 are significantly different from each other.)
 If you did regular ANOVA, Tukey is what you need:
-```{r }
+```{r tomatoes-9 }
 TukeyHSD(toms.1)
 ```
 
@@ -274,7 +275,7 @@ light and smallest in green light.
 If you did Welch ANOVA, you need Games-Howell, which you have to get
 from one of the packages that offers it:
 
-```{r }
+```{r tomatoes-10 }
 library(PMCMRplus)
 gamesHowellTest(growthrate~factor(colour),data=toms2)
 ```
@@ -285,7 +286,7 @@ The conclusions are the same as for the Tukey: all the means are
 significantly different except for yellow and blue.
 Finally, if you did Mood's median test, you need this one:
 
-```{r }
+```{r tomatoes-11 }
 pairwise_median_test(toms2, growthrate, colour)
 ```
 

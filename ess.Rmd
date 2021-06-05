@@ -26,7 +26,7 @@ Solution
 
 The obvious way. Printing it out will display some of the data
 and tell you how many rows and columns you have:
-```{r }
+```{r ess-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ess.csv"
 ess <- read_csv(my_url)
 ess
@@ -90,7 +90,7 @@ This seems to call for a pipeline. The major parties are numbered 1,
 2 and 3, so we can select the ones less than 4 (or
 `<=3`). The reference back to the last question is a hint
 to use `!is.na()`.
-```{r }
+```{r ess-2 }
 ess %>%
   select(prtvtgb:inwtm) %>%
   filter(prtvtgb < 4, agea < 999, eduyrs < 40, !is.na(inwtm)) -> ess.major
@@ -120,7 +120,7 @@ pipeline `summary()`, which produces a summary of the columns of
 the resulting data frame. For example, I first did this (note that my
 `filter` is a lot simpler than the one above):
 
-```{r }
+```{r ess-3 }
 ess %>%
   select(prtvtgb:inwtm) %>%
   filter(prtvtgb < 4, !is.na(inwtm)) %>%
@@ -172,7 +172,7 @@ Solution
 
 This, or something like it. `multinom` lives in package
 `nnet`, which you'll have to install first if you haven't already:
-```{r }
+```{r ess-4 }
 library(nnet)
 ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
@@ -181,7 +181,7 @@ ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.maj
 
 Or create a factor version of your response in the data frame first:
 
-```{r }
+```{r ess-5 }
 ess.major <- ess.major %>% mutate(party = factor(prtvtgb))
 ```
 
@@ -189,7 +189,7 @@ ess.major <- ess.major %>% mutate(party = factor(prtvtgb))
 
 and then:
 
-```{r }
+```{r ess-6 }
 ess.1a <- multinom(party ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
@@ -214,7 +214,7 @@ Solution
 
 
 I tried to give you lots of hints here:
-```{r }
+```{r ess-7 }
 ess.2a <- step(ess.1, trace = 0)
 ess.2a
 ```
@@ -260,7 +260,7 @@ object and you can look at it any of the ways you can look at a
 model fit.  I found that gender needed to be removed, but if yours
 is different, follow through with whatever your `step` said
 to do.
-```{r }
+```{r ess-8 }
 ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 ```
 
@@ -268,7 +268,7 @@ ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 
 If you saved the output from `step`, you'll already have this and you don't need to do it again:
 
-```{r }
+```{r ess-9 }
 anova(ess.2, ess.2a)
 ```
 
@@ -288,7 +288,7 @@ Solution
 
 
 Fit the model without `inwtm`:
-```{r }
+```{r ess-10 }
 ess.3 <- multinom(party ~ agea + eduyrs, data = ess.major)
 ```
 
@@ -296,7 +296,7 @@ ess.3 <- multinom(party ~ agea + eduyrs, data = ess.major)
 
 and then use `anova` to compare them:
 
-```{r }
+```{r ess-11 }
 anova(ess.3, ess.2)
 ```
 
@@ -307,7 +307,7 @@ is good, ie.\ the one *without* interview length.
 
 I thought `drop1` would also work here, but it appears not to:
 
-```{r error=T}
+```{r ess-12, error=T}
 drop1(ess.1, test = "Chisq")
 ```
 
@@ -347,7 +347,7 @@ from. `crossing` is our friend. You can use
 only had `agea` and `eduyrs` left, having decided
 that interview time really ought to come out:
 
-```{r }
+```{r ess-13 }
 summary(ess.major)
 ```
 
@@ -355,7 +355,7 @@ summary(ess.major)
 
 Quartiles for age are 44 and 71, and for years of education are 11 and 16:
 
-```{r }
+```{r ess-14 }
 new <- crossing(agea = c(44, 71), eduyrs = c(11, 16))
 new
 ```
@@ -366,7 +366,7 @@ Now we feed this into `predict`. An annoying feature of this
 kind of prediction is that `type` may not be what you
 expect. The best model is the one I called `ess.3`:
 
-```{r } 
+```{r ess-15  }
 pp <- predict(ess.3, new, type = "probs")
 cbind(new, pp)
 ```
@@ -416,7 +416,7 @@ it would be. To assess this, it's the same idea over again: create
 a new data frame with all combinations of `agea`,
 `eduyrs` *and* `inwtm`. I need the quartiles of
 interview time first:
-```{r }
+```{r ess-16 }
 quantile(ess.major$inwtm)
 ```
 
@@ -424,7 +424,7 @@ quantile(ess.major$inwtm)
 
 and then
 
-```{r }
+```{r ess-17 }
 ess.new <- crossing(agea = c(44, 71), eduyrs = c(11, 16), inwtm = c(35, 50))
 ess.new
 ```
@@ -433,7 +433,7 @@ ess.new
 
 and then predict *using the model that contained interview time*:
 
-```{r }
+```{r ess-18 }
 pp <- predict(ess.2, ess.new, type = "probs")
 cbind(ess.new, pp)
 ```

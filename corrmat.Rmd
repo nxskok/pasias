@@ -26,7 +26,7 @@ Solution
 
 
 I saved my data into `cov5.txt`,^[Not to be confused    with *covfefe*, which was current news when I wrote this question.] delimited by single spaces, so:
-```{r }
+```{r corrmat-1 }
 corr <- read_delim("cov5.txt", " ", col_names = F)
 corr
 ```
@@ -37,7 +37,7 @@ I needed to say that I have no variable names and I want R
 to provide some. As you see, it did: `X1` through
 `X5`. You can also supply your own names in this fashion:
 
-```{r }
+```{r corrmat-2 }
 my_names <- c("first", "second", "third", "fourth", "fifth")
 corr2 <- read_delim("cov5.txt", " ", col_names = my_names)
 corr2
@@ -52,7 +52,7 @@ Solution
 
 
 Two lines, these:
-```{r }
+```{r corrmat-3 }
 corr.mat <- as.matrix(corr)
 corr.1 <- princomp(covmat = corr.mat)
 ```
@@ -61,7 +61,7 @@ corr.1 <- princomp(covmat = corr.mat)
 
 Or do it in one step as
 
-```{r }
+```{r corrmat-4 }
 corr.1a <- princomp(as.matrix(corr))
 ```
 
@@ -88,7 +88,7 @@ There is kind of an elbow at 3, which would suggest two components/factors.^[The
 
 You can also use the eigenvalue-bigger-than-1 thing: 
 
-```{r }
+```{r corrmat-5 }
 summary(corr.1)
 ```
 
@@ -113,7 +113,7 @@ to feature in which component? Do they have a positive or negative effect?
 Solution
 
 
-```{r }
+```{r corrmat-6 }
 corr.1$loadings
 ```
 
@@ -147,7 +147,7 @@ Solution
 
 This is about the most direct way:
 
-```{r }
+```{r corrmat-7 }
 corr.list <- list(cov = corr.mat, n.obs = 50)
 ```
 
@@ -161,7 +161,7 @@ Note that you need the correlation matrix *as a `matrix`*,
 not as a data frame. If you ran the `princomp` all in one step,
 you'll have to create the correlation matrix again, for example like this:
 
-```{r }
+```{r corrmat-8 }
 corr.list2 <- list(cov = as.matrix(corr), n.obs = 50)
 ```
 
@@ -169,7 +169,7 @@ corr.list2 <- list(cov = as.matrix(corr), n.obs = 50)
 
 The actual list looks like this:
 
-```{r }
+```{r corrmat-9 }
 corr.list
 ```
 
@@ -181,7 +181,7 @@ connected things together. You use the same dollar-sign notation as
 for a data frame to
 access the things in a list:
 
-```{r }
+```{r corrmat-10 }
 corr.list$n.obs
 ```
 
@@ -205,7 +205,7 @@ moment.
 Solution
 
 
-```{r }
+```{r corrmat-11 }
 corr.2 <- factanal(factors = 2, covmat = corr.list)
 ```
 
@@ -219,7 +219,7 @@ than for the principal components analysis?
 Solution
 
 
-```{r }
+```{r corrmat-12 }
 corr.2$loadings
 ```
 
@@ -232,7 +232,7 @@ hand-waving required.
 Perhaps now is a good time to look back at the correlation matrix and
 see why the factor analysis came out this way:
 
-```{r }
+```{r corrmat-13 }
 corr
 ```
 
@@ -256,7 +256,7 @@ high? Does that surprise you, given your answer to
 Solution
 
 
-```{r }
+```{r corrmat-14 }
 corr.2$uniquenesses
 ```
 

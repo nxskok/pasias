@@ -25,13 +25,13 @@ Solution
 
 
 The usual `read_csv`:
-```{r }
+```{r heliconia-1 }
 heliconia=read_csv("heliconia.csv")
 ```       
 
 I suggested to look at *all* the rows. Here's why:
 
-```{r }
+```{r heliconia-2 }
 heliconia 
 ``` 
 
@@ -53,7 +53,7 @@ Solution
 
 There's a certain amount of repetitiveness here (that we work
 around later):
-```{r }
+```{r heliconia-3 }
 ggplot(heliconia,aes(sample=bihai))+stat_qq()+stat_qq_line()
 ```         
 
@@ -70,7 +70,7 @@ Solution
 
           
 Same idea again:
-```{r }
+```{r heliconia-4 }
 ggplot(heliconia,aes(sample=caribaea_red))+stat_qq()+stat_qq_line()
 ```         
 
@@ -85,7 +85,7 @@ Solution
 
 And, one more time:
 
-```{r }
+```{r heliconia-5 }
 ggplot(heliconia,aes(sample=caribaea_yellow))+stat_qq()+stat_qq_line()
 ```         
 
@@ -148,7 +148,7 @@ First, tidy the data. The three columns of the data frame are all
 lengths, just lengths of different things, which need to be
 labelled. This is `pivot_longer` from `tidyr`:
 
-```{r }
+```{r heliconia-6 }
 heliconia %>% 
   pivot_longer(everything(), names_to="variety", values_to="length", values_drop_na = T) -> heliconia.long
 heliconia.long  
@@ -161,7 +161,7 @@ there are now $16+23+15=54$ rows of actual data, as there should be). This was a
 Now, how to get a normal quantile plot for each variety? This is
 `facet_wrap` on the end of the `ggplot` again. 
 
-```{r }
+```{r heliconia-7 }
 ggplot(heliconia.long,aes(sample=length))+
 stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free")
@@ -182,7 +182,7 @@ and `ncol` which you can use one or both of to make this
 happen. This creates an array of plots with two columns and as many
 rows as needed:
 
-```{r }
+```{r heliconia-8 }
 ggplot(heliconia.long,aes(sample=length))+
 stat_qq()+stat_qq_line()+
 facet_wrap(~variety,scale="free",ncol=2)
@@ -193,7 +193,7 @@ curved, S-bend, straightish.
 Almost the same code will get a histogram for each variety, which I'll
 also make squarish:
 
-```{r }
+```{r heliconia-9 }
 ggplot(heliconia.long,aes(x=length))+
 geom_histogram(bins=5)+facet_wrap(~variety,scale="free",ncol=2)
 ``` 

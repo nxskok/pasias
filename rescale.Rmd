@@ -2,7 +2,7 @@
 
  Suppose we have this vector of values:
 
-```{r}
+```{r rescale-1}
 z <- c(10, 14, 11)
 z
 ```
@@ -18,7 +18,7 @@ Solution
 
 Simply this -- define `z` first:
 
-```{r}
+```{r rescale-2}
 z <- c(10, 14, 11)
 min(z)
 max(z)
@@ -33,7 +33,7 @@ $\blacksquare$
 
 (b) What do these lines of code do, using the same `z` that I had? Run them and see, and describe briefly what `s` contains.
 
-```{r, eval=FALSE}
+```{r rescale-3, eval=FALSE}
 lo <- min(z)
 hi <- max(z)
 s <- (z - lo) / (hi - lo)
@@ -45,7 +45,7 @@ Solution
 
 Here we go:
 
-```{r}
+```{r rescale-4}
 lo <- min(z)
 hi <- max(z)
 s <- (z - lo) / (hi - lo)
@@ -56,7 +56,7 @@ The lowest value became 0, the highest 1, and the other one to something in betw
 
 Extra: the reason for doing it in three steps rather than one (see below) is (i) it makes it clearer what is going on (and thus makes it less likely that you make a mistake), and (ii) it is more efficient, since my way only finds the minimum once instead of twice. Compare this approach with mine above:
 
-```{r}
+```{r rescale-5}
 (z - min(z)) / (max(z) - min(z))
 ```
 
@@ -78,7 +78,7 @@ Solution
 
 Write a function skeleton:
 
-```{r}
+```{r rescale-6}
 rescale <- function(x) {
 
 }
@@ -86,7 +86,7 @@ rescale <- function(x) {
 
 and inside the curly brackets put the code from above, replacing `z` with `x` everywhere:
 
-```{r}
+```{r rescale-7}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -96,7 +96,7 @@ hi <- max(x)
 
 You'll need to make sure your function returns something to the outside world. Either don't save the last line in `s` (as I did here), or save it in `s` and then return `s`:
 
-```{r}
+```{r rescale-8}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -109,7 +109,7 @@ or use `return()` if you must, but be aware that this is bad style in R (unlike 
 
 Extra: in the spirit of what's coming up below, you might check first whether the maximum and minimum are the same and return something else if that's the case:
 
-```{r}
+```{r rescale-9}
 rescale0 <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -123,7 +123,7 @@ This is good style; in this case, if `lo` and `hi` are the same, we want to retu
 
 Doing it this way, there is something to be careful of: a function ought to return a predictable *type* of thing: numbers, in this case. If you have your function return *text* on error, like this:
 
-```{r}
+```{r rescale-10}
 rescale0 <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -135,7 +135,7 @@ s
 
 then you can get into trouble:
 
-```{r}
+```{r rescale-11}
 rescale0(z)
 rescale0(c(3,3,3))
 ```
@@ -153,7 +153,7 @@ Solution
 
 On my `z`:
 
-```{r}
+```{r rescale-12}
 rescale(z)
 ```
 
@@ -161,14 +161,14 @@ The same values as I got before, so that works.
 
 For your vector, use whatever you like. I think it makes sense to have the values already in order, to make it easier to check. Here's one possibility:
 
-```{r}
+```{r rescale-13}
 w <- 2:6
 w
 ```
 
 and then
 
-```{r}
+```{r rescale-14}
 rescale(w)
 ```
 
@@ -176,7 +176,7 @@ The smallest value is 2, which goes to zero; the largest is 6, which goes to 1, 
 
 Another possibility is to use a vector with values whose largest and smallest you can clearly see:
 
-```{r}
+```{r rescale-15}
 w <- c(10, 11, 100, 0, 20)
 rescale(w)
 ```
@@ -187,7 +187,7 @@ Some discussion is needed here, in that you need to say something convincing abo
 
 Extra: This is why I had you use a name *other than* `z` for the input to your function. The function can be used on any input, not just the `z` that we tested it on. There's another R-specific reason, which is that you need to be careful about using the named inputs *only*. Consider this function:
 
-```{r}
+```{r rescale-16}
 ff <- function(x) {
 x + z
 }
@@ -197,7 +197,7 @@ ff(10)
 
 Where did `z` come from? R *used the `z` we had before*, which is rather dangerous: what if we had a `z` lying around from some completely different work? Much better to have a function work with only inputs in the top line:
 
-```{r, error=TRUE}
+```{r rescale-17, error=TRUE}
 ff <- function(x, z) {
 x + z
 }
@@ -218,7 +218,7 @@ Solution
 
 First, try it and see. Any collection of values all the same will do:
 
-```{r}
+```{r rescale-18}
 rescale(c(3,3,3))
 ```
 
@@ -226,7 +226,7 @@ rescale(c(3,3,3))
 
 The easiest way to check inputs is to use `stopifnot` to express what should be *true* if the function is to proceed. Here, we want the maximum and minimum to be different, so:
 
-```{r, error=TRUE}
+```{r rescale-19, error=TRUE}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -240,7 +240,7 @@ This is much clearer: I only have to recall what my `hi` and `lo` are to see wha
 
 Extra 1: by calculating and saving the min and max up front, I still only need to calculate them once. If you do it this way:
 
-```{r, error=TRUE}
+```{r rescale-20, error=TRUE}
 rescale <- function(x) {
 stopifnot(max(x) != min(x))
 (x - min(x)) / (max(x) - min(x))
@@ -252,7 +252,7 @@ you get a slightly more informative error message, but you have calculated the m
 
 Extra 2: `stopifnot` is shorthand for this:
 
-```{r, error=TRUE}
+```{r rescale-21, error=TRUE}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -264,7 +264,7 @@ rescale(c(3,3,3))
 
 I didn't show you this, so if you use `stop`, you must tell me where you found out about it. This is better than returning some text (see `rescale0` above) or printing a message: it's an error, so you want to make it look like an error. I am very sympathetic to being persuaded that this is *better* than `stopifnot`, because you can customize the message (and, also, you don't have to go through the double-negative contortions of `stopifnot`). Another way to use `stopifnot` and get a customized message is this one (that I only learned about right when you were writing this Assignment):
 
-```{r, error=TRUE}
+```{r rescale-22, error=TRUE}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -278,32 +278,32 @@ This is called a "named argument", and the name, if given, is used as an error m
 
 Extra 3: returning to my `rescale0` from above:
 
-```{r}
+```{r rescale-23}
 rescale0
 ```
 
 this can get you into trouble if you use it in a dataframe. This is a bit complicated, since it has to use list-columns. Here we go:
 
-```{r}
+```{r rescale-24}
 tibble(x = list(z, c(3,3,3)))
 ```
 
 Just to check that this does contain what you think it does:
 
-```{r}
+```{r rescale-25}
 tibble(x = list(z, c(3,3,3))) %>% unnest(x)
 ```
 
 So now, for each of those two input vectors, what happens when we run `rescale0` on them? This is `rowwise`:
 
-```{r}
+```{r rescale-26}
 tibble(x = list(z, c(3,3,3))) %>% 
   rowwise() %>% 
   mutate(ans = list(rescale0(x)))
 ```
 The first `ans` is a vector of 3 numbers, and the second one is one piece of text (the "error message"). I was actually surprised it got this far. So what happens when we `unnest` the second column?
 
-```{r, error=TRUE}
+```{r rescale-27, error=TRUE}
 tibble(x = list(z, c(3,3,3))) %>% 
   rowwise() %>% 
   mutate(ans = list(rescale0(x))) %>% 
@@ -312,7 +312,7 @@ tibble(x = list(z, c(3,3,3))) %>%
 
 Now we get a confusing error: it's *here* that combining some numbers and some text in one column of a dataframe doesn't work. To forestall this, we need to go back and rewrite `rescale0` to not mix things up. Having it return an error, as the latest version of `rescale` does, gives an error here too, but at least we know what it means:
 
-```{r, error=TRUE}
+```{r rescale-28, error=TRUE}
 tibble(x = list(z, c(3,3,3))) %>% 
   rowwise() %>% 
   mutate(ans = list(rescale(x))) %>% 
@@ -332,14 +332,14 @@ Solution
 
 This is less difficult than you might be expecting: make a dataframe with at least one numeric column, and use `mutate`:
 
-```{r}
+```{r rescale-29}
 d <- tibble(y=2:6)
 d
 ```
 
 and then
 
-```{r}
+```{r rescale-30}
 d %>% mutate(s=rescale(y))
 ```
 
@@ -347,7 +347,7 @@ You can supply the values for what I called `y`, or use random numbers. It's eas
 
 Extra: this is actually already in the `tidyverse` under the name `percent_rank` ("percentile ranks"):
 
-```{r}
+```{r rescale-31}
 d %>% mutate(s = percent_rank(y))
 ```
 
@@ -367,7 +367,7 @@ I'm showing you my thought process in this one. The answer I want from you is th
 
 So, start by copying and pasting what you had before:
 
-```{r}
+```{r rescale-32}
 rescale <- function(x) {
 lo <- min(x)
 hi <- max(x)
@@ -378,7 +378,7 @@ stopifnot(hi != lo)
 
 On the top line, add the extra inputs and their default values. I also changed the name of my function, for reasons you'll see later:
 
-```{r}
+```{r rescale-33}
 rescale2 <- function(x, a=0, b=1) {
 lo <- min(x)
 hi <- max(x)
@@ -389,7 +389,7 @@ stopifnot(hi != lo)
 
 Save the last line, since we have to do something else with it:
 
-```{r}
+```{r rescale-34}
 rescale2 <- function(x, a=0, b=1) {
 lo <- min(x)
 hi <- max(x)
@@ -400,7 +400,7 @@ s <- (x - lo) / (hi - lo)
 
 and finally add the calculation in the hint, which we don't need to save because we are returning it:
 
-```{r}
+```{r rescale-35}
 rescale2 <- function(x, a=0, b=1) {
 lo <- min(x)
 hi <- max(x)
@@ -414,7 +414,7 @@ This complete function is what I want to see from you. (You should keep the `sto
 
 A better way is to observe that you can call functions inside functions. The function above is now a bit messy since it has several steps. Something that corresponds better to my hint is to call the original `rescale` first, and then modify its result:
 
-```{r}
+```{r rescale-36}
 rescale3 <- function(x, a=0, b=1) {
 s <- rescale(x)
 a + (b-a) * s
@@ -443,7 +443,7 @@ Solution
 
 I'll start by using the default values for `a` and `b` (so I don't have to specify them):
 
-```{r}
+```{r rescale-37}
 rescale2(2:6)
 rescale3(2:6)
 ```
@@ -454,7 +454,7 @@ We got the same answer as before for the same input, so the default values $a=0,
 
 Let's try a different one:
 
-```{r}
+```{r rescale-38}
 v <- c(7, 11, 12)
 rescale2(v, 10, 30)
 rescale3(v, 10, 30)
@@ -464,13 +464,13 @@ The lowest value in `v` has become 10, and the highest has become 30. (Also, the
 
 Extra: you can also name any of your inputs:
 
-```{r}
+```{r rescale-39}
 rescale3(x=v, a=10, b=30)
 ```
 
 and if you name them, you can shuffle the order too:
 
-```{r}
+```{r rescale-40}
 rescale3(a=10, b=30, x=v)
 ```
 
@@ -478,7 +478,7 @@ The point of doing more than one test is to check that different aspects of your
 
 When you write your version of `rescale` with the optional inputs, it's best if you do it so that the things you have to supply (the vector of numbers) is *first*. If you put `a` and `b` first, when you want to omit them, you'll have to call the input vector by name, like this:
 
-```{r}
+```{r rescale-41}
 rescale3(x=v)
 ```
 

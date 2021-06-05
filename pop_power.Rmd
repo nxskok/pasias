@@ -9,12 +9,12 @@
 Solution
 
 
-```{r, echo=FALSE}
+```{r pop-power-1, echo=FALSE}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r pop-power-2}
 my_url <- "http://ritsokiguess.site/datafiles/pop.csv"
 pop <- read_csv(my_url)
 pop
@@ -34,18 +34,18 @@ Solution
 
 One quantitative variable, so a histogram. The population is large, so you can use more bins than usual. Sturges' rule says 14 bins (the logarithm below is base 2, or, the next power of 2 above 10,000 is 16,384 which is $2^{14}$):
 
-```{r}
+```{r pop-power-3}
 log(10000, 2)
 2^14
 ```
 
-```{r}
+```{r pop-power-4}
 ggplot(pop, aes(x=v)) + geom_histogram(bins=14)
 ```
 
 Pick a number of bins: the default 30 bins is pretty much always too many. Any number of bins that shows this shape is good as an answer, but you also need to display some thinking about how many bins to use, either starting with a rule as I did, or experimenting with different numbers of bins. Rules are not hard and fast; it so happened that I liked the picture that 14 bins gave, so I stopped there. Thirty bins, the default, is actually not bad here:
 
-```{r}
+```{r pop-power-5}
 ggplot(pop, aes(x=v)) + geom_histogram()
 ```
 
@@ -57,7 +57,7 @@ This is skewed to the right, or has a long right tail. This is a better descript
 Extra: The issue that's coming up is whether this is normally-distributed, which of course it is not. This is a normal quantile plot. (Idea: if the points follow the line, at least approximately, the variable is normally distributed; if not, not.):
 
 
-```{r}
+```{r pop-power-6}
 ggplot(pop, aes(sample=v)) + stat_qq() + stat_qq_line()
 ```
 
@@ -76,7 +76,7 @@ Solution
 
 As you noted, this is a one-sided alternative, so make sure your code does the right thing. Take a lot of random samples, run the $t$-test on each one, grab the P-value each time, count the number of P-values less or equal to your $\alpha$. This is *not* a bootstrap, so the sampling needs to be *without* replacement, and you need to say how big the sample is:
 
-```{r}
+```{r pop-power-7}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(pop$v, 10))) %>% 
@@ -104,7 +104,7 @@ Solution
 
 For the code, this is copy-paste-edit. Just change the sample size:
 
-```{r}
+```{r pop-power-8}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(pop$v, 50))) %>% 
@@ -130,14 +130,14 @@ Solution
 
 Taking the hint first:
 
-```{r}
+```{r pop-power-9}
 pop %>% 
 summarize(m = mean(v))
 ```
 
 (I'm hoping that some light dawns at this point), and copy-paste-edit your simulation code again, this time changing the null mean to 5:
 
-```{r}
+```{r pop-power-10}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(pop$v, 10))) %>% 
@@ -160,7 +160,7 @@ This test is what is known in the jargon as "conservative". To a statistician, t
 
 I  did some investigation to see what was going on. First, I ran the simulation again, but this time keeping the mean and SD of each sample, as well as the $t$-statistic, but not actually doing the $t$-test:
 
-```{r}
+```{r pop-power-11}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(pop$v, 10))) %>% 
@@ -175,7 +175,7 @@ As for coding, I made a dataframe with a column `sim` that numbers the individua
 
 After that, I played around with several things, but I found something interesting when I plotted the sample mean and SD *against each other*:
 
-```{r}
+```{r pop-power-12}
 ggplot(mean_sd, aes(x=xbar, y=s)) + geom_point() + geom_smooth(se=F)
 ```
 
@@ -185,7 +185,7 @@ This actually does make sense, if you stop to think about it. A sample with a la
 
 It wasn't clear to me what that would do to the $t$-statistic. A larger sample mean would make the top of the test statistic bigger, but a larger sample mean would also go with a larger sample SD, and so the bottom of the test statistic would be bigger as well. That's why I included this in the simulation too:
 
-```{r}
+```{r pop-power-13}
 ggplot(mean_sd, aes(x=t_stat)) + geom_histogram(bins=12)
 ```
 

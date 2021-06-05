@@ -11,7 +11,7 @@ Solution
 
 This is a `csv`, so no surprises:
 
-```{r}
+```{r eyesight-1}
 my_url <- "http://ritsokiguess.site/datafiles/eyesight.csv"
 sight <- read_csv(my_url)
 sight
@@ -33,7 +33,7 @@ This is matched pairs data, with two observations for each subject. A matched pa
 
 Thus, saving back into our original dataframe:
 
-```{r}
+```{r eyesight-2}
 sight %>% 
 mutate(difference = right - left) -> sight
 sight
@@ -52,7 +52,7 @@ Solution
 
 A normal quantile plot *of the differences*, therefore, since normality of the two individual scores is immaterial:
 
-```{r}
+```{r vontouchingen}
 ggplot(sight, aes(sample = difference)) + stat_qq() +
 stat_qq_line()
 ```
@@ -63,7 +63,7 @@ The plot is telling us that a matched-pairs $t$-test is questionable, and that w
 
 Extra: the one kind of sensible plot that uses the original data in this situation would be a scatterplot, since the right and left scores are matched up:
 
-```{r}
+```{r wickten}
 ggplot(sight, aes(x = right, y = left)) + 
 geom_point() + geom_abline(slope = 1, intercept = 0)
 ```
@@ -81,14 +81,14 @@ $\blacksquare$
 Solution
 
 
-```{r, echo=FALSE}
+```{r eyesight-3, echo=FALSE}
 set.seed(457299)
 ```
 
 
 Borrow the idea from lecture, replacing mean with median:
 
-```{r}
+```{r eyesight-4}
 tibble(sim = 1:1000) %>% 
 rowwise() %>% 
 mutate(sample = list(sample(sight$difference, replace = TRUE))) %>% 
@@ -120,7 +120,7 @@ Solution
 
 For this histogram, there is no need to specify a number of bins (unless you want to):
 
-```{r}
+```{r nefen}
 ggplot(meds, aes(x = my_median)) + geom_histogram()
 ```
 
@@ -133,14 +133,14 @@ each bootstrap sample must have a median that is an integer too.
 Extra:
 in case you are thinking that this happened because the data values were integers, no, it would happen even if the data were decimal numbers. Let's make some fake data of 15 random normals and then do the same thing again:
 
-```{r}
+```{r eyesight-5}
 fake_data <- tibble(x = rnorm(15))
 fake_data
 ```
 
 and once again bootstrap the median:
 
-```{r}
+```{r eyesight-6}
 tibble(sim = 1:1000) %>% 
 rowwise() %>% 
 mutate(sample = list(sample(fake_data$x, replace = TRUE))) %>% 
@@ -150,7 +150,7 @@ meds2
 
 You can see even from these few that the bootstrap distribution of the median has repeats, so there should also be some discreteness here:
 
-```{r}
+```{r botz}
 ggplot(meds2, aes(x = my_median)) + geom_histogram()
 ```
 
@@ -158,13 +158,13 @@ The discreteness is a property of the fact that we were bootstrapping the *media
 
 To confirm that, recall that our original data were integers:
 
-```{r}
+```{r eyesight-7}
 sight
 ```
 
 but even for these, if you bootstrap the mean, you don't get the same discreteness:
 
-```{r}
+```{r vesar}
 tibble(sim = 1:1000) %>% 
 rowwise() %>% 
 mutate(sample = list(sample(sight$difference, replace = TRUE))) %>% 
@@ -175,7 +175,7 @@ ggplot(aes(x = my_mean)) + geom_histogram()
 
 This is too many bins for 1000 bootstrap samples, so the shape is kind of irregular, but there are not the big gaps that the bootstrap distribution of the sample median has. Indeed, this ought to be somewhere near normal and is:
 
-```{r}
+```{r stricher}
 ggplot(means, aes(sample = my_mean)) + stat_qq() +
 stat_qq_line()
 ```
@@ -193,7 +193,7 @@ Solution
 
 The percentile interval comes from the middle 95% of the bootstrap distribution of medians:
 
-```{r}
+```{r eyesight-8}
 quantile(meds$my_median, c(0.025, 0.975))
 ```
 
@@ -201,7 +201,7 @@ The bootstrap percentile interval goes from $-2$ to 4. Like the CI for the media
 
 Extra: for comparison, the interval from the sign test is this:
 
-```{r}
+```{r eyesight-9}
 ci_median(sight, difference)
 ```
 
@@ -218,7 +218,7 @@ Solution
 
 Load (and if necessary install) the `bootstrap` package, and then:
 
-```{r}
+```{r eyesight-10}
 bca <- bcanon(sight$difference, 1000, median)
 bca$confpoints
 ```

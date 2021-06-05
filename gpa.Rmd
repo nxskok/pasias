@@ -29,7 +29,7 @@ Solution
 
 The usual:
 
-```{r }
+```{r gpa-1 }
 my_url <- "http://ritsokiguess.site/datafiles/gpa.txt"
 gpa <- read_delim(my_url, " ")
 gpa
@@ -53,7 +53,7 @@ High school comes before university, so high school should be
 explanatory and university should be the response. (High school
 grades are used as an admission criterion to university, so we
 would hope they would have some predictive value.)
-```{r }
+```{r gpa-2 }
 ggplot(gpa, aes(x = high_GPA, y = univ_GPA)) + geom_point() +
   geom_smooth()
 ```
@@ -106,7 +106,7 @@ Solution
 
 
 Just this, therefore:
-```{r }
+```{r gpa-3 }
 gpa.1 <- lm(univ_GPA ~ high_GPA, data = gpa)
 summary(gpa.1)
 ```
@@ -120,7 +120,7 @@ predictions getting less as the high-school GPA increases). In case
 you are interested, I'll look at this here. First, residuals against
 fitted values:
 
-```{r }
+```{r gpa-4 }
 ggplot(gpa.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
@@ -132,7 +132,7 @@ grey envelope includes zero all the way across.
 
 Normal quantile plot of residuals:
 
-```{r }
+```{r gpa-5 }
 ggplot(gpa.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
@@ -145,7 +145,7 @@ positive and negative end.
 The problem I was really worried about was the potential of
 fanning-in, which we can assess by looking at the absolute residuals:
 
-```{r }
+```{r gpa-6 }
 ggplot(gpa.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
@@ -175,7 +175,7 @@ would be the way to go.
 
 All right, how does Box-Cox work out here, if at all?
 
-```{r }
+```{r gpa-7 }
 library(MASS)
 boxcox(univ_GPA ~ high_GPA, data = gpa)
 ```
@@ -203,7 +203,7 @@ the  mean of *all* students with these GPAs, prediction
 intervals are called for. The first step is to make a data
 frame to predict from. This has to contain columns for all the
 explanatory variables, just `high_GPA` in this case:
-```{r }
+```{r gpa-8 }
 gpa.new <- tibble(high_GPA = c(3, 3.5))
 gpa.new
 ```
@@ -212,7 +212,7 @@ gpa.new
 
 and then feed that into `predict`:
 
-```{r }
+```{r gpa-9 }
 preds <- predict(gpa.1, gpa.new, interval = "p")
 preds
 ```
@@ -221,7 +221,7 @@ preds
 
 and display that side by side with the values it was predicted from:
 
-```{r }
+```{r gpa-10 }
 cbind(gpa.new, preds)
 ```
 
@@ -229,7 +229,7 @@ cbind(gpa.new, preds)
 
 or this way, if you like it better:
 
-```{r }
+```{r gpa-11 }
 as_tibble(preds) %>% bind_cols(gpa.new) %>% select(high_GPA, everything())
 ```
 
@@ -247,7 +247,7 @@ close to the average high-school GPA and 3.5 is noticeably higher. If
 that's the case, the prediction interval for 3.5 should be longer
 (since there is less "nearby data"). Was I right about that?
 
-```{r }
+```{r gpa-12 }
 gpa %>% summarize(
   mean = mean(high_GPA),
   med = median(high_GPA),
@@ -263,7 +263,7 @@ quartile. So the thing about the length of the prediction interval is
 a bit of a mystery. Maybe it works better for the confidence interval
 for the mean:
 
-```{r }
+```{r gpa-13 }
 preds <- predict(gpa.1, gpa.new, interval = "c")
 cbind(gpa.new, preds)
 ```
@@ -290,7 +290,7 @@ Solution
 
 Create a new regression with all the explanatory variables you want in it:
 
-```{r }
+```{r gpa-14 }
 gpa.2 <- lm(univ_GPA ~ high_GPA + math_SAT + verb_SAT, data = gpa)
 summary(gpa.2)
 ```
@@ -312,7 +312,7 @@ Since we added *two* explanatory variables, the $t$-tests in
 `gpa.2` don't apply (they tell us whether we can take out
 *one* $x$-variable). We might have some suspicions, but that's
 all they are.  So we have to do `anova`:
-```{r }
+```{r gpa-15 }
 anova(gpa.1, gpa.2)
 ```
 
@@ -347,7 +347,7 @@ Solution
 In the model of (<a href="#part:all">here</a>), `math_SAT` was the
 least significant, so that comes out first. (I use
 `update` but I'm not insisting that you do:)
-```{r }
+```{r gpa-16 }
 gpa.3 <- update(gpa.2, . ~ . - math_SAT)
 summary(gpa.3)
 ```
@@ -375,7 +375,7 @@ close to 0.05.
 The other way of tackling this one is via `step`, which
 does the backward elimination for you (not that it was much
 work here):
-```{r }
+```{r gpa-17 }
 step(gpa.2, direction = "backward", test = "F")
 ```
 
@@ -414,7 +414,7 @@ Here, I'm looking for some kind of discussion about what's in
 the final backward-elimination model, and what you would
 expect to be true of computer science students. 
 Let's look at the final model from the backward elimination again:
-```{r }
+```{r gpa-18 }
 summary(gpa.3)
 ```
 
@@ -435,7 +435,7 @@ information there.)
 
 I think I need to look at the correlations:
 
-```{r }
+```{r gpa-19 }
 cor(gpa)
 ```
 
@@ -459,7 +459,7 @@ telling more or less the same story.
 That makes me wonder how a regression with the SAT math score and
 *not* the SAT verbal score would look:
 
-```{r }
+```{r gpa-20 }
 gpa.4 <- lm(univ_GPA ~ high_GPA + math_SAT, data = gpa)
 summary(gpa.4)
 ```

@@ -50,7 +50,7 @@ Solution
 
 The columns are aligned with each other but not with the headings,
 so `read_table2` it has to be:
-```{r }
+```{r abortion-1 }
 my_url <- "http://ritsokiguess.site/datafiles/abortion.txt"
 abortion <- read_table2(my_url)
 abortion
@@ -113,7 +113,7 @@ This is actually harder to describe than it is to do.
 First thing is to decide on the ordering you want. You can go
 low to high or high to low (it doesn't matter).^[The        results might look different which way you go, but it won't        make any *material* difference.] I'm going negative to
 positive. Either way, you want `Mix` in the middle:
-```{r }
+```{r abortion-2 }
 lev <- c("Neg", "Mix", "Pos")
 ```
 
@@ -122,7 +122,7 @@ lev <- c("Neg", "Mix", "Pos")
 Then use the original `attitude` plus this `lev` as
 input to `ordered`:
 
-```{r }
+```{r abortion-3 }
 abortion <- abortion %>%
   mutate(attitude.ord = ordered(attitude, lev))
 abortion
@@ -138,7 +138,7 @@ ordered factor) rather than text.
 This is the easy way. To save yourself some typing, you can get the
 `attitude` levels from the data:
 
-```{r }
+```{r abortion-4 }
 lev <- abortion %>% distinct(attitude) %>% pull(attitude)
 lev
 ```
@@ -147,7 +147,7 @@ lev
 
 or 
 
-```{r }
+```{r abortion-5 }
 lev2 <- abortion %>% count(attitude) %>% pull(attitude)
 lev2
 ```
@@ -159,7 +159,7 @@ the data, which is a sensible low-to-high here; `count`
 arranges the levels in alphabetical order, which is *not*
 sensible, so you'd need to rearrange them, like this:
 
-```{r }
+```{r abortion-6 }
 lev3 <- lev2[c(2, 1, 3)]
 lev3
 ```
@@ -168,7 +168,7 @@ lev3
 
 or, if you like working with data frames better:
 
-```{r }
+```{r abortion-7 }
 lev4 <- abortion %>%
   count(attitude) %>%
   slice(c(2, 1, 3)) %>%
@@ -196,7 +196,7 @@ Solution
 This is a veiled hint to remember the `weights=`
 thing. Don't forget to use your `attitude` in the proper
 order that you went to such great pains to make in the last part!
-```{r }
+```{r abortion-8 }
 library(MASS)
 abortion.1 <- polr(attitude.ord ~ religion + education,
   data = abortion, weights = frequency
@@ -221,7 +221,7 @@ this carries along the `data=`, and *also* the
 make sure you say what *changes*, and everything else
 (including the form of the model) will stay the same:
 
-```{r }
+```{r abortion-9 }
 abortion.2 <- update(abortion.1, . ~ . - education)
 abortion.3 <- update(abortion.1, . ~ . - religion)
 ```
@@ -231,7 +231,7 @@ abortion.3 <- update(abortion.1, . ~ . - religion)
 The syntax means "take everything in the model abortion.1, and then take out education" for the first one.
 If you don't like `update`, you can also copy and paste and edit:
 
-```{r }
+```{r abortion-10 }
 abortion.2a <- polr(attitude.ord ~ religion,
   data = abortion, weights = frequency
 )
@@ -276,7 +276,7 @@ First, we test `religion`, by comparing the model with it (and
 `education`) and the model without it (with just
 `education`, but the other way around (since the smaller model
 goes first):
-```{r }
+```{r abortion-11 }
 anova(abortion.3, abortion.1)
 ```
 
@@ -292,7 +292,7 @@ Now, we test `education` by comparing the model with both and
 the model without `education` (but with `religion` since
 that's important):
 
-```{r }
+```{r abortion-12 }
 anova(abortion.2, abortion.1)
 ```
 
@@ -332,7 +332,7 @@ Solution
 
 Use either `distinct` or `count` to get the levels of
 `education` and `religion`:
-```{r }
+```{r abortion-13 }
 educations <- abortion %>% distinct(education) %>% pull(education)
 religions <- abortion %>% distinct(religion) %>% pull(religion)
 new <- crossing(education = educations, religion = religions)
@@ -408,7 +408,7 @@ didn't ask you to do it.) In R, `a:b` means
 "the main effects of `a` and `b` and their interaction". In our case, therefore, we
 should add `education:religion` to our model and test it
 for significance:
-```{r }
+```{r abortion-14 }
 abortion.4 <- update(abortion.1, . ~ . + education:religion)
 anova(abortion.1, abortion.4)
 ```
@@ -419,7 +419,7 @@ The interaction *is* significant, so it should stay. What effect
 does it have on the predictions? We've done all the setup earlier, so
 we just run `predict` again on the new model:
 
-```{r }
+```{r abortion-15 }
 pp <- predict(abortion.4, new, type = "p")
 cbind(new, pp)
 ```

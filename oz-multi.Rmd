@@ -22,7 +22,7 @@ Solution
 
 The data values are separated by tabs, so `read_tsv` is
 the thing:
-```{r }
+```{r oz-multi-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
@@ -32,7 +32,7 @@ athletes
 
 If you didn't remember that, this also works:
 
-```{r }
+```{r oz-multi-2 }
 athletes <- read_delim(my_url, "\t")
 ```
 
@@ -50,7 +50,7 @@ Solution
 
 
 I'm doing this to give you a little intuition for later:
-```{r }
+```{r oz-multi-3 }
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport)) + geom_point()
 ```
 
@@ -90,7 +90,7 @@ Solution
 120 steps is actually enough, but any number larger than 110 is
 fine. It doesn't matter if your guess is way too high. Like this:
 
-```{r }
+```{r oz-multi-4 }
 library(nnet)
 sport.1 <- multinom(Sport ~ Ht + Wt, data = athletes, maxit = 200)
 ```
@@ -110,7 +110,7 @@ Solution
 
 The idea is to fit a model without `Wt`, and then show that
 it fits significantly worse:
-```{r }
+```{r oz-multi-5 }
 sport.2 <- update(sport.1, . ~ . - Wt)
 anova(sport.2, sport.1, test = "Chisq")
 ```
@@ -130,7 +130,7 @@ back at the graph you made).
 
 `drop1`, the obvious thing, doesn't work here:
 
-```{r error=T}
+```{r oz-multi-6, error=T}
 drop1(sport.1, test = "Chisq", trace = T)
 ```
 
@@ -139,7 +139,7 @@ drop1(sport.1, test = "Chisq", trace = T)
 I gotta figure out what that error is.
 Does `step`?
 
-```{r }
+```{r oz-multi-7 }
 step(sport.1, direction = "backward", test = "Chisq")
 ```
 
@@ -164,7 +164,7 @@ Solution
 This is (again) the easier way: fill vectors with the given
 values, use `crossing` to get the combinations, and feed
 that into `predict`, thus:
-```{r }
+```{r oz-multi-8 }
 Hts <- c(160, 180, 200)
 Wts <- c(50, 75, 100)
 new <- crossing(Ht = Hts, Wt = Wts)
@@ -175,7 +175,7 @@ new
 
 and then
 
-```{r size="scriptsize"}
+```{r oz-multi-9, size="scriptsize"}
 p <- predict(sport.1, new, type = "probs")
 cbind(new, p)
 ```
@@ -188,7 +188,7 @@ This still spills onto a second line (even printed this small). Let's
 round the predicted probabilities to 2 decimals, which, with luck,
 will also kill the scientific notation:
 
-```{r }
+```{r oz-multi-10 }
 cbind(new, round(p, 2))
 ```
 

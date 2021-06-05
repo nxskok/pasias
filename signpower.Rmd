@@ -25,7 +25,7 @@ of $n=10$.
 Solution
 
 
-```{r }
+```{r signpower-1 }
 power.t.test(delta=50-40,n=10,sd=15,type="one.sample",alternative="two.sided")
 ```       
 
@@ -46,7 +46,7 @@ Solution
 The data actually have a normal distribution with mean 50 and
 SD 15, so we use `rnorm` with this mean and SD, obtaining
 10 values:
-```{r }
+```{r signpower-2 }
 x=rnorm(10,50,15)  
 x
 ``` 
@@ -63,7 +63,7 @@ Solution
 
 
  The way we know this is to put `x` into a data frame first:
-```{r }
+```{r signpower-3 }
 tibble(x) %>% count(x<40)
 ``` 
 
@@ -87,7 +87,7 @@ Solution
 This is actually easier than you might think. The output from
 `count` is a data frame with a column called `n`,
 whose minimum value you want. I add to my pipeline:
-```{r }
+```{r signpower-4 }
 tibble(x) %>% count(x<40) %>%
 summarize(the_min=min(n)) %>%
 mutate(is_rejected=(the_min<=1))
@@ -99,7 +99,7 @@ one line, `FALSE` and 10; the minimum of the `n` values
 is 10 (since there is only one), and it will falsely say that you
 should not reject. The fix is
 
-```{r }
+```{r signpower-5 }
 tibble(x) %>% count(x<40) %>%
 summarize(the_min=min(n)) %>%
 mutate(is_rejected=(the_min<=1 | the_min==10))
@@ -109,7 +109,7 @@ The above is almost the right thing, but not quite: we only want that value
 that I called `is_rejected`, rather than the whole data frame,
 so a `pull` will grab it:
 
-```{r }
+```{r signpower-6 }
 tibble(x) %>% count(x<40) %>%
 summarize(the_min=min(n)) %>%
 mutate(is_rejected=(the_min<=1 | the_min==10)) %>%
@@ -123,14 +123,14 @@ below 40, with probability 0.5 of each, so the number of values below
 40 (say) is binomial with $n=10$ and $p=0.5$. The P-value for 1
 observed value below 40 and the rest above is
 
-```{r }
+```{r signpower-7 }
 2*pbinom(1,10,0.5)  
 ``` 
 
 which is less than 0.05; the P-value for 2 values below 40 and the
 rest above is 
 
-```{r }
+```{r signpower-8 }
 2*pbinom(2,10,0.5)    
 ``` 
 
@@ -177,7 +177,7 @@ Set up a dataframe with a column (called, maybe, `sim`) that counts the number o
 I start with setting the random number seed, so it comes out the
 same each time. That way, if I rerun the code, my answers are the same (and I don't have to change my discussion of them.)
 
-```{r}
+```{r signpower-9}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -188,7 +188,7 @@ Each sample has 10 values in it, not just one, so you need the `list` around the
 
 Now we have to count how many of the sample values are less than 40:
 
-```{r}
+```{r signpower-10}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -199,7 +199,7 @@ tibble(sim = 1:1000) %>%
 
 This is a bit of a programmer's trick. In R, `less` contains a vector of 10 TRUE or FALSE values, according to whether the corresponding value in `sample` is less than 40 or not. In R (and many other programming languages), the numeric value of TRUE is 1 and of FALSE is 0, so you count how many TRUE values there are by adding them up. To verify that this worked, we should `unnest` `sample` and `less`:
 
-```{r}
+```{r signpower-11}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -213,7 +213,7 @@ In the first sample, 38.8, 39.5, and 33.8 are less than 40, correctly identified
 
 Next, the sign test will reject if there are 0, 1, 9 or 10 values less than 40 (you might be guessing that the last two will be pretty unlikely), so make a column called `reject` that encapsulates that, and then count how many times you rejected in your simulations. I don't need my `unnest` any more; that was just to check that everything was working so far:
 
-```{r}
+```{r signpower-12}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -239,7 +239,7 @@ I'm now thinking a better way to do this is to write a function that
 takes a sample (in a vector) and returns a TRUE or FALSE according to
 whether or not a median of 40 would be rejected for that sample:
 
-```{r }
+```{r signpower-13 }
 is_reject=function(x) {
   tibble(x=x) %>%
     mutate(counted = (x < 40)) %>% 
@@ -253,7 +253,7 @@ is_reject(c(35, 38, 45, 55))
 
 Now, we have to use that:
 
-```{r}
+```{r signpower-14}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -286,7 +286,7 @@ The power of my sign test was 0.243, so in
 `power` equal to that and
 omit the sample size `n`:
 
-```{r }
+```{r signpower-15 }
 power.t.test(delta=50-40,power=0.243,sd=15,type="one.sample",alternative="two.sided")
 ```       
 A sample of size 6 gives the same power for the $t$-test that a
@@ -334,7 +334,7 @@ To simulate the $t$ test, we first have to generate some Laplace data
 with the true mean of 0.5. We'll use a sample size of 50 throughout
 these simulations.
 
-```{r }
+```{r signpower-16 }
 library(smoothmest)
 rl <- rdoublex(50,mu=0.5)
 rl
@@ -342,7 +342,7 @@ rl
 
 This seems to have some unusual values, far away from zero:
 
-```{r }
+```{r wanners}
 tibble(rl) %>%
 ggplot(aes(sample=rl))+
 stat_qq()+stat_qq_line()
@@ -353,14 +353,14 @@ You see the long tails compared to the normal.
 Now, we feed these values into `t.test` and see whether we
 reject a null median of zero (at $\alpha=0.05$):
 
-```{r }
+```{r signpower-17 }
 tt <- t.test(rl)  
 tt
 ``` 
 
 Or we can just pull out the P-value and even compare it to 0.05:
 
-```{r }
+```{r signpower-18 }
 pval <- tt$p.value  
 pval
 is.reject <- (pval<=0.05)
@@ -375,7 +375,7 @@ We'll use these ideas to simulate the power of the $t$-test for these
 data, testing a mean of 0. This uses the same ideas as for any power
 simulation; the difference here is the true distribution:
 
-```{r}
+```{r signpower-19}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(sample = list(rdoublex(50, mu = 0.5))) %>% 
@@ -389,7 +389,7 @@ from a vector, the easiest way to do this is to use
 `pval_sign0` from `smmr`, which returns exactly the
 two-sided P-value that we want, so that the procedure is a step simpler:
 
-```{r}
+```{r signpower-20}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(sample = list(rdoublex(50, mu = 0.5))) %>% 

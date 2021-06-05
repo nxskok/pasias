@@ -25,7 +25,7 @@ doses and damaged cell numbers into a `.txt` file or
 spreadsheet and read in with the appropriate `read_`
 function). 
 Or, use a `tribble`:
-```{r }
+```{r doseresponse-1 }
 dr <- tribble(
   ~dose, ~damaged,
   10, 10,
@@ -42,7 +42,7 @@ dr
        
 Or, make a data frame with the values typed in:
 
-```{r }
+```{r doseresponse-2 }
 dr2 <- tibble(
   dose = seq(10, 70, 10),
   damaged = c(10, 28, 53, 77, 91, 98, 99)
@@ -98,7 +98,7 @@ than you'd think, as
 you see. A `mutate` is the way to
 go: create a new column in `dr` and save back in
 `dr` (because I like living on the edge):
-```{r }
+```{r doseresponse-3 }
 dr <- dr %>% mutate(undamaged = 100 - damaged)
 dr
 ```
@@ -117,7 +117,7 @@ had failed for some reason, I could have started again.
 
 Now we have to make our response "matrix" with two columns, using `cbind`:
 
-```{r }
+```{r doseresponse-4 }
 response <- with(dr, cbind(damaged, undamaged))
 response
 ```
@@ -129,7 +129,7 @@ dose. This is actually trickier than it looks: the two things in
 `cbind` are columns (vectors), and `cbind` glues them
 together to make an R `matrix`:
 
-```{r }
+```{r doseresponse-5 }
 class(response)
 ```
 
@@ -139,7 +139,7 @@ which is what `glm` needs here, even though it looks a lot like
 a data frame (which wouldn't work here). This *would* be a data
 frame:
 
-```{r }
+```{r doseresponse-6 }
 dr %>% select(damaged, undamaged) %>% class()
 ```
 
@@ -148,7 +148,7 @@ dr %>% select(damaged, undamaged) %>% class()
 and would therefore be the wrong thing to give `glm`. So I had
 to do it with `cbind`, or use some other trickery, like this:
 
-```{r }
+```{r doseresponse-7 }
 dr %>%
   select(damaged, undamaged) %>%
   as.matrix() -> resp
@@ -159,7 +159,7 @@ class(resp)
 
 Now we fit our model:
 
-```{r }
+```{r doseresponse-8 }
 cells.1 <- glm(response ~ dose, family = "binomial", data = dr)
 summary(cells.1)
 ```
@@ -190,7 +190,7 @@ so that the increase is about 11\%.
 If you like, you can get a rough CI for the slope by going up
 and down twice its standard error (this is the usual
 approximately-normal thing). Here that would be
-```{r }
+```{r doseresponse-9 }
 0.113323 + c(-2, 2) * 0.008315
 ```
 
@@ -217,7 +217,7 @@ Solution
 The remaining care that this needs is to make sure that we do
 indeed get predicted probabilities, and then some
 `cbind`ing to get the right kind of display:
-```{r }
+```{r doseresponse-10 }
 p <- predict(cells.1, type = "response")
 with(dr, cbind(dose, damaged, p))
 ```

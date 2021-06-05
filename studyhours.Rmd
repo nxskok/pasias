@@ -37,7 +37,7 @@ Solution
 Separated by one space. There appear to be some strange quotes
 in there, but we'll ignore those and see whether they cause any
 trouble: 
-```{r }
+```{r studyhours-1 }
 my_url <- "http://ritsokiguess.site/datafiles/studyhours.txt"
 studyhours <- read_delim(my_url, " ")
 studyhours
@@ -47,7 +47,7 @@ studyhours
 
 So far so good. 75 students, in tidy format.
 
-```{r }
+```{r studyhours-2 }
 ggplot(studyhours, aes(x = major, y = hours)) + geom_boxplot()
 ```
 
@@ -67,7 +67,7 @@ lowest on both.
 Extra: Box-Cox also works on ANOVA-type data, since that is an `lm`
 kind of model:
 
-```{r }
+```{r studyhours-3 }
 boxcox(hours ~ major, data = studyhours)
 ```
 
@@ -94,7 +94,7 @@ Solution
 
 We need to know what the categories of `major` are, so that
 we can set up the contrasts correctly, so let's start with that:
-```{r }
+```{r studyhours-4 }
 studyhours %>% select(major) %>% summary()
 ```
 
@@ -103,7 +103,7 @@ studyhours %>% select(major) %>% summary()
 Oh. Yeah. We never turned `major` into a factor. We'd better do
 that, and then try again:
 
-```{r }
+```{r studyhours-5 }
 studyhours <- studyhours %>% mutate(major = factor(major))
 studyhours %>% select(major) %>% summary()
 ```
@@ -117,7 +117,7 @@ so we'll do that first. Just set it up with a 1 for one of them and a
 $-1$ for the other and 0 for math, in the right order according to
 what the levels are, viz:
 
-```{r }
+```{r studyhours-6 }
 c.eng.socsci <- c(1, 0, -1)
 ```
 
@@ -131,7 +131,7 @@ $$\mbox{math}-(\mbox{English}+\mbox{socsci})/2.$$
 This translates into contrast-ese like this, making sure to get Math
 in the middle where it belongs:^[As I failed to do the first time.]
 
-```{r }
+```{r studyhours-7 }
 c.math.others <- c(-0.5, 1, -0.5)
 ```
 
@@ -150,7 +150,7 @@ Solution
 
 Multiply them together (elementwise, which is how R does it)
 and show that what you get adds up to zero:
-```{r }
+```{r studyhours-8 }
 sum(c.eng.socsci * c.math.others)
 ```
 
@@ -174,7 +174,7 @@ Solution
 
 So, like the example in lecture (where the
 `contrasts(model)` was admittedly rather confusing):
-```{r }
+```{r studyhours-9 }
 m <- cbind(c.math.others, c.eng.socsci)
 m
 contrasts(studyhours$major) <- m
@@ -194,7 +194,7 @@ Solution
 Pretend the ANOVA is a regression (though you can fit ANOVAs
 either way: we just used `aov` before because we were
 going to follow up with Tukey):
-```{r }
+```{r studyhours-10 }
 studyhours.1 <- lm(hours ~ major, data = studyhours)
 summary(studyhours.1)
 ```
@@ -234,7 +234,7 @@ you run an ANOVA using `lm`, you get the ANOVA table by
 passing the fitted model object into `anova` rather than
 `summary`:^[`anova` is one of R's  multi-purpose tools; what it does depends on what you feed it.]
 
-```{r }
+```{r studyhours-11 }
 anova(studyhours.1)
 ```
 
@@ -245,7 +245,7 @@ contrasts. (The example in class had four models of chainsaw, so 3 df
 for model, so 3 contrasts possible.) What if we don't use all those
 contrasts up? Try it and see:
 
-```{r }
+```{r studyhours-12 }
 m <- cbind(c.math.others)
 m
 contrasts(studyhours$major) <- m
@@ -268,7 +268,7 @@ had much cause to do so far. But now we do. What we want to do is to
 *recode* the levels of `major`, which is done by
 `fct_recode`:
 
-```{r }
+```{r studyhours-13 }
 studyhoursx <- studyhours %>%
   mutate(mathrest = fct_recode(major,
     "rest" = "english",
@@ -299,7 +299,7 @@ students for whom `mathrest` is `rest` (everyone else).
 
 Now, the $t$-test.
 
-```{r }
+```{r studyhours-14 }
 t.test(hours ~ mathrest, data = studyhoursx, var.equal = T)
 ```
 

@@ -10,7 +10,7 @@ The data are in [http://ritsokiguess.site/datafiles/blood_pressure1.csv](http://
 Solution
 
 
-```{r}
+```{r blood-pressure-paired-1}
 my_url <- "http://ritsokiguess.site/datafiles/blood_pressure1.csv"
 blood_pressure <- read_csv(my_url)
 blood_pressure
@@ -39,7 +39,7 @@ Solution
 
 A matched-pairs $t$-test, then. Remember, we want to see whether blood pressure is *lower* afterwards (that is, before is *greater* than after), so this needs to be one-sided:
 
-```{r}
+```{r blood-pressure-paired-2}
 with(blood_pressure, t.test(before, after, alternative = "greater", paired = TRUE))
 ```
 
@@ -47,7 +47,7 @@ There are some variations possible here: `before` and `after` could be switched 
 
 Or, you can do a one-sample $t$ on the differences, with the right `alternative` corresponding to the way you took differences. If you are looking ahead, you might realize that working out the differences *now* and adding them to the dataframe will be a good idea:
 
-```{r}
+```{r blood-pressure-paired-3}
 blood_pressure %>% 
 mutate(difference = before - after) -> blood_pressure
 blood_pressure
@@ -55,7 +55,7 @@ blood_pressure
 
 I took the differences this way around since I was expecting, if anything, the before numbers to be bigger than the after ones. And then:
 
-```{r}
+```{r blood-pressure-paired-4}
 with(blood_pressure, t.test(difference, mu = 0, alternative = "greater"))
 ```
 
@@ -74,7 +74,7 @@ Solution
 
 A sign test on the differences. By this point, you will realize that you will need to have obtained the differences. Get them here if you did not already get them:
 
-```{r}
+```{r blood-pressure-paired-5}
 sign_test(blood_pressure, difference, 0)
 ```
 

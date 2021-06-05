@@ -21,7 +21,7 @@ Solution
 
 
 This doesn't need much comment:
-```{r }
+```{r mathphobia-1 }
 my_url <- "http://ritsokiguess.site/datafiles/mathphobia.txt"
 math <- read_delim(my_url, " ")
 math
@@ -32,7 +32,7 @@ math
 This will do, counting the `a` and `b`. Or, to save
 yourself that trouble:
 
-```{r }
+```{r mathphobia-2 }
 math %>% count(course)
 ```
 
@@ -41,7 +41,7 @@ math %>% count(course)
 Five each. The story is to get the computer to do the grunt work for
 you, if you can make it do so. Other ways:
 
-```{r }
+```{r mathphobia-3 }
 math %>% group_by(course) %>% summarize(count = n())
 ```
 
@@ -49,7 +49,7 @@ math %>% group_by(course) %>% summarize(count = n())
 
 and this:
 
-```{r }
+```{r mathphobia-4 }
 with(math, table(course))
 ```
 
@@ -76,7 +76,7 @@ Solution
 
 A two-sided test is the default, so there is not much to do here:
 
-```{r }
+```{r mathphobia-5 }
 t.test(phobia ~ course, data = math)
 ```
 
@@ -97,7 +97,7 @@ line of code). What is the most striking thing that you notice?
 Solution
 
 
-```{r }
+```{r mathphobia-6 }
 ggplot(math, aes(x = course, y = phobia)) + geom_boxplot()
 ```
 
@@ -112,7 +112,7 @@ By way of explanation: the course `a` scores have a number of
 values equal so that the 3rd quartile and the median are the name, and
 also that the first quartile and the minimum value are the same:
 
-```{r }
+```{r mathphobia-7 }
 tmp <- math %>% filter(course == "a")
 tmp %>% count(phobia)
 summary(tmp)
@@ -154,7 +154,7 @@ only 5 values in each group, and so they can certainly look
 non-normal even if they actually are normal, but these values are
 all integers, so it is perhaps wise to be cautious.)
 We have the machinery to assess the normality for these, in one shot:
-```{r }
+```{r mathphobia-8 }
 ggplot(math, aes(sample = phobia)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~course, ncol = 1, scales = "free")
@@ -196,7 +196,7 @@ Solution
 
 
 This is an invite to use `smmr`:
-```{r }
+```{r mathphobia-9 }
 library(smmr)
 median_test(math, phobia, course)
 ```
@@ -211,7 +211,7 @@ something: there were 10 observations, but there are only $1+2+2+2=7$
 in the table. This is because three of the observations were equal to
 the overall median, and had to be thrown away:
 
-```{r }
+```{r mathphobia-10 }
 math %>% summarize(med = median(phobia))
 math %>% count(phobia)
 ```
@@ -226,7 +226,7 @@ the frequencies in the table have to be *very* lopsided for you
 to have a chance of rejecting the null. Something like this is what
 you'd need:
 
-```{r }
+```{r mathphobia-11 }
 x <- c(1, 1, 2, 6, 6, 6, 7, 8, 9, 10)
 g <- c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2)
 d <- tibble(x, g)

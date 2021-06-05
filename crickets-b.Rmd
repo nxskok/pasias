@@ -27,7 +27,7 @@ Solution
 
 Nothing terribly surprising here:
 
-```{r }
+```{r crickets-b-1 }
 my_url <- "http://ritsokiguess.site/datafiles/crickets2.csv"
 crickets <- read_csv(my_url)
 crickets
@@ -37,7 +37,7 @@ crickets
 
 31 crickets, which is what I remember. What species are there?
 
-```{r }
+```{r crickets-b-2 }
 crickets %>% count(species)
 ```
 
@@ -55,7 +55,7 @@ Solution
 
 
 Drag your mind way back to this:
-```{r }
+```{r crickets-b-3 }
 t.test(pulse_rate ~ species, data = crickets)
 ```
 
@@ -77,7 +77,7 @@ Solution
 
 Hang onto the "pulse rate depends on species" idea and try
 that in `lm`:
-```{r }
+```{r crickets-b-4 }
 pulse.0 <- lm(pulse_rate ~ species, data = crickets)
 summary(pulse.0)
 ```
@@ -98,7 +98,7 @@ variances everywhere (that is, within the two `species`), and
 before, we did the Welch-Satterthwaite test that does not assume equal
 variances. What if we do the pooled $t$-test instead?
 
-```{r }
+```{r crickets-b-5 }
 t.test(pulse_rate ~ species, data = crickets, var.equal = T)
 ```
 
@@ -121,7 +121,7 @@ Solution
 
 One of the wonderful things about `ggplot` is that doing
 the obvious thing works:
-```{r }
+```{r crickets-b-6 }
 ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
   geom_point()
 ```
@@ -175,7 +175,7 @@ Solution
 
 This is actually a so-called "analysis of covariance model",
 which properly belongs in D29, but it's really just a regression:
-```{r }
+```{r crickets-b-7 }
 pulse.1 <- lm(pulse_rate ~ species + temperature, data = crickets)
 summary(pulse.1)
 ```
@@ -203,7 +203,7 @@ us.
 
 We can go a little further here:
 
-```{r }
+```{r crickets-b-8 }
 confint(pulse.1)
 ```
 
@@ -230,7 +230,7 @@ same for both species (just the intercepts differ). If you want to
 allow the slopes to differ between species, you add an interaction
 between temperature and species:
 
-```{r }
+```{r crickets-b-9 }
 pulse.2 <- lm(pulse_rate ~ species * temperature, data = crickets)
 summary(pulse.2)
 ```
@@ -241,7 +241,7 @@ To see whether adding the interaction term added anything to the
 prediction,^[Though it's hard to imagine being able to improve on an R-squared of 99%.] 
 compare the model with and without using `anova`:
 
-```{r }
+```{r crickets-b-10 }
 anova(pulse.1, pulse.2)
 ```
 
@@ -277,7 +277,7 @@ is going on.
 `ggplot` makes it almost laughably easy to add regression lines
 for each species to our plot, thus:
 
-```{r }
+```{r crickets-b-11 }
 ggplot(crickets, aes(x = temperature, y = pulse_rate, colour = species)) +
   geom_point() + geom_smooth(method = "lm", se = F)
 ```
@@ -298,7 +298,7 @@ Solution
 
 First, the plot of residuals against fitted values (after all,
 it *is* a regression):
-```{r }
+```{r crickets-b-12 }
 ggplot(pulse.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -315,7 +315,7 @@ around that. Perhaps the simplest is to use `pulse.1` as our
 "default" data frame and then get `temperature` from the
 right place:
 
-```{r }
+```{r crickets-b-13 }
 ggplot(pulse.1, aes(x = crickets$temperature, y = .resid)) + geom_point()
 ```
 
@@ -328,7 +328,7 @@ is categorical. Since the residuals are quantitative, this suggests a
 boxplot. Remembering to get species from the right place again, that
 goes like this:
 
-```{r }
+```{r crickets-b-14 }
 ggplot(pulse.1, aes(x = crickets$species, y = .resid)) + geom_boxplot()
 ```
 
@@ -347,7 +347,7 @@ mean higher than the median.
 Is that non-normality really problematic? Well, I could look at the
 normal quantile plot of all the residuals together:
 
-```{r }
+```{r crickets-b-15 }
 ggplot(pulse.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 

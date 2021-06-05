@@ -42,7 +42,7 @@ Solution
 
 
 `read_csv`:
-```{r }
+```{r shirts-1 }
 my_url <- "http://ritsokiguess.site/datafiles/shirts.csv"
 shirts <- read_csv(my_url)
 shirts
@@ -63,7 +63,7 @@ Solution
 
 
 Thus:
-```{r }
+```{r shirts-2 }
 shirts <- shirts %>% mutate(treatment = factor(treatment))
 ```
 
@@ -71,7 +71,7 @@ shirts <- shirts %>% mutate(treatment = factor(treatment))
 
 and for checking:
 
-```{r }
+```{r shirts-3 }
 shirts
 ```
 
@@ -90,7 +90,7 @@ Solution
 
 
 This is the most direct:
-```{r }
+```{r shirts-4 }
 levels(shirts$treatment)
 ```
 
@@ -98,7 +98,7 @@ levels(shirts$treatment)
 
 or you can do one of the `tidyverse`-style ways, such as
 
-```{r }
+```{r shirts-5 }
 shirts %>% count(treatment)
 ```
 
@@ -106,7 +106,7 @@ shirts %>% count(treatment)
 
 or
 
-```{r }
+```{r shirts-6 }
 shirts %>% distinct(treatment)
 ```
 
@@ -121,7 +121,7 @@ Alphabetical order,  is the moral of the story.
 Extra: you can make them appear in the order they appear in the data,
 if you want to (and if you know what you are doing):
 
-```{r }
+```{r shirts-7 }
 shirts %>% mutate(trt2 = fct_inorder(treatment)) -> d
 levels(d$trt2)
 ```
@@ -145,7 +145,7 @@ Solution
 
 We will use this later when assessing the significance of the
 contrasts. It's the usual group-by and summarize:
-```{r }
+```{r shirts-8 }
 shirts %>%
   group_by(treatment) %>%
   summarize(m = mean(score))
@@ -156,7 +156,7 @@ shirts %>%
 Extra: how does this come out if you have your factor levels in a
 non-alphabetical order?
 
-```{r }
+```{r shirts-9 }
 d %>% group_by(trt2) %>% summarize(m = mean(score))
 ```
 
@@ -197,7 +197,7 @@ Solution
 
 
 These, in that order, are comparisons of treatments 4 and 5:
-```{r }
+```{r shirts-10 }
 c_mms <- c(0, 0, 0, 1, -1)
 ```
 
@@ -205,7 +205,7 @@ c_mms <- c(0, 0, 0, 1, -1)
 
 treatments 2 and 3:
 
-```{r }
+```{r shirts-11 }
 c_fms <- c(0, 1, -1, 0, 0)
 ```
 
@@ -215,7 +215,7 @@ c_fms <- c(0, 1, -1, 0, 0)
 
 the average of 2 and 3 vs.\ the average of 4 and 5:
 
-```{r }
+```{r shirts-12 }
 c_mf <- c(0, 0.5, 0.5, -0.5, -0.5)
 ```
 
@@ -227,7 +227,7 @@ two means.
 
 Finally
 
-```{r }
+```{r shirts-13 }
 c_tc <- c(1, -0.25, -0.25, -0.25, -0.25)
 ```
 
@@ -250,7 +250,7 @@ Solution
 
 Multiply them together (elementwise, which is what `*`
 does) and add them up, showing that you get zero, for example:
-```{r }
+```{r shirts-14 }
 sum(c_mf * c_tc)
 ```
 
@@ -269,7 +269,7 @@ Solution
 
 
 I called my data frame `shirts`, so I need to do this:
-```{r }
+```{r shirts-15 }
 m <- cbind(c_mms, c_fms, c_mf, c_tc)
 contrasts(shirts$treatment) <- m
 ```
@@ -281,7 +281,7 @@ There's no output here; we'll see in a moment whether it worked.
 Extra: once you've created the matrix `m`, it gives you a
 second way to test the contrasts for orthogonality, all at once:
 
-```{r }
+```{r shirts-16 }
 t(m) %*% m
 ```
 
@@ -296,7 +296,7 @@ each other contrast.
 
 Or even:
 
-```{r }
+```{r shirts-17 }
 z <- t(m) %*% m
 all(z[row(z) != col(z)] == 0)
 ```
@@ -317,7 +317,7 @@ Solution
 
 Once you have everything set up, it's just a matter of going
 through the process:
-```{r }
+```{r shirts-18 }
 score.1 <- lm(score ~ treatment, data = shirts)
 summary(score.1)
 ```

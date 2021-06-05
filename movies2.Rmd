@@ -15,7 +15,7 @@ Solution
 
 Reading in is as in the other question using these data (just copy
 your code, or mine). 
-```{r }
+```{r movies2-1 }
 my_url <- "http://ritsokiguess.site/datafiles/movie-lengths.csv"
 movies <- read_csv(my_url)
 movies
@@ -26,7 +26,7 @@ movies
 Now, the actual for-credit part, which is a `group_by` and
 `summarize`: 
 
-```{r }
+```{r movies2-2 }
 movies %>%
   group_by(rating) %>%
   summarize(count = n(), med = median(length))
@@ -49,7 +49,7 @@ Solution
 
 
 The graph would seem to be a boxplot, side by side for each group:
-```{r }
+```{r bletzen}
 ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
@@ -80,7 +80,7 @@ minute, you throw in a `facet_wrap`. I've written the code out
 on three lines, so that you can see the pieces: the "what to plot",
 then the normal quantile plot part, then the facetting:
 
-```{r }
+```{r fravel}
 ggplot(movies, aes(sample = length)) +
   stat_qq() + stat_qq_line() +
   facet_wrap(~rating)
@@ -148,7 +148,7 @@ Solution
 
 
 The smart way is to use `smmr`, since it is much easier:
-```{r }
+```{r movies2-3 }
 library(smmr)
 median_test(movies, length, rating)
 ```
@@ -170,7 +170,7 @@ The easiest way to see which movie types really differ in length from
 which is to do all the pairwise median tests, which is in
 `smmr` thus:
 
-```{r }
+```{r movies2-4 }
 pairwise_median_test(movies, length, rating)
 ```
 
@@ -182,7 +182,7 @@ The inputs for this are the same ones in the same order as for
 Only the first two of these are significant (look in the last
 column). We can remind ourselves of the sample medians:
 
-```{r }
+```{r movies2-5 }
 movies %>%
   group_by(rating) %>%
   summarize(count = n(), med = median(length))
@@ -201,7 +201,7 @@ table tabulating the number of values above and below the overall
 median for each group, (iii) test the table for association, (iv)
 draw a conclusion.
 Thus (i):
-```{r }
+```{r movies2-6 }
 median(movies$length)
 ```
 
@@ -209,7 +209,7 @@ median(movies$length)
 
 or
 
-```{r }
+```{r movies2-7 }
 movies %>% summarize(med = median(length))
 ```
 
@@ -218,7 +218,7 @@ movies %>% summarize(med = median(length))
 or store it in a variable,
 and then (ii):
 
-```{r }
+```{r movies2-8 }
 tab1 <- with(movies, table(length < 100, rating))
 tab1
 ```
@@ -227,7 +227,7 @@ tab1
 
 or
 
-```{r }
+```{r movies2-9 }
 tab2 <- with(movies, table(length > 100, rating))
 tab2
 ```
@@ -240,7 +240,7 @@ These differ because there are evidently some movies of length exactly
 
 Was I right about movies of length exactly 100 minutes?
 
-```{r }
+```{r movies2-10 }
 movies %>% filter(length == 100)
 ```
 
@@ -254,7 +254,7 @@ You
 need to store your table in a variable because it has to get passed on
 to `chisq.test` below, (iii):
 
-```{r }
+```{r movies2-11 }
 chisq.test(tab1, correct = F)
 ```
 
@@ -262,7 +262,7 @@ chisq.test(tab1, correct = F)
 
 or 
 
-```{r }
+```{r movies2-12 }
 chisq.test(tab2, correct = F)
 ```
 
@@ -288,7 +288,7 @@ to pull out just those, and then compare them using
 `smmr`. Because the first input to `median_test` is a
 data frame, it fits neatly into a pipe (with the data frame omitted):
 
-```{r }
+```{r movies2-13 }
 movies %>%
   filter(rating == "G" | rating == "PG") %>%
   median_test(length, rating)
@@ -302,7 +302,7 @@ function to do it. I think the input to the function should be a data
 frame that has a column called `rating`, and two names of
 ratings to compare:
 
-```{r }
+```{r movies2-14 }
 comp2 <- function(rat_1, rat_2, d) {
   d %>%
     filter(rating == rat_1 | rating == rat_2) %>%
@@ -325,7 +325,7 @@ you're interested.
 
 Anyway, testing:
 
-```{r }
+```{r movies2-15 }
 comp2("G", "PG", movies)
 ```
 
@@ -335,7 +335,7 @@ That works, but I really only want to pick out the P-value, which is
 in the list item `test` in the column `value`, the third
 entry. So let's rewrite the function to return just that:
 
-```{r }
+```{r movies2-16 }
 comp2 <- function(rat_1, rat_2, d) {
   d %>%
     filter(rating == rat_1 | rating == rat_2) %>%
@@ -374,7 +374,7 @@ function and not returning it. Ooops. The nice thing about
 it will pull out (and return) whatever I want it to.
 
 Let's grab a hold of the different rating groups we have:
-```{r }
+```{r movies2-17 }
 the_ratings <- unique(movies$rating)
 the_ratings
 ```
@@ -386,7 +386,7 @@ loop-inside-a-loop over the rating groups, and get the P-value for
 each pair. You can do that in R, if you must. It's not pretty at all,
 but it works:
 
-```{r }
+```{r movies2-18 }
 ii <- character(0)
 jj <- character(0)
 pp <- numeric(0)
@@ -412,7 +412,7 @@ doesn't matter too much here since it's not a very big problem.)
 
 Let's try another way:
 
-```{r }
+```{r movies2-19 }
 crossing(first = the_ratings, second = the_ratings)
 ```
 
@@ -425,7 +425,7 @@ because we're never comparing a rating with itself, and each pair of
 ratings appears twice, once in alphabetical order, and once the other
 way around. The ones we need are these:
 
-```{r }
+```{r movies2-20 }
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second)
 ```
@@ -444,7 +444,7 @@ in `first` *and* each of the things in `second`,
 and make a new column called `pval` that contains exactly
 that. `comp2` expects single movie ratings for each of its inputs, not a vector of each, so the way to go about this is `rowwise`:
 
-```{r}
+```{r movies2-21}
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
   rowwise() %>% 
@@ -463,7 +463,7 @@ adjustment: instead of rejecting if the P-value is less than 0.05, we
 only reject if it is less than $0.05/6$, since we are doing 6
 tests. This is a fiddly calculation to do by hand, but it's easy to
 build in another `mutate`, thus:^[In the pairwise median  test in `smmr`, I did this backwards: rather than changing the alpha that you compare each P-value with from 0.05 to 0.05/6, I  flip it around so that you adjust the P-values by *multiplying*  them by 6, and then comparing the adjusted P-values with the usual  0.05. It comes to the same place in the end, except that this way  you can get adjusted P-values that are greater than 1, which makes no sense. You read those as being definitely not significant.]
-```{r }
+```{r movies2-22 }
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
   rowwise() %>% 
@@ -495,7 +495,7 @@ with.)
 Listing the rating groups sorted by median would give you an idea of
 how far different the medians have to be to be significantly different:
 
-```{r }
+```{r movies2-23 }
 medians <- movies %>%
   group_by(rating) %>%
   summarize(med = median(length)) %>%
@@ -514,7 +514,7 @@ median of the combined sample. A subtlety, rather than an error, I'd say.
 
 Here's something extremely flashy to finish with:
 
-```{r }
+```{r movies2-24 }
 crossing(first = the_ratings, second = the_ratings) %>%
   filter(first < second) %>%
   rowwise() %>% 

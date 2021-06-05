@@ -18,7 +18,7 @@ Solution
 
 Like this. The arrangement of numbers and missing values doesn't
 matter, as long as you have some of each:
-```{r }
+```{r nonmissing-1 }
 v <- c(1, 2, NA, 4, 5, 6, 9, NA, 11)
 mydata <- tibble(v)
 mydata
@@ -35,7 +35,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r nonmissing-2 }
 mydata <- mydata %>% mutate(isna = is.na(v))
 mydata
 ```
@@ -57,7 +57,7 @@ Solution
 
 Try it and see. Give it whatever name you like. My name reflects
 that I know what it's going to do:
-```{r }
+```{r nonmissing-3 }
 mydata <- mydata %>% mutate(notisna = !is.na(v))
 mydata
 ```
@@ -80,7 +80,7 @@ Solution
 which case the column should contain something that either *is*
 `TRUE` or `FALSE`, or something that can be
 interpreted that way:
-```{r }
+```{r nonmissing-4 }
 mydata %>% filter(notisna)
 ```
 
@@ -90,7 +90,7 @@ or you can provide `filter` something that can be calculated
 from what's in the data frame, and also returns something that is
 either true or false:
 
-```{r }
+```{r nonmissing-5 }
 mydata %>% filter(!is.na(v))
 ```
 

@@ -30,7 +30,7 @@ right number of cars and variables?
 
 Solution
 
-```{r }
+```{r carc-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/car-cluster.csv"
 cars <- read_csv(my_url)
 cars
@@ -52,7 +52,7 @@ Solution
 
 
 All but the first column needs to be scaled, so:
-```{r }
+```{r carc-2 }
 cars %>% select(-Carname) %>% scale() -> cars.s
 ```
 
@@ -62,7 +62,7 @@ This is a `matrix`, as we've seen before.
 
 Another way is like this:
 
-```{r }
+```{r carc-3 }
 cars %>% select(where(is.numeric)) %>% scale() -> h
 ```
 
@@ -70,7 +70,7 @@ cars %>% select(where(is.numeric)) %>% scale() -> h
 I would prefer to have a look at my result, so that I can see that it
 has sane things in it:
 
-```{r }
+```{r carc-4 }
 head(cars.s)
 ```
 
@@ -78,7 +78,7 @@ head(cars.s)
 
 or, 
 
-```{r }
+```{r carc-5 }
 head(h)
 ```
 
@@ -86,7 +86,7 @@ head(h)
 
 These look right. Or, perhaps better, this:
 
-```{r }
+```{r carc-6 }
 summary(cars.s)
 ```
 
@@ -99,7 +99,7 @@ This doesn't show the standard deviation of each variable, though,
 which should be exactly 1 (since that's what "standardizing"
 means). To get *that*, *this*:
 
-```{r }
+```{r carc-7 }
 as_tibble(cars.s) %>%
   summarize(across(everything(), ~ sd(.)))
 ```
@@ -110,7 +110,7 @@ The idea here is "take the matrix `cars.s`, turn it into a data frame, and for e
 
 As you realize now, the same idea will get the mean of each column too:
 
-```{r }
+```{r carc-8 }
 as_tibble(cars.s) %>%
   summarize(across(everything(), ~ mean(.)))
 ```
@@ -132,7 +132,7 @@ Solution
 
 
 The hint at the end says "use `nstart`", so something like this:
-```{r }
+```{r carc-9 }
 set.seed(457299)
 cars.1 <- kmeans(cars.s, 3, nstart = 20)
 cars.1
@@ -168,7 +168,7 @@ original `cars` data frame, and the cluster numbers are in
 the `cluster` part of the output from `kmeans`. You'll
 need to take some action to display everything (there are only 32
 cars, so it's perfectly all right to display all of them):
-```{r }
+```{r carc-10 }
 tibble(car = cars$Carname, cluster = cars.1$cluster) %>%
   arrange(cluster) 
 ```
@@ -178,7 +178,7 @@ tibble(car = cars$Carname, cluster = cars.1$cluster) %>%
 Or start from the original data frame as read in from the file and
 grab only what you want:
 
-```{r }
+```{r carc-11 }
 cars %>%
   select(Carname) %>%
   mutate(cluster = cars.1$cluster) %>%
@@ -224,7 +224,7 @@ I'll talk about the function way here and the loop way in the next part.
 
 The function way is just like the one in the previous question:
 
-```{r }
+```{r carc-12 }
 wss <- function(howmany, data, nstart = 20) {
   kmeans(data, howmany, nstart = 20)$tot.withinss
 }
@@ -238,7 +238,7 @@ whatever input names you chose within the function.
 I should probably check that this works, at least on 3
 clusters. Before we had
 
-```{r }
+```{r carc-13 }
 cars.1$tot.withinss
 ```
 
@@ -246,7 +246,7 @@ cars.1$tot.withinss
 
 and the function gives
 
-```{r }
+```{r carc-14 }
 wss(3, cars.s)
 ```
 
@@ -270,7 +270,7 @@ Solution
 
 The loop way. I like to define my possible numbers of clusters into
 a vector first:
-```{r }
+```{r carc-15 }
 w <- numeric(0)
 nclus <- 2:10
 for (i in nclus) {
@@ -284,7 +284,7 @@ Now that I look at this again, it occurs to me that there is no great
 need to write a function to do this: you can just do what you need to
 do within the loop, like this:
 
-```{r }
+```{r carc-16 }
 w <- numeric(0)
 nclus <- 2:10
 for (i in nclus) {
@@ -319,7 +319,7 @@ so far for `i` clusters, we save it. Or, at least,
 
 Or, using `rowwise`, which I like better:
 
-```{r }
+```{r carc-17 }
 tibble(clusters = 2:10) %>%
   rowwise() %>% 
   mutate(ss = wss(clusters, cars.s)) -> wwx
@@ -337,7 +337,7 @@ function first, and then use it later.  (The principle is to keep the `mutate` s
 
 As I say, if you *must*:
 
-```{r }
+```{r carc-18 }
 tibble(clusters = 2:10) %>%
   rowwise() %>% 
   mutate(wss = kmeans(cars.s, 
@@ -368,7 +368,7 @@ Solution
 
 
 If you did this the loop way, it's tempting to leap into this:
-```{r error=T}
+```{r carc-19, error=T}
 d <- data.frame(clusters = nclus, wss = w)
 ```
 
@@ -378,7 +378,7 @@ and then wonder why it doesn't work. The problem is that `w`
 has 10 things in it, including an `NA` at the front (as a
 placeholder for 1 cluster):
 
-```{r }
+```{r carc-20 }
 w
 nclus
 ```
@@ -387,7 +387,7 @@ nclus
 
 while `nclus` only has 9. So do something like this instead:
 
-```{r }
+```{r carc-21 }
 tibble(clusters = 1:10, wss = w) %>%
   ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
@@ -401,7 +401,7 @@ is fine.
 Or plot the output from `rowwise`, which is easier since it's
 already a data frame:
 
-```{r }
+```{r carc-22 }
 wwx %>% ggplot(aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
@@ -457,7 +457,7 @@ Solution
 This is the same idea as above. The `arrange` idea from above
 seems to be the cleanest way to arrange the output:
 The K-means analysis is thus:
-```{r }
+```{r carc-23 }
 cars.2 <- kmeans(cars.s, 6, nstart = 20)
 ```
 
@@ -468,7 +468,7 @@ scree plot.
 
 Then display them:
 
-```{r }
+```{r carc-24 }
 cars %>%
   select(Carname) %>%
   mutate(cluster = cars.2$cluster) %>%
@@ -497,14 +497,14 @@ above (without the `arrange`, that being only for looking at,
 and without the `select`, since this time I want all the
 variables that were in `cars`):
 
-```{r }
+```{r carc-25 }
 carsx <- cars %>% mutate(cluster = cars.2$cluster)
 ```
 
  
 Now we fire away:
 
-```{r }
+```{r carc-26 }
 carsx.1 <- lda(cluster ~ mpg + disp + hp + drat + wt + qsec, data = carsx)
 carsx.1
 ```
@@ -538,7 +538,7 @@ cluster. There are two ways to do this; the easy one is
 first (unless you like shades of blue). I didn't load the package
 first, so I call it here with the package name and the two colons:
 
-```{r }
+```{r carc-27 }
 ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
 ```
 
@@ -546,7 +546,7 @@ ggbiplot::ggbiplot(carsx.1, groups = factor(carsx$cluster))
 Or you can do the predictions, then plot `LD1` against
 `LD2`, coloured by cluster:
 
-```{r }
+```{r carc-28 }
 p <- predict(carsx.1)
 data.frame(p$x, cluster = factor(carsx$cluster)) %>%
   ggplot(aes(x = LD1, y = LD2, colour = cluster)) + geom_point() +

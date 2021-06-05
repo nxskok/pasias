@@ -17,7 +17,7 @@ adults' cereals, and another that contains the amount of sugar?
 Solution
 
 
-```{r }
+```{r cerealsugar-1 }
 my_url="http://ritsokiguess.site/datafiles/cereal-sugar.txt"
 cereals=read_delim(my_url," ")
 cereals
@@ -40,7 +40,7 @@ Solution
 
 
 `group_by` and `summarize`:
-```{r }
+```{r cerealsugar-2 }
 cereals %>% group_by(who) %>%
 summarize(sugar_mean=mean(sugar))
 ``` 
@@ -61,7 +61,7 @@ Solution
 
 The usual:
 
-```{r }
+```{r cerealsugar-3 }
 ggplot(cereals,aes(x=who,y=sugar))+geom_boxplot()
 ``` 
 
@@ -108,7 +108,7 @@ Solution
 Having ruled out the two-sample $t$-test, we are left with Mood's
 median test. I didn't need you to build it yourself, so you can
 use package `smmr` to run it with:
-```{r }
+```{r cerealsugar-4 }
 library(smmr)
 median_test(cereals,sugar,who)
 ```     
@@ -135,7 +135,7 @@ Raisin Bran, even though she doesn't like raisins by themselves.)
 Mood's median test is the test we should trust, but you might be
 curious about how the $t$-test stacks up here:
 
-```{r }
+```{r cerealsugar-5 }
 t.test(sugar~who,data=cereals)
 ``` 
 

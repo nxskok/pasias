@@ -27,7 +27,7 @@ download it and save it on your computer, then upload it to
 `rstudio.cloud`), possibly using `file.choose` to
 help R find it. I put my copy in the same project folder as I was
 working in, so I just need the file name:
-```{r }
+```{r mizuna-r-1 }
 library(readxl)
 mizuna <- read_excel("mizuna.xlsx")
 mizuna
@@ -49,7 +49,7 @@ dates, with the points joined by lines.
 Solution
 
 
-```{r }
+```{r mizuna-r-2 }
 ggplot(mizuna, aes(x = date, y = height)) + geom_point() + geom_line()
 ```
 
@@ -68,7 +68,7 @@ This is `water` again. The way to do this is to load
 `ggrepel`, then add `geom_text_repel` to the
 plot, by adding `label=water` to the *original*
 `aes`:
-```{r }
+```{r mizuna-r-3 }
 library(ggrepel)
 ggplot(mizuna, aes(x = date, y = height, label = water)) +
   geom_point() + geom_line() + geom_text_repel(colour = "red")
@@ -80,7 +80,7 @@ I made the text red, so that you can see it more easily. It "repels"
 away from the points, but not from the lines joining them. Which makes
 me wonder whether this would work better (I explain `alpha` afterwards):
 
-```{r }
+```{r mizuna-r-4 }
 library(ggrepel)
 ggplot(mizuna, aes(x = date, y = height, label = water)) +
   geom_point() + geom_line() + geom_label_repel(colour = "red", alpha = 0.7)

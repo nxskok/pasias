@@ -4,7 +4,7 @@
  The [decathlon](https://en.wikipedia.org/wiki/Decathlon) is a men's^[Women  compete in a similar competition called the *heptathlon* with seven  events.] track-and-field competition in which competitors complete 10
 events over two days as follows, requiring the skills shown:
 
-```{r, echo=FALSE}
+```{r decathlon-1, echo=FALSE}
 dec <- tribble(
 ~Event, ~Skills,
 "100m","Running, speed",
@@ -67,7 +67,7 @@ Solution
 Checking the file, this is delimited by single spaces. You might
 be concerned by the quotes; we'll read them in and see what
 happens to them.
-```{r }
+```{r decathlon-2 }
 my_url <- "http://ritsokiguess.site/datafiles/dec2013.txt"
 decathlon0 <- read_delim(my_url, " ")
 decathlon0
@@ -100,12 +100,12 @@ first column. I would rather specify this by name than by
 number. (People have an annoying habit of changing the order of
 columns, but the column *name* is more work to change and
 thus it is less likely that it will change.)
-```{r echo=F}
+```{r decathlon-3, echo=F}
 options(width = 90)
 ```
 
      
-```{r size="footnotesize"}
+```{r decathlon-4, size="footnotesize"}
 decathlon0 %>%
   select(-name) %>%
   scale() -> decathlon
@@ -119,7 +119,7 @@ decimals. (Note that the means and SDs
 appear at the bottom as "attributes".)
     
 
-```{r echo=F}
+```{r decathlon-5, echo=F}
 maxclust <- 20
 ```
 
@@ -138,7 +138,7 @@ Having kind of given the game away in the footnote, I guess I now
 have to keep up my end of the deal and show you the obvious way
 and the clever way.
 The obvious way is to do a Python-style loop, thus:
-```{r }
+```{r decathlon-6 }
 maxclust
 w <- numeric(0)
 for (i in 2:maxclust) {
@@ -168,7 +168,7 @@ Not that there's anything wrong with this,^[I have to sneak a  Seinfeld quote in
 True R Way^[Like Buddhism. I keep feeling that R should have  something called the Eight Noble Truths or similar. See the Extra at the end of this part.] is not to use a
 loop, but get the whole thing in one shot. 
 The first stage is to figure out what you want to do for some number of clusters. In this case, it's something like this:
-```{r }
+```{r decathlon-7 }
 kmeans(decathlon, 3, nstart = 20)$tot.withinss
 ```
 
@@ -180,7 +180,7 @@ The second stage is to run this for each desired number of
 clusters, without using a loop. 
 There are two parts to this, in my favoured way of doing it. First, write a function that will get the total within-group sum of squares for any K-means analysis for any number of clusters (input) for any dataframe (also input):
 
-```{r}
+```{r decathlon-8}
 twss <- function(i, d) {
   ans <- kmeans(d, i, nstart = 20)
   ans$tot.withinss
@@ -191,7 +191,7 @@ The value of doing it this way is that you only ever have to write this function
 
 Let's make sure it works:
 
-```{r}
+```{r decathlon-9}
 twss(3, decathlon)
 ```
 
@@ -199,7 +199,7 @@ Check.
 
 Second, use `rowwise` to work out the total within-group sum of squares for a variety of numbers of clusters. What you use depends on how much data you have, and therefore how many clusters you think it would be able to support (a smallish fraction of the total number of observations). I went from 2 to 20 before, so I'll do that again:
 
-```{r}
+```{r decathlon-10}
 tibble(clusters = 2:20) %>% 
   rowwise() %>% 
   mutate(wss = twss(clusters, decathlon)) -> wsss
@@ -275,7 +275,7 @@ Solution
 
 
 If you're using R Markdown, you might like to start with this:
-```{r }
+```{r decathlon-11 }
 set.seed(457299)
 ```
 
@@ -290,7 +290,7 @@ knitted it. (I just remembered that for these solutions.)
 
 Running the `kmeans` itself is a piece of cake, since you have
 done it a bunch of times already (in your loop or `rowwise`):
-```{r }
+```{r decathlon-12 }
 decathlon.1 <- kmeans(decathlon, 5, nstart = 20)
 decathlon.1
 ```
@@ -304,7 +304,7 @@ hint with this.
 To display who is in which cluster, it's easiest to
 make a data frame of names and clusters and sort it:
 
-```{r }
+```{r decathlon-13 }
 tibble(name = decathlon0$name, cluster = decathlon.1$cluster) %>%
   arrange(cluster) 
 ```
@@ -328,7 +328,7 @@ Solution
 
 
 This is the thing called `centers`:^[We are no longer    in the `tidyverse`, so you no longer have the option of    using British or American spelling.]
-```{r }
+```{r decathlon-14 }
 decathlon.1$centers
 ```
 
@@ -386,7 +386,7 @@ in common.
 What would have made more sense would have been to take the
 *biggest* cluster:
 
-```{r }
+```{r decathlon-15 }
 decathlon.1$size
 ```
 
@@ -394,7 +394,7 @@ decathlon.1$size
 
 which in this case is cluster 3, and then
 
-```{r }
+```{r decathlon-16 }
 decathlon.1$centers
 ```
 
@@ -413,7 +413,7 @@ sprint running and possibly also the long jump, since that depends
 primarily on speed, once you have enough technique. Well, one way to
 figure out whether I was right:
 
-```{r }
+```{r decathlon-17 }
 cor(decathlon)
 ```
 
@@ -421,7 +421,7 @@ cor(decathlon)
 
 or, for this, maybe better:
 
-```{r }
+```{r decathlon-18 }
 cor(decathlon) %>%
   as.data.frame() %>%
   rownames_to_column("event") %>%

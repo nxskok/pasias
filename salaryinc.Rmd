@@ -20,7 +20,7 @@ Solution
 
 Looking at the file, we see that the values are separated by
 exactly one space:
-```{r }
+```{r salaryinc-1 }
 my_url <- "http://ritsokiguess.site/datafiles/salaryinc.txt"
 salaries <- read_delim(my_url, " ")
 salaries
@@ -65,7 +65,7 @@ the other, for each employee. The individual salaries don't have
 to be normally distributed at all. 
 We don't have the differences here, so we have to calculate them
 first. The smoothest way is to make a pipeline:
-```{r }
+```{r salaryinc-2 }
 salaries %>%
   mutate(diff = jan2017 - jan2016) %>%
   ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()
@@ -111,7 +111,7 @@ Solution
 The company is trying to prove that salaries are *increasing*
 over time, so we need a one-sided alternative.
 Following through the procedure, even though you may not trust it much:
-```{r }
+```{r salaryinc-3 }
 with(salaries, t.test(jan2016, jan2017, alternative = "less", paired = T))
 ```
 
@@ -120,7 +120,7 @@ with(salaries, t.test(jan2016, jan2017, alternative = "less", paired = T))
 You could also have the years the other way around, in which case the
 alternative has to be the other way around as well:
 
-```{r }
+```{r salaryinc-4 }
 with(salaries, t.test(jan2017, jan2016, alternative = "greater", paired = T))
 ```
 
@@ -131,7 +131,7 @@ one-sample test on those, again making sure that you get the
 `alternative` right. I didn't save it, so I'm calculating the
 differences again:
 
-```{r }
+```{r salaryinc-5 }
 salaries %>%
   mutate(diff = jan2017 - jan2016) %>%
   with(., t.test(diff, mu = 0, alternative = "greater"))
@@ -149,7 +149,7 @@ everyone's 2017 salary appears to be greater than their 2016 salary.)
 Extra: you might be feeling that we ought to be doing a matched-pairs
 sign test, which you could do this way:
 
-```{r }
+```{r salaryinc-6 }
 library(smmr)
 salaries %>%
   mutate(diff = jan2017 - jan2016) %>%
@@ -179,7 +179,7 @@ Solution
 A confidence interval. 95\% is fine. As before, we have to run
 `t.test` again because we ran a one-sided test and a
 confidence interval for us is two-sided:
-```{r }
+```{r salaryinc-7 }
 with(salaries, t.test(jan2017, jan2016, paired = T))
 ```
 

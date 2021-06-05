@@ -16,7 +16,7 @@ the data that you read in is a good idea also.
 Solution
 
 
-```{r }
+```{r wisconsin-1 }
 my_url <- "http://ritsokiguess.site/datafiles/wisconsin.txt"
 wisc <- read_table(my_url)
 wisc
@@ -35,7 +35,7 @@ rid of before we make a `dist` object using `as.dist`
 names  of the places, so we won't lose anything by getting rid of the
 `location` column:
 
-```{r }
+```{r wisconsin-2 }
 d <- wisc %>%
   select(-location) %>%
   as.dist()
@@ -55,7 +55,7 @@ Solution
 
 The `location` column of the data frame you read in
 from the file:
-```{r }
+```{r wisconsin-3 }
 cities <- wisc$location
 cities
 ```
@@ -71,7 +71,7 @@ don't need to look at the results yet.)
 Solution
 
 
-```{r }
+```{r wisconsin-4 }
 wisc.1 <- cmdscale(d)
 ```
 
@@ -89,7 +89,7 @@ Solution
 
 Let's see what `wisc.1` has in it, and make a data
 frame of the right thing:
-```{r }
+```{r wisconsin-5 }
 head(wisc.1)
 ```
 
@@ -104,7 +104,7 @@ that they will make it through the transition to a data frame, so
 we'll explicitly create a column called `city` with the city
 names (that we saved before):
 
-```{r }
+```{r wisconsin-6 }
 dd <- data.frame(wisc.1, city = cities)
 dd
 ```
@@ -119,7 +119,7 @@ elsewhere that I want to keep. I should use better names.
 I think the best use of your judgement is to go straight to
 `geom_text_repel` from package `ggrepel`:
 
-```{r }
+```{r wisconsin-7 }
 ggplot(dd, aes(x = X1, y = X2, label = city)) +
   geom_point() +
   geom_text_repel() +
@@ -148,7 +148,7 @@ On the map, the trio of cities Madison, Beloit and Fort Atkinson
 are closest together. How far apart are they actually? Well, you
 can go back to the original file (or display of what I called
 `d`) and find them, or you can do this:
-```{r }
+```{r wisconsin-8 }
 cities
 ```
 
@@ -156,7 +156,7 @@ cities
 
 Cities 2, 3 and 4, so:
 
-```{r }
+```{r wisconsin-9 }
 wisc %>% slice(2:4) %>% select(c(1, 3:5))
 ```
 
@@ -174,7 +174,7 @@ a data frame. It is actually stored internally as a
 *one*-dimensional vector that displays nicely, but if you want to
 pull things out of it you have to figure out where in the vector they are:
 
-```{r }
+```{r wisconsin-10 }
 print.default(d)
 ```
 
@@ -186,7 +186,7 @@ down the second column (which has one fewer entry), ending at 467, and
 so on. Thus the three entries we picked out are at $11+1=12$,
 $11+2=13$, and $11+10+1=22$:
 
-```{r }
+```{r wisconsin-11 }
 d[12]
 d[13]
 d[22]
@@ -268,7 +268,7 @@ Solution
 
 
 Run again with `eig=T` and take a look at `GOF` (uppercase):
-```{r }
+```{r wisconsin-12 }
 cmdscale(d, 2, eig = T)$GOF
 cmdscale(d, 1, eig = T)$GOF
 ```
@@ -297,7 +297,7 @@ ddd
 (the one-column matrix of points didn't have a name, so it acquired
 the name `V1`), and the plot:
 
-```{r }
+```{r wisconsin-13 }
 ggplot(ddd, aes(x = one, y = V1, label = city)) +
   geom_point() + geom_text_repel()
 ```

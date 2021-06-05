@@ -28,7 +28,7 @@ Solution
 
 The usual, separated by a single space:
 
-```{r }
+```{r geriatrics-1 }
 my_url <- "http://ritsokiguess.site/datafiles/geriatrics.txt"
 geriatrics <- read_delim(my_url, " ")
 geriatrics
@@ -50,7 +50,7 @@ Solution
 
 
 This:
-```{r }
+```{r geriatrics-2 }
 response <- with(geriatrics, cbind(t1, t2, t3, t4))
 geriatrics.1 <- lm(response ~ treatment, data = geriatrics)
 ```
@@ -74,7 +74,7 @@ Solution
 
 Make sure `car` is loaded, and do the `idata` and
 `idesign` thing:
-```{r }
+```{r geriatrics-3 }
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
@@ -84,7 +84,7 @@ geriatrics.2 <- Manova(geriatrics.1, idata = times.df, idesign = ~times)
 
 In case you're curious, `response` is an R `matrix`:
 
-```{r }
+```{r geriatrics-4 }
 class(response)
 ```
 
@@ -107,7 +107,7 @@ Solution
 
 
 Just "printing" it will get you what you want:
-```{r }
+```{r geriatrics-5 }
 geriatrics.2
 ```
 
@@ -136,7 +136,7 @@ Solution
 
 The usual layout:
 
-```{r}
+```{r geriatrics-6}
 geriatrics %>% 
   pivot_longer(t1:t4, names_to="time", values_to = "intpct") -> geriatrics.long
 geriatrics.long
@@ -164,7 +164,7 @@ Solution
 
 
 `group_by` followed by `summarize`, as ever:
-```{r }
+```{r geriatrics-7 }
 geriatrics.long %>%
   group_by(treatment, time) %>%
   summarize(mean = mean(intpct)) -> means
@@ -270,7 +270,7 @@ control subjects? Would there still be an interaction?^[This is rather like remo
 All right, we need to start with the original wide data frame, and
 from *that* select everything but `ctrl`:
 
-```{r }
+```{r geriatrics-8 }
 gg <- geriatrics %>% filter(treatment != "ctrl")
 gg
 ```
@@ -280,7 +280,7 @@ gg
 So now there are two treatments left, seven people on
 each:^[The factor `treatment` still has three levels,  but only two of them have any remaining data.] 
 
-```{r }
+```{r geriatrics-9 }
 gg %>% count(treatment)
 ```
 
@@ -292,7 +292,7 @@ the same stuff over again: construct the response, run the
 and run the `Manova`. There's really nothing new here:
 
 
-```{r }
+```{r geriatrics-10 }
 response <- with(gg, cbind(t1, t2, t3, t4))
 gg.1 <- lm(response ~ treatment, data = gg)
 times <- colnames(response)
@@ -335,7 +335,7 @@ something with the same kind of time effect, up at time 2 and then
 down afterwards, that is the same for two drugs A and B. Here's what I
 came up with:
 
-```{r }
+```{r geriatrics-11 }
 fake <- read.csv("fake.csv", header = T)
 fake
 ```
@@ -352,7 +352,7 @@ Let's see whether we can demonstrate that. First, a spaghetti plot,
 which involves getting the data in long format first. I'm saving the
 long format to use again later.
 
-```{r }
+```{r geriatrics-12 }
 fake %>% 
   pivot_longer(t1:t4, names_to="times", values_to="score") -> fake.long
 fake.long %>%
@@ -373,7 +373,7 @@ are the same) or a spaghetti plot (where `group` has to be
 
 Let's do the repeated-measures ANOVA and see whether my guess above is right:
 
-```{r }
+```{r geriatrics-13 }
 response <- with(fake, cbind(t1, t2, t3, t4))
 fake.1 <- lm(response ~ drug, data = fake)
 times <- colnames(response)
@@ -389,7 +389,7 @@ response is kind of annoying, where you have to list all the time
 columns. The trouble is, `response` has to be a `matrix`,
 which it is:
 
-```{r }
+```{r geriatrics-14 }
 class(response)
 ```
 
@@ -398,7 +398,7 @@ class(response)
 but if you do the obvious thing of selecting the columns of the data
 frame that you want:
 
-```{r }
+```{r geriatrics-15 }
 fake %>% select(t1:t4) -> r
 class(r)
 ```
@@ -407,7 +407,7 @@ class(r)
 
 you get a data frame instead. I think this would work:
 
-```{r }
+```{r geriatrics-16 }
 r <- fake %>% select(t1:t4) %>% as.matrix()
 class(r)
 ```
@@ -423,7 +423,7 @@ since you'd have to have some way of telling the function which are
 the "time" columns. Anyway, hope you haven't forgotten what we were
 doing:^[I got sidetracked, surprise surprise.]
 
-```{r }
+```{r geriatrics-17 }
 fake.2
 ```
 
@@ -439,7 +439,7 @@ scores are a bit higher than the drug B scores).
 What if we ignored the time effect? You'd think we could do something
 like this, treating the measurements at different times as replicates:
 
-```{r }
+```{r geriatrics-18 }
 head(fake.long)
 fake.3 <- aov(score ~ drug, data = fake.long)
 summary(fake.3)
@@ -457,7 +457,7 @@ What we could do instead is to average the scores for each subject
 over all the times,^[This would be allowable, since we are  averaging *over* the time-dependence; we are creating 10  independent averages, from the 10 subjects. People do this kind of  thing, instead of having to deal with the repeated measures.] for
 which we go back to the original data frame:
 
-```{r }
+```{r geriatrics-19 }
 fake
 fake %>%
   mutate(avg.score = (t1 + t2 + t3 + t4) / 4) %>%

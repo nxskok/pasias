@@ -18,7 +18,7 @@ Solution
 
 
 Read in and display the data. This, I think, is the easiest way.
-```{r }
+```{r compatt-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/compatt.txt"
 anxiety=read_delim(my_url," ")
 anxiety
@@ -38,13 +38,13 @@ Solution
 
 
 Most easily `count`:
-```{r }
+```{r compatt-2 }
 anxiety %>% count(gender)
 ```     
 
 This also works (and is therefore good):
 
-```{r }
+```{r compatt-3 }
 anxiety %>% group_by(gender) %>% summarize(count=n())
 ``` 
 
@@ -67,7 +67,7 @@ Solution
 
 
 Gender is categorical and CAS score is quantitative, so a boxplot would appear to be the thing:
-```{r }
+```{r compatt-4 }
 ggplot(anxiety,aes(x=gender,y=CAS))+geom_boxplot()
 ```     
 
@@ -76,7 +76,7 @@ The median for males is slightly higher, so male accountants are more anxious ar
 If you wish, side-by-side (or, better, above-and-below) histograms
 would also work:
 
-```{r }
+```{r compatt-5 }
 ggplot(anxiety,aes(x=CAS))+geom_histogram(bins=6)+
 facet_wrap(~gender,ncol=1)
 ``` 
@@ -92,7 +92,7 @@ Solution
 
 
 Group-by and summarize:
-```{r }
+```{r compatt-6 }
 anxiety %>% group_by(gender) %>% summarize(med=median(CAS))
 ```     
 
@@ -112,14 +112,14 @@ Without naming them explicitly means using some other way to pick them out of th
 
 The basic `across` comes from asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
 
-```{r }
+```{r compatt-7 }
 anxiety %>% summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 
 Another way is to ask what *property* these two columns have in common: they are the only two numeric (quantitative) columns. This means using an `across` with a `where` inside it, thus:
 
-```{r }
+```{r compatt-8 }
 anxiety %>% summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
 ```     
 
@@ -127,7 +127,7 @@ Read the first one as "across all the columnns whose names start with S, find th
 
 Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
-```{r }
+```{r compatt-9 }
 anxiety %>% summarize(across(ends_with("S"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
@@ -137,14 +137,14 @@ Yet another way to do it is to select the columns you want first (which
 you can do by number so as not to name them), and then find the mean
 and SD of all of them:
 
-```{r }
+```{r compatt-10 }
 anxiety %>% select(2:3) %>% 
     summarize(across(everything(), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 This doesn't work:
 
-```{r }
+```{r compatt-11 }
 summary(anxiety)
 ``` 
 
@@ -157,14 +157,14 @@ columns in your code, and I'm good.
 
 In case you were wondering about how to do this separately by gender, well, put the `group\_by` in like you did before:
 
-```{r }
+```{r compatt-12 }
 anxiety %>% group_by(gender) %>%
 summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
 ``` 
 
 or
 
-```{r }
+```{r compatt-13 }
 anxiety %>% group_by(gender) %>%
 summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
 ``` 
@@ -173,7 +173,7 @@ The male means are slightly higher on both tests, but the male
 standard deviations are a little smaller.
 You might be wondering whether the test scores are related. They are both quantitative, so the obvious way to find out is a scatterplot:
 
-```{r }
+```{r compatt-14 }
 ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
 ``` 
 
@@ -184,7 +184,7 @@ measuring the same thing.
 
 This plot mixes up the males and females, so you might like to distinguish them, which goes like this:
 
-```{r }
+```{r compatt-15 }
 ggplot(anxiety,aes(x=CAS,y=CARS,colour=gender))+geom_point()
 ``` 
 

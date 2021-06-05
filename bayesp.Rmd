@@ -75,27 +75,27 @@ Solution
 
 
 
-```{r, echo=FALSE}
+```{r bayesp-1, echo=FALSE}
 set.seed(457299)
 ```
 
 
 `cmdstanr` goes like this:
 
-```{r, include=FALSE}
+```{r bayesp-2, include=FALSE}
 # write_rds(m2, "m2.rds")
 ```
 
-```{r, echo=FALSE}
+```{r bayesp-3, echo=FALSE}
 m2 <- read_rds("m2.rds")
 ```
 
 
-```{r, eval=FALSE}
+```{r bayesp-4, eval=FALSE}
 m2 <- cmdstan_model("bernoulli.stan")
 ```
 
-```{r}
+```{r bayesp-5}
 m2
 ```
 
@@ -115,14 +115,14 @@ I don't know how much intuition you have for what beta distributions look like, 
 
 Start by choosing some values for $Y$:
 
-```{r}
+```{r bayesp-6}
 y <- seq(0, 1, 0.01)
 y
 ```
 
 then work out `dbeta` of these for your choice of parameters, then plot it. I'm going straight to a function for this, since I anticipate doing it several times. This `y` and the two parameters should be input to the function:
 
-```{r}
+```{r bayesp-7}
 plot_beta <- function(y, a, b) {
 tibble(y=y) %>% 
 mutate(density = dbeta(y, a, b)) %>% 
@@ -135,13 +135,13 @@ The beta with parameters 1 and 1 is a uniform distribution. (If you look up the 
 
 Let's try another:
 
-```{r}
+```{r bayesp-8}
 plot_beta(y, 3, 2)
 ```
 
 This one is skewed to the left. You might guess that having the second parameter bigger would make it skewed to the right:
 
-```{r}
+```{r bayesp-9}
 plot_beta(y, 3, 7)
 ```
 
@@ -149,7 +149,7 @@ which indeed is the case. If you try some other values, you'll see that this pat
 
 Therefore, you would think, having the two parameters the same would give a symmetric distribution:
 
-```{r}
+```{r bayesp-10}
 plot_beta(y, 2, 2)
 ```
 
@@ -157,13 +157,13 @@ Note that the peak is now at 0.5, which is what we wanted.
 
 The question called for a prior distribution of values "somewhere near 0.5", and you could reasonably say that this does the job. What does 3 and 3 look like?
 
-```{r}
+```{r bayesp-11}
 plot_beta(y, 3, 3)
 ```
 
 This is more concentrated around 0.5, and as you increase the two parameter values while keeping them equal, it gets more concentrated still:
 
-```{r}
+```{r bayesp-12}
 plot_beta(y, 20, 20)
 ```
 
@@ -188,14 +188,14 @@ Solution
 
 Turn those successes and failures in the question into a vector of 0 and 1 values: they were success, failure, success, success, failure, success, success, success.
 
-```{r}
+```{r bayesp-13}
 x <- c(1, 0, 1, 1, 0, 1, 1, 1)
 x
 ```
 
 Then make a "named list" of inputs to your Stan program, including the parameter values for the prior distribution (I went with 2 and 2):
 
-```{r}
+```{r bayesp-14}
 stan_data <- list(
 n = 8,
 a = 2,
@@ -216,7 +216,7 @@ Solution
 
 The `cmdstanr` way:
 
-```{r}
+```{r bayesp-15}
 fit2 <- m2$sample(data = stan_data)
 fit2
 ```
@@ -236,28 +236,28 @@ Solution
 This means extracting the sampled values of $p$ first. 
 The `cmdstanr` way is not very convenient, at least at first:
 
-```{r}
+```{r bayesp-16}
 bern.2a <- fit2$draws()
 str(bern.2a)
 ```
 
 This is a 3-dimensional array (sample by chain by variable). For plotting and so on, we really want this as a dataframe. At this point, I would use the `posterior` and `bayesplot` packages, which you should install following the instructions for `cmdstanr` at the top of [this page](https://mc-stan.org/cmdstanr/articles/cmdstanr.html#running-mcmc-1). Put the names of the extra two packages in place of the `cmdstanr` that you see there.
 
-```{r}
+```{r bayesp-17}
 library(posterior)
 library(bayesplot)
 ```
 
 To get the samples as a dataframe:
 
-```{r}
+```{r bayesp-18}
 bern.2 <- as_draws_df(fit2$draws())
 bern.2
 ```
 
 You don't even need to go this far to make a plot of the posterior distribution, because `bayesplot` does it automatically:
 
-```{r}
+```{r bayesp-19}
 mcmc_hist(fit2$draws("p"), binwidth =  0.05)
 ```
 
@@ -281,7 +281,7 @@ With `cmdstanr`, start from what I called `bern.2`.^[I am writing this a couple 
 
 The way to obtain the (sampled) posterior predictive distribution is to get the posterior distribution of values of $p$ in a dataframe, and make a new column as random values from the data-generating mechanism (here Bernoulli). This is easier to do and then talk about:
 
-```{r}
+```{r bayesp-20}
 bern.2 %>% 
   as_tibble() %>% 
   mutate(x = rbernoulli(4000, p)) -> ppd
@@ -295,7 +295,7 @@ It seems to go better if you turn `bern.2` into a `tibble` before generating `x`
 
 A bar chart would be an appropriate plot (you can either think of `x` as categorical, or as a discrete 0 or 1):
 
-```{r}
+```{r bayesp-21}
 ggplot(ppd, aes(x=x)) + geom_bar()
 ```
 
@@ -303,7 +303,7 @@ which shows the majority of successes in the posterior predictive distribution. 
 
 You might have been perplexed by the 4000 in the code above. `bernoulli` is vectorized, meaning that if you give it a vector of values for `p`, it will generate Bernoulli trials for each one in turn, and the whole result should be 4000 values long altogether. We'll see a way around that in a moment, but you could also do this using `rbinom` (random binomials) if you do it right:
 
-```{r}
+```{r bayesp-22}
 bern.2 %>% 
   as_tibble() %>% 
   mutate(x = rbinom(4000, 1, p)) 
@@ -311,7 +311,7 @@ bern.2 %>%
 
 There are 4000 random binomials altogether, and *each one* has one trial. This is confusing, and a less confusing way around this is to work one row at time with `rowwise`:
 
-```{r}
+```{r bayesp-23}
 bern.2 %>% 
   as_tibble() %>% 
   rowwise() %>% 
@@ -320,7 +320,7 @@ bern.2 %>%
 
 or
 
-```{r}
+```{r bayesp-24}
 bern.2 %>% 
   as_tibble() %>% 
   rowwise() %>%
@@ -332,7 +332,7 @@ bern.2 %>%
 
 Extra: I'd also like to put in a plug for the `tidybayes` package.  This works best with `rstan`, though it will work with `cmdstanr` also. The first thing it will help you with is setting up the data:
 
-```{r}
+```{r bayesp-25}
 library(tidybayes)
 tibble(x) %>% compose_data()
 ```
@@ -341,7 +341,7 @@ Starting from a dataframe of data (our `x`), this returns you a list that you ca
 
 Another thing that this will do is to handle categorical variables. Say you had something like this, with `g` being a group label:
 
-```{r}
+```{r bayesp-26}
 d <- tribble(
 ~g, ~y,
 "a", 10,
@@ -358,12 +358,12 @@ Knowing that Stan only has `real` and `int`, it labels the groups with numbers, 
 
 After obtaining the posterior distribution, `tidybayes` also helps in understanding it. This is how you get hold of the sampled values. Install `laRs` using
 
-```{r, eval=FALSE}
+```{r bayesp-27, eval=FALSE}
 devtools::install_github("Agasax/laRs")
 ```
 
 
-```{r}
+```{r bayesp-28}
 library(laRs) # i
 bern.2 %>% tidy_cmdstanr() %>% 
   spread_draws(p)
@@ -371,7 +371,7 @@ bern.2 %>% tidy_cmdstanr() %>%
 
 which you can then summarize:
 
-```{r}
+```{r bayesp-29}
 bern.2 %>% tidy_cmdstanr() %>% 
   spread_draws(p) %>% 
   median_hdi()
@@ -381,7 +381,7 @@ The median of the posterior distribution, along with a 95% Bayesian posterior in
 
 Or you can plot it:
 
-```{r}
+```{r bayesp-30}
 bern.2 %>% tidy_cmdstanr() %>% 
   spread_draws(p) %>% 
   ggplot(aes(x = p)) + stat_slab()
@@ -391,7 +391,7 @@ bern.2 %>% tidy_cmdstanr() %>%
 
 or, posterior predictive distribution:
 
-```{r}
+```{r bayesp-31}
 bern.2 %>% tidy_cmdstanr() %>% 
   spread_draws(p) %>% 
   rowwise() %>% 

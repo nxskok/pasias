@@ -24,7 +24,7 @@ Solution
 
 
 These are aligned columns with spaces in between, so we need `read_table`:
-```{r }
+```{r mousebully-1 }
 my_url <- "http://ritsokiguess.site/datafiles/stressedmice.txt"
 mice <- read_table(my_url)
 mice
@@ -36,7 +36,7 @@ You can call the data frame whatever you like.
 
 If you must, you can physically count the number of mice in each group, but you ought to get in the habit of coding this kind of thing:
 
-```{r }
+```{r mousebully-2 }
 mice %>% count(Environment)
 ```
 
@@ -105,7 +105,7 @@ think about is how R organizes the groups for
 `Enriched` is first (like on the boxplot). We're trying to
 prove that the mean `Time` is *less* for
 `Enriched` than for `Standard`, so we need `alternative="less"`:
-```{r }
+```{r mousebully-3 }
 with(mice, t.test(Time ~ Environment, alternative = "less"))
 ```
 
@@ -113,7 +113,7 @@ with(mice, t.test(Time ~ Environment, alternative = "less"))
 
 A common clue that you have the wrong alternative hypothesis is a P-value coming out close to *1*, which is what you would have gotten from something like this:
 
-```{r }
+```{r mousebully-4 }
 with(mice, t.test(Time ~ Environment, alternative = "greater"))
 ```
 
@@ -178,7 +178,7 @@ chance. So I do not see a problem.
 
 Extra: another way to think about this is normal quantile plots to assess
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each `Environment`:
-```{r }
+```{r mousebully-5 }
 ggplot(mice, aes(sample = Time)) + stat_qq() + stat_qq_line() +
   facet_wrap(~Environment, scales = "free")
 ```
@@ -197,7 +197,7 @@ at all.
 
 What happens if we change the shape of the plots?
 
-```{r }
+```{r mousebully-6 }
 ggplot(mice, aes(sample = Time)) + stat_qq() + stat_qq_line() +
   facet_wrap(~Environment, scales = "free", ncol = 1)
 ```

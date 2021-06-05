@@ -16,7 +16,7 @@ There is randomization here. Your answers will differ slightly from
 mine, unless you throw in this before you start (or at least before
 you generate your first random numbers).
 
-```{r }
+```{r bootstrap-1 }
 set.seed(457299)
 ```
 
@@ -31,7 +31,7 @@ Solution
 
 
 This is a `.csv` so `read_csv` is the thing:
-```{r }
+```{r bootstrap-2 }
 my_url <- "https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv"
 aircon <- read_csv(my_url)
 aircon
@@ -50,7 +50,7 @@ Solution
 
 Make a suitable graph. The obvious one is a histogram:
 
-```{r }
+```{r bootstrap-3 }
 ggplot(aircon, aes(x = hours)) + geom_histogram(bins = 7)
 ```
 
@@ -58,7 +58,7 @@ ggplot(aircon, aes(x = hours)) + geom_histogram(bins = 7)
 
 You'll have to play with the number of bins (there are only 12 observations). I got 7 from the Freedman-Diaconis rule:
 
-```{r }
+```{r bootstrap-4 }
 nclass.FD(aircon$hours)
 ```
 
@@ -68,7 +68,7 @@ I was a little suspicious that the data would not be much like normal (I have ru
 
 Another possibility is a one-group boxplot:
 
-```{r }
+```{r bootstrap-5 }
 ggplot(aircon, aes(y = hours, x = 1)) + geom_boxplot()
 ```
 
@@ -76,7 +76,7 @@ ggplot(aircon, aes(y = hours, x = 1)) + geom_boxplot()
 
 If you like, you can do a normal quantile plot. I rank that third here, because there is nothing immediately implying a comparison with the *normal* distribution, but I would accept it:
 
-```{r }
+```{r bootstrap-6 }
 ggplot(aircon, aes(sample = hours)) + stat_qq() + stat_qq_line()
 ```
 
@@ -102,7 +102,7 @@ Solution
 
 Something like this, therefore:
 
-```{r}
+```{r bootstrap-7}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(sample = list(sample(aircon$hours, replace = TRUE))) %>% 
@@ -122,7 +122,7 @@ Solution
 
 This:
 
-```{r }
+```{r bootstrap-8 }
 ggplot(means, aes(sample = sample_mean)) + stat_qq() + stat_qq_line()
 ```
 
@@ -148,7 +148,7 @@ Solution
 
 This is the 2.5 and 97.5 percentiles of the bootstrapped sampling distribution of the mean:
 
-```{r }
+```{r bootstrap-9 }
 quantile(means$sample_mean, c(0.025, 0.975))
 ```
 
@@ -163,7 +163,7 @@ Solution
 
 The key is to remember that the original sample (and thus each bootstrap sample) had $n=12$, so there are $12-1=11$ df. (The fact that there were 1000 bootstrap samples is neither here nor there). This is how I like to do it:
 
-```{r }
+```{r bootstrap-10 }
 t_star <- qt(0.975, 11)
 t_star
 mean(means$sample_mean) + c(-1, 1) * t_star * sd(means$sample_mean)
@@ -175,7 +175,7 @@ The `c(-1, 1)` thing is the calculation version of the $\pm$,
 and gets both limits at once. Pull the above apart to see how it works. If
 you don't like that, you might prefer something like this:
 
-```{r }
+```{r bootstrap-11 }
 the_mean <- mean(means$sample_mean)
 the_sd <- sd(means$sample_mean)
 margin <- t_star * the_sd
@@ -203,7 +203,7 @@ Solution
 
 This means (possibly) installing and (certainly) loading the `bootstrap` package, and then:
 
-```{r }
+```{r bootstrap-12 }
 theta <- function(x) {
   mean(x)
 }
@@ -221,7 +221,7 @@ I seem to need to define the function `theta` first and pass it into `bcanon` as
 
 Or, if you feel like some extra coding: turn this matrix into a data frame, grab the rows you want, and then the column you want:
 
-```{r }
+```{r bootstrap-13 }
 bca %>%
   as_tibble() %>%
   filter(alpha %in% c(0.025, 0.975)) %>%

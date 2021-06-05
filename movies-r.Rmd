@@ -20,7 +20,7 @@ Solution
 
 
 `read_csv`:
-```{r }
+```{r movies-r-1 }
 my_url <- "http://ritsokiguess.site/datafiles/movie-lengths.csv"
 movies <- read_csv(my_url)
 movies
@@ -38,7 +38,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r movies-r-2 }
 movies %>% count(rating)
 ```
 
@@ -59,7 +59,7 @@ Solution
 
 ANOVA first:
 
-```{r }
+```{r movies-r-3 }
 length.1 <- aov(length ~ rating, data = movies)
 summary(length.1)
 ```
@@ -71,7 +71,7 @@ This P-value is 0.00000459, which is way less than 0.05.
 Having rejected the null (which said "all means equal"), we now need to
 do Tukey, thus:
 
-```{r }
+```{r movies-r-4 }
 TukeyHSD(length.1)
 ```
 
@@ -84,7 +84,7 @@ others (which are not significantly different from each other).
 
 If you like, you can make a table of means to verify that:
 
-```{r }
+```{r movies-r-5 }
 movies %>%
   group_by(rating) %>%
   summarize(mean = mean(length))
@@ -105,7 +105,7 @@ Solution
 
 
 The obvious graph is a boxplot:
-```{r }
+```{r stattschriber}
 ggplot(movies, aes(x = rating, y = length)) + geom_boxplot()
 ```
 
@@ -126,7 +126,7 @@ Extra: the way to go if you don't trust the ANOVA is (as for the
 two-sample $t$) the Mood's median test. This applies to any number of
 groups, and works in the same way as before:
 
-```{r }
+```{r movies-r-6 }
 library(smmr)
 median_test(movies, length, rating)
 ```
@@ -146,7 +146,7 @@ each pair of groups, and then adjust to allow for your having done
 several tests at once. I thought this was generally useful enough that
 I put it into `smmr` under the name `pairwise_median_test`:
 
-```{r }
+```{r movies-r-7 }
 pairwise_median_test(movies, length, rating)
 ```
 

@@ -84,7 +84,7 @@ directly. This also works in R Studio Cloud, and completely
 by-passes the download-upload steps that you would have to do
 otherwise. (I am grateful to Rose Gao for this idea.)
 Here is how you can use `download.file` here:
-```{r }
+```{r parking-1 }
 my_url <- "http://ritsokiguess.site/datafiles/parking.xlsx"
 local <- "parking.xlsx"
 download.file(my_url, local, mode = "wb")
@@ -94,7 +94,7 @@ download.file(my_url, local, mode = "wb")
 
 When you've gotten the spreadsheet into your project folder via one of
 those two ways, you go ahead and do this:      
-```{r }
+```{r parking-2 }
 library(readxl)
 parking <- read_excel("parking.xlsx", sheet = 2)
 parking
@@ -115,7 +115,7 @@ on its tab in the workbook).
 Extra: Rose actually came up with a better idea, which I will show
 you and explain:
 
-```{r }
+```{r parking-3 }
 tf <- tempfile()
 download.file(my_url, tf, mode = "wb")
 p <- read_excel(tf, sheet = 2)
@@ -156,7 +156,7 @@ before you Save As `.csv`. I did that, and called my
 saved `.csv` `parking2.csv` (because it was from
 sheet 2, but you can use any name you like).
 Then I read this into R thus:
-```{r }
+```{r parking-4 }
 parking2 <- read_csv("parking2.csv")
 parking2
 ```
@@ -176,7 +176,7 @@ spreadsheet directly, so that's what would be worth full marks.
 You might want to check that you have some males and some females, and
 how many of each, which you could do this way:
 
-```{r }
+```{r parking-5 }
 parking %>% count(gender)
 ```
 
@@ -193,7 +193,7 @@ Solution
 
 
 With the right data set, this is a piece of cake:
-```{r }
+```{r parking-6 }
 ggplot(parking, aes(x = gender, y = distance)) + geom_boxplot()
 ```
 
@@ -212,7 +212,7 @@ above-and-below histograms, as another way of comparing males and
 females (two or more groups, in general). First, we make a histogram of all
 the distances, without distinguishing by gender:
 
-```{r }
+```{r parking-7 }
 ggplot(parking, aes(x = distance)) + geom_histogram(bins = 8)
 ```
 
@@ -226,7 +226,7 @@ Now, how do we get a *separate* histogram for each
 arranged as you want them is called `facet_grid`.^[I wrote this question a long time ago, back when I thought that `facet_grid` was the only way to do facets. Now, I would use `facet_wrap`. See the discussion about `facet_wrap` near the bottom.] Let me show you
 the code first, and then explain how it works:
 
-```{r }
+```{r parking-8 }
 ggplot(parking, aes(x = distance)) +
   geom_histogram(bins = 7) +
   facet_grid(gender ~ .)
@@ -251,7 +251,7 @@ come out (you probably get them side by side, which is not so helpful
 for comparing distributions). You can make it work by using
 `ncol=1` to arrange "all" the histograms in one column:
 
-```{r }
+```{r parking-9 }
 ggplot(parking, aes(x = distance)) +
   geom_histogram(bins = 7) +
   facet_wrap(~gender, ncol = 1)
@@ -274,7 +274,7 @@ on the left, how to arrange in the $x$ direction on the right), and if
 you don't have anything else to put there, you put a dot. Here's my
 `facet_grid` code from above, again:
 
-```{r eval=F}
+```{r parking-10, eval=F}
 ggplot(parking, aes(x = distance)) +
   geom_histogram(bins = 7) +
   facet_grid(gender ~ .)
@@ -286,7 +286,7 @@ We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my `facet_wrap`
 code:^[I took out the `ncol` since that confuses the  explanation here.] 
 
-```{r eval=F}
+```{r parking-11, eval=F}
 ggplot(parking, aes(x = distance)) +
   geom_histogram(bins = 7) +
   facet_wrap(~gender)
@@ -302,7 +302,7 @@ $k=\log_2(n)+1$, rounded up. If we were to make a histogram of all the
 parking distances combined together, we would have $n=47+48=95$
 observations, so we should use this many bins:
 
-```{r }
+```{r parking-12 }
 sturges <- log(95, 2) + 1
 sturges
 ```
@@ -316,7 +316,7 @@ can do it mentally by saying "the next power of 2 is 128, which is $2^7$, so I n
 
 Or:
 
-```{r }
+```{r parking-13 }
 with(parking, nclass.Sturges(distance))
 ```
 
@@ -328,7 +328,7 @@ the right with outlier.
 
 The other rule we saw was Freedman-Diaconis:
 
-```{r }
+```{r parking-14 }
 with(parking, nclass.FD(distance))
 ```
 
@@ -336,7 +336,7 @@ with(parking, nclass.FD(distance))
 
 and that leads to this histogram: 
 
-```{r }
+```{r parking-15 }
 ggplot(parking, aes(x = distance)) + geom_histogram(bins = 14)
 ```
 
@@ -353,7 +353,7 @@ use one `binwidth` (or `bins`), so you may have to
 compromise. For example, using Sturges' rule based on 47 observations
 (the number of males; the number of females is one more):
 
-```{r }
+```{r parking-16 }
 log(47, 2) + 1
 ```
 
@@ -366,7 +366,7 @@ immediately with `nclass.Sturges`, because we do not have
 we have one column of distances that are males and females mixed
 up. To do *that*, `filter` one of the genders first:
 
-```{r }
+```{r parking-17 }
 parking %>%
   filter(gender == "female") %>%
   with(., nclass.Sturges(distance))
@@ -426,7 +426,7 @@ Solution
  boxplots show different spreads; if you are going to do the pooled
  one, you need to say that the spreads are "about equal", by
  comparing the heights of the boxes on the boxplots:
-```{r }
+```{r parking-18 }
 t.test(distance ~ gender, data = parking)
 ```
 
@@ -439,7 +439,7 @@ between males and females.
 
 Or, this being the pooled one:
 
-```{r }
+```{r parking-19 }
 t.test(distance ~ gender, data = parking, var.equal = T)
 ```
 
@@ -484,7 +484,7 @@ Test, which is kind of the two-sample equivalent of the sign
 test (which we will also see later). It goes like this:
 Work out the overall median of all the distances, regardless
 of gender:
-```{r }
+```{r parking-20 }
 parking %>% summarize(med = median(distance))
 ```
 
@@ -497,7 +497,7 @@ overall median. (Strictly, I'm supposed to throw away any values that
 are exactly equal to the overall median, but I won't here for clarity
 of exposition.)
 
-```{r }
+```{r parking-21 }
 tab <- with(parking, table(gender, distance < 9))
 tab
 ```
@@ -510,7 +510,7 @@ median, which suggests that the males and females have about the same
 median. This can be tested (it's a chi-squared test for independence,
 if you know that):
 
-```{r }
+```{r parking-22 }
 chisq.test(tab, correct = F)
 ```
 

@@ -14,7 +14,7 @@ Solution
 
 This is (evidently) a `.csv`, so:
 
-```{r}
+```{r reggae-1}
 my_url <- "http://ritsokiguess.site/datafiles/reggae.csv"
 reggae <- read_csv(my_url)
 reggae
@@ -33,13 +33,13 @@ Solution
 
 This is the usual kind of application of `count`:
 
-```{r}
+```{r reggae-2}
 reggae %>% count(home)
 ```
 
 Another, equally good, way (you can ignore the warning):
 
-```{r}
+```{r reggae-3}
 reggae %>% group_by(home) %>% 
 summarize(n=n())
 ```
@@ -57,7 +57,7 @@ Solution
 
 One quantitative, one categorical: a boxplot, as ever:
 
-```{r}
+```{r schuchmacher}
 ggplot(reggae, aes(x=home, y=rating)) + geom_boxplot()
 ```
 
@@ -68,7 +68,7 @@ You could otherwise have taken the point of view that the ratings were (ordered)
 There is a question about which variable should be `x` and which should be `fill`. 
 I am taking the point of view that we want to compare ratings within each category of `home`, which I think makes sense here (see discussion below), which breaks my "rule" that the categorical variable with fewer categories should be `x`.^[Perhaps a better word here would be *principle*, to convey the idea that you can do something else if it works better for your purposes.] 
 
-```{r}
+```{r schuochmacher}
 ggplot(reggae, aes(x=home, fill=factor(rating))) + geom_bar(position = "dodge")
 ```
 
@@ -103,7 +103,7 @@ The only real concern I have is with the big city group. This is the least norma
 
 Extra: the issue is really about the sampling distribution of the mean within each group. Does that look normal enough? This could be assessed by looking at each group, one at a time, and taking bootstrap samples. Here's the big-city group:
 
-```{r}
+```{r ulins}
 reggae %>% filter(home=="big city") -> bigs
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -118,7 +118,7 @@ You can do any of the others the same way.
 
 If you're feeling bold, you can get hold of all three bootstrapped sampling distributions at once, like this:
 
-```{r}
+```{r schlosser}
 reggae %>% 
   nest_by(home) %>% 
   mutate(sim = list(1:1000)) %>% 
@@ -134,7 +134,7 @@ All of these distributions look very much normal, so there is no cause for conce
 
 This was rather a lot of code, so let me take you through it. The first thing is that we want to treat the different students' homes separately, so the first step is this:
 
-```{r}
+```{r reggae-4}
 reggae %>% 
   nest_by(home) 
 ```
@@ -143,7 +143,7 @@ This subdivides the students' reggae ratings according to where their home is. T
 
 Normally, we would start by making a dataframe with a column called `sim` that labels the 1000 or so simulations. This time, we want *four* sets of simulations, one for each `home`, which we can set up this way:
 
-```{r}
+```{r reggae-5}
 reggae %>% 
   nest_by(home) %>% 
   mutate(sim = list(1:1000)) 
@@ -151,7 +151,7 @@ reggae %>%
 
 The definition of `sim` happens by group, or rowwise, by `home` (however you want to look at it). Next, we need to spread out those `sim` values so that we'll have one row per bootstrap sample:
 
-```{r}
+```{r reggae-6}
 reggae %>% 
   nest_by(home) %>% 
   mutate(sim = list(1:1000)) %>% 
@@ -173,7 +173,7 @@ Solution
 
 Data frame, quantitative column, categorical column:
 
-```{r}
+```{r reggae-7}
 median_test(reggae, rating, home)
 ```
 
@@ -192,7 +192,7 @@ The Mood's median test is significant, with a P-value of 0.000005, so the median
 
 
 
-```{r}
+```{r reggae-8}
 pairwise_median_test(reggae, rating, home)
 ```
 
@@ -209,12 +209,12 @@ The students from big cities like reggae more than students from other places. T
 
 Extra 1: Given the previous discussion, you might be wondering how Welch ANOVA (and maybe even regular ANOVA) compare. Let's find out:
 
-```{r}
+```{r reggae-9}
 oneway.test(rating~home,data=reggae)
 ```
 and
 
-```{r}
+```{r reggae-10}
 gamesHowellTest(rating~factor(home),data=reggae)
 ```
 
@@ -222,7 +222,7 @@ The conclusions are identical with Mood's median test, and the P-values are not 
 
 This makes me wonder how an ordinary ANOVA with Tukey would have come out:
 
-```{r}
+```{r reggae-11}
 reggae %>% 
 aov(rating~home, data=.) %>% 
 TukeyHSD()

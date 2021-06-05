@@ -27,7 +27,7 @@ Solution
 
 These are "tab-separated values", so `read_tsv` is the
 thing, as for the Australian athletes:
-```{r }
+```{r nenana-1 }
 myurl <- "http://ritsokiguess.site/datafiles/nenana.txt"
 nenana <- read_tsv(myurl)
 ```
@@ -49,7 +49,7 @@ the text version of the date and time *also* have spaces in them,
 so things might go astray if you try and read the values in without
 recognizing that the actual separator is a tab:
 
-```{r }
+```{r nenana-2 }
 x <- read_delim(myurl, " ")
 ```
 
@@ -58,7 +58,7 @@ x <- read_delim(myurl, " ")
 Ouch! A hint as to what went wrong comes from looking at the read-in
 data frame:
 
-```{r }
+```{r nenana-3 }
 x
 ```
 
@@ -69,7 +69,7 @@ the values were separated by tabs rather than spaces.
 
 More detail (if you can bear to see it) is here:
 
-```{r }
+```{r nenana-4 }
 problems(x)
 ```
 
@@ -97,14 +97,14 @@ Solution
 
 
 The easiest is just to display the tibble:
-```{r }
+```{r nenana-5 }
 nenana
 ```
 
        
 Alternatively, you can take a `glimpse` of it:
 
-```{r }
+```{r nenana-6 }
 glimpse(nenana)
 ```
 
@@ -136,7 +136,7 @@ from 87 (our $n$) is 128, which is $2^7$, so the base 2 log of
 87 rounds up to 7. That plus one is 8, so we need 8 bins. For
 you, any not-insane number of bins will do, or any not-insane
 bin width, if you want to go that way:
-```{r }
+```{r nenana-7 }
 ggplot(nenana, aes(x = JulianDate)) + geom_histogram(bins = 8)
 ```
 
@@ -153,7 +153,7 @@ not especially important.
 
 We haven't done normal quantile plots yet, but looking ahead:
 
-```{r }
+```{r nenana-8 }
 ggplot(nenana, aes(sample = JulianDate)) + stat_qq() + stat_qq_line()
 ```
 
@@ -168,7 +168,7 @@ being taller than you would have expected.^[That is to say, the  principal devia
 Extra: looking *way* ahead (to almost the end of the R stuff),
 this is how you handle the dates and times:
 
-```{r }
+```{r nenana-9 }
 library(lubridate)
 nenana %>%
   mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
@@ -183,7 +183,7 @@ I have to do a preliminary step to get the date-times *with* their year in one p
 `Date&Time`. I stored this in `longdt`. The second `mutate` is the business end of it: `ymd_hm` takes a piece of text containing a year, month (by name or number), day, hours, minutes *in that order*, and extracts those things from it, storing the whole thing as an R date-time. Note that the AM/PM was handled properly.
 The benefit of doing that is we can extract anything from the dates, such as the month or day of week, or take differences between the dates. Or even check that the Julian dates were calculated correctly (the `lubridate` function is called `yday` for "day of year"):
 
-```{r }
+```{r nenana-10 }
 nenana %>%
   mutate(longdt = str_c(Year, " ", `Date&Time`)) %>%
   mutate(datetime = ymd_hm(longdt, tz = "America/Anchorage")) %>%
@@ -208,7 +208,7 @@ Solution
 
 `geom_point`:
 
-```{r }
+```{r nenana-11 }
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point()
 ```
 
@@ -224,7 +224,7 @@ before 1960, but most of the really early break-ups (less than about
 
 You can even add to the `ggplot`, by putting a smooth trend on it:
 
-```{r }
+```{r nenana-12 }
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
 ```
 

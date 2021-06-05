@@ -11,7 +11,7 @@ chloride and chlorine. The data are in
 
 Yes, you may have seen this one before. What you found was something like this:
 
-```{r }
+```{r urine2-1 }
 my_url <- "http://ritsokiguess.site/datafiles/urine.csv"
 urine <- read_csv(my_url)
 response <- with(urine, cbind(creatinine, chlorine, chloride))
@@ -33,7 +33,7 @@ Solution
 
 As above, plus:
 
-```{r }
+```{r urine2-2 }
 urine.1 <- lda(obesity ~ creatinine + chlorine + chloride, data = urine)
 urine.1
 ```
@@ -71,7 +71,7 @@ Solution
 then make a data frame out of the original data and the
 predictions. 
 
-```{r }
+```{r urine2-3 }
 urine.pred <- predict(urine.1)
 d <- cbind(urine, urine.pred)
 head(d)
@@ -86,7 +86,7 @@ To go a more tidyverse way, we can combine the original data frame and
 the predictions using `bind_cols`, but we have to be more
 careful that the things we are gluing together are both data frames:
 
-```{r }
+```{r urine2-4 }
 class(urine)
 class(urine.pred)
 ```
@@ -95,7 +95,7 @@ class(urine.pred)
 
 `urine` is a `tibble` all right, but `urine.pred` is a `list`. What does it look like?
 
-```{r }
+```{r urine2-5 }
 glimpse(urine.pred)
 ```
 
@@ -107,7 +107,7 @@ have a number of rows, 45, *and* a number of columns, 3 or
 like `as.data.frame` (a base R function) will smoosh them all
 into one data frame, grabbing the columns from the matrices:
 
-```{r }
+```{r urine2-6 }
 head(as.data.frame(urine.pred))
 ```
 
@@ -115,7 +115,7 @@ head(as.data.frame(urine.pred))
 
 You see that the columns that came from matrices have gained two-part names, the first part from the name of the matrix, the second part from the column name within that matrix. Then we can do this:
 
-```{r }
+```{r urine2-7 }
 dd <- bind_cols(urine, as.data.frame(urine.pred))
 dd
 ```
@@ -129,7 +129,7 @@ frames, not matrices, so that is what it is up to you to make sure you
 have. That means pulling out the pieces, turning them from matrices
 into data frames, and then gluing everything back together:
 
-```{r error=T}
+```{r urine2-8, error=T}
 post <- as_tibble(urine.pred$posterior)
 ld <- as_tibble(urine.pred$x)
 ddd <- bind_cols(urine, class = urine.pred$class, ld, post)
@@ -148,7 +148,7 @@ type rather than relying on R to convert them for you, but I don't
 mind which way you go.
 Now make the plot, making sure that you are using columns with the right names. I'm using my first data frame, with the two-part names:
 
-```{r error=T}
+```{r urine2-9, error=T}
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = obesity)) + geom_point()
 ```
 
@@ -191,7 +191,7 @@ individuals within a group are very variable, as they are
 here (especially group `c`), then that group will
 appear all over the plot. The table of means only says how
 the *average* individual within a group stacks up.
-```{r }
+```{r urine2-10 }
 ggbiplot(urine.1, groups = urine$obesity)
 ```
 
@@ -203,7 +203,7 @@ groups differ in terms of the original variables.^[This was why  we were doing d
 Most of the B's are high creatinine and high chloride (on the right); most of the D's are low on both (on the left). LD2 has a bit of `chloride`, but not much of anything else.
 Extra: the way we used to do this was with "base graphics", which involved plotting the `lda` output itself:
 
-```{r }
+```{r urine2-11 }
 plot(urine.1)
 ```
 
@@ -212,7 +212,7 @@ plot(urine.1)
 which is a plot of each discriminant score against each other
 one. You can plot just the first two, like this:
 
-```{r }
+```{r urine2-12 }
 plot(urine.1, dimen = 2)
 ```
 
@@ -233,7 +233,7 @@ Solution
 
 Make a table, one way or another:
 
-```{r error=T}
+```{r urine2-13, error=T}
 tab <- with(d, table(obesity, class))
 tab
 ```
@@ -248,14 +248,14 @@ counting all the combinations of true `obesity` and predicted
 two steps by saving the data frame first. I'm saving my results for
 later:
 
-```{r }
+```{r urine2-14 }
 d %>% count(obesity, class) -> tab
 tab
 ```
 
  
 or if you prefer to make it look more like a table of frequencies:
-```{r }
+```{r urine2-15 }
 tab %>% pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
 ```
 
@@ -282,7 +282,7 @@ the most incisive way of getting at this, because the `c` men
 are the hardest to get right and the others are easier, but you could
 also think about an overall misclassification rate. This comes most
 easily from the "tidy" table:
-```{r }
+```{r urine2-16 }
 tab %>% count(correct = (obesity == class), wt = n)
 ```
 
@@ -293,7 +293,7 @@ called `correct`.
 
 It's a shortcut for this:
 
-```{r }
+```{r urine2-17 }
 tab %>%
   mutate(is_correct = (obesity == class)) %>%
   count(is_correct, wt = n)
@@ -310,7 +310,7 @@ means to total them up rather than count up the number of rows.
 This says that 22 men were classified correctly and 23 were gotten
 wrong. We can find the proportions correct and wrong:
 
-```{r error=T}
+```{r urine2-18, error=T}
 tab %>%
   count(correct = (obesity == class), wt = n) %>%
   mutate(proportion = n / sum(n))
@@ -338,7 +338,7 @@ misclassification rates by (true) obesity group. This is done by
 putting an appropriate `group_by` in at the front, before we
 do any summarizing:
 
-```{r error=T}
+```{r urine2-19, error=T}
 tab %>%
   group_by(obesity) %>%
   count(correct = (obesity == class), wt = n) %>%
@@ -351,7 +351,7 @@ This gives the proportion wrong and correct for each (true) obesity
 group. I'm going to do the one more cosmetic thing to make it easier to
 read, a kind of "untidying":
 
-```{r error=T}
+```{r urine2-20, error=T}
 tab %>%
   group_by(obesity) %>%
   count(correct = (obesity == class), wt = n) %>%
@@ -373,7 +373,7 @@ column before doing the `pivot_wider`.
 A slightly more elegant look is obtained this way, by making nicer
 values than TRUE and FALSE:
 
-```{r error=T}
+```{r urine2-21, error=T}
 tab %>%
   group_by(obesity) %>%
   mutate(prediction_stat = ifelse(obesity == class, "correct", "wrong")) %>%

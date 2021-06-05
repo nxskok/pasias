@@ -17,7 +17,7 @@ Solution
 
 The usual:
 
-```{r}
+```{r braking-1}
 my_url <- "http://ritsokiguess.site/datafiles/stopping.csv"
 stopping <- read_csv(my_url)
 stopping
@@ -36,7 +36,7 @@ Solution
 Two quantitative variables means a scatterplot. Stopping distance is the outcome, so that goes on the $y$-axis:
 
 
-```{r}
+```{r braking-2}
 ggplot(stopping, aes(x=speed, y=distance)) + geom_point()
 ```
 
@@ -63,7 +63,7 @@ Solution
 
 Having observed  a curved relationship, it seems odd to fit a straight line. But we are going to do it anyway and then critique what we have:
 
-```{r}
+```{r braking-3}
 stopping.1 <- lm(distance~speed, data=stopping)
 summary(stopping.1)
 ```
@@ -79,7 +79,7 @@ $\blacksquare$
 Solution
 
 
-```{r}
+```{r braking-4}
 ggplot(stopping.1, aes(x=.fitted, y=.resid)) + geom_point()
 ```
 
@@ -130,7 +130,7 @@ Solution
 
 Add a squared term in `speed`:
 
-```{r}
+```{r braking-5}
 stopping.2 <- lm(distance~speed+I(speed^2), data=stopping)
 summary(stopping.2)
 ```
@@ -142,14 +142,14 @@ That is probably just chance, since the distances in the data look as if they ha
 
 If you want to go literally for the something-times-speed-squared, you can do that. This doesn't quite work:
 
-```{r}
+```{r braking-6}
 stopping.3x <- lm(distance~I(speed^2), data=stopping)
 summary(stopping.3x)
 ```
 because it still has an intercept in it. In R, the intercept is denoted by `1`. It is always included, unless you explicitly remove it. Some odd things start to happen if you remove the intercept, so it is not a good thing to do unless you know what you are doing. The answers [here](https://stats.stackexchange.com/questions/7948/when-is-it-ok-to-remove-the-intercept-in-a-linear-regression-model) have some good discussion. Having decided that you *are* going to remove the intercept,
 you can remove it the same way as anything else (see `update` in the multiple regression lecture) with "minus". I haven't shown you this, so if you do it, you will need to cite your source: that is, say where you learned what to do:
 
-```{r}
+```{r braking-7}
 stopping.3 <- lm(distance~I(speed^2)-1, data=stopping)
 summary(stopping.3)
 ```

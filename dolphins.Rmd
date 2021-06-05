@@ -17,7 +17,7 @@ Solution
 
 Exactly the usual:
 
-```{r}
+```{r dolphins-1}
 my_url <- "http://ritsokiguess.site/datafiles/dolphins.csv"
 dolphins <- read_csv(my_url)
 dolphins
@@ -35,13 +35,13 @@ Solution
 
 Two ways to do it: either list both columns:
 
-```{r}
+```{r dolphins-2}
 dolphins %>% select(mercury, sex)
 ```
 
 or say "everything but age":
 
-```{r}
+```{r dolphins-3}
 dolphins %>% select(-age)
 ```
 
@@ -60,7 +60,7 @@ Solution
 
 Evidently this is `age` and `sex`. We are selecting columns on the basis of their names, so we will need a select-helper. The one that works is `matches` with a regular expression. This is like the one in the lecture notes where we selected height and weight by selecting columns whose names had two letters and the second one was "t". In this case, the three letters can be anything, so it's three dots between the start of text and end of text:
 
-```{r}
+```{r dolphins-4}
 dolphins %>% 
 select(matches("^...$"))
 ```
@@ -76,7 +76,7 @@ Solution
 
 This is selecting rows *and* columns, so you'll have a `select` and a `filter`. If you do the `select` first, you'll only have the mercury levels left, and you won't know which dolphins are female. So do the `filter` first:
 
-```{r}
+```{r dolphins-5}
 dolphins %>% filter(sex == "female") %>% 
 select(mercury)
 ```
@@ -92,7 +92,7 @@ Solution
 
 Grab only the dolphins with age less than 15 first, and then work out their mean `mercury` with `summarize`:
 
-```{r}
+```{r dolphins-6}
 dolphins %>% filter(age<15) %>% 
 summarize(m = mean(mercury))
 ```
@@ -101,7 +101,7 @@ summarize(m = mean(mercury))
 
 Another way is to define a new column that indicates whether the age is less than 15 or not, and do group-by and summarize:
 
-```{r}
+```{r dolphins-7}
 dolphins %>% 
 mutate(young = ifelse(age<15, "yes", "no")) %>% 
 group_by(young) %>% 
@@ -110,7 +110,7 @@ summarize(m = mean(mercury))
 
 Here, you *definitely* need to extract the right number out of the output. You can also define groups by logical condition directly, which saves you a step:
 
-```{r}
+```{r dolphins-8}
 dolphins %>% 
 group_by(age<15) %>% 
 summarize(m = mean(mercury))
@@ -129,7 +129,7 @@ Solution
 
 The same three choices of method:
 
-```{r}
+```{r dolphins-9}
 dolphins %>% filter(age>25) %>% 
 summarize(m = mean(mercury))
 ```
@@ -138,7 +138,7 @@ summarize(m = mean(mercury))
 
 Or define a new column:
 
-```{r}
+```{r dolphins-10}
 dolphins %>% 
 mutate(young = ifelse(age>25, "yes", "no")) %>% 
 group_by(young) %>% 
@@ -147,7 +147,7 @@ summarize(m = mean(mercury))
 
 Or:
 
-```{r}
+```{r dolphins-11}
 dolphins %>% 
 group_by(age>25) %>% 
 summarize(m = mean(mercury))
@@ -166,13 +166,13 @@ Solution
 
 This one ought to be a gimme, but I am using the result in the next part. With two quantitative variables and one categorical, a scatterplot with the sexes indicated by colour:
 
-```{r}
+```{r dolphins-12}
 ggplot(dolphins, aes(x = age, y = mercury, colour = sex)) + geom_point()
 ```
 
 I think this is clearer without regression lines; the upward trend is clear enough, and it is not clear that the trends are linear (look at the males of the largest ages). Add a smooth trend if you like:
 
-```{r}
+```{r dolphins-13}
 ggplot(dolphins, aes(x = age, y = mercury, colour = sex)) + geom_point() +
 geom_smooth()
 ```
@@ -196,7 +196,7 @@ Extra:
 
 I tried to make this fairly obvious for you by choice of age groups to compare, and this pattern holds for both males and females, so that the mean calculations didn't need to depend on `sex`. But there is no great difficulty in making it work by sex as well -- insert a `group_by` before the `summarize`:
 
-```{r}
+```{r dolphins-14}
 dolphins %>% filter(age<15) %>% 
 group_by(sex) %>% 
 summarize(m = mean(mercury))
@@ -204,7 +204,7 @@ summarize(m = mean(mercury))
 
 and
 
-```{r}
+```{r dolphins-15}
 dolphins %>% filter(age>25) %>% 
 group_by(sex) %>% 
 summarize(m = mean(mercury))
@@ -214,7 +214,7 @@ The male means are slightly bigger in the two cases, though the difference betwe
 
 A second extra: what if you wanted to divide age up into age groups for comparison of mercury concentration? This isn't always a good idea (for reasons I get into below), but if you want to do it, `cut` is your friend:
 
-```{r}
+```{r dolphins-16}
 dolphins %>% mutate(age_group = cut(age, breaks=c(0,15,25,60))) -> dolphinsx
 dolphinsx
 ```
@@ -223,14 +223,14 @@ Note that `cut` needs input `breaks` whose first value is lower than all the age
 
 Now we can work out mean mercury concentration for each age group:
 
-```{r}
+```{r dolphins-17}
 dolphinsx %>% group_by(age_group) %>% 
 summarize(m = mean(mercury))
 ```
 
 or even do it by sex as well:
 
-```{r}
+```{r dolphins-18}
 dolphinsx %>% group_by(age_group, sex) %>% 
 summarize(m = mean(mercury))
 ```

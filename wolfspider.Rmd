@@ -34,7 +34,7 @@ Solution
 
 
 The nature of the file means that you need `read_table2`:
-```{r }
+```{r wolfspider-1 }
 my_url <- "http://ritsokiguess.site/datafiles/spiders.txt"
 spider <- read_table2(my_url)
 spider
@@ -83,7 +83,7 @@ Solution
 
 The presence or absence of spiders is our response. This is
 actually text at the moment:
-```{r }
+```{r wolfspider-2 }
 spider
 ```
 
@@ -92,7 +92,7 @@ spider
 so we need to make a factor version of it first. I'm going to live on
 the edge and overwrite everything:
 
-```{r }
+```{r wolfspider-3 }
 spider <- spider %>% mutate(Spiders = factor(Spiders))
 spider
 ```
@@ -106,7 +106,7 @@ Now we go ahead and fit the model. I'm naming this as
 response-with-a-number, so I still have the Capital Letter. Any choice
 of name is good, though.
 
-```{r }
+```{r wolfspider-4 }
 Spiders.1 <- glm(Spiders ~ Grain.size, family = "binomial", data = spider)
 summary(Spiders.1)
 ```
@@ -149,7 +149,7 @@ Solution
 Something like this. I like to save all the values first, and
 *then* make a data frame of them, but you can do it in one
 go if you prefer: 
-```{r }
+```{r wolfspider-5 }
 Grain.sizes <- c(0.2, 0.5, 0.8, 1.1)
 spider.new <- tibble(Grain.size = Grain.sizes)
 spider.new
@@ -159,7 +159,7 @@ spider.new
 
 Another way to make the data frame of values to predict from  is directly, using `tribble`:
 
-```{r }
+```{r wolfspider-6 }
 new <- tribble(
   ~Grain.size,
   0.2,
@@ -180,7 +180,7 @@ into a data frame).
 
 Now for the actual predictions. Get the predicted probabilities first, using `response` to get probabilities rather than something else, then put them next to the values being predicted for (using `cbind` because my `pred.prob` below is a `matrix` rather than a data frame:
 
-```{r }
+```{r wolfspider-7 }
 pred.prob <- predict(Spiders.1, spider.new, type = "response")
 cbind(spider.new, pred.prob)
 ```
@@ -209,7 +209,7 @@ would soon get bigger than 1!). It's actually the *log-odds* that
 go up linearly. In fact, if you leave out the `type` on the
 `predict`, log-odds is what you get:
 
-```{r }
+```{r wolfspider-8 }
 pred.log.odds <- predict(Spiders.1, spider.new)
 cbind(spider.new, pred.log.odds)
 ```
@@ -225,7 +225,7 @@ $(0.3)(5)=1.5$, which is (to this accuracy) what happened.
 Log-odds are hard to interpret. Odds are a bit easier, and to get
 them, we have to `exp` the log-odds:
 
-```{r }
+```{r wolfspider-9 }
 cbind(spider.new, odds = exp(pred.log.odds))
 ```
 
@@ -234,7 +234,7 @@ Thus, with each step of
 0.3 in grain size, we *multiply* the odds of finding a spider by
 about 
 
-```{r }
+```{r wolfspider-10 }
 exp(1.5)
 ```
 

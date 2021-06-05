@@ -17,7 +17,7 @@ Solution
 
 I made it as easy as I could:
 
-```{r}
+```{r ozvus-1}
 my_url <- "http://ritsokiguess.site/datafiles/anchoring.csv"
 canada <- read_csv(my_url)
 canada
@@ -36,7 +36,7 @@ Solution
 
 One categorical variable and one quantitative one, so a boxplot:
 
-```{r}
+```{r ozvus-2}
 ggplot(canada, aes(x = anchor, y = estimate)) + geom_boxplot()
 ```
 
@@ -66,7 +66,7 @@ Solution
 
 The word "suitable" is a hint that you may have to think a bit about how you run the test. If the anchoring  effect is real, the mean of the guesses for the students told the population of the US will be higher on average than for those told the population of Australia, so we want a one-sided alternative. Australia is before the US alphabetically, so the alternative has to be `less`:
 
-```{r}
+```{r ozvus-3}
 t.test(estimate~anchor, data = canada, alternative = "less")
 ```
 
@@ -90,12 +90,12 @@ Extra 1: this is perhaps the place to think about what effect that outlier in th
 
 Extra 2: if you are still worried about doing a two-sample $t$-test here, you might consider looking at the bootstrapped sampling distribution of the sample mean of the `australia` group:
 
-```{r, echo=FALSE}
+```{r ozvus-4, echo=FALSE}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r ozvus-5}
 canada %>% filter(anchor == "australia") -> oz
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -108,7 +108,7 @@ This is indeed skewed to the right (though, with 11 observations, not nearly so 
 
 Extra 3: looking even further ahead, there is a test that definitely *does* apply here, called Mood's Median Test. You won't have installed the package yet, so this won't work for you just yet ([read ahead](http://ritsokiguess.site/STAC33/inference_5_R_slides.pdf) if you want to learn more), but here's how it goes:
 
-```{r}
+```{r ozvus-6}
 library(smmr)
 median_test(canada, estimate, anchor)
 ```

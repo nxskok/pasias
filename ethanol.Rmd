@@ -20,7 +20,7 @@ Solution
 
 
 Separated by single spaces:
-```{r }
+```{r ethanol-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ratsleep.txt"
 sleep1 <- read_delim(my_url, " ")
 sleep1
@@ -62,21 +62,21 @@ also used the brackets-around-the-outside to display what I had,
 so that I didn't have to do a separate display. This is a handy
 way of saving *and* displaying in one shot:
 
-```{r}
+```{r ethanol-2}
 (sleep1 %>% 
   pivot_longer(-treatment, names_to="rep", values_to="sleeptime") -> sleep)
 ```
 
 Typically in this kind of work, you have a lot of columns that need to be made longer, and a much smaller number of columns that need to be repeated as necessary. You can either specify all the columns to make longer, or you can specify "not" the other columns. Above, my first input to `pivot_longer` was "everything but treatment", but you could also do it like this:
 
-```{r}
+```{r ethanol-3}
 sleep1 %>% 
   pivot_longer(obs1:obs5, names_to="rep", values_to="sleeptime") 
 ```
 
 or like this:
 
-```{r}
+```{r ethanol-4}
 sleep1 %>% 
   pivot_longer(starts_with("obs"), names_to="rep", values_to="sleeptime") 
 ```
@@ -107,7 +107,7 @@ time by treatment group.
 Solution
 
 
-```{r }
+```{r ethanol-5 }
 ggplot(sleep, aes(x = treatment, y = sleeptime)) + geom_boxplot()
 ```
 
@@ -151,7 +151,7 @@ similar heights, all things considered, so I am happy.
 
 If you want the SDs themselves:
 
-```{r }
+```{r ethanol-6 }
 sleep %>%
   group_by(treatment) %>%
   summarize(stddev = sd(sleeptime))
@@ -176,7 +176,7 @@ Solution
 I use `aov` here, because I might be following up with
 Tukey in a minute:
 
-```{r }
+```{r ethanol-7 }
 sleep.1 <- aov(sleeptime ~ treatment, data = sleep)
 summary(sleep.1)
 ```
@@ -208,7 +208,7 @@ variance and got a significant result and (ii) when we want to know
 which groups differ significantly from which. Both (i) and (ii) are
 true here. So:
 
-```{r }
+```{r ethanol-8 }
 TukeyHSD(sleep.1)
 ```
 

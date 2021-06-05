@@ -19,7 +19,7 @@ Solution
 
 
 I see this:
-```{r }
+```{r devices-r-1 }
 myurl="http://ritsokiguess.site/datafiles/pluggedin.txt"
 plugged=read_delim(myurl," ")
 plugged
@@ -30,13 +30,13 @@ I see only the first ten rows (with an indication that there are 20 more, so 30 
 Or, you can summarize the years by counting how many there are
 of each:
 
-```{r }
+```{r devices-r-2 }
 plugged %>% count(year)
 ``` 
 
 or the more verbose form of the same thing:
 
-```{r }
+```{r devices-r-3 }
 plugged %>% group_by(year) %>% summarize(rows=n())
 ``` 
 
@@ -112,7 +112,7 @@ The hard part to remember is how you specify a one-sided test in
 R; it's `alternative="less"` (rather
 than "greater") because 1999 is "before" 2009:
 
-```{r }
+```{r devices-r-4 }
 t.test(hours~year,data=plugged,alternative="less")  
 ``` 
 
@@ -125,13 +125,13 @@ This is the cleanest way to do it, because this version of
 squiggle) allows a `data=` to say which data frame to get
 things from. The other ways, using (for example) `with`, also work:
 
-```{r }
+```{r devices-r-5 }
 with(plugged,t.test(hours~year,alternative="less"))
 ``` 
 
 This also works, but is *ugly*:
 
-```{r }
+```{r devices-r-6 }
 t.test(plugged$hours~plugged$year,alternative="less")
 ``` 
 
@@ -142,7 +142,7 @@ yourself how you can avoid the repeat.
 
 If you want the pooled test in R, you have to ask for it:
 
-```{r }
+```{r devices-r-7 }
 t.test(hours~year,alternative="less",data=plugged,var.equal=T)    
 ``` 
 
@@ -192,7 +192,7 @@ Solution
 Take off the thing that made it one-sided, and
 put in a thing that gets the right CI:
 
-```{r }
+```{r devices-r-8 }
 t.test(hours~year,data=plugged,conf.level=0.99)  
 ``` 
 

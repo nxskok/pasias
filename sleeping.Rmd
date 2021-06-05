@@ -13,7 +13,7 @@ Solution
 
 The usual, to start:
 
-```{r}
+```{r sleeping-1}
 my_url <- "http://ritsokiguess.site/datafiles/sleeping.csv"
 sleep <- read_csv(my_url)
 sleep
@@ -39,20 +39,20 @@ Solution
 
 Since these are genuine date-times, you can take the difference, but the unit is not predictable. Internally, these are stored as a number of *seconds*, but it displays a "nice" unit:
 
-```{r}
+```{r sleeping-2}
 sleep %>% mutate(in_bed = rise.time - bed.time)
 ```
 
 In this case, we did get a number of hours, but in the next part, we are going to do a calculation like this:
 
-```{r, error=TRUE}
+```{r sleeping-3, error=TRUE}
 sleep %>% mutate(in_bed = rise.time - bed.time) %>% 
 mutate(ratio = sleep.time / in_bed)
 ```
 
 and this doesn't work because you can't divide a number by a time. (What would its units be?) So we have to turn `in_bed` into a number, and to do that we can divide by the number of seconds in an hour:
 
-```{r}
+```{r sleeping-4}
 sleep %>% mutate(in_bed = (rise.time - bed.time) / dhours(1))
 ```
 
@@ -69,7 +69,7 @@ Solution
 
 Divide the sleep time by the in-bed time and multiply by 100. To answer the last part of the question, you might think of sorting these in descending order as well:
 
-```{r}
+```{r sleeping-5}
 sleep %>% mutate(in_bed = (rise.time - bed.time) / dhours(1)) %>% 
 mutate(efficiency = sleep.time / in_bed * 100) %>% 
 arrange(desc(efficiency))
@@ -88,7 +88,7 @@ Solution
 
 The idea here is to display the time between going to bed and getting up as an interval, using `%--%`, and then turn that into a period:
 
-```{r}
+```{r sleeping-6}
 sleep %>% mutate(in_bed_hms = as.period(bed.time %--% rise.time))
 ```
 
@@ -103,20 +103,20 @@ Solution
 
 If you just pull out the times, some of them will be at the end of the day and some will be at the beginning. Extracting the hours, minutes and seconds is one way:^[Make sure you use "hour" and not "hours" as I did the first time. That computes the total number of hours between the zero date of Jan 1, 1970 and the time given, and so is way too large to be an answer here!]
 
-```{r}
+```{r sleeping-7}
 sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time))
 ```
 
 You could convert these into fractional hours to make a histogram of:
 
-```{r}
+```{r sleeping-8}
 sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
 mutate(bed_time_hours = h + m / 60 + s / (60*60))
 ```
 
 but if you make a histogram of these, this is what you get:
 
-```{r}
+```{r sleeping-9}
 sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
 mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
 ggplot(aes(x = bed_time_hours)) + geom_histogram(bins = 5)
@@ -126,7 +126,7 @@ but this makes no sense because the bedtimes after midnight are on the end of th
 
 With that in mind, let's move the bedtimes that are, say, before 3:00am to the end of the previous day by adding 24 to them before we make the graph:
 
-```{r}
+```{r sleeping-10}
 sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
 mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
 mutate(bed_time_hours = ifelse(bed_time_hours < 3, bed_time_hours + 24, bed_time_hours)) %>% 
@@ -137,7 +137,7 @@ This gives a sense of where the bedtimes are. If you're used to reading the 24-h
 
 If you're more used to the 12-hour clock, you'll want to convert the times to something between 10 and 12. You can do this with an `ifelse` as above, subtracting 12 from the ones before midnight and adding 12 to the ones after. Or you can recognize this as modulo arithmetic (the clock is a classic case: what is 10:00pm plus 3 hours?) A little thought will reveal that subtracting (or adding) 12 hours and taking the result modulo 24 would do it: the pre-midnight bedtimes will get turned into a number like 10 or 11, and the post-midnight ones to 12 and a bit. R has a modulo operator, which is `%%` (cite your source: mine was [this](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Arithmetic.html)):
 
-```{r}
+```{r sleeping-11}
 sleep %>% mutate(h = hour(bed.time), m = minute(bed.time), s = second(bed.time)) %>% 
 mutate(bed_time_hours = h + m / 60 + s / (60*60)) %>% 
 mutate(bed_time_hours = (bed_time_hours - 12) %% 24) %>% 
@@ -150,19 +150,19 @@ I think the best graph uses the fact that date-times plot nicely, so if we keep 
 
 Let's look at our dataframe again:
 
-```{r}
+```{r sleeping-12}
 sleep
 ```
 
 The `rise.time` values are all a.m., and on consecutive days, so if we subtract consecutive numbers of days from the `bed.time`s, we'll put them all on appropriate days too:
 
-```{r}
+```{r sleeping-13}
 sleep %>% mutate(time_of_bed = bed.time - ddays(0:6))
 ```
 
 These are all around the midnight at the end of September 1, so some of them are in the early hours of September 2. Now, if we make a histogram of *those*:
 
-```{r}
+```{r sleeping-14}
 sleep %>% mutate(time_of_bed = bed.time - ddays(0:6)) %>% 
 ggplot(aes(x = time_of_bed)) + geom_histogram(bins = 5)
 ```
@@ -170,7 +170,7 @@ Now the $x$-axis formatting looks like a time, and spills seamlessly into the ne
 
 One more embellishment, idea from [here](https://www.r-bloggers.com/2018/06/customizing-time-and-date-scales-in-ggplot2/):
 
-```{r}
+```{r sleeping-15}
 sleep %>% mutate(time_of_bed = bed.time - ddays(0:6)) %>% 
 ggplot(aes(x = time_of_bed)) + geom_histogram(bins = 5) +
 scale_x_datetime(date_labels = "%l:%M %p")

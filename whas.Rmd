@@ -20,7 +20,7 @@ Solution
 
 
 This is `read_delim`:
-```{r }
+```{r whas-1 }
 my_url <- "http://ritsokiguess.site/datafiles/whas500.txt"
 whas <- read_delim(my_url, " ")
 whas
@@ -55,7 +55,7 @@ Solution
 
 
 Load `lubridate` first:
-```{r }
+```{r whas-2 }
 library(lubridate)
 ```
 
@@ -64,7 +64,7 @@ library(lubridate)
 These dates are day-month-year, so we need `dmy` from
 `lubridate`: 
 
-```{r }
+```{r whas-3 }
 whas %>% mutate(
   admit = dmy(admitdate),
   dis = dmy(disdate),
@@ -96,7 +96,7 @@ ones that do, so we can use a "select helper" to select only them,
 and then submit all of them to a `mutate` via `across`,
 which goes like this:
 
-```{r }
+```{r whas-4 }
 whas %>% mutate(across(ends_with("date"), ~dmy(.))) %>% glimpse()
 ```
 
@@ -111,7 +111,7 @@ names; in this case our date variables all ended with
 
 This overwrites the original date columns (you can see that they are now `date`s), but you can give them new names thus. This is inside the `across` inside the `mutate`, so it needs two close-brackets after (the probable reason for the error if you get one):
 
-```{r }
+```{r whas-5 }
 whas %>% mutate(across(ends_with("date"), ~dmy(.), .names = "{.col}_d")) %>% glimpse()
 ```
 
@@ -133,7 +133,7 @@ what R's internal storage is for dates (it might be seconds or
 milliseconds or anything, not necessarily days),
 so subtracting them requires care; you have to divide by the
 length of a day (in whatever units), thus:
-```{r }
+```{r whas-6 }
 whas3 <- whas2 %>% mutate(
   diff1 = (dis - admit) / ddays(1),
   diff2 = (f - admit) / ddays(1),
@@ -161,7 +161,7 @@ that R is comparing all 500 values for us, since it would be a lot
 more reliable than the human eye. R has a function `all.equal`
 which does exactly that. By way of warmup:
 
-```{r }
+```{r whas-7 }
 x <- 1:4
 y <- 1:4
 z <- c(1, 2, 3, 5)
@@ -178,7 +178,7 @@ enough to call equal, or, as in this case, not.
 
 Anyway:
 
-```{r }
+```{r whas-8 }
 with(whas3, all.equal(lenfol, diff2))
 with(whas3, all.equal(los, diff1))
 ```
@@ -200,7 +200,7 @@ Solution
 
 The easiest way to make a factor is to wrap `fstat`, which
 is a numeric 0 or 1, in `factor()`:
-```{r }
+```{r whas-9 }
 ggplot(whas3, aes(x = factor(fstat), y = lenfol)) + geom_boxplot()
 ```
 
@@ -208,7 +208,7 @@ ggplot(whas3, aes(x = factor(fstat), y = lenfol)) + geom_boxplot()
 
 Or create a factor version of `fstat` first:
 
-```{r }
+```{r whas-10 }
 whas3 %>%
   mutate(ffstat = factor(fstat)) %>%
   ggplot(aes(x = ffstat, y = lenfol)) + geom_boxplot()
@@ -224,7 +224,7 @@ report for your boss, the first way is fine.
 `ggplot` also treats text stuff as categorical where needed, so
 this also works:
 
-```{r }
+```{r whas-11 }
 whas3 %>%
   mutate(cfstat = as.character(fstat)) %>%
   ggplot(aes(x = cfstat, y = lenfol)) + geom_boxplot()
@@ -234,13 +234,13 @@ whas3 %>%
  
 For example:
 
-```{r}
+```{r whas-12}
 whas %>% select(id, lenfol, fstat)
 ```
 
 The patient with id 4 died after 297 days, but patients 1 through 3 lived for over 2000 days and were still alive when last seen. My guess for patients 1 through 3 is that the study ended and they were still alive:
 
-```{r}
+```{r whas-13}
 whas %>% summarize(maxfol = max(lenfol)/365.25)
 ```
 
@@ -250,7 +250,7 @@ We're not going to analyze these data, but if we were, we would want to take adv
 
 With that in mind, let's redraw our boxplot with better labels for the followup status:
 
-```{r}
+```{r whas-14}
 whas3 %>% 
   mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
   ggplot(aes(x = followup_status, y = lenfol)) + geom_boxplot()
@@ -260,7 +260,7 @@ Now we have a clearer sense of what is going on. Out of the patients who died, s
 
 Another graph that is possible here is a facetted histogram:
 
-```{r}
+```{r whas-15}
 whas3 %>% 
   mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
   ggplot(aes(x = lenfol)) + geom_histogram(bins = 10) +
@@ -270,7 +270,7 @@ whas3 %>%
 The right-skewed distribution of times to death is what we saw from the boxplot, but what is that periodic thing on the left? Let's convert the days to years and draw again:
 
 
-```{r}
+```{r whas-16}
 whas3 %>% 
   mutate(followup_status = ifelse(fstat == 1, "died", "censored")) %>% 
   mutate(followup_years = lenfol/365.25) %>% 

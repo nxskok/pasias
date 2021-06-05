@@ -21,7 +21,7 @@ Solution
 
 
 `read_csv` is the thing this time:
-```{r }
+```{r pizza-1 }
 my_url <- "http://ritsokiguess.site/datafiles/Pizza.csv"
 pizza <- read_csv(my_url)
 pizza
@@ -42,7 +42,7 @@ There is a package called `rio` that will
 read (and write) data in a whole bunch of different formats in a
 unified way.^[It does this by figuring what kind of thing you have, from the extension to its filename, and then calling an appropriate function to read in or write out the data. This is an excellent example of "standing on the shoulders of giants" to make our lives easier. The software does the hard work of figuring out what kind of thing you have and how to read it in; all we do is say `import`.] Anyway, the usual installation thing, done once:
 
-```{r eval=F}
+```{r pizza-2, eval=F}
 install.packages("rio")
 ```
 
@@ -51,7 +51,7 @@ install.packages("rio")
 which takes a moment since it probably has to install some other
 packages too, and then you read in a file like this:
 
-```{r }
+```{r pizza-3 }
 library(rio)
 pizza3 <- import(my_url)
 head(pizza3)
@@ -71,7 +71,7 @@ below to display the first six lines.
 I originally had the data as an Excel spreadsheet, but `import`
 will gobble up that pizza too:
 
-```{r }
+```{r pizza-4 }
 my_other_url <- "http://ritsokiguess.site/datafiles/Pizza_E29.xls"
 pizza4 <- import(my_other_url)
 head(pizza4)
@@ -115,7 +115,7 @@ Solution
 
 
 `lm`, with `summary`:
-```{r }
+```{r pizza-5 }
 pizza.1 <- lm(Calories ~ Fat, data = pizza)
 summary(pizza.1)
 ```
@@ -140,7 +140,7 @@ Solution
 
 Use the regression object `pizza.1`:
 
-```{r }
+```{r pizza-6 }
 ggplot(pizza.1, aes(x = .fitted, y = .resid)) + geom_point() + geom_smooth()
 ```
 
@@ -155,7 +155,7 @@ straight line model is satisfactory.
 That's all you needed, but it is also worth looking at a normal
 quantile plot of the residuals:
 
-```{r }
+```{r pizza-7 }
 ggplot(pizza.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
@@ -165,7 +165,7 @@ A bit skewed to the left (the low ones are too low).
 
 Also a plot of the absolute residuals, for assessing fan-out:
 
-```{r }
+```{r pizza-8 }
 ggplot(pizza.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
@@ -177,7 +177,7 @@ fitted value gets bigger), but nothing much, I think.
 Another way of assessing curvedness is to fit a squared term anyway,
 and see whether it is significant:
 
-```{r }
+```{r pizza-9 }
 pizza.2 <- update(pizza.1, . ~ . + I(Fat^2))
 summary(pizza.2)
 ```
@@ -205,7 +205,7 @@ are interested in each case in the calorie content of the
 returned with (and not, for example, in the mean calorie content
 for *all* brands of pizza that have 12 grams of fat per
 serving). Thus:
-```{r }
+```{r pizza-10 }
 newfat <- c(12, 20)
 new <- tibble(Fat = newfat)
 new
@@ -217,7 +217,7 @@ cbind(new, preds)
 
 Or, if you like:
 
-```{r }
+```{r pizza-11 }
 as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
 ```
 
@@ -251,7 +251,7 @@ farther away from the mean fat content of all the brands. But there
 isn't much to choose. For the confidence intervals for the mean
 calories of *all* brands with these fat contents, the picture is clearer:
 
-```{r }
+```{r pizza-12 }
 preds <- predict(pizza.1, new, interval = "c")
 cbind(new, preds)
 ```
@@ -260,7 +260,7 @@ cbind(new, preds)
 
 or, as before:
 
-```{r }
+```{r pizza-13 }
 as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
 ```
 

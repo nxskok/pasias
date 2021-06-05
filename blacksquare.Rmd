@@ -1,10 +1,10 @@
 find files that need black-squaring
 
-```{r}
+```{r blacksquare-1}
 library(tidyverse)
 ```
 
-```{r}
+```{r blacksquare-2}
 q_prop <- function(fname) {
   file <- readLines(fname)
   file %>% enframe() %>% 
@@ -16,7 +16,7 @@ q_prop <- function(fname) {
 
 make list of all rmd for editing and select some
 
-```{r}
+```{r blacksquare-3}
 list.files(pattern = "*.Rmd") %>% enframe(name = NULL) %>% 
   rowwise() %>% 
   mutate(stat = list(q_prop(value))) %>% 

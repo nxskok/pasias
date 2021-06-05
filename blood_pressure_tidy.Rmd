@@ -15,7 +15,7 @@ Solution
 
 You ought to be suspicious that something is going to be up with the layout. With that in mind, I'm using a "disposable" name for this dataframe:
 
-```{r}
+```{r blood-pressure-tidy-1}
 my_url <- "http://ritsokiguess.site/datafiles/blood_pressure2.csv"
 bp0 <- read_csv(my_url)
 bp0
@@ -46,7 +46,7 @@ Solution
 The usual starting point for these is to get all the measurements into one column and see what to do after that.
 This is `pivot_longer`:
 
-```{r}
+```{r blood-pressure-tidy-2}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
 ```
 
@@ -54,7 +54,7 @@ This would be tidy if we had 20 independent observations from 20 different peopl
 
 We want to have a column of before and a column of after, so the names of the new columns are coming from what I called `time`. The values are coming from what I called `bp`, so, gluing the `pivot_wider` on the end of the pipe:
 
-```{r}
+```{r blood-pressure-tidy-3}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
   pivot_wider(names_from = time, values_from = bp) -> blood_pressure
 blood_pressure
@@ -66,7 +66,7 @@ I laid out the steps of my thinking, so you could follow my logic. I'm expecting
 
 Extra: `pivot_wider` is smarter than you think, but it can be helpful to know what it does, in order to help diagnose when things go wrong. Let's go back and look at the too-long dataframe again:
 
-```{r}
+```{r blood-pressure-tidy-4}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
 ```
 
@@ -76,7 +76,7 @@ This enables us to try a couple of what-ifs to see what can go wrong.
 
 First, what if there's no person column at all, so there is nothing to say what row an observation should go in?
 
-```{r}
+```{r blood-pressure-tidy-5}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
 select(-person) %>% 
 pivot_wider(names_from = time, values_from = bp)
@@ -86,7 +86,7 @@ It kinda works, but with a warning. The warning says "values are not uniquely id
 
 Here's another one, similar:
 
-```{r}
+```{r blood-pressure-tidy-6}
 d <- tribble(
 ~g, ~id, ~y,
 "a", "p1", 10,
@@ -101,13 +101,13 @@ d
 
 When we do this:
 
-```{r}
+```{r blood-pressure-tidy-7}
 d %>% pivot_wider(names_from = g, values_from = y)
 ```
 
 we get list-columns again (and the same warning). What this output is telling you is that mostly there is one number per id-group combination (the `dbl[1]`) but there are two observations labelled id `p1` and group `a`, and no observations at all labelled id `p3` and group `b`. It turns out^[I know because I made these data up. that the last row of the tribble contains errors. Fix them, and all is good:
 
-```{r}
+```{r blood-pressure-tidy-8}
 d <- tribble(
 ~g, ~id, ~y,
 "a", "p1", 10,
@@ -122,7 +122,7 @@ d %>% pivot_wider(names_from = g, values_from = y)
 
 One last one:
 
-```{r}
+```{r blood-pressure-tidy-9}
 d <- tribble(
 ~id, ~g, ~y,
 1, "a", 10,
@@ -137,13 +137,13 @@ d
 
 and then
 
-```{r}
+```{r blood-pressure-tidy-10}
 d %>% pivot_wider(names_from = g, values_from = y)
 ```
 
 Where did those missing values come from? If you go back and look at this `d`, you'll see that each person has only *one* measurement, *either* an `a` or a `b`, not both. There is, for example, nothing to go in the `a` column for person number 4, because their only measurement was in group `b`. This kind of thing happens with two independent samples, and is a warning that you don't *need* to pivot wider; it's already tidy:
 
-```{r}
+```{r blood-pressure-tidy-11}
 d
 ```
 Think about the kind of layout you need for a two-sample $t$-test.
@@ -170,7 +170,7 @@ Solution
 
 Given that we are going to do a matched-pairs analysis of some kind, the best graph looks at the *differences* between the two measurements. So calculate them first, and then make a one-sample plot of them, such as a histogram:
 
-```{r}
+```{r blood-pressure-tidy-12}
 blood_pressure %>% mutate(diff = before - after) %>% 
 ggplot(aes(x=diff)) + geom_histogram(bins=5)
 ```
@@ -178,14 +178,14 @@ You will need a suitably small number of bins, since we only have ten observatio
 
 You might have looked at the two quantitative columns and thought "scatterplot":
 
-```{r}
+```{r blood-pressure-tidy-13}
 ggplot(blood_pressure, aes(x=before, y=after)) + geom_point()
 ```
 This says that if the blood pressure before was large, the blood pressure afterwards is as well. This is fair enough, but it is the answer to a question *we don't care about*. What we *do* care about is whether the after measurement is bigger than the before one *for the same person*, which this graph does not show. So this is not the best.
 
 To rescue this graph, you can add the line $y=x$ to it. The value of this is that a point above this line has the after measurement bigger than the corresponding before one, and a point below the line has the after measurement smaller. You will need to find out how to add a line with a given intercept and slope to the plot, since I haven't shown you how to do it. It's called `geom_abline`, thus:
 
-```{r}
+```{r blood-pressure-tidy-14}
 ggplot(blood_pressure, aes(x=before, y=after)) + geom_point() +
 geom_abline(intercept = 0, slope = 1)
 ```
@@ -195,26 +195,26 @@ Note that if you put a *regression line* on your plot, you will need to offer a 
 
 Finally, if you thought the long data frame was tidy, this one:
 
-```{r}
+```{r blood-pressure-tidy-15}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") 
 ```
 
 then you can rescue some points here by making a suitable plot of that. A boxplot is not enough:
 
-```{r}
+```{r blood-pressure-tidy-16}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
 ggplot(aes(x=time, y=bp)) + geom_boxplot()
 ```
 
 because you have *lost* the connection between the two measurements for each person. To keep that connection, start with the same plot but as points rather than boxes:
 
-```{r}
+```{r blood-pressure-tidy-17}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
 ggplot(aes(x=time, y=bp)) + geom_point()
 ```
 and then join the two points that belong to the same person. This is done with `geom_line` as usual, only you have to say which points are going to be joined, namely the two for each person, and to do that, you specify `person` in `group`:
 
-```{r}
+```{r blood-pressure-tidy-18}
 bp0 %>% pivot_longer(-time, names_to="person", values_to="bp") %>% 
 ggplot(aes(x=time, y=bp, group=person)) + geom_point() + geom_line()
 ```

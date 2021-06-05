@@ -24,7 +24,7 @@ Solution
 This kind of thing. Since you looked at the data (didn't you?),
 you'll know that the values are separated by single spaces:
 
-```{r }
+```{r bodyfat-sign-1 }
 myurl <- "http://ritsokiguess.site/datafiles/bodyfat.txt"
 bodyfat <- read_delim(myurl, " ")
 bodyfat
@@ -49,7 +49,7 @@ This is a good place to look ahead. We'll need the differences in two
 places, most likely: first for the normal quantile plot, and second
 for the matched-pairs sign test. So we should calculate and save them first:
 
-```{r }
+```{r bodyfat-sign-2 }
 bodyfat %>% mutate(diff = xray - ultrasound) -> bodyfat2
 ```
 
@@ -60,7 +60,7 @@ dataframe-with-differences, but you can use whatever name you like.
 
 Then, not forgetting to use the data frame that we just made:
 
-```{r }
+```{r bodyfat-sign-3 }
 ggplot(bodyfat2, aes(sample = diff)) + stat_qq() + stat_qq_line()
 ```
 
@@ -137,7 +137,7 @@ one here.)
 
 Remembering again to use the data frame that has the differences in it:
 
-```{r }
+```{r bodyfat-sign-4 }
 sign_test(bodyfat2, diff, 0)
 ```
 

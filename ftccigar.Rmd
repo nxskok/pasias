@@ -20,7 +20,7 @@ Solution
 
 
 This specification calls for `read_table2`:
-```{r }
+```{r ftccigar-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ftccigar.txt"
 cigs <- read_table2(my_url)
 cigs
@@ -44,7 +44,7 @@ Solution
 
 The word "summary" is meant to be a big clue that
 `summary` is what you need:
-```{r }
+```{r ftccigar-2 }
 cigs.1 <- lm(co ~ tar + nicotine + weight, data = cigs)
 summary(cigs.1)
 ```
@@ -65,7 +65,7 @@ Solution
 First, the $x$-variable to remove. The obvious candidate is
 `weight`, since it has easily the highest, and clearly
 non-significant, P-value. So, out it comes:
-```{r }
+```{r ftccigar-3 }
 cigs.2 <- lm(co ~ tar + nicotine, data = cigs)
 summary(cigs.2)
 ```
@@ -81,7 +81,7 @@ Another way of achieving the same thing is via the function
 `update`, which takes a fitted model object and describes the
 *change* that you want to make:
 
-```{r }
+```{r ftccigar-4 }
 cigs.2a <- update(cigs.1, . ~ . - weight)
 summary(cigs.2a)
 ```
@@ -111,7 +111,7 @@ Solution
 
 
 As you would guess:
-```{r }
+```{r ftccigar-5 }
 cigs.3 <- lm(co ~ nicotine, data = cigs)
 summary(cigs.3)
 ```
@@ -158,7 +158,7 @@ Solution
 
 
 Plot the entire data frame:
-```{r }
+```{r ftccigar-6 }
 plot(cigs)
 ```
 
@@ -228,7 +228,7 @@ If you want only some of the columns to appear in your pairs plot,
 correlated with anything much, so we can take it out and then make a
 pairs plot of the other variables:
 
-```{r }
+```{r ftccigar-7 }
 cigs %>% select(-weight) %>% ggpairs(progress = FALSE)
 ```
 

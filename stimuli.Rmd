@@ -31,7 +31,7 @@ Solution
 
 Looking at the file first, there are *no column names*. So we
 have to tell `read_delim` that:
-```{r }
+```{r stimuli-1 }
 my_url <- "http://ritsokiguess.site/datafiles/stimuli.txt"
 stimuli <- read_delim(my_url, " ", col_names = F)
 stimuli
@@ -61,7 +61,7 @@ Solution
 
 
 The object names are in the first column, `X1`, of the data frame:
-```{r }
+```{r stimuli-2 }
 objects <- stimuli$X1
 objects
 ```
@@ -83,7 +83,7 @@ Solution
 
 I have 18 columns to name (including the column of object names),
 but only 17 names, so I need to supply an extra one:
-```{r }
+```{r stimuli-3 }
 names(stimuli) <- c("object", objects)
 stimuli
 ```
@@ -102,7 +102,7 @@ Solution
 
 This is `as.dist`, since we have distances
 (dissimilarities) already. Don't forget to take off the first column!
-```{r }
+```{r stimuli-4 }
 d <- stimuli %>% select(-1) %>% as.dist()
 ```
 
@@ -111,7 +111,7 @@ d <- stimuli %>% select(-1) %>% as.dist()
 I can try and show it all here, tiny, but even then it's long because
 the column names are long:
 
-```{r size="tiny"}
+```{r stimuli-5, size="tiny"}
 w <- getOption("width")
 options(width = 132)
 d
@@ -139,7 +139,7 @@ Solution
 
 
 This is the procedure. Talking about it is coming in a minute.
-```{r }
+```{r stimuli-6 }
 d.1 <- cmdscale(d, 2)
 data.frame(d.1, stim = objects) %>%
   ggplot(aes(x = X1, y = X2, label = stim)) + geom_point() +
@@ -160,7 +160,7 @@ If you forget the `2` after the distance matrix in
 two dimensions is the default). The output is an array of coordinates
 in two dimensions:
 
-```{r }
+```{r stimuli-7 }
 d.1
 ```
 
@@ -224,7 +224,7 @@ Solution
 This means fitting again, but this time with `eig=T`, and
 pulling out the thing called `GOF`. You can omit the 2,
 since that's the default 2 dimensions:
-```{r }
+```{r stimuli-8 }
 d.2 <- cmdscale(d, 2, eig = T)
 d.2$GOF
 ```
@@ -241,7 +241,7 @@ distance isn't very good; this is the same issue.
 
 I was curious about whether 3 dimensions would be any better:
 
-```{r }
+```{r stimuli-9 }
 d.2a <- cmdscale(d, 3, eig = T)
 d.2a$GOF
 ```
@@ -263,7 +263,7 @@ Solution
 
 This seems to be a throwback to last week, but I have my reasons,
 which you'll see in a moment:
-```{r }
+```{r stimuli-10 }
 d.3 <- hclust(d, method = "ward.D")
 plot(d.3)
 ```
@@ -273,7 +273,7 @@ plot(d.3)
 That looks like 5 clusters to me (chopping the tree at a height of
 30). Drawing them:
 
-```{r }
+```{r stimuli-11 }
 plot(d.3)
 rect.hclust(d.3, 5)
 ```
@@ -327,7 +327,7 @@ with the ones on the MDS map. So I put myself through some
 short-term R coding pain for some substantial long-term gain.
 I was thinking, "can I extract the clusters from this    analysis, and plot them on the MDS map in different colours?" That
 would go like this:
-```{r }
+```{r stimuli-12 }
 clusters <- cutree(d.3, 5)
 data.frame(d.1, names = stimuli[, 1], cluster = factor(clusters)) %>%
   ggplot(aes(x = X1, y = X2, label = objects, colour = cluster)) +
@@ -348,7 +348,7 @@ own little area on the map.
 Another, non-graphical, way of doing this is to list the MDS coordinates
 along with the clusters, probably sorted by cluster:
 
-```{r }
+```{r stimuli-13 }
 data.frame(d.1, object = stimuli[, 1], clusters) %>% arrange(clusters)
 ```
 
@@ -364,7 +364,7 @@ and cluster 5 has strongly positive `X1`.
 I wonder whether our three-dimensional solution distinguishes clusters
 1 and 2 at all? Same approach again:
 
-```{r }
+```{r stimuli-14 }
 save.3d <- data.frame(d.2a$points, objects, clusters) %>%
   arrange(clusters)
 save.3d
@@ -381,7 +381,7 @@ coordinates and the `clusters` into a
 clusters. Which is way too weird, and therefore deserves to be
 explored (with the three-dimensional solution, for example):
 
-```{r }
+```{r stimuli-15 }
 library(MASS)
 save.3d.lda <- lda(clusters ~ X1 + X2 + X3, data = save.3d)
 ppp <- predict(save.3d.lda)
@@ -393,7 +393,7 @@ I snuck a look at the output and
 found that `LD3` is basically worthless, so I can plot
 `LD1` against `LD2`, coloured by cluster:
 
-```{r }
+```{r stimuli-16 }
 data.frame(ppp$x, cluster = factor(save.3d$clusters)) %>%
   ggplot(aes(x = LD1, y = LD2, colour = cluster)) +
   geom_point()
@@ -412,7 +412,7 @@ discriminant analysis and ask "what distinguishes the clusters?".
 Map coordinates first. I need `points` since I ran
 the scaling with `eig=T`:
 
-```{r }
+```{r stimuli-17 }
 save.3d
 ```
 
@@ -420,7 +420,7 @@ save.3d
 
 and the business end of the LDA output:
 
-```{r }
+```{r stimuli-18 }
 save.3d.lda$svd
 save.3d.lda$scaling
 ```
@@ -438,7 +438,7 @@ plot of the first two `LD`s says, in fact, that under the
 
 A biplot would be another way to look at that:
 
-```{r }
+```{r stimuli-19 }
 ggbiplot(save.3d.lda, groups = factor(save.3d$clusters))
 ```
 

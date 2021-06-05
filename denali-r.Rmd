@@ -30,7 +30,7 @@ space. If you look further, you'll see that the values are
 the top. This is exactly the kind of thing that
 `read_table` will read. We start with the usual
 `library(tidyverse)`:
-```{r }
+```{r denali-r-1 }
 library(tidyverse)
 my_url <- "http://ritsokiguess.site/datafiles/caribou.txt"
 denali <- read_table(my_url)
@@ -93,7 +93,7 @@ now. They appear to be month-day-year, American
 style.^[Not a surprise since Denali National Park is in  Alaska.]  
 Thus the function needed is `mdy`. It doesn't matter
 whether the months are names or numbers:
-```{r }
+```{r denali-r-2 }
 denali %>% mutate(date = mdy(date)) -> denali
 denali
 ```
@@ -117,7 +117,7 @@ Solution
 
 
 This involves digging in the `lubridate` help to find out how to extract things from a date. It turns out that `wday` extracts the day of the week from a date, by default as a number, and `month` gets the month, also by default as a number:
-```{r }
+```{r denali-r-3 }
 denali %>% mutate(mon = month(date), wd = wday(date))
 ```
 
@@ -126,7 +126,7 @@ denali %>% mutate(mon = month(date), wd = wday(date))
 This is not what we wanted, though; we wanted the names of the months
 and of the days. To fix that, add `label=T` to both functions:
 
-```{r }
+```{r denali-r-4 }
 denali %>% mutate(mon = month(date, label = T), wd = wday(date, label = T))
 ```
 
@@ -141,7 +141,7 @@ since these are categorical variables with a natural order. This means
 that you could do something like counting the number of surveys in
 each month like this:
 
-```{r }
+```{r denali-r-5 }
 denali %>%
   mutate(mon = month(date, label = T), wd = wday(date, label = T)) %>%
   count(mon)
@@ -160,14 +160,14 @@ Solution
 
 
 Nothing terribly surprising here:
-```{r }
+```{r denali-r-6 }
 ggplot(denali, aes(x = caribou, y = wolf)) + geom_point()
 ```
 
        
 If you like, add a smooth trend to it:^[This wiggles more than  I would like, with such a small number of observations. Try putting  something like `span=2` in the smooth to make it less wiggly.]
 
-```{r }
+```{r denali-r-7 }
 ggplot(denali, aes(x = caribou, y = wolf)) + geom_point() + geom_smooth(se = F)
 ```
 
@@ -192,7 +192,7 @@ I'm going to use `geom_text_repel` for the labels from package
 `ggrepel`. The year values are gotten using the
 `lubridate` function `year`:
 
-```{r }
+```{r denali-r-8 }
 denali %>%
   mutate(year = year(date)) %>%
   ggplot(aes(x = caribou, y = wolf, label = year)) + geom_point() + geom_text_repel()
@@ -208,7 +208,7 @@ To join points in the order that they are in the data (what we want
 here, because the points are in time order in the data), use instead 
 `geom_path`:
 
-```{r }
+```{r denali-r-9 }
 denali %>%
   mutate(year = year(date)) %>%
   ggplot(aes(x = caribou, y = wolf, label = year)) + geom_point() +
@@ -235,7 +235,7 @@ Solution
 Make a scatterplot, with the survey date as explanatory
 variable, and caribou population as response (since time always
 goes on the $x$-axis):
-```{r }
+```{r denali-r-10 }
 ggplot(denali, aes(x = date, y = caribou)) + geom_point() + geom_line()
 ```
 
@@ -265,7 +265,7 @@ populations, just of different animals. One way of plotting both
 populations is to `pivot_longer` them up into one longer column, and
 then plot them against time, with the two animals distinguished
 by colour:
-```{r }
+```{r denali-r-11 }
 denali %>%
   pivot_longer(caribou:wolf, names_to="animal", values_to="population") %>%
   ggplot(aes(x = date, y = population, colour = animal)) +
@@ -287,7 +287,7 @@ different-looking graph), so we ought to be careful.
 
 All right, so let's put the caribou on the left:
 
-```{r }
+```{r denali-r-12 }
 ggplot(denali, aes(x = date, y = caribou)) + geom_line()
 ```
 
@@ -296,7 +296,7 @@ ggplot(denali, aes(x = date, y = caribou)) + geom_line()
 Or we can add a `colour` aesthetic to distinguish the caribou
 from the wolf populations, that we're going to add in a moment. This looks rather odd at first:
 
-```{r }
+```{r denali-r-13 }
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) + geom_line()
 ```
 
@@ -306,7 +306,7 @@ Now we think about adding the wolf numbers. This is done by adding a
 second `geom_line`, overriding the `y` and the
 `colour` to specify that this is wolf now:
 
-```{r }
+```{r denali-r-14 }
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line() +
   geom_line(aes(y = wolf, colour = "wolf"))
@@ -322,7 +322,7 @@ so that
 we don't get a good sense of how they go up and down together. If we
 divided the wolf numbers by 2.5, we would see this better:
 
-```{r }
+```{r denali-r-15 }
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line() +
   geom_line(aes(y = wolf / 2.5, colour = "wolf"))
@@ -334,7 +334,7 @@ Now we get to the secondary $y$-axis. We want to label this
 `wolf` and have it reflect that we actually made the graph by
 dividing the wolf values by 2.5:
 
-```{r }
+```{r denali-r-16 }
 ggplot(denali, aes(x = date, y = caribou, colour = "caribou")) +
   geom_line() +
   geom_line(aes(y = wolf / 2.5, colour = "wolf")) +

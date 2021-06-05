@@ -25,7 +25,7 @@ Solution
 
 
 I used `rains` as the name of my data frame: 
-```{r }
+```{r calirain-1 }
 my_url="http://ritsokiguess.site/datafiles/calirain.txt"
 rains=read_table2(my_url)
 ```
@@ -41,7 +41,7 @@ here and see how it fails.
 I don't need you to investigate the data yet (that happens in the next
 part), but this is interesting (to me):
 
-```{r }
+```{r calirain-2 }
 rains
 ```
 
@@ -69,7 +69,7 @@ Solution
 
 
 
-```{r }
+```{r calirain-3 }
 ggplot(rains,aes(y=rainfall,x=1))+geom_boxplot()
 ```
 
@@ -79,7 +79,7 @@ close to zero but positive, so that is good.
 
 Another possible plot here is a histogram, since there is only one quantitative variable:
 
-```{r }
+```{r calirain-4 }
 ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
 ```
 
@@ -87,7 +87,7 @@ ggplot(rains, aes(x=rainfall))+geom_histogram(bins=7)
 
 This clearly shows the rainfall value above 60 inches, but some other things are less clear: are those two rainfall values around 50 inches above or below 50, and are those six rainfall values near zero actually above zero? 
 Extra: What stations have those extreme values? Should you wish to find out:
-```{r }
+```{r calirain-5 }
 rains %>% filter(rainfall>60)
 ```
 
@@ -99,7 +99,7 @@ rainy places, you'll probably think of Vancouver and Seattle, in the
 Pacific Northwest.) Here it is:
 [link](https://www.google.ca/maps/place/Crescent+City,+CA,+USA/@41.7552589,-123.9652917,8.42z/data=!4m5!3m4!1s0x54d066375c6288db:0x76e89ab07375e62e!8m2!3d41.7557501!4d-124.2025913). 
 Which station has less than 2 inches of annual rainfall?
-```{r }
+```{r calirain-6 }
 rains %>% filter(rainfall<2)  
 ```
 
@@ -121,13 +121,13 @@ Solution
 That is, `altitude`, `latitude` and
 `fromcoast`. The obvious way to do this (perfectly
 acceptable) is one plot at a time:
-```{r }
+```{r calirain-7 }
 ggplot(rains,aes(y=rainfall,x=altitude))+geom_point()
 ```
 
      
 
-```{r }
+```{r calirain-8 }
 ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
 ```
 
@@ -135,7 +135,7 @@ ggplot(rains,aes(y=rainfall,x=latitude))+geom_point()
 
 and finally 
 
-```{r }
+```{r calirain-9 }
 ggplot(rains,aes(y=rainfall,x=fromcoast))+geom_point()
 ```
 
@@ -146,7 +146,7 @@ points is fine with me.
 
 Here is a funky way to get all three plots in one shot:
 
-```{r }
+```{r calirain-10 }
 rains %>% 
   pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
   ggplot(aes(x=x,y=rainfall))+geom_point()+
@@ -171,7 +171,7 @@ plots. `facet_wrap` can also take an `nrow` or an
 display. Here, for example, two columns because I thought three was
 too many:
 
-```{r }
+```{r calirain-11 }
 rains %>% 
   pivot_longer(altitude:fromcoast, names_to="xname",values_to="x") %>%
   ggplot(aes(x=x,y=rainfall))+geom_point()+
@@ -229,7 +229,7 @@ Solution
 
 Save your `lm` into a
 variable, since it will get used again later:
-```{r }
+```{r calirain-12 }
 rainfall.1=lm(rainfall~latitude,data=rains)
 summary(rainfall.1)
 ```
@@ -244,7 +244,7 @@ not strongly so.
 
 Extra: Of course, I can easily do the others as well, though you don't have to:
 
-```{r }
+```{r calirain-13 }
 rainfall.2=lm(rainfall~fromcoast,data=rains)
 summary(rainfall.2)
 ```
@@ -262,7 +262,7 @@ with a P-value of 0.265.
 
 Finally:
 
-```{r }
+```{r calirain-14 }
 rainfall.3=lm(rainfall~altitude,data=rains)
 summary(rainfall.3)
 ```
@@ -288,7 +288,7 @@ Solution
 
 
 This, then:
-```{r }
+```{r calirain-15 }
 rainfall.4=lm(rainfall~latitude+altitude+fromcoast,data=rains)
 summary(rainfall.4)
 ```
@@ -344,7 +344,7 @@ smaller (fewer explanatory variables) first. The null hypothesis
 is that the two models are equally good (so we should go with the
 smaller); the alternative is that the larger model is better, so
 that the extra complication is worth it:
-```{r }
+```{r calirain-16 }
 anova(rainfall.1,rainfall.4)  
 ```
 

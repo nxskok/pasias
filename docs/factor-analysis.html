@@ -483,7 +483,7 @@ of rows and columns.</li>
 <div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb289-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/personality.txt&quot;</span></a>
 <a class="sourceLine" id="cb289-2" title="2">pers &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   .default = col_double()
 ## )
@@ -502,9 +502,11 @@ of rows and columns.</li>
 ##  8     8      5      2      4      2      4      1      4      3      3      5      4      1      4      3      2      4      4      4      2      5      2      4      3
 ##  9     9      5      1      4      3      2      1      4      4      2      3      4      1      4      4      2      5      5      5      4      4      2      5      2
 ## 10    10      4      1      5      1      4      3      4      1      5      4      5      1      5      3      4      4      4      1      1      5      2      4      1
-## # … with 449 more rows, and 21 more variables: PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;,
-## #   PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;,
-## #   PERS44 &lt;dbl&gt;</code></pre>
+## # … with 449 more rows, and 21 more variables: PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>Yep, 459 people (in rows), and 44 items (in columns), plus one column
 of <code>id</code>s for the people who took the survey.</p>
 <p>In case you were wondering about the “I” vs. “I am” thing, the
@@ -539,7 +541,7 @@ charts of responses facetted by item:</p>
 <a class="sourceLine" id="cb295-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>id, <span class="dt">names_to=</span><span class="st">&quot;item&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;response&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb295-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> response)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>item)</a></code></pre></div>
 <pre><code>## Warning: Removed 371 rows containing non-finite values (stat_count).</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-182-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/derhuter-1.png" width="672" /></p>
 <p>The first time I did this, item <code>PERS36</code> appeared out of order
 at the end, and I was wondering what happened, until I realized it was
 actually misspelled as <code>PES36</code>! I corrected it in the data
@@ -661,9 +663,12 @@ glue it onto the end of that:</p>
 ##  8      8      5      2      4      2      4      1      4      3      3      5      4      1      4      3      2      4      4      4      2      5      2      4      3
 ##  9      9      5      1      4      3      2      1      4      4      2      3      4      1      4      4      2      5      5      5      4      4      2      5      2
 ## 10     10      4      1      5      1      4      3      4      1      5      4      5      1      5      3      4      4      4      1      1      5      2      4      1
-## # … with 449 more rows, and 24 more variables: PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;,
-## #   PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;,
-## #   PERS44 &lt;dbl&gt;, id...46 &lt;dbl&gt;, m &lt;dbl&gt;, has_missing &lt;lgl&gt;</code></pre>
+## # … with 449 more rows, and 24 more variables: PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;, id...46 &lt;dbl&gt;,
+## #   m &lt;dbl&gt;, has_missing &lt;lgl&gt;</code></pre>
 <p>and then filter out the rows for which <code>has_missing</code> is true.
 What we did here is really a way of mimicking <code>complete.cases</code>,
 which is the way we used to have to do it, before <code>drop_na</code>
@@ -947,9 +952,12 @@ missing data) we are looking at:</p>
 ##  8 -0.589    0.747  -0.257   1.18  -0.517      8      5      2      4      2      4      1      4      3      3      5      4      1      4      3      2      4      4
 ##  9 -0.836    1.02    0.620   1.36  -0.705      9      5      1      4      3      2      1      4      4      2      3      4      1      4      4      2      5      5
 ## 10  0.984    0.298  -1.06    0.681 -0.553     10      4      1      5      1      4      3      4      1      5      4      5      1      5      3      4      4      4
-## # … with 423 more rows, and 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
-## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;,
-## #   PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
+## # … with 423 more rows, and 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;,
+## #   PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;,
+## #   PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;,
+## #   PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;,
+## #   PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
+## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>I did it this way, rather than using <code>data.frame</code>, so that I
 would end up with a <code>tibble</code> that would display nicely rather
 than running off the page. This meant turning the matrix of factor
@@ -965,9 +973,12 @@ who scores highest and/or lowest on that factor:</p>
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12 PERS13 PERS14 PERS15 PERS16 PERS17
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1    1.70   -2.14   0.471  -0.525   0.681   231      1      4      5      4      4      5      5      2      4      4      2      2      5      4      5      4      1
-## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
-## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
-## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
+## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;,
+## #   PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>to display the maximum, or</p>
 <div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb323-1" title="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(Factor1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 5 x 50
@@ -978,18 +989,24 @@ who scores highest and/or lowest on that factor:</p>
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3      2      3      2      1      3      2      1      4      2      4      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3      4      4      4      3      2      2      2      4      5      3      5
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3      5      5      2      2      2      1      1      5      3      4      2
-## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
-## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
-## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
+## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;,
+## #   PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>to display the minimum (and in this case the five smallest ones), or</p>
 <div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb325-1" title="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(<span class="kw">abs</span>(Factor1) <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(Factor1)))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 50
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12 PERS13 PERS14 PERS15 PERS16 PERS17
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1      3      5      4      5      2      1      3      4      4      5      4
-## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
-## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
-## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
+## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;,
+## #   PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>to display the largest one in size, whether positive or negative. The
 code is a bit obfuscated because I have to take absolute values
 twice. Maybe it would be clearer to create a column with the absolute
@@ -1001,9 +1018,12 @@ values in it and look at that:</p>
 ##   Factor1 Factor2 Factor3 Factor4 Factor5    id PERS01 PERS02 PERS03 PERS04 PERS05 PERS06 PERS07 PERS08 PERS09 PERS10 PERS11 PERS12 PERS13 PERS14 PERS15 PERS16 PERS17
 ##     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
 ## 1   -2.82    1.33  -0.548   0.786   0.488   340      5      1      1      2      5      1      3      5      4      5      2      1      3      4      4      5      4
-## # … with 28 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
-## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
-## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;, abso &lt;dbl&gt;</code></pre>
+## # … with 28 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;,
+## #   PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;, abso &lt;dbl&gt;</code></pre>
 <p>Does
 this work too?</p>
 <div class="sourceCode" id="cb329"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb329-1" title="1">scores<span class="fl">.1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(Factor1))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</a></code></pre></div>
@@ -1015,9 +1035,12 @@ this work too?</p>
 ## 3   -2.14  -0.841 -0.272   -1.12  -1.18     142      1      2      1      4      2      3      2      3      2      1      3      2      1      4      2      4      3
 ## 4   -2.12   0.492  0.491   -0.259  0.259    387      5      3      3      4      4      3      4      4      4      3      2      2      2      4      5      3      5
 ## 5   -2.09  -0.125 -0.0469   0.766 -0.229    396      3      1      2      4      5      3      5      5      2      2      2      1      1      5      3      4      2
-## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;, PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;, PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;,
-## #   PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;, PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;, PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;,
-## #   PERS40 &lt;dbl&gt;, PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
+## # … with 27 more variables: PERS18 &lt;dbl&gt;, PERS19 &lt;dbl&gt;, PERS20 &lt;dbl&gt;,
+## #   PERS21 &lt;dbl&gt;, PERS22 &lt;dbl&gt;, PERS23 &lt;dbl&gt;, PERS24 &lt;dbl&gt;, PERS25 &lt;dbl&gt;,
+## #   PERS26 &lt;dbl&gt;, PERS27 &lt;dbl&gt;, PERS28 &lt;dbl&gt;, PERS29 &lt;dbl&gt;, PERS30 &lt;dbl&gt;,
+## #   PERS31 &lt;dbl&gt;, PERS32 &lt;dbl&gt;, PERS33 &lt;dbl&gt;, PERS34 &lt;dbl&gt;, PERS35 &lt;dbl&gt;,
+## #   PERS36 &lt;dbl&gt;, PERS37 &lt;dbl&gt;, PERS38 &lt;dbl&gt;, PERS39 &lt;dbl&gt;, PERS40 &lt;dbl&gt;,
+## #   PERS41 &lt;dbl&gt;, PERS42 &lt;dbl&gt;, PERS43 &lt;dbl&gt;, PERS44 &lt;dbl&gt;</code></pre>
 <p>It looks as if it does: “sort the Factor 1 scores in descending order by absolute value, and display the first few”. The most extreme
 scores on Factor 1 are all negative: the most positive one (found
 above) was only about 1.70.</p>
@@ -1141,7 +1164,7 @@ have five variables with names invented by R.</li>
 <p>I saved my data into <code>cov5.txt</code>,<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a> delimited by single spaces, so:</p>
 <div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1">corr &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> F)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   X1 = col_double(),
 ##   X2 = col_double(),
@@ -1164,7 +1187,7 @@ to provide some. As you see, it did: <code>X1</code> through
 <div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1">my_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;first&quot;</span>, <span class="st">&quot;second&quot;</span>, <span class="st">&quot;third&quot;</span>, <span class="st">&quot;fourth&quot;</span>, <span class="st">&quot;fifth&quot;</span>)</a>
 <a class="sourceLine" id="cb344-2" title="2">corr2 &lt;-<span class="st"> </span><span class="kw">read_delim</span>(<span class="st">&quot;cov5.txt&quot;</span>, <span class="st">&quot; &quot;</span>, <span class="dt">col_names =</span> my_names)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   first = col_double(),
 ##   second = col_double(),
@@ -1395,7 +1418,7 @@ number of rows and columns in your data frame.</li>
 <div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb368-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/airpollution.csv&quot;</span></a>
 <a class="sourceLine" id="cb368-2" title="2">air &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   wind = col_double(),
 ##   solar.radiation = col_double(),
@@ -1479,7 +1502,7 @@ There are rather a lot of brackets to close here; if you are not sure you have e
 <a class="sourceLine" id="cb376-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb376-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb376-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-221-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-214-1.png" width="672" /></p>
 <p>Extra extra: I originally put a pipe symbol on the end of the line with the <code>geom_histogram</code> on it, and got an impenetrable error. However, googling the error message (often a good plan) gave me a first hit that told me exactly what I had done.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1500,7 +1523,7 @@ possibility. If so, discuss them all.)</li>
 <p><code>ggscreeplot</code> the thing you just obtained, having loaded
 package <code>ggbiplot</code>:</p>
 <div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1"><span class="kw">ggscreeplot</span>(air<span class="fl">.1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-223-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-216-1.png" width="672" /></p>
 <p>There is a technicality here, which is
 that <code>ggbiplot</code>, the package, loads <code>plyr</code>, which
 contains a lot of the same things as <code>dplyr</code> (the latter is a
@@ -1729,7 +1752,7 @@ The one we looked at before, observation 8, is this:</p>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" title="1"><span class="kw">ggbiplot</span>(air<span class="fl">.1</span>, <span class="dt">labels =</span> d<span class="op">$</span>row)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-234-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-227-1.png" width="672" /></p>
 <p>Day 8 is way over on the left. The things that point in the direction
 of observation 8 (<code>NO2, CO</code> and to a lesser extent <code>NO</code>
 and <code>HC</code>) are the things that observation 8 is high on. On the
@@ -1780,7 +1803,7 @@ radiation and carbon monoxide. I’d say this is clearer than before.</p>
 <p>A biplot would tell us whether the variables are better aligned with
 the axes now:</p>
 <div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" title="1"><span class="kw">biplot</span>(air<span class="fl">.2</span><span class="op">$</span>scores, air<span class="fl">.2</span><span class="op">$</span>loadings)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-236-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/unnamed-chunk-229-1.png" width="672" /></p>
 <p>At least somewhat. Ozone points straight up, since it is the dominant part of factor 2 and not part of factor 1 at all. Carbon monoxide and the two oxides of nitrogen point to the right.</p>
 <p>Extra:
 <code>wind</code>, <code>solar.radiation</code> and <code>HC</code> don’t appear

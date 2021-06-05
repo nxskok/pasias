@@ -39,7 +39,7 @@ Solution
 
 
 Copied and pasted from last time:
-```{r message=F}
+```{r stimuli2-1, message=F}
 my_url <- "http://ritsokiguess.site/datafiles/stimuli.txt"
 stimuli <- read_delim(my_url, " ", col_names = F)
 objects <- stimuli$X1
@@ -51,7 +51,7 @@ stimuli
 
 That gets a data frame with the right column names. Then:
 
-```{r }
+```{r stimuli2-2 }
 d <- stimuli %>% dplyr::select(-1) %>% as.dist()
 ```
 
@@ -59,7 +59,7 @@ d <- stimuli %>% dplyr::select(-1) %>% as.dist()
 
 and just to check:
 
-```{r size="tiny"}
+```{r stimuli2-3, size="tiny"}
 w <- getOption("width")
 options(width = 132)
 d
@@ -77,7 +77,7 @@ objects. (No plotting or comments yet.)
 Solution
 
 
-```{r }
+```{r stimuli2-4 }
 stimuli.1 <- isoMDS(d)
 ```
 
@@ -85,7 +85,7 @@ stimuli.1 <- isoMDS(d)
 
 I'm going to remind myself of what this has in it:
 
-```{r }
+```{r stimuli2-5 }
 names(stimuli.1)
 ```
 
@@ -107,7 +107,7 @@ Solution
 
 
 What you need here is the "stress":
-```{r }
+```{r stimuli2-6 }
 stimuli.1$stress
 ```
 
@@ -130,7 +130,7 @@ Make a data frame first of things to plot, the points and the
 names. I'm going to plot the names smaller). I am *not*
 naming this data frame `d`, in an attempt to avoid
 overwriting things I want to keep:
-```{r }
+```{r stimuli2-7 }
 stimuli.1.d <- data.frame(stimuli.1$points, names = objects)
 stimuli.1.d
 ```
@@ -145,7 +145,7 @@ Remember that we are turning a matrix and a column into a data frame,
 so we need either the more forgiving `data.frame`, or to turn
 `points` into a data frame first, which would go like this:
 
-```{r }
+```{r stimuli2-8 }
 as_tibble(stimuli.1$points) %>%
   mutate(name = objects)
 ```
@@ -238,7 +238,7 @@ what I want you to say.
 Extra: another way to assess this is with a Shepard^[This always makes me think of the number 190 (now 985) bus, but that's the wrong spelling. Spelled like this, this is also the name of the illustrator of the original pre-Disney Winnie-the-Pooh stories. 
 [See here](https://en.wikipedia.org/wiki/E._H._Shepard).]
 diagram. That would go like this:
-```{r }
+```{r stimuli2-9 }
 stimuli.sh <- Shepard(d, stimuli.1$points)
 names(stimuli.sh)
 ```
@@ -277,7 +277,7 @@ Solution
 The calculation part is to figure out the stress value for a
 three-dimensional map, and compare it with the 20\% that we had
 before. `k=3` gets the three dimensions:
-```{r }
+```{r stimuli2-10 }
 isoMDS(d, k = 3)$stress
 ```
 
@@ -297,7 +297,7 @@ smaller stress value^[Using more dimensions will  *certainly* decrease the stres
 
 The kind of `rgl` code you'll need is something like this (not tested):
 
-```{r eval=F}
+```{r stimuli2-11, eval=F}
 library(rgl)
 stimuli.2 <- isoMDS(d, k = 3)$points
 plot3d(stimuli.2)

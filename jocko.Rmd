@@ -22,7 +22,7 @@ Solution
 
 As mentioned above, you'll need `read_table`, plus `col_names=FALSE` to *not* read the first row as column names:
 
-```{r}
+```{r jocko-1}
 my_url <- "http://ritsokiguess.site/datafiles/jocko.txt"
 cars0 <- read_table(my_url, col_names = FALSE)
 cars0
@@ -44,7 +44,7 @@ Solution
 
 This looks very far from tidy right now. The things in `X2` look like they will need to be variable names eventually, but there are two copies of them, and there are also five columns of data values that need eventually to become three. Having all the data values in *one* column might be a useful place to start:
 
-```{r}
+```{r jocko-2}
 cars0 %>% pivot_longer(X3:X7, names_to="old_cols", values_to="values") 
 ```
 
@@ -54,7 +54,7 @@ Now, therefore, we need to pivot *wider*. But to get to this point, we had to tr
 
 From here, we want to make columns whose names are the things in `X2`, and whose values are the things in `values`. This is exactly what `pivot_wider` does, so add that to our pipe:
 
-```{r}
+```{r jocko-3}
 cars0 %>% pivot_longer(X3:X7, names_to="names", values_to="values") %>% 
 pivot_wider(names_from = X2, values_from = values) -> cars
 cars
@@ -70,7 +70,7 @@ I think it is best to show the whole pipeline here, even though you are making R
 
 If you thought there were 20 observations, you have a bit more work to do (that you will have to undo later to get the right graph), namely:
 
-```{r}
+```{r jocko-4}
 cars %>% pivot_longer(c(Jocko, Other), names_to="garage", values_to="estimate") -> cars1
 cars1
 ```
@@ -79,20 +79,20 @@ This would be the right thing to do if you had independent observations (that is
 
 Extra: I thought about starting by making the dataframe even wider:
 
-```{r}
+```{r jocko-5}
 cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7)
 ```
 
 This is sort of the right thing, but there are repeat columns now, depending on where the data values came from in `cars0`. What we want to do now is *some* kind of `pivot_longer`, creating three columns called `Car`, `Jocko`, and `Other`. If we only had *one* kind of thing to make longer, this would be a standard `pivot_longer`. But we have three. There are two "extras" to `pivot_longer` that will get you to the right place. The first one is to give multiple inputs to `names_to`, because the column names encode two things: where in the original data frame the value came from (which is now junk to us), and what the value actually represents, which we definitely *do* want to keep. I don't have a good name for it, though, so I'll call it `z` for now. Note that we need a `names_sep` that says what the two things in the column names are separated by, the underscore that the `pivot_wider` put in there: 
 
-```{r}
+```{r jocko-6}
 cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
 pivot_longer(-X1, names_to = c("junk", "z"), names_sep="_")
 ```
 
 This is now exactly what I got by *starting* with `pivot_longer`, and so the same `pivot_wider` that I finished with before will tidy this up:
 
-```{r}
+```{r jocko-7}
 cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
 pivot_longer(-X1, names_to = c("junk", "z"), names_sep="_") %>% 
 pivot_wider(names_from = z, values_from = value)
@@ -103,13 +103,13 @@ This is now tidy, so you have achieved what you set out to do, but you have not 
 This kind of longer-then-wider happens often enough that there is an option in `pivot_longer` to do it in one step. Let's remind ourselves of where we were:
 
 
-```{r}
+```{r jocko-8}
 cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) 
 ```
 
 The second part of those funky column names needs to become *the names of our new columns*. To make that happen in one step, you put the special indicator `.value` in where we had `z` before:
 
-```{r}
+```{r jocko-9}
 cars0 %>% pivot_wider(names_from = X2, values_from = X3:X7) %>% 
 pivot_longer(-X1, names_to = c("junk", ".value"), names_sep="_")
 ```
@@ -131,13 +131,13 @@ Solution
 
 You might be tempted to look at `cars`, see two quantitative variables, and think "scatterplot":
 
-```{r}
+```{r jocko-10}
 ggplot(cars, aes(x=Jocko, y=Other)) + geom_point()
 ```
 This says that a repair that is more expensive at one garage is more expensive at the other as well, which is true, but it's an answer to the *wrong question*. We care about whether Jocko's Garage is more expensive than the other one *on the same car*. To rescue the scatterplot, you can add the line $y=x$ to the graph and see which side of the line the points are, which you might have to find out how to do:
 
 
-```{r}
+```{r jocko-11}
 ggplot(cars, aes(x=Jocko, y=Other)) + geom_point() + geom_abline(slope = 1, intercept = 0)
 ```
 
@@ -145,7 +145,7 @@ More of the points are below and to the right of the line, indicating that Jocko
 
 There is a more direct approach here, based on the idea that a matched pairs test looks at the differences between the two estimates for each car: work out the differences, and make a *one*-sample plot of them:
 
-```{r}
+```{r jocko-12}
 cars %>% mutate(diff=Jocko-Other) %>% 
 ggplot(aes(x=diff)) + geom_histogram(bins = 4)
 ```
@@ -153,7 +153,7 @@ Most of the differences, this way around, are positive, so the indication is tha
 
 A one-sample boxplot of the differences would also work:
 
-```{r}
+```{r jocko-13}
 cars %>% mutate(diff=Jocko-Other) %>% 
 ggplot(aes(x=1, y=diff)) + geom_boxplot()
 ```
@@ -161,18 +161,18 @@ This tells you that at least 75% of the differences are positive.
 
 If you ended up with my `cars1`:
 
-```{r}
+```{r jocko-14}
 cars1
 ```
 
 this is "obviously" a boxplot:
 
-```{r}
+```{r jocko-15}
 ggplot(cars1, aes(x=garage, y=estimate)) + geom_boxplot()
 ```
 except that you have not used the fact that each group is measurements on the *same* 10 cars. Here is a way to rescue that:
 
-```{r}
+```{r jocko-16}
 ggplot(cars1, aes(x=garage, y=estimate, group=Car)) + geom_point() + geom_line()
 ```
 
@@ -189,7 +189,7 @@ Solution
 
 Comparing means requires the right flavour of $t$-test, in this case a matched-pairs one, with a one-sided alternative, since we were concerned that the Jocko estimates were bigger. In a matched pairs test, `alternative` says how the first column you name compares with the other one. If your columns are the opposite way to mine, your `alternative` needs to be "less":
 
-```{r}
+```{r jocko-17}
 with(cars, t.test(Jocko, Other, paired = TRUE, alternative = "greater"))
 ```
 
@@ -199,7 +199,7 @@ The P-value is actually just less than 0.01, so we can definitely conclude that 
 
 If you calculated the differences earlier, feel free to use them here:
 
-```{r}
+```{r jocko-18}
 cars %>% mutate(diff=Jocko-Other) %>% 
 with(., t.test(diff, mu=0, alternative = "greater"))
 ```
@@ -207,7 +207,7 @@ Saving the data frame with the differences in it is probably smart.
 
 Again, if you got to `cars1`, you might think to do this:
 
-```{r}
+```{r jocko-19}
 t.test(estimate~garage, data=cars1, alternative="greater")
 ```
 
@@ -215,7 +215,7 @@ but you would be *wrong*, because the two groups are not independent (they're th
 
 I said to compare the means, so I don't want a sign test here. If you think we should be doing one, you'll need to make the case for it properly: first, calculate and plot the differences and make the case that they're not normal enough. I see left-skewness in the histogram of differences, but personally I don't find this bad enough to worry about. If you do, make that case (but, a sample of size 10 even from a normal distribution might look this skewed) and then run the right test:
 
-```{r}
+```{r jocko-20}
 cars %>% mutate(diff=Jocko-Other) %>% 
 sign_test(diff, 0)
 ```

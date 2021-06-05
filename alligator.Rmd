@@ -26,7 +26,7 @@ Solution
 
 
 Separated by exactly one space:
-```{r }
+```{r alligator-1 }
 my_url <- "http://ritsokiguess.site/datafiles/alligator.txt"
 gators.orig <- read_delim(my_url, " ")
 gators.orig
@@ -54,7 +54,7 @@ Solution
 
 I'm creating my "official" data frame here:
 
-```{r}
+```{r alligator-2}
 gators.orig %>% 
   pivot_longer(Fish:Other, names_to = "Food.type", values_to = "Frequency") -> gators
 gators
@@ -72,7 +72,7 @@ food types and one column of frequencies, both of which are what I
 wanted. I can check that I have all the different food types by
 finding the distinct ones:
 
-```{r }
+```{r alligator-3 }
 gators %>% distinct(Food.type)
 ```
 
@@ -123,7 +123,7 @@ reason that `count` earlier would have been confusing:
 it would have told you how many *rows* contained each
 food type, rather than how many *alligators*, and these
 would have been different:
-```{r }
+```{r alligator-4 }
 gators %>% count(Food.type)
 gators %>% count(Food.type, wt = Frequency)
 ```
@@ -138,7 +138,7 @@ You ought to understand *why* those are different.
 
 All right, back to modelling:
 
-```{r }
+```{r alligator-5 }
 library(nnet)
 gators.1 <- multinom(Food.type ~ Gender + Size + Lake,
   weights = Frequency, data = gators
@@ -152,7 +152,7 @@ it got converted to a factor. The ordering of the levels doesn't
 matter here anyway, since this is not an ordinal model.
 
 No need to look at it, since the output is kind of confusing anyway: 
-```{r }
+```{r alligator-6 }
 summary(gators.1)
 ```
 
@@ -174,7 +174,7 @@ Solution
 
 The other model to fit is the one *without* the variable
 you're testing:
-```{r }
+```{r alligator-7 }
 gators.2 <- update(gators.1, . ~ . - Gender)
 ```
 
@@ -184,7 +184,7 @@ I did `update` here to show you that it works, but of course
 there's no problem in just writing out the whole model again and
 taking out `Gender`, preferably by copying and pasting:
 
-```{r }
+```{r alligator-8 }
 gators.2x <- multinom(Food.type ~ Size + Lake,
   weights = Frequency, data = gators
 )
@@ -194,7 +194,7 @@ gators.2x <- multinom(Food.type ~ Size + Lake,
 
 and then you compare the models with and without `Gender` using `anova`:
 
-```{r }
+```{r alligator-9 }
 anova(gators.2, gators.1)
 ```
 
@@ -207,7 +207,7 @@ without `Gender`.
 Sometimes `drop1` works here too (and sometimes it doesn't, for
 reasons I haven't figured out):
 
-```{r error=T}
+```{r alligator-10, error=T}
 drop1(gators.1, test = "Chisq")
 ```
 
@@ -232,7 +232,7 @@ Solution
 
 
 To get the different categories, use `distinct` and `pull`:
-```{r }
+```{r alligator-11 }
 Lakes <- gators %>% distinct(Lake) %>% pull(Lake)
 Lakes
 Sizes <- gators %>% distinct(Size) %>% pull(Size)
@@ -250,7 +250,7 @@ I have persisted with the Capital Letters, for consistency.
 Next, a data frame for predicting from, using `crossing`,
 and called, as per my tradition, `new`:
 
-```{r }
+```{r alligator-12 }
 new <- crossing(Lake = Lakes, Size = Sizes)
 new
 ```
@@ -263,7 +263,7 @@ model, the one without `Gender`. If you do forget, you'll get
 an error anyway, because your data frame of values to predict from
 doesn't have any `Gender` in it:
 
-```{r size="footnotesize"}
+```{r alligator-13, size="footnotesize"}
 pp <- predict(gators.2, new, type = "p")
 preds1 <- cbind(new, pp)
 preds1
@@ -278,7 +278,7 @@ If you thought that the better model was the one with `Gender`
 in it, or you otherwise forgot that you didn't need `Gender`
 then you needed to do something like this as well:
 
-```{r }
+```{r alligator-14 }
 Genders <- gators %>% distinct(Gender) %>% pull(Gender)
 new <- crossing(Lake = Lakes, Size = Sizes, Gender = Genders)
 new
@@ -289,7 +289,7 @@ new
 If you predict this in the model *without* `Gender`, you'll get
 the following:
 
-```{r size="footnotesize"}
+```{r alligator-15, size="footnotesize"}
 pp <- predict(gators.2, new, type = "p")
 cbind(new, pp)
 ```
@@ -303,7 +303,7 @@ effect to be *exactly zero*.
 Alternatively, if you really thought the model with `Gender` was the
 better one, then you'd do this:
 
-```{r }
+```{r alligator-16 }
 pp <- predict(gators.1, new, type = "p")
 cbind(new, pp)
 ```
@@ -324,7 +324,7 @@ Solution
 
 
 Here are the predictions again:
-```{r }
+```{r alligator-17 }
 preds1
 ```
 

@@ -22,7 +22,7 @@ Solution
 
 
 Literal copy and paste: 
-```{r }
+```{r throw-spaghetti-1 }
 myurl <- "http://ritsokiguess.site/datafiles/throw.txt"
 throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball"))
 throws
@@ -42,7 +42,7 @@ Solution
 
 Feed `student` into `factor`, creating a new
 column with `mutate`:
-```{r }
+```{r throw-spaghetti-2 }
 throws %>% mutate(fs = factor(student))
 ```
 
@@ -61,7 +61,7 @@ Solution
 
 Use `pivot_longer`. It goes like this:
 
-```{r}
+```{r throw-spaghetti-3}
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(baseball:softball, names_to="ball", values_to="distance")
@@ -73,7 +73,7 @@ The `names_to` is the name of a new categorical column whose values will be what
 If you want to show off a little, you can use a select-helper, noting
 that the columns you want to make longer all end in "ball":
 
-```{r }
+```{r throw-spaghetti-4 }
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(ends_with("ball"), names_to="ball", values_to="distance")
@@ -94,7 +94,7 @@ Solution
 
 The obvious thing. No data frame in the `ggplot` because it's the data frame that came out of the previous part of the pipeline (that doesn't have a name):
 
-```{r }
+```{r throw-spaghetti-5 }
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
@@ -123,7 +123,7 @@ Solution
 
 A `colour` and a `group` in the `aes`, and
 a `geom_line`:
-```{r }
+```{r throw-spaghetti-6 }
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
@@ -135,7 +135,7 @@ throws %>%
 
 You can see what happens if you use the student as a number:
 
-```{r }
+```{r throw-spaghetti-7 }
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 
@@ -167,7 +167,7 @@ at the top of the legend that you want to remove. Here that is
 `aes`. It actually appears in two places: in
 `group` and `colour`. I think the legend we want
 to get rid of is actually the `colour` one, so we do this:
-```{r }
+```{r throw-spaghetti-8 }
 throws %>%
   mutate(fs = factor(student)) %>%
   pivot_longer(baseball:softball, names_to="ball", values_to="distance") %>% 

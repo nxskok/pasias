@@ -23,7 +23,7 @@ Solution
 
 
 Aligned columns separated by spaces, so `read_table`:
-```{r }
+```{r hayfever-1 }
 my_url <- "http://ritsokiguess.site/datafiles/hayfever.txt"
 hayfever <- read_table(my_url)
 hayfever
@@ -51,7 +51,7 @@ Solution
 
 
 This is a group-by and summarize, but there are two active ingredients and they *both* have to go in the group-by:
-```{r }
+```{r hayfever-2 }
 hayfever %>%
   group_by(a, b) %>%
   summarize(m = mean(relief)) -> d
@@ -66,7 +66,7 @@ I still need to save the data frame `d` to use in a moment.
 
 These levels are in the wrong logical order, but they are in the right order in the original data frame, so we can use `fct_inorder` first, thus:
 
-```{r }
+```{r hayfever-3 }
 hayfever %>%
   mutate(a = fct_inorder(a), b = fct_inorder(b)) %>%
   group_by(a, b) %>%
@@ -85,14 +85,14 @@ Solution
 My column of mean relief values is called `m`. Use whatever
 name you gave it.  I'm going to use my proper-order data frame for
 this:
-```{r }
+```{r zellerin}
 ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
   geom_point() + geom_line()
 ```
 
      
 Or, you probably had this:
-```{r }
+```{r bapplin}
 ggplot(d, aes(x = a, y = m, colour = b, group = b)) +
   geom_point() + geom_line()
 ```
@@ -101,7 +101,7 @@ ggplot(d, aes(x = a, y = m, colour = b, group = b)) +
 
 Since `a` and `b` both have three levels, you could just as well use them the other way around:
 
-```{r }
+```{r vonmengen}
 ggplot(d2, aes(x = b, y = m, colour = a, group = a)) +
   geom_point() + geom_line()
 ```
@@ -130,7 +130,7 @@ doesn't show. Another idea is to add the data to the interaction
 plot, colour-coded in the same way. I would do this by taking out
 the `geom_point` for the means and add one instead for the
 data, taken from the original data frame:
-```{r }
+```{r swaub}
 ggplot(d2, aes(x = a, y = m, colour = b, group = b)) +
   geom_line() +
   geom_point(data = hayfever, aes(y = relief))
@@ -154,7 +154,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r hayfever-4 }
 hayfever.1 <- aov(relief ~ a * b, data = hayfever)
 summary(hayfever.1)
 ```
@@ -175,7 +175,7 @@ Solution
 
 
 First, we pull out only the data where A is `medium`, and then we do a one-way analysis of B on that data. This is the slick way, though you can certainly save the result of `filter` first:
-```{r }
+```{r hayfever-5 }
 hayfever %>%
   filter(a == "medium") %>%
   aov(relief ~ b, data = .) -> simple_medium
@@ -187,7 +187,7 @@ summary(simple_medium)
 There is definitely some effect of ingredient B when A is medium. What
 is it? Tukey will tell us:
 
-```{r }
+```{r hayfever-6 }
 TukeyHSD(simple_medium)
 ```
 
@@ -203,7 +203,7 @@ Solution
 
 
 Same idea: pull out only the data where A is `high`, do a one-way analysis of B, and do Tukey if needed:
-```{r }
+```{r hayfever-7 }
 hayfever %>%
   filter(a == "high") %>%
   aov(relief ~ b, data = .) -> simple_high

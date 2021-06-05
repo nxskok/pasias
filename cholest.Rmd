@@ -12,7 +12,7 @@ Solution
 
 This is (as you might guess) a \verb=.csv=, so:
 
-```{r}
+```{r cholest-1}
 my_url <- "http://ritsokiguess.site/datafiles/cholest.csv"
 cholest <- read_csv(my_url)
 cholest
@@ -24,13 +24,13 @@ working with.
 
 Extra: the 2-day, 4-day and 14-day columns need to be referred to with funny "backticks" around their names, because a column name cannot contain a `-` or start with a number. This is not a problem here, since we won't be using those columns, but if we wanted to, this would not work:
 
-```{r, error=TRUE}
+```{r cholest-2, error=TRUE}
 cholest %>% summarize(xbar = mean(2-Day))
 ```
 
 because it is looking for a column called `Day`, which doesn't exist. The meaning of `2-Day` is "take the column called `Day` and subtract it from 2". To make this work, we have to supply the backticks ourselves:
 
-```{r}
+```{r cholest-3}
 cholest %>% summarize(xbar = mean(`2-Day`, na.rm = TRUE))
 ```
 
@@ -38,20 +38,20 @@ This column also has missing values (at the bottom), so here I've asked to remov
 
 You might imagine that dealing with column names like this would get annoying. There is a package called `janitor` that has a function called `clean_names` to save you the trouble. Install it first, then load it:
 
-```{r}
+```{r cholest-4}
 library(janitor)
 ```
 
 and then pipe your dataframe into `clean_names` and see what happens:
 
-```{r}
+```{r cholest-5}
 cholest %>% clean_names() -> cholest1
 cholest1
 ```
 
 These are all legit column names; the `-` has been replaced by an underscore, and each of the first three column names has gained an `x` on the front so that it no longer starts with a number. This then works:
 
-```{r}
+```{r cholest-6}
 cholest1 %>% summarize(xbar = mean(x2_day, na.rm = TRUE))
 ```
 
@@ -106,13 +106,13 @@ sense to have $H_0: \mu \ge 200$, which is also fine. As long as
 the null hypothesis has an equals in it in a logical place, you
 are good.)
 
-```{r}
+```{r cholest-7}
 with(cholest, t.test(control, mu=200, alternative = "less"))
 ```
 
 This is also good:
 
-```{r}
+```{r cholest-8}
 t.test(cholest$control, mu=200, alternative = "less")
 ``` 
 
@@ -159,7 +159,7 @@ run the test again, but two-sided, to get it. To do that, take out
 the "alternative", thus (you can also take out the null mean,
 since a confidence interval has no null hypothesis):
 
-```{r}
+```{r cholest-9}
 with(cholest, t.test(control))
 ```     
 
@@ -247,7 +247,7 @@ powerful than you think.
 To illustrate my first idea, let's pretend the population looks like this,
 with a flat top:
 
-```{r, echo=F}
+```{r brunhopter, echo=F}
 set.seed(457299)
 toplot <- tribble(
 ~x, ~y,
@@ -269,7 +269,7 @@ is called **simulation**: rather than working out the answer by
 math, we're letting the computer approximate the answer for us. Here's
 one simulated sample:
 
-```{r}
+```{r cholest-10}
 u <- runif(3)
 u
 mean(u)
@@ -338,7 +338,7 @@ We have to be a bit careful. Taking a sample from the sample would
 give us the original sample back. So, instead, we sample 
 *with replacement*, so that each bootstrap sample is different:
 
-```{r}
+```{r cholest-11}
 sort(cholest$control)
 sort(sample(cholest$control, replace=TRUE))
 ``` 
@@ -348,7 +348,7 @@ misses some of the others. Here, the original data had values 160 and 162 that a
 I sorted the data and the bootstrap sample
 to make this clearer; you will not need to sort. This is a perfectly good bootstrap sample:
 
-```{r}
+```{r cholest-12}
 sample(cholest$control, replace = TRUE)
 ```
 

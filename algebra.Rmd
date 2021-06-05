@@ -11,7 +11,7 @@ Solution
 
 Take a look at the data file first: the data values are *aligned in columns* with variable numbers of spaces between, so `read_table` is the thing. Read directly from the URL, rather than trying to copy the data from the website:
 
-```{r}
+```{r algebra-1}
 my_url <- "http://ritsokiguess.site/datafiles/algebra.txt"
 algebra <- read_table(my_url)
 algebra
@@ -26,7 +26,7 @@ Extra 1: as in the first question, `read.table` works but it is *wrong* in this 
 
 Extra 2: with more than one space between the values, `read_delim` will not work. Or, perhaps more confusing, it will appear to work and then fail later, which means that you need to pay attention:
 
-```{r}
+```{r algebra-2}
 d <- read_delim(my_url, " ")
 d
 ```
@@ -37,7 +37,7 @@ This will actually work for a while, as you go through the question, but will co
 
 Extra 3: this is the standard R way to lay out this kind of data, with all the outcome values in one column and a second (categorical) column saying which group each observation was in. In other places you might see two separate columns of scores, one for the students with laptops and one for the students without, as below (you won't understand the code below now, but you will by the end of the course):
 
-```{r}
+```{r algebra-3}
 algebra %>% 
 mutate(row = c(1:20, 1:27)) %>% 
 pivot_wider(names_from = laptop, values_from = score)
@@ -59,7 +59,7 @@ Solution
 
 The teachers were hoping to see how the laptop-yes and the laptop-no groups compared in terms of algebra scores, so side-by-side boxplots would be helpful. More simply, we have one quantitative and one categorical variable, which is a boxplot according to the table in the notes:
 
-```{r}
+```{r algebra-4}
 ggplot(algebra, aes(x = laptop, y = score)) + geom_boxplot()
 ```
 
@@ -67,7 +67,7 @@ Extra: as you will note below, the median score for the students with laptops is
 
 Another plot you might have drawn is a histogram for each group, side by side, or, as they come out here, above and below. This works using facets:
 
-```{r}
+```{r algebra-5}
 ggplot(algebra, aes(x = score)) + 
 geom_histogram(bins = 10) +
 facet_wrap(~laptop, ncol = 1)
@@ -109,7 +109,7 @@ Solution
 
 This is easy to make way harder than it needs to be: `group_by` and `summarize` will do it. Put the two summaries in one `summarize`:
 
-```{r}
+```{r algebra-6}
 algebra %>% 
 group_by(laptop) %>% 
 summarize(med = median(score), iqr = IQR(score))

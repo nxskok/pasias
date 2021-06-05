@@ -22,7 +22,7 @@ Solution
 
 
 The data values are separated by one space, so:
-```{r }
+```{r kids-diet-1 }
 my_url <- "http://ritsokiguess.site/datafiles/kids-diet.txt"
 diet <- read_delim(my_url, " ")
 diet
@@ -51,7 +51,7 @@ Solution
 
 The boxplot is the kind of thing we've seen before:
 
-```{r }
+```{r kids-diet-2 }
 ggplot(diet, aes(x = sect, y = height)) + geom_boxplot()
 ```
 
@@ -81,7 +81,7 @@ is good.
 As ever, normal quantile plots can offer more insight. With
 data in this form, the
 two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of *all* the heights, and then say at the end that we would actually like a separate plot for each sect:
-```{r }
+```{r kids-diet-3 }
 diet %>%
   ggplot(aes(sample = height)) + stat_qq() + stat_qq_line() +
   facet_wrap(~sect, ncol = 1)
@@ -99,7 +99,7 @@ could wish for. Having extreme values being *not extreme enough* is not a proble
 The other way of doing this is to use `filter` to pull out the
 rows you want and then feed that into the plot:
 
-```{r }
+```{r kids-diet-4 }
 secta <- filter(diet, sect == "a") %>%
   ggplot(aes(sample = sect)) + stat_qq() + stat_qq_line()
 ```
@@ -126,7 +126,7 @@ Solution
 The wording states that a two-sided test is correct, which is the
 default, so you don't need anything special:
 
-```{r }
+```{r kids-diet-5 }
 t.test(height ~ sect, data = diet)
 ```
 
@@ -154,7 +154,7 @@ that the $t$-test is all right, so it will be the better test
 (and give the smaller P-value) here, but if you want to do it, you
 could do it this way:
 
-```{r }
+```{r kids-diet-6 }
 library(smmr)
 median_test(diet, height, sect)
 ```

@@ -18,7 +18,7 @@ Solution
 This is mostly an exercise in structuring your function
 correctly. Let's call the input `C` (uppercase C, since
 lowercase c has a special meaning to R):
-```{r }
+```{r func-1 }
 c_to_k <- function(C) {
   C + 273.15
 }
@@ -35,7 +35,7 @@ outside world. The checks suggest that it worked.
 If you're used to Python or similar, you might prefer to calculate the
 value to be returned and then return it. You can do that in R too:
 
-```{r }
+```{r func-2 }
 c_to_k <- function(C) {
   K <- C + 273.15
   return(K)
@@ -61,7 +61,7 @@ Solution
 On the model of the previous one, we should call this
 `f_to_c`. I'm going to return the last line, but you can
 save the calculated value and return that instead:
-```{r }
+```{r func-3 }
 f_to_c <- function(F) {
   (F - 32) * 5 / 9
 }
@@ -91,7 +91,7 @@ wrote, which goes as below. First you convert the Fahrenheit to
 Celsius, and then you convert *that* to Kelvin. (This is less
 error-prone than trying to use algebra to get a formula for this
 conversion and then implementing that):
-```{r }
+```{r func-4 }
 f_to_k <- function(F) {
   C <- f_to_c(F)
   K <- c_to_k(C)
@@ -120,7 +120,7 @@ Solution
 
 You can choose any default you like. I'll take a default of 68
 (what I would call "a nice day"):
-```{r }
+```{r func-5 }
 f_to_c <- function(F = 68) {
   (F - 32) * 5 / 9
 }
@@ -144,7 +144,7 @@ Solution
 
 
 Try it and see:
-```{r }
+```{r func-6 }
 temps <- seq(30, 80, 10)
 temps
 f_to_c(temps)
@@ -155,7 +155,7 @@ f_to_c(temps)
 Each of the Fahrenheit temperatures gets converted into a Celsius
 one. This is perhaps more useful in a data frame, thus:
 
-```{r }
+```{r func-7 }
 tibble(temps = seq(30, 80, 10)) %>%
   mutate(celsius = f_to_c(temps))
 ```
@@ -166,7 +166,7 @@ All the temperatures are side-by-side with their equivalents.
 
 Here's another way to do the above:
 
-```{r }
+```{r func-8 }
 temps <- seq(30, 80, 10)
 temps %>%
   enframe(value = "fahrenheit") %>%
@@ -197,7 +197,7 @@ Solution
 
 
 This:
-```{r }
+```{r func-9 }
 wrap <- function(text = "hello", outside = "*") {
   str_c(outside, text, outside)
 }
@@ -207,7 +207,7 @@ wrap <- function(text = "hello", outside = "*") {
 
 I can run this with the defaults:
 
-```{r }
+```{r func-10 }
 wrap()
 ```
 
@@ -215,7 +215,7 @@ wrap()
 
 or with text of my choosing:
 
-```{r }
+```{r func-11 }
 wrap("goodbye", "_")
 ```
 
@@ -233,7 +233,7 @@ Solution
 
 
 The obvious thing is this, which doesn't work:
-```{r }
+```{r func-12 }
 wrap("!")
 ```
 
@@ -243,7 +243,7 @@ This takes *`text`* to be `!`, and `outside`
 to be the default. How do we get `outside` to be `!`
 instead? The key is to specify the input by name:
 
-```{r }
+```{r func-13 }
 wrap(outside = "!")
 ```
 
@@ -260,7 +260,7 @@ after that. These are the names you put on the function's top line.
 
 You can always use names:
 
-```{r }
+```{r func-14 }
 wrap(text = "thing", outside = "**")
 ```
 
@@ -268,7 +268,7 @@ wrap(text = "thing", outside = "**")
 
 and if you use names, they don't even have to be in order:
 
-```{r }
+```{r func-15 }
 wrap(outside = "!?", text = "fred")
 ```
 
@@ -283,14 +283,14 @@ Solution
 
 
 Let's try:
-```{r }
+```{r func-16 }
 mytext <- c("a", "b", "c")
 wrap(text = mytext)
 ```
 
      
 
-```{r }
+```{r func-17 }
 myout <- c("*", "!")
 wrap(outside = myout)
 ```
@@ -300,7 +300,7 @@ wrap(outside = myout)
 If one of the inputs is a vector, the other one gets "recycled" as
 many times as the vector is long. What if they're both vectors?
 
-```{r }
+```{r func-18 }
 mytext2 <- c("a", "b", "c", "d")
 wrap(mytext2, myout)
 ```
@@ -310,7 +310,7 @@ wrap(mytext2, myout)
 This uses the two inputs in parallel, repeating the short one as
 needed. But this, though it works, gives a warning:
 
-```{r }
+```{r func-19 }
 wrap(mytext, myout)
 ```
 
@@ -324,7 +324,7 @@ The `mutate` thing is easier, because all the columns in a data
 frame have to be the same length. `LETTERS` is a vector with
 the uppercase letters in it:
 
-```{r }
+```{r func-20 }
 tibble(mytext = LETTERS[1:6], myout = c("*", "**", "!", "!!", "_", "__")) %>%
   mutate(newthing = wrap(mytext, myout))
 ```

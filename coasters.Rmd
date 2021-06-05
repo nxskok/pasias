@@ -21,7 +21,7 @@ Solution
 
 A `.csv`, so the usual for that:
 
-```{r }
+```{r coasters-1 }
 my_url <- "http://ritsokiguess.site/datafiles/coasters.csv"
 coasters <- read_csv(my_url)
 coasters
@@ -54,7 +54,7 @@ invitation to use `ggrepel`, which is the way I'd
 recommend doing this. (If not, you have to do potentially lots
 of work organizing where the labels sit relative to the points,
 which is time you probably don't want to spend.) Thus:
-```{r }
+```{r coasters-2 }
 library(ggrepel)
 ggplot(coasters, aes(x = drop, y = duration, label = coaster_name)) +
   geom_point() + geom_text_repel() + geom_smooth(method = "lm", se = F)
@@ -124,7 +124,7 @@ is large in size (either positive, like Nitro, or negative, like
 the other two). I didn't ask you to find the residuals, but if
 you want to, `augment` from `broom` is the
 smoothest way to go:
-```{r }
+```{r coasters-3 }
 library(broom)
 duration.1 <- lm(duration ~ drop, data = coasters)
 augment(duration.1, coasters) %>%
@@ -146,7 +146,7 @@ You can also put `augment` in the *middle* of a pipe. What
 you may have to do then is supply the *original* data frame name
 to `augment` so that you have everything:
 
-```{r }
+```{r coasters-4 }
 coasters %>%
   lm(duration ~ drop, data = .) %>%
   augment(coasters) %>%

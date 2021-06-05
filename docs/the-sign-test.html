@@ -1156,14 +1156,14 @@ these simulations.</p>
 <div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1"><span class="kw">library</span>(smoothmest)</a>
 <a class="sourceLine" id="cb158-2" title="2">rl &lt;-<span class="st"> </span><span class="kw">rdoublex</span>(<span class="dv">50</span>,<span class="dt">mu=</span><span class="fl">0.5</span>)</a>
 <a class="sourceLine" id="cb158-3" title="3">rl</a></code></pre></div>
-<pre><code>##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.87221482  0.49250051  0.26700527  1.90236874  0.53288312  1.37374732  0.72743434  0.46634071  0.43581431 -0.01545866  0.18594908 -0.40403202 -0.13540289  0.83862694 -0.23360644
-## [20] -0.74050354  2.92089551 -2.72173880  0.51571185  1.23636045  0.82921382  1.72456334  0.07903058  0.74789589  0.90487190  2.52310082  3.13629814  0.81851434  0.74615575 -0.26068744  2.70683355  1.46981530  1.45646489  1.20232517
-## [39]  6.65249860 -0.51575026 -0.07606399  2.11338640 -1.20427995  1.70986104 -1.66466321  0.55346854  0.33908531  0.72100677  0.92025176  0.98922656</code></pre>
+<pre><code>##  [1] -0.33323285  0.70569291 -1.22513053  0.68517708  0.87221482  0.49250051  0.26700527  1.90236874  0.53288312  1.37374732  0.72743434  0.46634071  0.43581431 -0.01545866  0.18594908 -0.40403202 -0.13540289  0.83862694 -0.23360644 -0.74050354
+## [21]  2.92089551 -2.72173880  0.51571185  1.23636045  0.82921382  1.72456334  0.07903058  0.74789589  0.90487190  2.52310082  3.13629814  0.81851434  0.74615575 -0.26068744  2.70683355  1.46981530  1.45646489  1.20232517  6.65249860 -0.51575026
+## [41] -0.07606399  2.11338640 -1.20427995  1.70986104 -1.66466321  0.55346854  0.33908531  0.72100677  0.92025176  0.98922656</code></pre>
 <p>This seems to have some unusual values, far away from zero:</p>
 <div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1"><span class="kw">tibble</span>(rl) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb160-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample=</span>rl))<span class="op">+</span></a>
 <a class="sourceLine" id="cb160-3" title="3"><span class="kw">stat_qq</span>()<span class="op">+</span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-105-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/wanners-1.png" width="672" /></p>
 <p>You see the long tails compared to the normal.</p>
 <p>Now, we feed these values into <code>t.test</code> and see whether we
 reject a null median of zero (at <span class="math inline">\(\alpha=0.05\)</span>):</p>
@@ -1317,25 +1317,25 @@ powerful relative to the <span class="math inline">\(t\)</span>-test than you wo
 <p>Solution</p>
 <p>Don’t be tempted to think <em>too</em> hard about the choice of graph (though I talk more about this below). One quantitative variable, so a histogram again. There are only 12 observations, so 5 bins is about as high as you should go:</p>
 <div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/roethlisberger-5-1.png" width="672" /></p>
 <p>This one shows an outlier: there is one number of completed passes that is noticeably higher than the rest. A normal distribution doesn’t have outliers, and so this, coupled with a small sample in which normality is important, means that we should not be using a <span class="math inline">\(t\)</span>-test or confidence interval.</p>
 <p>If you chose a different number of bins, you might get a different look. Here’s 4 bins:</p>
 <div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">4</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-115-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/roethlisberger-6-1.png" width="672" /></p>
 <p>That looks more like right-skewness, but the conclusion is the same.</p>
 <p>Extra: if you have read, for example, <a href="http://ritsokiguess.site/datafiles/pasias/one-sample-inference.html#hunter-gatherers-in-australia">Problem 6.1 in PASIAS</a>, you’ll have seen that another possibility is a one-group boxplot. This might have been the context in which you first saw the boxplot, maybe at about the time you first saw the five-number summary, but I don’t talk about that so much in this course because <code>ggplot</code> boxplots have both an <code>x</code> and a <code>y</code>, and it makes more sense to think about using boxplots to <em>compare</em> groups. But, you can certainly get R to make you a one-sample boxplot. What you do is to set the grouping variable to a “dummy” thing like the number 1:</p>
 <div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span><span class="dv">1</span>, <span class="dt">y=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-116-1.png" width="672" />
+<p><img src="pasias_files/figure-html/roethlisberger-7-1.png" width="672" />
 and then you ignore the <span class="math inline">\(x\)</span>-axis.</p>
 <p>This really shows off the outlier; it is actually <em>much</em> bigger than the other observations. It didn’t show up so much on the histograms because of where the bin boundaries happened to come. On the four-bin histogram, the highest value 30 was in the 27.5–32.5 bin, and the second-highest value 23 was at the bottom of the 22.5–27.5 bin. So the highest and second-highest values looked closer together than they actually were.</p>
 <p>If you have been reading ahead, you might also be thinking about a normal quantile plot. That is for specifically assessing normality, and here this is something that interests us, because a <span class="math inline">\(t\)</span>-test will be doubtful if the normality fails:</p>
 <div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">sample=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-117-1.png" width="672" />
+<p><img src="pasias_files/figure-html/roethlisberger-8-1.png" width="672" />
 This again shows off the outlier at the high end. It is a reasonable choice of plot <em>here</em> because normality is of specific interest to us.</p>
 <p>A note: you are absolutely not required to read ahead to future lectures. Each assignment can be done using the material in the indicated lectures only. If you want to use something from future lectures, go ahead, but make sure you are using it appropriately.</p>
 <p>Don’t be tempted to plot the number of completed passes against something like week number:</p>
 <div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" title="1"><span class="kw">ggplot</span>(ben, <span class="kw">aes</span>(<span class="dt">x=</span>week, <span class="dt">y=</span>completed)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-118-1.png" width="672" />
+<p><img src="pasias_files/figure-html/roethlisberger-9-1.png" width="672" />
 That is quite interesting (a mostly increasing trend over weeks, with the outlier performance in week 10), but it doesn’t tell us what we want to know <em>here</em>: namely, is a <span class="math inline">\(t\)</span>-test any good?</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1426,7 +1426,7 @@ That is quite interesting (a mostly increasing trend over weeks, with the outlie
 <a class="sourceLine" id="cb199-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(ben<span class="op">$</span>completed, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb199-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb199-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/roethlisberger-16-1.png" width="672" /></p>
 <p>This is noticeably skewed to the right (it goes further up from the peak than down), which is why the CI for the mean went up a bit higher than the one for the median.</p>
 <p>Finally, bootstrapping the median is not something you’d want to do, since the sign test doesn’t depend on anything being normally-distributed. This is a good thing, since bootstrapping the sample median is weird:</p>
 <div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -1434,7 +1434,7 @@ That is quite interesting (a mostly increasing trend over weeks, with the outlie
 <a class="sourceLine" id="cb200-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(ben<span class="op">$</span>completed, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb200-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_median =</span> <span class="kw">median</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb200-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_median)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/roethlisberger-17-1.png" width="672" /></p>
 <p>The “holes” in the distribution comes about because there are not all that many different possible sample medians when you sample with replacement. For one thing, the values are all whole numbers, so the median can only be something or something and a half. Even then, the bar heights look kind of irregular.</p>
 <p>I used a large number of bins to emphasize this, but even a more reasonable number looks strange:</p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -1442,7 +1442,7 @@ That is quite interesting (a mostly increasing trend over weeks, with the outlie
 <a class="sourceLine" id="cb201-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(ben<span class="op">$</span>completed, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb201-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_median =</span> <span class="kw">median</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb201-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_median)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/roethlisberger-18-1.png" width="672" /></p>
 <p>A sample median of 19 or 20 is more likely than one of 19.5.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
@@ -1494,7 +1494,7 @@ as one column.</p>
 <p>Solution</p>
 <p>One quantitative variable, so a histogram with a sufficiently small number of bins:</p>
 <div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1"><span class="kw">ggplot</span>(meals, <span class="kw">aes</span>(<span class="dt">x=</span>protein)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-129-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/protein-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Why might a sign test be better than a <span class="math inline">\(t\)</span>-test for assessing the average amount of protein per package? Explain briefly. (“Average” here means any measure of centre.)</li>
@@ -1556,10 +1556,10 @@ as one column.</p>
 <a class="sourceLine" id="cb213-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(meals<span class="op">$</span>protein, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb213-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) -&gt;<span class="st"> </span>d</a>
 <a class="sourceLine" id="cb213-5" title="5"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-133-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/protein-6-1.png" width="672" /></p>
 <p>That is pretty close to normal. So the <span class="math inline">\(t\)</span>-test would in actual fact have been fine. To confirm, a normal quantile plot of the bootstrapped sampling distribution:</p>
 <div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-134-1.png" width="672" />
+<p><img src="pasias_files/figure-html/protein-7-1.png" width="672" />
 A <em>tiny bit</em> skewed to the left.</p>
 <p>But I didn’t ask you to do this, because I wanted to give you a chance to do a sign test for what seemed like a good reason.</p>
 <p>Extra 2: I mentioned in an note that the endpoints of the CI for the median are actually data points, only we didn’t see it because of the accuracy to which <code>ci_median</code> was working. You can control this accuracy by an extra input <code>tol</code>. Let’s do something silly here:</p>

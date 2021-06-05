@@ -18,14 +18,14 @@ Solution
 
 The exact usual thing:
 
-```{r}
+```{r reneg-1}
 my_url <- "http://ritsokiguess.site/datafiles/contracts.csv"
 contracts <- read_csv(my_url)
 contracts
 ```
 Extra: the original data file came with statuses as well (computed by someone using SAS). I copied and pasted it, and wanted to get it into a data frame. I did this by first pasting it into a piece of text:
 
-```{r}
+```{r reneg-2}
 data_txt <- "
 contract status        date
 5829014  EXPIRED       November 6, 2013
@@ -40,7 +40,7 @@ contract status        date
 
 This is aligned columns (think `read_table`) and in fact you can read from a piece of text just as easily as from a file (which is why I wanted to show you this):
 
-```{r}
+```{r reneg-3}
 contracts0 <- read_table(data_txt)
 contracts0
 ```
@@ -71,7 +71,7 @@ Solution
 
 For this, you will need `lubridate`, installed and loaded. Give the column of actual dates whatever name you like. I realized afterwards that a shorter name would have been better, since I was going to be typing it a lot:
 
-```{r}
+```{r reneg-4}
 contracts %>% mutate(date_date = mdy(date))
 ```
 
@@ -93,7 +93,7 @@ There are two things to remember about `case_when` that will help you here:
 
 Strategy-wise, therefore, if you start from one end of the range of dates, then you don't need to worry about "between". The best answer, therefore, looks something like this:
 
-```{r}
+```{r reneg-5}
 contracts %>% mutate(date_date = mdy(date)) %>% 
 mutate(status = case_when(
 date_date <= ymd("2013-11-15") ~ "expired",
@@ -112,7 +112,7 @@ The other thing to remember is that you have to compare a date *with another dat
 
 With that in mind, you might want to pre-compute those key dates (and give them short names), something like this:
 
-```{r}
+```{r reneg-6}
 exp_date <- ymd("2013-11-15")
 reneg_date <- ymd("2014-11-15")
 arb_date <- ymd("2016-11-15")
@@ -141,7 +141,7 @@ these together into one piece of text, for which I prefer `str_c` from `stringr`
 
 Also, you could start from the latest date and work the other way:
 
-```{r}
+```{r reneg-7}
 contracts %>% mutate(date_date = mdy(date)) %>% 
 mutate(status = case_when(
 date_date > mdy("Nov 15, 2016") ~ str_c("current ", 
@@ -159,7 +159,7 @@ It is good coding practice, in your `case_when`, to line up your `~`s, so that i
 
 Extra 1: an alternative to using `str_c` or `paste` is called `glue`. It is a package that you will need to install first, containing a function of the same name. Here's how it works:
 
-```{r}
+```{r reneg-8}
 library(glue)
 exp_date <- ymd("2013-11-15")
 reneg_date <- ymd("2014-11-15")
@@ -180,7 +180,7 @@ This turned out to be more fiddly than I would have liked, but there are some le
 - `glue` itself takes a single piece of text (unlike the others such as `str_c`, which take a mixture of text and variable values). Any literal text (like `current`) is used as is. Anything in curly brackets, like `year(date_date)`, is evaluated as if it were in a code chunk, and the value is inserted into the answer. This one, therefore, makes a piece of text (but see the next point) out of the literal text `current`, the name of the month, and the year as a number. Is this clearer than `str_c`? I dunno. Up to you.
 - The output from `glue` actually has a special class `glue/character` which is not the same as `character`. `case_when` is very picky: all the things on the right side of the squiggles have to be of *exactly* the same class. The others are ordinary text, so I have to make this one into ordinary text as well, which is the reason for the `as.character` around the outside. You might be thinking "how did he figure that out ahead of time?", and the answer is that I didn't: the first time I had it without the `as.character` and it didn't work:
 
-```{r, error=TRUE}
+```{r reneg-9, error=TRUE}
 contracts %>% mutate(date_date = mdy(date)) %>% 
 mutate(if_current = glue("current {month(date_date, label = TRUE)} {year(date_date)}")) %>% 
 mutate(status = case_when(
@@ -197,7 +197,7 @@ This gave me the hint that something was up with the output from `glue`. I remem
 
 Extra 2: if you are unable to get `case_when` working, you can do this with nested `ifelse`s, though I think you'll need to format this carefully to get the logic to make sense. `ifelse` takes three things: something that is true or false, the value if the thing is true, and the value if it is false, like this:
 
-```{r}
+```{r reneg-10}
 x <- 3
 ifelse(x==3, "three", "not three")
 x <- 4
@@ -206,7 +206,7 @@ ifelse(x==3, "three", "not three")
 
 In Python, or indeed in `case_when`, you can have more than two choices, by using `elif` or by adding  another line to your `case_when`. What you do with `ifelse` is to replace the last input by *another `ifelse`*:
 
-```{r}
+```{r reneg-11}
 x <- 3
 ifelse(x==3, "three", ifelse(x==4, "four", "something else"))
 x <- 4
@@ -215,7 +215,7 @@ ifelse(x==3, "three", ifelse(x==4, "four", "something else"))
 
 or perhaps better written as
 
-```{r}
+```{r reneg-12}
 x <- 5
 ifelse(
 x==3, "three", 
@@ -224,7 +224,7 @@ ifelse(x==4, "four", "something else"))
 
 For our actual example, that might go like this:
 
-```{r}
+```{r reneg-13}
 exp_date <- ymd("2013-11-15")
 reneg_date <- ymd("2014-11-15")
 arb_date <- ymd("2016-11-15")
@@ -250,7 +250,7 @@ Solution
 
 There are a couple of ways to get today's date. One way is to look at your phone, and make an R date from the date you see there. When I did this originally, it was August 6, 2020, thus:
 
-```{r}
+```{r reneg-14}
 d <- ymd("2020-08-06")
 d
 class(d)
@@ -260,13 +260,13 @@ which doesn't look as if it did much, but the last line verifies that it is inde
 
 A better way is to recognize that `lubridate` will probably have something that gives you today's date more easily, and it does:
 
-```{r}
+```{r reneg-15}
 today()
 ```
 
 or there is the no-`lubridate`-required base-R way:
 
-```{r}
+```{r reneg-16}
 Sys.Date()
 ```
 
@@ -274,14 +274,14 @@ If you found out about these somewhere, tell me where.
 
 Then take the difference between today and the dates in your dataframe:
 
-```{r}
+```{r reneg-17}
 contracts %>% 
 mutate(since_date = today()-date_date)
 ```
 
 (it chose the units), and convert that into fractional years by dividing by the number of days in a year:
 
-```{r}
+```{r reneg-18}
 contracts %>% 
 mutate(since_date = today()-date_date) %>% 
 mutate(years = since_date  / dyears(1))
@@ -295,7 +295,7 @@ The way to solve this is to make what `lubridate` calls a "period", in which the
 
 \small
 
-```{r}
+```{r reneg-19}
 contracts %>% 
 mutate(since_date = as.period(date_date %--% today())) %>% 
 mutate(years = year(since_date))
@@ -310,7 +310,7 @@ Extra extra: this works because the times-since-negotiation have the years as th
 
 \small
 
-```{r}
+```{r reneg-20}
 contracts %>% 
 mutate(since_date = as.period(date_date %--% today())) %>% 
 mutate(months = month(since_date) + 12*year(since_date))

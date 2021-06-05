@@ -3,14 +3,14 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-```{r}
+```{r distance-pref-1}
 library(tidyverse)
 ```
 
 
 College distance preferences
 
-```{r}
+```{r distance-pref-2}
 preferred <- tribble(
 ~distance, ~students, ~parents,
 "250 or less", 4450, 1594,
@@ -22,53 +22,53 @@ preferred
 ```
 
 
-```{r}
+```{r distance-pref-3}
 (preferred %>% select(-parents) %>% uncount(students) %>% mutate(who="students") -> d1)
 ```
 
-```{r}
+```{r distance-pref-4}
 (preferred %>% select(-students) %>% uncount(parents) %>% mutate(who="parents") -> d2)
 ```
 
-```{r}
+```{r distance-pref-5}
 bind_rows(d1, d2) -> all
 all
 ```
 
 save "all"
 
-```{r}
+```{r distance-pref-6}
 write_csv(all, "distance.csv")
 ```
 
 
-```{r}
+```{r distance-pref-7}
 all %>% count(who, distance)
 ```
 
-```{r}
+```{r distance-pref-8}
 ggplot(all, aes(x=distance)) + geom_bar()
 ```
 
-```{r}
+```{r distance-pref-9}
 ggplot(all, aes(x=fct_inorder(distance))) + geom_bar()
 ```
 
-```{r}
+```{r distance-pref-10}
 ggplot(all, aes(x=fct_inorder(distance), fill=who)) + geom_bar(position="dodge")
 ```
 
-```{r}
+```{r distance-pref-11}
 ggplot(all, aes(x=fct_inorder(distance), fill=who)) + geom_bar(position="fill")
 
 ```
-```{r}
+```{r distance-pref-12}
 ggplot(all, aes(x=who, fill=fct_inorder(distance))) + geom_bar(position="fill")
 ```
 
 this I think  is nice
 
-```{r}
+```{r distance-pref-13}
 ggplot(all, aes(x=who, fill=fct_inorder(distance))) + geom_bar(position="dodge")
 ```
 

@@ -15,11 +15,11 @@ Solution
 
 `rnorm` with the number of values first, then the mean,
 then the SD:
-```{r echo=F}
+```{r power-sim-1, echo=F}
 set.seed(457298)
 ```       
 
-```{r }
+```{r power-sim-2 }
 x=rnorm(10,20,2)
 x
 ```       
@@ -35,7 +35,7 @@ reasonableness: turn the sample into $z$-scores and see whether the
 values you get look like $z$-scores (that is, most of them are between
 $-2$ and 2, for example):
 
-```{r }
+```{r power-sim-3 }
 (x-20)/2
 ``` 
 
@@ -46,7 +46,7 @@ implementing the same idea.
 You might also think of finding the *sample* mean and SD, and
 demonstrating that they are close to the right answers. Mine are:
 
-```{r }
+```{r power-sim-4 }
 mean(x)
 sd(x)
 ``` 
@@ -64,7 +64,7 @@ and a roughly symmetric shape.
 This is old-fashioned "base R" technology; you could do it with a
 data frame like this:
 
-```{r }
+```{r power-sim-5 }
 d=tibble(x=rnorm(10,20,2))
 d
 d %>% summarize(m=mean(x), s=sd(x))
@@ -100,7 +100,7 @@ Once you get the hang of these, they all look almost the
 same. This one is easier than some because we don't have to do
 anything special to get a two-sided alternative hypothesis. The initial setup is to make a dataframe with a column called something like `sim` to label the simulations, and then a `rowwise` to generate one random sample, $t$-test and P-value for each simulation:
 
-```{r}
+```{r power-sim-6}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
@@ -155,7 +155,7 @@ Solution
 
 Here's the code we just used:
 
-```{r, eval=FALSE}
+```{r power-sim-7, eval=FALSE}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
@@ -170,7 +170,7 @@ change the 20 in the `rnorm` line to 22, since that's where
 we're generating data from the true distribution. The rest of it stays
 the same:
 
-```{r}
+```{r power-sim-8}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
@@ -191,14 +191,14 @@ distribution: one with a mean around 22 and an SD around 2. Thus the
 $t$-statistic should be somewhere around this (we have a sample size
 of 10):
 
-```{r }
+```{r power-sim-9 }
 t_stat=(22-20)/(2/sqrt(10))
 t_stat
 ``` 
 
 and the two-sided P-value should be about
 
-```{r }
+```{r power-sim-10 }
 2*(1-pt(t_stat,10-1))
 ``` 
 
@@ -226,7 +226,7 @@ Solution
 
 This is `power.t.test`. The quantity `delta` is
 the difference between true and null means:
-```{r }
+```{r power-sim-11 }
 power.t.test(n=10,delta=22-20,sd=2,type="one.sample",alternative="two.sided")
 ```       
 
@@ -258,7 +258,7 @@ In part (b), we knew that the probability of
 (incorrectly) rejecting should have been 0.05 and we rejected 42 times
 out of 1000:
 
-```{r }
+```{r power-sim-12 }
 prop.test(42,1000,0.05)
 ``` 
 
@@ -275,7 +275,7 @@ to be (not until we calculated it with `power.t.test`, anyway),
 so we go straight for a confidence interval; the default 95\% confidence
 level is fine. We (correctly) rejected 798 times out of 1000:
 
-```{r }
+```{r power-sim-13 }
 prop.test(798,1000)
 ``` 
 
@@ -291,7 +291,7 @@ This might be an accurate enough assessment of the power for you, but
 if not, you can do more simulations, say 10,000:
 
 
-```{r}
+```{r power-sim-14}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(norm_sample = list(rnorm(10, 20, 2))) %>% 
@@ -306,7 +306,7 @@ close to turning it into a function, but anyway.
 
 The confidence interval for the power is then
 
-```{r }
+```{r power-sim-15 }
 prop.test(7996,10000)
 ``` 
 

@@ -16,7 +16,7 @@ Solution
 
 Thus. You may need to start with `library(survival)`:
 
-```{r }
+```{r ovarian-1 }
 ovarian
 ```
 
@@ -26,7 +26,7 @@ There are indeed 26 rows. This is a `data.frame` rather than a
 `tibble`, so you see the whole thing, in case you were
 expecting something like this:
 
-```{r }
+```{r ovarian-2 }
 ovarian %>% as.tibble()
 ```
 
@@ -70,7 +70,7 @@ I always forget whether the second thing in `Surv` has to
 be 1 or 0 if the event happened. The help says that it needs to be
 1 or `TRUE` if the event (death) happened, which is what
 `fustat` is, so we can use it as it is:
-```{r }
+```{r ovarian-3 }
 y <- with(ovarian, Surv(futime, fustat))
 y
 ```
@@ -82,7 +82,7 @@ frame. This is how it has to be done, because although `y`
 looks as if it is 26 long (one per patient), it's actually more
 complicated than that:
 
-```{r error=T}
+```{r ovarian-4, error=T}
 ov2 <- ovarian %>% mutate(y = Surv(futime, fustat))
 ```
 
@@ -90,7 +90,7 @@ ov2 <- ovarian %>% mutate(y = Surv(futime, fustat))
 
 This doesn't work, because internally `y` is a `matrix` with two columns:
 
-```{r }
+```{r ovarian-5 }
 print.default(y)
 ```
 
@@ -163,7 +163,7 @@ Solution
 
 
 The hint suggests something like this:
-```{r }
+```{r ovarian-6 }
 time.1 <- coxph(y ~ age + factor(rx), data = ovarian)
 summary(time.1)
 ```
@@ -173,7 +173,7 @@ summary(time.1)
 Alternatively, define the factor version of `rx` in the data
 frame first. This is the slick way to do that:
 
-```{r }
+```{r ovarian-7 }
 time.1a <- ovarian %>%
   mutate(rxf = factor(rx)) %>%
   coxph(y ~ age + rxf, data = .)
@@ -250,7 +250,7 @@ the correct interpretation.)
 Extra: I was curious about what would happen if I just included
 `rx` in the model:
 
-```{r }
+```{r ovarian-8 }
 time.2 <- update(time.1, . ~ . - age)
 summary(time.2)
 ```
@@ -275,7 +275,7 @@ What you often see early on in a paper on this kind of stuff is a
 graph showing that the treatment groups are similar in terms of
 important things like `age`. Here, that could be a boxplot:
 
-```{r }
+```{r ovarian-9 }
 ggplot(ovarian, aes(x = factor(rx), y = age)) + geom_boxplot()
 ```
 
@@ -307,7 +307,7 @@ Solution
 
 The plot is just the same idea as the one in the notes. Make sure
 you have `survminer` installed and loaded:
-```{r }
+```{r ovarian-10 }
 ggcoxdiagnostics(time.1) + geom_smooth()
 ```
 
@@ -349,7 +349,7 @@ I imagine you can guess what we are going to be doing with these:
 predictions, so we'll call the data frame `new` when we get
 there. 
 Quartiles first:
-```{r }
+```{r ovarian-11 }
 quantile(ovarian$age)
 ```
 
@@ -357,7 +357,7 @@ quantile(ovarian$age)
 
 or, if you prefer,
 
-```{r }
+```{r ovarian-12 }
 ovarian %>%
   summarize(
     q1 = quantile(age, 0.25),
@@ -374,7 +374,7 @@ Either way is good.
 Then follow my standard procedure (or one of your own devising),
 remembering that "treatment" is called `rx` here:
 
-```{r }
+```{r ovarian-13 }
 ages <- c(50.17, 62.38)
 rxs <- c(1, 2)
 new <- crossing(age = ages, rx = rxs)
@@ -396,7 +396,7 @@ Solution
 
 The magic word here is `survfit`. The structure is the same
 as for `predict`:
-```{r }
+```{r ovarian-14 }
 s <- survfit(time.1, new, data = ovarian)
 summary(s)
 ```
@@ -434,7 +434,7 @@ Solution
 
 Thus. The `conf.int=F` means to skip the confidence interval
 "envelopes" that I find make the plot rather messy:
-```{r }
+```{r ovarian-15 }
 ggsurvplot(s, conf.int = F)
 ```
 
@@ -453,7 +453,7 @@ The best survival curve, in terms of surviving longest, is up and to
 the right, so the green one is best and the blue one is
 worst.^[In other cases, having the event happen sooner is    better. For example, you might be poisoning rats, in which case    you want them to die quicker. Or the event might be something    desirable like becoming qualified to fly an airplane. In those    cases, down and to the left is better.] To figure out which those
 are, we have to go back to the data frame we created:
-```{r }
+```{r ovarian-16 }
 new
 ```
 
@@ -480,7 +480,7 @@ of treatment, including which one is better.
 
 Extra: recall the output from the Cox model:
 
-```{r }
+```{r ovarian-17 }
 summary(time.1)
 ```
 

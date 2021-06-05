@@ -22,7 +22,7 @@ Read straight from
 the URL rather than copying and pasting the data or doing anything  like that:^[Reading from the URL is reproducible in that somebody else doing what you did will get exactly what results you did. Copying and pasting data is not in general reproducible because somebody else might do it differently from you, such as missing a line of data. Copying and pasting a URL, especially by right-clicking and Copy Link Address, has much less to go wrong. Physically selecting the URL text by selecting all the letters in the URL can go wrong, especially if the printed URL goes over two lines on the page.]
 
 
-```{r}
+```{r rainfall2-1}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain <- read_delim(my_url, " ")
 rain
@@ -39,7 +39,7 @@ line up, and there is a space all the way down between the year and
 the rainfall. That is to say, another possibility for your "brief justification" is that the columns are lined up all the way down.
 That means that this will also work: 
 
-```{r}
+```{r rainfall2-2}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain <- read_table(my_url)
 rain
@@ -51,7 +51,7 @@ It also looks as if it could be tab-separated values, since the rainfall
 column always starts in the same place, but if you try it, you'll find
 that it doesn't work:
 
-```{r}
+```{r rainfall2-3}
 my_url <- "http://ritsokiguess.site/datafiles/rainfall.txt"
 rain_nogood <- read_tsv(my_url)
 rain_nogood
@@ -86,19 +86,19 @@ sense. (That's the brief explanation.) To decide which variable goes on which ax
 rainfall as a response to the explanatory variable year, or note
 that time goes by tradition on the horizontal axis:
 
-```{r}
+```{r rainfall2-4}
 ggplot(rain, aes(x=Year, y=Rainfall)) + geom_point()
 ```
 
 This is a time trend, so it would also be reasonable to join the points with lines:
 
-```{r}
+```{r rainfall2-5}
 ggplot(rain, aes(x=Year, y=Rainfall)) + geom_point() + geom_line()
 ```
 
 and because any trend looks irregular, you could also justify putting a smooth trend through the points:
 
-```{r}
+```{r rainfall2-6}
 ggplot(rain, aes(x=Year, y=Rainfall)) + geom_point() + geom_smooth()
 ```
 
@@ -107,19 +107,19 @@ This one is rather interesting (as an aside): there is a more noticeable upward 
 
 If you treat the year as categorical, and try to draw a boxplot, it won't work out so well:
 
-```{r}
+```{r rainfall2-7}
 ggplot(rain, aes(x=Year, y=Rainfall)) + geom_boxplot()
 ```
 
 This is actually a boxplot of rainfall in all the years together; it ignored year because it couldn't figure out what you wanted to do with it. The warning message is indicating that you might have forgotten something that defines groups; the `x` is quantitative here. So you have to clarify what you meant. For example, you might have meant to treat the years as categorical, which you could do like this:
 
-```{r}
+```{r rainfall2-8}
 ggplot(rain, aes(x=factor(Year), y=Rainfall)) + geom_boxplot()
 ```
 
 Aside from the fact that you have too many years to see them all, you only have *one* observation per year (that year's annual rainfall), so you don't get an actual box. To get boxes, you need to organize groups where you have multiple observations, for example decades:
 
-```{r}
+```{r rainfall2-9}
 rain %>% 
   mutate(decade_number = Year %/% 10) %>% 
   mutate(decade = str_c(decade_number, "0s")) %>% 
@@ -144,7 +144,7 @@ Solution
 
 Thus:
 
-```{r}
+```{r rainfall2-10}
 ggplot(rain, aes(x=Year, y=Rainfall)) + geom_point() + 
 geom_smooth(method="lm")
 ```
@@ -164,7 +164,7 @@ inches for all the years).
 Further evidence comes from a regression (which we haven't looked at
  yet):
 
-```{r}
+```{r rainfall2-11}
 r.1 <- lm(Rainfall~Year, data=rain)
 summary(r.1)
 ```

@@ -26,7 +26,7 @@ Solution
 
 This is a space-delimited text file, which means:
 
-```{r }
+```{r birthtypes-1 }
 my_url <- "http://ritsokiguess.site/datafiles/birthtypes.txt"
 births <- read_delim(my_url, " ")
 births
@@ -57,7 +57,7 @@ does this automatically. (The next question is whether
 exploring that.)
 The cesarean rate is `cesarean` divided by
 `cesarean` plus `vaginal`:
-```{r }
+```{r birthtypes-2 }
 library(lubridate)
 b2 <- births %>%
   mutate(datestr = str_c("2012", month, "1", sep = " ")) %>%
@@ -72,7 +72,7 @@ If you don't like that, create columns that contain 2012 and 1 all
 the way down. If you set a column name equal to a single value, that
 single value gets repeated the right number of times:^[This is  an example of R's so-called "recycling rules".]
 
-```{r }
+```{r birthtypes-3 }
 births %>% mutate(year = 2012, day = 1)
 ```
 
@@ -83,7 +83,7 @@ and then use `unite` as in class. The distinction is that
 the columns that it is made out of; in this case, the original year,
 month and day disappear:
 
-```{r }
+```{r birthtypes-4 }
 b3 <- births %>%
   mutate(year = 2012, day = 1) %>%
   unite(datestr, year, month, day) %>%
@@ -108,7 +108,7 @@ Solution
 
 
 This is a scatterplot with time on the $x$ axis:
-```{r }
+```{r tann}
 ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 ```
 
@@ -117,7 +117,7 @@ ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 I like this better than joining the points by lines, since we already
 have a trend on the plot, but you can do that in some contrasting way:
 
-```{r }
+```{r fletzlinger}
 ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() +
   geom_line(linetype = "dashed") + geom_smooth()
 ```
@@ -138,7 +138,7 @@ Solution
 
 Something like this is the obvious guess:
 
-```{r error=T}
+```{r birthtypes-5, error=T}
 with(b2, cor(thedate, cesarean_rate))
 ```
 
@@ -149,7 +149,7 @@ lurking in the background is how the date is actually
 *represented*: as a number of days since Jan 1, 1970. Thus,
 passing it through `as.numeric` might turn it into that:
 
-```{r }
+```{r birthtypes-6 }
 b2 %>% mutate(numeric_date = as.numeric(thedate)) -> b5
 b5
 ```
@@ -161,7 +161,7 @@ bit over 40 years, that is $40 \times 365 \simeq 14000$ days, since
 the "zero" date of Jan 1, 1970, and so it turns out. This suggests
 that we can calculate a correlation with the numeric dates:
 
-```{r }
+```{r birthtypes-7 }
 with(b5, cor(numeric_date, cesarean_rate))
 ```
 
@@ -170,7 +170,7 @@ with(b5, cor(numeric_date, cesarean_rate))
 and we can make a test of the null hypothesis that the correlation is
 zero (against a two-sided alternative) thus:
 
-```{r }
+```{r birthtypes-8 }
 with(b5, cor.test(numeric_date, cesarean_rate))
 ```
 
