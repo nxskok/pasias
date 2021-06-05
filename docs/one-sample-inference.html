@@ -24,7 +24,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2021-06-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -520,8 +520,8 @@ simplest (which is perfectly acceptable at this point) is a
 histogram. You’ll need to pick a suitable number of bins. This one
 comes from Sturges’ rule:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/schnagg-1.png" width="672" />
-Your conclusion might depend on how many bins you chose for your
+<p><img src="pasias_files/figure-html/schnagg-1.png" width="672" /></p>
+<p>Your conclusion might depend on how many bins you chose for your
 histogram. Here’s 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well):</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
@@ -1511,7 +1511,13 @@ matters, <em>but so does the sample size</em>.</p>
 <p>I should say a little about my code. I’m not expecting you to figure
 out details now (we see the ideas properly in simulating power of
 tests), but in words, one line at a time:</p>
-
+<ul>
+<li>generate 1000 (“many”) samples each of 3 observations from a
+uniform distribution</li>
+<li>for each sample, work out the mean of it</li>
+<li>turn those sample means into a data frame with a column called <code>value</code></li>
+<li>make a histogram of those.</li>
+</ul>
 <p>Now, the central limit theorem doesn’t always work as nicely as this,
 but maybe a sample size of 30 is large enough to overcome the skewness
 that we had:</p>
