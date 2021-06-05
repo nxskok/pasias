@@ -415,7 +415,7 @@ the data that you read in.</li>
 <div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/wisconsin.txt&quot;</span></a>
 <a class="sourceLine" id="cb260-2" title="2">wisc &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   location = col_character(),
 ##   Appleton = col_double(),
@@ -433,20 +433,21 @@ the data that you read in.</li>
 ## )</code></pre>
 <div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" title="1">wisc</a></code></pre></div>
 <pre><code>## # A tibble: 12 x 13
-##    location      Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe Superior Wausau Dubuque St.Paul Chicago
-##    &lt;chr&gt;            &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1 Appleton             0    130            98     102        103       100    149      315     91     196     257     186
-##  2 Beloit             130      0            33      50        185        73     33      377    186      94     304      97
-##  3 Fort.Atkinson       98     33             0      36        164        54     58      359    166     119     287     113
-##  4 Madison            102     50            36       0        138        77     47      330    139      95     258     146
-##  5 Marshfield         103    185           164     138          0       184    170      219     45     186     161     276
-##  6 Milwaukee          100     73            54      77        184         0    107      394    181     168     322      92
-##  7 Monroe             149     33            58      47        170       107      0      362    186      61     289     130
-##  8 Superior           315    377           359     330        219       394    362        0    223     351     162     467
-##  9 Wausau              91    186           166     139         45       181    186      223      0     215     175     275
-## 10 Dubuque            196     94           119      95        186       168     61      351    215       0     274     184
-## 11 St.Paul            257    304           287     258        161       322    289      162    175     274       0     395
-## 12 Chicago            186     97           113     146        276        93    130      467    275     184     395       0</code></pre>
+##    location  Appleton Beloit Fort.Atkinson Madison Marshfield Milwaukee Monroe Superior Wausau Dubuque St.Paul
+##    &lt;chr&gt;        &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;   &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Appleton         0    130            98     102        103       100    149      315     91     196     257
+##  2 Beloit         130      0            33      50        185        73     33      377    186      94     304
+##  3 Fort.Atk…       98     33             0      36        164        54     58      359    166     119     287
+##  4 Madison        102     50            36       0        138        77     47      330    139      95     258
+##  5 Marshfie…      103    185           164     138          0       184    170      219     45     186     161
+##  6 Milwaukee      100     73            54      77        184         0    107      394    181     168     322
+##  7 Monroe         149     33            58      47        170       107      0      362    186      61     289
+##  8 Superior       315    377           359     330        219       394    362        0    223     351     162
+##  9 Wausau          91    186           166     139         45       181    186      223      0     215     175
+## 10 Dubuque        196     94           119      95        186       168     61      351    215       0     274
+## 11 St.Paul        257    304           287     258        161       322    289      162    175     274       0
+## 12 Chicago        186     97           113     146        276        93    130      467    275     184     395
+## # … with 1 more variable: Chicago &lt;dbl&gt;</code></pre>
 <p>The first time I did this, I had a blank line on the end of the data
 file, so I had a blank <code>location</code> and missing values for all
 the distances for it. I tidied that up before sharing the file with
@@ -742,7 +743,7 @@ twelve cities.</li>
 <p>Nothing terribly unexpected here:</p>
 <div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb294-1" title="1">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   station = col_character()
 ## )</code></pre>
@@ -815,18 +816,18 @@ twelve cities.</li>
 <a class="sourceLine" id="cb302-2" title="2"><span class="st">  </span><span class="kw">unnest_wider</span>(coords) -&gt;<span class="st"> </span>stations</a>
 <a class="sourceLine" id="cb302-3" title="3">stations</a></code></pre></div>
 <pre><code>## # A tibble: 24 x 6
-##    station               longname                         query                                x     y bbox      
-##    &lt;chr&gt;                 &lt;chr&gt;                            &lt;chr&gt;                            &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;    
-##  1 Redditch              Redditch station UK              Redditch station UK              -1.94  52.3 &lt;bbox [4]&gt;
-##  2 Alvechurch            Alvechurch station UK            Alvechurch station UK            -1.97  52.3 &lt;bbox [4]&gt;
-##  3 Barnt Green           Barnt Green station UK           Barnt Green station UK           -1.99  52.4 &lt;bbox [4]&gt;
-##  4 Longbridge            Longbridge station UK            Longbridge station UK            -1.98  52.4 &lt;bbox [4]&gt;
-##  5 Northfield            Northfield station UK            Northfield station UK            -1.97  52.4 &lt;bbox [4]&gt;
-##  6 King&#39;s Norton         King&#39;s Norton station UK         King&#39;s Norton station UK         -1.93  52.4 &lt;bbox [4]&gt;
-##  7 Bournville            Bournville station UK            Bournville station UK            -1.94  52.4 &lt;bbox [4]&gt;
-##  8 Selly Oak             Selly Oak station UK             Selly Oak station UK             -1.94  52.4 &lt;bbox [4]&gt;
-##  9 Birmingham University Birmingham University station UK Birmingham University station UK -1.93  52.5 &lt;bbox [4]&gt;
-## 10 Five Ways             Five Ways station UK             Five Ways station UK             -1.91  52.5 &lt;bbox [4]&gt;
+##    station               longname                        query                               x     y bbox     
+##    &lt;chr&gt;                 &lt;chr&gt;                           &lt;chr&gt;                           &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;   
+##  1 Redditch              Redditch station UK             Redditch station UK             -1.94  52.3 &lt;bbox [4…
+##  2 Alvechurch            Alvechurch station UK           Alvechurch station UK           -1.97  52.3 &lt;bbox [4…
+##  3 Barnt Green           Barnt Green station UK          Barnt Green station UK          -1.99  52.4 &lt;bbox [4…
+##  4 Longbridge            Longbridge station UK           Longbridge station UK           -1.98  52.4 &lt;bbox [4…
+##  5 Northfield            Northfield station UK           Northfield station UK           -1.97  52.4 &lt;bbox [4…
+##  6 King&#39;s Norton         King&#39;s Norton station UK        King&#39;s Norton station UK        -1.93  52.4 &lt;bbox [4…
+##  7 Bournville            Bournville station UK           Bournville station UK           -1.94  52.4 &lt;bbox [4…
+##  8 Selly Oak             Selly Oak station UK            Selly Oak station UK            -1.94  52.4 &lt;bbox [4…
+##  9 Birmingham University Birmingham University station … Birmingham University station … -1.93  52.5 &lt;bbox [4…
+## 10 Five Ways             Five Ways station UK            Five Ways station UK            -1.91  52.5 &lt;bbox [4…
 ## # … with 14 more rows</code></pre>
 <p>The two <code>unnest_wider</code>s are because the longitudes and latitudes are hidden inside a thing called <code>coords</code> which is itself nested within <code>ll</code>. Do the first <code>unnest_wider</code>, and see what you have. This will tell you that you need to do another one.</p>
 <p>The values seem reasonable; this is the UK, most of which is slightly west of the Greenwich meridian, and the latitudes look sensible given that the UK is north of southern Ontario.</p>
@@ -862,18 +863,18 @@ twelve cities.</li>
 <div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb307-1" title="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(info) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb307-2" title="2"><span class="st">  </span><span class="kw">unnest_wider</span>(info)</a></code></pre></div>
 <pre><code>## # A tibble: 10 x 13
-##    where  query  coords  bbox    place_id  osm_type osm_id  place_rank display_name                       class type   importance  icon                 
-##    &lt;chr&gt;  &lt;chr&gt;  &lt;list&gt;  &lt;list&gt;  &lt;chr&gt;     &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      &lt;chr&gt;                              &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;                
-##  1 Aston… Aston… &lt;dbl [… &lt;bbox … 9814552   node     966630… 18         Aston, Birmingham, West Midlands … place town   0.51410998… https://nominatim.op…
-##  2 Aston… Aston… &lt;dbl [… &lt;bbox … 65583750  node     592022… 30         Aston, Lovers Walk, Aston, Birmin… rail… stati… 0.44157598… https://nominatim.op…
-##  3 Aston… Aston… &lt;dbl [… &lt;bbox … 3972412   node     487080… 19         Aston, Flintshire, Cymru / Wales,… place villa… 0.44129130… https://nominatim.op…
-##  4 Aston… Aston… &lt;dbl [… &lt;bbox … 126341    node     261278… 19         Aston, West Oxfordshire, Oxfordsh… place villa… 0.42689306… https://nominatim.op…
-##  5 Aston… Aston… &lt;dbl [… &lt;bbox … 118240    node     237778… 19         Aston, East Hertfordshire, Hertfo… place villa… 0.385       https://nominatim.op…
-##  6 Aston… Aston… &lt;dbl [… &lt;bbox … 17080467  node     170982… 19         Aston, Cheshire East, North West … place villa… 0.385       https://nominatim.op…
-##  7 Aston… Aston… &lt;dbl [… &lt;bbox … 258605508 relation 3594185 20         Aston, East Hertfordshire, Hertfo… boun… admin… 0.36        https://nominatim.op…
-##  8 Aston… Aston… &lt;dbl [… &lt;bbox … 258067004 relation 1440416 20         Aston, Cheshire West and Chester,… boun… admin… 0.36        https://nominatim.op…
-##  9 Aston… Aston… &lt;dbl [… &lt;bbox … 2427860   node     356242… 20         Aston, Claverley, Heathton, Shrop… place hamlet 0.36        https://nominatim.op…
-## 10 Aston… Aston… &lt;dbl [… &lt;bbox … 5573721   node     599656… 20         Aston, Maer, Newcastle-under-Lyme… place hamlet 0.36        https://nominatim.op…</code></pre>
+##    where  query  coords bbox  place_id osm_type osm_id place_rank display_name   class type  importance icon  
+##    &lt;chr&gt;  &lt;chr&gt;  &lt;list&gt; &lt;lis&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt; 
+##  1 Aston… Aston… &lt;dbl … &lt;bbo… 9814552  node     96663… 18         Aston, Birmin… place town  0.5141099… https…
+##  2 Aston… Aston… &lt;dbl … &lt;bbo… 65583750 node     59202… 30         Aston, Lovers… rail… stat… 0.4415759… https…
+##  3 Aston… Aston… &lt;dbl … &lt;bbo… 3972412  node     48708… 19         Aston, Flints… place vill… 0.4412913… https…
+##  4 Aston… Aston… &lt;dbl … &lt;bbo… 126341   node     26127… 19         Aston, West O… place vill… 0.4268930… https…
+##  5 Aston… Aston… &lt;dbl … &lt;bbo… 118240   node     23777… 19         Aston, East H… place vill… 0.385      https…
+##  6 Aston… Aston… &lt;dbl … &lt;bbo… 17080467 node     17098… 19         Aston, Cheshi… place vill… 0.385      https…
+##  7 Aston… Aston… &lt;dbl … &lt;bbo… 2586055… relation 35941… 20         Aston, East H… boun… admi… 0.36       https…
+##  8 Aston… Aston… &lt;dbl … &lt;bbo… 2580670… relation 14404… 20         Aston, Cheshi… boun… admi… 0.36       https…
+##  9 Aston… Aston… &lt;dbl … &lt;bbo… 2427860  node     35624… 20         Aston, Claver… place haml… 0.36       https…
+## 10 Aston… Aston… &lt;dbl … &lt;bbo… 5573721  node     59965… 20         Aston, Maer, … place haml… 0.36       https…</code></pre>
 <p>There are 10 locations it found matching “Aston UK”, and for each of those there is the information you see, a total of 12 columns’ worth in addition to the name of the place we are looking up. Perhaps the most interesting are the columns <code>class</code> and <code>type</code> near the end:</p>
 <div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" title="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(info) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb309-2" title="2"><span class="st">  </span><span class="kw">unnest_wider</span>(info) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -895,7 +896,7 @@ twelve cities.</li>
 <p>This makes me think that with sufficient patience we could do this for all our places, and pick out the one that is the station:</p>
 <div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb311-1" title="1">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   station = col_character()
 ## )</code></pre>

@@ -339,7 +339,7 @@ of rows. (Note that the failure times are in ascending order).</li>
 <div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
 <a class="sourceLine" id="cb253-2" title="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()
@@ -368,17 +368,17 @@ of rows. (Note that the failure times are in ascending order).</li>
 <p>Solution</p>
 <p>Make a suitable graph. The obvious one is a histogram:</p>
 <div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">x =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-159-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-3-1.png" width="672" /></p>
 <p>You’ll have to play with the number of bins (there are only 12 observations). I got 7 from the Freedman-Diaconis rule:</p>
 <div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1"><span class="kw">nclass.FD</span>(aircon<span class="op">$</span>hours)</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <p>I was a little suspicious that the data would not be much like normal (I have run into failure times before), so I kept away from the Sturges rule.</p>
 <p>Another possibility is a one-group boxplot:</p>
 <div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">y =</span> hours, <span class="dt">x =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-161-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-5-1.png" width="672" /></p>
 <p>If you like, you can do a normal quantile plot. I rank that third here, because there is nothing immediately implying a comparison with the <em>normal</em> distribution, but I would accept it:</p>
 <div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">sample =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-162-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-6-1.png" width="672" /></p>
 <p>Pick a visual and defend it.</p>
 <p>All three of these graphs are showing a strong skewness to the right.</p>
 <p>Extra: this is probably not a surprise, because a time until failure
@@ -422,7 +422,7 @@ distribution like the exponential or gamma or Weibull.</p>
 <p>Solution</p>
 <p>This:</p>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="kw">ggplot</span>(means, <span class="kw">aes</span>(<span class="dt">sample =</span> sample_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-164-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-8-1.png" width="672" /></p>
 <p>This is still skewed to the right (it has a curved shape, or, the low values and the high values are both too high compared to the normal).</p>
 <p>Extra: this is less skewed than the original data was, because, with a
 sample size of 12, we have a <em>little</em> help from the Central Limit
@@ -524,7 +524,7 @@ have it lying around). The link is in the previous question.</li>
 <div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1">my_url &lt;-<span class="st"> &quot;https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv&quot;</span></a>
 <a class="sourceLine" id="cb279-2" title="2">aircon &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   failure = col_double(),
 ##   hours = col_double()
@@ -566,7 +566,7 @@ have it lying around). The link is in the previous question.</li>
 <p>I actually copied and pasted my code from the previous problem, changing <code>mean</code> to <code>median</code>.</p>
 <p>As for a plot, well, this:</p>
 <div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="kw">ggplot</span>(meds, <span class="kw">aes</span>(<span class="dt">sample =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-173-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-median-4-1.png" width="672" /></p>
 <p>Not only does this not look very normal, but also there are those
 curious horizontal patches of points (that, you might recall, are
 characteristic of a discrete distribution). This has happened because
@@ -580,7 +580,7 @@ possible values end up in the same bin; here, the aim is to have
 enough bins to show the discreteness, rather than the usual thing of
 having few enough bins to show the shape.)</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1"><span class="kw">ggplot</span>(meds, <span class="kw">aes</span>(<span class="dt">x =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-174-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-median-5-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Obtain a 95% bootstrap percentile confidence interval for the median. How does it compare with the one you obtained earlier?</li>
@@ -632,7 +632,7 @@ sample size and large variability.</p>
 <div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/eyesight.csv&quot;</span></a>
 <a class="sourceLine" id="cb292-2" title="2">sight &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   person = col_double(),
 ##   right = col_double(),
@@ -884,7 +884,7 @@ in case you are thinking that this happened because the data values were integer
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb321-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/irs.txt&quot;</span></a>
 <a class="sourceLine" id="cb321-2" title="2">irs &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## 
-## ── Column specification ────────────────────────────────────────────────────────
+## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   Time = col_double()
 ## )</code></pre>
