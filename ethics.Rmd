@@ -224,14 +224,11 @@ one whose probability is being modelled.
 That's why I made you do that contingency table. Another way to
 think about
 this is to do a prediction, which would go like this:
-```{r ethics-7 }
-genders <- c("Female", "Male")
-new <- tibble(gender = genders)
-p <- predict(decide.1, new, type = "response")
-cbind(new, p)
+
+```{r}
+predictions(decide.1, variables = "gender")
 ```
 
- 
 
 The probability of whatever-it-is is exactly 70\% for females and
 about 40\% for males. A quick look at the contingency table shows
@@ -395,46 +392,20 @@ These make some kind of sense because being exposed to a scenario
 where there are tangible benefits later ought to be most favourable to
 the research continuing, and people are not going to be impressed by
 something that is "only theoretical" without any clear benefits.
-This also lends itself to a `predict` solution, but it's a
-little fiddly. I need some "average" values for the other variables,
-and I don't know what they are yet:
 
-```{r ethics-15 }
-decide %>% summarize(across(where(is.numeric), ~median(.)))
+We can also tackle this by doing some predictions. We want all the categories for `scenario`, and we might as well use average values for everything else:
+
+```{r}
+predictions(decide.3, variables = "scenario")
 ```
 
- 
+The scenarios are over on the right, and the values of the other variables are the same all the way down (means for the quantitative ones, the most common category for the categorical ones). Having checked that this is indeed the case, we really only need the predictions and the scenarios:
 
-("if the variable is numeric, get me its  median".)
-
-The other thing we need is a list of all the scenarios. Here's a cute
-way to do that:
-
-```{r ethics-16 }
-scenarios <- decide %>% count(scenario) %>% pull(scenario)
-scenarios
+```{r}
+predictions(decide.3, variables = "scenario") %>% 
+  select(predicted, scenario)
 ```
 
- 
-
-I didn't really need to know how many observations there were for each
-scenario, but it was a handy way to find out which scenarios there
-were without listing them all (and then having to pick out the unique
-ones). 
-
-So now let's make a data frame to predict from that has all
-scenarios for, let's say, females. (We don't have an interaction, so
-according to the model, the pattern is the same for males and
-females. So I could just as well have looked at males.)
-
-```{r ethics-17 }
-new <- crossing(idealism = 6.5, relativism = 6.1, gender = "Female", scenario = scenarios)
-new
-p <- predict(decide.3, new, type = "response")
-cbind(new, p)
-```
-
- 
 
 This echoes what we found before: the probability of saying that the
 research should stop is highest for "theory" and the lowest for "medical".
@@ -453,40 +424,16 @@ anova(decide.3, decide.4, test = "Chisq")
  
 
 No evidence at all that the scenarios have different effects for the
-different genders. The appropriate `predict` should show that too:
+different genders. The appropriate `predictions` should show that too:
 
-```{r ethics-19 }
-genders <- decide %>% count(gender) %>% pull(gender)
-new <- crossing(idealism = 6.5, relativism = 6.1, gender = genders, scenario = scenarios)
-new
-p <- predict(decide.4, new, type = "response")
-cbind(new, p)
+```{r}
+predictions(decide.4, variables = c("gender", "scenario")) %>% 
+  select(predicted, gender, scenario)
 ```
 
- 
-The probability of "stop" is a lot higher for females than for males
-(that is the strong `gender` effect we found earlier), but the
-*pattern* is about the same for males and females: the difference in
-probabilities^[Strictly, we should look at the difference in log-odds.]
-is about the same, and also both genders have almost the highest predicted
-probability for `theory` (the highest male one is actually for
-`meat` but there's not much in it)
-and the lowest one for
-`medical`, as we found before. The pattern is not
-*exactly* the same because these predictions came from the model
-with interaction. If you use the model without interaction, you get this:
+The predicted probabilities that the experiment should be stopped are a lot lower for males than females across the board (this is the strongly significant gender effect). But, given that, the probability for `medical` is the lowest for both males and females, and the probability for `theory` is the highest for females and almost the highest for males. (The pattern for males and females is similar enough to suggest that there should be no interaction.)
 
-```{r ethics-20 }
-p <- predict(decide.3, new, type = "response")
-cbind(new, p)
-```
 
- 
-
-and the scenarios are ranked in *exactly* the same order by males
-and females. The probabilities from the two models are very close
-(compare them), so there is no value in adding the interaction, as we
-found before.
 
 So fitting an interaction was a
 waste of time, but it was worth checking whether it was.
@@ -535,35 +482,33 @@ thing, and thus conclude that the research should be stopped. The
 `idealism` slope coefficient, by that argument, should be
 positive, and is.
 
-This will also lead to a `predict`. We need "low" and
-"high" scores on the idealism and relativism tests. Let's use
-the quartiles:
 
-```{r ethics-21 }
-decide %>% summarize(
-  i_q1 = quantile(idealism, 0.25),
-  i_q3 = quantile(idealism, 0.75),
-  r_q1 = quantile(relativism, 0.25),
-  r_q3 = quantile(relativism, 0.75)
-)
+This can also be done by a prediction. In the light of what we have done before, the suggestion
+is this:
+
+```{r}
+predictions(decide.3, variables = c("idealism", "relativism"))
 ```
 
-     
+except that there are 5 representative values for each variable, and all the combinations of those, so 25 rows, a lot to get your head around. We can supply two custom values for each variable, and then we'll only get four combinations, for example like this:
 
-There is a more elegant way, but this works.
-Let's use the scenario `cosmetic` that was middling in its
-effects, and think about females:
-```{r ethics-22 }
-new <- crossing(
-  idealism = c(5.6, 7.5), relativism = c(5.4, 6.8),
-  gender = "Female", scenario = "cosmetic"
-)
+```{r}
+summary(decide)
+```
+
+The quartiles for idealism are 5.6 and 7.5, and for relativism are 5.4 and 6.8, so we can use `datagrid` to construct a dataframe to predict from:
+
+```{r}
+new <- datagrid(newdata = decide, idealism = c(5.6, 7.5), relativism = c(5.4, 6.8))
 new
-p <- predict(decide.3, new, type = "response")
-cbind(new, p)
 ```
 
-     
+The most common categories `Female` and `theory` were used for the other variables:
+
+```{r}
+predictions(decide.3, newdata = new) %>% 
+  select(predicted, relativism, idealism)
+```
 
 For both of the idealism scores, the higher relativism score went with
 a lower probability of "stop" (the "negative" effect), and for
