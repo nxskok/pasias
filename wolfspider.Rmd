@@ -136,28 +136,18 @@ something better.
  
 $\blacksquare$
 
-(f) We want to obtain predicted probabilities of spider presence
-for grain sizes of 0.2, 0.5, 0.8 and 1.1 millimetres. Do this by
-creating a new data frame with one column called `Grain.size`
-(watch the capital letter!) and those four values, and then feed
-this into `predict`. I only want predicted probabilities, not
+(f) Obtain predicted probabilities of spider presence
+for a representative collection of grain sizes.
+I only want predicted probabilities, not
 any kind of intervals.
  
 Solution
 
-
-Something like this. I like to save all the values first, and
-*then* make a data frame of them, but you can do it in one
-go if you prefer: 
-```{r wolfspider-5 }
-Grain.sizes <- c(0.2, 0.5, 0.8, 1.1)
-spider.new <- tibble(Grain.size = Grain.sizes)
-spider.new
+```{r}
+predictions(Spiders.1, variables = "Grain.size")
 ```
 
-     
-
-Another way to make the data frame of values to predict from  is directly, using `tribble`:
+Another way to do this is to make a data frame of values to predict from directly, using `tribble` or for that matter `datagrid`. For some reason, I chose these four values:
 
 ```{r wolfspider-6 }
 new <- tribble(
@@ -170,51 +160,29 @@ new <- tribble(
 new
 ```
 
- 
+and then
 
-I have no particular preference here (use whichever makes most sense
-to you), but when we come later to combinations of things using
-`crossing`, I think the vector way is easier (make vectors of
-each of the things you want combinations of, *then* combine them
-into a data frame).
-
-Now for the actual predictions. Get the predicted probabilities first, using `response` to get probabilities rather than something else, then put them next to the values being predicted for (using `cbind` because my `pred.prob` below is a `matrix` rather than a data frame:
-
-```{r wolfspider-7 }
-pred.prob <- predict(Spiders.1, spider.new, type = "response")
-cbind(spider.new, pred.prob)
+```{r}
+predictions(Spiders.1, newdata = new)
 ```
 
- 
 
-(Second attempt: on my first, the `tibble` contained
-`Grain.Sizes`!) 
 
-This exemplifies my preferred technique in these things: I store the
-values to predict for in a vector with a *plural* name. The
-column names in the data frame I make have to have the same (singular)
-name as the original data, so the layout in making the data frame is
-"singular equals plural". You'll see a lot of this as we go through
-the course.
+One of the above is all I need. I prefer the first one, since that way we don't even have to decide what th e representative values are.
 
-I think the data frame of values to predict for is called
-`spider.new`  because the original one is called
-`spider`. I have to stop and think about my naming
-conventions. 
-
-The above is all I need. (The stuff below is my extra comments.)
+Extra:
 
 Note that the probabilities don't go up linearly. (If they did, they
 would soon get bigger than 1!). It's actually the *log-odds* that
-go up linearly. In fact, if you leave out the `type` on the
-`predict`, log-odds is what you get:
+go up linearly. 
+
+To verify this, you can add a `type` to the `predictions`:
 
 ```{r wolfspider-8 }
-pred.log.odds <- predict(Spiders.1, spider.new)
-cbind(spider.new, pred.log.odds)
+predictions(Spiders.1, newdata = new, type = "link")
 ```
 
- 
+This one, as you see shortly, makes more sense with equally-spaced grain sizes. 
 
 The meaning of that slope coefficient in the `summary`, which
 is about 5, is that if you increase grain size by 1, you increase the
@@ -226,7 +194,8 @@ Log-odds are hard to interpret. Odds are a bit easier, and to get
 them, we have to `exp` the log-odds:
 
 ```{r wolfspider-9 }
-cbind(spider.new, odds = exp(pred.log.odds))
+predictions(Spiders.1, newdata = new, type = "link") %>% 
+  mutate(exp_pred = exp(predicted))
 ```
 
  

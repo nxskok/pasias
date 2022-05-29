@@ -199,66 +199,61 @@ $\blacksquare$
 and 58. The quartiles of the `socst` test score are 46 and 61. Make
 a data frame that has all combinations of those quartiles. If your best
 regression had any other explanatory variables in it, also put the
-*medians* of those variables into this data frame.
+*means* of those variables into this data frame.
 
 
 Solution
 
 
-Thus, most obviously:
-```{r hsb-10 }
-sciences <- c(44, 58)
-socsts <- c(46, 61)
-new <- crossing(science = sciences, socst = socsts)
+This is what `datagrid` does by default (from package `marginaleffects`):
+
+```{r}
+new <- datagrid(model = ses.5, science = c(44, 58), socst = c(46, 61))
 new
 ```
 
-  
+You can feed `datagrid` either a `model` (probably clearer for you) or a dataset (with `newdata`):
 
-Since there are only two variables left, this new data frame has only
+```{r}
+datagrid(newdata = hsb, science = c(44, 58), socst = c(46, 61))
+```
+
+This explicitly fills in mean values or most frequent categories for all the other variables in the dataset, even though those other variables are not in the model. The two variables you actually care about are over on the right. Either version of `datagrid` will work, but the one based on the model is easier for you to check than the one based on the dataset.
+
+Since there are only two variables left, this `new` data frame has only
 $2^2=4$ rows.
 
 There is a veiled hint here that these are the two variables that
 should have remained in your regression. If that was not what you got,
-find the median of any other variables you had, and put that into your
-`new`. For example, if you still had `math`, you'd do
-this:^[That is *maths* as the apparently-plural of  *math*, not as the British name for mathematics.]
+the means of the other variables in the model will go automatically into your `new`:
 
-```{r hsb-11 }
-hsb %>% summarize(m = median(math))
-maths <- 52
-new2 <- crossing(science = sciences, socst = socsts, math = maths)
-new2
+```{r}
+datagrid(model = ses.1, science = c(44, 58), socst = c(46, 61))
 ```
 
- 
+so you don't have to do anything extra.
 
 $\blacksquare$
 
 (f) Use the data frame you created in the previous part, together
 with your best model, to obtain predicted probabilities of being in
-each `ses` category.
+each `ses` category. Display these predicted probabilities so that they are easy to read.
 
 
 Solution
 
 
 This is `predict`, and we've done the setup. My best model
-was called `ses.4`:
+was called `ses.4`. Remember that these come out "long"
+
 ```{r hsb-12 }
-p <- predict(ses.4, new, type = "probs")
-cbind(new, p)
+predictions(ses.4, newdata = new, type = "probs") %>% 
+  select(group, predicted, science.x, socst.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
+The easiest strategy seems to be to run `predictions` first, see that it comes out long, and then wonder how to fix it. (If you forget the `type`, the error message will tell you which `type` to use.) Then pick the columns you care about: the predicted `group`, the predictions, and the columns for science and social science (which have gained an `x` on the end for some reason), and then pivot wider. 
    
-
-If you forgot which `type` to use, guess one that's obviously
-wrong, and it will tell you what your options are. That ought to be
-enough to trigger your memory of the right thing.
-
-If you get the `type` right, but the `predict` still
-doesn't work, check the construction  of your `new` data frame
-very carefully. That's likely where your problem is.
 
 $\blacksquare$
 

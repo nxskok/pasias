@@ -499,19 +499,18 @@ summary(decide)
 The quartiles for idealism are 5.6 and 7.5, and for relativism are 5.4 and 6.8, so we can use `datagrid` to construct a dataframe to predict from:
 
 ```{r}
-new <- datagrid(newdata = decide, idealism = c(5.6, 7.5), relativism = c(5.4, 6.8))
+new <- datagrid(model = decide.3, idealism = c(5.6, 7.5), relativism = c(5.4, 6.8))
 new
 ```
 
 The most common categories `Female` and `theory` were used for the other variables:
 
 ```{r}
-predictions(decide.3, newdata = new) %>% 
-  select(predicted, relativism, idealism)
+predictions(decide.3, newdata = new) 
 ```
 
 For both of the idealism scores, the higher relativism score went with
-a lower probability of "stop" (the "negative" effect), and for
+a *lower* probability of "stop" (the "negative" effect), and for
 both of the relativism scores, the higher idealism score went with a
 *higher* probability of "stop" (the positive effect).
 

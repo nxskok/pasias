@@ -271,23 +271,11 @@ have been to fit the interaction model *first*, see that it is
 significant, and then done some predictions to assess the effects of
 things: 
 
-```{r productivity-8 }
-lasts <- c(7, 9, 11)
-expenditures <- c("low", "moderate", "high")
-new <- crossing(last = lasts, expenditure = expenditures)
-new
+```{r}
+plot_cap(improvement.2, condition = c("last", "expenditure"))
 ```
 
- 
-
-(oh, how I wish I'd given those variables shorter names),^[The expenditure levels have come out in alphabetical order again.] and then:
-
-```{r productivity-9 }
-p <- predict(improvement.2, new)
-cbind(new, p)
-```
-
- 
+The three lines are not quite parallel, and evidently non-parallel enough to be significant. (This graph does not give you any sense of how much variability there is in the *slopes*; the at-least partial non-overlapping of the confidence envelopes tells you that there is a significant effect of *expenditure*, but it doesn't tell you about the interaction.)
 
 The effect is more or less as we described it before: as `last`
 goes up (for fixed `expenditure`), the predicted productivity

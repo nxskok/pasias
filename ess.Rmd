@@ -359,11 +359,18 @@ Quartiles for age are 44 and 71, and for years of education are 11 and 16.
 This time, instead of predicting for variable values that `predictions` chooses for us (like a five-number summary), we are predicting for "custom" values, ones that *we* chose. To set that up, the `marginaleffects` way is to use `datagrid` like this:
 
 ```{r}
-new <- datagrid(newdata = ess.major, agea = c(44, 71), eduyrs = c(11, 16))
+new <- datagrid(model = ess.3, agea = c(44, 71), eduyrs = c(11, 16))
 new
 ```
 
-What `datagrid` does is to make all combinations of your variable values, and along with that, to use "typical" values for the others: the mean, in the case of quantitative variables like `inwtm`, and the most common category for categorical ones like `party`. The other variables don't make much sense, since they are really categorical but expressed as numbers, but they are not in the best model, so that doesn't do any harm. (In other cases, you might need to be more careful.)
+What `datagrid` does is to make all combinations of your variable values, and along with that, to use "typical" values for the others: the mean, in the case of quantitative variables like `inwtm`, and the most common category for categorical ones like `party`. If you feed `datagrid` a `model` first, it only includes variables in that model, which is easier to make sense of:
+
+```{r}
+datagrid(newdata = ess.major, agea = c(44, 71), eduyrs = c(11, 16))
+```
+
+
+The other variables don't make much sense, since they are really categorical but expressed as numbers, but they are not in the best model, so that doesn't do any harm. (In other cases, you might need to be more careful.)
 
 Next, we feed this into `predictions`, using the above dataframe as `newdata`, and with our best model, `ess.3` (the one *without* interview length). The results might confuse you at first, since you will probably get an error:
 
