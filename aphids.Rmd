@@ -213,35 +213,31 @@ results, honest!
 $\blacksquare$
 
 (f) Obtain predicted probabilities of an insect's being killed at
-each of the log-concentrations in the data set. (This is easier than
-it sometimes is, because here you don't create a new data frame for
-`predict`.)
+each of the log-concentrations in the data set. 
 
  
 Solution
 
+Use a `newdata` that is the original dataframe:
 
-Just this (notice there are only *two* things going into
-`predict`): 
-```{r aphids-8 }
-prob <- predict(bugs.1, type = "response")
-cbind(dead_bugs$log_conc, prob)
+```{r}
+predictions(bugs.1, newdata = dead_bugs)
 ```
 
-   
-or, if you frame everything in terms of the `tidyverse`, turn
-the predictions from a `matrix` into a `tibble` first,
-and then use `bind_cols` to glue them together:
-
-```{r aphids-9 }
-as_tibble(prob) %>% bind_cols(dead_bugs)
-```
 
  
-The advantage of showing the whole input data frame is that you can
+The advantage of this is that you can
 compare the observed with the predicted. For example, 44 out of 50
 insects were killed at log-dose 2.32, which is a proportion of 0.88,
 pretty close to the prediction of 0.91.
+
+Extra: you could also make a plot of these:
+
+```{r}
+plot_cap(bugs.1, condition = "log_conc")
+```
+
+As the log-concentration goes up, you can see how clearly the probability of the aphid being killed goes up. The confidence band is narrow because there is lots of data (almost 250 aphids altogether).
  
 $\blacksquare$ 
 
@@ -262,6 +258,8 @@ log-concentration only kills less than a third of the insects. So I
 would guess somewhere a bit bigger than 1.5. Any guess somewhere in
 this ballpark is fine: you really cannot be very accurate.
 
+If you read through the Extra to the previous part (or at least looked at the graph), the median lethal dose is where the curve of predictions passes through 0.5 on the $y$-axis. This is at a log-concentration of just less than 1.6; if you judge from the scale where the crossing-point is, it's something like 1.57.
+
 Extra: this is kind of a strange prediction problem, because we know what
 the *response* variable should be, and we want to know what the
 explanatory variable's value is. Normally we do predictions the
@@ -271,19 +269,18 @@ to try some different log-concentrations, and see which one gets
 closest to a probability 0.5 of killing the insect.
 
 Something like this would work:
-```{r aphids-10 }
-lc.new <- tibble(log_conc = seq(1.5, 1.63, 0.01))
-prob <- predict(bugs.1, lc.new, type = "response")
-cbind(lc.new, prob)
+
+```{r}
+new <- datagrid(model = bugs.1, log_conc = seq(1.5, 1.63, 0.01))
+predictions(bugs.1, newdata = new)
 ```
 
-   
 
 The closest one of these to a probability of 0.5 is 0.4971, which goes
 with a log-concentration of 1.57: indeed, a bit bigger than 1.5 and a
-bit less than 1.63. The `seq` in the construction of the new
+bit less than 1.63, and close to what I read off from my graph. The `seq` in the construction of the new
 data frame is "fill sequence": go from 1.5 to 1.63 in steps of
-0.01. The rest of it is the same as before.
+0.01. We are predicting for values of `log_conc` that we chose, so the way to go is to make a new dataframe with `datagrid` and then feed that into `predictions` with `newdata`.
 
 Now, of course this is only our "best guess", like a single-number
 prediction in regression. There is uncertainty attached to it (because
@@ -295,7 +292,6 @@ Later: there's a function called `dose.p`
 in `MASS` that appears to do this:
 
 ```{r aphids-11 }
-library(MASS)
 lethal <- dose.p(bugs.1)
 lethal
 ```

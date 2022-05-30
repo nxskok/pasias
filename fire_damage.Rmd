@@ -189,29 +189,22 @@ of the explanatory variable. This is as opposed to
 part~(<a href="#part:ttest">here</a>), which is averaged over *all* distances.
 So, follow the steps. Make a tiny data frame with this one value
 of `distance`:
-```{r fire-damage-7 }
-new <- tibble(distance = 4)
+
+```{r}
+new <- datagrid(model = damage.1, distance = 4)
+new
 ```
 
-     
+and then
 
-and then feed it into `predict`:
-
-```{r fire-damage-8 }
-pp <- predict(damage.1, new, interval = "c")
+```{r}
+pp <- predictions(damage.1, newdata = new)
+pp
 ```
-
- 
-
-and then put it side-by-side with the value it's a prediction for:
-
-```{r fire-damage-9 }
-cbind(new, pp)
-```
-
- 
 
 28.5 to 31.4 (thousand dollars).
+
+(I saved this one because I want to refer to it again later.)
 
 $\blacksquare$
 
@@ -238,10 +231,6 @@ and part~(<a href="#part:cim">here</a>)'s is
 pp
 ```
 
- 
-
-I printed them out like this since these give the centres of the
-intervals as well as the lower and upper limits.
 
 The centre of the interval is higher for the mean damage when the
 distance is 4. This is because the mean distance is a bit less than 4:
