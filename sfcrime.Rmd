@@ -150,71 +150,59 @@ obtaining the predictions and then displaying them suitably.
 
 Solution
 
+There is an easier way, which takes a bit of adapting (and takes a bit of time to run):
 
-I left this one fairly open, because you've done this kind of thing
-before, so what you need to do ought to be fairly clear:
-Construct the values to predict for with plural names:^[You are almost certainly going to get the Capital Letters wrong in *DayOfWeek*, once, somewhere in the process. I did.]
-
-```{r sfcrime-3 }
-DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-DayOfWeeks
-PdDistricts <- "TENDERLOIN"
+```{r, cache=TRUE}
+p <- predictions(sfcrime.1, variables = c("DayOfWeek", "PdDistrict"), type = "probs")
+p
 ```
 
- 
+This is because it includes all the districts, not just the one we want, so:
 
-The days of the week are in the order they came out in the data. I
-could fix this up, but the thing that matters for us is that Saturday
-and Sunday came out next to each other.
+- grab only the district we want
+- (as usual for these) grab only the columns we want
+- pivot wider to get a column for each group (crime) we want a predicted probability for:
 
-Anyway, it's about right, even though only one of the variables is
-actually plural and the other plural came out wrong. 
-
-Then, make data frame of combinations. The nice thing is that if we
-had more than one district, we'd just define `PdDistricts`
-appropriately above and the rest of it would be the same:
-
-```{r sfcrime-4 }
-sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
-sfcrime.new
+```{r}
+p %>% filter(PdDistrict == "TENDERLOIN") %>% 
+  select(group, predicted, DayOfWeek) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
- 
+A better way to do this is to use `datagrid` first to get the combinations you want (and only those), namely all the days of the week, but only the district called TENDERLOIN.^[Better, because it doesn't do predictions for all the other districts as well, only to throw them away, which is what we did above. When the predictions take so long, it's worth trying to speed it up.]
 
-Then do the predictions:
+So, let's get the days of the week. The easiest way is to count them and ignore the counts:^[I know I just said not to do this kind of thing, but counting is really fast, while unnecessary predictions are really slow.]
 
-```{r sfcrime-5 }
-p <- predict(sfcrime.1,sfcrime.new,type="probs")
+```{r}
+sfcrime %>% count(DayOfWeek) %>% 
+  pull(DayOfWeek) -> daysofweek
+daysofweek
 ```
 
- 
+Now we can use these in `datagrid`:^[There is only one district, so we can just put that in here.]
 
-I can never remember the `type` thing for these models, because
-they are *all different*. I just make a guess, and if I guess
-something that this version of `predict` doesn't know about,
-it'll tell me:
-
-```{r sfcrime-6, error=T}
-p <- predict(sfcrime.1,sfcrime.new,type="bananas")
+```{r}
+new <- datagrid(model = sfcrime.1, DayOfWeek = daysofweek, PdDistrict = "TENDERLOIN")
+new
 ```
 
- 
+Good. And then predict for just these. This is slow, but not as slow as before. I'm saving the result of this slow part, so that it doesn't matter if I change my mind later about what to do with it. I want to make sure that I don't have to do it again, is all:^[The same thing applies if you are doing something like webscraping, that is to say downloading stuff from the web that you then want to do something with. Download it *once* and save it, then you can take as long as you need to decide what you're doing with it.]
 
-I can work out from this that `type` should be `probs`,
-since the other one makes the best guess at which category of response
-you'll get (the one with the highest probability). The predicted
-probabilities are more informative, since then you can see how they
-change, even if the predicted category stays the same.^[This is something we'll see again in discriminant analysis.]
-
-Finally, display the results. I thought `cbind` wouldn't work
-here, because some of the variables are factors and some are numbers,
-but `cbind`  is smarter than that:^[The old base-R stuff like `cbind` makes some guesses about what you want. If it guesses right, it makes things work very smoothly, but if not, you can end up with some mysterious problems to debug. The old `read.table` for reading in data, likewise, used to turn text into `factor`s, *without telling you*. The tidyverse, on the other hand, requires you to be more explicit about what you want, or to have things be the same type, so that you don't run into these kinds of things.]
-
-```{r sfcrime-7 }
-cbind(sfcrime.new,p)
+```{r, cache=TRUE}
+p <- predictions(sfcrime.1, newdata = new, type = "probs")
+p
 ```
 
- 
+This, as you remember, is long format, so grab the columns you need from it and pivot wider. The easiest grab is to just get rid of the standard error column (since you want only one number to pivot-wider):
+
+```{r}
+p %>% 
+  select(-std.error) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
+```
+
+Success. (If you don't get rid of the standard errors, you still have 28 rows and a bunch of missing values; the standard errors are unique, and so `pivot_wider` will infer that everything should be in its own row.)
+
   
 $\blacksquare$
 
@@ -239,7 +227,10 @@ changes from one weekday to another are even smaller). This supports
 what I guessed before, that with this much data even a small effect
 (the one shown here) is statistically
 significant.^[Statistical significance as an idea grew up in    the days before "big data".]
-I want to compare another district. What districts do we have?
+
+
+Extra: I want to compare another district. What districts do we have?
+
 ```{r sfcrime-8 }
 sfcrime %>% count(PdDistrict)
 ```
@@ -250,6 +241,21 @@ This is the number of our "big four" crimes committed in each
 district. Let's look at the lowest-crime district `RICHMOND`. I
 copy and paste my code. Since I want to compare two districts, I
 include both:
+
+
+```{r}
+new <- datagrid(model = sfcrime.1, DayOfWeek = daysofweek, PdDistrict = c("TENDERLOIN", "RICHMOND"))
+new
+```
+
+and then as we just did. I'm going to be a bit more selective about the columns I keep this time, since the display will be a bit wider and I don't want it to be too big for the page:
+
+```{r, cache=TRUE}
+p <- predictions(sfcrime.1, newdata = new, type = "probs")
+p
+```
+
+
 
 ```{r sfcrime-9, echo=F}
 options(width=90)
