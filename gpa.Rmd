@@ -203,14 +203,20 @@ the  mean of *all* students with these GPAs, prediction
 intervals are called for. The first step is to make a data
 frame to predict from. This has to contain columns for all the
 explanatory variables, just `high_GPA` in this case:
+
+```{r}
+new <- datagrid(model = gpa.1, high_GPA = c(3,3.5))
+new
+```
+
+In general, the advantage to doing it this way is that you also get representative values for any other explanatory variables (means for quantitative ones, the most common category for categorical ones). But in this case, the dataframe has just one column with two values in it, so any other way to create this dataframe is equally good, and, you might say, easier, like this:
+
 ```{r gpa-8 }
 gpa.new <- tibble(high_GPA = c(3, 3.5))
 gpa.new
 ```
 
-      
-
-and then feed that into `predict`:
+The next thing to consider is whether you want a confidence interval for the mean response (the kind of thing `predictions` gives you), or a prediction interval for an individual response. In this case, it's the prediction interval, because we want to infer how these individual students will fare. To get this, you need the old-fashioned `predict` rather than `predictions`:
 
 ```{r gpa-9 }
 preds <- predict(gpa.1, gpa.new, interval = "p")
@@ -241,7 +247,7 @@ Thus the predicted university GPA for the student with high school GPA
 to give, but in any case, you should actually *say* what the
 intervals are.)
 
-I observe that these intervals are almost exactly the same
+Extra: I observe that these intervals are almost exactly the same
 length. This surprises me a bit, since I would have said that 3.0 is
 close to the average high-school GPA and 3.5 is noticeably higher. If
 that's the case, the prediction interval for 3.5 should be longer
@@ -264,8 +270,7 @@ a bit of a mystery. Maybe it works better for the confidence interval
 for the mean:
 
 ```{r gpa-13 }
-preds <- predict(gpa.1, gpa.new, interval = "c")
-cbind(gpa.new, preds)
+predictions(gpa.1, newdata = new)
 ```
 
  

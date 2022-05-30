@@ -74,7 +74,7 @@ Solution
 
 The categories of `Sport` are not in any kind of order, and
 there are more than two of them.
-That's really all you needed, for which two marks is kind of
+That's really all you needed, for which two marks was kind of
 generous. 
 
 $\blacksquare$
@@ -109,7 +109,8 @@ Solution
 
 
 The idea is to fit a model without `Wt`, and then show that
-it fits significantly worse:
+it fits significantly worse. This converges in less than 100 iterations, so you can have `maxit` or not as you prefer:
+
 ```{r oz-multi-5 }
 sport.2 <- update(sport.1, . ~ . - Wt)
 anova(sport.2, sport.1, test = "Chisq")
@@ -160,40 +161,68 @@ to fit them on the page.
 
 Solution
 
+To get all combinations of those heights and weights, use `datagrid`:
 
-This is (again) the easier way: fill vectors with the given
-values, use `crossing` to get the combinations, and feed
-that into `predict`, thus:
-```{r oz-multi-8 }
-Hts <- c(160, 180, 200)
-Wts <- c(50, 75, 100)
-new <- crossing(Ht = Hts, Wt = Wts)
+```{r}
+new <- datagrid(model = sport.1, Ht = c(160, 180, 200), Wt = c(50, 75, 100))
 new
 ```
 
-  
+(check: $3 \times 3 = 9$ rows.)
 
-and then
+Then predict:
 
-```{r oz-multi-9, size="scriptsize"}
-p <- predict(sport.1, new, type = "probs")
-cbind(new, p)
+```{r}
+p <- predictions(sport.1, newdata = new, type = "probs")
+p
 ```
 
- 
+I saved these, because I want to talk about what to do next. The normal procedure is to say that there is a prediction for each `group` (sport), so we want to grab only the columns we need and pivot wider. But, this time there are 10 sports (see how there are $9 \times 10 = 90$ rows, with a predicted probability for each height-weight combo *for each sport*). I suggested reducing the number of decimal places in the predictions; the time to do that is *now*, while they are all in one column (rather than trying to round a bunch of columns all at once, which is doable but more work). Hence:
 
-I'll take this, but read on for an improvement.
-
-This still spills onto a second line (even printed this small). Let's
-round the predicted probabilities to 2 decimals, which, with luck,
-will also kill the scientific notation:
-
-```{r oz-multi-10 }
-cbind(new, round(p, 2))
+```{r}
+p %>% 
+  mutate(predicted = round(predicted, 2)) %>% 
+  select(group, predicted, Ht, Wt) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
- 
-Better. Much better.
+This works (although even then it might not all fit onto the page and you'll have to scroll left and right to see everything).
+
+If you forget to round until the end, you'll have to do something like this:
+
+```{r}
+p %>% 
+  select(group, predicted, Ht, Wt) %>% 
+  pivot_wider(names_from = group, values_from = predicted) %>% 
+  mutate(across(BBall:WPolo, ~round(., 2)))
+```
+
+In words, "for each column from `BBall` through `WPolo`, replace it by itself rounded to 2 decimals".
+
+There's nothing magic about two decimals; three or maybe even four would be fine. A small enough number that you can see most or all of the columns at once, and easily compare the numbers for size (which is hard when some of them are in scientific notation).
+
+Extra: you can even abbreviate the sport names, like this:
+
+```{r}
+p %>% 
+  mutate(predicted = round(predicted, 2),
+         group = abbreviate(group, 3)) %>% 
+  select(group, predicted, Ht, Wt) %>% 
+  pivot_wider(names_from = group, values_from = predicted) 
+```
+
+Once again, the time to do this is while everything is long, so that you only have one column to work with.^[`abbreviate` comes from base R; it returns an abbreviated version of its (text) input, with a minimum length of its second input. If two abbreviations come out the same, it makes them longer until they are different. It has some heuristics to get things short enough: remove vowels, then remove letters on the end.] Again, you can do this at the end, but it's more work, because you are now renaming columns:
+
+```{r}
+p %>% 
+  mutate(predicted = round(predicted, 2)) %>% 
+  select(group, predicted, Ht, Wt) %>% 
+  pivot_wider(names_from = group, values_from = predicted) %>% 
+  rename_with(~abbreviate(., 3), everything())
+```
+
+`rename` doesn't work with `across` (you will get an error if you try it), so you need to use `rename_with`^[Which I learned about today.]. This has syntax "how to rename" first (here, with an abbreviated version of itself), and "what to rename" second (here, everything, or `BBall` through `WPolo` if you prefer). 
+
     
 $\blacksquare$
 
