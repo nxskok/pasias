@@ -244,7 +244,7 @@ include both:
 
 
 ```{r}
-new <- datagrid(model = sfcrime.1, DayOfWeek = daysofweek, PdDistrict = c("TENDERLOIN", "RICHMOND"))
+new <- datagrid(model = sfcrime.1, PdDistrict = c("TENDERLOIN", "RICHMOND"), DayOfWeek = daysofweek)
 new
 ```
 
@@ -255,24 +255,13 @@ p <- predictions(sfcrime.1, newdata = new, type = "probs")
 p
 ```
 
-
-
-```{r sfcrime-9, echo=F}
-options(width=90)
+```{r}
+p %>% 
+  select(group, predicted, DayOfWeek, PdDistrict) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
- 
 
-```{r sfcrime-10, size="footnotesize"}
-DayOfWeeks <- sfcrime %>% distinct(DayOfWeek) %>% pull(DayOfWeek)
-PdDistricts <- c("RICHMOND","TENDERLOIN")
-sfcrime.new <- crossing(DayOfWeek=DayOfWeeks,PdDistrict=PdDistricts)
-sfcrime.new
-p1 <- predict(sfcrime.1,sfcrime.new,type="probs")
-d1 <- cbind(sfcrime.new,p1) ; d1
-```
-
- 
 
 Richmond is obviously not a drug-dealing kind of place; most of its
 crimes are theft of one kind or another. But the predicted effect of
@@ -303,8 +292,8 @@ times around and stopped (since that's the default limit). We can make
 it go a bit further thus:
 
 ```{r model-three-two,cache=T}
-sfcrime.3 <- update(sfcrime.1,.~.+DayOfWeek*PdDistrict,maxit=300)
-anova(sfcrime.1,sfcrime.3)
+sfcrime.3 <- update(sfcrime.1, .~.+DayOfWeek*PdDistrict, maxit=300)
+anova(sfcrime.1, sfcrime.3)
 ```
 
  
@@ -320,66 +309,20 @@ different districts might not be very big. We can even assess that; we
 have all the machinery for the predictions, and we just have to apply
 them to this model:
 
-```{r sfcrime-11, size="footnotesize"}
-p3 <- predict(sfcrime.3,sfcrime.new,type="probs")
-d3 <- cbind(sfcrime.new,p3) ; d3
+```{r, cache=TRUE}
+p <- predictions(sfcrime.3, newdata = new, type = "probs")
+p
 ```
 
- 
+```{r}
+p %>% 
+  select(group, predicted, DayOfWeek, PdDistrict) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
+```
 
 It doesn't *look* much different. Maybe the Tenderloin has a
-larger weekend increase in assaults than Richmond does. I saved these
-predictions in data frames so that I could compare them. Columns 3
-through 6 contain the actual predictions;  let's take the difference
-between them, and glue it back onto the district and day of week. I
-rounded the prediction differences off to 4 decimals to make the
-largest ones easier to find:
+larger weekend increase in assaults than Richmond does. 
 
-```{r sfcrime-12, size="footnotesize"}
-pdiff <- round(p3-p1, 4)
-cbind(sfcrime.new, pdiff)
-```
-
- 
-
-None of the predicted probabilities differ by more than 0.04, which is
-consistent with the size of the interaction effect being small even
-though significant. Some of the differences largest in size are
-Drugs-Narcotics in Tenderloin, but even they are not big.
-
-The programmer in me wants to find a way to display the largest and
-smallest few differences. My idea is to use `pivot_longer` to make
-*one* column of differences and sort it, then 
-display the top and bottom few values. Note that
-I have to put those little "backticks" around `VEHICLE THEFT`
-since the variable name has a space in it. My code inefficiently sorts
-the differences twice:
-
-```{r sfcrime-13 }
-cbind(sfcrime.new,pdiff) %>% 
-  pivot_longer(ASSAULT:`VEHICLE THEFT`, names_to="crimetype", values_to = "difference") -> d1
-d1 %>% arrange(difference) %>% slice(1:6)
-d1 %>% arrange(desc(difference)) %>% slice(1:6)
-```
-
- 
-
-I don't know what, if anything, you make of those.
-
-Extra: there is a better way of doing those in one go:
-
-```{r sfcrime-14 }
-d1 %>% top_n(6, difference)
-d1 %>% top_n(6, -difference)
-```
-
- 
-
-that is just slicker. What it
-actually does is almost the same as my code, but it saves you worrying about
-the details. (It picks out the top 6, but without putting them in
-order.) 
-  
 $\blacksquare$
 
 
