@@ -259,7 +259,7 @@ the output table; the P-value wrapped onto the second line, and is in
 fact exactly the same as in the `drop1` output (it is doing
 exactly the same test). As non-significant as you could wish for.
 
-I was curious about whether either of the other $x$'s could come out now:
+Extra: I was curious about whether either of the other $x$'s could come out now:
 
 ```{r steak-11 }
 drop1(steak.2, test = "Chisq")
@@ -268,8 +268,11 @@ drop1(steak.2, test = "Chisq")
  
 
 `lottery_a` should come out, but `educ` is edging
-towards significance.
-    
+towards significance. We are about to do predictions; in those, the above suggests that there may be some visible effect of education, but there may not be much effect of `lottery_a`.
+
+All right, so what happens when we remove `lottery_a` That we find out later.
+
+
 $\blacksquare$
 
 (g) Using the best model that you have so far, predict the
@@ -286,47 +289,64 @@ Solution
 
 
 Again, I'm leaving it to you to follow all the steps. My variables
-remaining are `educ` and `lottery_a`. The second of
-these is a logical, TRUE and FALSE, so I just filled in the two values:
-```{r steak-12 }
-educs <- steak %>% distinct(educ) %>% pull(educ)
-lottery_as <- c(FALSE, TRUE)
+remaining are `educ` and `lottery_a`. 
 
-steak.new <- crossing(educ = educs, lottery_a = lottery_as)
-steak.new
+```{r}
+predictions(steak.2, variables = c("educ", "lottery_a"),
+            type = "probs") %>% 
+  select(rowid, group, predicted, educ.x, lottery_a.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
-     
+There are 5 levels of education, 2 levels of `lottery_a`, and 5 ways in which you might ask for your steak to be cooked, so the original output from `predictions` has $5 \times 2 \times 5 = 50$ rows, and the output you see above has $5 \times 2 = 10$ rows.
 
-My best model so far is the one I called `steak.2`, without
-`female`, so this. As before, if you forget what `type`
-should be, put in *something*, and it will tell you what your
-choices are:
+Aside: sometimes, the output from `predictions` glues an `x` or a `y` onto the end of the names of the things in `variables`, as here. I haven't yet discovered why this is, but I suspect it has something to do with looking things up in a dataframe. This happens when the two dataframes you are left-joining have a column by the same name that is *not* part of what you are looking up. Example:
 
-```{r steak-13 }
-p <- predict(steak.2, steak.new, type = "probs")
-cbind(steak.new, p)
+```{r}
+xx <- tribble(~u, ~v,
+             "a", 10,
+             "a", 11,
+             "b", 12)
+yy <- tribble(~u, ~v,
+             "a", 100,
+             "b", 103)
 ```
 
- 
+Think of `x` as containing sales of products `a` and `b`, and `y` as containing some other information about those products like their price. The other columns in the two dataframes happen to have the same names, but they have nothing to do with each other (one is sales and the other is price). So we want to join only on `u`:
+
+```{r}
+xx %>% left_join(yy, by = "u")
+```
+
+`v.x` is the column `v` that came from the first dataframe (the one called `xx` that had the sales in it), and `v.y` is the one that come from the second dataframe (called `yy`, with prices in it).
+
+So that's where the names `educ.x` and `lottery_a.x` came from (I think), but I still have no idea where they acquired those names.
+
+
 
 I find this hard to read, so I'm going to round off those
-predictions. Three or four decimals seems to be sensible:
+predictions. Three or four decimals seems to be sensible. The time to do this is while they are all in one column, that is, before the `pivot_wider`. On my screen, the education levels also came out rather long, so I'm going to shorten them as well:
 
-```{r steak-14 }
-cbind(steak.new, round(p, 3))
+```{r}
+predictions(steak.2, variables = c("educ", "lottery_a"),
+            type = "probs") %>% 
+  select(rowid, group, predicted, educ.x, lottery_a.x) %>%
+  mutate(predicted = round(predicted, 3),
+         educ.x = abbreviate(educ.x, 15)) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
- 
+That's about as much as I can shorten the education levels while still having them readable.
 
-Say something about the effect of changing educational level on the
+
+Then, say something about the effect of changing educational level on the
 predictions, and say something about the effect of favouring Lottery A
 vs.\ not. I don't much mind what: you can say that there is not much
 effect (of either variable), or you can say something like "people with a graduate degree are slightly more likely to like their steak rare and less likely to like it well done" (for education level) and
 "people who preferred Lottery A are slightly less likely to like their steak rare and slightly more likely to like it well done" (for
-effect of Lottery A). You can see these by comparing the first five
-rows to assess the effect of education (or the last five rows, if you
-prefer), and you can compare eg. rows 1 and 6 to assess the effect of
+effect of Lottery A). You can see these by comparing the odd-numbered rows
+rows with each other to assess the effect of education while holding attitudes towards `lottery_a` constant (or the even-numbered rows, if you
+prefer), and you can compare eg. rows 1 and 2 to assess the effect of
 Lottery A (compare two lines with the *same* educational level
 but *different* preferences re Lottery A). 
 
@@ -384,7 +404,7 @@ anova(steak.3a, steak.2, test = "Chisq")
 At the 0.05 level, removing both of the remaining variables is fine:
 that is, nothing (out of these variables) has any impact on the
 probability that a diner will prefer their steak cooked a particular
-way. 
+way. However, it is a very close call; the P-value is only *just* bigger than 0.05.
 
 However, with data like this and a rather exploratory analysis, I
 might think about using a larger $\alpha$ like 0.10, and at this
@@ -434,7 +454,9 @@ above about dropping those last two variables. So say something
 consistent with what you said in the previous part. Two points for
 saying that the author said "nothing has any effect", and one
 point for how your findings square with that.
-Now that you have worked through this great long question, this is
+
+
+Extra: now that you have worked through this great long question, this is
 where I tell you that I simplified things a fair bit for you! There
 were lots of other variables that might have had an impact on how
 people like their steaks, and we didn't even consider those. Why did
