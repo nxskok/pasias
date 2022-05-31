@@ -321,27 +321,53 @@ $\blacksquare$
 (h) <a name="part:preds">*</a> 
 Obtain predicted probabilities for each attitude towards abortion
 for each combination of education level and religious
-denomination. To do that, (i) obtain those levels of education and
-religion, (ii) make a data frame out of all combinations of them,
-(iii) feed your best fitted model and that data frame into
-`predict` with any necessary options.
+denomination. 
 
 
 Solution
 
+In `predictions`, `variables` gets all the levels of categorical variables (which these are):
 
-Use either `distinct` or `count` to get the levels of
-`education` and `religion`:
-```{r abortion-13 }
-educations <- abortion %>% distinct(education) %>% pull(education)
-religions <- abortion %>% distinct(religion) %>% pull(religion)
-new <- crossing(education = educations, religion = religions)
-new
-pp <- predict(abortion.1, new, type = "p")
-cbind(new, pp)
+```{r}
+predictions(abortion.1, variables = c("religion", "education"), type = "probs")
 ```
 
-       
+To get these in viewable from, select the columns you want, then pivot wider:
+
+```{r}
+predictions(abortion.1, variables = c("religion", "education"), type = "probs") %>% 
+  select(group, predicted, religion.x, education.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
+```
+
+Oh. There are five probabilities instead of one in each cell.
+
+To figure out why, let's look back at our predictions:
+
+
+```{r}
+predictions(abortion.1, variables = c("religion", "education"), type = "probs") 
+```
+
+There is also a column called `frequency.x` that seems to contain five representative frequencies (and the same predictions for each). Thus, two ways you can go: grab only the rows where the frequency is 1, say):
+
+```{r}
+predictions(abortion.1, variables = c("religion", "education"), type = "probs") %>% 
+  filter(frequency.x == 1) %>% 
+  select(group, predicted, religion.x, education.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
+```
+
+or, use an option of `pivot_wider` to run a function like eg. `mean` on all five (identical) predictions:
+
+```{r}
+predictions(abortion.1, variables = c("religion", "education"), type = "probs") %>% 
+  select(group, predicted, religion.x, education.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted, values_fn = mean)
+```
+
+
+
 $\blacksquare$
 
 
@@ -352,9 +378,8 @@ the effect of education. (This should be the same for all values of `religion`).
 Solution
 
 
-Pick a religious denomination, say `Cath` since that's
-the first one. Focus on the three rows with that
-`religion`, here rows 1, 4 and 7.  I'd say the striking
+Pick a religious denomination, say `Cath`. Focus on the three rows with that
+`religion`, here the last three.  I'd say the striking
 thing is that people with `Low` education are most likely
 to have a negative attitude towards abortion. Or you could say
 that they are *least* likely to have a positive attitude
@@ -362,7 +387,7 @@ towards abortion. That's equally good. Or you can turn it around
 and say that the `High` education people are *more*
 likely to be in favour of abortion (or less likely to be opposed
 to it).
-This holds true for all religious denominations, as you can check.
+This holds true for all religious denominations, as you can check, although it's easiest to see with Catholics.
 This is one of those cases where I don't mind much what you say,
 as long as the data (here the predictions) support it.
 
@@ -383,7 +408,7 @@ The `Low` level of education appeared to be the most
 opposed to abortion before, so the effects of `religion`
 might be the most noticeable there. For those, the Catholics are
 most likely to be negatively inclined towards abortion, and the
-least likely to be postively inclined. There is not much
+least likely to be positively inclined. There is not much
 difference between the two flavours of Protestant.
 
 Some further thoughts:
@@ -417,11 +442,12 @@ anova(abortion.1, abortion.4)
 
 The interaction *is* significant, so it should stay. What effect
 does it have on the predictions? We've done all the setup earlier, so
-we just run `predict` again on the new model:
+we just run `predictions` again on the new model:
 
 ```{r abortion-15 }
-pp <- predict(abortion.4, new, type = "p")
-cbind(new, pp)
+predictions(abortion.4, variables = c("religion", "education"), type = "probs") %>% 
+  select(group, predicted, religion.x, education.x) %>% 
+  pivot_wider(names_from = group, values_from = predicted, values_fn = mean)
 ```
 
  

@@ -388,8 +388,8 @@ d
 and then feed that into `predict`:
 
 ```{r pinetrees-15 }
-p <- predict(volume.3, d)
-d %>% mutate(pred = p)
+predictions(volume.3, newdata = d) -> p
+p
 ```
 
 
@@ -397,7 +397,7 @@ d %>% mutate(pred = p)
 These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
 
 ```{r pinetrees-16 }
-d %>% mutate(pred = exp(p))
+p %>% mutate(exp_pred = exp(predicted))
 ```
 
 
