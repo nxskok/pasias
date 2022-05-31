@@ -17,7 +17,7 @@ Solution
 
 
 So, `read_tsv`. 
-```{r }
+```{r ais-km-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
@@ -35,20 +35,20 @@ Solution
 
 This first one is a bit *too* slick:
 
-```{r}
+```{r ais-km-2}
 athletes %>% mutate(across(where(is.numeric), ~scale(.)))
 ```
 
 It standardizes all the columns that are numeric all right, but any other columns it finds it leaves as they are, while we want to get rid of them first. So do it in two steps: get the numeric columns, and standardize *all* of those:
 
-```{r}
+```{r ais-km-3}
 athletes %>% select(where(is.numeric)) %>% 
   mutate(across(everything(), ~scale(.))) -> athletes.s
 ```
 
 
 This, in fact:
-```{r }
+```{r ais-km-4 }
 athletes.s
 ```
 
@@ -60,7 +60,7 @@ getting the columns one at a time.
 Elsewhere, I stuck `scale()` on the end, which produces a
 *matrix*, which I should then display the top of (it has 200-plus rows):
 
-```{r }
+```{r ais-km-5 }
 athletes %>% select(where(is.numeric)) %>% scale() %>% head()
 ```
 
@@ -85,13 +85,13 @@ I'm going to attempt a slick way of doing this, and then I'll talk
 about how I'd expect *you* to tackle this. First, though, I
 set the random number seed so that everything comes out the same
 every time I run it:
-```{r }
+```{r ais-km-6 }
 set.seed(457299)
 ```
 
      
 Here we go:
-```{r }
+```{r ais-km-7 }
 withinss <- tibble(clusters = 2:20) %>%
   rowwise() %>% 
   mutate(wss = kmeans(athletes.s, clusters, nstart = 20)$tot.withinss)
@@ -109,7 +109,7 @@ All right then, what is a better way to do this? First write
 a function to take a number of clusters and a data frame and return
 the total within-cluster sum of squares:
 
-```{r }
+```{r ais-km-8 }
 twss <- function(i, x) {
   ans <- kmeans(x, i, nstart = 20)
   ans$tot.withinss
@@ -120,7 +120,7 @@ twss <- function(i, x) {
 
 and test it (against my answer above):
 
-```{r }
+```{r ais-km-9 }
 twss(3, athletes.s)
 ```
 
@@ -132,14 +132,14 @@ Then calculate
 all the total within-cluster sum of squares values by making a little
 data frame with all your numbers of clusters:
 
-```{r }
+```{r ais-km-10 }
 tibble(clusters = 2:20)
 ```
 
  
 and then make a pipeline and save it, using `rowwise` and your function:
 
-```{r }
+```{r ais-km-11 }
 tibble(clusters = 2:20) %>%
   rowwise() %>% 
   mutate(wss = twss(clusters, athletes.s)) -> withinss
@@ -158,7 +158,7 @@ Solution
 
 `ggscreeplot` is for principal components; this one you can
 plot directly, with the points joined by lines:
-```{r }
+```{r ais-km-12 }
 ggplot(withinss, aes(x = clusters, y = wss)) + geom_point() + geom_line()
 ```
 
@@ -195,7 +195,7 @@ Solution
 
 This:
 
-```{r }
+```{r ais-km-13 }
 athletes.km <- kmeans(athletes.s, 12, nstart = 20)
 ```
 
@@ -216,7 +216,7 @@ appropriate things from the appropriate one of your data frames.
 Solution
 
 
-```{r }
+```{r ais-km-14 }
 athletes2 <- tibble(
   gender = athletes$Sex,
   sport = athletes$Sport,
@@ -238,7 +238,7 @@ Solution
 
 Let's start with my cluster 1:
 
-```{r }
+```{r ais-km-15 }
 athletes2 %>% filter(cluster == 1)
 ```
 
@@ -249,7 +249,7 @@ height and weight for these data, these are the kinds of sport that
 are played by shorter, lighter people.
 Cluster 2:
 
-```{r }
+```{r ais-km-16 }
 athletes2 %>% filter(cluster == 2) 
 ```
 
@@ -258,7 +258,7 @@ athletes2 %>% filter(cluster == 2)
 Males, apparently some of the more muscular ones, but not the field
 athletes. 
 
-```{r }
+```{r ais-km-17 }
 athletes2 %>% filter(cluster == 3) 
 ```
 
@@ -273,7 +273,7 @@ need to be light in weight.
 
 Let's investigate:
 
-```{r }
+```{r ais-km-18 }
 athletes %>%
   select(gender = Sex, sport = Sport, ht = Ht, wt = Wt) %>%
   mutate(cluster = athletes.km$cluster) -> athletes2a
@@ -284,7 +284,7 @@ athletes2a %>% filter(sport == "Row", cluster == 3)
 
 How does this athlete compare to the other rowers?
 
-```{r }
+```{r ais-km-19 }
 athletes2a %>%
   filter(sport == "Row") %>%
   select(ht, wt) %>%
@@ -297,7 +297,7 @@ The rower that is in cluster 3 is almost the lightest, and also almost
 the shortest, of all the rowers.
 Cluster 4:
 
-```{r }
+```{r ais-km-20 }
 athletes2 %>% filter(cluster == 4) 
 ```
 
@@ -305,7 +305,7 @@ athletes2 %>% filter(cluster == 4)
 
 Males, but possibly more muscular ones.
 
-```{r }
+```{r ais-km-21 }
 athletes2 %>% filter(cluster == 5) 
 ```
 
@@ -316,7 +316,7 @@ clusters different?
 
 One more:
 
-```{r }
+```{r ais-km-22 }
 athletes2 %>% filter(cluster == 6) 
 ```
 
@@ -334,7 +334,7 @@ Solution
 
 
 `MASS` is already loaded (for me), so:
-```{r }
+```{r ais-km-23 }
 athletes.3 <- athletes %>%
   mutate(cluster = athletes.km$cluster) %>%
   lda(cluster ~ RCC + WCC + Hc + Hg + Ferr + BMI + SSF + `%Bfat` + LBM + Ht + Wt, data = .)
@@ -346,7 +346,7 @@ We can display all the output now. The
 problem here, with 12 groups and 11 variables, is that there is rather
 a lot of it:
 
-```{r }
+```{r ais-km-24 }
 athletes.3
 ```
 
@@ -414,7 +414,7 @@ categorical (the numbers are labels). Also, note that we will have
 a lot of colours here, so I am trying to make them more
 distinguishable using `scale_colour_brewer` from the
 `RColorBrewer` package (loaded at the beginning):
-```{r }
+```{r ais-km-25 }
 ggbiplot(athletes.3, groups = factor(athletes2$cluster)) +
   scale_colour_brewer(palette = "Set3")
 ```
@@ -469,7 +469,7 @@ tell apart.
 In any case, RCC and BMI seem to be important, so let's plot them
 against each other, coloured by cluster:
 
-```{r }
+```{r ais-km-26 }
 athletes %>%
   mutate(cluster = factor(athletes2$cluster)) %>%
   ggplot(aes(x = RCC, y = BMI, colour = cluster)) +

@@ -27,7 +27,7 @@ Solution
 
 I am doing some preparatory work that you don't need to do:
 
-```{r }
+```{r proportion-power-sim-1 }
 set.seed(457299)
 ```
 
@@ -42,7 +42,7 @@ number generator with any number you like. A lot of people use
 number. 
 
 And so to work:
-```{r }
+```{r proportion-power-sim-2 }
 rbinom(1, 100, 0.6)
 ```
 
@@ -55,7 +55,7 @@ you should get the same values I did.)
 
 For fun, you can see what happens if you change the 1:
 
-```{r }
+```{r proportion-power-sim-3 }
 rbinom(3, 100, 0.6)
 ```
 
@@ -90,7 +90,7 @@ Solution
 
 
 I got exactly 60 successes, so I do this:
-```{r }
+```{r proportion-power-sim-4 }
 prop.test(60, 100, 0.5, alternative = "greater")
 ```
 
@@ -113,7 +113,7 @@ Solution
 
 Copying and pasting:
 
-```{r }
+```{r proportion-power-sim-5 }
 p_test <- prop.test(60, 100, 0.5, alternative = "greater")
 p_test$p.value
 ```
@@ -147,7 +147,7 @@ Solution
 
 The first part of the first step is to create a column called something like `sim` that labels each simulated sample, and to make sure that everything happens rowwise. After that, you follow the procedure:
 
-```{r}
+```{r proportion-power-sim-6}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(sample = rbinom(1, 500, 0.56)) %>% 

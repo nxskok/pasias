@@ -31,7 +31,7 @@ rows and 30 columns of dissimilarities.
 Solution
 
 
-```{r }
+```{r seabed-1 }
 my_url <- "http://ritsokiguess.site/datafiles/seabed1.csv"
 seabed <- read_csv(my_url)
 seabed
@@ -59,7 +59,7 @@ This one needs `as.dist` to convert already-distances into
 a `dist` object. (`dist` would have
 *calculated* distances from things that were not
 distances/dissimilarities yet.)
-```{r }
+```{r seabed-2 }
 d <- as.dist(seabed)
 ```
 
@@ -79,7 +79,7 @@ Solution
 
 
 This:
-```{r }
+```{r seabed-3 }
 d.1 <- hclust(d, method = "single")
 plot(d.1)
 ```
@@ -100,7 +100,7 @@ formed into clusters first).
 You might^[Conceivably.] be wondering what else is in that
 `hclust` object, and what it's good for. Let's take a look:
 
-```{r }
+```{r seabed-4 }
 glimpse(d.1)
 ```
 
@@ -110,7 +110,7 @@ You might guess that `labels` contains the names of the sites,
 and you'd be correct. Of the other things, the most interesting are
 `merge` and `height`. Let's display them side by side:
 
-```{r }
+```{r seabed-5 }
 with(d.1, cbind(height, merge))
 ```
 
@@ -146,7 +146,7 @@ Solution
 
 Same thing, with small changes. The hard part is getting the name 
 of the `method` right:
-```{r }
+```{r seabed-6 }
 d.2 <- hclust(d, method = "ward.D")
 plot(d.2, cex = 0.7)
 ```
@@ -162,7 +162,7 @@ happen here.
 
 This shows up in `merge` too:
 
-```{r }
+```{r seabed-7 }
 d.2$merge
 ```
 
@@ -186,7 +186,7 @@ Solution
 You may need to draw the plot again. In any case, a second line of
 code draws the rectangles. I think three clusters is good, but you
 can have a few more than that if you like:
-```{r }
+```{r seabed-8 }
 plot(d.2, cex = 0.7)
 rect.hclust(d.2, 3)
 ```
@@ -197,7 +197,7 @@ What I want to see is a not-unreasonable choice of number of clusters
 (I think you could go up to about six), and then a depiction of that
 number of clusters on the plot. This is six clusters:
 
-```{r }
+```{r seabed-9 }
 plot(d.2, cex = 0.7)
 rect.hclust(d.2, 6)
 ```
@@ -225,7 +225,7 @@ Solution
 
 Thus:
 
-```{r }
+```{r seabed-10 }
 my_url <- "http://ritsokiguess.site/datafiles/seabed.csv"
 seabed.z <- read_csv(my_url)
 seabed.z
@@ -266,7 +266,7 @@ in the same cluster will be easiest to justify if you pick sites
 that were joined together early.
 Then you need to display just those rows of the original data (that
 you just read in), which is a `filter` with an "or" in it:
-```{r }
+```{r seabed-11 }
 seabed.z %>% filter(site == "s3" | site == "s20")
 ```
 
@@ -274,7 +274,7 @@ seabed.z %>% filter(site == "s3" | site == "s20")
 
 I think this odd-looking thing also works:
 
-```{r }
+```{r seabed-12 }
 seabed.z %>% filter(site %in% c("s3", "s20"))
 ```
 
@@ -302,7 +302,7 @@ those two sites from the original data.
 What happens if you pick sites from different clusters? Let's pick two
 very dissimilar ones, sites 4 and 7 from opposite ends of my dendrogram:
 
-```{r }
+```{r seabed-13 }
 seabed.z %>% filter(site == "s4" | site == "s7")
 ```
 
@@ -320,7 +320,7 @@ calculation; the other variables have nothing to do with it.
 Let's simplify matters by pretending that we have only two species (we
 can call them A and B), and a vector like this:
 
-```{r }
+```{r seabed-14 }
 v1 <- c(10, 3)
 ```
 
@@ -329,7 +329,7 @@ v1 <- c(10, 3)
 which says that we have 10 organisms of species A and 3 of species B
 at a site. This is rather similar to this site:
 
-```{r }
+```{r seabed-15 }
 v2 <- c(8, 4)
 ```
 
@@ -337,7 +337,7 @@ v2 <- c(8, 4)
 
 but very different from this site:
 
-```{r }
+```{r seabed-16 }
 v3 <- c(0, 7)
 ```
 
@@ -346,7 +346,7 @@ v3 <- c(0, 7)
 The way you calculate the Bray-Curtis dissimilarity is to take the
 absolute difference of counts of organisms of each species:
 
-```{r }
+```{r seabed-17 }
 abs(v1 - v2)
 ```
 
@@ -354,7 +354,7 @@ abs(v1 - v2)
 
 and add those up:
 
-```{r }
+```{r seabed-18 }
 sum(abs(v1 - v2))
 ```
 
@@ -362,7 +362,7 @@ sum(abs(v1 - v2))
 
 and then divide by the total of all the frequencies:
 
-```{r }
+```{r seabed-19 }
 sum(abs(v1 - v2)) / sum(v1 + v2)
 ```
 
@@ -371,7 +371,7 @@ sum(abs(v1 - v2)) / sum(v1 + v2)
 The smaller this number is, the more similar the sites are. So you
 might imagine that `v1` and `v3` would be more dissimilar:
 
-```{r }
+```{r seabed-20 }
 sum(abs(v1 - v3)) / sum(v1 + v3)
 ```
 
@@ -394,7 +394,7 @@ So, my function is (copying and pasting my code from above into the
 body of the function, which is Wickham-approved since it's only my
 second time):
 
-```{r }
+```{r seabed-21 }
 braycurtis <- function(v1, v2) {
   sum(abs(v1 - v2)) / sum(v1 + v2)
 }
@@ -404,7 +404,7 @@ braycurtis <- function(v1, v2) {
 
 Let's test it on my made-up sites, making up one more:
 
-```{r }
+```{r seabed-22 }
 braycurtis(v1, v2)
 braycurtis(v1, v3)
 braycurtis(v2, v2)
@@ -423,7 +423,7 @@ the maximum value of 1.
 
 But note this:
 
-```{r }
+```{r seabed-23 }
 v2
 2 * v2
 braycurtis(v2, 2 * v2)
@@ -443,7 +443,7 @@ row of the original data frame; specifically, it's columns 2 through
 6. For example, sites `s3` and `s20` of the original
 data frame look like this:
 
-```{r }
+```{r seabed-24 }
 seabed.z %>% filter(site == "s3" | site == "s20")
 ```
 
@@ -457,14 +457,14 @@ that we wrote before. This is a little fiddly, but bear with me. The
 input to the function is the data frame, then the two sites that we want:
 First, though, what happens if `filter` site `s3`?
 
-```{r }
+```{r seabed-25 }
 seabed.z %>% filter(site == "s3")
 ```
 
  
 This is a one-row data frame, not a vector as our function expects. 
 Do we need to worry about it? First, grab the right columns, so that we will know what our function has to do:
-```{r }
+```{r seabed-26 }
 seabed.z %>%
   filter(site == "s3") %>%
   select(a:e)
@@ -475,7 +475,7 @@ seabed.z %>%
 That leads us to this function, which is a bit repetitious, but for
 two repeats I can handle it. I haven't done anything about the fact
 that `x` and `y` below are actually data frames:
-```{r }
+```{r seabed-27 }
 braycurtis.spec <- function(d, i, j) {
   d %>% filter(site == i) %>% select(a:e) -> x
   d %>% filter(site == j) %>% select(a:e) -> y
@@ -499,7 +499,7 @@ into a separate function as well, but I didn't.
 Sites 3 and 20 were the two sites I chose before as being similar ones (in the
 same cluster). So the dissimilarity should be small:
 
-```{r }
+```{r seabed-28 }
 braycurtis.spec(seabed.z, "s3", "s20")
 ```
 
@@ -523,7 +523,7 @@ you'll recognize this as two loops, one inside the other. This can be done in R 
 The starting point is to make a vector containing all the sites, which
 is easier than you would guess:
 
-```{r }
+```{r seabed-29 }
 sites <- str_c("s", 1:30)
 sites
 ```
@@ -533,7 +533,7 @@ sites
 Next, we need to make all possible *pairs* of sites, which we
 also know how to do:
 
-```{r }
+```{r seabed-30 }
 site_pairs <- crossing(site1 = sites, site2 = sites)
 site_pairs
 ```
@@ -541,7 +541,7 @@ site_pairs
  
 Now, think about what to do in English first: "for each of the sites in `site1`, and for each of the sites in `site2`, taken in parallel, work out the Bray-Curtis distance."  This is, I hope,
 making you think of `rowwise`:
-```{r }
+```{r seabed-31 }
 site_pairs %>%
   rowwise() %>% 
   mutate(bray_curtis = braycurtis.spec(seabed.z, site1, site2)) -> bc
@@ -552,7 +552,7 @@ bc
 
 This is a "long" data frame, but for the cluster analysis, we need a wide one with sites in rows and columns, so let's create that:
 
-```{r }
+```{r seabed-32 }
 (bc %>% pivot_wider(names_from=site2, values_from=bray_curtis) -> bc2)
 ```
 
@@ -568,7 +568,7 @@ number and a column number. We also have to initialize our matrix that
 we're going to fill with Bray-Curtis distances; I'll fill it with $-1$
 values, so that if any are left at the end, I'll know I missed
 something.
-```{r error=T}
+```{r seabed-33, error=T}
 m <- matrix(-1, 30, 30)
 for (i in 1:30) {
   for (j in 1:30) {
@@ -589,7 +589,7 @@ when I call my function. I also have to supply row and column names
 
 That looks all right. Are all my Bray-Curtis distances between 0 and 1? I can smoosh my matrix into a vector and summarize it:
 
-```{r }
+```{r seabed-34 }
 summary(as.vector(m))
 ```
 
@@ -598,7 +598,7 @@ All the
 dissimilarities are correctly between 0 and 1. We can also check the
 one we did before:
 
-```{r }
+```{r seabed-35 }
 bc2 %>% filter(site1 == "s3") %>% select(s20)
 ```
 
@@ -606,7 +606,7 @@ bc2 %>% filter(site1 == "s3") %>% select(s20)
 
 or
 
-```{r error=T}
+```{r seabed-36, error=T}
 m[3, 20]
 ```
 
@@ -636,7 +636,7 @@ before. (This is again making the grader's life a misery, but her
 instructions from me are to check that you have done something
 reasonable, with the actual answer being less important.) 
 
-```{r }
+```{r seabed-37 }
 cluster <- cutree(d.2, 3)
 cluster
 ```
@@ -646,7 +646,7 @@ cluster
 Now, we add that to the original data, the data frame I called
 `seabed.z`, and make a plot. The best one is a boxplot:
 
-```{r }
+```{r seabed-38 }
 seabed.z %>%
   mutate(cluster = factor(cluster)) %>%
   ggplot(aes(x = cluster, y = pollution)) + geom_boxplot()
@@ -661,7 +661,7 @@ lowest. (Cluster 3 has a low outlier.)
 Any sensible plot will do here. I think boxplots are the best, but you
 could also do something like vertically-faceted histograms:
 
-```{r }
+```{r seabed-39 }
 seabed.z %>%
   mutate(cluster = factor(cluster)) %>%
   ggplot(aes(x = pollution)) + geom_histogram(bins = 8) +
@@ -677,7 +677,7 @@ data in them.)
 
 Here's how 5 clusters looks:
 
-```{r }
+```{r seabed-40 }
 cluster <- cutree(d.2, 5)
 cluster
 seabed.z %>%

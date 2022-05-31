@@ -20,7 +20,7 @@ Solution
 
 
 Reading directly from the URL is easiest:
-```{r }
+```{r bellpepper-1 }
 my_url <- "http://ritsokiguess.site/datafiles/bellpepper.csv"
 pepper <- read_csv(my_url)
 pepper
@@ -30,7 +30,7 @@ pepper
 
 If you like, find out how many observations you have from each field, thus:
 
-```{r }
+```{r bellpepper-2 }
 pepper %>% count(field)
 ```
 
@@ -59,7 +59,7 @@ but the median for `a` is actually *lower*.
 
 The other reasonable plot is a facetted histogram, something like this:
 
-```{r }
+```{r bellpepper-3 }
 ggplot(pepper, aes(x = water)) + geom_histogram(bins = 6) +
   facet_grid(field ~ .)
 ```
@@ -73,7 +73,7 @@ is that the water content in field B is either about the same as field
 A, or a lot less (nothing in between).  I can borrow an idea from
 earlier to find the five-number summaries for each field:
 
-```{r }
+```{r bellpepper-4 }
 pepper %>%
   nest(-field) %>%
   rowwise() %>% 
@@ -100,7 +100,7 @@ results from a two-sided test.)
 Solution
 
 
-```{r }
+```{r bellpepper-5 }
 t.test(water ~ field, alternative = "greater", data = pepper)
 ```
 
@@ -117,7 +117,7 @@ content.
 
 Another way to tackle this is to do a two-sided test and adapt the P-value:
 
-```{r }
+```{r bellpepper-6 }
 t.test(water ~ field, data = pepper)
 ```
 

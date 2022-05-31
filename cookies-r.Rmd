@@ -19,7 +19,7 @@ I'll pretend it's a
 `.csv` this time, just for fun.  Give the data frame a
 name different from `chips`, so that you don't get
 confused:
-```{r }
+```{r cookies-r-1 }
 bags=read_csv("chips.txt")
 bags
 ``` 
@@ -42,7 +42,7 @@ Solution
 The null median is 1100, so we count the number
 of values above and below:
 
-```{r }
+```{r cookies-r-2 }
 bags %>% count(chips<1100)
 ``` 
 
@@ -51,13 +51,13 @@ directly into the `count`. If you don't think of that, you can
 also do this, which creates a new variable `less` that is
 `TRUE` or `FALSE` for each bag appropriately:
 
-```{r }
+```{r cookies-r-3 }
 bags %>% mutate(less=(chips<1100)) %>% count(less)
 ``` 
 
 or the more verbose
 
-```{r }
+```{r cookies-r-4 }
 bags %>% mutate(less=(chips<1100)) %>%
 group_by(less) %>% summarize(howmany=n())
 ``` 
@@ -75,13 +75,13 @@ if we will), that small number of values below 1100 is what we want.
 The P-value is the probability of a value 1 or less in a binomial
 distribution with $n=16, p=0.5$:
 
-```{r }
+```{r cookies-r-5 }
 sum(dbinom(0:1,16,0.5))
 ``` 
 
 Or, equivalently, count *up* from 15:
 
-```{r }
+```{r cookies-r-6 }
 sum(dbinom(15:16,16,0.5))
 ``` 
 
@@ -101,7 +101,7 @@ Solution
 
 
 This will mean reading the output carefully:
-```{r }
+```{r cookies-r-7 }
 library(smmr)
 sign_test(bags,chips,1100)
 ```       
@@ -115,7 +115,7 @@ along the `upper` line) of 0.00026.
 
 Alternatively, you can do this:
 
-```{r }
+```{r cookies-r-8 }
 sign_test0(bags$chips,1100)
 ``` 
 
@@ -132,7 +132,7 @@ Solution
 
 
 Once everything is in place, this is simplicity itself:
-```{r }
+```{r cookies-r-9 }
 ci_median(bags,chips)
 ```       
 
@@ -143,7 +143,7 @@ supports the conclusion we got above that the median is above
 
 Or, 
 
-```{r }
+```{r cookies-r-10 }
 ci_median0(bags$chips)
 ``` 
 

@@ -27,7 +27,7 @@ Solution
 
 This is a tricky one. There are aligned columns, but *the column headers are not aligned with them*. 
 Thus `read_table2` is what you need.
-```{r }
+```{r mathsal-1 }
 my_url <- "http://ritsokiguess.site/datafiles/mathsal.txt"
 salaries <- read_table2(my_url)
 salaries
@@ -40,7 +40,7 @@ one for the response and one each for the explanatory variables.
 
 Or, if you like,
 
-```{r }
+```{r mathsal-2 }
 dim(salaries)
 ```
 
@@ -100,7 +100,7 @@ call.
 Note that all the relationships are more or less linear (no
 obvious curves here). We could also investigate the relationships
 among the explanatory variables:
-```{r }
+```{r mathsal-3 }
 cor(salaries)
 ```
 
@@ -117,7 +117,7 @@ variables, and obtain a `summary` of the results.
 Solution
 
 
-```{r }
+```{r mathsal-4 }
 salaries.1 <- lm(salary ~ workqual + experience + pubsucc, data = salaries)
 summary(salaries.1)
 ```
@@ -159,7 +159,7 @@ take any, even one, of the variables out: doing so would make the
 regression much worse.
 If you need convincing of that, see what happens when we take
 the variable with the highest P-value out --- this is `workqual`:
-```{r }
+```{r mathsal-5 }
 salaries.2 <- lm(salary ~ experience + pubsucc, data = salaries)
 summary(salaries.2)
 ```
@@ -209,7 +209,7 @@ I think it would be a big mistake. Taking even one of these
 variables out of the regression is a bad idea (from the
 $t$-tests), so taking out more than one would be a *really* bad idea.
 To perform a test, fit the model without these two explanatory variables:
-```{r }
+```{r mathsal-6 }
 salaries.3 <- lm(salary ~ experience, data = salaries)
 ```
 
@@ -218,7 +218,7 @@ salaries.3 <- lm(salary ~ experience, data = salaries)
 and then use `anova` to compare the two regressions, smaller
 model first:
 
-```{r }
+```{r mathsal-7 }
 anova(salaries.3, salaries.1)
 ```
 
@@ -243,7 +243,7 @@ Solution
 
 I intended that (i) should just be a matter of looking at residuals
 vs.\ fitted values:
-```{r }
+```{r mathsal-8 }
 ggplot(salaries.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -260,7 +260,7 @@ dataframe with the original $x$-variables *and* the residuals in
 it. The following thus looks rather complicated, and if it confuses
 you, run the code a piece at a time to see what it's doing:
 
-```{r }
+```{r mathsal-9 }
 salaries.1 %>%
   augment(salaries) %>%
   pivot_longer(workqual:pubsucc, names_to="xname", values_to="x") %>%
@@ -274,7 +274,7 @@ These three residual plots are also pretty much textbook random, so no problems 
 
 For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:
 
-```{r }
+```{r mathsal-10 }
 ggplot(salaries.1, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
@@ -288,7 +288,7 @@ them to be.
 
 Our graph for assessing fan-in or fan-out is to plot the *absolute* values of the residuals against the fitted values. The plot from (i) suggests that we won't have any problems here, but to investigate:
 
-```{r }
+```{r mathsal-11 }
 ggplot(salaries.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 

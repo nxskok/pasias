@@ -76,7 +76,7 @@ column names (not ones that we want to use, anyway). Just
 typing the name of the data frame will display "a few" (that
 is, 10) lines of it, so that you can check it for
 plausibleness: 
-```{r }
+```{r bikes-1 }
 my_url <- "http://ritsokiguess.site/datafiles/bikes.csv"
 bikes <- read_csv(my_url, skip = 8, col_names = F)
 bikes
@@ -139,7 +139,7 @@ you'll see that it requires up to two
 things (not including the data frame): a column to fill, and
 a direction to fill it (the default of "down" is exactly
 what we want). Thus:
-```{r }
+```{r bikes-2 }
 bikes %>% fill(X1)
 ```
 
@@ -151,7 +151,7 @@ We will probably want to rename `X1` to something like
 `time`, so let's do that now before we forget. There is a
 `rename` that does about what you'd expect:
 
-```{r }
+```{r bikes-3 }
 bikes %>% fill(X1) %>% rename(Time = X1)
 ```
 
@@ -186,7 +186,7 @@ Solution
 
 Under the assumption we are making, we only have to look
 at column `X2` and we ignore `X3` totally:
-```{r error=T}
+```{r bikes-4, error=T}
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -199,7 +199,7 @@ Oh, that didn't work. The gender column is either `male` or
 missing; the two missing ones here should say `female`. What
 happened? Let's just look at our logical condition this time:
 
-```{r error=T}
+```{r bikes-5, error=T}
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -223,7 +223,7 @@ case, it's a female cyclist). R has a function `is.na` which is
 the thing inside it has some non-missing value. In our case, it
 goes like this:
 
-```{r }
+```{r bikes-6 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -247,7 +247,7 @@ check for three things: (i) `X2` has an `X` and
 `X3` is missing; (ii) `X2` is missing and `X3`
 has an `X`; (iii) anything else, which is an error:
 
-```{r }
+```{r bikes-7 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -279,7 +279,7 @@ I wanted to check that the observer did check exactly one of
 `V2` and `V3` as I asserted, which can be done by
 gluing this onto the end:
 
-```{r }
+```{r bikes-8 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -300,7 +300,7 @@ cyclists than female ones.)
 Extra: I was wondering how `pivot_longer` would play out here. The
 way to do it seems to be to rename the columns we want first, and get rid of the others:
 
-```{r }
+```{r bikes-9 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -310,7 +310,7 @@ bikes %>%
 
 Each row should have one X and one missing in it, so we may as well drop the missings as we pivot-longer:
 
-```{r}
+```{r bikes-10}
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -345,7 +345,7 @@ Solution
 
 On the face of it, the way to do this is to go looking
 for `X`'s:
-```{r }
+```{r bikes-11 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -366,7 +366,7 @@ The solution is the same: look for the things that are *missing*
 if the cyclist is wearing a helmet, carrying a passenger or riding on
 the sidewalk. These are `X5, X7, X9` respectively:
 
-```{r }
+```{r bikes-12 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -388,7 +388,7 @@ It is less elegant, though equally good for the purposes of the
 assignment, to use `ifelse` for these as well, which would go
 like this, for example:
 
-```{r }
+```{r bikes-13 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -412,7 +412,7 @@ I like to put brackets around logical conditions when I am assigning
 them to a variable or defining new columns containing them.
 If I don't, I get something like
 
-```{r eval=F}
+```{r bikes-14, eval=F}
 helmet <- V4 == "X"
 ```
 
@@ -421,7 +421,7 @@ helmet <- V4 == "X"
 which actually works, but is hard to read. Well, I *think* it
 works. Let's check:
 
-```{r }
+```{r bikes-15 }
 exes <- c("X", "", "X", "", "X")
 y <- exes == "X"
 y
@@ -438,7 +438,7 @@ logical-equals is evaluated first, and the result of that is saved in
 the variable. But unless you or your readers remember that, it's
 better to write
 
-```{r }
+```{r bikes-16 }
 y <- (exes == "X")
 ```
 
@@ -446,7 +446,7 @@ y <- (exes == "X")
 
 to draw attention to the order of calculation. This is the same reason that
 
-```{r }
+```{r bikes-17 }
 4 + 5 * 6
 ```
 
@@ -476,7 +476,7 @@ Solution
 This is a breath of fresh air after all the thinking
 needed above: this is just `select`, added to
 the end:
-```{r }
+```{r bikes-18 }
 mybikes <- bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -497,7 +497,7 @@ have it, but need to keep it (because it holds the times).
 
 Another way to do this is to use a "select-helper", thus:
 
-```{r }
+```{r bikes-19 }
 bikes %>%
   fill(X1) %>%
   rename(Time = X1) %>%
@@ -530,7 +530,7 @@ Solution
 
 I already got this one when I was checking for
 observer-notation errors earlier:
-```{r }
+```{r bikes-20 }
 mybikes %>% count(gender)
 ```
 
@@ -549,7 +549,7 @@ Solution
 
 You can count two variables at once, in which case
 you get counts of all combinations of them:
-```{r }
+```{r bikes-21 }
 mybikes %>% count(gender, helmet)
 ```
 
@@ -564,7 +564,7 @@ solution that I will have to explain. First, let's go back to the
 `group_by` and `summarize` version of the
 `count` here:
 
-```{r }
+```{r bikes-22 }
 mybikes %>%
   group_by(gender, helmet) %>%
   summarize(the_count = n())
@@ -575,7 +575,7 @@ mybikes %>%
 That's the same table we got just now. Now, let's calculate a
 proportion and see what happens:
 
-```{r }
+```{r bikes-23 }
 mybikes %>%
   group_by(gender, helmet) %>%
   summarize(the_count = n()) %>%
@@ -588,7 +588,7 @@ We seem to have the proportions of males and females who were and were
 not wearing a helmet, and you can check that this is indeed the case,
 for example:
 
-```{r }
+```{r bikes-24 }
 403 / (403 + 458)
 ```
 
@@ -614,7 +614,7 @@ explanation ("peeling off") to explain how it worked.
 
 What happens if we switch the order of the things in the `group_by`?
 
-```{r }
+```{r bikes-25 }
 mybikes %>%
   group_by(helmet, gender) %>%
   summarize(the_count = n()) %>%
@@ -633,7 +633,7 @@ and "out of females"; now we have "out of helmeted riders" and
 This is row and column proportions in a contingency table, B22 style.
 
 Now, I have to see whether the `count` variant of this works:
-```{r error=T}
+```{r bikes-26, error=T}
 mybikes %>%
   count(gender, helmet) %>%
   mutate(prop = n / sum(n))
@@ -658,7 +658,7 @@ Solution
 
 
 Not too many, I'd hope. Again:
-```{r }
+```{r bikes-27 }
 mybikes %>% count(passenger, sidewalk)
 ```
 
@@ -684,7 +684,7 @@ and eyeball the largest frequency. There are quite a
 few 15-minute periods, so be prepared to hit Next a
 few times (or use `View`):
 
-```{r size="footnotesize"}
+```{r bikes-28, size="footnotesize"}
 mybikes %>% count(Time) 
 ```
 
@@ -698,7 +698,7 @@ anything you can do to a data frame, you can do to *it*: for
 example, display only the rows where the frequency equals the maximum
 frequency:
 
-```{r }
+```{r bikes-29 }
 mybikes %>%
   count(Time) %>%
   filter(n == max(n))

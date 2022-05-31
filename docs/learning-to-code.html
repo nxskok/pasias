@@ -297,7 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">15.3</span> Analysis</h2>
 <p>We begin by visualizing the data. With one quantitative variable <code>mark</code> and one categorical variable <code>instruction</code>, a boxplot will give us an overall picture (see note 3):</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">x=</span> instruction, <span class="dt">y =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/proggo-4-1.png" width="672" /></p>
 <p>It looks as if the average (median) mark is somewhat higher for the students in the online section. In addition, both distributions look reasonably symmetric with no outliers, and they appear to have similar spread. (see note 4.)</p>
 <p>With that in mind, it seems sensible to compare the mean final exam marks in the two groups by a pooled two-sample <span class="math inline">\(t\)</span>-test, in order to see whether the apparent difference in performance is any more than chance. The aim of the course coordinator was to see whether there was any difference between the two sections, without having any prior idea about which teaching method would be better, so a two-sided test is appropriate: (see note 5.)</p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
@@ -316,7 +316,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This <span class="math inline">\(t\)</span>-test comes with the assumption that the data in each group come from a normal distribution, at least approximately. With two small samples, this will not be easy to assess, but we can at least look for any gross violations, using a normal quantile plot for each group:</p>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">sample =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb77-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/proggo-6-1.png" width="672" /></p>
 <p>The largest observation in the classroom group and the largest two observations in the online group are a little bigger than expected, but they were not big enough to be flagged as outliers on the boxplots, so I conclude that the normality is good enough to justify the <span class="math inline">\(t\)</span>-test that we did. (See note 8.)</p>
 </div>
 <div id="conclusions-see-note-9" class="section level2">
@@ -430,7 +430,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb88-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb88-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb88-8" title="8"><span class="st">    </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/proggo-12-1.png" width="672" /></p>
 <p>These are close to their lines, which tells me indeed that the two-sample <span class="math inline">\(t\)</span>-test I did was perfectly reasonable.</p>
 <p>As I say, though, this is very much for <em>you</em>, and not for the report, given who would be reading it. If you were doing a presentation on this, the bootstrap stuff is something you would keep in reserve in case someone asks about the appropriateness of the <span class="math inline">\(t\)</span>-test, and <em>then</em> you could talk about it, but otherwise you wouldn’t mention it at all.</p>
 <ol start="9" style="list-style-type: decimal">

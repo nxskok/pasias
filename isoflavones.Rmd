@@ -40,7 +40,7 @@ Solution
 
 The tidying part is a fair bit easier to see if you *do not* read the column headers. A clue to this is that `bone_mineral_density` is not aligned with the values (of bone mineral density) below it. The next question is how to do that. You might remember `col_names=FALSE` from when the data file has no column headers at all, but here it *does* have headers; we just want to skip over them. Keep reading in the documentation for `read_table`, and you'll find an option `skip` that does exactly that, leading to:
 
-```{r}
+```{r isoflavones-1}
 my_url <- "http://ritsokiguess.site/datafiles/isoflavones.txt"
 bmd0a <- read_table(my_url, col_names = FALSE, skip = 1)
 bmd0a
@@ -52,7 +52,7 @@ This, however, is looking very promising. A pivot_longer will get those columns 
 
 All right, can we replace the blanks with missings, and then `fill` those? This might inspire you to go back to the list of ideas in the question, and find out what `na_if` does: namely, exactly this! Hence:
 
-```{r}
+```{r isoflavones-2}
 bmd0a %>% mutate(X1=na_if(X1, "")) %>% 
 fill(X1) 
 ```
@@ -65,7 +65,7 @@ You need to organize the treatment column first, before you do the `pivot_longer
 
 Now, we need to get one column of bone mass densities, instead of six. This you'll recognize as a standard `pivot_longer`, with one tweak: those missing values in `X5` through `X7`, which we want to get rid of. You might remember that this is what `values_drop_na` does:
 
-```{r}
+```{r isoflavones-3}
 bmd0a %>% mutate(X1=na_if(X1, "")) %>% 
 fill(X1) %>% 
 pivot_longer(X2:X7, names_to="old", values_to="bmd", values_drop_na=TRUE)
@@ -75,7 +75,7 @@ If you didn't think of `values_drop_na`, do the pivot without, and then check th
 
 This is almost there. We have a numeric column of bone mass densities, a column called `old` that we can ignore, and a treatment column with a stupid name that we can fix. I find `rename` backwards: the syntax is new name equals old name, so you start with the name that doesn't exist yet and finish with the one you want to get rid of:
 
-```{r}
+```{r isoflavones-4}
 bmd0a %>% mutate(X1=na_if(X1, "")) %>% 
 fill(X1) %>% 
 pivot_longer(X2:X7, names_to="old", values_to="bmd", values_drop_na=TRUE) %>% 
@@ -97,7 +97,7 @@ The guideline for description is that if *you* don't know what's going to happen
 
 So, I said there was another way. This happens to have a simple but clever solution. It starts from wondering "what happens if I read the data file *with* column headers, the normal way? Do it and find out:
 
-```{r}
+```{r isoflavones-5}
 my_url <- "http://ritsokiguess.site/datafiles/isoflavones.txt"
 bmd0b <- read_table(my_url)
 bmd0b
@@ -107,7 +107,7 @@ This looks ... strange. There are two column headers, and so there are two colum
 
 The first thing is, as before, to fill in the missing treatments, which is as above, but changing some names:
 
-```{r}
+```{r isoflavones-6}
 bmd0b %>% mutate(treatment=na_if(treatment, "")) %>% 
 fill(treatment) 
 ```
@@ -115,7 +115,7 @@ fill(treatment)
 
 The way we learned in class for dealing with this kind of thing is `separate`. It is rather unwieldy here since we have to split `bone_mineral_density` into six (temporary) things:
 
-```{r}
+```{r isoflavones-7}
 bmd0b %>% mutate(treatment=na_if(treatment, "")) %>% 
 fill(treatment) %>% 
 separate(bone_mineral_density, into = c("z1", "z2", "z3", "z4", "z5", "z6"))
@@ -125,7 +125,7 @@ This works, though if you check, there's a warning that some of the rows don't h
 
 Having thought of `separate`, maybe you're now wondering what `separate_rows` does. It turns out that it bypasses the business of creating extra columns and then pivoting them longer, thus:
 
-```{r}
+```{r isoflavones-8}
 bmd0b %>% mutate(treatment=na_if(treatment, "")) %>% 
 fill(treatment)  %>% 
 separate_rows(bone_mineral_density, convert = TRUE) -> bmd1a
@@ -145,7 +145,7 @@ Solution
 
 The key issues here are whether the values within each treatment group are close enough to normally distributed, and, if they are, whether the spreads are close enough to equal. The best plot is therefore a normal quantile plot of each of the three groups, in facets. You can do this *without* `scales="free"`:
 
-```{r}
+```{r isoflavones-9}
 ggplot(bmd1b, aes(sample=bmd)) + stat_qq() + stat_qq_line() +
 facet_wrap(~treatment)
 ```
@@ -154,7 +154,7 @@ The value of doing it this way is that you also get a sense of variability, from
 
 You could also do it *with* `scales = "free"`:
 
-```{r}
+```{r isoflavones-10}
 ggplot(bmd1b, aes(sample=bmd)) + stat_qq() + stat_qq_line() +
 facet_wrap(~treatment, scales = "free")
 ```
@@ -165,7 +165,7 @@ I'm happy with either way of making the normal quantile plots, as long as you ha
 
 The next-best graph here is boxplots:
 
-```{r}
+```{r isoflavones-11}
 ggplot(bmd1b, aes(x=treatment, y=bmd)) + geom_boxplot()
 ```
 
@@ -197,7 +197,7 @@ If you are OK with the normality, you need to assess equal spreads. You can do t
 
 If your normal quantile plots looked like this:
 
-```{r}
+```{r isoflavones-12}
 ggplot(bmd1b, aes(sample=bmd)) + stat_qq() + stat_qq_line() +
 facet_wrap(~treatment, scales = "free")
 ```
@@ -206,12 +206,12 @@ the only way to assess spread is to make another plot, and for this job, the box
 
 Extra 1: the bootstrapped sampling distribution of the sample mean for the control group goes this way:
 
-```{r, echo=FALSE}
+```{r isoflavones-13, echo=FALSE}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r isoflavones-14}
 bmd1b %>% 
 filter(treatment == "control") -> d
 tibble(sim = 1:1000) %>% 
@@ -225,13 +225,13 @@ No problems there. The Welch ANOVA is fine.
 
 Extra 2: You might be curious how the analysis comes out. Here is Welch:
 
-```{r}
+```{r isoflavones-15}
 oneway.test(bmd~treatment, data=bmd1b)
 ```
 
 Not all the same means, so use Games-Howell to explore:
 
-```{r}
+```{r isoflavones-16}
 gamesHowellTest(bmd~factor(treatment), data = bmd1b)
 ```
 
@@ -239,7 +239,7 @@ High dose is significantly different from both the other two, which are not sign
 
 Mood's median test, for comparison:
 
-```{r}
+```{r isoflavones-17}
 median_test(bmd1b, bmd, treatment)
 ```
 

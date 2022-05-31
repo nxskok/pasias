@@ -11,7 +11,7 @@ Solution
 
 Pretty much any of the `read_` functions will work, even this one:
 
-```{r}
+```{r boot-irs-1}
 my_url <- "http://ritsokiguess.site/datafiles/irs.txt"
 irs <- read_table(my_url)
 irs
@@ -32,13 +32,13 @@ The lecture notes use the exact same dataset, so you can borrow ideas from there
 
 Set up a dataframe with one row for each bootstrap sample you're going to draw, 1000 in this case:
 
-```{r}
+```{r boot-irs-2}
 tibble(sim = 1:1000)
 ```
 
 Create a column with a new bootstrap sample for each `sim`. This means doing `rowwise` *first* and then wrapping the sampling in `list` because you are creating a list-column of samples:
 
-```{r}
+```{r boot-irs-3}
 tibble(sim = 1:1000) %>% 
 rowwise() %>% 
 mutate(sample = list(sample(irs$Time, replace = TRUE)))
@@ -48,7 +48,7 @@ Each thing in `sample` has 30 observations in it (one bootstrap sample). If you 
 
 Next, work out the median of each bootstrapped sample, which is simple because we are still working rowwise:
 
-```{r}
+```{r boot-irs-4}
 tibble(sim = 1:1000) %>% 
 rowwise() %>% 
 mutate(sample = list(sample(irs$Time, replace = TRUE))) %>% 
@@ -99,7 +99,7 @@ Solution
 
 The percentile interval comes from the middle 95% of the bootstrap distribution of medians. The dataframe `bs` is still rowwise, so we have to undo that first to do it the obvious way:
 
-```{r}
+```{r boot-irs-5}
 bs %>% 
   ungroup() %>% 
   summarize(ci1 = quantile(my_median, 0.025),
@@ -108,20 +108,20 @@ bs %>%
 
 Or, pull out just that column and find the two quantiles of that, for which there are two ways, the base R way:
 
-```{r}
+```{r boot-irs-6}
 quantile(bs$my_median, c(0.025, 0.975))
 ```
 
 and the slightly odd-looking:
 
-```{r}
+```{r boot-irs-7}
 bs %>% pull(my_median) %>% 
   quantile(c(0.025, 0.975))
 ```
 
 All of these get you to the same place. There is even one more:
 
-```{r}
+```{r boot-irs-8}
 bs %>% 
   ungroup() %>% 
   summarize(ci = quantile(my_median, c(0.025, 0.975)))
@@ -129,7 +129,7 @@ bs %>%
 
 This takes advantage of a (newish) behaviour of `summarize`: if your summary is more than one thing, it puts one of the summaries on each row, as if you had done something like this:
 
-```{r}
+```{r boot-irs-9}
 bs %>% 
   ungroup() %>% 
   summarize(ci = list(quantile(my_median, c(0.025, 0.975)))) %>% 
@@ -140,27 +140,27 @@ If you had `rowwise` in the back of your mind, you might have tried this. Try it
 
 For the bootstrap $t$, estimate the population median as the sample median:
 
-```{r}
+```{r boot-irs-10}
 med <- median(irs$Time)
 med
 ```
 
 get its standard error from the SD of the bootstrap distribution of medians:
 
-```{r}
+```{r boot-irs-11}
 se <- sd(bs$my_median)
 se
 ```
 
 then go up and down twice this (or 1.96 if you believe in $z$): 
 
-```{r}
+```{r boot-irs-12}
 med + c(-2, 2)*se
 ```
 
 Extra: in this case, we also have the CI for the median that came out of the sign test:
 
-```{r}
+```{r boot-irs-13}
 library(smmr)
 ci_median(irs, Time)
 ```

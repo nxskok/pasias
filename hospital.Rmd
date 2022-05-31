@@ -23,7 +23,7 @@ Solution
  This one requires a little thought
 first. The data values are aligned in columns, and so are the
 column headers. Thus, `read_table` is what we need:
-```{r }
+```{r hospital-1 }
 my_url <- "http://ritsokiguess.site/datafiles/satisfaction.txt"
 satisf <- read_table(my_url)
 satisf
@@ -48,7 +48,7 @@ Solution
 
 
 The obvious way is to do these one after the other:
-```{r fig.height=3, fig.width=4}
+```{r hospital-2, fig.height=3, fig.width=4}
 ggplot(satisf, aes(x = age, y = satis)) + geom_point()
 ggplot(satisf, aes(x = severity, y = satis)) + geom_point()
 ggplot(satisf, aes(x = anxiety, y = satis)) + geom_point()
@@ -63,7 +63,7 @@ but to set *that* up, we have to have all the $x$-variables in
 that value was. This uses `pivot_longer`. The right way to do this is
 in a pipeline:
 
-```{r }
+```{r hospital-3 }
 satisf %>%
   pivot_longer(-satis, names_to="xname", values_to="x") %>%
   ggplot(aes(x = x, y = satis)) + geom_point() +
@@ -96,7 +96,7 @@ two plots, I should save the long data frame first and re-use it,
 rather than calculating it twice (so that I ought now to go back and
 do the other one using the saved data frame, really):
 
-```{r }
+```{r hospital-4 }
 satisf %>% 
   pivot_longer(age:anxiety, names_to="xname", 
                values_to="x") -> satisf.long
@@ -113,7 +113,7 @@ pipes one line at a time, inspect things, and so on.
 First, making a *row* of plots, so that `xname` is the $x$
 of the facets:
 
-```{r }
+```{r hospital-5 }
 ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
   facet_grid(. ~ xname, scales = "free")
 ```
@@ -125,7 +125,7 @@ I find these too tall and skinny to see the trends, as on the first
 
 And now, making a *column* of plots, with `xname` as $y$:
 
-```{r }
+```{r hospital-6 }
 ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
   facet_grid(xname ~ ., scales = "free")
 ```
@@ -137,7 +137,7 @@ scales. The effect of the `scales="free"` is to allow the
 `satis` scale to vary, but the `x` scale cannot because
 the facets are all in a line. Compare this:
 
-```{r }
+```{r hospital-7 }
 ggplot(satisf.long, aes(x = x, y = satis)) + geom_point() +
   facet_wrap(~xname, ncol = 1, scales = "free")
 ```
@@ -169,7 +169,7 @@ Solution
 
 
 This is a matter of running the whole data frame through `cor`:
-```{r }
+```{r hospital-8 }
 cor(satisf)
 ```
 
@@ -191,7 +191,7 @@ three variables, and display the output.
 Solution
 
 
-```{r }
+```{r hospital-9 }
 satisf.1 <- lm(satis ~ age + severity + anxiety, data = satisf)
 summary(satisf.1)
 ```
@@ -256,6 +256,8 @@ enough to be significant. But see that `severity`
 with low severity of disease is probably also younger, and we know
 that younger patients are likely to be more satisfied. Thus
 severity has nothing (much) to add.
+
+Extra 1:
 The multiple regression is actually doing something clever
 here. Just looking at the correlations, it appears that all three
 variables are helpful, but the regression is saying that once you
@@ -277,232 +279,59 @@ have something to say about `satis` over and above
 `severity` does. But the regression is telling the story to
 believe, because it handles all the inter-correlations, not just
 the ones between pairs of variables.
+
 I thought it would be rather interesting to do some predictions
 here. Let's predict satisfaction for all combinations of high and
 low age, severity and anxiety. I'll use the quartiles for high and
-low. There is a straightforward but ugly way:
-```{r }
-quartiles <- satisf %>% summarize(
-  age_q1 = quantile(age, 0.25),
-  age_q3 = quantile(age, 0.75),
-  severity_q1 = quantile(severity, 0.25),
-  severity_q3 = quantile(severity, 0.75),
-  anxiety_q1 = quantile(anxiety, 0.25),
-  anxiety_q3 = quantile(anxiety, 0.75)
-)
-```
+low. 
 
-     
-
-This is ugly because of all the repetition (same quantiles of
-different variables), and the programmer in you should be offended by
-the ugliness. Anyway, it gives what we want:
-
-```{r }
-quartiles
-```
+The easiest way to get those is via `summary`:
 
 ```{r}
-quartiles %>% 
-  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
-```
- 
- 
- 
-You can copy the numbers from here to below, or you can do some
-cleverness to get them in the right places:
-```{r }
-quartiles %>%
-  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
-  separate(var_q, c("var_name", "which_q")) %>%
-  pivot_wider(names_from=var_name, values_from=quartile)
+summary(satisf)
 ```
 
-This combo of `pivot_longer` and `separate` can be shortened further by specifying *two* names in `names_to`, and also specifying a `names_sep` to say what they're separated by: 
+and then use `datagrid` to make combinations for prediction:
 
-```{r }
-quartiles %>%
-  pivot_longer(everything(), names_to=c("var_q", "which_q"), 
-               names_sep="_", values_to="quartile") %>%
-  pivot_wider(names_from=var_q, values_from=quartile)
-```
-
-Believe it or not, this can be shortened even further, thus:     
-     
 ```{r}
-quartiles %>% 
-  pivot_longer(everything(), names_to=c(".value", "which_q"), names_sep="_")
-```
-     
-The place where this approach gains is when `pivot_longer` goes too far, making *everything* longer, when you want some of it to be wider and thus you needed a `pivot_wider` at the end. Once again, you use two things in the `names_to`, but this time instead of giving both variables names, you use the special name `.value` for the thing you want to end up in columns. The original data frame `quartiles` had columns with names like `severity_q1`, so here that is the first thing: `age` and `severity` and `anxiety` will be used as column names, and filled automatically with the values for `q1` and `q3`, so you don't specify a `values_to`. 
-
-This is one of those very dense pieces of coding, where you accomplish a lot in a small space. If it is too dense for you, you can go back to one of the two previous ways of doing it, eg. the simple `pivot_longer` followed by `separate` followed by `pivot_wider`. Sometimes there is value in using a larger number of simpler tools to get where you want.
-     
-
-Those data frames above are we want for below. Let's test the first way of coding it line by line to see exactly
-what it did: (The second way does the first two lines in one, and the third way does all three.)
-
-```{r }
-quartiles %>%
-  pivot_longer(everything(), names_to="var_q", values_to="quartile") 
+new <- datagrid(model = satisf.1, age = c(33, 44.5), 
+                severity = c(48, 53.5), anxiety = c(2.15, 2.4))
+new
 ```
 
- 
+Eight rows for the $2^3 = 8$ combinations. Then get the predictions for these:
 
-Making longer. `everything()` is a select-helper saying
-"pivot-longer *all* the columns". 
-
-
-```{r }
-quartiles %>%
-  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
-  separate(var_q, c("var_name", "which_q")) 
+```{r}
+predictions(satisf.1, newdata = new)
 ```
 
- 
+Extra 2: the standard errors vary quite a bit. The smallest ones are where age, severity, and anxiety are all high or all low (the last row and the first one). This is where most of the data is, because the three explanatory variables are positively correlated with each other (if you know that one of them is high, the others will probably be high too). The other standard errors are higher because there is not much data "nearby", and so we don't know as much about the quality of the predictions there.
 
-The column `var_q` above encodes a variable *and* a
-quartile, so split them up. By default, `separate` splits at an
-underscore, which is why the things in `quartiles` were named
-with underscores.^[I'd like to claim that I was clever enough  to think of this in advance, but I wasn't; originally the variable  name and the quartile name were separated by dots, which made the separate more complicated, so I went back and changed it.]
+Extra 3: we had to copy the quartile values into the new dataframe we were making (to predict from), which ought to have caused you some concern, since there was no guarantee that we copied them correctly. It would be better to make a dataframe with just the quartiles, and feed that into `datagrid`. Here's how we can do that.
 
-Now put the variable names back in the columns:
-
-```{r }
-quartiles %>%
-  pivot_longer(everything(), names_to="var_q", values_to="quartile") %>%
-  separate(var_q, c("var_name", "which_q")) %>%
-  pivot_wider(names_from=var_name, values_from=quartile) -> qq
-qq
+```{r}
+satisf %>% 
+  summarize(across(-satis,
+                   ~quantile(., c(0.25, 0.75)))) -> d
+d
 ```
 
- 
-I make `var_name` wider, carrying along the values in
-`quartile` (which means that the rows will get matched up by
-`which_q`). 
+To summarize several columns at once, use `across`. This one reads "for each column that is not `satis`, work out the first and third quartiles (25th and 75th percentiles) of it. Recall that the first input to `quantile` is what to compute percentiles of, and the optional^[If you don't give it, you get the five-number summary.] second input is which percentiles to compute. Also, when `summarize` is fed a summary that is more than one number long (two quartiles, here) it will automatically be unnested longer, which happens to be exactly what we want here.
 
-Now, let's think about why we were doing that. We want to do
-predictions of all possible combinations of those values of age and
-anxiety and severity.
-Doing "all possible combinations" calls for `crossing`,
-which looks like this. It uses the output from one of the above pipelines, which I saved in `qq`:
+So now, we need to take the columns from here and feed them into `datagrid`. The way to do that is to use `with`:
 
-```{r }
-satisf.new <- with(qq, crossing(age, anxiety, severity))
-satisf.new
+```{r}
+new <- with(d, datagrid(model = satisf.1, age = age, severity = severity, anxiety = anxiety))
+new
 ```
 
- 
+The clunky repetition is needed because the first (eg.) `age` in `age = age` is the name that the column in `new` is going to get, and the second `age` is the thing that supplies the values to be combined (the column of `d` called `age`). This is exactly the same `new` that we had before, and so the predictions will be exactly the same as they were before.
 
-There are two possibilities for each variable, so there are $2^3=8$
-"all possible combinations". You can check that `crossing` got
-them all.
-
-This is a data frame containing all the values we want to predict for,
-with columns having names that are the same as the variables in the
-regression, so it's ready to go into `predict`. I'll do
-prediction intervals, just because:
-
-```{r }
-pp <- predict(satisf.1, satisf.new, interval = "p")
-cbind(satisf.new, pp)
-```
-
- 
-
-Looking at the predictions themselves (in `fit`), you can see
-that `age` has a huge effect. If you compare the 1st and 5th
-lines (or the 2nd and 6th, 3rd and 7th, \ldots) you see that
-increasing age by 13.5 years, while leaving the other variables the
-same, decreases the satisfaction score by over 15 on
-average. Changing `severity`, while leaving everything else the
-same, has in comparison a tiny effect, just over 2 points. (Compare
-eg. 1st and 2nd lines.) Anxiety has an in-between effect: increasing
-anxiety from 2.1 to 2.475, leaving everything else fixed, decreases
-satisfaction by about 5 points on average.
-
-I chose the quartiles on purpose: to demonstrate the change in average
-satisfaction by changing the explanatory variable by an appreciable
-fraction of its range of values. That is, I changed `severity`
-by "a fair bit", and still the effect on satisfaction scores was small.
-
-Are any of these prediction intervals longer or shorter? We can calculate how
-long they are. Look at the predictions:
-
-```{r }
-pp
-```
-
- 
-
-This is unfortunately not a data frame:
-
-```{r }
-class(pp)
-```
-
- 
-
-so we make it one before calculating the lengths.
-We want `upr` minus `lwr`:
-
-```{r }
-pp %>%
-  as_tibble() %>%
-  transmute(pi.length = upr - lwr)
-```
-
- 
-
-Now, I don't want to keep the other stuff from `pp`, so I used
-`transmute` instead of `mutate`; `transmute`
-keeps *only* the new variable(s) that I calculate and throws away
-the others.^[Usually you want to keep the other variables around as  well, which is why you don't see transmute very often.]
-
-Then I put that side by side with the values being predicted for:
-
-```{r }
-pp %>%
-  as_tibble() %>%
-  transmute(pi.length = upr - lwr) %>%
-  bind_cols(satisf.new) %>% 
-  arrange(pi.length)
-```
-
- 
-
-Two of these are noticeably shorter than the others. These are high-everything and low-everything. If you
-look back at the scatterplot matrix of (<a href="#part:scatmat">here</a>), you'll
-see that the explanatory variables have positive correlations with
-each other. This means that when one of them is low, the other ones
-will tend to be low as well (and correspondingly high with high). That
-is, most of the data is at or near the low-low-low end or the
-high-high-high end, and so those values will be easiest to predict for.
-
-I was actually expecting more of an effect, but what I expected is
-actually there.
-
-In the backward elimination part (coming up), I found that only
-`age` and `anxiety` had a significant impact on
-satisfaction, so I can plot these two explanatory variables against
-each other to see where most of the values are:
-
-```{r }
-ggplot(satisf, aes(x = age, y = anxiety)) + geom_point()
-```
-
- 
-
-There is basically *no* data with low age and high anxiety, or
-with high age and low anxiety, so these combinations will be difficult
-to predict satisfaction for (and thus their prediction intervals will
-be longer).
- 
 $\blacksquare$
 
 (i) Carry out a backward elimination to determine which of
 `age`, `severity` and `anxiety` are needed to
-predict satisfaction. What do you get?
+predict satisfaction. What do you get? Use $\alpha = 0.10$.
 
 
 
@@ -512,7 +341,7 @@ Solution
 This means starting with the regression containing all the explanatory
 variables, which is the one I called `satisf.1`:
 
-```{r }
+```{r hospital-26 }
 summary(satisf.1)
 ```
 
@@ -521,32 +350,34 @@ summary(satisf.1)
 Pull out the least-significant (highest P-value) variable, which here
 is `severity`. We already decided that this had nothing to add:
 
-```{r }
+```{r hospital-27 }
 satisf.2 <- update(satisf.1, . ~ . - severity)
 summary(satisf.2)
 ```
 
- 
+
 
 If you like, copy and paste the first `lm`, edit it to get rid
 of `severity`, and run it again. But when I have a 
 "small change" to make to a model, I like to use `update`.
 
+
+
 Having taken `severity` out, `anxiety` has become
-strongly significant. Since all of the explanatory variables are now
+significant (at $\alpha = 0.10$). Since all of the explanatory variables are now
 significant, this is where we stop. If we're predicting satisfaction,
 we need to know both a patient's age and their anxiety score: being
 older or more anxious is associated with a *decrease* in satisfaction.
 
 There is also a function `step` that will do this for you:
 
-```{r }
+```{r hospital-28 }
 step(satisf.1, direction = "backward", test = "F")
 ```
 
  
 
-with the same result. This function doesn't actually use P-values;
+with the same result.^[This is because we used $\alpha = 0.10$. `step` tends to keep explanatory variables that you might consider marginal because it uses AIC (see below) rather than P-values directly.] This function doesn't actually use P-values;
 instead it uses a thing called AIC. At each step, the variable with
 the lowest AIC comes out, and when `<none>` bubbles up to the
 top, that's when you stop. The `test="F"` means 

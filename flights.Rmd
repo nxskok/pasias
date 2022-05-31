@@ -11,13 +11,13 @@ Solution
 
 Take a look at the `airports` dataframe first:
 
-```{r}
+```{r flights-1}
 airports 
 ```
 
 The airport codes are in the `faa` column, so:
 
-```{r}
+```{r flights-2}
 airports %>% filter(faa == "EWR" | faa == "LGA" | faa == "JFK")
 ```
 
@@ -25,7 +25,7 @@ They are called Newark Liberty (which is actually in New Jersey), John F Kennedy
 
 The code uses `|` to represent "or" in a `filter`. Another way to do it is to define a set of abbreviations as a vector, and then search for `faa` values "in" a set:
 
-```{r}
+```{r flights-3}
 nyc_airports <- c("EWR", "JFK", "LGA")
 airports %>% filter(faa %in% nyc_airports)
 ```
@@ -45,7 +45,7 @@ This is actually simple, but you can overthink yourself into something more comp
 
 First look at `flights` and see that the column you want is called `origin`. Then count them:
 
-```{r}
+```{r flights-4}
 flights %>% count(origin)
 ```
 
@@ -53,7 +53,7 @@ Approximately 120,000 out of Newark, 111,000 out of John F Kennedy, nearly 105,0
 
 Extra: if you want to include the airport *names* on this, you can look them up with `left_join`. This creates a lot of columns, so I would then use `select` to just display the ones I want:
 
-```{r}
+```{r flights-5}
 flights %>% count(origin) %>% 
 left_join(airports, by = c("origin" = "faa")) %>% 
 select(name, n)
@@ -73,13 +73,13 @@ Solution
 
 This begins like the previous part, noting that the column you want is called `dest`:
 
-```{r}
+```{r flights-6}
 flights %>% count(dest)
 ```
 
 Then arrange in descending order by `n`, and slice off the top 5:
 
-```{r}
+```{r flights-7}
 flights %>% count(dest) %>% 
 arrange(desc(n)) %>% 
 slice(1:5)
@@ -87,7 +87,7 @@ slice(1:5)
 
 Another way is this:
 
-```{r}
+```{r flights-8}
 flights %>% count(dest) %>% 
 slice_max(n, n=5)
 ```
@@ -96,7 +96,7 @@ I can't remember (as I write this) whether I've shown you this last one anywhere
 Now you need to think about your reader. I happen to know four of these airports (Chicago,^[The abbreviation comes from O'Hare Field, which is the original name of Chicago's airport.]
 Atlanta, Los Angeles and Boston are the first four), but it's asking a lot to expect your reader to know that. So you need to translate these to actual airport names. You could do this by looking in the `airports` dataframe for these abbreviations by hand and then adding the names to your answer, but I think you should be suspecting that there is a better, code, way to do this, and it's the same idea as the Extra to the previous part: look up the abbreviations in the `airports` dataframe using `left_join`, and then grab only the columns you want to display, like this:
 
-```{r}
+```{r flights-9}
 flights %>% count(dest) %>% 
 arrange(desc(n)) %>% 
 slice(1:5) %>% 
@@ -110,14 +110,14 @@ Extra: Some of these are big cities, and some of them not so much. I think Atlan
 
 Well, we have airline codes in the `flights` dataframe, so let's investigate this. I'm pretty sure that Atlanta is a hub for Delta Airlines, so let's look at Atlanta first. Step one is to look only at the flights with destination Atlanta:
 
-```{r}
+```{r flights-10}
 flights %>% 
 filter(dest == "ATL")
 ```
 
 A mere 17,000 flights. The airline info is in the column called `carrier`:
 
-```{r}
+```{r flights-11}
 flights %>% 
 filter(dest == "ATL") %>% 
 count(carrier) %>% 
@@ -126,13 +126,13 @@ arrange(desc(n))
 
 I have even less clue about airline abbreviations than airport ones, so we definitely need to look these up. Let's examine the `airlines` dataframe:
 
-```{r}
+```{r flights-12}
 airlines
 ```
 
 This is going to be easier than the other ones, because the airline abbreviations have the same name `carrier` in both dataframes, and there are no other columns that have the same name in either dataframe:
 
-```{r}
+```{r flights-13}
 flights %>% 
 filter(dest == "ATL") %>% 
 count(carrier) %>% 
@@ -144,7 +144,7 @@ left_join(airlines)
 
 Looks like my guess of Delta was on the money. What about Orlando? Wikipedia says that this is a hub for JetBlue and Southwest, among others. The same code idea will work again:
 
-```{r}
+```{r flights-14}
 flights %>% 
 filter(dest == "MCO") %>% 
 count(carrier) %>% 
@@ -153,7 +153,7 @@ left_join(airlines)
 ```
 JetBlue for sure, but what happened to Southwest? Do they fly out of New York at all, and if so, where to? We need their abbreviation first:
 
-```{r}
+```{r flights-15}
 airlines %>% 
 filter(str_detect(name, "Southwest"))
 ```
@@ -161,7 +161,7 @@ I did something a little different here: I didn't know what the exact `name` wou
 
 All right, let's find the flights with this carrier, count their destinations, and look them up:
 
-```{r}
+```{r flights-16}
 flights %>% 
 filter(carrier == "WN") %>% 
 count(dest) %>% 
@@ -185,13 +185,13 @@ Solution
 
 This is rather a lot to think about, but the weather will have to be looked up for each flight. The key^[A joke. The most important column, and also the one the database lookup is going to be based on.] column is the one called `time_hour` in `flights`. What does `weather` contain?
 
-```{r}
+```{r flights-17}
 weather
 ```
 
 A column of the same name right at the end. That makes our job a bit easier. We want the weather at the same airport and same time as the flight departed from, so the `by` has to contain both (they have the same names in the two dataframes). If you get over a million rows, it's probably because you forgot to match the airport (and thus you'd have three rows in the output, one for each airport):
 
-```{r}
+```{r flights-18}
 flights %>% 
 left_join(weather, by = c("origin", "time_hour")) %>% 
 select(dep_delay, visib) %>% 
@@ -210,7 +210,7 @@ Solution
 
 Two quantitative variables, so a scatterplot. I would put a smooth trend on it, to make it easier to see whether there is a relationship. There are a *lot* of observations, so the plot takes an appreciable time to draw:
 
-```{r, cache=TRUE}
+```{r flights-19, cache=TRUE}
 ggplot(d, aes(x = visib, y = dep_delay)) + geom_point() + geom_smooth(se = FALSE)
 ```
 
@@ -218,7 +218,7 @@ The big takeaway here is that the delay can be very large for any visibility, an
 
 So let's try removing the points and just leaving the smooth trend, which is down at the bottom of this plot. That might be clearer:
 
-```{r, cache=TRUE}
+```{r flights-20, cache=TRUE}
 ggplot(d, aes(x = visib, y = dep_delay)) + geom_smooth()
 ```
 
@@ -226,7 +226,7 @@ This is a lot clearer: once the visibility gets down below about 2.5 miles, the 
 
 Another way to try is to treat `visib` as categorical, which it really isn't, but there is a fairly small set of discrete values. If you do that, you have a quantitative delay and a categorical visibility, which you have to make such, and thus a boxplot:
 
-```{r}
+```{r flights-21}
 ggplot(d, aes(x = factor(visib), y = dep_delay)) + geom_boxplot()
 ```
 
@@ -234,7 +234,7 @@ This is also not the best, because it is dominated by the outliers.
 
 You could just plotting the median for each `visib` value, thus:
 
-```{r}
+```{r flights-22}
 d %>% 
 group_by(visib) %>% 
 summarize(med_delay = median(dep_delay)) %>% 
@@ -247,7 +247,7 @@ Not all the median delays are large when visibility is under 2.5 miles, but at l
 
 What about if we plot the median *and* quartiles for each visibility value? I don't know how to do that yet,  but I know how to *calculate* them, so let's do that first:^[The `factor` thing is not needed here, because grouping will use each of the distinct values even if the variable is really quantitative.]
 
-```{r}
+```{r flights-23}
 d %>% 
 group_by(visib) %>% 
 summarize(q1 = quantile(dep_delay, 0.25),
@@ -258,14 +258,14 @@ d_summ
 
 Well, this I can do now.^[If I remember to put quotes around the names of my new columns, that is.] Let's make this longer, since we want *one* column of delay summaries to plot:
 
-```{r}
+```{r flights-24}
 d_summ %>% 
 pivot_longer(q1:q3, names_to = "which", values_to = "delay") 
 ```
 
 then plot these as points, joining up the ones that are the same quantile:
 
-```{r}
+```{r flights-25}
 d_summ %>% 
 pivot_longer(q1:q3, names_to = "which", values_to = "delay") %>% 
 ggplot(aes(x = visib, y = delay, colour = which)) + geom_point() + geom_line()
@@ -275,7 +275,7 @@ My take from this is that delays can be bigger when the visibility is less than 
 
 Extra 1: another way of making a plot like these is to have `ggplot` do the calculations for you. We haven't talked about writing functions yet, so some of this won't make much sense to you, but (this way)[https://stackoverflow.com/questions/41077199/how-to-use-r-ggplot-stat-summary-to-plot-median-and-quartiles/41077282] also works, though it too takes noticeable time:
 
-```{r}
+```{r flights-26}
 ggplot(d, aes(x = visib, y = dep_delay)) + stat_summary(
 fun.min = function(z) { quantile(z, 0.25) },
 fun.max = function(z) { quantile(z, 0.75) },
@@ -289,7 +289,7 @@ The code idea is that `stat_summary` contains instructions for calculating the s
 
 Extra 2: if you calculate the three percentiles in one go, the process to the plot is different, thus:
 
-```{r}
+```{r flights-27}
 qs <- c(0.25, 0.5, 0.75)
 d %>% 
 group_by(visib) %>% 
@@ -297,7 +297,7 @@ summarize(q_delay =  quantile(dep_delay, qs))
 ```
 This has a row for each summary, but unfortunately there is no indication of which is which, so we need to put them in ourselves:^[Or be cleverer than I am capable of.]
 
-```{r}
+```{r flights-28}
 qs <- c(0.25, 0.5, 0.75)
 d %>% 
 group_by(visib) %>% 
@@ -309,7 +309,7 @@ mutate(which = rep(qs))
 
 Now everything is ready to go:
 
-```{r}
+```{r flights-29}
 qs <- c(0.25, 0.5, 0.75)
 d %>% 
 group_by(visib) %>% 
@@ -322,7 +322,7 @@ geom_point() + geom_line()
 Oops. The column `which` is quantitative, but I want it treated as categorical, so I should wrap it in `factor`:
 
 
-```{r}
+```{r flights-30}
 qs <- c(0.25, 0.5, 0.75)
 d %>% 
 group_by(visib) %>% 
@@ -338,26 +338,26 @@ Extra 3: an attempt to be clever.^[And thus most likely doomed to failure.]
 
 `quantile` does actually keep track of which quantile is which (using the same `qs` as above):
 
-```{r}
+```{r flights-31}
 quantile(1:10, qs)
 ```
 
 except that the percentages are what is called the "names attribute" of the output, and the `tidyverse` tends to lose things like names attributes, *unless* you explicitly keep hold of them, like this:
 
-```{r}
+```{r flights-32}
 enframe(quantile(1:10, qs), name = "percent", value = "percentile")
 ```
 
 So now, what if we add the `enframe` to the calculation we had above?
 
-```{r}
+```{r flights-33}
 d %>% 
 group_by(visib) %>% 
 summarize(q_delay =  enframe(quantile(dep_delay, qs), name = "percent", value = "delay")) 
 ```
 We now have a list-column, which is OK, but each visibility value is repeated three times, which is not, so I don't like this. I think I need to explicitly add a `list` in the right place:
 
-```{r}
+```{r flights-34}
 d %>% 
 group_by(visib) %>% 
 summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay")))
@@ -365,7 +365,7 @@ summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", val
 
 Now each `visib` value appears once, and in the list-column `q_delay` there is some kind of dataframe for each `visib`, which we hope is the same kind of thing as `enframe` gave us before. Let's `unnest` and take a look:
 
-```{r}
+```{r flights-35}
 d %>% 
 group_by(visib) %>% 
 summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 
@@ -374,7 +374,7 @@ unnest(q_delay)
 
 Genius! Or, as my daughter says, "pog":
 
-```{r}
+```{r flights-36}
 d %>% 
 group_by(visib) %>% 
 summarize(q_delay =  list(enframe(quantile(dep_delay, qs), name = "percent", value = "delay"))) %>% 

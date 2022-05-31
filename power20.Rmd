@@ -25,14 +25,14 @@ alternative hypothesis `alternative`
 (`two.sided`). Leave out `power` since that's what
 we want:
 
-```{r }
+```{r power20-1 }
 power.t.test(n=30,delta=10,sd=20,type="one.sample",alternative="two.sided")
 ``` 
 
 I meant "calculate" exactly rather than "estimate" (by
 simulation). Though if you want to, you can do that as well, thus:
 
-```{r }
+```{r power20-2 }
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(samples = list(rnorm(30, 110, 20))) %>% 
@@ -61,7 +61,7 @@ This time, in `power.t.test`, put in 0.80 for
 doesn't matter (since I have named everything that's going into
 `power.t.test`): 
 
-```{r }
+```{r power20-3 }
 power.t.test(delta=10,power=0.80,sd=20,type="one.sample",alternative="two.sided")  
 ``` 
 
@@ -83,7 +83,7 @@ enough power, so we have to up the sample size a bit. How about we try
 40? I copied and pasted my code from above and changed 30 to 40:
 
 
-```{r }
+```{r power20-4 }
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(samples = list(rnorm(40, 110, 20))) %>% 
@@ -97,7 +97,7 @@ as big as 40. So probably our next guess would be 35. But before we
 copy and paste again, we should be thinking about making a function of
 it first, with the sample size as input. Copy-paste once more and edit:
 
-```{r }
+```{r power20-5 }
 sim_power=function(n) {
   tibble(sim = 1:1000) %>% 
     rowwise() %>% 
@@ -117,7 +117,7 @@ so that we have a more general tool, but this will do for now.
 
 Let's run it with a sample size of 35:
 
-```{r }
+```{r power20-6 }
 sim_power(35)
 ``` 
 
@@ -138,7 +138,7 @@ really need them.
 
 You might even think about automating this further. The easiest way, now that we have the function, is something like this:
 
-```{r}
+```{r power20-7}
 tibble(ns = seq(20, 50, 5)) %>% 
   rowwise() %>% 
   mutate(power_tab = list(sim_power(ns))) %>% 

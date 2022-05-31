@@ -18,7 +18,7 @@ Solution
 
 
 `read_csv`:
-```{r }
+```{r urine-1 }
 my_url <- "http://ritsokiguess.site/datafiles/urine.csv"
 urine <- read_csv(my_url)
 urine
@@ -49,7 +49,7 @@ This also works with facets, though it is different from the other
 ones we've done, in that we have to collect together the $y$-variables
 first rather than the $x$s:
 
-```{r }
+```{r urine-2 }
 urine %>%
   pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
   ggplot(aes(x = obesity, y = y)) + geom_boxplot() +
@@ -72,14 +72,14 @@ up to you whether you think that gain is worth the extra coding.
 
 Extra: let's take another look at that longer data frame:
 
-```{r}
+```{r urine-3}
 urine %>%
   pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") 
 ```
 
 You might say that there is one quantitative variable now, the thing we called `y`, and *two* categorical variables, `obesity` and `yname`. So why not make a grouped boxplot? All right:
 
-```{r}
+```{r urine-4}
 urine %>%
   pivot_longer(creatinine:chlorine, names_to="yname", values_to="y") %>%
   ggplot(aes(x=yname, y=y, colour=obesity)) + geom_boxplot()
@@ -113,7 +113,7 @@ Solution
 
 
 Create the response variable and run `manova`:
-```{r }
+```{r urine-5 }
 response <- with(urine, cbind(creatinine, chlorine, chloride))
 urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
@@ -138,7 +138,7 @@ anyway. There was a lot of variability within the groups, which is
 why the P-value didn't come out smaller.)
 The other way of doing this is the following, using
 `Manova` from `car`:
-```{r }
+```{r urine-6 }
 response.1 <- lm(response ~ obesity, data = urine)
 Manova(response.1)
 ```

@@ -24,7 +24,7 @@ Solution
 The usual. This one is aligned columns.
 I'm using a "temporary" name for my read-in data
 frame, since I'm going to create the proper one in a moment.
-```{r }
+```{r jobs-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/jobs.txt"
 jobs0 <- read_table(my_url)
 jobs0
@@ -52,7 +52,7 @@ factor.
 I think the best way to do that is via `mutate`, and then
 we save the new data frame into one called `jobs` that we
 actually use for the analysis below:
-```{r }
+```{r jobs-2 }
 job_labels <- c("custserv", "mechanic", "dispatcher")
 jobs <- jobs0 %>%
   mutate(job = factor(job, labels = job_labels))
@@ -63,7 +63,7 @@ I lived on the edge and saved my factor `job` into a variable
 with the same name as the numeric one. I should check that I now have
 the right thing:
 
-```{r }
+```{r jobs-3 }
 jobs
 ```
 
@@ -79,7 +79,7 @@ levels, so that you can remember what stands for what.^[When  you're *recording*
 
 Extra: another way of doing this is to make a lookup table, that is, a little table that shows which job goes with which number:
 
-```{r }
+```{r jobs-4 }
 lookup_tab <- tribble(
   ~job, ~jobname,
   1, "custserv",
@@ -93,7 +93,7 @@ lookup_tab
 
 I carefully put the numbers in a column called `job` because I want to match these with the column called `job` in `jobs0`:
 
-```{r }
+```{r jobs-5 }
 jobs0 %>%
   left_join(lookup_tab) %>%
   sample_n(20)
@@ -151,7 +151,7 @@ Solution
 
 Now `job`
 is the "response":
-```{r }
+```{r jobs-6 }
 job.1 <- lda(job ~ social + outdoor + conservative, data = jobs)
 job.1
 ```
@@ -237,7 +237,7 @@ Solution
 
 
 Predictions first, then make a data frame combining the predictions with the original data:
-```{r }
+```{r jobs-7 }
 p <- predict(job.1)
 d <- cbind(jobs, p)
 head(d)
@@ -247,7 +247,7 @@ head(d)
 Following my suggestion, plot these the standard way with
 `colour` distinguishing the jobs:
 
-```{r }
+```{r jobs-8 }
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + geom_point()
 ```
 
@@ -288,14 +288,14 @@ with(d, table(obs = job, pred = class))
      
 Or, the `tidyverse` way:
 
-```{r }
+```{r jobs-9 }
 d %>% count(job, class)
 ```
 
  
 or:
 
-```{r }
+```{r jobs-10 }
 d %>%
   count(job, class) %>%
   pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
@@ -330,7 +330,7 @@ misclassified. There are different ways you might do this, but the
 example, we can make a new column that indicates whether a group is
 the correct or wrong classification:
 
-```{r }
+```{r jobs-11 }
 d %>%
   count(job, class) %>%
   mutate(job_stat = ifelse(job == class, "correct", "wrong"))
@@ -342,7 +342,7 @@ From there, we count up the correct and wrong ones, recognizing that
 we want to total up the *frequencies* in `n`, not just
 count the number of rows:
 
-```{r }
+```{r jobs-12 }
 d %>%
   count(job, class) %>%
   mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
@@ -353,7 +353,7 @@ d %>%
 
 and turn these into proportions:
 
-```{r error=T}
+```{r jobs-13, error=T}
 d %>%
   count(job, class) %>%
   mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
@@ -379,7 +379,7 @@ To figure out whether some of the groups were harder to classify than
 others, squeeze a `group_by` in early to do the counts and
 proportions for each (true) job:
 
-```{r error=T}
+```{r jobs-14, error=T}
 d %>%
   count(job, class) %>%
   mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
@@ -392,7 +392,7 @@ d %>%
 
 or even split out the correct and wrong ones into their own columns:
 
-```{r error=T}
+```{r jobs-15, error=T}
 d %>%
   count(job, class) %>%
   mutate(job_stat = ifelse(job == class, "correct", "wrong")) %>%
@@ -433,7 +433,7 @@ This is in fact exactly the same idea as the data frame that I
 generally called `new` when doing predictions for other
 models. I think the
 clearest way to make one of these is with `tribble`:
-```{r }
+```{r jobs-16 }
 new <- tribble(
   ~outdoor, ~social, ~conservative,
   20, 17, 8
@@ -448,7 +448,7 @@ for example of "what effect does a higher score on `outdoor` have on the likelih
 
 Then feed this into `predict` as the *second* thing:
 
-```{r }
+```{r jobs-17 }
 pp1 <- predict(job.1, new)
 ```
 
@@ -456,7 +456,7 @@ pp1 <- predict(job.1, new)
 
 Our predictions are these:
 
-```{r }
+```{r jobs-18 }
 cbind(new, pp1)
 ```
 
@@ -471,7 +471,7 @@ service. Our best guess is that they are a mechanic.^[I  discovered that I used 
 Does this pass the sanity-check test? First figure out where our new
 employee stands compared to the others:
 
-```{r }
+```{r jobs-19 }
 summary(jobs)
 ```
 
@@ -502,7 +502,7 @@ change in `conservative` over its "typical range", which we
 found out above with `summary(jobs)`. I'll take the quartiles,
 in my usual fashion:
 
-```{r }
+```{r jobs-20 }
 outdoors <- c(13, 19)
 socials <- c(17, 25)
 conservatives <- c(8, 13)
@@ -514,7 +514,7 @@ The IQRs are not that different, which says that what we get here will
 not be that different from the ``coefficients of linear
 discriminants'' above:
 
-```{r }
+```{r jobs-21 }
 new <- crossing(
   outdoor = outdoors, social = socials,
   conservative = conservatives
@@ -553,7 +553,7 @@ These most consistently go with `outdoor` being low.
 
 Is that consistent with the "coefficients of linear discriminants"?
 
-```{r }
+```{r jobs-22 }
 job.1$scaling
 ```
 
@@ -575,7 +575,7 @@ Solution
 
 Stick a `CV=T` in the `lda`:
 
-```{r } 
+```{r jobs-23  }
 job.3 <- lda(job ~ social + outdoor + conservative, data = jobs, CV = T)
 glimpse(job.3)
 ```
@@ -586,7 +586,7 @@ This directly contains a `class` (no need for a
 `predict`), so we make a data frame, with a different name
 since I shortly want to compare this one with the previous one:
 
-```{r }
+```{r jobs-24 }
 dcv <- cbind(jobs, class = job.3$class, posterior = job.3$posterior)
 head(dcv)
 ```
@@ -596,7 +596,7 @@ head(dcv)
 This is a bit fiddlier than before because `job.3` contains some things of different lengths and we can't just `cbind` them all together.
 
 Then go straight to the `table`:
-```{r }
+```{r jobs-25 }
 with(dcv, table(job, class))
 ```
 
@@ -627,14 +627,14 @@ think I have the machinery to do that.
 
 Let's start by gluing together the dataframes with the predictions from the regular `lda` (in `d`) and the ones from the cross-validation (in `dcv`). I think I can do that like this:
 
-```{r }
+```{r jobs-26 }
 d %>% left_join(dcv, by=c("id", "job"))
 ```
 There's already subtlety. The people are numbered separately within each actual `job`, so the thing that uniquely identifies each person (what database people call a "key") is the combination of the actual job they do *plus* their `id` within that job. You might also think of using `bind_cols`, except that this adds a number to all the column names which is a pain to deal with. I don't really need to look up the people in the second dataframe, since I know where they are (in the corresponding rows), but doing so seems to make everything else easier.
 
 The columns with an `x` on the end of their names came from `d`, that is, the predictions without cross-validation, and the ones with a `y` came from cross-validation. Let's see if we can keep only the columns we need so that it's a bit less unwieldy:
 
-```{r}
+```{r jobs-27}
 d %>% left_join(dcv, by=c("id", "job")) %>% 
   select(outdoor = outdoor.x,
          social = social.x,
@@ -647,7 +647,7 @@ That's not too bad. We could shorten some variable names and reduce some decimal
  
 How many individuals were predicted differently? We have columns called `class.x` (predicted group membership from original LDA) and `class.y` (from cross-validation), and so:
 
-```{r }
+```{r jobs-28 }
 all %>% filter(class.x != class.y)
 ```
 
@@ -658,7 +658,7 @@ How do their posterior probabilities compare? These are all in columns beginning
 try to make things simpler.
 Let's round them to three decimals, and then display only some of the columns:
 
-```{r }
+```{r jobs-29 }
 all %>% filter(class.x != class.y) %>% 
   mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior"))
@@ -666,7 +666,7 @@ all %>% filter(class.x != class.y) %>%
 
 And then, because I can, let's re-format that to make it easier to read, `x` being regular LDA and `y` being cross-validation:
 
-```{r}
+```{r jobs-30}
 all %>% filter(class.x != class.y) %>% 
   mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
   select(id, job, starts_with("posterior")) %>% 
@@ -690,7 +690,7 @@ make much difference)?
 
 Let's count them first:
 
-```{r error=T}
+```{r jobs-31, error=T}
 all %>% mutate(is_correct = ifelse(job == class.x, "correct", "wrong")) -> all.mis
 all.mis %>%
   count(is_correct == "wrong") %>%
@@ -703,7 +703,7 @@ There are a lot of them, so we'll pick a random sample to look at,
 rounding the posterior probabilities to 3 decimals first and reducing
 the number of columns to look at:
 
-```{r error=T}
+```{r jobs-32, error=T}
 set.seed(457299)
 all.mis %>%
   filter(is_correct == "wrong") %>%

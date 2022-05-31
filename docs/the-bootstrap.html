@@ -368,17 +368,17 @@ of rows. (Note that the failure times are in ascending order).</li>
 <p>Solution</p>
 <p>Make a suitable graph. The obvious one is a histogram:</p>
 <div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">x =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-165-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-3-1.png" width="672" /></p>
 <p>You’ll have to play with the number of bins (there are only 12 observations). I got 7 from the Freedman-Diaconis rule:</p>
 <div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1"><span class="kw">nclass.FD</span>(aircon<span class="op">$</span>hours)</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <p>I was a little suspicious that the data would not be much like normal (I have run into failure times before), so I kept away from the Sturges rule.</p>
 <p>Another possibility is a one-group boxplot:</p>
 <div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">y =</span> hours, <span class="dt">x =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-167-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-5-1.png" width="672" /></p>
 <p>If you like, you can do a normal quantile plot. I rank that third here, because there is nothing immediately implying a comparison with the <em>normal</em> distribution, but I would accept it:</p>
 <div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">ggplot</span>(aircon, <span class="kw">aes</span>(<span class="dt">sample =</span> hours)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-168-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-6-1.png" width="672" /></p>
 <p>Pick a visual and defend it.</p>
 <p>All three of these graphs are showing a strong skewness to the right.</p>
 <p>Extra: this is probably not a surprise, because a time until failure
@@ -422,7 +422,7 @@ distribution like the exponential or gamma or Weibull.</p>
 <p>Solution</p>
 <p>This:</p>
 <div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="kw">ggplot</span>(means, <span class="kw">aes</span>(<span class="dt">sample =</span> sample_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-170-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-8-1.png" width="672" /></p>
 <p>This is still skewed to the right (it has a curved shape, or, the low values and the high values are both too high compared to the normal).</p>
 <p>Extra: this is less skewed than the original data was, because, with a
 sample size of 12, we have a <em>little</em> help from the Central Limit
@@ -566,7 +566,7 @@ have it lying around). The link is in the previous question.</li>
 <p>I actually copied and pasted my code from the previous problem, changing <code>mean</code> to <code>median</code>.</p>
 <p>As for a plot, well, this:</p>
 <div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1"><span class="kw">ggplot</span>(meds, <span class="kw">aes</span>(<span class="dt">sample =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-179-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-median-4-1.png" width="672" /></p>
 <p>Not only does this not look very normal, but also there are those
 curious horizontal patches of points (that, you might recall, are
 characteristic of a discrete distribution). This has happened because
@@ -580,7 +580,7 @@ possible values end up in the same bin; here, the aim is to have
 enough bins to show the discreteness, rather than the usual thing of
 having few enough bins to show the shape.)</p>
 <div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1"><span class="kw">ggplot</span>(meds, <span class="kw">aes</span>(<span class="dt">x =</span> medians)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">30</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-180-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bootstrap-median-5-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Obtain a 95% bootstrap percentile confidence interval for the median. How does it compare with the one you obtained earlier?</li>
@@ -695,13 +695,13 @@ sample size and large variability.</p>
 <p>A normal quantile plot <em>of the differences</em>, therefore, since normality of the two individual scores is immaterial:</p>
 <div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="kw">ggplot</span>(sight, <span class="kw">aes</span>(<span class="dt">sample =</span> difference)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb298-2" title="2"><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-185-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/vontouchingen-1.png" width="672" /></p>
 <p>We have what I think is best described as “long tails”, with the high values being too high and the low ones being a bit too low for a normal distribution. I think this is a better description than “outliers” because outliers are isolated unusual values, not five observations out of fifteen!</p>
 <p>The plot is telling us that a matched-pairs <span class="math inline">\(t\)</span>-test is questionable, and that we might do a sign test instead. Or, as we explore in this question, find a bootstrap distribution (in this case, for the median).</p>
 <p>Extra: the one kind of sensible plot that uses the original data in this situation would be a scatterplot, since the right and left scores are matched up:</p>
 <div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1"><span class="kw">ggplot</span>(sight, <span class="kw">aes</span>(<span class="dt">x =</span> right, <span class="dt">y =</span> left)) <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb299-2" title="2"><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_abline</span>(<span class="dt">slope =</span> <span class="dv">1</span>, <span class="dt">intercept =</span> <span class="dv">0</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-186-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/wickten-1.png" width="672" /></p>
 <p>I added the line <span class="math inline">\(y = x\)</span> to the plot. The value of doing that is that a point to the right and below the line has the right-eye score bigger than the left-eye one, and vice versa for a point to the left and above. This plot tells us that a small majority of the subjects had a higher score with the right eye, and for the ones that had a higher score with the left eye, the difference wasn’t usually very big.</p>
 <p>This plot tells us nothing about normality of differences, though (not without some careful looking), which is one of the things we usually care about.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -746,7 +746,7 @@ sample size and large variability.</p>
 <p>For this histogram, there is no need to specify a number of bins (unless you want to):</p>
 <div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb302-1" title="1"><span class="kw">ggplot</span>(meds, <span class="kw">aes</span>(<span class="dt">x =</span> my_median)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-189-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/nefen-1.png" width="672" /></p>
 <p>The distribution is very discrete (this shows up more clearly with more bins).</p>
 <p>The data values are all integers (and therefore so are the differences). The median of an odd number of data values must be one of the data values, and the bootstrap samples only contain (varying numbers of copies of) the differences in the original dataset, so
 each bootstrap sample must have a median that is an integer too.</p>
@@ -796,7 +796,7 @@ in case you are thinking that this happened because the data values were integer
 <p>You can see even from these few that the bootstrap distribution of the median has repeats, so there should also be some discreteness here:</p>
 <div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1"><span class="kw">ggplot</span>(meds2, <span class="kw">aes</span>(<span class="dt">x =</span> my_median)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-192-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/botz-1.png" width="672" /></p>
 <p>The discreteness is a property of the fact that we were bootstrapping the <em>median</em>, and the median has to be one of the data values.</p>
 <p>To confirm that, recall that our original data were integers:</p>
 <div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb310-1" title="1">sight</a></code></pre></div>
@@ -826,11 +826,11 @@ in case you are thinking that this happened because the data values were integer
 <a class="sourceLine" id="cb312-5" title="5">means <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb312-6" title="6"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
 <pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-194-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/vesar-1.png" width="672" /></p>
 <p>This is too many bins for 1000 bootstrap samples, so the shape is kind of irregular, but there are not the big gaps that the bootstrap distribution of the sample median has. Indeed, this ought to be somewhere near normal and is:</p>
 <div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb314-1" title="1"><span class="kw">ggplot</span>(means, <span class="kw">aes</span>(<span class="dt">sample =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb314-2" title="2"><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/stricher-1.png" width="672" /></p>
 <p>(This is saying that the Central Limit Theorem is really helping, even for a sample size of only 15 from clearly non-normal data, so the paired <span class="math inline">\(t\)</span> may not be as bad as we would have thought.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="6" style="list-style-type: lower-alpha">
@@ -975,14 +975,14 @@ in case you are thinking that this happened because the data values were integer
 <p>Solution</p>
 <p>The medians are already in a dataframe, so go straight ahead:</p>
 <div class="sourceCode" id="cb331"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb331-1" title="1"><span class="kw">ggplot</span>(bs, <span class="kw">aes</span>(<span class="dt">x =</span> my_median)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">50</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-203-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/stainachin-1.png" width="672" /></p>
 <p>What we are seeing at this resolution is that the distribution is <em>very</em> irregular, with funny holes in it, more than you would expect even with this many bins. By way of comparison, the bootstrap distribution of the <em>mean</em> looks a lot smoother:</p>
 <div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb332-2" title="2"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb332-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(irs<span class="op">$</span>Time, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb332-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb332-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">50</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-204-1.png" width="672" />
+<p><img src="pasias_files/figure-html/rom-1.png" width="672" />
 This is somewhat irregular, because we really have too many bins, but there are not nearly so many holes and irregular heights as on the plot for the median. I had you use a lot of bins in this special case because I wanted you to see just how irregular the bootstrapped distribution for the median really was.</p>
 <p>So why did that happen? Think about what the sample median is for 30 observations: it is the mean of the 15th and 16th smallest values when you arrange them in order. A bootstrap sample must contain the same values as the original dataset (just probably not the same frequencies of them). So the median of a bootstrap sample must be the average of two of the values in the original dataset, and probably two that were close together. What that means is that there are <em>not very many possible medians</em> of the bootstrap samples, and they form a clearly discrete rather than a continuous distribution. (The sample mean, on the other hand, uses all the values in the bootstrap sample, and so there are a lot more possible bootstrap means than bootstrap medians; the distribution of those is as good as continuous.)</p>
 <p>What this means is that bootstrapping for medians is odd (it always looks like this), but that’s what the bootstrap distribution looks like.</p>

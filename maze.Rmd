@@ -18,7 +18,7 @@ Take a look at the data file first. There is only one column of
 data, so you can treat it as being delimited by anything you like:
 a space, or a comma (the file can also be treated as a
 `.csv`), etc.:
-```{r }
+```{r maze-1 }
 myurl <- "http://ritsokiguess.site/datafiles/maze.txt"
 times <- read_delim(myurl, " ")
 times
@@ -42,7 +42,7 @@ Solution
 
 Count how many values are above and below 60:
 
-```{r }
+```{r maze-2 }
 times %>% count(time > 60)
 ```
 
@@ -50,7 +50,7 @@ times %>% count(time > 60)
 5 above and 16 below. Then find out how likely it is that a binomial
 with $n=21, p=0.5$ would produce 5 or fewer successes:
 
-```{r }
+```{r maze-3 }
 p <- sum(dbinom(0:5, 21, 0.5))
 p
 ```
@@ -59,7 +59,7 @@ p
 
 or if you prefer count upwards from 16:
 
-```{r }
+```{r maze-4 }
 sum(dbinom(16:21, 21, 0.5))
 ```
 
@@ -67,7 +67,7 @@ sum(dbinom(16:21, 21, 0.5))
 
 and double it to get a two-sided P-value:
 
-```{r }
+```{r maze-5 }
 2 * p
 ```
 
@@ -83,7 +83,7 @@ this, you first need to install the package `devtools` (if you
 haven't already),
 by going to the console and typing
 
-```{r eval=F}
+```{r maze-6, eval=F}
 install.packages("devtools")
 ```
 
@@ -91,7 +91,7 @@ install.packages("devtools")
 
 When that's all done, install `smmr` thus:
 
-```{r eval=F}
+```{r maze-7, eval=F}
 library(devtools)
 install_github("nxskok/smmr")
 ```
@@ -101,7 +101,7 @@ install_github("nxskok/smmr")
 That all needs to be done only once. Then, each R Studio session where
 you want to use `smmr` needs this:
 
-```{r }
+```{r maze-8 }
 library(smmr)
 ```
 
@@ -121,7 +121,7 @@ Solution
 The sign test function takes a data frame, an (unquoted) column
 name from that data frame of data to test the median of, and a
 null median (which defaults to 0 if you omit it):
-```{r }
+```{r maze-9 }
 library(smmr)
 sign_test(times, time, 60)
 ```
@@ -144,7 +144,7 @@ alternative function `sign_test0` that doesn't use it. It
 requires as input a *column* of values (extracted from the data
 frame) and a null median, thus:
 
-```{r }
+```{r maze-10 }
 with(times, sign_test0(time, 60))
 ```
 
@@ -166,7 +166,7 @@ Solution
 
 
 Try it and see:
-```{r }
+```{r maze-11 }
 pval_sign(60, times, time)
 ```
 
@@ -177,7 +177,7 @@ The two-sided P-value, and that is all. We'll be using this in a minute.
 Alternatively, there is also this, which needs a null median and a
 *column* as input:
 
-```{r }
+```{r maze-12 }
 with(times, pval_sign0(60, time))
 ```
 
@@ -208,7 +208,7 @@ outside the 95\% CI, and the sample median is close to 50 (which we
 expect to be inside), so sensible values to try for the upper end of
 the interval would be between 50 and 60:
 
-```{r }
+```{r maze-13 }
 pval_sign(58, times, time)
 pval_sign(55, times, time)
 ```
@@ -219,7 +219,7 @@ So, 55 is inside the interval and 58 is outside. I could investigate
 further in similar fashion, but I thought I would try a whole bunch of null
 medians all at once. That goes like this, `rowwise` because `pval_sign` expects *one* null-hypothesis median, not several all at once:
 
-```{r }
+```{r maze-14 }
 tibble(meds = seq(55, 58, 0.25)) %>% 
   rowwise() %>% 
   mutate(pvals = pval_sign(meds, times, time))
@@ -236,7 +236,7 @@ different way: more efficient, but less transparent. The first thing I
 need is a pair of values for the median: one inside the interval and
 one outside. Let's try 40 and 50:
 
-```{r }
+```{r maze-15 }
 pval_sign(40, times, time)
 pval_sign(50, times, time)
 ```
@@ -251,7 +251,7 @@ assume *nothing* about the relationship except that it goes
 uphill, and therefore crosses 0.05 somewhere. So my next guess is
 halfway between the two values I tried before:
 
-```{r }
+```{r maze-16 }
 pval_sign(45, times, time)
 ```
 
@@ -261,7 +261,7 @@ So, 45 is inside the interval, and my (slightly) improved guess at the
 bottom end of the interval is that it's between 40 and 45. So next, I
 try halfway between *those*:
 
-```{r }
+```{r maze-17 }
 pval_sign(42.5, times, time)
 ```
 
@@ -286,7 +286,7 @@ This all begs to be automated into a loop. It's not a
 going around. It's a `while` loop: keep going while something
 is true. Here's how it goes:
 
-```{r }
+```{r maze-18 }
 lo <- 40
 hi <- 50
 while (abs(hi - lo) > 0.1) {
@@ -323,7 +323,7 @@ above and one below.
 Likewise, you can use the function with a zero on its name and feed it
 a column rather than a data frame and a column name:
 
-```{r }
+```{r maze-19 }
 tibble(meds =  seq(55, 58, 0.25)) %>% 
   rowwise() %>% 
   mutate(pvals =  with(times, pval_sign0(meds, time)))
@@ -339,7 +339,7 @@ you having to do it. As I first wrote it, it was using the trial and
 error thing with `rowwise`, but I chose to rewrite it with the
 bisection idea, because I thought that would be more accurate.
 
-```{r }
+```{r maze-20 }
 ci_median(times, time)
 ```
 
@@ -354,7 +354,7 @@ apart, by default.)^[You can change this by adding something like *tol=1e-4* to 
 If you want some other confidence level, you add `conf.level`
 on the end, as you would for `t.test`:
 
-```{r }
+```{r maze-21 }
 ci_median(times, time, conf.level = 0.75)
 ```
 
@@ -366,7 +366,7 @@ as it should be.
 Likewise there is a `ci_median0` that takes a column and an
 optional confidence level:
 
-```{r }
+```{r maze-22 }
 with(times, ci_median0(time))
 with(times, ci_median0(time, conf.level = 0.75))
 ```

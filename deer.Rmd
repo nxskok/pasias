@@ -23,7 +23,7 @@ Solution
 
 
 The usual stuff for data values separated by (single) spaces:
-```{r }
+```{r deer-1 }
 myurl <- "http://ritsokiguess.site/datafiles/deer.txt"
 deer <- read_delim(myurl, " ")
 ```
@@ -33,7 +33,7 @@ deer <- read_delim(myurl, " ")
 and then, recalling that `n()` is the handy way of getting the
 number of observations in each group:
 
-```{r }
+```{r deer-2 }
 deer %>%
   group_by(month) %>%
   summarize(n = n(), med = median(food))
@@ -59,7 +59,7 @@ month. Comment briefly on what you see.
 Solution
 
 
-```{r }
+```{r endinger}
 ggplot(deer, aes(x = month, y = food)) + geom_boxplot()
 ```
 
@@ -82,7 +82,7 @@ sizes, is a "dot plot": instead of making a boxplot for each month,
 we plot the actual points for each month as if we were making a
 scatterplot:
 
-```{r }
+```{r vongiengen}
 ggplot(deer, aes(x = month, y = food)) + geom_point()
 ```
 
@@ -98,7 +98,7 @@ One way to solve this is to randomly
 move the points around so that no two of them plot in the same
 place. This is called *jittering*, and is done like this:
 
-```{r }
+```{r kaisers}
 ggplot(deer, aes(x = month, y = food)) + geom_jitter(width = 0, height = 0.05)
 ```
 
@@ -139,7 +139,7 @@ Solution
 
 To give you some practice with the mechanics, first find the
 overall median:
-```{r }
+```{r deer-3 }
 deer %>% summarize(med = median(food))
 ```
 
@@ -147,7 +147,7 @@ deer %>% summarize(med = median(food))
 
 or
 
-```{r }
+```{r deer-4 }
 median(deer$food)
 ```
 
@@ -157,7 +157,7 @@ I like the first way because it's the same idea as we did before, just
 not differentiating by month. I think there are some observations
 exactly equal to the median, which will mess things up later:
 
-```{r }
+```{r deer-5 }
 deer %>% filter(food == 4.7)
 ```
 
@@ -168,7 +168,7 @@ There are, two in February and two in August.
 Next, make (and save) a table of the observations within each month
 that are above and below this median:
 
-```{r }
+```{r deer-6 }
 tab1 <- with(deer, table(month, food < 4.7))
 tab1
 ```
@@ -177,7 +177,7 @@ tab1
 
 or
 
-```{r }
+```{r deer-7 }
 tab2 <- with(deer, table(month, food > 4.7))
 tab2
 ```
@@ -191,7 +191,7 @@ and (look carefully) two of the August ones also.  Hence the
 test results will be different, and `smmr` (later) will give
 different results again:
 
-```{r }
+```{r deer-8 }
 chisq.test(tab1, correct = F)
 chisq.test(tab2, correct = F)
 ```
@@ -228,7 +228,7 @@ Solution
 
 
 Off we go:
-```{r }
+```{r deer-9 }
 library(smmr)
 median_test(deer, food, month)
 ```
@@ -244,7 +244,7 @@ You might be wondering how you could get rid of the equal-to-median
 values in the build-it-yourself way. This is `filter` from
 `dplyr`, which you use first:
 
-```{r }
+```{r deer-10 }
 deer2 <- deer %>% filter(food != 4.7)
 tab3 <- with(deer2, table(month, food < 4.7))
 tab3
@@ -257,7 +257,7 @@ which is exactly what `smmr` does, so the answer is
 identical.^[The computer scientists among you will note that I  should not use equals or not-equals to compare a decimal  floating-point number, since decimal numbers are not represented exactly in the computer. R, however, is ahead of us here, since when you try to do "food not equal to 4.7", it tests whether food is more than a small distance away from 4.7, which is the right way to do it. In R, therefore, code like my `food !=  4.7` does exactly what I want, but in a language like C, it *does not*, and you have to be more careful: `abs(food-4.7)>1e-8`, or something like that. The small number `1e-8` ($10^{-8}$) is typically equal to **machine epsilon**, the smallest number on a computer that is distinguishable from zero.]
 How would an ANOVA come out here? My guess is, very similarly:
 
-```{r }
+```{r deer-11 }
 deer.1 <- aov(food ~ month, data = deer)
 summary(deer.1)
 TukeyHSD(deer.1)
@@ -302,7 +302,7 @@ P-values to see how the months differ in terms of food eaten.
 This is accomplished in `smmr` via `pairwise_median_test`,
 thus: 
 
-```{r }
+```{r deer-12 }
 pairwise_median_test(deer, food, month)
 ```
 

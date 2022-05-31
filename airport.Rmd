@@ -44,7 +44,7 @@ Solution
 
 The usual, data values separated by one space:
 
-```{r }
+```{r airport-1 }
 my_url <- "http://ritsokiguess.site/datafiles/airport.txt"
 airport <- read_delim(my_url, " ")
 airport
@@ -71,7 +71,7 @@ Solution
 
 `pivot_longer`:
 
-```{r }
+```{r airport-2 }
 airport %>% pivot_longer(starts_with("epi"), names_to="when", values_to="epinephrine") -> airport.long
 airport.long
 ```
@@ -165,7 +165,7 @@ Solution
 
 
 We've done this before:
-```{r }
+```{r airport-3 }
 airport.long %>%
   mutate(time = parse_number(when)) %>%
   mutate(floc = factor(location)) %>%
@@ -185,7 +185,7 @@ distinct values of a variable, whatever they are, and `group`
 in a boxplot may or may not insist on something other than a number. I
 should try it:
 
-```{r }
+```{r airport-4 }
 airport.long %>%
   mutate(time = parse_number(when)) %>%
   group_by(location, time) %>%
@@ -198,7 +198,7 @@ airport.long %>%
 
 It seems that `colour` requires a non-number:
 
-```{r }
+```{r airport-5 }
 airport.long %>%
   mutate(time = parse_number(when)) %>%
   group_by(location, time) %>%
@@ -257,7 +257,7 @@ Solution
 
 The usual process. I'll try the other way I used of making the
 `response`: 
-```{r }
+```{r airport-6 }
 airport %>%
   select(epi_1:epi_4) %>%
   as.matrix() -> response
@@ -308,7 +308,7 @@ tweaking your definition of your `response` to omit the
 first time point. The rest of it stays the same, though you
 might want to change your model numbers rather than re-using
 the old ones as I did:
-```{r }
+```{r airport-7 }
 airport %>%
   select(epi_2:epi_4) %>%
   as.matrix() -> response
@@ -362,7 +362,7 @@ Let's see if we can make it fly for this example. We need the data in
 "long" format, the way we arranged it for graphing: the data frame
 `airport.long`. I'd like to convert things to factors first:
 
-```{r }
+```{r airport-8 }
 airport.long %>% mutate(
   fchild = factor(child),
   flocation = factor(location)
@@ -386,7 +386,7 @@ The other choice for
 testing is to fit a model without what you
 are testing and use `anova` to compare the two models:
 
-```{r }
+```{r airport-9 }
 airport.4 <- update(airport.3, . ~ . - flocation:when)
 anova(airport.4, airport.3)
 ```
@@ -437,7 +437,7 @@ the profile analysis needs the wide-format data, while the mixed-model
 analysis needs long format, so we'll have to repeat our process, once
 for each format of data set:
 
-```{r }
+```{r airport-10 }
 loc1 <- airport %>% filter(location == 1)
 response <- loc1 %>% select(epi_1:epi_4) %>% as.matrix()
 loc1.1 <- lm(response ~ 1, data = loc1)
@@ -471,7 +471,7 @@ conclusion. This time, we have to start from the *long* data set
 factors) and pull out the rows for location 1. The only remaining
 fixed effect is time:
 
-```{r }
+```{r airport-11 }
 fairport %>%
   filter(location == 1) %>%
   lmer(epinephrine ~ when + (1 | fchild), data = .) %>%
@@ -488,7 +488,7 @@ I should perhaps point out that you don't *have* to do these
 models in a pipe. I just did because it was easier for me. But there's
 nothing wrong with doing it like this:
 
-```{r }
+```{r airport-12 }
 tmp <- fairport %>% filter(location == 1)
 tmp.1 <- lmer(epinephrine ~ when + (1 | child), data = tmp)
 drop1(tmp.1, test = "Chisq")
@@ -508,7 +508,7 @@ things might be different. `lmer` allows more sophisticated
 things, like for example the random child effect depending linearly on
 time. To do that, you'd rewrite the above like this:
 
-```{r eval=F}
+```{r airport-13, eval=F}
 fairport %>%
   filter(location == 1) %>%
   lmer(epinephrine ~ when + (1 + when | fchild), data = .) %>%
@@ -526,7 +526,7 @@ so we expect to see *no* dependence of epinephrine level on time,
 either in the profile analysis or in the mixed-model analysis. There
 is a large amount of copying and pasting coming up:
 
-```{r }
+```{r airport-14 }
 airport %>% filter(location == 2) -> loc2
 loc2 %>% select(epi_1:epi_4) %>% as.matrix() -> response
 loc2.1 <- lm(response ~ 1, data = loc1)
@@ -545,7 +545,7 @@ We can look at that by finding epinephrine means at each time. That
 would be easier if we had long format, but I think we can still do
 it. The magic word is `across`:
 
-```{r }
+```{r airport-15 }
 airport %>%
   filter(location == 2) %>%
   summarize(across(starts_with("epi"), ~mean(.)))
@@ -561,7 +561,7 @@ new airport nearby.
 
 I want to try this:
 
-```{r }
+```{r airport-16 }
 airport %>% nest_by(location)
 ```
 
@@ -572,7 +572,7 @@ function that calculates the means of the `epi_1` through
 `epi_4` columns of a data frame like `airport`, and
 then apply it to each of those "nested" data frames.
 
-```{r }
+```{r airport-17 }
 epi.means <- function(x) {
   x %>% summarize(across(starts_with("epi"), ~mean(.)))
 }
@@ -584,7 +584,7 @@ epi.means(airport)
 
 OK, and then:
 
-```{r }
+```{r airport-18 }
 airport %>%
   nest_by(location) %>%
   rowwise() %>% 
@@ -603,7 +603,7 @@ back down again.
 Enough of that. Back to the mixed model analysis, with more copying
 and pasting. Here is the "simple time effect" at location 2:
 
-```{r }
+```{r airport-19 }
 fairport %>%
   filter(location == 2) %>%
   lmer(epinephrine ~ when + (1 | fchild), data = .) %>%

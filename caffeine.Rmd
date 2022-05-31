@@ -22,7 +22,7 @@ Solution
 
 
 `read_csv` because it's a `.csv` file:
-```{r }
+```{r caffeine-1 }
 my_url <- "http://ritsokiguess.site/datafiles/caffeine.csv"
 caffeine.untidy <- read_csv(my_url)
 caffeine.untidy
@@ -65,7 +65,7 @@ Solution
 
 We are combining several columns into one, so this is `pivot_longer`:
 
-```{r}
+```{r caffeine-2}
 caffeine.untidy %>% 
   pivot_longer(-Sub, names_to = "amount", values_to = "score") -> caffeine
 ```
@@ -76,7 +76,7 @@ I didn't ask you to list the resulting data frame, but it is smart to
 at least look for yourself, to make sure `pivot_longer` has done
 what you expected.
 
-```{r }
+```{r caffeine-3 }
 caffeine
 ```
 
@@ -86,7 +86,7 @@ A column of amounts of caffeine, and a column of test scores. This is
 what we expected. There should be 12 each of the `amount`s,
 which you can check if you like:
 
-```{r }
+```{r caffeine-4 }
 caffeine %>% count(amount)
 ```
 
@@ -108,7 +108,7 @@ Solution
 
 
 
-```{r }
+```{r nayer}
 ggplot(caffeine, aes(x = amount, y = score)) + geom_boxplot()
 ```
 
@@ -142,7 +142,7 @@ Solution
 
 
 Something like this:
-```{r }
+```{r caffeine-5 }
 caff.1 <- aov(score ~ amount, data = caffeine)
 summary(caff.1)
 ```
@@ -181,7 +181,7 @@ Solution
 
 This kind of thing:
 
-```{r }
+```{r caffeine-6 }
 caff.3 <- TukeyHSD(caff.1)
 caff.3
 ```
@@ -202,7 +202,7 @@ because the confidence interval is rather long.^[We'd need a  lot more students 
 
 Extra: the normality and equal spreads assumptions look perfectly good, given the boxplots, and I don't think there's any reason to consider any other test. You might like to assess that with normal quantile plots:
 
-```{r}
+```{r frantz}
 ggplot(caffeine, aes(sample=score)) + stat_qq() +
   stat_qq_line() + facet_wrap(~amount, ncol=2)
 ```

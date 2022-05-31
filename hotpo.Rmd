@@ -43,7 +43,7 @@ Solution
 
 
 Let's try this out. For example, 5 is odd and 6 is even, so
-```{r }
+```{r hotpo-1 }
 5 %% 2
 6 %% 2
 ```
@@ -56,7 +56,7 @@ even, the remainder is 0. There is an additional shortcut here in that
 all we have to do is calculate the remainder on dividing by 2, turn it
 into a `logical`, and return it:
 
-```{r }
+```{r hotpo-2 }
 is_odd <- function(x) {
   r <- x %% 2
   as.logical(r)
@@ -72,7 +72,7 @@ same idea as `as.numeric`: turn something that looks like a
 
 We should test it:
 
-```{r }
+```{r hotpo-3 }
 is_odd(19)
 is_odd(12)
 is_odd(0)
@@ -97,7 +97,7 @@ Solution
 The logic is "if the input is odd, return 3 times it plus 1, otherwise return half of it". 
 The R structure is an
 `if-then-else`: 
-```{r }
+```{r hotpo-4 }
 hotpo1 <- function(x) {
   if (is_odd(x)) 3 * x + 1 else x / 2
 }
@@ -113,7 +113,7 @@ earlier; this code almost looks like the English-language description
 of the sequence. If we had not written `is_odd` before, the
 condition would have looked something like 
 
-```{r eval=F}
+```{r hotpo-5, eval=F}
 if (x %% 2 == 1) 3 * x + 1 else x / 2
 ```
 
@@ -123,7 +123,7 @@ which would have been a lot harder to read.
 
 All right, let's try that out:
 
-```{r }
+```{r hotpo-6 }
 hotpo1(4)
 hotpo1(7)
 hotpo1(24)
@@ -153,7 +153,7 @@ sequence and glue it onto what we have so far. To initialize the
 sequence, we start with the input value. There is an R trick to
 glue a value onto the sequence, which is to use `c` with a
 vector and a value, and save it back into the vector:
-```{r }
+```{r hotpo-7 }
 hotpo <- function(x) {
   sequence <- x
   term <- x
@@ -172,7 +172,7 @@ more).
 
 Does it work?
 
-```{r }
+```{r hotpo-8 }
 hotpo(4)
 hotpo(12)
 hotpo(97)
@@ -193,7 +193,7 @@ the Collatz sequence starting at 6. There is no dependence any further
 back. You can do recursion in R also; there is no problem with a
 function calling itself:
 
-```{r }
+```{r hotpo-9 }
 hotpo_rec <- function(x) {
   if (x == 1) 1 else c(x, hotpo_rec(hotpo1(x)))
 }
@@ -213,7 +213,7 @@ we will eventually reach 1.
 
 Does it work?
 
-```{r }
+```{r hotpo-10 }
 hotpo_rec(12)
 hotpo_rec(97)
 ```
@@ -247,7 +247,7 @@ Solution
 
 These are both one-liners. Call the input whatever you like:
 
-```{r }
+```{r hotpo-11 }
 hotpo_len <- function(sequence) length(sequence)
 hotpo_max <- function(sequence) max(sequence)
 ```
@@ -259,7 +259,7 @@ although there's no problem if they are there.
 
 Testing:
 
-```{r }
+```{r hotpo-12 }
 hotpo_len(hotpo(12))
 hotpo_max(hotpo(97))
 ```
@@ -281,7 +281,7 @@ Solution
 
 This one uses `rowwise` ideas:^[I should have been more careful in my functions to make sure everything was integers, and, in particular, to do integer division by 2 because I knew that this division was going to come out even.] 
 
-```{r }
+```{r hotpo-13 }
 tibble(x = 11:20) %>%
   rowwise %>% 
   mutate(sequence = list(hotpo(x))) %>%

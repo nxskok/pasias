@@ -12,7 +12,7 @@ Solution
 
 The usual. This is a straightforward one:
 
-```{r}
+```{r relig-1}
 my_url <- "http://ritsokiguess.site/datafiles/student_relig.csv"
 student <- read_csv(my_url)
 student
@@ -24,7 +24,7 @@ Extra:
 
 I said this came from a bigger survey, actually this one:
 
-```{r}
+```{r relig-2}
 my_url <- "http://ritsokiguess.site/datafiles/student0405.csv"
 student0 <- read_csv(my_url)
 student0
@@ -33,7 +33,7 @@ student0
 There are four extra rows here. Why? Let's look at a `summary` of the dataframe:
 
 \small
-```{r}
+```{r relig-3}
 summary(student0) 
 ```
 \normalsize
@@ -45,7 +45,7 @@ some stats about each one, along with a count of missing values. The study hours
 R also has a "factor" variable type, which is the "official" way to handle categorical variables in R. Sometimes it matters, but most of the time leaving categorical variables as text is just fine. `summary` handles these
 differently. My second line of code below says "for each variable that is text, make it into a factor":
 
-```{r}
+```{r relig-4}
 student0 %>% 
 mutate(across(where(is.character), ~factor(.))) %>% 
 summary()
@@ -57,7 +57,7 @@ However, `ReligImp` does not have any missing values.
 I said there were four missing values for study hours, that is, four students who left that blank on their survey. 
 We want to get rid of those students (that is, remove those whole rows), and, to simplify things for you, let's keep only the study hours and importance of religion columns. That goes like this:
 
-```{r}
+```{r relig-5}
 student0 %>% drop_na(StudyHrs) %>% 
 select(ReligImp, StudyHrs)
 ```
@@ -78,7 +78,7 @@ Solution
 
 `group_by` and `summarize` (spelling the latter with s or z as you prefer):
 
-```{r}
+```{r relig-6}
 student %>% group_by(ReligImp) %>% 
 summarize(n=n(), mean_sh=mean(StudyHrs), sd_sh=sd(StudyHrs))
 ```
@@ -109,7 +109,7 @@ Solution
 
 This kind of data is one quantitative and one categorical variable, so once again a boxplot:
 
-```{r}
+```{r relig-7}
 ggplot(student, aes(x=ReligImp, y=StudyHrs)) + geom_boxplot()
 ```
 
@@ -126,7 +126,7 @@ Solution
 
 Normal-enough data (in the statistician's estimation) and unequal spreads means a Welch ANOVA:
 
-```{r}
+```{r relig-8}
 oneway.test(StudyHrs~ReligImp, data=student)
 gamesHowellTest(StudyHrs~factor(ReligImp), data=student)
 ```
@@ -138,11 +138,11 @@ Make sure you have installed and loaded `PMCMRplus` before trying the second hal
 Extra: for large data sets, boxplots make it look as if the outlier problem is bad, because a boxplot of a large amount of data will almost certainly contain some outliers (according to Tukey's definition). 
 Tukey envisaged a boxplot as something you could draw by hand for a smallish data set, and couldn't foresee something like R and the kind of data we might be able to deal with. To show you the kind of thing I mean, let's draw some random samples of varying sizes from normal distributions, which should not have outliers, and see how their boxplots look:
 
-```{r, include=F}
+```{r relig-9, include=F}
 set.seed(457299)
 ```
 
-```{r}
+```{r relig-10}
 tibble(n=c(10, 30, 100, 300)) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(n))) %>% 
@@ -175,7 +175,7 @@ Enough? Well, that is hard to judge.
 
 My take on this is to bootstrap the sampling distribution of the sample mean for each group. If *that* looks normal, then we ought to be able to trust the $F$-test (regular or Welch, as appropriate). The code is complicated (I'll explain the ideas below):
 
-```{r}
+```{r relig-11}
 student %>% 
   nest_by(ReligImp) %>% 
   mutate(sim = list(1:1000)) %>% 
@@ -203,7 +203,7 @@ The code, line by line:
 
 Finally, you might have wondered whether we needed to do Welch:
 
-```{r}
+```{r relig-12}
 student.1 <- aov(StudyHrs~ReligImp, data=student)
 summary(student.1)
 TukeyHSD(student.1)

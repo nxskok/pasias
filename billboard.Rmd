@@ -20,7 +20,7 @@ display the previous result).
 Solution
 
 
-```{r }
+```{r billboard-1 }
 billboard <- read_csv("http://stat405.had.co.nz/data/billboard.csv")
 ```
 
@@ -28,7 +28,7 @@ billboard <- read_csv("http://stat405.had.co.nz/data/billboard.csv")
 
 There are a *lot* of columns. What does this look like?
 
-```{r }
+```{r billboard-2 }
 billboard
 ```
 
@@ -60,7 +60,7 @@ Solution
 
 As is often the case, the first step is `pivot_longer`, to reduce all those columns to something easier to deal with. The columns we want to make longer are the ones ending in "week":
 
-```{r}
+```{r billboard-3}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T)
 ```
@@ -88,7 +88,7 @@ in each week appears in *one* row, so that there are as many rows
 as there are song-week combinations. The original data frame had 317
 songs over 76 weeks, so this many:
 
-```{r }
+```{r billboard-4 }
 317 * 76
 ```
 
@@ -122,7 +122,7 @@ Solution
 
 My `rank` is already a number, so I could leave it; for later, I make a copy of it called `rakn_numbe`. The `week` has a number *in* it, which I can extract using `parse_number`:
 
-```{r}
+```{r billboard-5}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -158,7 +158,7 @@ to subtract one from the number of weeks before you multiply
 it by seven to get a number of days.
 After that thinking, this:
 
-```{r}
+```{r billboard-6}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -186,13 +186,13 @@ be right. A handy trick is to display a random sample of 10 (say) out
 of the 5,000-odd rows of the data frame. To do that, add the line
 `sample_n(10)` on the end, like this:
 
-```{r echo=F}
+```{r billboard-7, echo=F}
 set.seed(457299)
 ```
 
  
 
-```{r }
+```{r billboard-8 }
 billboard %>%
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(
@@ -237,7 +237,7 @@ either `rank` (text) or what I called
 since we are only checking for equal-to, not something like
 "less than":
 
-```{r}
+```{r billboard-9}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -285,7 +285,7 @@ Solution
 This is a question of using `count`, but on the
 `track` title:
 
-```{r}
+```{r billboard-10}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -307,7 +307,7 @@ But, this is a data frame, so anything we can do to a data frame we
 can do to this, like listing out only the row(s) where `n` is
 equal to its maximum value:
 
-```{r}
+```{r billboard-11}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -325,7 +325,7 @@ billboard %>%
 or arranging them in (most logically, descending) order by `n`
 to make it easier to pick out the top one:
 
-```{r}
+```{r billboard-12}
 billboard %>% 
   pivot_longer(ends_with("week"), names_to = "week", values_to="rank", values_drop_na = T) %>% 
   mutate(week_number=parse_number(week),
@@ -356,7 +356,7 @@ and then display *that* later, something like this. This means
 replacing `track` by my `combo` later in the pipe,
 wherever it appears:
 
-```{r }
+```{r billboard-13 }
 billboard %>%
   pivot_longer(x1st.week:x76th.week, names_to = "week", values_to = "rank", values_drop_na = T) %>%
   mutate(

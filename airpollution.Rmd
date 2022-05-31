@@ -38,7 +38,7 @@ Solution
 
 
 This is a `.csv` file, so:
-```{r }
+```{r airpollution-1 }
 my_url <- "http://ritsokiguess.site/datafiles/airpollution.csv"
 air <- read_csv(my_url)
 air
@@ -61,7 +61,7 @@ Solution
 
 Like this (the cleanest):
 
-```{r}
+```{r airpollution-2}
 air %>% 
   summarize(across(everything(), ~quantile(.)))
 ```
@@ -74,7 +74,7 @@ smallest and the max has to be the biggest in each column.
 
 Or, with some more work, this:
 
-```{r }
+```{r airpollution-3 }
 air %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>% 
   nest_by(xname) %>%
@@ -104,7 +104,7 @@ There are rather a lot of brackets to close here; if you are not sure you have e
 
 Extra: say you wanted to make facetted histograms of each variable. You would begin the same way, with the `pivot_longer`, and at the end, `facet_wrap` with `scales = "free"` (since the variables are measured on different scales):
 
-```{r}
+```{r airpollution-4}
 air %>%
   pivot_longer(everything(), names_to="xname", values_to="x") %>% 
   ggplot(aes(x=x)) + geom_histogram(bins = 6) +
@@ -124,7 +124,7 @@ Solution
 
 
 This too is all rather like the previous question:
-```{r }
+```{r airpollution-5 }
 air.1 <- princomp(air, cor = T)
 ```
 
@@ -142,7 +142,7 @@ Solution
 
 `ggscreeplot` the thing you just obtained, having loaded
 package `ggbiplot`: 
-```{r }
+```{r airpollution-6 }
 ggscreeplot(air.1)
 ```
 
@@ -180,7 +180,7 @@ components? Explain briefly.
 Solution
 
 
-```{r }
+```{r airpollution-7 }
 summary(air.1)
 ```
 
@@ -215,7 +215,7 @@ Solution
 When this was a hand-in question, there were three marks for it,
 which was  a bit of a giveaway!
 Off we go:
-```{r }
+```{r airpollution-8 }
 air.1$loadings
 ```
 
@@ -251,7 +251,7 @@ Solution
 All the columns contain numbers, so `cbind` will do
 it. (The component scores are seven columns, so
 `bind_cols` won't do it unless you are careful.):
-```{r }
+```{r airpollution-9 }
 cbind(air, air.1$scores) %>%  
   mutate(row = row_number()) -> d
 head(d)
@@ -266,7 +266,7 @@ way^[There really ought to be a radio station *CTDY: All Tidyverse, All The Time
 then you need to bear in mind that `bind_cols` *only* 
 accepts vectors or data frames, not matrices, so a bit of care is needed first:
 
-```{r }
+```{r airpollution-10 }
 air.1$scores %>%
   as_tibble() %>%
   bind_cols(air) %>%
@@ -297,7 +297,7 @@ Solution
 
 
 I think the best strategy is to sort by  component 1 score (in the default ascending order), and then display the first row:
-```{r }
+```{r airpollution-11 }
 d %>% arrange(Comp.1) %>% slice(1)
 ```
 
@@ -326,7 +326,7 @@ Solution
 
 
 This is a repeat of the ideas we just saw:
-```{r }
+```{r airpollution-12 }
 d %>% arrange(Comp.2) %>% slice(1)
 ```
 
@@ -334,7 +334,7 @@ d %>% arrange(Comp.2) %>% slice(1)
 
 and for convenience, we'll grab the quantiles again:
 
-```{r}
+```{r airpollution-13}
 air %>% 
   summarize(across(everything(), ~quantile(.)))
 ```
@@ -355,7 +355,7 @@ five-number summary to see where the values for a particular
 observation come. Another way to approach this is to calculate
 *percentile ranks* for everything. Let's go back to our original data frame and replace everything with its percent rank: 
 
-```{r }
+```{r airpollution-14 }
 air %>% mutate(across(everything(), ~ percent_rank(.))) -> pct_rank
 pct_rank
 ```
@@ -364,7 +364,7 @@ pct_rank
 
 Observation 34 is row 34 of this:
 
-```{r }
+```{r airpollution-15 }
 pct_rank %>% slice(34)
 ```
 
@@ -374,7 +374,7 @@ Very high on ozone, (joint) lowest on nitric oxide, but middling on
 solar radiation.
 The one we looked at before, observation 8, is this:
 
-```{r }
+```{r airpollution-16 }
 pct_rank %>% slice(8)
 ```
 
@@ -390,7 +390,7 @@ Solution
 
 
 
-```{r }
+```{r airpollution-17 }
 ggbiplot(air.1, labels = d$row)
 ```
 
@@ -426,7 +426,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r airpollution-18 }
 air.2 <- factanal(air, 2, scores = "r")
 air.2$loadings
 ```
@@ -443,7 +443,7 @@ radiation and carbon monoxide. I'd say this is clearer than before.
 A biplot would tell us whether the variables are better aligned with
 the axes now:
 
-```{r }
+```{r airpollution-19 }
 biplot(air.2$scores, air.2$loadings)
 ```
 
@@ -455,7 +455,7 @@ Extra:
 `wind`, `solar.radiation` and `HC` don't appear
 in either of our factors, which also shows up here:
 
-```{r }
+```{r airpollution-20 }
 air.2$uniquenesses
 ```
 
@@ -468,7 +468,7 @@ only 42\% of the variability, we
 really ought to look at 3 factors, the same way that we said we should look at
 3 components:
 
-```{r }
+```{r airpollution-21 }
 air.3 <- factanal(air, 3)
 air.3$loadings
 ```
@@ -487,7 +487,7 @@ and factor 3 is mainly `NO` with a bit of `CO`.
 I think I mentioned most of the variables in there, so the uniquenesses
 should not be too bad:
 
-```{r }
+```{r airpollution-22 }
 air.3$uniquenesses
 ```
 

@@ -23,7 +23,7 @@ Solution
 
 Nothing new here:
 
-```{r }
+```{r athletes-d-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
@@ -54,7 +54,7 @@ group the columns to "unite" with `c()`, as in class, or
 not, as here. Either way is good.^[You used to have to group    them, but you don't any more. Hence my old code has them grouped,    but my new code does not.]
 We'll be using height and weight in the
 analysis to come, so I decided to display just those:
-```{r }
+```{r athletes-d-2 }
 athletes %>%
   unite(combo, Sport, Sex) -> athletesc
 athletesc %>% select(combo, Ht, Wt)
@@ -71,7 +71,7 @@ Extra: there is another column, `SSF`, that begins with S, so the
 select-helper thing is not so obviously helpful here. But the two
 columns we want start with S followed by either e or p, so we could do this:
 
-```{r }
+```{r athletes-d-3 }
 athletes %>%
   unite(combo, matches("^S(e|p)")) %>%
   select(combo, Ht, Wt)
@@ -88,7 +88,7 @@ though (either order is fine).
 I have a feeling we can also take advantage of the fact that the two
 columns we want to `unite` are the only two text ones:
 
-```{r error=T}
+```{r athletes-d-4, error=T}
 athletes %>% 
   unite(combo, where(is.character))
 ```
@@ -105,7 +105,7 @@ Solution
 
 
 That would be this. I'm having my familiar trouble with names:
-```{r }
+```{r athletes-d-5 }
 combo.1 <- lda(combo ~ Ht + Wt, data = athletesc)
 ```
 
@@ -116,7 +116,7 @@ combinations in it, use that new name here.
 
 The output:
 
-```{r }
+```{r athletes-d-6 }
 combo.1
 ```
 
@@ -207,7 +207,7 @@ Solution
 
 
 The prediction part is only one step:
-```{r }
+```{r athletes-d-7 }
 p <- predict(combo.1)
 ```
 
@@ -221,7 +221,7 @@ athletes.
 
 I prefer (no obligation) to take a look at what I have. My `p`
 is actually a `list`:
-```{r }
+```{r athletes-d-8 }
 class(p)
 glimpse(p)
 ```
@@ -230,7 +230,7 @@ glimpse(p)
 
 Our standard procedure is to `cbind` the predictions together with the original data (including the combo), and get a huge data frame (in this case):
 
-```{r }
+```{r athletes-d-9 }
 d <- cbind(athletesc, p)
 head(d)
 ```
@@ -238,7 +238,7 @@ head(d)
  
 And so, to the graph:
 
-```{r error=T}
+```{r athletes-d-10, error=T}
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = combo)) + geom_point()
 ```
 
@@ -247,7 +247,7 @@ If you can distinguish seventeen different colours, your eyes are
 better than mine! You might prefer to use seventeen different shapes,
 although I wonder how much better that will be:
 
-```{r error=T}
+```{r athletes-d-11, error=T}
 ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo)) + geom_point() +
   scale_shape_manual(values = 1:17)
 ```
@@ -260,7 +260,7 @@ assignment.
 
 Or even this:
 
-```{r error=T}
+```{r athletes-d-12, error=T}
 ggplot(d, aes(x = x.LD1, y = x.LD2, shape = combo, colour = combo)) + geom_point() +
   scale_shape_manual(values = 1:17)
 ```
@@ -324,7 +324,7 @@ Solution
 
 
 Let's see what happens:
-```{r error=T}
+```{r athletes-d-13, error=T}
 tab <- with(d, table(combo, class))
 tab
 ```
@@ -351,7 +351,7 @@ which ones you pick out, but see if you can find a few:
 
 Or you can turn it into a tibble:
 
-```{r }
+```{r athletes-d-14 }
 tab %>% as_tibble()
 ```
 
@@ -359,7 +359,7 @@ tab %>% as_tibble()
 This makes the `tidyverse` output, with frequencies. You
 probably want to omit the zero ones:
 
-```{r size="tiny"}
+```{r athletes-d-15, size="tiny"}
 tab %>% as_tibble() %>% filter(n > 0)
 ```
 
@@ -369,7 +369,7 @@ This is the same output as below. See there for comments.
 The other, perhaps easier, way to tackle this one is the
 `tidyverse` way, making a "long" table of frequencies. Here is some of it. You'll be able to click to see more:
 
-```{r }
+```{r athletes-d-16 }
 d %>% count(combo, class)
 ```
 
@@ -386,7 +386,7 @@ changed my mind from how I originally wrote this. I still use
 `count`, but I start with the overall misclassification. Let's
 take it in steps:
 
-```{r }
+```{r athletes-d-17 }
 d %>%
   count(combo, class) %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong"))
@@ -400,7 +400,7 @@ overall misclassification rate we have to count these, but *not*
 simply counting the number of rows; rather, we need to total up the
 things in the `n` column:
 
-```{r error=T}
+```{r athletes-d-18, error=T}
 d %>%
   count(combo, class) %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
@@ -415,7 +415,7 @@ wrong.
 To make those into proportions, another `mutate`, dividing by
 the total of `n`:
 
-```{r error=T}
+```{r athletes-d-19, error=T}
 d %>%
   count(combo, class) %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
@@ -434,7 +434,7 @@ corresponding calculation by sport-gender combination. To do
 *that*, we put a `group_by(combo)` either before or after
 we define `stat` (it doesn't matter which way):
 
-```{r error=T}
+```{r athletes-d-20, error=T}
 d %>%
   count(combo, class) %>%
   group_by(combo) %>%
@@ -454,7 +454,7 @@ We don't actually see all the answers, because there are too many of
 them. Let's try to get the proportion correct and wrong in their own
 columns. This almost works:
 
-```{r error=T}
+```{r athletes-d-21, error=T}
 d %>%
   count(combo, class) %>%
   group_by(combo) %>%
@@ -473,7 +473,7 @@ tested for uniqueness; if it's unique, it gets its own row. Thus,
 easiest way around this is to get rid of `n`, since it has
 served its purpose:
 
-```{r error=T}
+```{r athletes-d-22, error=T}
 d %>%
   count(combo, class) %>%
   group_by(combo) %>%
@@ -490,7 +490,7 @@ One extra thing: some of the `proportion` values were missing, because there wer
 While we're about it, let's arrange in
 order of misclassification probability:
 
-```{r error=T}
+```{r athletes-d-23, error=T}
 d %>%
   count(combo, class) %>%
   group_by(combo) %>%
@@ -512,7 +512,7 @@ weight. The ones at the bottom of the list were very confusible since
 the discriminant analysis guessed them all wrong!
 So what were the most common *misclassifications*? Let's go back
 to this:
-```{r error=T}
+```{r athletes-d-24, error=T}
 head(d)
 d %>%
   count(combo, class) %>%
@@ -524,7 +524,7 @@ We want to express those `n` values as proportions out of their
 actual sport-gender combo, so we group by `combo` before
 defining the proportions:
 
-```{r error=T}
+```{r athletes-d-25, error=T}
 d %>%
   count(combo, class) %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%
@@ -537,7 +537,7 @@ d %>%
 Only pick out the ones that were gotten wrong, and arrange the remaining
 proportions in descending order:
 
-```{r error=T}
+```{r athletes-d-26, error=T}
 d %>%
   count(combo, class) %>%
   mutate(stat = ifelse(combo == class, "correct", "wrong")) %>%

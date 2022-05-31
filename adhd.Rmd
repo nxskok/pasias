@@ -27,7 +27,7 @@ Solution
 
 
 As ever:
-```{r }
+```{r adhd-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/adhd-parents.txt"
 adhd <- read_delim(my_url, " ")
 adhd
@@ -47,7 +47,7 @@ Solution
 
 
 This is as before:
-```{r }
+```{r adhd-2 }
 adhd.1 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd)
 adhd.1
 ```
@@ -89,7 +89,7 @@ Solution
 
 The prediction is the obvious thing. I take a quick look at it
 (using `glimpse`), but only because I feel like it:
-```{r }
+```{r adhd-3 }
 adhd.2 <- predict(adhd.1)
 glimpse(adhd.2)
 ```
@@ -102,7 +102,7 @@ fathers), so the right way to plot it is against the true groups, eg.
 by a boxplot, first making a data frame, using `data.frame`,
 containing what you need:
 
-```{r error=T}
+```{r adhd-4, error=T}
 d <- cbind(adhd, adhd.2)
 head(d)
 ggplot(d, aes(x = parent, y = LD1)) + geom_boxplot()
@@ -133,7 +133,7 @@ Solution
 Use the predictions from the previous part, and the observed
 `parent` values from the original data frame. Then use
 either `table` or `tidyverse` to summarize.
-```{r }
+```{r adhd-5 }
 with(d, table(obs = parent, pred = class))
 ```
 
@@ -141,7 +141,7 @@ with(d, table(obs = parent, pred = class))
 
 Or,
 
-```{r }
+```{r adhd-6 }
 d %>% count(parent, class)
 ```
 
@@ -149,7 +149,7 @@ d %>% count(parent, class)
 
 or
 
-```{r }
+```{r adhd-7 }
 d %>%
   count(parent, class) %>%
   pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
@@ -173,7 +173,7 @@ to see only the rows where the actual parent and the predicted parent
 were different. I'm also going to create a column `id` that
 will give us the row of the *original* data frame:
 
-```{r }
+```{r adhd-8 }
 d %>%
   mutate(id = row_number()) %>%
   filter(parent != class)
@@ -187,7 +187,7 @@ that behaviour `q2` was the one that generally distinguished
 mothers from fathers, so maybe we should find the mean and SD of scores for
 mothers and fathers on `q2`:
 
-```{r }
+```{r adhd-9 }
 adhd %>% group_by(parent) %>% summarize(m2 = mean(q2), s2 = sd(q2))
 ```
 
@@ -213,7 +213,7 @@ Solution
 
 
 So, this, with different name:
-```{r error=T}
+```{r adhd-10, error=T}
 adhd.3 <- lda(parent ~ q1 + q2 + q3 + q4, data = adhd, CV = T)
 dd <- cbind(adhd, class = adhd.3$class, posterior = adhd.3$posterior)
 with(dd, table(parent, class))
@@ -258,14 +258,14 @@ that respectively
 contain everything from the (original) `lda` output and the
 cross-validated output. Let's glue them together, look at what we
 have, and then pull out what we need:
-```{r error=T}
+```{r adhd-11, error=T}
 all <- data.frame(d, dd)
 head(all)
 ```
 
  
 The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to  have shorter names:
-```{r error=T, fred}
+```{r adhd-12, error=T}
 all %>%
   select(parent, starts_with("posterior"), LD1) %>%
   mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
@@ -342,7 +342,7 @@ Solution
 
 Let's add something to the output we had before: the original
 scores on `q1` through `q4`:
-```{r }
+```{r adhd-13 }
 all %>%
   select(q1:q4, parent, starts_with("posterior"), LD1) %>%
   mutate(across(starts_with("posterior"), ~ round(., 3))) %>%

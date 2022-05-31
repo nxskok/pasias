@@ -29,7 +29,7 @@ the column names are above and aligned with the columns, which
 is what `read_table` wants. If the column names had
 *not* been aligned with the columns, we would have needed
 `read_table2`. 
-```{r }
+```{r migraine-1 }
 my_url <- "http://ritsokiguess.site/datafiles/migraine.txt"
 migraine <- read_table(my_url)
 migraine
@@ -88,7 +88,7 @@ Solution
 
 This is `pivot_longer`. The column names are going to be stored in a column `drug`, and the corresponding values in a column called `painrelief` (use whatever names you like):
 
-```{r}
+```{r migraine-2}
 migraine %>% 
   pivot_longer(everything(), names_to="drug", values_to="painrelief") -> migraine2
 ```
@@ -117,7 +117,7 @@ Solution
 
 My last sentence absolves us from doing the boxplots that we
 would normally insist on doing. 
-```{r }
+```{r migraine-3 }
 painrelief.1 <- aov(painrelief ~ drug, data = migraine2)
 summary(painrelief.1)
 ```
@@ -127,7 +127,7 @@ summary(painrelief.1)
 There are (strongly) significant differences among the drugs, so it is
 definitely worth firing up Tukey to figure out where the differences are:
 
-```{r }
+```{r migraine-4 }
 TukeyHSD(painrelief.1)
 ```
 
@@ -140,7 +140,7 @@ different from each other.
 
 Extra: we can also use the "pipe" to do this all in one go:
 
-```{r }
+```{r migraine-5 }
 migraine %>%
   pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
@@ -160,7 +160,7 @@ Read the above like this: "take `migraine`, and then make everything longer, cre
 What is even more alarming is that I can feed the output from
 `aov` straight into `TukeyHSD`:
 
-```{r }
+```{r migraine-6 }
 migraine %>%
   pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
@@ -178,7 +178,7 @@ What I am missing here is to display the result of `aov`
 *and* use it as input to `TukeyHSD`. Of course, I had to
 discover that this could be solved, and indeed it can:
 
-```{r }
+```{r migraine-7 }
 migraine %>%
   pivot_longer(everything(), names_to="drug", values_to="painrelief") %>%
   aov(painrelief ~ drug, data = .) %>%
@@ -222,7 +222,7 @@ If you weren't sure which way around the drugs actually came
 out, then you should work out the mean pain relief score by
 drug:
 
-```{r }
+```{r migraine-8 }
 migraine2 %>%
   group_by(drug) %>%
   summarize(m = mean(painrelief))
@@ -241,7 +241,7 @@ sometimes C's mean will be higher, because there is no significant
 difference between them.^[This talks about *means* rather  than individual observations; in individual cases, sometimes even  drug *A* will come out best. But we're interested in  population means, since we want to do the greatest good for the  greatest number. "Greatest good for the greatest number"  is from Jeremy Bentham, 1748--1832, British    philosopher and advocate of utilitarianism.]
 Another way is to draw a boxplot of pain-relief scores:
 
-```{r }
+```{r migraine-9 }
 ggplot(migraine2, aes(x = drug, y = painrelief)) + geom_boxplot()
 ```
 
@@ -263,7 +263,7 @@ As I said, I didn't want you to have to get into this, but if you are
 worried, you know what the remedy is --- Mood's median test. Don't
 forget to use the right data frame:
 
-```{r }
+```{r migraine-10 }
 library(smmr)
 median_test(migraine2, painrelief, drug)
 ```
@@ -286,7 +286,7 @@ again suggests that drug A is worse than the others, but to confirm
 that you'd have to do Mood's median test on all three *pairs* of
 drugs, and then use Bonferroni to allow for your having done three tests:
 
-```{r }
+```{r migraine-11 }
 pairwise_median_test(migraine2, painrelief, drug)
 ```
 

@@ -15,12 +15,12 @@ Do students learn programming more or less effectively from an online course, co
 
 We begin by reading in the data:
 
-```{r}
+```{r proggo-1}
 library(tidyverse)
 ```
 
 
-```{r}
+```{r proggo-2}
 my_url <- "http://ritsokiguess.site/datafiles/proggo.csv"
 prog0 <- read_csv(my_url)
 prog0
@@ -28,7 +28,7 @@ prog0
 
 The nine students in each section are in separate columns. This is not an appropriate layout for analysis because each row contains data for *two* separate, unrelated students, and we need to have each student's score in its own row. (See note 1.) This means making the data longer (see note 2):
 
-```{r}
+```{r proggo-3}
 prog0 %>% pivot_longer(everything(), 
   names_to = "instruction", 
   values_to = "mark") -> prog
@@ -41,7 +41,7 @@ Now everything is arranged as we need, and we can proceed to analysis.
 
 We begin by visualizing the data. With one quantitative variable `mark` and one categorical variable `instruction`, a boxplot will give us an overall picture (see note 3):
 
-```{r}
+```{r proggo-4}
 ggplot(prog, aes(x= instruction, y = mark)) + geom_boxplot()
 ```
 
@@ -49,7 +49,7 @@ It looks as if the average (median) mark is somewhat higher for the students in 
 
 With that in mind, it seems sensible to compare the mean final exam marks in the two groups by a pooled two-sample $t$-test, in order to see whether the apparent difference in performance is any more than chance. The aim of the course coordinator was to see whether there was any difference between the two sections, without having any prior idea about which teaching method would be better, so a two-sided test is appropriate: (see note 5.)
 
-```{r}
+```{r proggo-5}
 t.test(mark~instruction, data = prog, var.equal = TRUE)
 ```
 
@@ -57,7 +57,7 @@ The P-value of 0.1185 is not smaller than 0.05, so there is no evidence of any d
 
 This $t$-test comes with the assumption that the data in each group come from a normal distribution, at least approximately. With two small samples, this will not be easy to assess, but we can at least look for any gross violations, using a normal quantile plot for each group:
 
-```{r}
+```{r proggo-6}
 ggplot(prog, aes(sample = mark)) + stat_qq() + stat_qq_line() +
 facet_wrap(~instruction)
 ```
@@ -93,7 +93,7 @@ I split the pivot-longer onto several lines so that it wouldn't run off the righ
 
 7. You might have chosen to do a different test, but your choice needs to be properly justified. I think the pooled $t$-test is the best choice here. If you thought those marks were not normal enough, then you need to do Mood's median test, explaining why. That comes out like this:
 
-```{r}
+```{r proggo-7}
 median_test(prog, mark, instruction)
 ```
 
@@ -101,7 +101,7 @@ The (two-sided) P-value is a little bigger than the one for the pooled $t$-test,
 
 If you thought that the normality was all right, but the equal spreads was not, you will need to justify the unequal spreads. Perhaps the best way here is to say that you are unsure whether the spreads are close enough to equal, so you are doing the Welch test to be safe. That looks like this:
 
-```{r}
+```{r proggo-8}
 t.test(mark~instruction, data = prog)
 ```
 
@@ -119,7 +119,7 @@ Here is a slightly different way to approach the bootstrap in this case, that ta
 
 The first step is `nest_by`, which does two things, one of which is invisible:
 
-```{r}
+```{r proggo-9}
 prog %>% nest_by(instruction)
 ```
 
@@ -127,14 +127,14 @@ This (visibly) creates a list-column containing two mini dataframes `data`. They
 
 What we do next is to generate a lot of bootstrap samples, for each group. First, a vector of simulation numbers, one for each method of instruction. This only needs to be said once because `nest_by` is like `group_by`:
 
-```{r}
+```{r proggo-10}
 prog %>% nest_by(instruction) %>% 
   mutate(sim = list(1:10))
 ```
 
 Then we need to `unnest` those `sim`s, so that we can put a bootstrap sample next to each one:
 
-```{r}
+```{r proggo-11}
 prog %>% nest_by(instruction) %>% 
   mutate(sim = list(1:10)) %>% 
   unnest(sim)
@@ -142,7 +142,7 @@ prog %>% nest_by(instruction) %>%
 
 Now we draw a bootstrap sample from the `data` to the left of each `sim` (the ones next to `classroom` are the in-person ones, and the ones next to `online` are the online ones, so we will be taking bootstrap samples of the right thing). This here is where the `rowwise` goes:
 
-```{r}
+```{r proggo-12}
 prog %>% nest_by(instruction) %>% 
   mutate(sim = list(1:1000)) %>% 
   unnest(sim) %>% 

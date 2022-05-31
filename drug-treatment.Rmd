@@ -40,7 +40,7 @@ Solution
 
 
 This:
-```{r }
+```{r drug-treatment-1 }
 my_url <- "http://ritsokiguess.site/datafiles/drugusers.txt"
 drugusers <- read_delim(my_url, " ")
 drugusers
@@ -64,7 +64,7 @@ Solution
 
 First off, `summary` is a quick way to show how many missing
 values there are:^[It doesn't work with text columns, but it  *does* work if you temporarily turn the text columns into  factors, eg. by using `mutate` with `where`. However, we don't have any text  columns here, so what we do here is good for this data set.]
-```{r }
+```{r drug-treatment-2 }
 summary(drugusers)
 ```
 
@@ -75,14 +75,14 @@ has seventeen.
 
 Following the instructions, and saving back into the original dataframe:
 
-```{r }
+```{r drug-treatment-3 }
 drugusers %>% drop_na() -> drugusers
 ```
 
  
 and then
 
-```{r }
+```{r drug-treatment-4 }
 summary(drugusers)
 ```
 
@@ -91,7 +91,7 @@ summary(drugusers)
 No NA left. Gosh, as they say, that was easy.
 Extra: how many rows did we lose?
 
-```{r }
+```{r drug-treatment-5 }
 nrow(drugusers)
 ```
 
@@ -132,7 +132,7 @@ Most of them have only two levels, so it doesn't matter whether
 we make them categorical or leave them as numbers, but for
 `herco` it matters. Let's give them all sensible values,
 mostly with `ifelse`,^[`case_when` is much clearer than using nested `if-else`s when you have three or more categories, as for `herco`.] thus:
-```{r }
+```{r drug-treatment-6 }
 drugusers %>% mutate(
   treat = ifelse(treat == 0, "short", "long"),
   site = ifelse(site == 0, "A", "B"),
@@ -149,7 +149,7 @@ drugusers %>% mutate(
 
 I'm living on the edge and overwriting everything:
 
-```{r }
+```{r drug-treatment-7 }
 drugusers
 ```
 
@@ -174,7 +174,7 @@ interest (return to drug use) and whether or not that event
 happened for each patient.^[Some people define the response variable right inside the `coxph`, in the same way as putting something like `log(y)` as a response in an `lm`, but I think, especially while you're getting used to the process, it's better to create the response variable first and look at it to make sure it's the right thing.]
 In this case, that is
 `censor="returned"`. 
-```{r }
+```{r drug-treatment-8 }
 y <- with(drugusers, Surv(time, censor == "returned"))
 ```
 
@@ -194,7 +194,7 @@ Solution
 
 `head` works as well with a vector (displaying the first
 six values) as it does with a data frame:
-```{r }
+```{r drug-treatment-9 }
 head(y)
 ```
 
@@ -205,7 +205,7 @@ value: this is a patient who was never observed to go back to drug
 use. You can tell this by looking at the `head` of the entire
 data frame:
 
-```{r }
+```{r drug-treatment-10 }
 head(drugusers)
 ```
 
@@ -218,7 +218,7 @@ Typically, censored values will be bigger than uncensored ones,
 because (in general) the individual will be observed until the study
 ends, and studies of this kind carry on for years:
 
-```{r }
+```{r drug-treatment-11 }
 ggplot(drugusers, aes(x = censor, y = time)) + geom_boxplot()
 ```
 
@@ -234,7 +234,7 @@ year ago). Suppose you want to compare times for the two treatment
 groups, and you *also* want to distinguish censored from
 non-censored observations. Then, this works:
 
-```{r }
+```{r drug-treatment-12 }
 ggplot(drugusers, aes(x = treat, y = time, colour = censor)) +
   geom_boxplot()
 ```
@@ -262,7 +262,7 @@ yet. Display the results.
 Solution
 
 
-```{r }
+```{r drug-treatment-13 }
 drugusers.1 <- coxph(y ~ age + ndrugtx + treat + site + herco, data = drugusers)
 summary(drugusers.1)
 ```
@@ -272,7 +272,7 @@ summary(drugusers.1)
 Another way to handle 
 "all the other $x$'s except `row`, `ID`, `time` and `censor`" is this:
 
-```{r }
+```{r drug-treatment-14 }
 drugusers.1a <- coxph(y ~ . - row - ID - time - censor, data = drugusers)
 broom::tidy(drugusers.1a)
 ```
@@ -292,7 +292,7 @@ Solution
 
 
 The hint is meant to suggest to you that looking at `drop1` is the right way to go:
-```{r error=T}
+```{r drug-treatment-15, error=T}
 drop1(drugusers.1, test = "Chisq")
 ```
 
@@ -319,7 +319,7 @@ out.^[The researchers were probably relieved that there        was not quite a s
 `update`, but there is no
 problem about copying-pasting your `coxph` and taking out
 what you no longer need.
-```{r }
+```{r drug-treatment-16 }
 drugusers.2 <- update(drugusers.1, . ~ . - site - herco)
 ```
 
@@ -328,7 +328,7 @@ drugusers.2 <- update(drugusers.1, . ~ . - site - herco)
 Having fit two models, we can use `anova` to compare them. The
 right test gets done, so no need for `test=`:
 
-```{r }
+```{r drug-treatment-17 }
 anova(drugusers.2, drugusers.1)
 ```
 
@@ -351,7 +351,7 @@ about drug treatments? Explain briefly.
 Solution
 
 
-```{r }
+```{r drug-treatment-18 }
 summary(drugusers.2)
 ```
 
@@ -412,7 +412,7 @@ Solution
 This data frame is going to be used for prediction, so I will
 call it `new` and construct it in pieces as I did before
 (thus meaning that I don't have to think too hard about what I'm doing):
-```{r }
+```{r drug-treatment-19 }
 ages <- c(27, 37)
 ndrugtxs <- c(1, 6)
 treats <- c("short", "long")
@@ -437,7 +437,7 @@ Solution
 
 `survfit` is the survival analysis version of
 `predict` and works the same way, so this is all you need:
-```{r }
+```{r drug-treatment-20 }
 pp <- survfit(drugusers.2, new, data = drugusers)
 ```
 
@@ -456,7 +456,7 @@ Solution
 
 
 This:
-```{r }
+```{r drug-treatment-21 }
 ggsurvplot(pp, conf.int = F)
 ```
 
@@ -470,7 +470,7 @@ If your plot didn't come out, you may have to go back and re-do the
 
 For reference in a minute:
 
-```{r }
+```{r drug-treatment-22 }
 new
 ```
 

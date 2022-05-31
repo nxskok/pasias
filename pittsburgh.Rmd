@@ -79,7 +79,7 @@ Solution
 
 This sort of thing:
 
-```{r }
+```{r pittsburgh-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/bridges.csv"
 bridges0 <- read_csv(my_url, na = "?")
 bridges0
@@ -108,7 +108,7 @@ Solution
 
 
 I called my data frame `bridges0`, so this:
-```{r }
+```{r pittsburgh-2 }
 bridges0 %>%
   mutate(across(where(is.character), ~ factor(.))) %>%
   summary()
@@ -147,7 +147,7 @@ Solution
 
 
 This is as simple as:
-```{r }
+```{r pittsburgh-3 }
 bridges0 %>% drop_na() -> bridges
 bridges
 ```
@@ -182,7 +182,7 @@ square brackets to pull out the ones you want, checking them for
 differentness, then updating a counter which gets returned at the
 end. If you've done Python, this is exactly the strategy you'd
 use there:
-```{r }
+```{r pittsburgh-4 }
 count_diff <- function(v, w) {
   n <- length(v)
   stopifnot(length(v) == length(w)) # I explain this below
@@ -205,7 +205,7 @@ inside the `stopifnot` is what has to be *true*.)
 
 Does it work?
 
-```{r }
+```{r pittsburgh-5 }
 v <- c(1, 1, 0, 0, 0)
 w <- c(1, 2, 0, 2, 0)
 count_diff(v, w)
@@ -217,7 +217,7 @@ Three of the values are the same and two are different, so this is right.
 
 What happens if my two vectors are of different lengths?
 
-```{r error=T}
+```{r pittsburgh-6, error=T}
 v1 <- c(1, 1, 0, 0)
 w <- c(1, 2, 0, 2, 0)
 count_diff(v1, w)
@@ -232,7 +232,7 @@ R, though, is a "vectorized" language: it's possible to work with
 whole vectors at once, rather than pulling things out of them one at a
 time. Check out this (which is like what I did with the fruits):
 
-```{r }
+```{r pittsburgh-7 }
 v != w
 ```
 
@@ -241,7 +241,7 @@ v != w
 The second and fourth values are different, and the others are the
 same. But we can go one step further:
 
-```{r }
+```{r pittsburgh-8 }
 sum(v != w)
 ```
 
@@ -251,7 +251,7 @@ The true values count as 1 and the false ones as zero, so the sum is
 counting up how many values are different, exactly what we want. So
 the function can be as simple as:
 
-```{r }
+```{r pittsburgh-9 }
 count_diff <- function(v, w) {
   sum(v != w)
 }
@@ -283,7 +283,7 @@ This is just like my function `braycurtis.spec`, except that
 instead of calling `braycurtis` at the end, I call
 `count_diff`: 
 
-```{r }
+```{r pittsburgh-10 }
 row_diff <- function(i, j, d) {
   d1 <- d %>% select(-id, -location)
   x <- d1 %>% slice(i) %>% unlist()
@@ -299,7 +299,7 @@ That's what I said.
 
 Extra: is that right, though? Let's print out those rows and count:
 
-```{r }
+```{r pittsburgh-11 }
 bridges %>% slice(c(3, 4)) 
 ```
 
@@ -310,7 +310,7 @@ lanes, material, span and type. Six.
 
 I actually think the `unlist` is not needed:
 
-```{r }
+```{r pittsburgh-12 }
 row_diff2 <- function(i, j, d) {
   d1 <- d %>% select(-id, -location)
   x <- d1 %>% slice(i)
@@ -344,7 +344,7 @@ Solution
 
 
 First thing, either way, is to find out how many bridges we have left:
-```{r }
+```{r pittsburgh-13 }
 bridges
 ```
 
@@ -352,7 +352,7 @@ bridges
 
 70. So the loops (and the `crossing`) will go up to 70. Loops first:
 
-```{r cache=T}
+```{r pittsburgh-14, cache=T}
 m <- matrix(-1, 70, 70)
 for (i in 1:70) {
   for (j in 1:70) {
@@ -366,7 +366,7 @@ for (i in 1:70) {
 Even just the top six rows (of all 70 columns) takes up a lot of
 space. The grader would only check that it looks about right:
 
-```{r size="scriptsize"}
+```{r pittsburgh-15, size="scriptsize"}
 head(m)
 ```
 
@@ -380,7 +380,7 @@ up in the same cluster (later).
 The `tidyverse` way is really similar in conception. First use
 `crossing` to create all combinations of `i` and `j`:
 
-```{r }
+```{r pittsburgh-16 }
 mm <- crossing(i = 1:70, j = 1:70)
 ```
 
@@ -388,7 +388,7 @@ mm <- crossing(i = 1:70, j = 1:70)
 
 and then use `rowwise`:
 
-```{r cache=T}
+```{r pittsburgh-17, cache=T}
 mm %>% 
   rowwise() %>% 
   mutate(diff = row_diff(i, j, bridges)) -> mm
@@ -400,7 +400,7 @@ If you forget the `rowwise`, the answers (in `diff`) will all be the same, which
 This is long format, though, so we need to `pivot_wider` the
 `j` column to get a square array of dissimilarities:
 
-```{r }
+```{r pittsburgh-18 }
 mm %>% pivot_wider(names_from=j, values_from=diff) -> mm
 mm
 ```
@@ -425,7 +425,7 @@ The only tricky thing is that the data frame that I called
 `mm` has an extra column called `i` that needs to be
 removed first. This also applies if you need to read it in from
 the file. Thus:
-```{r }
+```{r pittsburgh-19 }
 d1 <- as.dist(m)
 ```
 
@@ -433,7 +433,7 @@ d1 <- as.dist(m)
 
 or 
 
-```{r }
+```{r pittsburgh-20 }
 mm %>% select(-i) %>% as.dist() -> d2
 ```
 
@@ -441,7 +441,7 @@ mm %>% select(-i) %>% as.dist() -> d2
 
 or, if you got stuck,
 
-```{r }
+```{r pittsburgh-21 }
 my_url <- "http://ritsokiguess.site/datafiles/mm.csv"
 mmm <- read_csv(my_url)
 mmm
@@ -461,7 +461,7 @@ Solution
 
 
 Home stretch now. I found that `cex=0.3` was good for me, though I had to enlarge the graph to see the bridge numbers:
-```{r }
+```{r pittsburgh-22 }
 bridges.1 <- hclust(d1, method = "ward.D")
 plot(bridges.1, cex = 0.3)
 ```
@@ -485,7 +485,7 @@ I think you could go with any number from about 3 to something
 like 15, but my choice is 5. What you want is for the bridges
 within a cluster to be similar and bridges in different clusters
 to be different, however you judge that.
-```{r }
+```{r pittsburgh-23 }
 plot(bridges.1, cex = 0.3)
 rect.hclust(bridges.1, 5)
 ```
@@ -512,7 +512,7 @@ What I want you to do is to display the data for your chosen three
 bridges and make the case that they are "similar". I'm picking
 41, 42 and 48 from my third cluster. On yours, scroll right to see the other variables.
 
-```{r }
+```{r pittsburgh-24 }
 bridges %>% slice(c(41, 42, 48))
 ```
 
@@ -525,7 +525,7 @@ be in the same cluster.
 You might not have been so lucky, for example, 10, 12 and 19, which
 got joined together further up:
 
-```{r }
+```{r pittsburgh-25 }
 bridges %>% slice(c(10, 12, 19))
 ```
 
@@ -537,7 +537,7 @@ so you can certainly say that they are more alike than different.
 Extra: to get a feel for how different they might be, let's compare
 three bridges in different clusters:
 
-```{r }
+```{r pittsburgh-26 }
 bridges %>% slice(c(8, 24, 52))
 ```
 
@@ -563,7 +563,7 @@ about.
 I am curious enough to have a crack at this. First we need a data set
 with the clusters in it. I'm going with my 5 clusters:
 
-```{r }
+```{r pittsburgh-27 }
 bridges.rpart <- bridges %>% mutate(cluster = cutree(bridges.1, 5))
 ```
 
@@ -571,7 +571,7 @@ bridges.rpart <- bridges %>% mutate(cluster = cutree(bridges.1, 5))
 
 and then
 
-```{r }
+```{r pittsburgh-28 }
 library(rpart)
 bridges.tree <- rpart(factor(cluster) ~ river + erected + purpose + length + lanes + clear_g +
   t_d + material + span + rel_l + type, data = bridges.rpart, method = "class")
@@ -583,7 +583,7 @@ print(bridges.tree)
 This takes some making sense of, so let's grab a couple of bridges to
 predict the cluster of:
 
-```{r }
+```{r pittsburgh-29 }
 bridges.rpart %>% slice(c(20, 29)) 
 ```
 

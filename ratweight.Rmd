@@ -21,7 +21,7 @@ Solution
 
 A `.csv` file, so `read_csv`. (I typed the data from
 Christensen (2001) into a spreadsheet.)
-```{r }
+```{r ratweight-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ratweight.csv"
 weights <- read_csv(my_url)
 weights
@@ -57,7 +57,7 @@ Solution
 
 The response variable is the same idea as for any MANOVA: just
 glue the columns together:
-```{r }
+```{r ratweight-2 }
 response <- with(weights, cbind(Time0, Time1, Time2, Time3, Time4))
 weights.1 <- lm(response ~ drug, data = weights)
 ```
@@ -77,7 +77,7 @@ Solution
 
 
 Something like this:
-```{r }
+```{r ratweight-3 }
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 times.df
@@ -103,7 +103,7 @@ thereof) mean?
 Solution
 
 
-```{r }
+```{r ratweight-4 }
 weights.2
 ```
 
@@ -130,7 +130,7 @@ Solution
 
 Like this:
 
-```{r}
+```{r ratweight-5}
 weights %>% 
   pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> weights.long
 weights.long
@@ -148,7 +148,7 @@ Since the piece of the time we want is the number,
 `parse_number` (from `readr`, part of the
 `tidyverse`) should also work:
 
-```{r }
+```{r ratweight-6 }
 weights %>% 
   pivot_longer(starts_with("Time"), names_to="timex", values_to="weight") %>% 
   mutate(time = parse_number(timex)) -> weights2.long
@@ -175,7 +175,7 @@ latter using the data frame that came out of the
 `summarize`. The second factor `drug` goes as the
 `colour` and `group` both, since `time` has
 grabbed the `x` spot:
-```{r }
+```{r ratweight-7 }
 weights.long %>%
   group_by(time, drug) %>%
   summarize(mean.weight = mean(weight)) %>%
@@ -227,7 +227,7 @@ the `x` part (`x` being 0, 1, 2, 3, 4), but I won't
 do that here. Then we save the result into a new data frame
 `wt`, and take a look at the first few lines:
 
-```{r }
+```{r ratweight-8 }
 weights %>%
   mutate(subject = row_number()) %>%
   pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> wt
@@ -238,7 +238,7 @@ wt
 Each rat is identified by `subject`, which repeats 5 times,
 once for each value of `time`:
 
-```{r }
+```{r ratweight-9 }
 wt %>% count(rat)
 ```
 
@@ -289,7 +289,7 @@ Since we went to the trouble of making the "long" data frame
 mixed-model idea (described more fully in the problem of the children
 near the new airport):
 
-```{r }
+```{r ratweight-10 }
 wt.1 <- lmer(weight ~ drug * time + (1 | subject), data = wt)
 drop1(wt.1, test = "Chisq")
 ```

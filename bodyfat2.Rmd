@@ -20,7 +20,7 @@ Solution
 
 
 This kind of thing:
-```{r }
+```{r bodyfat2-1 }
 my_url <- "http://ritsokiguess.site/datafiles/bodyfat.txt"
 bodyfat <- read_delim(my_url, " ")
 bodyfat
@@ -47,7 +47,7 @@ Feed the two columns into `t.test` along with
 `paired=T`. Remember that this is (in effect) a one-sample
 $t$-test, so that you can't use a `data=`. You therefore have
 to wrap everything in a `with`:
-```{r }
+```{r bodyfat2-2 }
 with(bodyfat, t.test(xray, ultrasound, paired = TRUE))
 ```
 
@@ -92,7 +92,7 @@ Solution
 Construct the response variable, run `lm`, construct the
 within-subjects part of the design, run `Manova`:
 
-```{r }
+```{r bodyfat2-3 }
 bodyfat %>%
   select(xray:ultrasound) %>%
   as.matrix() -> response
@@ -132,7 +132,7 @@ of the Rings^[The movies of Lord of the Rings were filmed      in New Zealand, w
 label saying which `method` they were obtained with; create
 a column which is the athlete number as a factor; fit the linear
 mixed model; see what we can drop from it:
-```{r }
+```{r bodyfat2-4 }
 bodyfat
 bodyfat %>%
   pivot_longer(-athlete, names_to="method", values_to="fat") %>%
@@ -150,7 +150,7 @@ very close to those.
 If you're not clear about the tidy data frame used for input to
 `lmer`, pull the top two lines off the pipeline and see what they produce:
 
-```{r }
+```{r bodyfat2-5 }
 bodyfat %>%
   pivot_longer(-athlete, names_to="method", values_to="fat") %>%
   mutate(fathlete = factor(athlete))

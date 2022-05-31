@@ -20,7 +20,7 @@ Solution
 I did it this way, combining the reading
 of the data with the calculation of the differences in *one* pipe:
 
-```{r }
+```{r throw-1 }
 myurl <- "http://ritsokiguess.site/datafiles/throw.txt"
 throws <- read_delim(myurl, " ", col_names = c("student", "baseball", "softball")) %>%
   mutate(diff = baseball - softball)
@@ -40,7 +40,7 @@ Solution
 
 `ci_median`, with 95\% being the default confidence level:
 
-```{r }
+```{r throw-2 }
 ci_median(throws, diff)
 ```
 
@@ -70,7 +70,7 @@ on a function name brings up the help for that function.)
 Let's check that it works properly by repeating the previous
 `sign_test` and verifying that `pval_sign` gives
 the same thing:
-```{r }
+```{r throw-3 }
 sign_test(throws, diff, 0)
 pval_sign(0, throws, diff)
 ```
@@ -113,7 +113,7 @@ Solution
  mindlessness, guesswork and cleverness that you want to employ.
 The most mindless way to try some values one at a time and see what
  you get, eg.:
-```{r }
+```{r throw-4 }
 pval_sign(1, throws, diff)
 pval_sign(5, throws, diff)
 ```
@@ -128,7 +128,7 @@ above, or vice versa.
 Something more intelligent is to make a long list of potential
 medians, and get the P-value for each of them, eg.:
 
-```{r }
+```{r throw-5 }
 d <- tibble(my.med = seq(0, 20, 2))
 d %>% rowwise() %>% 
   mutate(pvals = pval_sign(my.med, throws, diff))
@@ -139,7 +139,7 @@ d %>% rowwise() %>%
 2 is just inside the interval, 8 is also inside, and 10 is
 outside. Some closer investigation:
 
-```{r }
+```{r throw-6 }
 d <- tibble(my.med = seq(0, 2, 0.5))
 d %>% rowwise() %>% 
   mutate(pvals = pval_sign(my.med, throws, diff))
@@ -150,7 +150,7 @@ d %>% rowwise() %>%
 The bottom end of the interval actually is 2, since 2 is inside and
 1.5 is outside.
 
-```{r }
+```{r throw-7 }
 d <- tibble(my.med = seq(8, 10, 0.5))
 d %>% rowwise() %>% 
   mutate(pvals = pval_sign(my.med, throws, diff))
@@ -165,7 +165,7 @@ already have a kickoff for this, since we found, mindlessly, that 1 is
 outside the interval on the low end and 5 is inside, so the lower
 limit has to be between 1 and 5. Let's try halfway between, ie.\ 3:
 
-```{r }
+```{r throw-8 }
 pval_sign(3, throws, diff)
 ```
 
@@ -173,7 +173,7 @@ pval_sign(3, throws, diff)
 
 Inside, so lower limit is between 1 and 3. This can be automated, thus:
 
-```{r }
+```{r throw-9 }
 lo <- 1
 hi <- 3
 while (abs(hi - lo) > 0.1) {
@@ -203,7 +203,7 @@ At the other end of the interval, `lo` is inside and
 the loop. For starting values, you can be fairly mindless: for
 example, we know that 5 is inside and something big like 20 must be outside:
 
-```{r }
+```{r throw-10 }
 lo <- 5
 hi <- 20
 while (abs(hi - lo) > 0.1) {

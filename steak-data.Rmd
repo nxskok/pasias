@@ -77,7 +77,7 @@ Solution
 
 The usual:
 
-```{r }
+```{r steak-data-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/steak.csv"
 steak0 <- read_csv(my_url)
 steak0
@@ -97,7 +97,7 @@ Solution
 
 I see missing values, starting in the very first row.
 Running the data frame through `summary` gives this, either as `summary(steak0)` or this way:
-```{r }
+```{r steak-data-2 }
 steak0 %>% summary()
 ```
 
@@ -114,7 +114,7 @@ Solution
 
 Let's try it and see.
 
-```{r }
+```{r steak-data-3 }
 steak0 %>% drop_na() %>% summary()
 ```
 
@@ -129,7 +129,7 @@ now have only 311 left. Ouch.
 
 So now we'll save this into our "good" data frame, which means doing it again (now that we know it works):
 
-```{r }
+```{r steak-data-4 }
 steak0 %>% drop_na() -> steak
 ```
 
@@ -146,7 +146,7 @@ Extra extra: below we see how we used to have to do this, for your information.
 
 First, we run `complete.cases` on the data frame:
 
-```{r }
+```{r steak-data-5 }
 complete.cases(steak0)
 ```
 
@@ -162,7 +162,7 @@ I'll pick rows 496, 497, and 498 for the TRUE rows, and 540, 541 and
 542 for the FALSE ones. Let's assemble these rows into a vector and
 use `slice` to display the rows with these numbers:
 
-```{r }
+```{r steak-data-6 }
 rows <- c(496, 497, 498, 540, 541, 542)
 rows
 ```
@@ -171,7 +171,7 @@ rows
 
 Like this:
 
-```{r }
+```{r steak-data-7 }
 steak0 %>% slice(rows)
 ```
 
@@ -186,7 +186,7 @@ Extra (within "extra extra": I hope you are keeping track): this
 is a bit tricky to investigate more thoroughly, because the text
 variables might have missing values in them, and they won't show
 up unless we turn them into a factor first:
-```{r }
+```{r steak-data-8 }
 steak0 %>%
   mutate(across(where(is.character), ~factor(.))) %>%
   summary()
@@ -206,7 +206,7 @@ in our rows by looking at the columns 1 through 8 and then 9 through
 15, so they all fit on the screen. Recall that you can `select`
 columns by number:
 
-```{r }
+```{r steak-data-9 }
 steak0 %>% select(1:8) %>% slice(rows)
 ```
 
@@ -214,7 +214,7 @@ steak0 %>% select(1:8) %>% slice(rows)
 
 and
 
-```{r }
+```{r steak-data-10 }
 steak0 %>% select(9:15) %>% slice(rows)
 ```
 
@@ -276,7 +276,7 @@ Solution
 
 This is `write_csv`, using my output from 
 `drop_na`:
-```{r }
+```{r steak-data-11 }
 write_csv(steak, "steak1.csv")
 ```
 

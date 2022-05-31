@@ -246,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="two-sample-inference" class="section level1">
 <h1><span class="header-section-number">Chapter 7</span> Two-sample inference</h1>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 <div id="children-and-electronic-devices" class="section level2">
 <h2><span class="header-section-number">7.1</span> Children and electronic devices</h2>
 <p>Do children (aged 8–17) spend more time on electronic
@@ -441,15 +441,15 @@ different years.</li>
 </ol>
 <p>Solution</p>
 <p>I see this:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/pluggedin.txt&quot;</span></a>
-<a class="sourceLine" id="cb48-2" title="2">plugged=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">myurl=<span class="st">&quot;http://ritsokiguess.site/datafiles/pluggedin.txt&quot;</span></a>
+<a class="sourceLine" id="cb44-2" title="2">plugged=<span class="kw">read_delim</span>(myurl,<span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   year = col_double(),
 ##   hours = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">plugged</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1">plugged</a></code></pre></div>
 <pre><code>## # A tibble: 30 x 2
 ##     year hours
 ##    &lt;dbl&gt; &lt;dbl&gt;
@@ -467,14 +467,14 @@ different years.</li>
 <p>I see only the first ten rows (with an indication that there are 20 more, so 30 altogether). In your notebook, it’ll look a bit different: again, you’ll see the first 10 rows, but you’ll see exactly how many rows and columns there are, and there will be buttons “Next” and “Previous” to see earlier and later rows, and a little right-arrow to see more columns to the right (to which is added a little left-arrow if there are previous columns to scroll back to). If you want to check for yourself that there are 30 rows, you can click Next a couple of times to get down to row 30, and then see that the Next button cannot be clicked again, and therefore that 30 rows is how many there are.</p>
 <p>Or, you can summarize the years by counting how many there are
 of each:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(year)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(year)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##    year     n
 ##   &lt;dbl&gt; &lt;int&gt;
 ## 1  1999    15
 ## 2  2009    15</code></pre>
 <p>or the more verbose form of the same thing:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">rows=</span><span class="kw">n</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">rows=</span><span class="kw">n</span>())</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##    year  rows
 ##   &lt;dbl&gt; &lt;int&gt;
@@ -489,7 +489,7 @@ year. <code>year</code> is a numeric variable that we want to treat as a
 factor, so we need to <em>make</em> it into a factor.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span><span class="kw">factor</span>(year),<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/waehingen-1.png" width="672" /></p>
 <p>The <code>fct_inorder</code> trick from assignment 1 will also work, since
 the years are in the data in the order we want them to be displayed.</p>
@@ -501,8 +501,8 @@ there would be no problem running the pooled test here.</p>
 get around that, you can define year-as-factor <em>first</em>, using
 <code>mutate</code>, then feed your new column into the boxplot. That goes
 like this. There is a wrinkle that I explain afterwards:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">plugged <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">the_year=</span><span class="kw">factor</span>(year)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb53-2" title="2"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>the_year, <span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/bisslerin-1.png" width="672" /></p>
 <p>You could even redefine <code>year</code> to be the factor version of
 itself (if you don’t need the year-as-number anywhere else). The
@@ -513,7 +513,7 @@ not</em> name the data frame first; the data frame used is the
 <code>the_year</code>.</p>
 <p>Note how the <span class="math inline">\(x\)</span>-axis now has the name of the new variable.</p>
 <p>If you forget to make <code>year</code> into a factor, this happens:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">ggplot</span>(plugged,<span class="kw">aes</span>(<span class="dt">x=</span>year,<span class="dt">y=</span>hours))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <pre><code>## Warning: Continuous x aesthetic -- did you forget aes(group=...)?</code></pre>
 <p><img src="pasias_files/figure-html/luotter-1.png" width="672" /></p>
 <p>You get <em>one</em> boxplot, for all the hours, without distinguishing
@@ -528,7 +528,7 @@ mind: yes, we have a continuous, quantitative <code>x</code>, but
 <p>The hard part to remember is how you specify a one-sided test in
 R; it’s <code>alternative="less"</code> (rather
 than “greater”) because 1999 is “before” 2009:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)  </a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -547,7 +547,7 @@ we got. (The pooled test is below.)</p>
 <code>t.test</code>, with a “model formula” (the thing with the
 squiggle) allows a <code>data=</code> to say which data frame to get
 things from. The other ways, using (for example) <code>with</code>, also work:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">with</span>(plugged,<span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">with</span>(plugged,<span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -560,7 +560,7 @@ things from. The other ways, using (for example) <code>with</code>, also work:</
 ## mean in group 1999 mean in group 2009 
 ##           5.933333           7.600000</code></pre>
 <p>This also works, but is <em>ugly</em>:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">t.test</span>(plugged<span class="op">$</span>hours<span class="op">~</span>plugged<span class="op">$</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">t.test</span>(plugged<span class="op">$</span>hours<span class="op">~</span>plugged<span class="op">$</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -577,7 +577,7 @@ dollar sign <em>twice</em> for no reason. As a general principle, if you
 as a programmer are repeating yourself, you should stop and ask
 yourself how you can avoid the repeat.</p>
 <p>If you want the pooled test in R, you have to ask for it:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>,<span class="dt">data=</span>plugged,<span class="dt">var.equal=</span>T)    </a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>,<span class="dt">data=</span>plugged,<span class="dt">var.equal=</span>T)    </a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -626,7 +626,7 @@ switched around. Or, do the same thing with Welch-Satterthwaite.</p>
 <p>Solution</p>
 <p>Take off the thing that made it one-sided, and
 put in a thing that gets the right CI:</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">conf.level=</span><span class="fl">0.99</span>)  </a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="kw">t.test</span>(hours<span class="op">~</span>year,<span class="dt">data=</span>plugged,<span class="dt">conf.level=</span><span class="fl">0.99</span>)  </a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -718,14 +718,14 @@ by-passes the download-upload steps that you would have to do
 otherwise. (I am grateful to Rose Gao for this idea.)
 Here is how you can use <code>download.file</code> here:</p></li>
 </ul>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/parking.xlsx&quot;</span></a>
-<a class="sourceLine" id="cb70-2" title="2">local &lt;-<span class="st"> &quot;parking.xlsx&quot;</span></a>
-<a class="sourceLine" id="cb70-3" title="3"><span class="kw">download.file</span>(my_url, local, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/parking.xlsx&quot;</span></a>
+<a class="sourceLine" id="cb66-2" title="2">local &lt;-<span class="st"> &quot;parking.xlsx&quot;</span></a>
+<a class="sourceLine" id="cb66-3" title="3"><span class="kw">download.file</span>(my_url, local, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a></code></pre></div>
 <p>When you’ve gotten the spreadsheet into your project folder via one of
 those two ways, you go ahead and do this:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">library</span>(readxl)</a>
-<a class="sourceLine" id="cb71-2" title="2">parking &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;parking.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb71-3" title="3">parking</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">library</span>(readxl)</a>
+<a class="sourceLine" id="cb67-2" title="2">parking &lt;-<span class="st"> </span><span class="kw">read_excel</span>(<span class="st">&quot;parking.xlsx&quot;</span>, <span class="dt">sheet =</span> <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb67-3" title="3">parking</a></code></pre></div>
 <pre><code>## # A tibble: 93 x 2
 ##    distance gender
 ##       &lt;dbl&gt; &lt;chr&gt; 
@@ -751,9 +751,9 @@ second sheet in the workbook), or a name (whatever name the sheet has
 on its tab in the workbook).</p>
 <p>Extra: Rose actually came up with a better idea, which I will show
 you and explain:</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1">tf &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
-<a class="sourceLine" id="cb73-2" title="2"><span class="kw">download.file</span>(my_url, tf, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a>
-<a class="sourceLine" id="cb73-3" title="3">p &lt;-<span class="st"> </span><span class="kw">read_excel</span>(tf, <span class="dt">sheet =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1">tf &lt;-<span class="st"> </span><span class="kw">tempfile</span>()</a>
+<a class="sourceLine" id="cb69-2" title="2"><span class="kw">download.file</span>(my_url, tf, <span class="dt">mode =</span> <span class="st">&quot;wb&quot;</span>)</a>
+<a class="sourceLine" id="cb69-3" title="3">p &lt;-<span class="st"> </span><span class="kw">read_excel</span>(tf, <span class="dt">sheet =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p>What <code>tempfile()</code> does is to create a temporary file to hold the
 spreadsheet that you are about to download. After downloading the
 spreadsheet to the temporary file, you then use <code>read_excel</code> to
@@ -784,14 +784,14 @@ before you Save As <code>.csv</code>. I did that, and called my
 saved <code>.csv</code> <code>parking2.csv</code> (because it was from
 sheet 2, but you can use any name you like).
 Then I read this into R thus:</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">parking2 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;parking2.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">parking2 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;parking2.csv&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   distance = col_double(),
 ##   gender = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">parking2</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">parking2</a></code></pre></div>
 <pre><code>## # A tibble: 93 x 2
 ##    distance gender
 ##       &lt;dbl&gt; &lt;chr&gt; 
@@ -816,7 +816,7 @@ route, but I really wanted you to figure out how to read the Excel
 spreadsheet directly, so that’s what would be worth full marks.</p>
 <p>You might want to check that you have some males and some females, and
 how many of each, which you could do this way:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(gender)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   gender     n
 ##   &lt;chr&gt;  &lt;int&gt;
@@ -830,8 +830,8 @@ gender seem to be better at parking than the other? Explain briefly.</li>
 </ol>
 <p>Solution</p>
 <p>With the right data set, this is a piece of cake:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> gender, <span class="dt">y =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> gender, <span class="dt">y =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/parking-6-1.png" width="672" /></p>
 <p>The outcome variable is distance from the curb, so smaller should be
 better (more accurate parking). With that in mind, the median for
 females is a little smaller than for males (about 8.5 vs. about 10),
@@ -843,18 +843,18 @@ difference — don’t worry, that’s coming up).</p>
 above-and-below histograms, as another way of comparing males and
 females (two or more groups, in general). First, we make a histogram of all
 the distances, without distinguishing by gender:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">8</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">8</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/parking-7-1.png" width="672" /></p>
 <p>That big outlier is the very inaccurate male driver.</p>
 <p>Now, how do we get a <em>separate</em> histogram for each
 <code>gender</code>? In <code>ggplot</code>, separate plots for each
 “something” are called <strong>facets</strong>, and the way to get facets
 arranged as you want them is called <code>facet_grid</code>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> Let me show you
 the code first, and then explain how it works:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb82-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb82-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb78-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb78-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/parking-8-1.png" width="672" /></p>
 <p><code>facet_grid</code> takes a “model formula” with a squiggle, with <span class="math inline">\(y\)</span>
 on the left and <span class="math inline">\(x\)</span> on the right. We want to compare our two
 histograms, one for males and one for females, and I think the best
@@ -870,10 +870,10 @@ more careful since you don’t have any control over how the histograms
 come out (you probably get them side by side, which is not so helpful
 for comparing distributions). You can make it work by using
 <code>ncol=1</code> to arrange “all” the histograms in one column:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb83-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb83-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb79-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/parking-9-1.png" width="672" /></p>
 <p>The centres of both histograms are somewhere around 10, so it’s hard
 to see any real difference between males and females here. Maybe this
 is further evidence that the small difference we saw between the
@@ -887,15 +887,15 @@ arrange), but <code>facet_grid</code> <em>must</em> have something on
 on the left, how to arrange in the <span class="math inline">\(x\)</span> direction on the right), and if
 you don’t have anything else to put there, you put a dot. Here’s my
 <code>facet_grid</code> code from above, again:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb84-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb84-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb80-3" title="3"><span class="st">  </span><span class="kw">facet_grid</span>(gender <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
 <p>We wanted gender to go up and down, and we had nothing to go left and
 right, hence the dot. Contrast that with my <code>facet_wrap</code>
 code:<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb85-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb85-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</a></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb81-2" title="2"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb81-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>gender)</a></code></pre></div>
 <p>This says “make a separate facet for each gender”, but it doesn’t
 say anything about how to arrange them.
 The choice of bins for my histogram(s) came from Sturges’ rule: with
@@ -903,26 +903,26 @@ The choice of bins for my histogram(s) came from Sturges’ rule: with
 <span class="math inline">\(k=\log_2(n)+1\)</span>, rounded up. If we were to make a histogram of all the
 parking distances combined together, we would have <span class="math inline">\(n=47+48=95\)</span>
 observations, so we should use this many bins:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">sturges &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">95</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb86-2" title="2">sturges</a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">sturges &lt;-<span class="st"> </span><span class="kw">log</span>(<span class="dv">95</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb82-2" title="2">sturges</a></code></pre></div>
 <pre><code>## [1] 7.569856</code></pre>
 <p>Round this up to 8. (The second thing in <code>log</code> is the base of
 the logs, if you specify it, otherwise it defaults to <span class="math inline">\(e\)</span> and gives
 you “natural” logs.) I seem to have the powers of 2 in my head, so I
 can do it mentally by saying “the next power of 2 is 128, which is <span class="math inline">\(2^7\)</span>, so I need <span class="math inline">\(7+1=8\)</span> bins.”</p>
 <p>Or:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 8</code></pre>
 <p>Sturges’ rule tends to produce not enough bins if <span class="math inline">\(n\)</span> is small, so be
 prepared to increase it a bit if you don’t have much data.
 I think that gives a fairly bare-bones picture of the shape: skewed to
 the right with outlier.</p>
 <p>The other rule we saw was Freedman-Diaconis:</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.FD</span>(distance))</a></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">with</span>(parking, <span class="kw">nclass.FD</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 14</code></pre>
 <p>and that leads to this histogram:</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">14</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">ggplot</span>(parking, <span class="kw">aes</span>(<span class="dt">x =</span> distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">14</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/parking-15-1.png" width="672" /></p>
 <p>That gives rather more detail (a lot more bars: the binwidth in the
 Sturges-rule histogram is about 7, or twice what you see here), but in
 this case the overall story is about the same.</p>
@@ -932,7 +932,7 @@ might have quite different numbers of observations, but you can only
 use one <code>binwidth</code> (or <code>bins</code>), so you may have to
 compromise. For example, using Sturges’ rule based on 47 observations
 (the number of males; the number of females is one more):</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="kw">log</span>(<span class="dv">47</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="kw">log</span>(<span class="dv">47</span>, <span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="dv">1</span></a></code></pre></div>
 <pre><code>## [1] 6.554589</code></pre>
 <p>and so each facet should have that many bins, rounded up. That’s where
 I got my 7 for the facetted histogram from. This one doesn’t work
@@ -940,9 +940,9 @@ immediately with <code>nclass.Sturges</code>, because we do not have
 <em>one</em> column whose length is the number of observations we want:
 we have one column of distances that are males and females mixed
 up. To do <em>that</em>, <code>filter</code> one of the genders first:</p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1">parking <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb95-2" title="2"><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb95-3" title="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1">parking <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb91-2" title="2"><span class="st">  </span><span class="kw">filter</span>(gender <span class="op">==</span><span class="st"> &quot;female&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb91-3" title="3"><span class="st">  </span><span class="kw">with</span>(., <span class="kw">nclass.Sturges</span>(distance))</a></code></pre></div>
 <pre><code>## [1] 7</code></pre>
 <p>I used the “dot” trick again, which you can read as “it”: “from <code>parking</code>, take only the rows for the females, and with it, give me the number of bins for a histogram by Sturges’ rule.”</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -985,7 +985,7 @@ can do the Welch one either without comment or by asserting that the
 boxplots show different spreads; if you are going to do the pooled
 one, you need to say that the spreads are “about equal”, by
 comparing the heights of the boxes on the boxplots:</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking)</a></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1002,7 +1002,7 @@ not assume equal SDs in the two groups. The P-value of 0.1894 is not
 small, so there is no evidence of any difference in parking accuracy
 between males and females.</p>
 <p>Or, this being the pooled one:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking, <span class="dt">var.equal =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1"><span class="kw">t.test</span>(distance <span class="op">~</span><span class="st"> </span>gender, <span class="dt">data =</span> parking, <span class="dt">var.equal =</span> T)</a></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
@@ -1049,7 +1049,7 @@ Test, which is kind of the two-sample equivalent of the sign
 test (which we will also see later). It goes like this:
 Work out the overall median of all the distances, regardless
 of gender:</p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(distance))</a></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1">parking <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">med =</span> <span class="kw">median</span>(distance))</a></code></pre></div>
 <pre><code>## # A tibble: 1 x 1
 ##     med
 ##   &lt;dbl&gt;
@@ -1059,8 +1059,8 @@ of gender:</p>
 overall median. (Strictly, I’m supposed to throw away any values that
 are exactly equal to the overall median, but I won’t here for clarity
 of exposition.)</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1">tab &lt;-<span class="st"> </span><span class="kw">with</span>(parking, <span class="kw">table</span>(gender, distance <span class="op">&lt;</span><span class="st"> </span><span class="dv">9</span>))</a>
-<a class="sourceLine" id="cb103-2" title="2">tab</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1">tab &lt;-<span class="st"> </span><span class="kw">with</span>(parking, <span class="kw">table</span>(gender, distance <span class="op">&lt;</span><span class="st"> </span><span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb99-2" title="2">tab</a></code></pre></div>
 <pre><code>##         
 ## gender   FALSE TRUE
 ##   female    23   24
@@ -1070,7 +1070,7 @@ Both genders are pretty close to 50–50 above and below the overall
 median, which suggests that the males and females have about the same
 median. This can be tested (it’s a chi-squared test for independence,
 if you know that):</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" title="1"><span class="kw">chisq.test</span>(tab, <span class="dt">correct =</span> F)</a></code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s Chi-squared test
 ## 
@@ -1122,15 +1122,15 @@ list the resulting data frame.</li>
 </ol>
 <p>Solution</p>
 <p>Reading directly from the URL is easiest:</p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bellpepper.csv&quot;</span></a>
-<a class="sourceLine" id="cb107-2" title="2">pepper &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/bellpepper.csv&quot;</span></a>
+<a class="sourceLine" id="cb103-2" title="2">pepper &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   field = col_character(),
 ##   water = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1">pepper</a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1">pepper</a></code></pre></div>
 <pre><code>## # A tibble: 30 x 2
 ##    field water
 ##    &lt;chr&gt; &lt;dbl&gt;
@@ -1146,7 +1146,7 @@ list the resulting data frame.</li>
 ## 10 a      13.8
 ## # … with 20 more rows</code></pre>
 <p>If you like, find out how many observations you have from each field, thus:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">pepper <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(field)</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1">pepper <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(field)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   field     n
 ##   &lt;chr&gt; &lt;int&gt;
@@ -1160,28 +1160,28 @@ the two fields. How do the fields seem to compare?</li>
 </ol>
 <p>Solution</p>
 <p>This kind of thing:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> field, <span class="dt">y =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> field, <span class="dt">y =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/dartmouth-1.png" width="672" /></p>
 <p>This one is rather interesting: the distribution of water contents for
 field <code>a</code> is generally higher than that for field <code>b</code>,
 but the median for <code>a</code> is actually <em>lower</em>.</p>
 <p>The other reasonable plot is a facetted histogram, something like this:</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb114-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(field <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-82-1.png" width="672" /></p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">ggplot</span>(pepper, <span class="kw">aes</span>(<span class="dt">x =</span> water)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">6</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb110-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(field <span class="op">~</span><span class="st"> </span>.)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/bellpepper-3-1.png" width="672" /></p>
 <p>The distribution of water content in field <code>b</code> is actually
 bimodal, which is probably the explanation of the funny thing with the
 median. What actually seems to be happening (at least for these data)
 is that the water content in field B is either about the same as field
 A, or a lot less (nothing in between). I can borrow an idea from
 earlier to find the five-number summaries for each field:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">pepper <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb115-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>field) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb115-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb115-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qq =</span> <span class="kw">list</span>(<span class="kw">enframe</span>(<span class="kw">quantile</span>(data<span class="op">$</span>water))))<span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb115-5" title="5"><span class="st">  </span><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb115-6" title="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb115-7" title="7"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>name, <span class="dt">values_from=</span>value)</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1">pepper <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb111-2" title="2"><span class="st">  </span><span class="kw">nest</span>(<span class="op">-</span>field) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb111-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">qq =</span> <span class="kw">list</span>(<span class="kw">enframe</span>(<span class="kw">quantile</span>(data<span class="op">$</span>water))))<span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb111-5" title="5"><span class="st">  </span><span class="kw">unnest</span>(qq) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb111-6" title="6"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb111-7" title="7"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from=</span>name, <span class="dt">values_from=</span>value)</a></code></pre></div>
 <pre><code>## Warning: All elements of `...` must be named.
 ## Did you want `data = c(water)`?</code></pre>
 <pre><code>## # A tibble: 2 x 6
@@ -1201,7 +1201,7 @@ figure out a way of doing a one-sided test, or how to adapt the
 results from a two-sided test.)</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">data =</span> pepper)</a></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>, <span class="dt">data =</span> pepper)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1221,7 +1221,7 @@ means) in favour of the <code>a</code> mean being bigger than the
 <code>b</code> mean: field <code>a</code> really does have a higher mean water
 content.</p>
 <p>Another way to tackle this is to do a two-sided test and adapt the P-value:</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">data =</span> pepper)</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="kw">t.test</span>(water <span class="op">~</span><span class="st"> </span>field, <span class="dt">data =</span> pepper)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1280,15 +1280,15 @@ darkness is recorded for each of the mice.</p>
 </ol>
 <p>Solution</p>
 <p>These are aligned columns with spaces in between, so we need <code>read_table</code>:</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/stressedmice.txt&quot;</span></a>
-<a class="sourceLine" id="cb122-2" title="2">mice &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/stressedmice.txt&quot;</span></a>
+<a class="sourceLine" id="cb118-2" title="2">mice &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   Time = col_double(),
 ##   Environment = col_character()
 ## )</code></pre>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" title="1">mice</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1">mice</a></code></pre></div>
 <pre><code>## # A tibble: 14 x 2
 ##     Time Environment
 ##    &lt;dbl&gt; &lt;chr&gt;      
@@ -1308,7 +1308,7 @@ darkness is recorded for each of the mice.</p>
 ## 14   454 Standard</code></pre>
 <p>You can call the data frame whatever you like.</p>
 <p>If you must, you can physically count the number of mice in each group, but you ought to get in the habit of coding this kind of thing:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb126-1" title="1">mice <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Environment)</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1">mice <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Environment)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   Environment     n
 ##   &lt;chr&gt;       &lt;int&gt;
@@ -1322,7 +1322,7 @@ group of mice.</li>
 </ol>
 <p>Solution</p>
 <p>This:</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">x =</span> Environment, <span class="dt">y =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb124-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">x =</span> Environment, <span class="dt">y =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
 <p><img src="pasias_files/figure-html/artichoke-1.png" width="672" /></p>
 <p>You did remember to put capital letters on the variable names, didn’t you?</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -1361,7 +1361,7 @@ think about is how R organizes the groups for
 <code>Enriched</code> is first (like on the boxplot). We’re trying to
 prove that the mean <code>Time</code> is <em>less</em> for
 <code>Enriched</code> than for <code>Standard</code>, so we need <code>alternative="less"</code>:</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1374,7 +1374,7 @@ prove that the mean <code>Time</code> is <em>less</em> for
 ## mean in group Enriched mean in group Standard 
 ##               231.7143               438.7143</code></pre>
 <p>A common clue that you have the wrong alternative hypothesis is a P-value coming out close to <em>1</em>, which is what you would have gotten from something like this:</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="kw">with</span>(mice, <span class="kw">t.test</span>(Time <span class="op">~</span><span class="st"> </span>Environment, <span class="dt">alternative =</span> <span class="st">&quot;greater&quot;</span>))</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1435,9 +1435,9 @@ chance. So I do not see a problem.</p></li>
 </ul>
 <p>Extra: another way to think about this is normal quantile plots to assess
 normality within each group. This uses the facetting trick to get a separate normal quantile plot for each <code>Environment</code>:</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb133-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-90-1.png" width="672" /></p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb129-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/mousebully-5-1.png" width="672" /></p>
 <p>For the <code>Enriched</code> group, the upper-end outlier shows up. In a
 way this plot is no more illuminating than the boxplot, because you
 still have to make a call about whether this is “too big”. Bear in
@@ -1447,9 +1447,9 @@ exaggerated. On this plot, the lowest value also looks too low.</p>
 <p>For the <code>Standard</code> group, there are no problems with normality
 at all.</p>
 <p>What happens if we change the shape of the plots?</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb134-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-91-1.png" width="672" /></p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1"><span class="kw">ggplot</span>(mice, <span class="kw">aes</span>(<span class="dt">sample =</span> Time)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb130-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>Environment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/mousebully-6-1.png" width="672" /></p>
 <p>This makes the plots come out in one column, that is, short and
 squat. I prefer these. I’d still call the highest value in
 <code>Enriched</code> an outlier, but the lowest value now looks pretty
@@ -1474,15 +1474,15 @@ and which variables.</li>
 </ol>
 <p>Solution</p>
 <p>The data values are separated by one space, so:</p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/kids-diet.txt&quot;</span></a>
-<a class="sourceLine" id="cb135-2" title="2">diet &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/kids-diet.txt&quot;</span></a>
+<a class="sourceLine" id="cb131-2" title="2">diet &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   sect = col_character(),
 ##   height = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1">diet</a></code></pre></div>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1">diet</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 2
 ##    sect  height
 ##    &lt;chr&gt;  &lt;dbl&gt;
@@ -1510,8 +1510,8 @@ are different? Comment briefly.</li>
 </ol>
 <p>Solution</p>
 <p>The boxplot is the kind of thing we’ve seen before:</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="kw">ggplot</span>(diet, <span class="kw">aes</span>(<span class="dt">x =</span> sect, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1"><span class="kw">ggplot</span>(diet, <span class="kw">aes</span>(<span class="dt">x =</span> sect, <span class="dt">y =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/kids-diet-2-1.png" width="672" /></p>
 <p>It looks to me as if the boys in Sect B are taller on average.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1531,10 +1531,10 @@ is good.
 As ever, normal quantile plots can offer more insight. With
 data in this form, the
 two samples are mixed up, but using facets is the way to go. Philosophically, we draw a normal quantile plot of <em>all</em> the heights, and then say at the end that we would actually like a separate plot for each sect:</p>
-<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1">diet <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb140-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb140-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>sect, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1">diet <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb136-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> height)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb136-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>sect, <span class="dt">ncol =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/kids-diet-3-1.png" width="672" /></p>
 <p>I decided that I wanted short squat plots rather than tall skinny ones.</p>
 <p>With the sizes of the samples, I really don’t see any problems
 here. Most of the evidence for the left skewness in Sect B is actually coming
@@ -1542,8 +1542,8 @@ from that largest value being too small. Sect A is as good as you
 could wish for. Having extreme values being <em>not extreme enough</em> is not a problem, since it won’t be distorting the mean.</p>
 <p>The other way of doing this is to use <code>filter</code> to pull out the
 rows you want and then feed that into the plot:</p>
-<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1">secta &lt;-<span class="st"> </span><span class="kw">filter</span>(diet, sect <span class="op">==</span><span class="st"> &quot;a&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb141-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> sect)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1">secta &lt;-<span class="st"> </span><span class="kw">filter</span>(diet, sect <span class="op">==</span><span class="st"> &quot;a&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb137-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> sect)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
 <p>and the same for sect B. This is the usual <code>ggplot</code>-in-pipeline
 thing where you don’t have a named data frame in the <code>ggplot</code>
 because it will use whatever came out of the previous step of the
@@ -1558,7 +1558,7 @@ right thing to do.)</li>
 <p>Solution</p>
 <p>The wording states that a two-sided test is correct, which is the
 default, so you don’t need anything special:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb142-1" title="1"><span class="kw">t.test</span>(height <span class="op">~</span><span class="st"> </span>sect, <span class="dt">data =</span> diet)</a></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1"><span class="kw">t.test</span>(height <span class="op">~</span><span class="st"> </span>sect, <span class="dt">data =</span> diet)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1588,8 +1588,8 @@ thing, if you were worried about that skewness in Sect B. My guess is
 that the <span class="math inline">\(t\)</span>-test is all right, so it will be the better test
 (and give the smaller P-value) here, but if you want to do it, you
 could do it this way:</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb144-2" title="2"><span class="kw">median_test</span>(diet, height, sect)</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb140-1" title="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb140-2" title="2"><span class="kw">median_test</span>(diet, height, sect)</a></code></pre></div>
 <pre><code>## $table
 ##      above
 ## group above below
@@ -1631,16 +1631,16 @@ than females? This is what we will explore.</p>
 </ol>
 <p>Solution</p>
 <p>This is a delimited (by spaces) file, so:</p>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb146-2" title="2">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></a>
-<a class="sourceLine" id="cb146-3" title="3">span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb142-1" title="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb142-2" title="2">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/handspan.txt&quot;</span></a>
+<a class="sourceLine" id="cb142-3" title="3">span &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   sex = col_character(),
 ##   handspan = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb148-1" title="1">span</a></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb144-1" title="1">span</a></code></pre></div>
 <pre><code>## # A tibble: 190 x 2
 ##    sex   handspan
 ##    &lt;chr&gt;    &lt;dbl&gt;
@@ -1661,8 +1661,8 @@ than females? This is what we will explore.</p>
 </ol>
 <p>Solution</p>
 <p>One quantitative variable and one categorical one, so a boxplot:</p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb150-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-99-1.png" width="672" /></p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" title="1"><span class="kw">ggplot</span>(span, <span class="kw">aes</span>(<span class="dt">x=</span>sex, <span class="dt">y=</span>handspan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/handspan-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Run a suitable two-sample <span class="math inline">\(t\)</span>-test to address the question
@@ -1673,7 +1673,7 @@ of interest. What do you conclude, in the context of the data?</li>
 handspan, so we need an <code>alternative</code>. To see which: there
 are two sexes, F and M in that order, and we are trying to show
 that F is less than M:</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">alternative=</span><span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1698,7 +1698,7 @@ any more code? Explain briefly.</li>
 without the  to make it two-sided. Note also that
 we need a 90% interval, which is different from the default 95%, so
 we have to ask for that too:</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">conf.level=</span><span class="fl">0.90</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="kw">t.test</span>(handspan<span class="op">~</span>sex, <span class="dt">data=</span>span, <span class="dt">conf.level=</span><span class="fl">0.90</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1733,7 +1733,7 @@ earlier both had low-end outliers, so the normality is
 questionable.</p>
 <p>Also, say something about the sample sizes and whether or not you think they are large enough to be helpful.</p>
 <p>How big are our sample sizes?</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</a></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(sex)</a></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ##   sex       n
 ##   &lt;chr&gt; &lt;int&gt;
@@ -1750,8 +1750,8 @@ way this works is to sample from each distribution <em>with
 replacement</em>, work out the mean of each sample, then repeat many
 times, once for the females and once for the males.</p>
 <p>To start with the females, the first thing to do is to grab <em>only</em> the rows containing the females. This, using an idea from Lecture 5a that we see again properly later, is <code>filter</code>:</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>) -&gt;<span class="st"> </span>females</a>
-<a class="sourceLine" id="cb157-2" title="2">females</a></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;F&quot;</span>) -&gt;<span class="st"> </span>females</a>
+<a class="sourceLine" id="cb153-2" title="2">females</a></code></pre></div>
 <pre><code>## # A tibble: 103 x 2
 ##    sex   handspan
 ##    &lt;chr&gt;    &lt;dbl&gt;
@@ -1767,24 +1767,24 @@ times, once for the females and once for the males.</p>
 ## 10 F         20  
 ## # … with 93 more rows</code></pre>
 <p>There are 103 females. From these we need to take a “large” number of bootstrap samples to get a sense of how the mean handspan of the females varies:</p>
-<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
-<a class="sourceLine" id="cb159-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb159-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb159-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb159-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1"><span class="kw">set.seed</span>(<span class="dv">457299</span>)</a>
+<a class="sourceLine" id="cb155-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb155-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb155-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(females<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb155-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
 <p>Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-105-1.png" width="672" /></p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb156-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/handspan-8-1.png" width="672" /></p>
 <p>I don’t know what you think of this. There are a few more extreme values than I would like, and
 it looks otherwise a bit left-skewed to me. But maybe I am worrying too much.</p>
 <p>The males one works exactly the same way:</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;M&quot;</span>) -&gt;<span class="st"> </span>males</a>
-<a class="sourceLine" id="cb161-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb161-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb161-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(males<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb161-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1">span <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(sex<span class="op">==</span><span class="st">&quot;M&quot;</span>) -&gt;<span class="st"> </span>males</a>
+<a class="sourceLine" id="cb157-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb157-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb157-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(males<span class="op">$</span>handspan, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb157-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) -&gt;<span class="st"> </span>d</a></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/handspan-10-1.png" width="672" /></p>
 <p>There is a similar story here. I think these are good enough overall, and so I am happy with the two-sample <span class="math inline">\(t\)</span>-test, but it is not as clear-cut as I was expecting.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
@@ -1800,15 +1800,15 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>I made it as easy as I could:</p>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/anchoring.csv&quot;</span></a>
-<a class="sourceLine" id="cb163-2" title="2">canada &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/anchoring.csv&quot;</span></a>
+<a class="sourceLine" id="cb159-2" title="2">canada &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
 <pre><code>## 
 ## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ## cols(
 ##   anchor = col_character(),
 ##   estimate = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb165-1" title="1">canada</a></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1">canada</a></code></pre></div>
 <pre><code>## # A tibble: 21 x 2
 ##    anchor estimate
 ##    &lt;chr&gt;     &lt;dbl&gt;
@@ -1830,8 +1830,8 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>One categorical variable and one quantitative one, so a boxplot:</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="kw">ggplot</span>(canada, <span class="kw">aes</span>(<span class="dt">x =</span> anchor, <span class="dt">y =</span> estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-109-1.png" width="672" /></p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" title="1"><span class="kw">ggplot</span>(canada, <span class="kw">aes</span>(<span class="dt">x =</span> anchor, <span class="dt">y =</span> estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<p><img src="pasias_files/figure-html/ozvus-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Explain briefly why a Welch <span class="math inline">\(t\)</span>-test would be better than a pooled <span class="math inline">\(t\)</span>-test in this case.</li>
@@ -1846,7 +1846,7 @@ US as an anchor will be higher than for the students given Australia as an ancho
 </ol>
 <p>Solution</p>
 <p>The word “suitable” is a hint that you may have to think a bit about how you run the test. If the anchoring effect is real, the mean of the guesses for the students told the population of the US will be higher on average than for those told the population of Australia, so we want a one-sided alternative. Australia is before the US alphabetically, so the alternative has to be <code>less</code>:</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1"><span class="kw">t.test</span>(estimate<span class="op">~</span>anchor, <span class="dt">data =</span> canada, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="kw">t.test</span>(estimate<span class="op">~</span>anchor, <span class="dt">data =</span> canada, <span class="dt">alternative =</span> <span class="st">&quot;less&quot;</span>)</a></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
@@ -1869,17 +1869,17 @@ It’s if you want a <em>pooled</em> test that you have to ask for it specifical
 <p>The P-value is definitely less than 0.05, so we reject the null hypothesis (which says that the mean guess is the same regardless of the anchor the student was given). So we have evidence that the mean guess is higher for the students who were given the US population first.</p>
 <p>Extra 1: this is perhaps the place to think about what effect that outlier in the <code>australia</code> group might have had. Since it is a high outlier, its effect will be to make the the <code>australia</code> mean higher than it would have been otherwise, and therefore to make the two group means closer together. Despite this, the difference still came out strongly significant, so that we can be <em>even more sure than the P-value says</em> that there is a real difference between the means of estimates of the population of Canada. (To say it differently, if the outlier had not been there, the difference in means would have been even bigger and thus even more significant.)</p>
 <p>Extra 2: if you are still worried about doing a two-sample <span class="math inline">\(t\)</span>-test here, you might consider looking at the bootstrapped sampling distribution of the sample mean of the <code>australia</code> group:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1">canada <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(anchor <span class="op">==</span><span class="st"> &quot;australia&quot;</span>) -&gt;<span class="st"> </span>oz</a>
-<a class="sourceLine" id="cb170-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb170-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb170-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(oz<span class="op">$</span>estimate, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb170-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb170-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-112-1.png" width="672" /></p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1">canada <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(anchor <span class="op">==</span><span class="st"> &quot;australia&quot;</span>) -&gt;<span class="st"> </span>oz</a>
+<a class="sourceLine" id="cb166-2" title="2"><span class="kw">tibble</span>(<span class="dt">sim =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb166-3" title="3"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb166-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(oz<span class="op">$</span>estimate, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb166-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb166-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">10</span>)</a></code></pre></div>
+<p><img src="pasias_files/figure-html/ozvus-5-1.png" width="672" /></p>
 <p>This is indeed skewed to the right (though, with 11 observations, not nearly so non-normal as the original data), and so the P-value we got from the <span class="math inline">\(t\)</span>-test may not be reliable. But, as discussed in Extra 1, the “correct” P-value is, if anything, <em>even smaller</em> than the one we got, and so the conclusion we drew earlier (that there is a significant anchoring effect) is not going to change.</p>
 <p>Extra 3: looking even further ahead, there is a test that definitely <em>does</em> apply here, called Mood’s Median Test. You won’t have installed the package yet, so this won’t work for you just yet (<a href="http://ritsokiguess.site/STAC33/inference_5_R_slides.pdf">read ahead</a> if you want to learn more), but here’s how it goes:</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" title="1"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb171-2" title="2"><span class="kw">median_test</span>(canada, estimate, anchor)</a></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="kw">library</span>(smmr)</a>
+<a class="sourceLine" id="cb167-2" title="2"><span class="kw">median_test</span>(canada, estimate, anchor)</a></code></pre></div>
 <pre><code>## $table
 ##            above
 ## group       above below

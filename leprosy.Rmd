@@ -19,7 +19,7 @@ pre-treatment and post-treatment scores are labelled `pre` and
 
 (a) Read in the data and check that you have apparently the
 right thing.
-```{r }
+```{r leprosy-1 }
 
 ```
 
@@ -31,7 +31,7 @@ Solution
 Take a look at the data file. The values have multiple spaces
 between them, but they are aligned with each other and the
 column headings, so `read_table` is the thing:
-```{r }
+```{r leprosy-2 }
 my_url <- "http://ritsokiguess.site/datafiles/leprosy.txt"
 lepro <- read_table(my_url)
 lepro
@@ -54,7 +54,7 @@ Solution
 
 This is the kind of thing that `ggplot` does without
 batting an eyelid:
-```{r }
+```{r leprosy-3 }
 ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point()
 ```
 
@@ -105,7 +105,7 @@ Solution
 This is what you'd guess. `lm` handles the interaction
 properly, even though `pre` is a  quantitative variable.
 
-```{r }
+```{r leprosy-4 }
 lepro.1 <- lm(post ~ pre * drug, data = lepro)
 ```
 
@@ -113,7 +113,7 @@ lepro.1 <- lm(post ~ pre * drug, data = lepro)
 
 I wanted to take a look, so I did:
 
-```{r }
+```{r leprosy-5 }
 summary(lepro.1)
 ```
 
@@ -134,7 +134,7 @@ Solution
 
 
 Just this:
-```{r }
+```{r leprosy-6 }
 drop1(lepro.1, test = "F")
 ```
 
@@ -156,7 +156,7 @@ Solution
 
 
 Change the `*` to a `+`:
-```{r }
+```{r leprosy-7 }
 lepro.2 <- lm(post ~ pre + drug, data = lepro)
 ```
 
@@ -164,7 +164,7 @@ lepro.2 <- lm(post ~ pre + drug, data = lepro)
 
 Or use `update` (not much in it, here):
 
-```{r }
+```{r leprosy-8 }
 lepro.2a <- update(lepro.1, . ~ . - pre:drug)
 ```
 
@@ -186,7 +186,7 @@ Solution
 
 
 Mine was the no-interaction model `lepro.2`:
-```{r }
+```{r leprosy-9 }
 summary(lepro.2)
 ```
 
@@ -208,7 +208,7 @@ the fake one.
 
 Whether there is a real drug difference, I didn't ask you to assess,
 but you could do it by `drop1` again, this way:
-```{r }
+```{r leprosy-10 }
 drop1(lepro.2, test = "F")
 ```
 
@@ -234,7 +234,7 @@ First, make the new data frame for predicting from, using
 `crossing`. I'm doing this in small steps for clarity:
 first, I define all the drugs and `pre` values, and then I
 feed them into `crossing`:
-```{r }
+```{r leprosy-11 }
 drugs <- c("A", "D", "F")
 pres <- c(5, 12, 20)
 lepro.new <- crossing(drug = drugs, pre = pres)
@@ -250,7 +250,7 @@ The names of the columns in the new data frame have to be
 Now I obtain the predictions, from my best model `lepro.2`. I
 don't need intervals or anything like that:
 
-```{r }
+```{r leprosy-12 }
 preds <- predict(lepro.2, lepro.new)
 preds
 ```
@@ -260,7 +260,7 @@ preds
 only it would be easier to see the predictions side by side with the
 values they are predictions for:
 
-```{r }
+```{r leprosy-13 }
 allpreds <- cbind(lepro.new, preds)
 allpreds
 ```
@@ -279,7 +279,7 @@ Solution
 
 
 
-```{r }
+```{r leprosy-14 }
 ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() +
   geom_line(data = allpreds, aes(y = preds, linetype = drug))
 ```
@@ -312,7 +312,7 @@ would make the lines *not* be parallel.
 If your best model
 *did* have the interaction term still in it, your predictions
 would have been these:
-```{r }
+```{r leprosy-15 }
 preds <- predict(lepro.1, lepro.new)
 cbind(lepro.new, preds)
 ```
@@ -328,7 +328,7 @@ The `ggplot` in this case is actually a lot easier than the
 other `ggplot`, because the lines are now just the regression
 lines for each group.  So `geom_smooth` will get them:
 
-```{r }
+```{r leprosy-16 }
 ggplot(lepro, aes(x = pre, y = post, colour = drug)) +
   geom_point() + geom_smooth(method = "lm")
 ```

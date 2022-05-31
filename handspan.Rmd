@@ -17,7 +17,7 @@ Solution
 
 This is a delimited (by spaces) file, so:
 
-```{r}
+```{r handspan-1}
 library(tidyverse)
 my_url <- "http://ritsokiguess.site/datafiles/handspan.txt"
 span <- read_delim(my_url, " ")
@@ -34,7 +34,7 @@ Solution
 
 One quantitative variable and one categorical one, so a boxplot:
 
-```{r}
+```{r handspan-2}
 ggplot(span, aes(x=sex, y=handspan)) + geom_boxplot()
 ```     
 
@@ -51,7 +51,7 @@ handspan, so we need an `alternative`. To see which: there
 are two sexes, F and M in that order, and we are trying to show
 that F is less than M:
 
-```{r}
+```{r handspan-3}
 t.test(handspan~sex, data=span, alternative="less")
 ```     
 
@@ -72,7 +72,7 @@ without the \texttt{alternative} to make it two-sided. Note also that
 we need a 90\% interval, which is different from the default 95\%, so
 we have to ask for that too:
 
-```{r}
+```{r handspan-4}
 t.test(handspan~sex, data=span, conf.level=0.90)
 ``` 
 
@@ -106,7 +106,7 @@ Also, say something about the sample sizes and whether or not you think they are
 
 How big are our sample sizes?
 
-```{r}
+```{r handspan-5}
 span %>% count(sex)
 ```
 
@@ -126,14 +126,14 @@ times, once for the females and once for the males.
 
 To start with the females, the first thing to do is to grab *only* the rows containing the females. This, using an idea from Lecture 5a that we see again properly later, is `filter`:
 
-```{r}
+```{r handspan-6}
 span %>% filter(sex=="F") -> females
 females
 ```
 
 There are 103 females. From these we need to take a "large" number of bootstrap samples to get a sense of how the mean handspan of the females varies:
 
-```{r}
+```{r handspan-7}
 set.seed(457299)
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -145,7 +145,7 @@ tibble(sim = 1:1000) %>%
 
 Then we make a histogram of the bootstrap sampling distribution of the sample mean for the females:
 
-```{r}
+```{r handspan-8}
 ggplot(d, aes(x = the_mean)) + geom_histogram(bins = 10)
 ```
 
@@ -154,7 +154,7 @@ it looks otherwise a bit left-skewed to me. But maybe I  am worrying too much.
 
 The males one works exactly the same way:
 
-```{r}
+```{r handspan-9}
 span %>% filter(sex=="M") -> males
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
@@ -162,7 +162,7 @@ tibble(sim = 1:1000) %>%
   mutate(the_mean = mean(the_sample)) -> d
 ```
 
-```{r}
+```{r handspan-10}
 ggplot(d, aes(x = the_mean)) + geom_histogram(bins = 10)
 ```
 

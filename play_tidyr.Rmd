@@ -5,13 +5,13 @@ output: html_notebook
 
 playing with `pivot_longer`:
 
-```{r}
+```{r play-tidyr-1}
 library(tidyverse)
 ```
 
 a fake family or two, copied from vignette:
 
-```{r}
+```{r play-tidyr-2}
 family <- tribble(
   ~family,  ~dob_child1,  ~dob_child2, ~gender_child1, ~gender_child2,
        1L, "1998-11-26", "2000-01-29",             1L,             2L,
@@ -25,7 +25,7 @@ family
 
 what I think of is `pivot_longer` with two names_to:
 
-```{r}
+```{r play-tidyr-3}
 family %>% 
   mutate(across(starts_with("dob"), ~as.Date(.))) %>% 
   pivot_longer(-family, names_to=c("variable", "child"), names_sep="_", values_to="value")
@@ -35,7 +35,7 @@ only it isn't. It would work if all the variables were of the same type.
 
 Here's what Hadley does:
 
-```{r}
+```{r play-tidyr-4}
 family %>% 
   pivot_longer(
     -family, 
@@ -49,26 +49,26 @@ haven't grokked ".value" yet. Ah: when I am combining variables of different typ
 
 Is this how I do my "making it too long" thing, and I have to make it wider? Let's go back to the Toronto weather data:
 
-```{r}
+```{r play-tidyr-5}
 my_url <- 
   "http://ritsokiguess.site/STAC32/toronto_weather.csv"
 weather <- read_csv(my_url)
 ```
 
-```{r}
+```{r play-tidyr-6}
 weather
 ```
 
 let's do the pivot_wider first this time:
 
-```{r}
+```{r play-tidyr-7}
 weather %>% 
   pivot_wider(names_from=element, values_from = d01:d31)
 ```
 
 then we make it longer with two names_to, one of which is .value?
 
-```{r}
+```{r play-tidyr-8}
 weather %>% 
   pivot_wider(names_from=element, values_from = d01:d31) %>% 
   pivot_longer(starts_with("d"), 
@@ -83,7 +83,7 @@ Ooh!
 
 That works, although "casting" the day to integer doesn't. That is OK, though, since I am going to make a date of them later:
 
-```{r}
+```{r play-tidyr-9}
 weather %>% 
   pivot_wider(names_from=element, values_from = d01:d31) %>% 
   pivot_longer(starts_with("d"), 
@@ -100,11 +100,11 @@ weather %>%
 
 Here's a simpler one (maybe):
 
-```{r}
+```{r play-tidyr-10}
 who
 ```
 
-```{r}
+```{r play-tidyr-11}
 who %>% pivot_longer(
   cols = new_sp_m014:newrel_f65,
   names_to = c("diagnosis", "gender", "age"), 

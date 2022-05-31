@@ -18,7 +18,7 @@ Solution
 
 Exactly the usual:
 
-```{r}
+```{r gss-tv-1}
 my_url <- "http://ritsokiguess.site/datafiles/gss_tv.csv"
 gss <- read_csv(my_url)
 gss
@@ -35,7 +35,7 @@ Solution
 
 `group_by` and `summarize`, using `n()` to get the number of observations (rather than `count` because you want some numerical summaries as well):
 
-```{r}
+```{r gss-tv-2}
 gss %>% group_by(degree) %>% 
 summarise(n=n(), mean=mean(tvhours), med=median(tvhours))
 ```
@@ -63,7 +63,7 @@ Solution
 
 One quantitative variable and one categorical one, so a boxplot. (I hope you are getting the hang of this by now.)
 
-```{r}
+```{r gss-tv-3}
 ggplot(gss, aes(x=degree, y=tvhours)) + geom_boxplot()
 ```
 
@@ -91,7 +91,7 @@ Solution
 
 From the boxplot, the distributions are definitely not all normal; in fact, none of them are. So we should use Mood's median test, thus:
 
-```{r}
+```{r gss-tv-4}
 median_test(gss, tvhours, degree)
 ```
 
@@ -120,7 +120,7 @@ Solution
 
 The overall Mood test is significant, so there are some differences between the education groups, but we don't know where they are.  Pairwise median tests will reveal where any differences are:
 
-```{r}
+```{r gss-tv-5}
 pairwise_median_test(gss, tvhours, degree)
 ```
 
@@ -131,7 +131,7 @@ Extra 1:
 You might have been surprised that the College and Graduate medians were not significantly different. After all, they look quite different on the boxplot. Indeed, the P-value for comparing just those two groups is 0.0512, only just over 0.05. But remember that we are doing three tests at once, so the Bonferroni adjustment is to multiply the P-values by 3, so this P-value is "really" some way from being significant. 
 I thought I would investigate this in more detail:
 
-```{r}
+```{r gss-tv-6}
 gss %>% filter(degree != "HSorLess") %>% 
 median_test(tvhours, degree)
 ```
@@ -140,14 +140,14 @@ The College group are about 50-50 above and below the overall median, but the Gr
 
 You might also be concerned that there are in total more values below the grand median (106) than above (only 85). This must mean that there are a lot of data values *equal* to the grand median:
 
-```{r}
+```{r gss-tv-7}
 gss %>% filter(degree != "HSorLess") -> gss1
 gss1 %>% summarize(med=median(tvhours))
 ```
 
 and
 
-```{r}
+```{r gss-tv-8}
 gss1 %>% count(tvhours)
 ```
 
@@ -157,7 +157,7 @@ Extra 2:
 
 Regular ANOVA and Welch ANOVA should be non-starters here because of the non-normality, but you might be curious about how they would perform:
 
-```{r}
+```{r gss-tv-9}
 gss.1 <- aov(tvhours~degree, data=gss)
 summary(gss.1)
 TukeyHSD(gss.1)
@@ -165,14 +165,14 @@ TukeyHSD(gss.1)
 
 and
 
-```{r}
+```{r gss-tv-10}
 oneway.test(tvhours~degree, data=gss)
 gamesHowellTest(tvhours~factor(degree), data=gss)
 ```
 
 The conclusions are actually identical to our Mood test, and the P-values are actually not all that much different. Which makes me wonder just how bad the sampling distributions of the sample means are. Bootstrap to the rescue:
 
-```{r}
+```{r gss-tv-11}
 gss %>% 
   nest_by(degree) %>% 
   mutate(sim = list(1:1000)) %>% 

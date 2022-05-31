@@ -9,13 +9,13 @@
 Solution
 
 
-```{r, echo=FALSE}
+```{r mean-two-1, echo=FALSE}
 set.seed(457299)
 ```
 
 Use at least 1000 simulations (more, if you're willing to wait for it). In `rnorm`, the sample size is first, then the (true) population mean, then the (assumed) population SD:
 
-```{r}
+```{r mean-two-2}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(100, 2, 15))) %>% 
@@ -31,7 +31,7 @@ The power is (estimated as) a disappointing 0.361. Your answer won't (most likel
 
 The test we are doing is one-sided, so you need the `alternative` in there. If you omit it, you'll have the answer to a different problem:
 
-```{r}
+```{r mean-two-3}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(100, 2, 15))) %>% 
@@ -46,7 +46,7 @@ Extra 1:
 
 This low power of 0.361 is because the population SD is large relative to the kind of difference from the null that we are hoping to find. To get a sense of how big the power might be, imagine you draw a "typical" sample from the true population: it will have a sample mean of 2 and a sample SD of 15, so that $t$ will be about
 
-```{r}
+```{r mean-two-4}
 (2-0)/(15/sqrt(100))
 ```
 
@@ -56,7 +56,7 @@ Extra 2:
 
 This is exactly the situation where `power.t.test` works, so we can get the exact answer (you need all the pieces):
 
-```{r}
+```{r mean-two-5}
 power.t.test(n=100, delta=2-0, sd=15, type="one.sample", 
 alternative = "one.sided")
 ```
@@ -78,7 +78,7 @@ The simulation approach does not immediately give you a sample size for fixed po
 
 First off, for a sample size of 100, the power was too small, so the answer had better be bigger than 100. I'll try 200. For these, copy and paste the code, changing the sample size each time:
 
-```{r}
+```{r mean-two-6}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(200, 2, 15))) %>% 
@@ -91,7 +91,7 @@ tibble(sim = 1:10000) %>%
 
 A sample size of 200 isn't big enough yet. I'll double again to 400:
 
-```{r}
+```{r mean-two-7}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(400, 2, 15))) %>% 
@@ -102,7 +102,7 @@ tibble(sim = 1:10000) %>%
 
 Getting closer. 400 is too big, but closer than 200. 350?
 
-```{r}
+```{r mean-two-8}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(350, 2, 15))) %>% 
@@ -113,7 +113,7 @@ tibble(sim = 1:10000) %>%
 
 Close! I reckon you could call that good (see below), or try again with a sample size a bit less than 350:
 
-```{r}
+```{r mean-two-9}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(345, 2, 15))) %>% 
@@ -126,7 +126,7 @@ tibble(sim = 1:10000) %>%
 
 340 is definitely too small:
 
-```{r}
+```{r mean-two-10}
 tibble(sim = 1:10000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(rnorm(340, 2, 15))) %>% 
@@ -139,7 +139,7 @@ tibble(sim = 1:10000) %>%
 
 This is actually not as close as I was expecting. I think we are getting close to simulation accuracy for this number of simulations. If we do 10,000 simulations of an event with probability 0.8 (correctly rejecting this null), below are the kind of results we might get.^[If the power is really 0.8, the number of simulated tests that end up rejecting has a binomial distribution with n of 10000 and p of 0.80.] This is the middle 95% of that distribution.
 
-```{r}
+```{r mean-two-11}
 qbinom(c(0.025,0.975), 10000, 0.8)
 ```
 
@@ -147,7 +147,7 @@ Anything between those limits is the kind of thing we might get by chance, so si
 
 If you stuck with 1000 simulations each time, these are the corresponding limits:
 
-```{r}
+```{r mean-two-12}
 qbinom(c(0.025,0.975), 1000, 0.8)
 ```
 
@@ -159,7 +159,7 @@ What I want to see from you here is some kind of trial and error that proceeds l
 
 Extra: once again we can figure out the correct answer:
 
-```{r}
+```{r mean-two-13}
 power.t.test(power = 0.80, delta=2-0, sd=15, type="one.sample", 
 alternative = "one.sided")
 ```

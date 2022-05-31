@@ -17,7 +17,7 @@ Solution
 
 
 This is an exact repeat of what you did before:
-```{r }
+```{r manova1a-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/simple-manova.txt"
 simple <- read_delim(my_url, " ")
 simple
@@ -41,7 +41,7 @@ Solution
 
 
 This:
-```{r }
+```{r manova1a-2 }
 simple.4 <- lda(group ~ y1 + y2, data = simple)
 simple.4
 ```
@@ -98,7 +98,7 @@ Solution
 
 This was the old-fashioned way:
 
-```{r }
+```{r manova1a-3 }
 plot(simple.4)
 ```
 
@@ -107,7 +107,7 @@ plot(simple.4)
 It needs cajoling to produce colours, but we can do better. The first
 thing is to obtain the predictions:
 
-```{r }
+```{r manova1a-4 }
 simple.pred <- predict(simple.4)
 ```
 
@@ -116,7 +116,7 @@ simple.pred <- predict(simple.4)
 Then we make a data frame out of the discriminant scores and the true
 groups, using `cbind`:
 
-```{r }
+```{r manova1a-5 }
 d <- cbind(simple, simple.pred)
 head(d)
 ```
@@ -124,7 +124,7 @@ head(d)
  
 or like this, for fun:^[For suitable definitions of fun.]
 
-```{r error=T}
+```{r manova1a-6, error=T}
 ld <- as_tibble(simple.pred$x)
 post <- as_tibble(simple.pred$posterior)
 dd <- bind_cols(simple, class = simple.pred$class, ld, post)
@@ -135,7 +135,7 @@ dd
 After that, we plot the first one against the second one, colouring by
 true groups:
 
-```{r error=T}
+```{r manova1a-7, error=T}
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + geom_point()
 ```
 
@@ -144,7 +144,7 @@ ggplot(d, aes(x = x.LD1, y = x.LD2, colour = group)) + geom_point()
 I wanted to compare this plot with the original plot of `y1`
 vs.\ `y2`, coloured by groups:
 
-```{r }
+```{r manova1a-8 }
 ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
@@ -159,7 +159,7 @@ the fact that `LD1` is quite a bit more important than
 With that in mind, we could also plot just `LD1`, presumably
 against groups via boxplot:
 
-```{r error=T}
+```{r manova1a-9, error=T}
 ggplot(d, aes(x = group, y = x.LD1)) + geom_boxplot()
 ```
 
@@ -259,7 +259,7 @@ Solution
 Use the
 `simple.pred` that you got earlier. This is the
 `table` way:
-```{r error=T}
+```{r manova1a-10, error=T}
 with(d, table(obs = group, pred = class))
 ```
 
@@ -268,14 +268,14 @@ Every single one of the 12 observations has been classified into its
 correct group. (There is nothing off the diagonal of this table.) 
 The alternative to `table` is the `tidyverse` way:
 
-```{r }
+```{r manova1a-11 }
 d %>% count(group, class)
 ```
 
  
 
 or
-```{r }
+```{r manova1a-12 }
 d %>%
   count(group, class) %>%
   pivot_wider(names_from=class, values_from=n, values_fill = list(n=0))
@@ -293,7 +293,7 @@ belongs in, but how sure am I about that call? The posterior
 probabilities in my `d` start with `posterior`. These
 have a ton of decimal places which I like to round off first before I
 display them, eg. to 3 decimals here:
-```{r }
+```{r manova1a-13 }
 d %>%
   select(y1, y2, group, class, starts_with("posterior")) %>%
   mutate(across(starts_with("posterior"), ~ round(., 3)))
@@ -312,7 +312,7 @@ and `c`. Let me see if I can display this observation on the
 plot in a different way. First I need to make a new column picking out
 observation 6, and then I use this new variable as the `size`
 of the point I plot:
-```{r }
+```{r manova1a-14 }
 simple %>%
   mutate(is6 = (row_number() == 6)) %>%
   ggplot(aes(x = y1, y = y2, colour = group, size = is6)) +

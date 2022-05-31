@@ -17,7 +17,7 @@ Solution
 
 The usual:
 
-```{r}
+```{r writers-1}
 my_url <- "http://ritsokiguess.site/datafiles/writers.csv"
 writers <- read_csv(my_url)
 writers
@@ -36,7 +36,7 @@ Solution
 
 As usual, one quantitative and one categorical, so a boxplot:
 
-```{r}
+```{r writers-2}
 ggplot(writers, aes(x=Type, y=Age)) + geom_boxplot()
 ```
 
@@ -53,7 +53,7 @@ Solution
 
 The customary `group_by` and `summarize`:
 
-```{r}
+```{r writers-3}
 writers %>% group_by(Type) %>% 
 summarize(n=n(), mean=mean(Age), med=median(Age), sd=sd(Age))
 ```
@@ -71,7 +71,7 @@ I've left this fairly open-ended, to see how well you know what needs to be incl
 
 The place to start is the ordinary (not Welch) ANOVA. You may not think that this is the best thing to do (you'll have a chance to talk about that later), but I wanted to make sure that you practiced the procedure:
 
-```{r}
+```{r writers-4}
 writers.1 <- aov(Age~Type, data=writers)
 summary(writers.1)
 ```
@@ -80,7 +80,7 @@ This says that the mean ages at death of the three groups of writers are not all
 
 The $F$-test is significant, meaning that there are some differences among^[There might be differences between two things, but among three or more.] the means, and Tukey's method will enable us to see which ones differ:
 
-```{r}
+```{r writers-5}
 TukeyHSD(writers.1)
 ```
 
@@ -94,7 +94,7 @@ The assumption we made is that the ages at death of the authors of each differen
 
 Now, since you specifically want normality, you could reasonably look at normal quantile plots instead of the boxplots. Don't just get normal quantile plots, though; say something about why you want them instead of the boxplots you drew earlier:
 
-```{r}
+```{r writers-6}
 ggplot(writers, aes(sample = Age)) +
 stat_qq() + stat_qq_line() + 
 facet_wrap(~Type)
@@ -118,19 +118,19 @@ There is a more prosaic reason. It is harder (in most places, but especially Nor
 
 Extra 2: with the non-normality in mind, maybe Mood's median test is the thing:
 
-```{r}
+```{r writers-7}
 median_test(writers, Age, Type)
 ```
 
 The P-value here is a bit bigger than for the $F$-test, but it is still clearly significant. Hence, we do the pairwise median tests to find out which medians differ:
 
-```{r}
+```{r writers-8}
 pairwise_median_test(writers, Age, Type)
 ```
 
 The conclusion here is exactly the same as for the ANOVA. The P-values have moved around a bit, though: the first one is a little closer to significance (remember, look at the last column since we are doing three tests at once) and the last one is now only just significant.
 
-```{r}
+```{r writers-9}
 writers %>% group_by(Type) %>% 
 summarize(n=n(), mean=mean(Age), med=median(Age), sd=sd(Age))
 ```
@@ -143,7 +143,7 @@ Extra 3: the other way to assess if the normality is OK given the sample sizes i
 
 Let's see if we can do all three at once (I like living on the edge). I take things one step at a time, building up a pipeline as I go. Here's how it starts:
 
-```{r}
+```{r writers-10}
 writers %>% nest_by(Type)
 ```
 
@@ -153,14 +153,14 @@ In this one, the three things in the column `data` are each *dataframes*,^[Like 
 
 I'm not at all sure how this is going to go, so let's shoot for just 5 bootstrap samples to start with. If we can get it working, we can scale up the number of samples later, but having a smaller number of samples is easier to look at:
 
-```{r}
+```{r writers-11}
 writers %>% nest_by(Type) %>% 
   mutate(sim = list(1:5))
 ```
 
 Let me break off at this point to say that we want 1000 bootstrap samples for the writers of each type, so this is the kind of thing we need to start with. `nest_by` has an implied `rowwise`, so we get three lots of values in `sim`; the `list` is needed since each one is five values rather than just one. The next stage is to unnest these, and then do *another* `rowwise` to work with all the (more) rows of the dataframe we now have. After that, the process should look more or less familiar:
 
-```{r}
+```{r writers-12}
 writers %>% nest_by(Type) %>% 
   mutate(sim = list(1:5)) %>% 
   unnest(sim) %>% 
@@ -170,7 +170,7 @@ writers %>% nest_by(Type) %>%
 
 That seems to be about the right thing; the bootstrap samples appear to be the right size, considering how many writers of each type our dataset had. From here, work out the mean of each sample:
 
-```{r}
+```{r writers-13}
 writers %>% nest_by(Type) %>% 
   mutate(sim = list(1:5)) %>% 
   unnest(sim) %>% 
@@ -181,7 +181,7 @@ writers %>% nest_by(Type) %>%
 
 and then you could plot those means. This seems to be working, so let's scale up to 1000 simulations, and make normal quantile plots of the bootstrapped sampling distributions, one for each Type of writer:
 
-```{r}
+```{r writers-14}
 writers %>% nest_by(Type) %>% 
   mutate(sim = list(1:1000)) %>% 
   unnest(sim) %>% 

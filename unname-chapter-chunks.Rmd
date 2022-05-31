@@ -1,0 +1,20 @@
+```{r}
+library(tidyverse)
+library(namer)
+```
+
+find all the chapter RMDs
+
+```{r}
+list.files(".", pattern = "^[0-9]") %>% 
+  enframe() %>% 
+  filter(str_detect(value, "Rmd$")) %>% 
+  mutate(thing = walk(value, ~unname_all_chunks(.)))
+```
+
+then name all chunks
+
+```{r}
+name_dir_chunks(".")
+```
+

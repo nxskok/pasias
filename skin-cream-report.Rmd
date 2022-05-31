@@ -19,7 +19,7 @@ Is a new skin cream superior to others on the market? To be better, a skin cream
 
 We need to load a couple of packages first:
 
-```{r}
+```{r skin-cream-report-1}
 library(tidyverse)
 library(smmr)
 ```
@@ -27,7 +27,7 @@ library(smmr)
 
 Thirty subjects were randomly assigned to one of the three creams, and the number of blemishes removed from each subject was recorded. The data are as follows, being separated in the data file by single spaces:
 
-```{r}
+```{r skin-cream-report-2}
 my_url="http://ritsokiguess.site/datafiles/cosmetic-wide.txt"
 cosmetic=read_delim(my_url, " ")
 cosmetic
@@ -41,7 +41,7 @@ The data in the current format are not suitable for analysis because they are no
 
 That is to say, we need to make the data set *longer* (and to remove the missing values):
 
-```{r}
+```{r skin-cream-report-3}
 cosmetic %>%
 pivot_longer(everything(), names_to="treatment", 
 values_to="blemishes", values_drop_na=T) -> cosmetic_tidy
@@ -54,7 +54,7 @@ This is now tidy, and we can work with it.
 
 We begin by plotting the data. With one quantitative and one categorical variable, a boxplot is suitable:
 
-```{r}
+```{r skin-cream-report-4}
 ggplot(cosmetic_tidy, aes(x=treatment, y=blemishes)) + geom_boxplot()
 ```
 
@@ -68,13 +68,13 @@ To compare three groups, we need to use something like analysis of variance. Thi
 
 With that in mind, the most sensible test here seems to be Mood's median test:
 
-```{r}
+```{r skin-cream-report-5}
 median_test(cosmetic_tidy, blemishes, treatment)
 ```
 
 This tells us that the three groups do not all have the same median. We therefore follow up with pairwise median tests to find out which groups differ:
 
-```{r}
+```{r skin-cream-report-6}
 pairwise_median_test(cosmetic_tidy, blemishes, treatment)
 ```
 

@@ -15,7 +15,7 @@ Solution
 
 Reading in is the usual, noting that this is a `.csv`:
 
-```{r}
+```{r roethlisberger-1}
 my_url <- "http://ritsokiguess.site/datafiles/roethlisberger.csv"
 ben <- read_csv(my_url)
 ben
@@ -29,14 +29,14 @@ I have the four variables promised, and I also have a sensible number of rows. I
 
 Extra: I did some processing to get the data to this point. I wanted to ask you about the 2010 season, and that meant having the 2009 data to compare it with. So I went [here](https://www.pro-football-reference.com/teams/pit/2009.htm), scrolled down to Schedule and Game Results, and clicked on each of the Boxscores to get the player stats by game. Then I made a note of the opponent and the number of passes completed, and did the same for 2010. I put them in a file I called `r1.txt`, in aligned columns, and read that in. (An alternative would have been to make a spreadsheet and save that as a `.csv`, but I already had R Studio open.) Thus:
 
-```{r}
+```{r roethlisberger-2}
 r0 <- read_table("r1.txt")
 r0
 ```
 
 I was curious about the season medians (for reasons you see later), thus:
 
-```{r}
+```{r roethlisberger-3}
 r0 %>% group_by(season) %>% summarise(med = median(completed))
 ```
 
@@ -44,7 +44,7 @@ You will realize that my asserted average for "previous seasons" is close to the
 
 Anyway, the last thing to do is to grab only the rows for 2010 and save them for you. This uses `filter` to select only the rows for which something is true:
 
-```{r}
+```{r roethlisberger-4}
 library(smmr)
 r0 %>% filter(season==2010) -> r1
 write_csv(r1, "roethlisberger.csv")
@@ -61,7 +61,7 @@ Solution
 
 Don't be tempted to think *too* hard about the choice of graph (though I talk more about this below). One quantitative variable, so a histogram again. There are only 12 observations, so 5 bins is about as high as you should go:
 
-```{r}
+```{r roethlisberger-5}
 ggplot(ben, aes(x=completed)) + geom_histogram(bins=5)
 ```
 
@@ -69,7 +69,7 @@ This one shows an outlier: there is one number of completed passes that is notic
 
 If you chose a different number of bins, you might get a different look. Here's 4 bins:
 
-```{r}
+```{r roethlisberger-6}
 ggplot(ben, aes(x=completed)) + geom_histogram(bins=4)
 ```
 
@@ -77,7 +77,7 @@ That looks more like right-skewness, but the conclusion is the same.
 
 Extra: if you have read, for example, [Problem 6.1 in PASIAS](http://ritsokiguess.site/datafiles/pasias/one-sample-inference.html#hunter-gatherers-in-australia), you'll have seen that another possibility is a one-group boxplot. This might have been the context in which you first saw the boxplot, maybe at about the time you first saw the five-number summary, but I don't talk about that so much in this course because `ggplot` boxplots have both an `x` and a `y`, and it makes more sense to think about using boxplots to *compare* groups. But, you can certainly get R to make you a one-sample boxplot. What you do is to set the grouping variable to a "dummy" thing like the number 1:
 
-```{r}
+```{r roethlisberger-7}
 ggplot(ben, aes(x=1, y=completed)) + geom_boxplot()
 ```
 and then you ignore the $x$-axis.
@@ -86,7 +86,7 @@ This really shows off the outlier; it is actually *much* bigger than the other o
 
 If you have been reading ahead, you might also be thinking about a normal quantile plot. That is for specifically assessing normality, and here this is something that interests us, because a $t$-test will be doubtful if the normality fails:
 
-```{r}
+```{r roethlisberger-8}
 ggplot(ben, aes(sample=completed)) + stat_qq() + stat_qq_line()
 ```
 This again shows off the outlier at the high end. It is a reasonable choice of plot *here* because normality is of specific interest to us.
@@ -95,7 +95,7 @@ A note: you are absolutely not required to read ahead to future lectures. Each a
 
 Don't be tempted to plot the number of completed passes against something like week number:
 
-```{r}
+```{r roethlisberger-9}
 ggplot(ben, aes(x=week, y=completed)) + geom_point()
 ```
 That is quite interesting (a mostly increasing trend over weeks, with the outlier performance in week 10), but it doesn't tell us what we want to know *here*: namely, is a $t$-test any good?
@@ -111,7 +111,7 @@ Solution
 
 Use `smmr`, dataframe, column, null median:
 
-```{r}
+```{r roethlisberger-10}
 sign_test(ben, completed, 22.5)
 ```
 
@@ -123,7 +123,7 @@ My P-value is 0.039, so I can reject the null hypothesis (that the median number
 
 Extra: I said above that I cheated and made the null median 22.5 instead of 22. What happens if we make the null median 22?
 
-```{r}
+```{r roethlisberger-11}
 sign_test(ben, completed, 22)
 ```
 
@@ -142,13 +142,13 @@ Solution
 
 The other ingredient to the sign test is how many data values are above and below the null median. You can look at the output from `sign_test` (the first part), or count them yourself:
 
-```{r}
+```{r roethlisberger-12}
 ben %>% count(completed<22.5)
 ```
 
 You can put a logical condition (something that can be true or false) into `count`, or you can create a new column using `ifelse` (which I think I showed you somewhere):
 
-```{r}
+```{r roethlisberger-13}
 ben %>% mutate(side = ifelse(completed<22.5, "below", "above")) %>% 
 count(side)
 ```
@@ -166,7 +166,7 @@ Solution
 
 This is `ci_median`, but with `conf.level` since you are not using the default level of 95%:
 
-```{r}
+```{r roethlisberger-14}
 ci_median(ben, completed, conf.level = 0.90)
 ```
 
@@ -186,7 +186,7 @@ Solution
 
 All right, get the interval for the mean first:
 
-```{r}
+```{r roethlisberger-15}
 with(ben, t.test(completed, conf.level = 0.90))
 ```
 
@@ -196,7 +196,7 @@ This is higher at both ends than the interval for the median, though possibly no
 
 Extra: this is one of those cases where the bootstrap might shed some light on the sampling distribution of the sample mean:
 
-```{r}
+```{r roethlisberger-16}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 
@@ -209,7 +209,7 @@ This is noticeably skewed to the right (it goes further up from the peak than do
 
 Finally, bootstrapping the median is not something you'd want to do, since the sign test doesn't depend on anything being normally-distributed. This is a good thing, since bootstrapping the sample median is weird:
 
-```{r}
+```{r roethlisberger-17}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 
@@ -221,7 +221,7 @@ The "holes" in the distribution comes about because there are not all that many 
 
 I used a large number of bins to emphasize this, but even a more reasonable number looks strange:
 
-```{r}
+```{r roethlisberger-18}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(ben$completed, replace = TRUE))) %>% 

@@ -11,7 +11,7 @@ Solution
 
 I like to make a function skeleton first to be sure I remember all the pieces. You can do this by making a code chunk, typing `fun`, waiting a moment, and selecting the "snippet" that is offered to you. That gives you this, with your cursor on `name`:
 
-```{r}
+```{r cv-1}
 name <- function(variables) {
 
 }
@@ -19,7 +19,7 @@ name <- function(variables) {
 
 Give your function a name (I asked you to use `cv`), hit tab, enter a name like x for the input, hit tab again, and then fill in the body of the function, to end up with something like this:
 
-```{r}
+```{r cv-2}
 cv <- function(x) {
 mean_x <- mean(x)
 sd_x <- sd(x)
@@ -34,7 +34,7 @@ Some observations:
 - in the last line of the function, you calculate something, and that something is the thing that gets returned. You *do not* need to save it in a variable, because then you have to return that variable by having its name alone on the last line.
 - R has a `return()` function, but it is *bad style* to use it to return a value at the end of a function. The time to use it is  when you test something early in the function and want to return early with a value like zero or missing without doing any actual calculation. Looking ahead a bit, you might want to return "missing" if the mean is zero *before* dividing by it, which you could do like this, this being *good* style:
 
-```{r}
+```{r cv-3}
 cv2 <- function(x) {
 mean_x <- mean(x)
 if (mean_x == 0) return(NA)
@@ -47,7 +47,7 @@ sd_x/mean_x
 
 - you might be tempted to do something like this:
 
-```{r}
+```{r cv-4}
 cv3 <- function(x) {
 sd(x)/mean(x)
 }
@@ -68,20 +68,20 @@ Solution
 
 This can be as simple as
 
-```{r}
+```{r cv-5}
 cv(1:5)
 ```
 
 or, equally good, define this into a vector first:
 
-```{r}
+```{r cv-6}
 y <- 1:5
 cv(y)
 ```
 
 or, displaying a little less understanding, type the five numbers into the vector first (or directly as input to the function):
 
-```{r}
+```{r cv-7}
 y <- c(1, 2, 3, 4, 5)
 cv(y)
 cv(c(1, 2, 3, 4, 5))
@@ -95,7 +95,7 @@ $\blacksquare$
 
 (c) Define a vector as follows:
 
-```{r}
+```{r cv-8}
 v <- c(-2.8, -1.8, -0.8, 1.2, 4.2)
 ```
 
@@ -106,7 +106,7 @@ Solution
 
 Try it and see:
 
-```{r}
+```{r cv-9}
 cv(v)
 ```
 
@@ -114,7 +114,7 @@ A very large number, much bigger than any of the data values; with these human-s
 
 What actually happened was that the mean of `v` is this:
 
-```{r}
+```{r cv-10}
 mean(v)
 ```
 
@@ -139,7 +139,7 @@ This is a case for `stopifnot`, or of `if` coupled with `stop`. Check this up fr
 
 R has functions `any` and `all` that do what you'd expect:
 
-```{r}
+```{r cv-11}
 w <- 1:5
 w
 any(w>3.5)
@@ -153,7 +153,7 @@ Cite your sources for these if you use either of them, since this is the first p
 
 Remember that if you use `stopifnot`, the condition that goes in there is what has to be true if the function is to run; if you use `if` and `stop`, the condition is what will *stop* the function running. With that in mind, I would code my three possibilities above this way. First off, here's the original:
 
-```{r}
+```{r cv-12}
 cv <- function(x) {
 mean_x <- mean(x)
 sd_x <- sd(x)
@@ -163,7 +163,7 @@ sd_x/mean_x
 
 then, stop if any of the numbers are negative:
 
-```{r, error=TRUE}
+```{r cv-13, error=TRUE}
 cv <- function(x) {
 if (any(x<0)) stop("A value is negative")
 mean_x <- mean(x)
@@ -175,7 +175,7 @@ cv(v)
 
 continue if all the numbers are positive
 
-```{r, error=TRUE}
+```{r cv-14, error=TRUE}
 cv <- function(x) {
 stopifnot(all(x>0))
 mean_x <- mean(x)
@@ -187,7 +187,7 @@ cv(v)
 
 stop if the smallest value is negative
 
-```{r, error=TRUE}
+```{r cv-15, error=TRUE}
 cv <- function(x) {
 if (min(x)<0) stop("Smallest value is negative")
 mean_x <- mean(x)
@@ -201,7 +201,7 @@ There are (at least) three other possibilities: you can negate the logical condi
 
 continue if it is not true that any of the numbers are negative
 
-```{r, error=TRUE}
+```{r cv-16, error=TRUE}
 cv <- function(x) {
 stopifnot(!any(x<0))
 mean_x <- mean(x)
@@ -215,7 +215,7 @@ cv(v)
 
 stop if it is not true that all the numbers are positive
 
-```{r, error=TRUE}
+```{r cv-17, error=TRUE}
 cv <- function(x) {
 if (!all(x>0)) stop("Not all values are positive")
 mean_x <- mean(x)
@@ -227,7 +227,7 @@ cv(v)
 
 continue if the smallest value is not negative
 
-```{r, error=TRUE}
+```{r cv-18, error=TRUE}
 cv <- function(x) {
 stopifnot(min(x)>=0)
 mean_x <- mean(x)
@@ -238,7 +238,7 @@ cv(v)
 ```
 or another way to do the last one, a more direct negation of the condition, which at my guess needs some extra brackets:
 
-```{r, error=TRUE}
+```{r cv-19, error=TRUE}
 cv <- function(x) {
 stopifnot(!(min(x)<0))
 mean_x <- mean(x)
@@ -252,7 +252,7 @@ This one is hard to parse: what does that last message mean? I would take a nega
 
 I said that last one needed some extra brackets. This is, I thought, to get the order of operations right (operator precedence); it turns out not to matter because "not" has lower precedence than most other things, so that these do actually work (the "not" is evaluated *after* the less-than and the other things, so last of all here, even though it appears to be "glued" to the `min`): 
 
-```{r}
+```{r cv-20}
 !min(v)<0
 !min(1:5)<0
 ```

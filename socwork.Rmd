@@ -16,7 +16,7 @@ experience and annual salary figures look reasonable overall.
 Solution
 
 
-```{r }
+```{r socwork-1 }
 my_url <- "http://ritsokiguess.site/datafiles/socwork.txt"
 soc <- read_delim(my_url, " ")
 soc
@@ -28,7 +28,7 @@ That checks that we have the right *number* of observations; to
 check that we have sensible *values*, something like
 `summary` is called for:
 
-```{r }
+```{r socwork-2 }
 summary(soc)
 ```
 
@@ -43,7 +43,7 @@ reasonable.
 
 A rather more `tidyverse` way is this:
 
-```{r }
+```{r socwork-3 }
 soc %>% 
   summarize(across(everything(), list(min = ~min(.),  max = ~max(.))))
 ```
@@ -58,7 +58,7 @@ The code so far uses `across`. This means to do something across multiple column
 
 What, you want a nice rectangle? This is a pivot-longer, but the fancy version because the column names encode two kinds of things, a variable and a statistic:
 
-```{r}
+```{r socwork-4}
 soc %>% 
   summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
   pivot_longer(everything(), 
@@ -69,7 +69,7 @@ soc %>%
 ```
 and then
 
-```{r}
+```{r socwork-5}
 soc %>% 
   summarize(across(everything(), list(min = ~min(.),  max = ~max(.)))) %>% 
   pivot_longer(everything(), 
@@ -86,21 +86,21 @@ Another way to work is with the five-number summary. This gives a more nuanced p
 
 The base-R five-number summary looks like this:
 
-```{r }
+```{r socwork-6 }
 qq <- quantile(soc$experience)
 qq
 ```
 
 This is what's known as a "named vector". The numbers on the bottom are the summaries themselves, and the names above say which percentile you are looking at. Unfortunately, the `tidyverse` doesn't like names, so modelling after the above doesn't quite work:
 
-```{r}
+```{r socwork-7}
 soc %>% 
   summarize(across(everything(), list(q = ~quantile(.))))
 ```
 
 You can guess which percentile is which (they have to be in order), but this is not completely satisfactory. A workaround is to get hold of the `names` and add them to the result:
 
-```{r}
+```{r socwork-8}
 soc %>% 
   summarize(across(everything(), list(q = ~quantile(.)))) %>% 
   mutate(pct = names(qq))
@@ -116,7 +116,7 @@ Solution
 
 
 The usual:
-```{r }
+```{r socwork-9 }
 ggplot(soc, aes(x = experience, y = salary)) + geom_point()
 ```
 
@@ -135,7 +135,7 @@ make sense?
 Solution
 
 
-```{r }
+```{r socwork-10 }
 soc.1 <- lm(salary ~ experience, data = soc)
 summary(soc.1)
 ```
@@ -161,7 +161,7 @@ The easiest way to do this with `ggplot` is to plot the
 *regression object* (even though it is not actually a data
 frame), and plot the `.fitted` and `.resid`
 columns in it, not forgetting the initial dots:
-```{r }
+```{r socwork-11 }
 ggplot(soc.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -178,7 +178,7 @@ residual without its plus or minus sign, so if the residuals are
 getting bigger in size, their absolute values are getting bigger. That
 would look like this:
 
-```{r }
+```{r socwork-12 }
 ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth()
 ```
 
@@ -191,7 +191,7 @@ apart from those few small fitted values that have larger-sized
 residuals. Don't get thrown off by the kinks in the smooth trend. Here
 is a smoother version:
 
-```{r }
+```{r socwork-13 }
 ggplot(soc.1, aes(x = .fitted, y = abs(.resid))) + geom_point() + geom_smooth(span = 2)
 ```
 
@@ -218,7 +218,7 @@ Solution
 
 You'll need to call in (and install if necessary) the package
 `MASS` that contains `boxcox`:
-```{r }
+```{r socwork-14 }
 library(MASS)
 ```
 
@@ -226,7 +226,7 @@ library(MASS)
 
 I explain that "masked" thing below.
 
-```{r }
+```{r socwork-15 }
 boxcox(salary ~ experience, data = soc)
 ```
 
@@ -261,7 +261,7 @@ Solution
 
 The best way is to add the new variable to the data frame using
 `mutate`, and save that new data frame. That goes like this:
-```{r }
+```{r socwork-16 }
 soc.2 <- soc %>% mutate(log_salary = log(salary))
 ```
 
@@ -269,7 +269,7 @@ soc.2 <- soc %>% mutate(log_salary = log(salary))
 
 and then
 
-```{r }
+```{r socwork-17 }
 soc.3 <- lm(log_salary ~ experience, data = soc.2)
 summary(soc.3)
 ```
@@ -280,7 +280,7 @@ I think it's best to save the data frame with `log_salary` in
 it, since we'll be doing a couple of things with it, and it's best to
 be able to start from `soc.2`. But you can also do this:
 
-```{r }
+```{r socwork-18 }
 soc %>%
   mutate(log_salary = log(salary)) %>%
   lm(log_salary ~ experience, data = .) %>%
@@ -307,7 +307,7 @@ it. That's why I created `soc.2` and `soc.3` above.
 
 You can also put functions of things directly into `lm`:
 
-```{r }
+```{r socwork-19 }
 soc.1a <- lm(log(salary) ~ experience, data = soc)
 summary(soc.1a)
 ```
@@ -326,7 +326,7 @@ Solution
 
 As we did before, treating the regression object as if it were a
 data frame:
-```{r }
+```{r socwork-20 }
 ggplot(soc.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -339,7 +339,7 @@ One concern I have about the residuals is that there seem to be a
 couple of very negative values: that is, are the residuals normally
 distributed as they should be? Well, that's easy enough to check:
 
-```{r }
+```{r socwork-21 }
 ggplot(soc.3, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
@@ -358,7 +358,7 @@ What increase? Well, the slope is about 0.05, so adding a year of
 experience is predicted to increase log-salary by 0.05, or to
 multiply actual salary by 
 
-```{r }
+```{r socwork-22 }
 exp(0.05)
 ```
 

@@ -84,7 +84,7 @@ before.
 Let's start by reading in my table of fruits and properties, which
 I saved in
 [link](http://ritsokiguess.site/datafiles/fruit1.txt):
-```{r }
+```{r fruits-1 }
 my_url <- "http://ritsokiguess.site/datafiles/fruit1.txt"
 fruit1 <- read_table(my_url)
 fruit1
@@ -94,7 +94,7 @@ fruit1
 
 We don't need the first column, so we'll get rid of it:
 
-```{r error=T}
+```{r fruits-2, error=T}
 fruit2 <- fruit1 %>% select(-Property)
 fruit2
 ```
@@ -112,7 +112,7 @@ anything.
 
 Here's where we are at so far:
 
-```{r eval=F}
+```{r fruits-3, eval=F}
 fruit_m <- matrix(-1, 6, 6)
 for (i in 1:6) {
   for (j in 1:6) {
@@ -129,7 +129,7 @@ separate thought process that should be in a function of its own. The
 inputs are the two column numbers, and a data frame to get those
 columns from:
 
-```{r }
+```{r fruits-4 }
 dissim <- function(i, j, d) {
   x <- d %>% select(i)
   y <- d %>% select(j)
@@ -157,7 +157,7 @@ That was a complicated thought process, so it was probably wise to
 write a function to do it. Now, in our loop, we only have to call the
 function (having put some thought into getting it right):
 
-```{r }
+```{r fruits-5 }
 fruit_m <- matrix(-1, 6, 6)
 for (i in 1:6) {
   for (j in 1:6) {
@@ -174,7 +174,7 @@ is a `matrix` so it has a `rownames` and a
 `colnames`. We set both of those, but first we have to get the
 fruit names from `fruit2`:
 
-```{r }
+```{r fruits-6 }
 fruit_names <- names(fruit2)
 rownames(fruit_m) <- fruit_names
 colnames(fruit_m) <- fruit_names
@@ -190,7 +190,7 @@ like the loop way in its conception, but the coding looks
 different. We start by making all combinations of the fruit names with
 each other, which is `crossing`:
 
-```{r }
+```{r fruits-7 }
 combos <- crossing(fruit = fruit_names, other = fruit_names)
 combos
 ```
@@ -201,7 +201,7 @@ Now, we want a function that, given any two fruit *names*, works
 out the dissimilarity between them. A happy coincidence is that we can
 use the function we had before, *unmodified*! How? Take a look: 
 
-```{r }
+```{r fruits-8 }
 dissim <- function(i, j, d) {
   x <- d %>% select(i)
   y <- d %>% select(j)
@@ -219,7 +219,7 @@ Now, we want to run this function for each of the pairs in
 `combos`. This is `rowwise`, since our function takes only one `fruit` and one `other` fruit at a time, not all of them at once:
 
 
-```{r }
+```{r fruits-9 }
 combos %>% 
   rowwise() %>% 
   mutate(dissim = dissim(fruit, other, fruit2))
@@ -235,7 +235,7 @@ To make this into something we can turn into a `dist` object
 later, we need to pivot-wider the column `other` to make a
 square array:
 
-```{r }
+```{r fruits-10 }
 combos %>% 
   rowwise() %>% 
   mutate(dissim = dissim(fruit, other, fruit2)) %>% 
@@ -259,7 +259,7 @@ First, we need to take one of our matrices of dissimilarities
 and turn it into a `dist` object. Since I asked you to
 save yours into a file, let's start from there. Mine is aligned
 columns: 
-```{r }
+```{r fruits-11 }
 dissims <- read_table("fruits.txt")
 dissims
 ```
@@ -270,7 +270,7 @@ Then turn it into a `dist` object. The first step is to take
 off the first column, since `as.dist` can get the names from
 the columns:
 
-```{r }
+```{r fruits-12 }
 d <- dissims %>%
   select(-fruit) %>%
   as.dist()
@@ -281,7 +281,7 @@ d
 
 If you forget to take off the first column, this happens:
 
-```{r error=T}
+```{r fruits-13, error=T}
 as.dist(dissims)
 ```
 

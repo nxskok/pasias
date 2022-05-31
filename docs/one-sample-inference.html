@@ -24,7 +24,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2021-06-05" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -520,8 +520,8 @@ simplest (which is perfectly acceptable at this point) is a
 histogram. You’ll need to pick a suitable number of bins. This one
 comes from Sturges’ rule:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">5</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/schnagg-1.png" width="672" />
-Your conclusion might depend on how many bins you chose for your
+<p><img src="pasias_files/figure-html/schnagg-1.png" width="672" /></p>
+<p>Your conclusion might depend on how many bins you chose for your
 histogram. Here’s 8 bins (which is really too many with only 13
 observations, but it actually shows the shape well):</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="kw">ggplot</span>(societies,<span class="kw">aes</span>(<span class="dt">x=</span>density))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">8</span>)</a></code></pre></div>
@@ -700,7 +700,7 @@ looks like vs. what it ought to look like. I don’t so much mind what
 that comment is, as long as it’s intelligent enough.</p>
 <p>Perhaps I should draw a normal quantile plot:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">ggplot</span>(journey.times, <span class="kw">aes</span>(<span class="dt">sample =</span> minutes)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/boulder-4-1.png" width="672" /></p>
 <p>The normal quantile plot is saying that the problem is actually at the
 <em>bottom</em> of the distribution: the lowest value is not low enough,
 but the highest value is actually <em>not</em> too high. So this one
@@ -862,7 +862,7 @@ not obviously too many or too few bins.)</li>
 I’ll just reproduce my 10-bin histogram (which is what I preferred,
 but this is a matter of taste):</p>
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-75-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ncbirths-inf-5-1.png" width="672" /></p>
 <p>So, we were assessing normality. What about that?</p>
 <p>It is mostly normal-looking, but I am suspicious about those
 <em>very</em> low birth weights, the ones below about 4 pounds. There
@@ -876,7 +876,7 @@ interpretation of the histogram.</p>
 than a histogram is, but I won’t make you do one until we have seen
 the idea in class. Here’s the normal quantile plot for these data:</p>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="kw">ggplot</span>(bw, <span class="kw">aes</span>(<span class="dt">sample =</span> <span class="st">`</span><span class="dt">Weight (pounds)</span><span class="st">`</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-76-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ncbirths-inf-6-1.png" width="672" /></p>
 <p>This is rather striking: the lowest birthweights (the ones below 5
 pounds or so) are <em>way</em> too low for a normal distribution to
 apply. The top end is fine (except perhaps for that one very heavy
@@ -1023,7 +1023,7 @@ the graph this time, so feel free to just read this part.)</li>
 <p>I liked the <code>ggplot</code> with a smooth trend on it:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-80-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/nenana-inf-4-1.png" width="672" /></p>
 <p>There was something obvious to see: after about 1960, there is a clear
 downward trend: the ice is breaking up earlier on average every
 year. Even though there is a lot of variability, the overall trend,
@@ -1047,7 +1047,7 @@ fits a line; as we see later, <code>lm</code> does regressions in R:</p>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">ggplot</span>(nenana, <span class="kw">aes</span>(<span class="dt">x =</span> Year, <span class="dt">y =</span> JulianDate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb88-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-81-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/nenana-inf-5-1.png" width="672" /></p>
 <p>Compare the confidence interval for the mean <code>JulianDate</code> in
 1920: 126 to 131 (the shaded area on the graph), with 2000: 121 to
 125. A change of about 5 days over 80 years. And with the recent trend
@@ -1141,12 +1141,12 @@ The easiest way to get the URL is to <em>right</em>-click on the blue text and s
 <p>Solution</p>
 <p>One quantitative variable, so a histogram. Choose a sensible number of bins. There are 40 observations, so a number of bins up to about 10 is good. Sturges’ rule says 6 since <span class="math inline">\(2^6=64\)</span>:</p>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">x=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-85-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/trees-4-1.png" width="672" /></p>
 <p>Extra 1: comments come later, but you might care to note (if only for yourself) that the distribution is a little skewed to the right, or, perhaps better, has <em>no</em> left tail at all. You might even observe that diameters cannot be less than 0 (they are measurements), and so you might expect a skew away from the limit.</p>
 <p>After you’ve looked at the <span class="math inline">\(t\)</span> procedures for these data, we’ll get back to the shape.</p>
 <p>Extra 2: later we look at a more precise tool for assessing normality, the normal quantile plot, which looks like this:</p>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">sample=</span>diameter)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-86-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/trees-5-1.png" width="672" /></p>
 <p>If the data come from a normal distribution, the points should follow the straight line, at least approximately. Here, most of the points do, except for the points on the left, which veer away upwards from the line: that is, the highest values, on the right, are about right for a normal distribution, but the lowest values, on the left, <em>don’t go down low enough</em>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>
 Thus, the problem with normality is not the long tail on the right, but the short one on the left. It is hard to get this kind of insight from the histogram, but at the moment, it’s the best we have.</p>
 <p>The big problems, for things like <span class="math inline">\(t\)</span>-tests that depend on means, is stuff like outliers, or long tails, with extreme values that might distort the mean. Having short tails, as the left tail here, will make the distribution look non-normal but won’t cause any problems for the <span class="math inline">\(t\)</span>-tests.</p>
@@ -1310,7 +1310,7 @@ distribution.</li>
 <p>Solution</p>
 <p>There is one quantitative variable, so a histogram, as ever:</p>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">ggplot</span>(cholest, <span class="kw">aes</span>(<span class="dt">x=</span>control)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/luprands-1.png" width="672" /></p>
 <p>Pick a number of bins that shows the shape reasonably well. Too many
 or too few won’t. (Sturges’ rule says 6, since there are 30
 observations and <span class="math inline">\(2^5=32\)</span>.) Seven bins also works, but by the time you
@@ -1476,7 +1476,7 @@ and, indeed, is).</p>
 powerful than you think.</p>
 <p>To illustrate my first idea, let’s pretend the population looks like this,
 with a flat top:</p>
-<p><img src="pasias_files/figure-html/unnamed-chunk-101-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/brunhopter-1.png" width="672" /></p>
 <p>Only values between 0 and 1 are possible, and each of those is equally
 likely. Not very normal in shape. So let’s take some random samples of
 size <em>three</em>, not in any sense a large sample, from this “uniform”
@@ -1496,7 +1496,7 @@ sample means:</p>
 <a class="sourceLine" id="cb136-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">runif</span>(<span class="dv">3</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb136-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb136-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-103-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/toeber-1.png" width="672" /></p>
 <p>This is our computer-generated assessment of what the sampling
 distribution of the sample mean looks like. Isn’t this looking like a
 normal distribution?</p>
@@ -1511,12 +1511,18 @@ matters, <em>but so does the sample size</em>.</p>
 <p>I should say a little about my code. I’m not expecting you to figure
 out details now (we see the ideas properly in simulating power of
 tests), but in words, one line at a time:</p>
-
+<ul>
+<li>generate 1000 (“many”) samples each of 3 observations from a
+uniform distribution</li>
+<li>for each sample, work out the mean of it</li>
+<li>turn those sample means into a data frame with a column called <code>value</code></li>
+<li>make a histogram of those.</li>
+</ul>
 <p>Now, the central limit theorem doesn’t always work as nicely as this,
 but maybe a sample size of 30 is large enough to overcome the skewness
 that we had:</p>
 <div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1"><span class="kw">ggplot</span>(cholest, <span class="kw">aes</span>(<span class="dt">x=</span>control)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">6</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/schauffhusen-1.png" width="672" /></p>
 <p>That brings us to my second idea above.</p>
 <p>The sample that we had is in some sense an “estimate of the
 population”. To think about the sampling distribution of the sample
@@ -1549,7 +1555,7 @@ only new idea here is the sampling with replacement:</p>
 <a class="sourceLine" id="cb144-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(cholest<span class="op">$</span>control, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb144-4" title="4"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_mean =</span> <span class="kw">mean</span>(my_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb144-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> my_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">12</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/schuomarchers-1.png" width="672" /></p>
 <p>That looks pretty normal, not obviously skewed, and so the <span class="math inline">\(t\)</span>
 procedures we used will be reliable enough.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>

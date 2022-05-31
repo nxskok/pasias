@@ -38,7 +38,7 @@ patient died)
 Solution
 
 
-```{r }
+```{r worcester-1 }
 my_url <- "http://ritsokiguess.site/datafiles/whas100.csv"
 whas100 <- read_csv(my_url)
 whas100
@@ -64,7 +64,7 @@ Solution
 `Surv`. The event here is death, so the two parts of the
 response variable are followup time `lenfol` and followup
 status, 1 being "dead", `fstat`:
-```{r }
+```{r worcester-2 }
 y <- with(whas100, Surv(lenfol, fstat == 1))
 y
 ```
@@ -93,7 +93,7 @@ Solution
 
 
 This, using the response variable that we just created:
-```{r }
+```{r worcester-3 }
 whas100.1 <- coxph(y ~ age + gender + bmi, data = whas100)
 summary(whas100.1)
 ```
@@ -123,7 +123,7 @@ Solution
 out of the model. The other two variables have small P-values
 (`bmi` only just under 0.05), so they need to stay.
 The other way to think about this is `step`, or `drop1`:
-```{r }
+```{r worcester-4 }
 drop1(whas100.1, test = "Chisq")
 ```
 
@@ -137,7 +137,7 @@ about keeping or dropping it as a whole.^[Our categorical  variable *gender* has
 
 If you prefer: 
 
-```{r }
+```{r worcester-5 }
 step(whas100.1, trace = 0, test = "Chisq")
 ```
 
@@ -157,7 +157,7 @@ Solution
 
 
 So, take out `gender`:
-```{r }
+```{r worcester-6 }
 whas100.2 <- update(whas100.1, . ~ . - gender)
 summary(whas100.2)
 ```
@@ -179,7 +179,7 @@ data frame, or the columns of it you want, into `summary`.
 Solution
 
 
-```{r }
+```{r worcester-7 }
 quantile(whas100$age)
 quantile(whas100$bmi)
 ```
@@ -188,16 +188,16 @@ quantile(whas100$bmi)
 
 or
 
-```{r }
+```{r worcester-8 }
 whas100 %>%
   select(age, bmi) %>%
   summary()
 ```
 
  
-Or, pure tidyverse: use `summarize_all`, which summarizes all the columns (after you've done the `select`). 
+Or, pure tidyverse: summarize all the columns (after you've done the `select`). 
 
-```{r }
+```{r worcester-9 }
 whas100 %>%
   select(age, bmi) %>%
   summarize(across(everything(), ~list(quantile(.)))) %>%
@@ -226,7 +226,7 @@ Solution
 
 
 The inevitable `crossing`. This is probably quickest:
-```{r }
+```{r worcester-10 }
 whas100.new <- crossing(age = c(60, 71, 80), bmi = c(24, 27, 30))
 whas100.new
 ```
@@ -238,7 +238,7 @@ clearer. This is my no-think approach, which is what I recommend;
 vectors with plural names containing the values, and inside the
 `crossing`, a singular name equals a plural one:
 
-```{r }
+```{r worcester-11 }
 ages <- c(60, 71, 80)
 bmis <- c(24, 27, 30)
 whas100.new <- crossing(age = ages, bmi = bmis)
@@ -259,7 +259,7 @@ Solution
 The magic word is `survfit` (which plays the role of
 `predict` here). The best model is `whas100.2`,
 with the non-significant `gender` removed:
-```{r }
+```{r worcester-12 }
 pp2 <- survfit(whas100.2, whas100.new, data = whas100)
 ```
 
@@ -285,7 +285,7 @@ Solution
 
 This is actually easy once you work out what to do:
 
-```{r }
+```{r worcester-13 }
 ggsurvplot(pp2, conf.int = FALSE)
 ```
 
@@ -300,7 +300,7 @@ predicted for, so it's usually a good idea to list the "new"
 prediction data frame, either here or when you assess the effects of
 the variables (next part) so that you can see which is which:
 
-```{r }
+```{r worcester-14 }
 whas100.new
 ```
 
@@ -352,7 +352,7 @@ here are "overweight" or close to it. Maybe being heavier helps
 the body recover from a heart attack. 
 
 Let's start with the martingale residual plot:
-```{r }
+```{r worcester-15 }
 ggcoxdiagnostics(whas100.2) + geom_smooth()
 ```
 
@@ -366,7 +366,7 @@ would be worth exploring.
 
 Thus:
 
-```{r }
+```{r worcester-16 }
 whas100.3 <- update(whas100.2, . ~ . + I(bmi^2))
 summary(whas100.3)
 ```
@@ -380,7 +380,7 @@ means that the "hazard of dying" increases faster with increasing
 survival chances decrease again. 
 Have we improved the residuals by adding the squared term?
 
-```{r }
+```{r worcester-17 }
 ggcoxdiagnostics(whas100.3) + geom_smooth()
 ```
 
@@ -396,7 +396,7 @@ different, we would need an interaction term, ANOVA-style).
 First we create a data frame with a bunch of different BMIs in, and
 one age 70:
 
-```{r }
+```{r worcester-18 }
 bmis <- seq(20, 36, 4)
 ages <- 70
 whas100.new.2 <- crossing(bmi = bmis, age = ages)
@@ -410,7 +410,7 @@ in it, but that's the way it goes, if you're me and trying to avoid thinking.
 
 Predictions, using the model with the squared term in it:
 
-```{r }
+```{r worcester-19 }
 pp3 <- survfit(whas100.3, whas100.new.2, data = whas100)
 ```
 
@@ -418,7 +418,7 @@ pp3 <- survfit(whas100.3, whas100.new.2, data = whas100)
 
 And then the plot:
 
-```{r }
+```{r worcester-20 }
 ggsurvplot(pp3, conf.int = F)
 ```
 
@@ -427,7 +427,7 @@ ggsurvplot(pp3, conf.int = F)
 and the customary reminder of which stratum is which, with its rather
 ungainly name:
 
-```{r }
+```{r worcester-21 }
 whas100.new.2
 ```
 

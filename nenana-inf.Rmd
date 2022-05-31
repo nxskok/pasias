@@ -30,7 +30,7 @@ Solution
 
 These are "tab-separated values", so `read_tsv` is the
 thing, as for the Australian athletes:
-```{r }
+```{r nenana-inf-1 }
 myurl <- "http://ritsokiguess.site/datafiles/nenana.txt"
 nenana <- read_tsv(myurl)
 ```
@@ -58,7 +58,7 @@ interval. Since we are looking for a non-standard interval, we
 have to remember `conf.level` as the way to get the
 confidence level that we want. I'm going with `with` this
 time, though the dollar-sign thing is equally as good:
-```{r }
+```{r nenana-inf-2 }
 with(nenana, t.test(JulianDate, conf.level = 0.90))
 ```
 
@@ -95,7 +95,7 @@ Solution
 
 The test is `t.test` again, but this time we have to
 specify a null mean and a direction of alternative:
-```{r }
+```{r nenana-inf-3 }
 with(nenana, t.test(JulianDate, mu = 130, alternative = "less"))
 ```
 
@@ -131,7 +131,7 @@ Solution
 
 I liked  the `ggplot` with a smooth trend on it:
 
-```{r }
+```{r nenana-inf-4 }
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() + geom_smooth()
 ```
 
@@ -159,7 +159,7 @@ trend isn't really linear, but is not that far off. I can modify the
 previous picture to give you an idea. Putting in `method="lm"`
 fits a line; as we see later, `lm` does regressions in R:
 
-```{r }
+```{r nenana-inf-5 }
 ggplot(nenana, aes(x = Year, y = JulianDate)) + geom_point() +
   geom_smooth(method = "lm")
 ```

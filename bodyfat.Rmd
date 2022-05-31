@@ -76,7 +76,7 @@ Solution
 This kind of thing. Since you looked at the data (didn't you?),
 you'll know that the values are separated by single spaces:
 
-```{r }
+```{r bodyfat-1 }
 myurl <- "http://ritsokiguess.site/datafiles/bodyfat.txt"
 bodyfat <- read_delim(myurl, " ")
 bodyfat
@@ -111,7 +111,7 @@ take any special steps for that. Note that we're back to the
 "old-fashioned" version of `t.test` that *does not*
 allow `data=`, so we have to go the `with` way:
 
-```{r }
+```{r bodyfat-2 }
 with(bodyfat, t.test(xray, ultrasound, paired = T))
 ```
 
@@ -176,7 +176,7 @@ data frame that would normally go first (the input data frame here
 is the new one with the differences in it, which doesn't have a
 name). I'll make a normal quantile plot in a moment, but if you
 haven't seen that yet, the plot to make is a histogram:
-```{r }
+```{r bodyfat-3 }
 bodyfat %>%
   mutate(diff = xray - ultrasound) %>%
   ggplot(aes(x = diff)) + geom_histogram(bins = 6)
@@ -201,7 +201,7 @@ frame*, then use that new data frame twice. But you're probably only
 going to draw either the histogram or the normal quantile plot, not
 both, so you can use the appropriate one of my two bits of code. The
 normal quantile plot:
-```{r }
+```{r bodyfat-4 }
 bodyfat %>%
   mutate(diff = xray - ultrasound) %>%
   ggplot(aes(sample = diff)) + stat_qq() + stat_qq_line()

@@ -40,7 +40,7 @@ Solution
 
 I was lazy and used the one on the web, the
 values being separated ("delimited") by exactly one space:
-```{r }
+```{r thomas-1 }
 my_url <- "http://ritsokiguess.site/datafiles/marks.txt"
 marks <- read_delim(my_url, " ")
 marks
@@ -57,7 +57,7 @@ top line of the data file was variable names. With
 *not* variable names, that's when you have to say so. If I cheat,
 by skipping the first line and saying that I then have no column names, I get:
 
-```{r }
+```{r thomas-2 }
 read_delim(my_url, " ", col_names = F, skip = 1)
 ```
 
@@ -67,7 +67,7 @@ Column names are supplied (`X1` and `X2`). I could also
 supply my own column names, in which case the file needs not to have
 any, so I need the `skip` again:
 
-```{r }
+```{r thomas-3 }
 read_delim(my_url, " ", col_names = c("instructor", "mark"), skip = 1)
 ```
 
@@ -93,7 +93,7 @@ variable measured goes up ($y$).
 
 Extra: this might work:
 
-```{r }
+```{r thomas-4 }
 ggplot(marks, aes(x = class, y = score)) + geom_boxplot() +
   coord_flip()
 ```
@@ -148,7 +148,7 @@ The $x$-axis is kind of dopey, so you just ignore it. It is possible
 to remove it, but that is more work than it's worth, and I didn't get
 rid of the ticks below:
 
-```{r }
+```{r thomas-5 }
 ggplot(marks, aes(x = 1, y = score)) + geom_boxplot() +
   theme(
     axis.text.x = element_blank(),
@@ -171,7 +171,7 @@ Solution
 
 Three ways to get the median score. I like the first one best:
 
-```{r }
+```{r thomas-6 }
 marks %>% summarize(med = median(score))
 with(marks, median(score))
 median(marks$score)
@@ -189,7 +189,7 @@ do that.
 Extra: if you wanted median by group, this is the approved
 (`tidyverse`) way:
 
-```{r }
+```{r thomas-7 }
 marks %>%
   group_by(class) %>%
   summarize(med = median(score))
@@ -203,7 +203,7 @@ then whatever you do after that is done for *each* group.
 You can now go back and compare these medians with the ones on the
 boxplots in (<a href="#part:sbsbox">here</a>). They should be the same. Or you can even do this:
 
-```{r }
+```{r thomas-8 }
 marks %>%
   group_by(class) %>%
   summarize(
@@ -221,7 +221,7 @@ only restriction is that the things on the right side of the equals
 should return a *single* number. If you have a function like
 `quantile` without anything extra that returns more than one number:
 
-```{r }
+```{r thomas-9 }
 quantile(marks$score)
 ```
 
@@ -230,7 +230,7 @@ quantile(marks$score)
 you're in trouble. Only read on if you *really* want to know how
 to handle this. Here's step 1:
 
-```{r }
+```{r thomas-10 }
 marks %>%
   nest_by(class)
 ```
@@ -248,7 +248,7 @@ quantiles of `score`. This is `rowwise`:
 for each of our
 mini-data-frames `data`, calculate the five-number summary of the column called `score` in *it*:
 
-```{r }
+```{r thomas-11 }
 marks %>%
   nest_by(class) %>%
   rowwise() %>% 
@@ -266,7 +266,7 @@ five-number summary for each group.^[It's actually a  coincidence that the five-
 
 Now we want to display the quantiles. This is the easiest way:
 
-```{r }
+```{r thomas-12 }
 marks %>%
   nest_by(class) %>%
   rowwise() %>% 
@@ -285,7 +285,7 @@ is the max and the quartiles and median are in between). It would be
 nice to see which is which, though. A trick to do that is to use
 `enframe`, thus:
 
-```{r }
+```{r thomas-13 }
 quantile(marks$score) %>% enframe()
 ```
 
@@ -293,7 +293,7 @@ quantile(marks$score) %>% enframe()
 
 or thus:
 
-```{r }
+```{r thomas-14 }
 enframe(quantile(marks$score))
 ```
 
@@ -311,7 +311,7 @@ of which is which.)
 So we have a *two*-column data frame with a column saying
 which quantile is which. So let's rewrite our code to use this:
 
-```{r }
+```{r thomas-15 }
 marks %>%
   nest_by(class) %>%
   rowwise() %>% 
@@ -325,7 +325,7 @@ themselves have two columns.
 
 And finally `unnest` `qq`:
 
-```{r }
+```{r thomas-16 }
 marks %>%
   nest_by(class) %>%
   rowwise() %>% 
@@ -337,7 +337,7 @@ marks %>%
 
 Success! Or even:
 
-```{r }
+```{r thomas-17 }
 marks %>%
   nest_by(class) %>%
   rowwise() %>% 

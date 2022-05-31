@@ -15,7 +15,7 @@ Solution
 
 That means `col_names = FALSE` when reading in. I gave this a "disposable" name, saving the good name `utils` for the tidy version:
 
-```{r}
+```{r util-temp-1}
 my_url <- "http://ritsokiguess.site/datafiles/utils.txt"
 utils0 <- read_table(my_url, col_names = FALSE)
 utils0
@@ -34,7 +34,7 @@ Solution
 
 This question is asking about your process as well as your answer, so I think it's best to build a pipeline one step at a time (which corresponds in any case to how you would figure out what to do). The first step seems to be to make longer, for example getting all those numbers in one column. I'm not quite sure what to call the new columns, so I'll make up some names and figure things out later:
 
-```{r}
+```{r util-temp-2}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") 
 ```
 
@@ -42,7 +42,7 @@ If you scroll down, `X2` has consumptions as well as temperatures, so we need to
 
 This, so far, is actually a lot like the weather one in lecture (where we had a max and a min temperature), and the solution is the same: follow up with a `pivot_wider` to get the temperatures and consumptions in their own columns:
 
-```{r}
+```{r util-temp-3}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 pivot_wider(names_from = X2, values_from = value) 
 ```
@@ -58,7 +58,7 @@ If you go back and look at the longer dataframe, you'll see, for example, that t
 The resolution of the list-columns here is the same as in the one about the writers: `unnest` them,  and then you can ignore the warning:
 
 
-```{r}
+```{r util-temp-4}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 pivot_wider(names_from = X2, values_from = value) %>% 
 unnest(c(temperature, consumption)) -> utils
@@ -71,20 +71,20 @@ There were 24 months of data, and a temperature and consumption for each, so thi
 
 Extra: if you got to here and got scared:
 
-```{r}
+```{r util-temp-5}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 pivot_wider(names_from = X2, values_from = value) 
 ```
 
 which is an entirely reasonable reaction, you might have asked yourself how you could have prevented this from happening. The problem, as discussed earlier, is with the rows, and that the `X1`-`col` combinations repeat. Let's go back to "longer":
 
-```{r}
+```{r util-temp-6}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") 
 ```
 
 Rows 1 and 7, 2 and 8, etc, are "replicates" in that they have the same `X1` and `col` values but different temperatures. This is because they come from the same column in the original layout of the data (the 31 and the 62 are underneath each other). This means that the first six rows are "replicate 1" and the next six are "replicate 2". Scrolling down, we then get to 8 cents and consumption, and we need to do the same again. So if we make a column that has 1s and 2s in the right places (six 1s, six 2s, repeat), we should then have unique rows for the `pivot_wider`. 
 
-```{r}
+```{r util-temp-7}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 mutate(replicate = rep(1:2, each = 6, length.out = 48))
 ```
@@ -93,7 +93,7 @@ mutate(replicate = rep(1:2, each = 6, length.out = 48))
 
 Then, this time, if we do the `pivot_wider`, it should give us something tidy:
 
-```{r}
+```{r util-temp-8}
 utils0 %>% pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 mutate(replicate = rep(1:2, each = 6, length.out = 48)) %>% 
 pivot_wider(names_from = X2, values_from = value) 
@@ -103,14 +103,14 @@ and so it does, with 24 rows for the 24 months.
 
 Another, perhaps easier, way to think about this (you might find it easier, anyway) is to go back to the original dataframe and make the `replicate` there:
 
-```{r}
+```{r util-temp-9}
 utils0
 ```
 
 The first two rows are replicates (both 8 cents and temperature), then the third and fourth, and so on. So setting a `replicate` column as 1, 2, 1, 2 etc should do it, and this is short enough to type directly. Do this *first*, then the `pivot_longer`, then the `pivot_wider` as we did before, and we should end up with something tidy:
 
 
-```{r}
+```{r util-temp-10}
 utils0 %>% mutate(replicate = c(1,2,1,2,1,2,1,2)) %>% 
 pivot_longer(X3:X8, names_to = "col", values_to = "value") %>% 
 pivot_wider(names_from = X2, values_from = value) %>% 
@@ -121,7 +121,7 @@ If you check this, you'll see that `replicate` gets turned into the same thing i
 
 The moral of the story is that when you are planning to do a pivot-wider, you ought to devote some attention to which *rows* things are going into. Sometimes you can get away with just doing it and it works, but thinking about rows is how to diagnose it when it doesn't. (The ideas below also appear in Lecture 14a.) Here's another mini-example where the observations are matched pairs but they come to us long, like two-sample data:
 
-```{r}
+```{r util-temp-11}
 d <- tribble(
 ~obs, ~y, ~time,
 1, 10, "pre",
@@ -140,7 +140,7 @@ The problem is that the only thing left after `y` and `time` have been used in t
 
 The problem is that the `obs` column numbered the six observations 1 through 6, but really they are three groups of two observations on three people, so instead of `obs` we need a column called `person` that shows which observations are the matched pairs, like this:
 
-```{r}
+```{r util-temp-12}
 d <- tribble(
 ~person, ~y, ~time,
 1, 10, "pre",
@@ -154,7 +154,7 @@ d <- tribble(
 
 Now there are going to be three rows with a pre and a post in each:
 
-```{r}
+```{r util-temp-13}
 d %>% pivot_wider(names_from = time, values_from = y)
 ```
 
@@ -178,7 +178,7 @@ I said earlier to treat price (rather badly labelled as `X1`) as categorical, so
 Before we make a graph, though, we should rename `X1`. The way you might think of is to create a new column with the same values as `X1`, but a new name.^[This actually creates a copy of the original column, so if you look you now have two columns with the same thing in them, one with a bad name and one with a good one.] Like this. Consumption is the outcome, so it goes on the $y$-axis:
 
 
-```{r}
+```{r util-temp-14}
 utils %>% 
 mutate(price = X1) %>% 
 ggplot(aes(x = temperature, y = consumption, colour = price)) + 
@@ -193,7 +193,7 @@ If you fail to rename `X1`, that's what will appear on the legend, and the first
 
 Extra: there is an official `rename` also. I haven't used that in class, so if you discover this, make sure to say where you found out about it from:
 
-```{r}
+```{r util-temp-15}
 utils %>% 
 rename(price = X1)
 ```

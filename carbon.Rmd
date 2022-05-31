@@ -90,7 +90,7 @@ Solution
 
 
 Values separated by spaces:
-```{r }
+```{r carbon-1 }
 my_url <- "http://ritsokiguess.site/datafiles/carbon.txt"
 carbon <- read_delim(my_url, " ")
 carbon
@@ -210,7 +210,7 @@ Solution
 
 This would be the Welch-Satterthwaite version of the two-sample
 $t$-test, since the two groups do appear to have different spreads:
-```{r }
+```{r carbon-2 }
 t.test(weight ~ method, data = carbon)
 ```
 
@@ -223,7 +223,7 @@ above), and not just do the default $t$-test without comment.
 If, in your discussion above, you thought the spreads were equal
 enough, then you should do the pooled $t$-test here, which goes like this:
 
-```{r }
+```{r carbon-3 }
 t.test(weight ~ method, data = carbon, var.equal = T)
 ```
 
@@ -250,7 +250,7 @@ several that I can think of, that R can do, of which I mention two.
 The first is the $F$-test for variances that you might have learned in
 B57 (that is the basis for the ANOVA $F$-test):
 
-```{r }
+```{r carbon-4 }
 var.test(weight ~ method, data = carbon)
 ```
 
@@ -266,7 +266,7 @@ why normality is also more important in ANOVA than it is in a $t$-test.
 The second is Levene's test. This doesn't depend on normality (at
 least, not nearly so much), so I like it better in general:
 
-```{r }
+```{r carbon-5 }
 library(car)
 leveneTest(weight ~ factor(method), data = carbon)
 ```
@@ -300,7 +300,7 @@ Solution
 
 That would be Mood's median test. Since I didn't say anything
 about building it yourself, feel free to use `smmr`:
-```{r }
+```{r carbon-6 }
 library(smmr)
 median_test(carbon, weight, method)
 ```

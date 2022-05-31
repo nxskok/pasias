@@ -12,7 +12,7 @@ Solution
 
 The usual:
 
-```{r}
+```{r heightfoot-1}
 my_url <- "http://ritsokiguess.site/datafiles/heightfoot.csv"
 hf <- read_csv(my_url)
 hf
@@ -38,7 +38,7 @@ Solution
 They are both quantitative, so a scatter plot is called for:
 
 
-```{r}
+```{r heightfoot-2}
 ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth()
 ```
 
@@ -68,7 +68,7 @@ Solution
 
 These things. Displaying the `summary` of the regression is optional, but gives the grader an opportunity to check that your work is all right so far.
 
-```{r}
+```{r heightfoot-3}
 hf.1 <- lm(height~foot, data=hf)
 summary(hf.1)
 ggplot(hf.1, aes(x=.fitted, y=.resid)) + geom_point()
@@ -93,25 +93,25 @@ Extra: in the residuals vs. fitted values, the other residuals show a slight upw
 
 This is the kind of thing I mean (made-up data):
 
-```{r, echo=FALSE}
+```{r heightfoot-4, echo=FALSE}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r heightfoot-5}
 tibble(x = 1:10) %>% 
 mutate(y = rnorm(10, 10+2*x, 1)) %>% 
 mutate(y = ifelse(x == 9, 40, y)) -> madeup
 madeup
 ```
 
-```{r}
+```{r heightfoot-6}
 ggplot(madeup, aes(x=x, y=y)) + geom_point() + geom_smooth()
 ```
 
 The second-last point is off a clearly linear trend otherwise (the smooth gets "distracted" by the outlying off-trend point). Fitting a regression anyway and looking at the residual plot gives this:
 
-```{r}
+```{r heightfoot-7}
 madeup.1 <- lm(y~x, data = madeup)
 ggplot(madeup.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
@@ -132,7 +132,7 @@ Solution
 
 Find a way to not pick that outlying point. For example, you can choose the observations with height less than 80:
 
-```{r}
+```{r heightfoot-8}
 hf %>% filter(height<80) -> hfx
 hfx
 ```
@@ -152,7 +152,7 @@ Solution
 
 Code-wise, the same as before, but with the new data set:
 
-```{r}
+```{r heightfoot-9}
 hf.2 <- lm(height~foot, data=hfx)
 summary(hf.2)
 ggplot(hf.2, aes(x=.fitted, y=.resid)) + geom_point()
@@ -175,7 +175,7 @@ You might have a different point of view, in which case you need to make the cas
 
 Extra: a standard diagnostic for fanning-out is to plot the *absolute values* of the residuals against the fitted values, with a smooth trend. If this looks like an increasing trend, there is fanning-out; a decreasing trend shows fanning-in. The idea is that we want to see whether the residuals are changing in *size* (for example, getting more positive *and* more negative both):
 
-```{r}
+```{r heightfoot-10}
 ggplot(hf.2, aes(x=.fitted, y=abs(.resid))) + geom_point() + geom_smooth()
 ```
 
@@ -183,14 +183,14 @@ No evidence of fanning-out at all. In fact, the residuals seem to be smallest in
 
 Another thing you might think of is to try Box-Cox:
 
-```{r}
+```{r heightfoot-11}
 boxcox(height~foot, data=hfx)
 ```
 
 It looks as if the best $\lambda$ is $-1$, and we should predict one over height from foot length. But this plot is deceiving, since it doesn't even show the whole confidence interval for $\lambda$!
 We should zoom out (a lot) more:
 
-```{r}
+```{r heightfoot-12}
 boxcox(height~foot, data=hfx, lambda = seq(-8, 8, 0.1))
 ```
 
@@ -209,7 +209,7 @@ This is the same idea as with [the windmill data](http://ritsokiguess.site/STAC3
 
 The easiest way is to use `geom_smooth` twice, once with the original data set, and then on the one with the outlier removed:
 
-```{r}
+```{r heightfoot-13}
 ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth(method = "lm", se=F) +
 geom_smooth(data=hfx, method="lm", colour="red", se=F)
 ```
@@ -220,7 +220,7 @@ entails drawing this line in a different colour (or in some way distinguishing i
 
 This is, I think, the best way to do it. You can mimic the idea that I used for the windmill data:
 
-```{r}
+```{r heightfoot-14}
 ggplot(hf, aes(y=height, x=foot)) + geom_point() + geom_smooth(method = "lm", se=F) +
 geom_line(data=hf.2, aes(y = .fitted))
 ```

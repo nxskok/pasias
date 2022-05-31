@@ -715,7 +715,7 @@ make sense.</p></li>
 Presumably this depends on how fast you are going.
 Knowing this relationship is important in setting speed limits on roads. For example, on a very bendy road, the speed limit needs to be low, because you cannot see very far ahead, and there could be something just
 out of sight that you need to stop for.</p>
-<p>Data were collected for a typical car and driver, as shown in . These are American data, so the speeds are miles per hour and the stopping distances are in feet.</p>
+<p>Data were collected for a typical car and driver, as shown in <a href="http://ritsokiguess.site/datafiles/stopping.csv">http://ritsokiguess.site/datafiles/stopping.csv</a>. These are American data, so the speeds are miles per hour and the stopping distances are in feet.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Read in and display (probably all of) the data.</p></li>
 <li><p>Make a suitable plot of the data.</p></li>
@@ -817,12 +817,12 @@ number 1 will do.</li>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1"><span class="kw">ggplot</span>(rains,<span class="kw">aes</span>(<span class="dt">y=</span>rainfall,<span class="dt">x=</span><span class="dv">1</span>))<span class="op">+</span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-119-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-3-1.png" width="672" /></p>
 <p>There is only one rainfall over 60 inches, and the smallest one is
 close to zero but positive, so that is good.</p>
 <p>Another possible plot here is a histogram, since there is only one quantitative variable:</p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" title="1"><span class="kw">ggplot</span>(rains, <span class="kw">aes</span>(<span class="dt">x=</span>rainfall))<span class="op">+</span><span class="kw">geom_histogram</span>(<span class="dt">bins=</span><span class="dv">7</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-4-1.png" width="672" /></p>
 <p>This clearly shows the rainfall value above 60 inches, but some other things are less clear: are those two rainfall values around 50 inches above or below 50, and are those six rainfall values near zero actually above zero?
 Extra: What stations have those extreme values? Should you wish to find out:</p>
 <div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1">rains <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(rainfall<span class="op">&gt;</span><span class="dv">60</span>)</a></code></pre></div>
@@ -856,12 +856,12 @@ variables (that is, not <code>station</code>).</li>
 <code>fromcoast</code>. The obvious way to do this (perfectly
 acceptable) is one plot at a time:</p>
 <div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1"><span class="kw">ggplot</span>(rains,<span class="kw">aes</span>(<span class="dt">y=</span>rainfall,<span class="dt">x=</span>altitude))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-123-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-7-1.png" width="672" /></p>
 <div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" title="1"><span class="kw">ggplot</span>(rains,<span class="kw">aes</span>(<span class="dt">y=</span>rainfall,<span class="dt">x=</span>latitude))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-124-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-8-1.png" width="672" /></p>
 <p>and finally</p>
 <div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="kw">ggplot</span>(rains,<span class="kw">aes</span>(<span class="dt">y=</span>rainfall,<span class="dt">x=</span>fromcoast))<span class="op">+</span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-9-1.png" width="672" /></p>
 <p>You can add a smooth trend to these if you want. Up to you. Just the
 points is fine with me.</p>
 <p>Here is a funky way to get all three plots in one shot:</p>
@@ -869,7 +869,7 @@ points is fine with me.</p>
 <a class="sourceLine" id="cb171-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(altitude<span class="op">:</span>fromcoast, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>,<span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb171-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>rainfall))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
 <a class="sourceLine" id="cb171-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname,<span class="dt">scales=</span><span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-10-1.png" width="672" /></p>
 <p>This always seems extraordinarily strange if you haven’t run into it
 before. The strategy is to put <em>all</em> the <span class="math inline">\(x\)</span>-variables you want
 to plot into <em>one</em> column and then plot your <span class="math inline">\(y\)</span> against the
@@ -888,7 +888,7 @@ too many:</p>
 <a class="sourceLine" id="cb172-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(altitude<span class="op">:</span>fromcoast, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>,<span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb172-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>rainfall))<span class="op">+</span><span class="kw">geom_point</span>()<span class="op">+</span></a>
 <a class="sourceLine" id="cb172-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname,<span class="dt">scales=</span><span class="st">&quot;free&quot;</span>,<span class="dt">ncol=</span><span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/calirain-11-1.png" width="672" /></p>
 <p>Now, the three plots have come out about square, or at least “landscape”, which I like a lot better.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
@@ -1303,7 +1303,7 @@ out).</li>
 <p>Solution</p>
 <p>Plot the entire data frame:</p>
 <div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" title="1"><span class="kw">plot</span>(cigs)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-138-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ftccigar-6-1.png" width="672" /></p>
 <p>We’re supposed to ignore <code>co</code>, but I comment that strong
 relationships between <code>co</code> and <em>both</em> of <code>tar</code> and
 <code>nicotine</code> show up here, along with <code>weight</code> being
@@ -1342,7 +1342,7 @@ with observational data.</p>
 ##   method from   
 ##   +.gg   ggplot2</code></pre>
 <div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1">cigs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggpairs</span>(<span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/tober-1.png" width="672" /></p>
 <p>As ever, <code>install.packages</code> first, in the likely event that you
 don’t have this package installed yet. Once you do, though, I think
 this is a nicer way to get a pairs plot.</p>
@@ -1358,7 +1358,7 @@ and <code>nicotine</code> are clearly the highest.</p>
 correlated with anything much, so we can take it out and then make a
 pairs plot of the other variables:</p>
 <div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1">cigs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>weight) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggpairs</span>(<span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-140-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ftccigar-7-1.png" width="672" /></p>
 <p>The three correlations that remain are all very high, which is
 entirely consistent with the strong linear relationships that you see
 bottom left.</p>
@@ -1644,7 +1644,7 @@ the one that best captures how the variables vary together, is often
 scatterplots. The nicest way to produce these is via <code>ggpairs</code>
 from package <code>GGally</code>:</p>
 <div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1">boys <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggpairs</span>(<span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-147-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/youngboys-7-1.png" width="672" /></p>
 <p>A final remark: with five variables, we really ought to have more than
 ten observations (something like 50 would be better). But with more
 observations and the same correlation structure, the same issues would
@@ -1706,7 +1706,7 @@ separated by tabs, which you will need to take into account:</p>
 ## # … with 30 more rows</code></pre>
 <div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1"><span class="kw">ggplot</span>(fb, <span class="kw">aes</span>(<span class="dt">x =</span> GMdensity, <span class="dt">y =</span> FBfriends)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-148-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/fbfriends-1-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>Describe what you see on your scatterplot: is there a
@@ -1833,7 +1833,7 @@ of (a):</p>
 <div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb229-1" title="1"><span class="kw">ggplot</span>(fb, <span class="kw">aes</span>(<span class="dt">x =</span> GMdensity, <span class="dt">y =</span> FBfriends)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb229-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/fbfriends-6-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="7" style="list-style-type: lower-alpha">
 <li>Obtain a plot of the residuals from the regression against
@@ -1842,7 +1842,7 @@ the fitted values, and comment briefly on it.</li>
 <p>Solution</p>
 <p>This is, to my mind, the easiest way:</p>
 <div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" title="1"><span class="kw">ggplot</span>(fb<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-154-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/fbfriends-7-1.png" width="672" /></p>
 <p>There is some “magic” here, since the fitted model object is not
 actually a data frame, but it works this way.
 That looks to me like a completely random scatter of
@@ -1854,7 +1854,7 @@ what it implies about whether or not your regression is satisfactory.)</p>
 <div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb232-1" title="1"><span class="kw">ggplot</span>(fb<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb232-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-155-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/fbfriends-8-1.png" width="672" /></p>
 <p>Now, why did I try adding a smooth trend, and why is it not
 necessarily a good idea? The idea of a residual plot is that there
 should be no trend, and so the smooth trend curve ought to go straight
@@ -1922,7 +1922,7 @@ commenting that the values appear to be correct will improve your report.</p>
 <div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1"><span class="kw">ggplot</span>(carp, <span class="kw">aes</span>(<span class="dt">x =</span> bodyweight, <span class="dt">y =</span> ENE)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb238-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-157-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/marttis-1.png" width="672" /></p>
 <p>This part is just about getting the plot. Comments are coming in a
 minute. Note that <code>ENE</code> is capital letters, so that
 <code>ene</code> will not work.</p>
@@ -1982,7 +1982,7 @@ tell you about the relationship in the data?</li>
 <p>This is the easiest way: feed the output of the regression
 straight into <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="kw">ggplot</span>(carp<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-159-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/goeslingerin-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>Fit a parabola to the data (that is, including an
@@ -2061,7 +2061,7 @@ want to add the original data, just the points:</p>
 <div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" title="1"><span class="kw">ggplot</span>(carp<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x =</span> carp<span class="op">$</span>bodyweight, <span class="dt">y =</span> .fitted), <span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb245-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb245-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> carp, <span class="kw">aes</span>(<span class="dt">x =</span> bodyweight, <span class="dt">y =</span> ENE))</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-161-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/bletz-1.png" width="672" /></p>
 <p>This works, but is not very aesthetic, because the bodyweight that is
 plotted against the fitted values is in the wrong data frame, and so
 we have to use the dollar-sign thing to get it from the right one.</p>
@@ -2096,7 +2096,7 @@ the <span class="math inline">\(x\)</span> coordinate <code>bodyweight</code> is
 have to change that; we only have to change the <span class="math inline">\(y\)</span>-coordinate, which
 is <code>ENE</code>. The plot is this:</p>
 <div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1">g</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-163-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/carp-4-1.png" width="672" /></p>
 <p>Concerning interpretation, you have a number of possibilities
 here. The simplest is that the points in the middle are above the
 curve, and the points at the ends are below. (That is, negative
@@ -2123,7 +2123,7 @@ about them in this question, but I will.)</li>
 fitted model object <code>carp.2</code> as your data frame for the
 <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="kw">ggplot</span>(carp<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-164-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ohem-1.png" width="672" /></p>
 <p>I think this is <em>still</em> a curve (or, it goes down and then
 sharply up at the end). Either way, there is still a pattern.</p>
 <p>That was all I needed, but as to what this means: our parabola was a
@@ -2175,7 +2175,7 @@ convince us that we have the shape of the trend right.</p>
 <p>And, as ever, the residual plot. That’s a lot easier than the plot we
 just did:</p>
 <div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" title="1"><span class="kw">ggplot</span>(carp<span class="fl">.3</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-166-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/sailer-1.png" width="672" /></p>
 <p>All in all, that looks pretty good (and certainly a vast improvement
 over the ones you got before).</p>
 <p>When you write up your report, you can make it flow better by writing
@@ -2317,7 +2317,7 @@ experience. Does the nature of the trend make sense?</li>
 <p>Solution</p>
 <p>The usual:</p>
 <div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1"><span class="kw">ggplot</span>(soc, <span class="kw">aes</span>(<span class="dt">x =</span> experience, <span class="dt">y =</span> salary)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-175-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-9-1.png" width="672" /></p>
 <p>As experience goes up, salary also goes up, as you would expect. Also,
 the trend seems more or less straight.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -2363,7 +2363,7 @@ problem do you see?</li>
 frame), and plot the <code>.fitted</code> and <code>.resid</code>
 columns in it, not forgetting the initial dots:</p>
 <div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-177-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-11-1.png" width="672" /></p>
 <p>I see a “fanning-out”: the residuals are getting bigger <em>in size</em>
 (further away from zero) as the fitted values get bigger. That
 is, when the (estimated) salary gets larger, it also gets more
@@ -2376,7 +2376,7 @@ getting bigger in size, their absolute values are getting bigger. That
 would look like this:</p>
 <div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-178-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-12-1.png" width="672" /></p>
 <p>I added a smooth trend to this to help us judge whether the
 absolute-value-residuals are getting bigger as the fitted values get
 bigger. It looks to me as if the overall trend is an increasing one,
@@ -2385,7 +2385,7 @@ residuals. Don’t get thrown off by the kinks in the smooth trend. Here
 is a smoother version:</p>
 <div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1"><span class="kw">ggplot</span>(soc<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">span =</span> <span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-179-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-13-1.png" width="672" /></p>
 <p>The larger fitted values, according to this, have residuals larger in size.</p>
 <p>The thing that controls the smoothness of the smooth trend is the
 value of <code>span</code> in <code>geom_smooth</code>. The default is
@@ -2405,7 +2405,7 @@ transformation. What transformation is suggested?</li>
 <div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1"><span class="kw">library</span>(MASS)</a></code></pre></div>
 <p>I explain that “masked” thing below.</p>
 <div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="kw">boxcox</span>(salary <span class="op">~</span><span class="st"> </span>experience, <span class="dt">data =</span> soc)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-181-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-15-1.png" width="672" /></p>
 <p>That one looks like <span class="math inline">\(\lambda=0\)</span> or log. You could probably also
 justify fourth root (power 0.25), but log is a very common
 transformation, which people won’t need much persuasion to accept.</p>
@@ -2520,14 +2520,14 @@ previous residual plot?</li>
 <p>As we did before, treating the regression object as if it were a
 data frame:</p>
 <div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-186-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-20-1.png" width="672" /></p>
 <p>That, to my mind, is a horizontal band of points, so I would say yes,
 I have solved the fanning out.</p>
 <p>One concern I have about the residuals is that there seem to be a
 couple of very negative values: that is, are the residuals normally
 distributed as they should be? Well, that’s easy enough to check:</p>
 <div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1"><span class="kw">ggplot</span>(soc<span class="fl">.3</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-187-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/socwork-21-1.png" width="672" /></p>
 <p>The issues here are that those bottom two values are a bit too low,
 and the top few values are a bit bunched up (that curve at the top).
 It is really not bad, though, so I am making the call that I don’t
@@ -2600,13 +2600,13 @@ that <code>read_delim</code> will do it:</p>
 quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the <span class="math inline">\(y\)</span>-axis:</p>
 <div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">x =</span> diameter, <span class="dt">y =</span> volume)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-190-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pinetrees-2-1.png" width="672" /></p>
 <p>You can put a smooth trend on it if you like, which would
 look like this:</p>
 <div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1"><span class="kw">ggplot</span>(trees, <span class="kw">aes</span>(<span class="dt">x =</span> diameter, <span class="dt">y =</span> volume)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb299-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-191-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pinetrees-3-1.png" width="672" /></p>
 <p>I’ll take either of those for this part, though I think the smooth
 trend actually obscures the issue here (because there is not so much
 data).</p>
@@ -2700,7 +2700,7 @@ the linearity of this regression. What do you conclude? Explain briefly.</li>
 against the fitted values), and on it you are looking for a
 random mess of nothingness:</p>
 <div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" title="1"><span class="kw">ggplot</span>(volume<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-196-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pinetrees-8-1.png" width="672" /></p>
 <p>Make a call. You could say that there’s no discernible pattern,
 especially with such a small data set, and
 therefore that the regression is fine. Or you could say that there is
@@ -2792,7 +2792,7 @@ is very similar to that from our linear model (the one for which the
 intercept made no sense). So, from that point of view, either model
 predicts the data well. I should look at the residuals from this one:</p>
 <div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb312-1" title="1"><span class="kw">ggplot</span>(volume<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-198-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pinetrees-10-1.png" width="672" /></p>
 <p>I really don’t think there are any problems there.</p>
 <p>Now, I said to assume that the trees are all of similar height. This
 seems entirely questionable, since the trees vary quite a bit in
@@ -2867,7 +2867,7 @@ sure about what it is, and 2.19 is not completely implausible.</p>
 <p>The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:</p>
 <div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb317-1" title="1"><span class="kw">ggplot</span>(volume<span class="fl">.3</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-201-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pinetrees-13-1.png" width="672" /></p>
 <p>which again seem to show no problems. The residuals are smaller in
 size now because of the log transformation: the actual and predicted
 log-volumes are smaller numbers than the actual and predicted volumes,
@@ -3160,12 +3160,12 @@ your conclusions of the previous part? In what way? Explain briefly.</li>
 regression object, which is not a data frame but you can treat it as
 if it is for this:</p>
 <div class="sourceCode" id="cb340"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb340-1" title="1"><span class="kw">ggplot</span>(tortoises<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-211-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/tortoise-5-1.png" width="672" /></p>
 <p>Up to you whether you put a smooth trend on it or not:</p>
 <div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="kw">ggplot</span>(tortoises<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb341-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-212-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/tortoise-6-1.png" width="672" /></p>
 <p>Looking at the plot, you see a curve, up and down. The most
 negative residuals go with small or large fitted values; when the
 fitted value is in the middle, the residual is usually positive. A
@@ -3181,7 +3181,7 @@ the regression with length-squared, where the length-squared term is
 <p>That was all I wanted, but you can certainly look at other
 plots. Normal quantile plot of the residuals:</p>
 <div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1"><span class="kw">ggplot</span>(tortoises<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-213-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/tortoise-7-1.png" width="672" /></p>
 <p>This is not the best: the low values are a bit too low, so that the
 whole picture is (a little) skewed to the left.<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a></p>
 <p>Another plot you can make is to assess fan-out: you plot the
@@ -3191,7 +3191,7 @@ get bigger:</p>
 <div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1"><span class="kw">ggplot</span>(tortoises<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb344-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-214-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/tortoise-8-1.png" width="672" /></p>
 <p>I put the smooth curve on as a kind of warning: it looks as if the
 size of the residuals goes down and then up again as the fitted values
 increase. But the width of the grey “envelope” and the general
@@ -3265,7 +3265,7 @@ which is time you probably don’t want to spend.) Thus:</p>
 <a class="sourceLine" id="cb350-2" title="2"><span class="kw">ggplot</span>(coasters, <span class="kw">aes</span>(<span class="dt">x =</span> drop, <span class="dt">y =</span> duration, <span class="dt">label =</span> coaster_name)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb350-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-216-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/coasters-2-1.png" width="672" /></p>
 <p>The <code>se=F</code> at the end is optional; if you omit it, you get that
 “envelope” around the line, which is fine here.</p>
 <p>Note that with the labelling done this way, you can easily identify
@@ -3749,7 +3749,7 @@ with this regression, or not? Explain briefly.</li>
 <p>Use the regression object <code>pizza.1</code>:</p>
 <div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb393-1" title="1"><span class="kw">ggplot</span>(pizza<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-234-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pizza-6-1.png" width="672" /></p>
 <p>On my residual plot, I see a slight curve in the smooth trend,
 but I am not worried about that because the residuals on the plot are
 all over the place in a seemingly random pattern (the grey envelope is
@@ -3758,12 +3758,12 @@ straight line model is satisfactory.</p>
 <p>That’s all you needed, but it is also worth looking at a normal
 quantile plot of the residuals:</p>
 <div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb395-1" title="1"><span class="kw">ggplot</span>(pizza<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-235-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pizza-7-1.png" width="672" /></p>
 <p>A bit skewed to the left (the low ones are too low).</p>
 <p>Also a plot of the absolute residuals, for assessing fan-out:</p>
 <div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb396-1" title="1"><span class="kw">ggplot</span>(pizza<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-236-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/pizza-8-1.png" width="672" /></p>
 <p>A tiny bit of fan-in (residuals getting <em>smaller</em> in size as the
 fitted value gets bigger), but nothing much, I think.</p>
 <p>Another way of assessing curvedness is to fit a squared term anyway,
@@ -3970,7 +3970,7 @@ plot.</li>
 <p>We are predicting fire damage, so that goes on the <span class="math inline">\(y\)</span>-axis:</p>
 <div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb418-1" title="1"><span class="kw">ggplot</span>(fire, <span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> damage)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-245-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/riemer-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li><a name="part:howgood">*</a> Is there a relationship between distance from fire station
@@ -4078,7 +4078,7 @@ even a useless one, will increase R-squared).</p>
 <a class="sourceLine" id="cb426-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb426-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> damage<span class="fl">.3</span>, <span class="kw">aes</span>(<span class="dt">y =</span> .fitted), <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-249-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/ganter-1.png" width="672" /></p>
 <p>The cubic, in red, does bend a little, but it doesn’t do an obvious
 job of going through the points better than the straight line does. It
 seems to be mostly swayed by that one observation with damage over 40,
@@ -4166,7 +4166,7 @@ the same as mine.</p>
 Presumably this depends on how fast you are going.
 Knowing this relationship is important in setting speed limits on roads. For example, on a very bendy road, the speed limit needs to be low, because you cannot see very far ahead, and there could be something just
 out of sight that you need to stop for.</p>
-<p>Data were collected for a typical car and driver, as shown in . These are American data, so the speeds are miles per hour and the stopping distances are in feet.</p>
+<p>Data were collected for a typical car and driver, as shown in <a href="http://ritsokiguess.site/datafiles/stopping.csv">http://ritsokiguess.site/datafiles/stopping.csv</a>. These are American data, so the speeds are miles per hour and the stopping distances are in feet.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Read in and display (probably all of) the data.</li>
 </ol>
@@ -4200,7 +4200,7 @@ out of sight that you need to stop for.</p>
 <p>Solution</p>
 <p>Two quantitative variables means a scatterplot. Stopping distance is the outcome, so that goes on the <span class="math inline">\(y\)</span>-axis:</p>
 <div class="sourceCode" id="cb442"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb442-1" title="1"><span class="kw">ggplot</span>(stopping, <span class="kw">aes</span>(<span class="dt">x=</span>speed, <span class="dt">y=</span>distance)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-257-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/braking-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Describe any trend you see in your graph.</li>
@@ -4240,7 +4240,7 @@ out of sight that you need to stop for.</p>
 </ol>
 <p>Solution</p>
 <div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb445-1" title="1"><span class="kw">ggplot</span>(stopping<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x=</span>.fitted, <span class="dt">y=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-259-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/braking-4-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="6" style="list-style-type: lower-alpha">
 <li>What do you learn from the residual plot? Does that surprise you? Explain briefly.</li>
@@ -4391,7 +4391,7 @@ The right thing to do is to concentrate on getting the form of the model right, 
 <p>They are both quantitative, so a scatter plot is called for:</p>
 <div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb456-1" title="1"><span class="kw">ggplot</span>(hf, <span class="kw">aes</span>(<span class="dt">y=</span>height, <span class="dt">x=</span>foot)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-264-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-2-1.png" width="672" /></p>
 <p>I added a smooth trend, or you could just plot the points. (This is better than plotting a regression line at this stage, because we haven’t yet thought about whether the trend is straight.)</p>
 <p>Now that we’ve seen the scatterplot, the trend looks more or less straight (but you should take a look at the scatterplot first, with or without smooth trend, before you put a regression line on it). That point top left is a concern, though, which brings us to…</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -4427,9 +4427,9 @@ The right thing to do is to concentrate on getting the form of the model right, 
 ## Multiple R-squared:  0.3173, Adjusted R-squared:  0.2952 
 ## F-statistic: 14.41 on 1 and 31 DF,  p-value: 0.0006428</code></pre>
 <div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb460-1" title="1"><span class="kw">ggplot</span>(hf<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x=</span>.fitted, <span class="dt">y=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-265-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-3-1.png" width="672" /></p>
 <div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb461-1" title="1"><span class="kw">ggplot</span>(hf<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-265-2.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-3-2.png" width="672" /></p>
 <p>Note that we did not exclude the off-trend point. Removing points <em>because they are outliers</em> is a <strong>bad</strong> idea. <a href="https://statisticsbyjim.com/basics/remove-outliers/">This</a> is a good discussion of the issues.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -4458,11 +4458,11 @@ The right thing to do is to concentrate on getting the form of the model right, 
 ## 10    10  31.1</code></pre>
 <div class="sourceCode" id="cb464"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb464-1" title="1"><span class="kw">ggplot</span>(madeup, <span class="kw">aes</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-268-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-6-1.png" width="672" /></p>
 <p>The second-last point is off a clearly linear trend otherwise (the smooth gets “distracted” by the outlying off-trend point). Fitting a regression anyway and looking at the residual plot gives this:</p>
 <div class="sourceCode" id="cb466"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb466-1" title="1">madeup<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(y<span class="op">~</span>x, <span class="dt">data =</span> madeup)</a>
 <a class="sourceLine" id="cb466-2" title="2"><span class="kw">ggplot</span>(madeup<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-269-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-7-1.png" width="672" /></p>
 <p>This time you see a rather more obvious downward trend in the other residuals. The problem is not with them, but with the one very positive residual, corresponding to the outlier that is way off the trend on the scatterplot.</p>
 <p>The residuals in a regression have to add up to zero. If one of them is very positive (as in the one you did and the example I just showed you), at least some of the other residuals have to become more negative to compensate – the ones on the right just above and the ones on the left in the one you did. If you have done STAC67, you will have some kind of sense of why that is: think about the two equations you have to solve to get the estimates of intercept and slope, and how they are related to the residuals. Slide 6 of <a href="https://statweb.stanford.edu/~jtaylo/courses/stats203/notes/introduction.pdf">this</a> shows them; at the least squares estimates, these two partial derivatives both have to be zero, and the things inside the brackets are the residuals.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -4517,9 +4517,9 @@ Create and save a new data frame that does not contain any of those data points.
 ## Multiple R-squared:  0.5741, Adjusted R-squared:  0.5599 
 ## F-statistic: 40.45 on 1 and 30 DF,  p-value: 5.124e-07</code></pre>
 <div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb471-1" title="1"><span class="kw">ggplot</span>(hf<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x=</span>.fitted, <span class="dt">y=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-271-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-9-1.png" width="672" /></p>
 <div class="sourceCode" id="cb472"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb472-1" title="1"><span class="kw">ggplot</span>(hf<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">sample=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-271-2.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-9-2.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="8" style="list-style-type: lower-alpha">
 <li>Do you see any problems on the plots you drew in the previous part? Explain briefly.</li>
@@ -4530,15 +4530,15 @@ Create and save a new data frame that does not contain any of those data points.
 <p>Extra: a standard diagnostic for fanning-out is to plot the <em>absolute values</em> of the residuals against the fitted values, with a smooth trend. If this looks like an increasing trend, there is fanning-out; a decreasing trend shows fanning-in. The idea is that we want to see whether the residuals are changing in <em>size</em> (for example, getting more positive <em>and</em> more negative both):</p>
 <div class="sourceCode" id="cb473"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb473-1" title="1"><span class="kw">ggplot</span>(hf<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x=</span>.fitted, <span class="dt">y=</span><span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-272-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-10-1.png" width="672" /></p>
 <p>No evidence of fanning-out at all. In fact, the residuals seem to be smallest in size <em>in the middle</em>.</p>
 <p>Another thing you might think of is to try Box-Cox:</p>
 <div class="sourceCode" id="cb475"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb475-1" title="1"><span class="kw">boxcox</span>(height<span class="op">~</span>foot, <span class="dt">data=</span>hfx)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-273-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-11-1.png" width="672" /></p>
 <p>It looks as if the best <span class="math inline">\(\lambda\)</span> is <span class="math inline">\(-1\)</span>, and we should predict one over height from foot length. But this plot is deceiving, since it doesn’t even show the whole confidence interval for <span class="math inline">\(\lambda\)</span>!
 We should zoom out (a lot) more:</p>
 <div class="sourceCode" id="cb476"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb476-1" title="1"><span class="kw">boxcox</span>(height<span class="op">~</span>foot, <span class="dt">data=</span>hfx, <span class="dt">lambda =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">8</span>, <span class="dv">8</span>, <span class="fl">0.1</span>))</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-274-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-12-1.png" width="672" /></p>
 <p>This shows that the confidence interval for <span class="math inline">\(\lambda\)</span> goes from about <span class="math inline">\(-7\)</span> to almost 5: that is, <em>any</em> value of <span class="math inline">\(\lambda\)</span> in that interval is supported by the data! This very definitely includes the do-nothing <span class="math inline">\(\lambda=1\)</span>, so there is really no support for any kind of transformation.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol style="list-style-type: lower-roman">
@@ -4551,7 +4551,7 @@ We should zoom out (a lot) more:</p>
 <a class="sourceLine" id="cb477-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">data=</span>hfx, <span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">colour=</span><span class="st">&quot;red&quot;</span>, <span class="dt">se=</span>F)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;
 ## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-275-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-13-1.png" width="672" /></p>
 <p>I would use the original data set as the “base”, since we want to plot its points (including the outlier) as well as its line.
 Then we want to plot just the line for the second data set. This entails using a <code>data=</code> in the second <code>geom_smooth</code>, to say that we want to get <em>this</em> regression line from a different data set, and also
 entails drawing this line in a different colour (or in some way distinguishing it from the first one). Putting the <code>colour</code> <em>outside</em> an <code>aes</code> is a way to make the <em>whole line</em> red. (Compare how you make points different colours according to their value on a third variable.)</p>
@@ -4559,7 +4559,7 @@ entails drawing this line in a different colour (or in some way distinguishing i
 <div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb479-1" title="1"><span class="kw">ggplot</span>(hf, <span class="kw">aes</span>(<span class="dt">y=</span>height, <span class="dt">x=</span>foot)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F) <span class="op">+</span></a>
 <a class="sourceLine" id="cb479-2" title="2"><span class="kw">geom_line</span>(<span class="dt">data=</span>hf<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">y =</span> .fitted))</a></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-276-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/heightfoot-14-1.png" width="672" /></p>
 <p>but this is not as good, because you don’t need to use the trickery with <code>geom_line</code>: the second trend is another regression line not a curve, and we know how to draw regression lines with <code>geom_smooth</code> without having to actually fit them. (Doing it this way reveals that you are copying without thinking, instead of wondering whether there is a better way to do it.)</p>
 <p>The idea of using a different data set in different “layers” of a plot is quite well-known. For example, the idea is the one in <a href="https://bookdown.org/yih_huynh/Guide-to-R-Book/graphing-with-different-datasets.html">here</a>, though used for a different purpose there (plotting different sets of points instead of different lines).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>

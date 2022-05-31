@@ -36,7 +36,7 @@ Solution
 Begin your document with a code chunk containing
 `library(tidyverse)`. The data values are
 separated by tabs, which you will need to take into account:
-```{r }
+```{r fbfriends-1 }
 my_url <- "http://ritsokiguess.site/datafiles/facebook.txt"
 fb <- read_tsv(my_url)
 fb
@@ -82,7 +82,7 @@ Solution
 That looks like this. You can call the "fitted model object"
 whatever you like, but you'll need to get the capitalization of
 the  variable names correct:
-```{r }
+```{r fbfriends-2 }
 fb.1 <- lm(FBfriends ~ GMdensity, data = fb)
 summary(fb.1)
 ```
@@ -91,7 +91,7 @@ summary(fb.1)
 
 I observe, though I didn't ask you to, that the R-squared is pretty
 awful, going with a correlation of 
-```{r }
+```{r fbfriends-3 }
 sqrt(0.1904)
 ```
 
@@ -152,7 +152,7 @@ may not have a very clear idea of what the slope actually
 *is*. There are a couple of ways to get a confidence
 interval. The obvious one is to use R as a calculator and go up
 and down twice its standard error (to get a rough idea):
-```{r }
+```{r fbfriends-4 }
 82.45 + 2 * 27.58 * c(-1, 1)
 ```
 
@@ -160,7 +160,7 @@ and down twice its standard error (to get a rough idea):
 The `c()` thing is to get both confidence limits at once. The
 smoother way is this:
 
-```{r }
+```{r fbfriends-5 }
 confint(fb.1)
 ```
 
@@ -190,7 +190,7 @@ Solution
 
 Just a modification
 of (a):
-```{r }
+```{r fbfriends-6 }
 ggplot(fb, aes(x = GMdensity, y = FBfriends)) + geom_point() +
   geom_smooth(method = "lm")
 ```
@@ -208,7 +208,7 @@ Solution
 
 
 This is, to my mind, the easiest way:
-```{r }
+```{r fbfriends-7 }
 ggplot(fb.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -225,7 +225,7 @@ what it implies about whether or not your regression is satisfactory.)
 
 Compare that residual plot with this one:
 
-```{r }
+```{r fbfriends-8 }
 ggplot(fb.1, aes(x = .fitted, y = .resid)) +
   geom_point() + geom_smooth()
 ```

@@ -195,7 +195,7 @@ code is. If it finds any errors, correct them and try again.
 
 To compile, the usual thing:
 
-```{r}
+```{r regression-stan-1}
 reg <- cmdstan_model("reg.stan")
 ```
 
@@ -280,7 +280,7 @@ Solution
 
 
 Thus:
-```{r }
+```{r regression-stan-2 }
 my_url <- "https://raw.githubusercontent.com/nxskok/pasias/master/vocab.txt"
 vocabulary <- read_delim(my_url, " ")
 vocabulary
@@ -300,7 +300,7 @@ Two parts: set up the data, and then sample it:
 
 
 
-```{r }
+```{r regression-stan-3 }
 reg_data <- list(
   n = 10, x = vocabulary$age, y = vocabulary$vocab,
   prior_int_mean = -500,
@@ -326,7 +326,7 @@ Solution
 
 This is most easily `mcmc_hist` from `bayesplot`:
 
-```{r}
+```{r regression-stan-4}
 mcmc_hist(reg.1$draws("b"), binwidth = 20)
 ```
 
@@ -345,7 +345,7 @@ Solution
 
 If you have done a regression course, you might recognize this as being the Bayesian version of a prediction interval. How might we make a predictive distribution for this? Well, first we need to extract the sampled values from the posteriors:
 
-```{r }
+```{r regression-stan-5 }
 as_draws_df(reg.1$draws()) %>%
   as_tibble() -> sims
 sims
@@ -355,7 +355,7 @@ sims
 
 and now we need to simulate some response values for our notional child of age 5. That means simulating for an `x` of 5, using each of those values of `a`, `b` and `sigma`:
 
-```{r }
+```{r regression-stan-6 }
 sims %>%
   rowwise() %>% 
   mutate(sim_vocab = rnorm(1, a + b * 5, sigma)) -> sims2
@@ -367,7 +367,7 @@ ggplot(sims2, aes(x = sim_vocab)) + geom_histogram(bins = 20)
 
 That's the distribution of the vocabulary size of children aged 5. We can get a 95\% interval from this the usual way: find the 2.5 and 97.5 percentiles:
 
-```{r }
+```{r regression-stan-7 }
 with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 ```
 
@@ -378,7 +378,7 @@ words, squarely in the middle of this interval.
 
 Is the posterior predictive interval like the prediction interval?
 
-```{r }
+```{r regression-stan-8 }
 vocabulary.1 <- lm(vocab ~ age, data = vocabulary)
 new <- tibble(age = 5)
 predict(vocabulary.1, new, interval = "p")

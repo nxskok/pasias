@@ -16,7 +16,7 @@ have it lying around). The link is in the previous question.
 Solution
 
 
-```{r }
+```{r bootstrap-median-1 }
 my_url <- "https://raw.githubusercontent.com/nxskok/pasias/master/air_conditioning.csv"
 aircon <- read_csv(my_url)
 aircon
@@ -32,7 +32,7 @@ Solution
 
 
 Input to `ci_median` is data frame and column:
-```{r }
+```{r bootstrap-median-2 }
 ci_median(aircon, hours)
 ```
 
@@ -47,7 +47,7 @@ Solution
 
 The usual do-it-yourself bootstrap:
 
-```{r }
+```{r bootstrap-median-3 }
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(samples = list(sample(aircon$hours, replace = TRUE))) %>% 
@@ -60,7 +60,7 @@ I actually copied and pasted my code from the previous problem, changing `mean` 
 
 As for a plot, well, this:
 
-```{r }
+```{r bootstrap-median-4 }
 ggplot(meds, aes(sample = medians)) + stat_qq() + stat_qq_line()
 ```
 
@@ -80,7 +80,7 @@ possible values end up in the same bin; here, the aim is to have
 enough bins to show the discreteness, rather than the usual thing of
 having few enough bins to show the shape.)
 
-```{r }
+```{r bootstrap-median-5 }
 ggplot(meds, aes(x = medians)) + geom_histogram(bins = 30)
 ```
 
@@ -95,7 +95,7 @@ Solution
 
 Also, the usual:
 
-```{r }
+```{r bootstrap-median-6 }
 quantile(meds$medians, c(0.025, 0.975))
 ```
 
@@ -111,7 +111,7 @@ Solution
 
 
 Yet more copying and pasting (from the previous question):
-```{r }
+```{r bootstrap-median-7 }
 theta <- function(x) {
   median(x)
 }

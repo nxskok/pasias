@@ -8,7 +8,7 @@ Solution
 
 Take a look at the data and see that it is aligned columns, and thus that `read_table` is what you want. (Or, try something like `read_delim`, see that it doesn't work, and see why it goes wrong):
 
-```{r}
+```{r track-pc-1}
 my_url <- "http://ritsokiguess.site/datafiles/men_track_field.txt"
 track <- read_table2(my_url)
 track
@@ -28,7 +28,7 @@ Solution
 
 This is an ordinary `csv` file, so no issues there:
 
-```{r}
+```{r track-pc-2}
 my_other_url <- "http://ritsokiguess.site/datafiles/isocodes.csv"
 codes <- read_csv(my_other_url)
 codes
@@ -48,27 +48,27 @@ Solution
 
 The input to `princomp` requires just the quantitative columns of the dataframe. The obvious way to go is te first create this dataframe and save it:
 
-```{r}
+```{r track-pc-3}
 track %>% select(where(is.numeric)) -> track_num
 track_num
 ```
 
 An option for the `select` part is to recognize that the only column you *do not* need is the one called `country`:
 
-```{r, eval=FALSE}
+```{r track-pc-4, eval=FALSE}
 track %>% select(-country) -> track_num
 ```
 
 Then you run the analysis:
 
-```{r}
+```{r track-pc-5}
 track.1 <- princomp(track_num, cor = TRUE)
 ```
 
 
 Another option is to recognize that this is the only place you'll need the dataframe of quantitative columns, so the whole thing can be done in a pipeline without saving the thing I called `track_num`:
 
-```{r, eval=FALSE}
+```{r track-pc-6, eval=FALSE}
 track %>% 
   select(where(is.numeric)) %>% 
   princomp(cor = TRUE) -> track.1
@@ -78,7 +78,7 @@ We *do* need the output of the analysis again later (several times), so you *wil
 
 The last step is to display its `summary`:
 
-```{r}
+```{r track-pc-7}
 summary(track.1)
 ```
 
@@ -93,7 +93,7 @@ Solution
 
 Once you have `ggbiplot` (the package) installed, getting the plot is simplicity itself:
 
-```{r}
+```{r track-pc-8}
 ggscreeplot(track.1)
 ```
 
@@ -119,7 +119,7 @@ Solution
 
 This is a matter of looking at the component `loadings`:
 
-```{r}
+```{r track-pc-9}
 track.1$loadings
 ```
 
@@ -139,7 +139,7 @@ Solution
 
 This is `ggbiplot` from the package of the same name. The input you need is (i) the output from running `princomp` earlier, and (ii) a column of country name abbreviations, taken most easily from the dataframe I called `track`:
 
-```{r}
+```{r track-pc-10}
 ggbiplot(track.1, labels = track$country)
 ```
 
@@ -161,7 +161,7 @@ There is a bit of preparatory work to do here. Let's do some setup so that we ha
 
 First, the component scores (this is rather longer than I would like you to hand in ever, but I want to show you the process):
 
-```{r}
+```{r track-pc-11}
 track.1$scores
 ```
 
@@ -170,13 +170,13 @@ The problem with using something like `cbind` is that the country abbreviations 
 
 The base-R first way, uses `data.frame` to combine:
 
-```{r}
+```{r track-pc-12}
 data.frame(country = track$country, track.1$scores)
 ```
 
 or you could turn the `matrix` into a `tibble` and then add the column of country abbreviations:
 
-```{r}
+```{r track-pc-13}
 track.1$scores %>% 
   as_tibble() %>% 
   bind_cols(country = track$country) %>% 
@@ -187,7 +187,7 @@ Either way is good. I went a bit further the second way, recognizing that the on
 
 Now we need to look up the country names. This is a `left_join` with the dataframe that I called `codes` earlier. This one will need a `by` because the column we want to look up by is called different names in the two places: `country` here and `ISO2` there:
 
-```{r}
+```{r track-pc-14}
 track.1$scores %>% 
   as_tibble() %>% 
   bind_cols(country = track$country) %>% 
@@ -197,7 +197,7 @@ track.1$scores %>%
 
 Now I just need the country names and the component scores, so I'll grab those and save what I have:
 
-```{r}
+```{r track-pc-15}
 track.1$scores %>% 
   as_tibble() %>% 
   bind_cols(country = track$country) %>% 
@@ -212,7 +212,7 @@ That was the hard part. Now we need to find the highest and lowest scores on eac
 
 Lowest on component 1:
 
-```{r}
+```{r track-pc-16}
 scores %>% arrange(Comp.1)
 ```
 
@@ -220,7 +220,7 @@ These are the best at running overall, probably about what you would guess if yo
 
 The worst overall:
 
-```{r}
+```{r track-pc-17}
 scores %>% arrange(desc(Comp.1))
 ```
 
@@ -228,7 +228,7 @@ So now we know that CK is the Cook Islands and WS is (Western) Samoa. The big sp
 
 Low on component 2:
 
-```{r}
+```{r track-pc-18}
 scores %>% arrange(Comp.2)
 ```
 
@@ -236,7 +236,7 @@ Countries that are better at sprinting than at distance running. Perhaps the mos
 
 Finally, high on component 2:
 
-```{r}
+```{r track-pc-19}
 scores %>% arrange(desc(Comp.2))
 ```
 
@@ -252,7 +252,7 @@ Solution
 
 This will probably mean some reconstruction of what you did in the previous part:
 
-```{r}
+```{r track-pc-20}
 track.1$scores %>% 
   as_tibble() %>% 
   bind_cols(country = track$country) %>% 
@@ -265,7 +265,7 @@ This should look like a compressed version of your biplot, but without the red a
 If I had been thinking, I would have saved one of my intermediate steps from the previous part to use here. 
 Another way you might think of is to load `ggrepel` and then do this:
 
-```{r}
+```{r track-pc-21}
 track.1$scores %>% 
   as_tibble() %>% 
   bind_cols(country = track$country) %>% 

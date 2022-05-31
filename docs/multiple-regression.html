@@ -467,11 +467,11 @@ its columns.</p>
 <p>Solution</p>
 <p>The obvious way is to do these one after the other:</p>
 <div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1"><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-116-1.png" width="384" /></p>
+<p><img src="pasias_files/figure-html/hospital-2-1.png" width="384" /></p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb163-1" title="1"><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> severity, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-116-2.png" width="384" /></p>
+<p><img src="pasias_files/figure-html/hospital-2-2.png" width="384" /></p>
 <div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> anxiety, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-116-3.png" width="384" /></p>
+<p><img src="pasias_files/figure-html/hospital-2-3.png" width="384" /></p>
 <p>This is fine, but there is also a way of getting all three plots with
 <em>one</em> <code>ggplot</code>. This uses the <code>facet_wrap</code> trick,
 but to set <em>that</em> up, we have to have all the <span class="math inline">\(x\)</span>-variables in
@@ -482,7 +482,7 @@ in a pipeline:</p>
 <a class="sourceLine" id="cb165-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="op">-</span>satis, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb165-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb165-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-117-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hospital-3-1.png" width="672" /></p>
 <p>Steps: collect together the columns age through anxiety into one column
 whose values go in <code>x</code>, with names in <code>xname</code>, then plot this new
 <code>x</code> against satisfaction score, with a separate facet for each
@@ -530,20 +530,20 @@ pipes one line at a time, inspect things, and so on.</p>
 of the facets:</p>
 <div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1"><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb168-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-119-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hospital-5-1.png" width="672" /></p>
 <p>I find these too tall and skinny to see the trends, as on the first
 <code>facet_wrap</code> plot.</p>
 <p>And now, making a <em>column</em> of plots, with <code>xname</code> as <span class="math inline">\(y\)</span>:</p>
 <div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" title="1"><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb169-2" title="2"><span class="st">  </span><span class="kw">facet_grid</span>(xname <span class="op">~</span><span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-120-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hospital-6-1.png" width="672" /></p>
 <p>This one looks weird because the three <span class="math inline">\(x\)</span>-variables are on different
 scales. The effect of the <code>scales="free"</code> is to allow the
 <code>satis</code> scale to vary, but the <code>x</code> scale cannot because
 the facets are all in a line. Compare this:</p>
 <div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="kw">ggplot</span>(satisf.long, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> satis)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb170-2" title="2"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-121-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hospital-7-1.png" width="672" /></p>
 <p>This time, the <span class="math inline">\(x\)</span> scales came out different (and suitable), but I
 still like squarer plots better for judging relationships.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -894,7 +894,7 @@ actually there.</p>
 satisfaction, so I can plot these two explanatory variables against
 each other to see where most of the values are:</p>
 <div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" title="1"><span class="kw">ggplot</span>(satisf, <span class="kw">aes</span>(<span class="dt">x =</span> age, <span class="dt">y =</span> anxiety)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hospital-25-1.png" width="672" /></p>
 <p>There is basically <em>no</em> data with low age and high anxiety, or
 with high age and low anxiety, so these combinations will be difficult
 to predict satisfaction for (and thus their prediction intervals will
@@ -1145,21 +1145,21 @@ against explanatory variables, and a normal quantile plot of the residuals.</li>
 second one requires care, but the first and last should be straightforward.
 Residuals against fitted values:</p>
 <div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" title="1"><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-145-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-3-1.png" width="672" /></p>
 <p>The tricky part about the second one is that the <span class="math inline">\(x\)</span>-values and the
 residuals come from different data frames, which has to get expressed
 in the <code>ggplot</code>. The obvious way is to do the two plots (one
 for each explanatory variable) one at a time:</p>
 <div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1"><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> chemicals<span class="op">$</span>drums, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-146-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-4-1.png" width="672" /></p>
 <p>and</p>
 <div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" title="1"><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> chemicals<span class="op">$</span>weight, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-147-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-5-1.png" width="672" /></p>
 <p>What would also work is to make a data frame first with the things to plot:</p>
 <div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1">dd &lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">weight =</span> chemicals<span class="op">$</span>weight, <span class="dt">drums =</span> chemicals<span class="op">$</span>drums, <span class="dt">res =</span> <span class="kw">resid</span>(minutes<span class="fl">.1</span>))</a></code></pre></div>
 <p>and then:</p>
 <div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" title="1"><span class="kw">ggplot</span>(dd, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> res)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-149-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-7-1.png" width="672" /></p>
 <p>and similarly for <code>drums</code>. The <code>resid</code> with the model
 name in brackets seems to be necessary.</p>
 <p>Another way to approach this is <code>augment</code> from
@@ -1193,19 +1193,19 @@ name in brackets seems to be necessary.</p>
 <p>and then you can use <code>d</code> as the “base” data frame from which
 everything comes:</p>
 <div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb225-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-151-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-9-1.png" width="672" /></p>
 <p>and</p>
 <div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" title="1"><span class="kw">ggplot</span>(d, <span class="kw">aes</span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-152-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-10-1.png" width="672" /></p>
 <p>or you can even do that trick to put the two plots on facets:</p>
 <div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1">d <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb227-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(drums<span class="op">:</span>weight, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb227-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb227-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-11-1.png" width="672" /></p>
 <p>Last, the normal quantile plot:</p>
 <div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" title="1"><span class="kw">ggplot</span>(minutes<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-154-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-12-1.png" width="672" /></p>
 <p>As a check for the grader, there should be four plots, obtained
 somehow: residuals against fitted values, normal quantile plot of
 residuals, residuals against <code>drums</code>, residuals against<br />
@@ -1266,7 +1266,7 @@ look about 15 minutes too long. This was actually an average-sized shipment:</p>
 <a class="sourceLine" id="cb233-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">my_label =</span> <span class="kw">ifelse</span>(.resid <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, <span class="st">&quot;residual +&quot;</span>, <span class="st">&quot;&quot;</span>)) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb233-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> weight, <span class="dt">colour =</span> minutes, <span class="dt">label =</span> my_label)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb233-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-157-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-15-1.png" width="672" /></p>
 <p>so it’s a bit of a mystery why it took so long to handle.</p>
 <p>I had some fun with the graph: if you set <code>colour</code> equal to a
 continuous variable (as <code>minutes</code> is here), you get a
@@ -1286,7 +1286,7 @@ another way to do that:</p>
 <a class="sourceLine" id="cb234-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> drums, <span class="dt">y =</span> weight, <span class="dt">colour =</span> minutes, <span class="dt">label =</span> my_label)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb234-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text_repel</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb234-5" title="5"><span class="st">  </span><span class="kw">scale_colour_gradient</span>(<span class="dt">low =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-158-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/chemical-16-1.png" width="672" /></p>
 <p>The labelled point is a little more blue (purplish) than the more
 clearly red points near it.</p>
 <p>The other thing to see is that there is also a positive correlation
@@ -1544,7 +1544,7 @@ briefly how you came to your conclusions in each case.</li>
 <p>I intended that (i) should just be a matter of looking at residuals
 vs. fitted values:</p>
 <div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb252-1" title="1"><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-166-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/mathsal-8-1.png" width="672" /></p>
 <p>There is no appreciable pattern on here, so no evidence of a curve (or
 apparently of any other problems).</p>
 <p>Extra: you might read this that we should check residuals against the
@@ -1559,11 +1559,11 @@ you, run the code a piece at a time to see what it’s doing:</p>
 <a class="sourceLine" id="cb253-3" title="3"><span class="st">  </span><span class="kw">pivot_longer</span>(workqual<span class="op">:</span>pubsucc, <span class="dt">names_to=</span><span class="st">&quot;xname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;x&quot;</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb253-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb253-5" title="5"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-167-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/mathsal-9-1.png" width="672" /></p>
 <p>These three residual plots are also pretty much textbook random, so no problems here either.</p>
 <p>For (ii), look at a normal quantile plot of the residuals, which is not as difficult as the plot I just did:</p>
 <div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" title="1"><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-168-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/mathsal-10-1.png" width="672" /></p>
 <p>That is really pretty good. Maybe the <em>second</em> smallest point is
 a bit far off the line, but otherwise there’s nothing to worry about. A
 quick place to look for problems is the extreme observations, and the
@@ -1572,7 +1572,7 @@ them to be.</p>
 <p>Our graph for assessing fan-in or fan-out is to plot the <em>absolute</em> values of the residuals against the fitted values. The plot from (i) suggests that we won’t have any problems here, but to investigate:</p>
 <div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1"><span class="kw">ggplot</span>(salaries<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-169-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/mathsal-11-1.png" width="672" /></p>
 <p>This is pretty nearly straight across. You might think it increases a
 bit at the beginning, but most of the evidence for that comes from the
 one observation with fitted value near 30 that happens to have a
@@ -1643,7 +1643,7 @@ would hope they would have some predictive value.)</p>
 <div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">ggplot</span>(gpa, <span class="kw">aes</span>(<span class="dt">x =</span> high_GPA, <span class="dt">y =</span> univ_GPA)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb261-2" title="2"><span class="st">  </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-171-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/gpa-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
 <li>Describe any relationship on your scatterplot: its direction, its
@@ -1708,13 +1708,13 @@ you are interested, I’ll look at this here. First, residuals against
 fitted values:</p>
 <div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1"><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-173-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/gpa-4-1.png" width="672" /></p>
 <p>Is that evidence of a trend in the residuals? Dunno. I’m inclined to
 call this an “inconsequential wiggle” and say it’s OK. Note that the
 grey envelope includes zero all the way across.</p>
 <p>Normal quantile plot of residuals:</p>
 <div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1"><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-174-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/gpa-5-1.png" width="672" /></p>
 <p>A somewhat long-tailed distribution: compared to a normal
 distribution, the residuals are a bit too big in size, both on the
 positive and negative end.</p>
@@ -1722,7 +1722,7 @@ positive and negative end.</p>
 fanning-in, which we can assess by looking at the absolute residuals:</p>
 <div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="kw">ggplot</span>(gpa<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> <span class="kw">abs</span>(.resid))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-175-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/gpa-6-1.png" width="672" /></p>
 <p>That is definitely a downward trend in the size of the residuals, and
 I think I was right to be worried before. The residuals should be of
 similar size all the way across.</p>
@@ -1745,7 +1745,7 @@ would be the way to go.</p>
 <p>All right, how does Box-Cox work out here, if at all?</p>
 <div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1"><span class="kw">library</span>(MASS)</a>
 <a class="sourceLine" id="cb270-2" title="2"><span class="kw">boxcox</span>(univ_GPA <span class="op">~</span><span class="st"> </span>high_GPA, <span class="dt">data =</span> gpa)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-176-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/gpa-7-1.png" width="672" /></p>
 <p>It doesn’t. All right, that answers <em>that</em> question.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -2188,14 +2188,14 @@ to make a call and stand by it.</p>
 <a class="sourceLine" id="cb306-3" title="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> xval, <span class="dt">y =</span> mercury)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>() <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb306-4" title="4"><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-194-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/hachel-1.png" width="672" /></p>
 <p>I did one more thing, which is to note that I am going to be assessing these relationships in a moment, so I would rather have squarer plots than the tall skinny ones that come out by default (that is to say these):</p>
 <div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1">mercury <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb308-2" title="2"><span class="kw">pivot_longer</span>(<span class="op">-</span>mercury, <span class="dt">names_to =</span> <span class="st">&quot;xname&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;xval&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb308-3" title="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> xval, <span class="dt">y =</span> mercury)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>() <span class="op">+</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb308-4" title="4"><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/unnamed-chunk-195-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/endinger-1.png" width="672" /></p>
 <p>To make this happen, I added <code>ncol=2</code>, which says to arrange the facets in <em>two</em> columns (that is, as three cells of a <span class="math inline">\(2\times 2\)</span> grid), and that makes them come out more landscape than portrait. <code>nrow=2</code> would have had the same effect.</p>
 <p>If you are stuck, get three separate graphs, but note that you are making more work for yourself (that you will have to do again later).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -2251,7 +2251,7 @@ to make a call and stand by it.</p>
 <p>Box-Cox is to find out whether you need to transform the response variable, here <code>mercury</code>. The hint is that we have already transformed two of the explanatory variables, the ones that had some unusually large values, and so those are presumably now all right now.</p>
 <p><code>boxcox</code> comes from the <code>MASS</code> package, so install and load that first.</p>
 <div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1"><span class="kw">boxcox</span>(mercury <span class="op">~</span><span class="st"> </span>log_alkalinity <span class="op">+</span><span class="st"> </span>log_calcium <span class="op">+</span><span class="st"> </span>ph, <span class="dt">data =</span> mercury)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-198-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/mercury-7-1.png" width="672" /></p>
 <p>The confidence interval for <span class="math inline">\(\lambda\)</span> goes from about <span class="math inline">\(-0.4\)</span> to <span class="math inline">\(0.5\)</span>. The only round-number powers in there are 0 (log) and 0.5 (square root, right on the end). The <span class="math inline">\(\lambda\)</span> for the log transformation is right in the middle of the interval, so that’s what I would choose. That means that we should use log of mercury instead of mercury itself in a regression.</p>
 <p>Extra: I looked at the residual plots of the regression <code>mercury.1</code>, in the hope that they would point you towards some kind of transformation of <code>mercury</code>, but they really didn’t – the biggest feature was an upper-end outlier, more extreme than the one you see below, that appeared on all of them. So I didn’t have you produce those graphs.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -2291,16 +2291,16 @@ to make a call and stand by it.</p>
 <p>Solution</p>
 <p>residuals against fitted</p>
 <div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb316-1" title="1"><span class="kw">ggplot</span>(mercury<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">x=</span>.fitted, <span class="dt">y=</span>.resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-200-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/spaerwer-1.png" width="672" /></p>
 <p>normal quantile plot of residuals</p>
 <div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb317-1" title="1"><span class="kw">ggplot</span>(mercury<span class="fl">.2</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-201-1.png" width="672" /></p>
+<p><img src="pasias_files/figure-html/lugglinin-1.png" width="672" /></p>
 <p>against the explanatory variables. This uses the ideas of <code>augment</code> (from <code>broom</code>) and pivoting longer:</p>
 <div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb318-1" title="1">mercury<span class="fl">.2</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(mercury) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb318-2" title="2"><span class="kw">pivot_longer</span>(ph<span class="op">:</span>log_calcium, <span class="dt">names_to =</span> <span class="st">&quot;xname&quot;</span>, <span class="dt">values_to =</span> <span class="st">&quot;xval&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb318-3" title="3"><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> xval, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb318-4" title="4"><span class="kw">facet_wrap</span>(<span class="op">~</span>xname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
-<p><img src="pasias_files/figure-html/unnamed-chunk-202-1.png" width="672" />
+<p><img src="pasias_files/figure-html/aertzinars-1.png" width="672" />
 I think the only troublesome feature on there is the large positive residual that appears at the top of all the plots. Other than that, I see nothing troubling.</p>
 <p>You might, if you look a bit longer (but remember, apophenia!) see a tiny up and down on the plot with log-alkalinity, and maybe a small downward trend on the plots with the other two explanatory variables, but I would need a lot of convincing to say that these are more than chance. You are looking for <em>obvious trouble</em>, and I really don’t think there’s any sign of that here.</p>
 <p>Extra: you sometimes see a downward trend on residual plots that have an outlier on them. This is because if you have an outlier, it can change the slope disproportionately from what it ought to be, and then most of the observations at one end will be underestimated and most of the observations at the other end will be overestimated.</p>

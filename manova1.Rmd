@@ -18,7 +18,7 @@ the groups.
 Solution
 
 
-```{r }
+```{r manova1-1 }
 my_url <- "http://ritsokiguess.site/datafiles/simple-manova.txt"
 simple <- read_delim(my_url, " ")
 simple
@@ -41,7 +41,7 @@ among the groups? If necessary, run Tukey. What do you conclude?
 Solution
 
 
-```{r }
+```{r manova1-2 }
 simple.1 <- aov(y1 ~ group, data = simple)
 summary(simple.1)
 TukeyHSD(simple.1)
@@ -62,7 +62,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r manova1-3 }
 simple.2 <- aov(y2 ~ group, data = simple)
 summary(simple.2)
 TukeyHSD(simple.2)
@@ -87,7 +87,7 @@ Solution
 `y1` and `y2` can be either way around, since
 they are both response variables (!):
 
-```{r }
+```{r manova1-4 }
 ggplot(simple, aes(x = y1, y = y2, colour = group)) + geom_point()
 ```
 
@@ -128,7 +128,7 @@ Solution
 
 This is just like the seed weight and yield example in class
 (deliberately so):
-```{r }
+```{r manova1-5 }
 response <- with(simple, cbind(y1, y2))
 simple.3 <- manova(response ~ group, data = simple)
 summary(simple.3)

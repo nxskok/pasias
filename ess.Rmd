@@ -26,7 +26,7 @@ Solution
 
 The obvious way. Printing it out will display some of the data
 and tell you how many rows and columns you have:
-```{r }
+```{r ess-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ess.csv"
 ess <- read_csv(my_url)
 ess
@@ -86,11 +86,12 @@ done in one go.
 Solution
 
 
-This seems to call for a pipeline. The major parties are numbered 1,
+The major parties are numbered 1,
 2 and 3, so we can select the ones less than 4 (or
 `<=3`). The reference back to the last question is a hint
-to use `!is.na()`.
-```{r }
+to use `!is.na()`. It also works to use `drop_na`, if you are familiar with that.
+
+```{r ess-2 }
 ess %>%
   select(prtvtgb:inwtm) %>%
   filter(prtvtgb < 4, agea < 999, eduyrs < 40, !is.na(inwtm)) -> ess.major
@@ -120,7 +121,7 @@ pipeline `summary()`, which produces a summary of the columns of
 the resulting data frame. For example, I first did this (note that my
 `filter` is a lot simpler than the one above):
 
-```{r }
+```{r ess-3 }
 ess %>%
   select(prtvtgb:inwtm) %>%
   filter(prtvtgb < 4, !is.na(inwtm)) %>%
@@ -172,7 +173,7 @@ Solution
 
 This, or something like it. `multinom` lives in package
 `nnet`, which you'll have to install first if you haven't already:
-```{r }
+```{r ess-4 }
 library(nnet)
 ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
@@ -181,7 +182,7 @@ ess.1 <- multinom(factor(prtvtgb) ~ gndr + agea + eduyrs + inwtm, data = ess.maj
 
 Or create a factor version of your response in the data frame first:
 
-```{r }
+```{r ess-5 }
 ess.major <- ess.major %>% mutate(party = factor(prtvtgb))
 ```
 
@@ -189,7 +190,7 @@ ess.major <- ess.major %>% mutate(party = factor(prtvtgb))
 
 and then:
 
-```{r }
+```{r ess-6 }
 ess.1a <- multinom(party ~ gndr + agea + eduyrs + inwtm, data = ess.major)
 ```
 
@@ -214,7 +215,7 @@ Solution
 
 
 I tried to give you lots of hints here:
-```{r }
+```{r ess-7 }
 ess.2a <- step(ess.1, trace = 0)
 ess.2a
 ```
@@ -260,7 +261,7 @@ object and you can look at it any of the ways you can look at a
 model fit.  I found that gender needed to be removed, but if yours
 is different, follow through with whatever your `step` said
 to do.
-```{r }
+```{r ess-8 }
 ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 ```
 
@@ -268,7 +269,7 @@ ess.2 <- multinom(party ~ agea + eduyrs + inwtm, data = ess.major)
 
 If you saved the output from `step`, you'll already have this and you don't need to do it again:
 
-```{r }
+```{r ess-9 }
 anova(ess.2, ess.2a)
 ```
 
@@ -288,7 +289,7 @@ Solution
 
 
 Fit the model without `inwtm`:
-```{r }
+```{r ess-10 }
 ess.3 <- multinom(party ~ agea + eduyrs, data = ess.major)
 ```
 
@@ -296,7 +297,7 @@ ess.3 <- multinom(party ~ agea + eduyrs, data = ess.major)
 
 and then use `anova` to compare them:
 
-```{r }
+```{r ess-11 }
 anova(ess.3, ess.2)
 ```
 
@@ -307,7 +308,7 @@ is good, ie.\ the one *without* interview length.
 
 I thought `drop1` would also work here, but it appears not to:
 
-```{r error=T}
+```{r ess-12, error=T}
 drop1(ess.1, test = "Chisq")
 ```
 
@@ -347,32 +348,58 @@ from. `crossing` is our friend. You can use
 only had `agea` and `eduyrs` left, having decided
 that interview time really ought to come out:
 
-```{r }
+```{r ess-13 }
 summary(ess.major)
 ```
 
      
 
-Quartiles for age are 44 and 71, and for years of education are 11 and 16:
+Quartiles for age are 44 and 71, and for years of education are 11 and 16.
 
-```{r }
-new <- crossing(agea = c(44, 71), eduyrs = c(11, 16))
+This time, instead of predicting for variable values that `predictions` chooses for us (like a five-number summary), we are predicting for "custom" values, ones that *we* chose. To set that up, the `marginaleffects` way is to use `datagrid` like this:
+
+```{r}
+new <- datagrid(model = ess.3, agea = c(44, 71), eduyrs = c(11, 16))
 new
 ```
 
-     
+What `datagrid` does is to make all combinations of your variable values, and along with that, to use "typical" values for the others: the mean, in the case of quantitative variables like `inwtm`, and the most common category for categorical ones like `party`. If you feed `datagrid` a `model` first, it only includes variables in that model, which is easier to make sense of:
 
-Now we feed this into `predict`. An annoying feature of this
-kind of prediction is that `type` may not be what you
-expect. The best model is the one I called `ess.3`:
-
-```{r } 
-pp <- predict(ess.3, new, type = "probs")
-cbind(new, pp)
+```{r}
+datagrid(newdata = ess.major, agea = c(44, 71), eduyrs = c(11, 16))
 ```
 
- 
- 
+
+The other variables don't make much sense, since they are really categorical but expressed as numbers, but they are not in the best model, so that doesn't do any harm. (In other cases, you might need to be more careful.)
+
+Next, we feed this into `predictions`, using the above dataframe as `newdata`, and with our best model, `ess.3` (the one *without* interview length). The results might confuse you at first, since you will probably get an error:
+
+```{r, error=TRUE}
+predictions(ess.3, newdata = new)
+```
+
+The error message gives you a hint about what to do: add a `type = "probs"` to `predictions` (which is a consequence of how `multinom` works):
+
+```{r}
+predictions(ess.3, newdata = new, type = "probs")
+```
+
+There are twelve rows for our four predictions, because there are three predictions for each of our four "people": the probabilities of each one voting for each of the three parties. The party predicted for is in the column `group`, and the probability of each person (labelled by `rowid`) voting for that party is in `predicted`. Let's simplify things by keeping only those columns and the ones we are predicting for:
+
+```{r}
+predictions(ess.3, newdata = new, type = "probs") %>% 
+  select(rowid, group, predicted, agea, eduyrs)
+```
+
+and then pivot wider to get all three predictions for each person on one line:
+
+```{r}
+predictions(ess.3, newdata = new, type = "probs") %>% 
+  select(rowid, group, predicted, agea, eduyrs) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
+```
+
+
 $\blacksquare$
 
 (k) What is the effect of increasing age? What is the effect of
@@ -412,39 +439,20 @@ Democrats, which became a slightly stronger third party.
 
 I was curious about what the effect of interview length would
 be. Presumably, the effect is small, but I have no idea which way
-it would be. To assess this, it's the same idea over again: create
-a new data frame with all combinations of `agea`,
-`eduyrs` *and* `inwtm`. I need the quartiles of
-interview time first:
-```{r }
-quantile(ess.major$inwtm)
+it would be. To assess this, this is `predictions` again, but this time we can let
+`predictions` pick some values for `inwtm` for us, and leave everything else at their mean. We have 
+to remember to use the model `ess.2` that contained interview length, this time: 
+
+```{r}
+predictions(ess.2, variables = "inwtm", type = "probs") %>% 
+  select(rowid, group, predicted, agea, eduyrs, inwtm) %>% 
+  pivot_wider(names_from = group, values_from = predicted)
 ```
 
-     
+As interview length goes up (for a respondent with average age and years of education, though the pattern would be the same for people of different ages and different amounts of education), the respondent is less likely to vote Conservative (party 1), and more likely to vote for one of the other two parties.
 
-and then
-
-```{r }
-ess.new <- crossing(agea = c(44, 71), eduyrs = c(11, 16), inwtm = c(35, 50))
-ess.new
-```
-
- 
-
-and then predict *using the model that contained interview time*:
-
-```{r }
-pp <- predict(ess.2, ess.new, type = "probs")
-cbind(ess.new, pp)
-```
-
- 
-
-The effects of age and education are as they were before. A longer
-interview time is associated with a slightly decreased chance of
-voting Conservative and a slightly increased chance of voting
-Labour. Compare, for example, lines 1 and 2. But, as we 
-suspected, the effect is small and not really worth worrying about.
+But, as we 
+suspected, the effect is small (except for that very long interview length) and not really worth worrying about.
  
 $\blacksquare$
 

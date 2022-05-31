@@ -11,7 +11,7 @@ Solution
 
 Copy what you did before:
 
-```{r}
+```{r reg-1}
 my_url <- "http://ritsokiguess.site/datafiles/heightfoot.csv"
 hf <- read_csv(my_url)
 hf
@@ -39,7 +39,7 @@ Solution
 
 There is some setup first: we have to get hold of $X$ and $y$ from the data as a matrix and a vector respectively. I would use tidyverse ideas to do this, and then turn them into a matrix at the end, which I think is best. Don't forget to create a column of 1s to make the first column of $X$
 
-```{r}
+```{r reg-2}
 hf %>% mutate(one=1) %>% 
 select(one, foot) %>% 
 as.matrix() -> X
@@ -50,7 +50,7 @@ head(X)
 
 Another approach is this:
 
-```{r}
+```{r reg-3}
 X <- cbind(1, hf$foot)
 head(X)
 ```
@@ -61,20 +61,20 @@ The choice here is whether to use tidyverse stuff and turn into a matrix at the 
 
 The simplest choice for making $y$ is this:
 
-```{r}
+```{r reg-4}
 y <- hf$height
 y
 ```
 
 This also works:
 
-```{r}
+```{r reg-5}
 hf %>% select(height) %>% pull(height)
 ```
 
 (remembering that you don't want to have anything that's a dataframe), or this:
 
-```{r}
+```{r reg-6}
 hf %>% select(height) %>% as.matrix() -> yy
 head(yy)
 ```
@@ -83,7 +83,7 @@ remembering that a (column) vector and a 1-column matrix are the same thing as R
 
 Now we want to construct some things. I would go at it this way, rather than trying to do everything at once (if you do, you will either get lost now, or in six months when you try to figure out what you did):
 
-```{r}
+```{r reg-7}
 Xt <- t(X) # X-transpose
 XtX <- Xt %*% X 
 XtXi <- solve(XtX)
@@ -108,7 +108,7 @@ Solution
 
 The usual `lm`:
 
-```{r}
+```{r reg-8}
 hf.1 <- lm(height ~ foot, data = hf)
 summary(hf.1)
 ```
@@ -120,7 +120,7 @@ in this "well-conditioned" case,^[Which in this case means that the column of 1s
 
 I guess I should try to make up one where it struggles. Let me do one with two $x$'s that are strongly correlated:
 
-```{r}
+```{r reg-9}
 d <- tribble(
 ~x1, ~x2, ~y,
 10, 20, 55,
@@ -135,7 +135,7 @@ d
 
 `x2` is almost exactly equal to 30 minus `x1`. What's the right answer?
 
-```{r}
+```{r reg-10}
 d.1 <- lm(y ~ x1 + x2, data = d)
 summary(d.1)
 coef(d.1)
@@ -143,7 +143,7 @@ coef(d.1)
 
 You should be right away suspicious here: the R-squared is high, but neither of the explanatory variables are significant! (This actually means that you can remove one of them, either one.) The standard errors are also suspiciously large, never a good sign. If you've done C67, you might be thinking about variance inflation factors here:
 
-```{r}
+```{r reg-11}
 library(car)
 vif(d.1)
 ```
@@ -152,7 +152,7 @@ These are both huge (greater than 5 or 10 or whatever guideline you use), indica
 
 All right, how does the matrix algebra work? This is just the same as before:
 
-```{r}
+```{r reg-12}
 d %>% mutate(one=1) %>% 
 select(one, starts_with("x")) %>% 
 as.matrix() -> X
@@ -161,7 +161,7 @@ head(X)
 
 and then
 
-```{r}
+```{r reg-13}
 y <- d$y
 Xt <- t(X) # X-transpose
 XtX <- Xt %*% X 
@@ -172,13 +172,13 @@ XtXi %*% Xty
 
 These answers are actually noticeably different from the right answers (with a few more decimals here):
 
-```{r}
+```{r reg-14}
 coef(d.1)
 ```
 
 One way of finding out how nearly singular $X^TX$ is is to look at its eigenvalues. You'll recall that a singular matrix has one or more zero eigenvalues:
 
-```{r}
+```{r reg-15}
 eigen(XtX)
 ```
 

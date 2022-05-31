@@ -29,7 +29,7 @@ Solution
 
 Observe that the data values are separated by spaces, and therefore
 that `read_delim` will do it:
-```{r }
+```{r pinetrees-1 }
 my_url <- "http://ritsokiguess.site/datafiles/pinetrees.txt"
 trees <- read_delim(my_url, " ")
 trees
@@ -50,7 +50,7 @@ Solution
 No clues this time. You need to recognize that you have two
 quantitative variables, so that a scatterplot is called
 for. Also, the volume is the response, so that should go on the $y$-axis:
-```{r }
+```{r pinetrees-2 }
 ggplot(trees, aes(x = diameter, y = volume)) + geom_point()
 ```
 
@@ -59,7 +59,7 @@ ggplot(trees, aes(x = diameter, y = volume)) + geom_point()
 You can put a smooth trend on it if you like, which would
 look like this:
 
-```{r }
+```{r pinetrees-3 }
 ggplot(trees, aes(x = diameter, y = volume)) +
   geom_point() + geom_smooth()
 ```
@@ -108,7 +108,7 @@ My naming convention is (usually) to call the fitted model
 object by the name of the response variable and a number. (I
 have always used dots, but in the spirit of the
 `tidyverse` I suppose I should use underscores.)
-```{r }
+```{r pinetrees-4 }
 volume.1 <- lm(volume ~ diameter, data = trees)
 summary(volume.1)
 ```
@@ -122,7 +122,7 @@ installed with the `tidyverse` but which you need to load
 separately. It provides two handy ways to summarize a fitted model
 (regression, analysis of variance or whatever):
 
-```{r }
+```{r pinetrees-5 }
 library(broom)
 glance(volume.1)
 ```
@@ -136,7 +136,7 @@ frame and eyeball them.
 
 The other summary is this one:
 
-```{r }
+```{r pinetrees-6 }
 tidy(volume.1)
 ```
 
@@ -145,7 +145,7 @@ tidy(volume.1)
 This gives a table of intercepts, slopes and their P-values, but the
 value to this one is that it is a *data frame*, so if you want to
 pull anything out of it, you know how to do that:^[The  `summary` output is more designed for looking at than for  extracting things from.]
-```{r }
+```{r pinetrees-7 }
 tidy(volume.1) %>% filter(term == "diameter")
 ```
 
@@ -168,7 +168,7 @@ Solution
 The thing I'm fishing for is a residual plot (of the residuals
 against the fitted values), and on it you are looking for a
 random mess of nothingness:
-```{r }
+```{r pinetrees-8 }
 ggplot(volume.1, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -256,7 +256,7 @@ Solution
 
 According to my formula, the volume depends on the diameter
 squared, which I include in the model thus:
-```{r }
+```{r pinetrees-9 }
 volume.2 <- lm(volume ~ I(diameter^2), data = trees)
 summary(volume.2)
 ```
@@ -275,7 +275,7 @@ is very similar to that from our linear model (the one for which the
 intercept made no sense). So, from that point of view, either model
 predicts the data well. I should look at the residuals from this one:
 
-```{r }
+```{r pinetrees-10 }
 ggplot(volume.2, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -334,7 +334,7 @@ $$
 so that log-volume has a linear relationship with log-diameter and we
 can go ahead and estimate it:
 
-```{r }
+```{r pinetrees-11 }
 volume.3 <- lm(log(volume) ~ log(diameter), data = trees)
 summary(volume.3)
 ```
@@ -348,7 +348,7 @@ parameter is not (again, measurements in different units, plus, this
 time we need to take the log of it). I think the "slopes" are
 comparable because we haven't estimated our slope all that accurately:
 
-```{r }
+```{r pinetrees-12 }
 confint(volume.3)
 ```
 
@@ -360,7 +360,7 @@ sure about what it is, and 2.19 is not completely implausible.
 The R-squared here, though it is less than the other ones we
 got, is still high. The residuals are these:
 
-```{r }
+```{r pinetrees-13 }
 ggplot(volume.3, aes(x = .fitted, y = .resid)) + geom_point()
 ```
 
@@ -378,7 +378,7 @@ predicted actual volume will be close to zero. If you want to make
 that mathematically rigorous, you can take limits, but that's the
 intuition. We can also do some predictions: set up a data frame that has a column called `diameter` with some diameters to predict for:
 
-```{r }
+```{r pinetrees-14 }
 d <- tibble(diameter = c(1, 2, seq(5, 50, 5)))
 d
 ```
@@ -387,17 +387,17 @@ d
 
 and then feed that into `predict`:
 
-```{r }
-p <- predict(volume.3, d)
-d %>% mutate(pred = p)
+```{r pinetrees-15 }
+predictions(volume.3, newdata = d) -> p
+p
 ```
 
 
 
 These are predicted log-volumes, so we'd better anti-log them. `log` in R is natural logs, so this is inverted using `exp`: 
 
-```{r }
-d %>% mutate(pred = exp(p))
+```{r pinetrees-16 }
+p %>% mutate(exp_pred = exp(predicted))
 ```
 
 
@@ -409,7 +409,7 @@ For a diameter near zero, the predicted volume appears to be near zero as well.
 I mentioned `broom` earlier. We can make a data frame out of
 the one-line summaries of our three models:
 
-```{r }
+```{r pinetrees-17 }
 bind_rows(glance(volume.1), glance(volume.2), glance(volume.3))
 ```
 
@@ -427,7 +427,7 @@ it. I was determined to find out how. My solution involves putting the
 three models in a list-column, and then using `rowwise` to
 get the `glance` output for each one.
 
-```{r}
+```{r pinetrees-18}
 tibble(i = 1:3, model = list(volume.1, volume.2, volume.3)) %>% 
   rowwise() %>% 
   mutate(glances = list(glance(model))) %>% 

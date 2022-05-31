@@ -39,7 +39,7 @@ current favourite is the `tidyverse`-approved
 inserting column headings and commas in the right places. The
 columns don't have to line up, since it's the commas that
 determine where one value ends and the next one begins:
-```{r }
+```{r aphids-1 }
 dead_bugs <- tribble(
   ~log_conc, ~exposed, ~killed,
   0.96, 50, 6,
@@ -61,7 +61,7 @@ If you are clever in R
 Studio, you can insert a column of commas all at once (using
 "multiple cursors").
 I used to do it like this. I make vectors of each column using `c` and then glue the columns together into a data frame:
-```{r }
+```{r aphids-2 }
 log_conc <- c(0.96, 1.33, 1.63, 2.04, 2.32)
 exposed <- c(50, 48, 46, 49, 50)
 killed <- c(6, 16, 24, 42, 44)
@@ -83,7 +83,7 @@ default eight spaces and these values look farther apart than that.)
 I copied them into a file `exposed.txt` in my current folder
 (or use `file.choose`):
 
-```{r }
+```{r aphids-3 }
 bugs2 <- read_table("exposed.txt")
 bugs2
 ```
@@ -102,7 +102,7 @@ pre-empt^[My daughter learned the word pre-empt because we  like to play a bridg
 make a copy of the data file with the illegal characters replaced by
 underscores, which is my file `exposed2.txt`:
 
-```{r }
+```{r aphids-4 }
 bugs2 <- read_table("exposed2.txt")
 bugs2
 ```
@@ -149,7 +149,7 @@ the second needs to be the number of "failures" (insects that
 survived). We don't actually have the latter, but we know how many
 insects were exposed in total to each dose, so we can work it
 out. Like this:
-```{r }
+```{r aphids-5 }
 dead_bugs %>%
   mutate(survived = exposed - killed) %>%
   select(killed, survived) %>%
@@ -168,7 +168,7 @@ its contents).
 It's also equally good to create the response *outside* of the
 data frame and use `cbind` to glue its columns together:
 
-```{r }
+```{r aphids-6 }
 resp2 <- with(
   dead_bugs,
   cbind(killed, survived = exposed - killed)
@@ -188,7 +188,7 @@ Solution
 
 
 I think you know how to do this by now:
-```{r }
+```{r aphids-7 }
 bugs.1 <- glm(response ~ log_conc, family = "binomial", data = dead_bugs)
 summary(bugs.1)
 ```
@@ -213,35 +213,31 @@ results, honest!
 $\blacksquare$
 
 (f) Obtain predicted probabilities of an insect's being killed at
-each of the log-concentrations in the data set. (This is easier than
-it sometimes is, because here you don't create a new data frame for
-`predict`.)
+each of the log-concentrations in the data set. 
 
  
 Solution
 
+Use a `newdata` that is the original dataframe:
 
-Just this (notice there are only *two* things going into
-`predict`): 
-```{r }
-prob <- predict(bugs.1, type = "response")
-cbind(dead_bugs$log_conc, prob)
+```{r}
+predictions(bugs.1, newdata = dead_bugs)
 ```
 
-   
-or, if you frame everything in terms of the `tidyverse`, turn
-the predictions from a `matrix` into a `tibble` first,
-and then use `bind_cols` to glue them together:
-
-```{r }
-as_tibble(prob) %>% bind_cols(dead_bugs)
-```
 
  
-The advantage of showing the whole input data frame is that you can
+The advantage of this is that you can
 compare the observed with the predicted. For example, 44 out of 50
 insects were killed at log-dose 2.32, which is a proportion of 0.88,
 pretty close to the prediction of 0.91.
+
+Extra: you could also make a plot of these:
+
+```{r}
+plot_cap(bugs.1, condition = "log_conc")
+```
+
+As the log-concentration goes up, you can see how clearly the probability of the aphid being killed goes up. The confidence band is narrow because there is lots of data (almost 250 aphids altogether).
  
 $\blacksquare$ 
 
@@ -262,6 +258,8 @@ log-concentration only kills less than a third of the insects. So I
 would guess somewhere a bit bigger than 1.5. Any guess somewhere in
 this ballpark is fine: you really cannot be very accurate.
 
+If you read through the Extra to the previous part (or at least looked at the graph), the median lethal dose is where the curve of predictions passes through 0.5 on the $y$-axis. This is at a log-concentration of just less than 1.6; if you judge from the scale where the crossing-point is, it's something like 1.57.
+
 Extra: this is kind of a strange prediction problem, because we know what
 the *response* variable should be, and we want to know what the
 explanatory variable's value is. Normally we do predictions the
@@ -271,19 +269,18 @@ to try some different log-concentrations, and see which one gets
 closest to a probability 0.5 of killing the insect.
 
 Something like this would work:
-```{r }
-lc.new <- tibble(log_conc = seq(1.5, 1.63, 0.01))
-prob <- predict(bugs.1, lc.new, type = "response")
-cbind(lc.new, prob)
+
+```{r}
+new <- datagrid(model = bugs.1, log_conc = seq(1.5, 1.63, 0.01))
+predictions(bugs.1, newdata = new)
 ```
 
-   
 
 The closest one of these to a probability of 0.5 is 0.4971, which goes
 with a log-concentration of 1.57: indeed, a bit bigger than 1.5 and a
-bit less than 1.63. The `seq` in the construction of the new
+bit less than 1.63, and close to what I read off from my graph. The `seq` in the construction of the new
 data frame is "fill sequence": go from 1.5 to 1.63 in steps of
-0.01. The rest of it is the same as before.
+0.01. We are predicting for values of `log_conc` that we chose, so the way to go is to make a new dataframe with `datagrid` and then feed that into `predictions` with `newdata`.
 
 Now, of course this is only our "best guess", like a single-number
 prediction in regression. There is uncertainty attached to it (because
@@ -294,8 +291,7 @@ I'm riding the bus as I type this, so I can't look it up right now.
 Later: there's a function called `dose.p` 
 in `MASS` that appears to do this:
 
-```{r }
-library(MASS)
+```{r aphids-11 }
 lethal <- dose.p(bugs.1)
 lethal
 ```
@@ -307,7 +303,7 @@ and we have a standard error, so we can make a confidence interval by
 going up and down twice it (or 1.96 times it) from the estimate. The
 structure of the result is a bit arcane, though:
 
-```{r }
+```{r aphids-12 }
 str(lethal)
 ```
 
@@ -315,7 +311,7 @@ str(lethal)
 
 It is what R calls a "vector with attributes". To get at the pieces and calculate the interval, we have to do something like this:
 
-```{r }
+```{r aphids-13 }
 (lethal_est <- as.numeric(lethal))
 (lethal_SE <- as.vector(attr(lethal, "SE")))
 ```
@@ -324,7 +320,7 @@ It is what R calls a "vector with attributes". To get at the pieces and calculat
 
 and then make the interval:
 
-```{r }
+```{r aphids-14 }
 lethal_est + c(-2, 2) * lethal_SE
 ```
 
@@ -338,7 +334,7 @@ think I got a little further than he did. An idea that works more
 generally is to get several intervals all at once, say for the
 "quartile lethal doses" as well:
 
-```{r }
+```{r aphids-15 }
 lethal <- dose.p(bugs.1, p = c(0.25, 0.5, 0.75))
 lethal
 ```
@@ -349,7 +345,7 @@ This looks like a data frame or matrix, but is actually a
 "named vector", so `enframe` will get at least some of this and turn
 it into a genuine data frame:
 
-```{r }
+```{r aphids-16 }
 enframe(lethal)
 ```
 
@@ -357,7 +353,7 @@ enframe(lethal)
 
 That doesn't get the SEs, so we'll make a new column by grabbing the "attribute" as above:
 
-```{r }
+```{r aphids-17 }
 enframe(lethal) %>% mutate(SE = attr(lethal, "SE"))
 ```
 
@@ -365,7 +361,7 @@ enframe(lethal) %>% mutate(SE = attr(lethal, "SE"))
 
 and now we make the intervals by making new columns containing the lower and upper limits:
 
-```{r }
+```{r aphids-18 }
 enframe(lethal) %>%
   mutate(SE = attr(lethal, "SE")) %>%
   mutate(LCL = value - 2 * SE, UCL = value + 2 * SE)

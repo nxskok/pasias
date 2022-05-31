@@ -15,7 +15,7 @@ the data that you read in.
 Solution
 
 
-```{r }
+```{r wisconsin2-1 }
 my_url <- "http://ritsokiguess.site/datafiles/wisconsin.txt"
 wisc <- read_table(my_url)
 wisc
@@ -39,7 +39,7 @@ Solution
 
 There seems to be a bit of base R attached to this, however you do it. I am going to create a dataframe pretending they are all in Wisconsin, and then fix it up afterwards:
 
-```{r}
+```{r wisconsin2-2}
 wisc %>% 
   select(!where(is.numeric)) %>% 
   mutate(state = "WI") -> wisc
@@ -50,7 +50,7 @@ wisc
 
 Now we have to fix up the states of the last three places, which is where the base R seems to come in (but see the Extra):
 
-```{r}
+```{r wisconsin2-3}
 wisc$state[10] <- "IA"
 wisc$state[11] <- "MN"
 wisc$state[12] <- "IL"
@@ -61,7 +61,7 @@ The states of the last three locations are now correct.
 
 Extra: I didn't know about the following until literally just now, but there is a `tidyverse` way to do this as well (that may look familiar to those of you that know about SQL). Let's start by pretending again that everything is in Wisconsin:
 
-```{r}
+```{r wisconsin2-4}
 wisc %>% 
   mutate(state = "WI") -> wisc2
 wisc2
@@ -69,7 +69,7 @@ wisc2
 
 and then change the ones that need changing. What you do is to make a little dataframe of the ones that need changing:
 
-```{r}
+```{r wisconsin2-5}
 changes <- tribble(
   ~location, ~state,
   "Dubuque", "IA",
@@ -84,14 +84,14 @@ Note that the columns in here have *exactly* the same names as the ones in the o
 
 I did this by copy-pasting the city names whose states needed changing out of the display of my `wisc2`. You might think that a left join is what we need now, and it almost is. Note that I want to match the locations but *not* the states:
 
-```{r}
+```{r wisconsin2-6}
 wisc2 %>% left_join(changes, by = "location")
 ```
 
 and the story here is that if `state.y` has a value, use that, otherwise use  the value in `state.x`. This can even be done: there is a function `coalesce`^[I knew this existed, but I couldn't remember what it was called, which made it hard to search for. My first port of call was `na_if`, which converts values to `NA`, the opposite of what I wanted. But from its See Also I got `na_replace`, and from the See Also of that, I found out what `coalesce` does.]  that will do exactly that:
 
 
-```{r}
+```{r wisconsin2-7}
 wisc2 %>% left_join(changes, by = "location") %>% 
   mutate(state=coalesce(state.y, state.x))
 ```
@@ -100,19 +100,19 @@ The idea behind `coalesce` is that you give it a list of columns, and the first 
 
 But, there is a better way. Let's go back to our all-Wisconsin dataframe:
 
-```{r}
+```{r wisconsin2-8}
 wisc2
 ```
 
 and our dataframe of corrections to make:
 
-```{r}
+```{r wisconsin2-9}
 changes
 ```
 
 We can make those changes in one step, thus:
 
-```{r}
+```{r wisconsin2-10}
 wisc2 %>% 
   rows_update(changes) -> wisc
 wisc
@@ -132,21 +132,21 @@ Solution
 
 A couple of ways: a literal gluing, using `paste`:
 
-```{r}
+```{r wisconsin2-11}
 wisc %>% 
   mutate(lookup = paste(location, state))
 ```
 
 or the same idea using `str_c` from `stringr` (part of the tidyverse), only this time you have to supply the space yourself:
 
-```{r}
+```{r wisconsin2-12}
 wisc %>% 
   mutate(lookup = str_c(location, " ", state))
 ```
 
 or a way you might have forgotten, using `unite` (which is the inverse of `separate`):
 
-```{r}
+```{r wisconsin2-13}
 wisc %>% 
   unite(lookup, c(location, state), sep = " ") -> wisc
 wisc
@@ -162,7 +162,7 @@ Solution
 
 This is geocoding, with the disentangling afterwards that is (I hope) becoming familiar:
 
-```{r}
+```{r wisconsin2-14}
 wisc %>% 
   rowwise() %>% 
   mutate(ll = list(geocode_OSM(lookup))) %>% 
@@ -182,7 +182,7 @@ Solution
 
 The usual:
 
-```{r}
+```{r wisconsin2-15}
 leaflet(data = wisc) %>% 
   addTiles() %>% 
   addCircleMarkers(lng = ~x, lat = ~y) -> locs
@@ -193,7 +193,7 @@ The nice thing about this map is that you can play with it: zoom it (using the p
 
 I like identifying the cities with circles, but there are other possibilities, such as "icon markers" that look like Google map pins:
 
-```{r}
+```{r wisconsin2-16}
 leaflet(data = wisc) %>% 
   addTiles() %>% 
   addMarkers(lng = ~x, lat = ~y) -> locs

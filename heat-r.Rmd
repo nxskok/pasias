@@ -34,7 +34,7 @@ Solution
 
 
 A `.csv`, so:
-```{r }
+```{r heat-r-1 }
 my_url <- "http://ritsokiguess.site/datafiles/heat.csv"
 heat <- read_csv(my_url)
 heat
@@ -70,7 +70,7 @@ Solution
 
 
 `count`, most easily:
-```{r }
+```{r heat-r-2 }
 heat %>% count(code)
 ```
 
@@ -78,7 +78,7 @@ heat %>% count(code)
 
 Alternatively, `group_by` and `summarize`:
 
-```{r }
+```{r heat-r-3 }
 heat %>% group_by(code) %>% summarize(count = n())
 ```
 
@@ -192,7 +192,7 @@ alert day and the next one. `dplyr` has a
 function `diff` that works out exactly this. Building
 a pipeline, just because:
 
-```{r }
+```{r heat-r-4 }
 heat %>%
   select(-text) %>%
   mutate(daycount = as.numeric(date)) %>%
@@ -236,7 +236,7 @@ first day, the one at the end of the file.)
 
 Thus my pipeline continues like this:
 
-```{r }
+```{r heat-r-5 }
 heat %>%
   select(-text) %>%
   mutate(daycount = as.numeric(date)) %>%
@@ -260,7 +260,7 @@ data frame; here it is something that is either `TRUE` or
 One step further: what *is* the connection between the codes and
 the start of heat alert events? We can figure that out now:
 
-```{r }
+```{r heat-r-6 }
 heat %>%
   select(-text) %>%
   mutate(daycount = as.numeric(date)) %>%
@@ -303,7 +303,7 @@ Solution
 
 
 This will need `lubridate`:
-```{r }
+```{r heat-r-7 }
 library(lubridate)
 heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 ```
@@ -312,7 +312,7 @@ heat %>% select(-text) %>% mutate(year = year(date)) %>% sample_n(10)
 That seems to have worked. I listed a random sample of rows to
 get back to previous years.
 Having convinced myself that it worked, let me save it:
-```{r }
+```{r heat-r-8 }
 heat %>% select(-text) %>% mutate(year = year(date)) -> heat
 ```
 
@@ -331,7 +331,7 @@ Solution
 
 
 Count them again:
-```{r }
+```{r heat-r-9 }
 heat %>% count(year)
 ```
 
@@ -351,7 +351,7 @@ not obviously nonsense will do.
 I was thinking about making a graph of these frequencies against year,
 and sticking some kind of smooth trend on it. This uses the output we just got, which is itself a data frame:
 
-```{r }
+```{r heat-r-10 }
 heat %>%
   count(year) %>%
   ggplot(aes(x = year, y = n)) + geom_point() + geom_smooth(se = F)
@@ -400,7 +400,7 @@ the hypothesized median, not how far above or below they are.
 
 This can be calculated, and even tested:
 
-```{r }
+```{r heat-r-11 }
 heat %>%
   count(year) %>%
   with(., cor.test(year, n, method = "kendall"))
@@ -438,7 +438,7 @@ Read on.
 
 I did this in R, using a package called `jsonlite`, with this code:
 
-```{r eval=F}
+```{r heat-r-12, eval=F}
 library(jsonlite)
 url <- "http://app.toronto.ca/opendata/heat_alerts/heat_alerts_list.json"
 heat <- fromJSON(url, simplifyDataFrame = T)

@@ -2,7 +2,7 @@
 
 When I went to university (in Birmingham, England, a long time ago), I was very excited because I would be travelling to campus by train. My journey was on the Cross-City Line, a metro-type service with lots of stops short distances apart, but run in those days by diesel trains (the electrification came later). 
 
-```{r echo=FALSE}
+```{r cross-city-1, echo=FALSE}
 my_url <- "http://ritsokiguess.site/datafiles/cross-city.csv"
 ```
 
@@ -15,7 +15,7 @@ Solution
 
 Nothing terribly unexpected here:
 
-```{r}
+```{r cross-city-2}
 stations <- read_csv(my_url)
 stations
 ```
@@ -28,7 +28,7 @@ Solution
 
 I wrote this back into the original dataframe. Create a new one if you prefer:
 
-```{r}
+```{r cross-city-3}
 stations %>% 
   mutate(longname = str_c(station, " station UK")) -> stations
 stations
@@ -44,7 +44,7 @@ Two steps: the first is to do the geocoding, and the second is to disentangle wh
 
 First, then:
 
-```{r}
+```{r cross-city-4}
 stations %>% 
   rowwise() %>% 
   mutate(ll = list(geocode_OSM(longname))) -> stations
@@ -53,7 +53,7 @@ stations
 
 The longitudes and latitudes are hidden in the list-column that I called `ll`, so the second step is to get them out:
 
-```{r}
+```{r cross-city-5}
 stations %>% unnest_wider(ll) %>% 
   unnest_wider(coords) -> stations
 stations
@@ -72,7 +72,7 @@ Solution
 
 I used the pin markers (with `addMarkers`), though `addCircleMarkers` is as good. The code for drawing the map is always the same; the work here is in setting up the geocoding:
 
-```{r}
+```{r cross-city-6}
 leaflet(data = stations) %>% 
   addTiles() %>% 
   addMarkers(lng = ~x, lat = ~y)
@@ -92,7 +92,7 @@ If you zoom in enough, you'll see where the railway line goes (a grey line). The
 
 Extra: `geocode_OSM` uses a free geocoder called Nominatim. This has some options. The defaults are to return only the first "hit", and to return just the coordinates and the "bounding box". These can be changed. Let's see what we can find for Aston:
 
-```{r}
+```{r cross-city-7}
 tibble(where = "Aston UK") %>% 
   mutate(info = list(geocode_OSM(where, return.first.only = FALSE,
                             details = TRUE))) -> d
@@ -100,14 +100,14 @@ d
 ```
 There are now 10 things returned. Let's unnest this and see what we have:
 
-```{r}
+```{r cross-city-8}
 d %>% unnest(info) %>% 
   unnest_wider(info)
 ```
 
 There are 10 locations it found matching "Aston UK", and for each of those there is the information you see, a total of 12 columns' worth in addition to the name of the place we are looking up. Perhaps the most interesting are the columns `class` and `type` near the end:
 
-```{r}
+```{r cross-city-9}
 d %>% unnest(info) %>% 
   unnest_wider(info) %>% 
   select(where, class, type)
@@ -118,7 +118,7 @@ Oh look, the second one is the station.
 
 This makes me think that with sufficient patience we could do this for all our places, and pick out the one that is the station:
 
-```{r}
+```{r cross-city-10}
 stations <- read_csv(my_url)
 stations %>% 
   mutate(longname = str_c(station, " UK")) %>% 
@@ -129,7 +129,7 @@ stations %>%
 ```
 
 
-```{r}
+```{r cross-city-11}
 stations %>% unnest(ll) %>% 
   unnest_wider(ll) %>% 
   select(station, coords, class, type) %>% 
@@ -140,7 +140,7 @@ d
 
 Almost. We're missing University and Lichfield City stations, but it looks as if we got the rest:
 
-```{r}
+```{r cross-city-12}
 leaflet(data = d) %>% 
   addTiles() %>% 
   addMarkers(lng = ~x, lat = ~y)

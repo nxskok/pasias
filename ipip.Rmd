@@ -134,7 +134,7 @@ do with it. You could say that the `PERS` columns are all
 survey-responses, just to different questions, and you might think of
 doing something like this:
 
-```{r }
+```{r ipip-1 }
 pers %>% pivot_longer(-id, names_to="item", values_to="response")
 ```
 
@@ -145,7 +145,7 @@ what you are doing with it. Long-and-skinny is ideal if you are going
 to summarize the responses by survey item, or draw something like bar
 charts of responses facetted by item:
 
-```{r }
+```{r derhuter}
 pers %>%
   pivot_longer(-id, names_to="item", values_to="response") %>%
   ggplot(aes(x = response)) + geom_bar() + facet_wrap(~item)
@@ -173,7 +173,7 @@ Solution
 This is actually much easier than it was in the past.
 A way of asking "are there any missing values anywhere?" is:
 
-```{r }
+```{r ipip-2 }
 any(is.na(pers))
 ```
 
@@ -181,7 +181,7 @@ any(is.na(pers))
 
 There are.
 To remove them, just this:
-```{r }
+```{r ipip-3 }
 pers %>% drop_na() -> pers.ok
 ```
 
@@ -189,7 +189,7 @@ pers %>% drop_na() -> pers.ok
 
 Are there any missings left?
 
-```{r }
+```{r ipip-4 }
 any(is.na(pers.ok))
 ```
 
@@ -205,7 +205,7 @@ knew ahead of time*.
 
 That gives me an idea, though. 
 
-```{r }
+```{r ipip-5 }
 pers %>%
   pivot_longer(-id, names_to="item", values_to="rating")
 ```
@@ -221,7 +221,7 @@ return `NA` if the thing whose mean you are finding has any NA
 values in it anywhere, and a number if it's "complete", so this kind
 of thing, adding to my pipeline:
 
-```{r }
+```{r ipip-6 }
 pers %>%
   pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
@@ -239,7 +239,7 @@ missing.
 So now we define a column `has_missing` that is true if the
 subject has any missing values and false otherwise:
 
-```{r }
+```{r ipip-7 }
 pers %>%
   pivot_longer(-id, names_to="item", values_to="rating") %>% 
   group_by(id) %>%
@@ -254,7 +254,7 @@ This data frame `pers.hm` has the same number of rows as the
 original data frame `pers`, one per subject, so we can just
 glue it onto the end of that:
 
-```{r }
+```{r ipip-8 }
 pers %>% bind_cols(pers.hm)
 ```
 
@@ -302,7 +302,7 @@ When I drew this in R Studio, the elbow at 6 was clearer than
 the one at 7, so I went with 5 components/factors below.
 The other way to go is to take the number of eigenvalues bigger
 than 1: 
-```{r size="small"}
+```{r ipip-9, size="small"}
 summary(pers.1)
 ```
 
@@ -325,7 +325,7 @@ Solution
 I'm going to do the 5 factors that I preferred the first time I
 looked at this. Don't forget to grab only the appropriate
 columns from `pers.ok`:
-```{r }
+```{r ipip-10 }
 pers.ok.1 <- pers.ok %>%
   select(starts_with("PERS")) %>%
   factanal(5, scores = "r")
@@ -343,7 +343,7 @@ does your chosen number of factors explain?
 Solution
 
 
-```{r size="footnotesize"}
+```{r ipip-11, size="footnotesize"}
 pers.ok.1$loadings
 ```
 
@@ -415,7 +415,7 @@ above last year without thinking about "big 5" at all.)
 
 I wonder whether 6 factors is different?
 
-```{r size="footnotesize"}
+```{r ipip-12, size="footnotesize"}
 pers.ok.2 <- pers.ok %>%
   select(starts_with("PERS")) %>%
   factanal(6, scores = "r")
@@ -451,7 +451,7 @@ lot of columns, but we'll only need to display some each time.
 This is based on my 5-factor solution. I'm adding a column
 `id` so that I know which of the individuals (with no
 missing data) we are looking at:
-```{r }
+```{r ipip-13 }
 scores.1 <- as_tibble(pers.ok.1$scores) %>%
   bind_cols(pers.ok) %>%
   mutate(id = row_number())
@@ -470,7 +470,7 @@ final result into `as_tibble` to end up with a
 Let's start with factor 1. There are several ways to find the person
 who scores highest and/or lowest on that factor:
 
-```{r }
+```{r ipip-14 }
 scores.1 %>% filter(Factor1 == max(Factor1))
 ```
 
@@ -478,7 +478,7 @@ scores.1 %>% filter(Factor1 == max(Factor1))
 
 to display the maximum, or
 
-```{r }
+```{r ipip-15 }
 scores.1 %>% arrange(Factor1) %>% slice(1:5)
 ```
 
@@ -486,7 +486,7 @@ scores.1 %>% arrange(Factor1) %>% slice(1:5)
 
 to display the minimum (and in this case the five smallest ones), or
 
-```{r }
+```{r ipip-16 }
 scores.1 %>% filter(abs(Factor1) == max(abs(Factor1)))
 ```
 
@@ -497,7 +497,7 @@ code is a bit obfuscated because I have to take absolute values
 twice. Maybe it would be clearer to create a column with the absolute
 values in it and look at that:
 
-```{r }
+```{r ipip-17 }
 scores.1 %>%
   mutate(abso = abs(Factor1)) %>%
   filter(abso == max(abso))
@@ -508,7 +508,7 @@ scores.1 %>%
 Does
 this work too?
 
-```{r }
+```{r ipip-18 }
 scores.1 %>% arrange(desc(abs(Factor1))) %>% slice(1:5)
 ```
 
@@ -530,7 +530,7 @@ though, remember that we don't need to look at *all* the
 factor. These are the ones I defined into `f1` first; the first
 ones have positive loadings and the last three have negative loadings:
 
-```{r }
+```{r ipip-19 }
 f1 <- c(3, 13, 28, 33, 38, 8, 18, 23, 43)
 scores.1 %>%
   mutate(abso = abs(Factor1)) %>%
@@ -563,7 +563,7 @@ this. The high loaders on factor 2 are the ones shown in `f2`
 below, with the first five loading positively and the last three
 negatively.^[I think the last four items in the entire survey  are different; otherwise the total number of items would be a  multiple of 5.]
 
-```{r }
+```{r ipip-20 }
 f2 <- c(1, 11, 16, 26, 36, 6, 21, 31)
 scores.1 %>%
   mutate(abso = abs(Factor2)) %>%
@@ -586,7 +586,7 @@ Finally, factor 3, which loads highly on  items 4, 9 (neg), 14, 19, 24
 this factor, is actually in factor 5.) First we see which individual
 this is:
 
-```{r }
+```{r ipip-21 }
 f3 <- c(4, 14, 19, 29, 39, 9, 24, 34)
 scores.1 %>%
   mutate(abso = abs(Factor3)) %>%
@@ -612,7 +612,7 @@ Solution
 
 
 Mine are
-```{r }
+```{r ipip-22 }
 pers.ok.1$uniquenesses
 ```
 

@@ -21,7 +21,7 @@ Solution
 This is a `.csv` file (it came from a spreadsheet), so it
 needs reading in accordingly. Work directly from the URL (rather
 than downloading the file, unless you are working offline):
-```{r }
+```{r ncbirths-inf-1 }
 myurl <- "http://ritsokiguess.site/datafiles/ncbirths.csv"
 bw <- read_csv(myurl)
 ```
@@ -46,7 +46,7 @@ Solution
 
 This:
 
-```{r }
+```{r ncbirths-inf-2 }
 t.test(bw$`Weight (pounds)`)
 ```
 
@@ -54,7 +54,7 @@ t.test(bw$`Weight (pounds)`)
 
 or (the same, but remember to match your brackets):
 
-```{r }
+```{r ncbirths-inf-3 }
 with(bw, t.test(`Weight (pounds)`))
 ```
 
@@ -102,7 +102,7 @@ Note that I defined $\mu$ first before I used it.
 This is a one-sided
 alternative, which we need to feed into `t.test`:
 
-```{r }
+```{r ncbirths-inf-4 }
 t.test(bw$`Weight (pounds)`, mu = 7.3, alternative = "less")
 ```
 $ %$ 
@@ -140,7 +140,7 @@ Solution
 We did this before (and discussed the number of bins before), so
 I'll just reproduce my 10-bin histogram (which is what I preferred,
 but this is a matter of taste):
-```{r }
+```{r ncbirths-inf-5 }
 ggplot(bw, aes(x = `Weight (pounds)`)) + geom_histogram(bins = 10)
 ```
 
@@ -162,7 +162,7 @@ A normal quantile plot is better for assessing normality
 than a histogram is, but I won't make you do one until we have seen
 the idea in class. Here's the normal quantile plot for these data:
 
-```{r }
+```{r ncbirths-inf-6 }
 ggplot(bw, aes(sample = `Weight (pounds)`)) + stat_qq() + stat_qq_line()
 ```
 

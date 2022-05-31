@@ -19,7 +19,7 @@ Solution
 
 
 Read directly from the URL, most easily:
-```{r }
+```{r soap2-1 }
 url <- "http://ritsokiguess.site/datafiles/soap.txt"
 soap <- read_delim(url, " ")
 soap
@@ -40,7 +40,7 @@ Solution
 
 
 
-```{r }
+```{r soap2-2 }
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10)
 ```
 
@@ -64,7 +64,7 @@ call it anything other than symmetric.
 Having said that (this is going beyond the question), the way a
 histogram looks can depend on the bins you choose to draw it
 with. This is 8 bins rather than 10:
-```{r }
+```{r soap2-3 }
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 8)
 ```
 
@@ -83,7 +83,7 @@ Solution
 
 
 
-```{r }
+```{r soap2-4 }
 ggplot(soap, aes(x = line, y = scrap)) + geom_boxplot()
 ```
 
@@ -119,7 +119,7 @@ Extra: you might be wondering whether the medians, or means, since
 there is no serious skewness here and definitely no outliers,
 are "significantly different". This is inference, which we
 will come to later, but a preview looks like this:
-```{r }
+```{r soap2-5 }
 t.test(scrap ~ line, data = soap)
 ```
 
@@ -139,7 +139,7 @@ that is to have two separate histograms, one for each line, side by
 side, which is what facetting does. There is an extra wrinkle here
 that I explain afterwards:
 
-```{r }
+```{r soap2-6 }
 ggplot(soap, aes(x = scrap)) + geom_histogram(bins = 10) + facet_grid(line ~ .)
 ```
 
@@ -184,7 +184,7 @@ Solution
 
 
 Same mechanism as before:
-```{r }
+```{r soap2-7 }
 ggplot(soap, aes(x = speed, y = scrap)) + geom_point()
 ```
 
@@ -220,7 +220,7 @@ line. `ggplot` makes that easy: you add a
 `colour`^[If you are concerned about the spelling: the guy who wrote ggplot is from New Zealand, where they spell *colour* the same way we do. However, if you want to use *color*, that works too.] to say what you want to
 distinguish by colour. This is two quantitative variables and one
 categorical variable, if you want to think of it that way:
-```{r }
+```{r soap2-8 }
 ggplot(soap, aes(x = speed, y = scrap, colour = line)) + geom_point()
 ```
 
@@ -237,7 +237,7 @@ I want to show you one more embellishment, which is to put the
 regression lines on the plot for each group separately. This is where
 `ggplot` is so nice, since I just have to add one thing:
 
-```{r }
+```{r soap2-9 }
 ggplot(soap, aes(x = speed, y = scrap, colour = line)) +
   geom_point() + geom_smooth(method = "lm", se = F)
 ```
@@ -264,7 +264,7 @@ but you will also have more bars of soap to sell.
 Here's another way to see the same thing. I'm *definitely* not
 expecting you to follow the code, but you can admire the result!
 
-```{r }
+```{r soap2-10 }
 soap2 <- soap %>% select(-line)
 ggplot(soap, aes(x = speed, y = scrap)) +
   geom_point(data = soap2, colour = "grey") +
@@ -307,7 +307,7 @@ but I would like you to try and get the logic. What we do is a
 regression predicting `scrap` from *two* things:
 `speed` and production `line`. The results we get are these:
 
-```{r }
+```{r soap2-11 }
 scrap.1 <- lm(scrap ~ speed + line, data = soap)
 summary(scrap.1)
 ```

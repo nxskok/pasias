@@ -24,7 +24,7 @@ Solution
 
 
 This kind of thing:
-```{r }
+```{r baseball-softball-r-1 }
 myurl="http://ritsokiguess.site/datafiles/throw.txt"
 throws=read_delim(myurl," ",col_names=c("student","baseball","softball"))
 throws
@@ -49,7 +49,7 @@ right-arrow assignment to create what I called
 `throws2` below, or put something like
 `throws2 <-` on the beginning of the line. Your choice.
 
-```{r }
+```{r baseball-softball-r-2 }
 throws %>% mutate(diff=baseball-softball) ->
   throws2
 ``` 
@@ -70,7 +70,7 @@ I think using `smmr` is way easier, so I'll do that
 first. There is even a shortcut in that the null median defaults to
 zero, which is exactly what we want here:
 
-```{r }
+```{r baseball-softball-r-3 }
 library(smmr)
 sign_test(throws2,diff)
 ``` 
@@ -81,19 +81,19 @@ than a softball. Thus the P-value we want is 0.000033.
 
 To build it yourself, you know the steps by now.
 First step is to count how many differences are greater and less than zero:
-```{r }
+```{r baseball-softball-r-4 }
 table(throws2$diff>0)
 ``` 
 
 or
 
-```{r }
+```{r baseball-softball-r-5 }
 table(throws2$diff<0)
 ``` 
 
 or, since we have things in a data frame,
 
-```{r }
+```{r baseball-softball-r-6 }
 throws2 %>% count(diff>0)
 ``` 
 
@@ -116,7 +116,7 @@ differences out of 24 (or 23) or more, since this is the end of the
 distribution we should be at if the alternative hypothesis is correct.
 Thus any of these will get you a defensible P-value:
 
-```{r }
+```{r baseball-softball-r-7 }
 sum(dbinom(21:23,23,0.5))
 sum(dbinom(22:24,24,0.5))
 sum(dbinom(21:24,24,0.5))

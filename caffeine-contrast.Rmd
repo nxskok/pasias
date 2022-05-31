@@ -35,7 +35,7 @@ display it. This is the untidy format, so name it appropriately:
 Solution
 
 
-```{r }
+```{r caffeine-contrast-1 }
 my_url <- "http://individual.utoronto.ca/kbutler/stad29/caffeine.csv"
 caffeine.untidy <- read_csv(my_url)
 caffeine.untidy
@@ -59,7 +59,7 @@ Solution
 
 We'll save into `caffeine` again:
 
-```{r }
+```{r caffeine-contrast-2 }
 caffeine.untidy %>%
   pivot_longer(-Sub, names_to="amount", values_to="score", 
                names_ptypes = list(amount=factor())) -> caffeine
@@ -86,7 +86,7 @@ Solution
 
 Extra: I'm going to run the ANOVA the "old way" first, so that we can
 compare results. You don't need to do this:
-```{r }
+```{r caffeine-contrast-3 }
 caffeine.old <- aov(score ~ amount, data = caffeine)
 summary(caffeine.old)
 TukeyHSD(caffeine.old)
@@ -99,7 +99,7 @@ End of digression.
 
 Now we'll do it using `lm`, with contrasts later, and see how
 things change:
-```{r }
+```{r caffeine-contrast-4 }
 caffeine.2 <- lm(score ~ amount, data = caffeine)
 summary(caffeine.2)
 ```
@@ -118,7 +118,7 @@ significant. But it is not what I said we wanted to test.
 Extra: in case you're curious, you can also get the regular analysis of
 variance table as below. `anova` is multi-talented:
 
-```{r }
+```{r caffeine-contrast-5 }
 anova(caffeine.2)
 ```
 
@@ -131,7 +131,7 @@ Since we have a regression model (albeit a peculiar one), we can test
 whether we should remove `amount` (that is, whether it has any
 impact on test scores) this way too:
 
-```{r }
+```{r caffeine-contrast-6 }
 drop1(caffeine.2, test = "F")
 ```
 
@@ -151,7 +151,7 @@ Solution
 
 Count them, or find the distinct ones:
 
-```{r }
+```{r caffeine-contrast-7 }
 caffeine %>% group_by(amount) %>% summarize(count = n())
 ```
 
@@ -159,7 +159,7 @@ caffeine %>% group_by(amount) %>% summarize(count = n())
 
 or there is this shortcut to the above:
 
-```{r }
+```{r caffeine-contrast-8 }
 caffeine %>% count(amount)
 ```
 
@@ -167,7 +167,7 @@ caffeine %>% count(amount)
 
 Or
 
-```{r }
+```{r caffeine-contrast-9 }
 caffeine %>% distinct(amount)
 ```
 
@@ -179,7 +179,7 @@ These would all have worked if `amount` had been text rather a
 factor. If you have a genuine `factor`, you can also ask for
 its `levels`:
 
-```{r }
+```{r caffeine-contrast-10 }
 with(caffeine, levels(amount))
 ```
 
@@ -187,7 +187,7 @@ with(caffeine, levels(amount))
 
 or `summary` will count them up and list them:
 
-```{r }
+```{r caffeine-contrast-11 }
 caffeine %>% select(amount) %>% summary()
 ```
 
@@ -213,7 +213,7 @@ Solution
 
 
 Put a 0 in for None:
-```{r }
+```{r caffeine-contrast-12 }
 c.hm <- c(1, -1, 0)
 ```
 
@@ -231,7 +231,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r caffeine-contrast-13 }
 c.any <- c(-0.5, -0.5, 1)
 ```
 
@@ -239,7 +239,7 @@ c.any <- c(-0.5, -0.5, 1)
 Note that both our contrasts have coefficients that add up to zero, as
 they must:
 
-```{r }
+```{r caffeine-contrast-14 }
 sum(c.hm)
 sum(c.any)
 ```
@@ -256,7 +256,7 @@ Solution
 
 
 Multiply them together and check that what you get adds up to zero:
-```{r }
+```{r caffeine-contrast-15 }
 sum(c.hm * c.any)
 ```
 
@@ -278,7 +278,7 @@ called it).
 Solution
 
 
-```{r }
+```{r caffeine-contrast-16 }
 m <- cbind(c.hm, c.any)
 contrasts(caffeine$amount) <- m
 ```
@@ -295,7 +295,7 @@ $\blacksquare$
 Solution
 
 
-```{r }
+```{r caffeine-contrast-17 }
 caff.3 <- lm(score ~ amount, data = caffeine)
 summary(caff.3)
 ```
@@ -325,7 +325,7 @@ caffeine and moderate vs.\ none as your two contrasts?
 Solution
 
 
-```{r }
+```{r caffeine-contrast-18 }
 c.hm <- c(1, -1, 0)
 c.mn <- c(0, 1, -1)
 ```
@@ -335,7 +335,7 @@ c.mn <- c(0, 1, -1)
 So far so good: the coefficients add up to zero and they reflect the
 right comparisons. But now:
 
-```{r }
+```{r caffeine-contrast-19 }
 sum(c.hm * c.mn)
 ```
 
@@ -357,7 +357,7 @@ First we need a vector that is all 1's, which I have called
 `c.mn` have 3 things in them (3 groups), we need to add a
 "dummy" 3rd contrast to give us a $3\times 3$ array of numbers:^[Which we are going to invert, as a matrix. But I get ahead of myself.]
 
-```{r }
+```{r caffeine-contrast-20 }
 c0 <- rep(1, 3)
 m <- cbind(c0, c.hm, c.mn)
 m
@@ -372,7 +372,7 @@ which we can do because it's square. `t(m)` means
 "take the matrix transpose of `m`", if you're trying to keep up at the
 back, and `solve` finds a matrix inverse:
 
-```{r }
+```{r caffeine-contrast-21 }
 minv <- solve(t(m))
 ```
 
@@ -381,7 +381,7 @@ minv <- solve(t(m))
 and then we remove the first column, which represents the contrast
 that we didn't want anyway (what Howell calls "deaugmenting"):^[We are working with R matrices here rather than data frames, so we access elements, rows and columns using the square bracket notation: inside the square brackets, we put first the numbers of the rows we want, then a comma, then the numbers of the columns. There are two special pieces of notation, both of which I use here: leaving the row or column slot blank means all the rows or all the columns, and using a negative row or column number means all the rows or columns except the one(s) named. Thus my notation here is all the rows, and all the columns except for the first one. You can access data frames this way too, but the Tidyverse makes it much easier.]
 
-```{r }
+```{r caffeine-contrast-22 }
 m.contr <- minv[, -1]
 m.contr
 contrasts(caffeine$amount) <- m.contr
@@ -398,7 +398,7 @@ trusted.] they can be
 used to test what we want. 
 Now fit the model again:
 
-```{r }
+```{r caffeine-contrast-23 }
 caff.4 <- lm(score ~ amount, data = caffeine)
 summary(caff.4)
 ```

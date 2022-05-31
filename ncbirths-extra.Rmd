@@ -15,7 +15,7 @@ suitable graph or otherwise.
 
 Solution
 
-```{r, echo=F}
+```{r ncbirths-extra-1, echo=F}
 myurl <- "http://ritsokiguess.site/datafiles/ncbirths.csv"
 bw <- read_csv(myurl)
 ```
@@ -28,14 +28,14 @@ on ``Premie?``. Some possibilities are boxplots or a
 scatterplot. Either of the first two graphs would get full credit (for
 the graphing part: you still have to do the explanation) if this
 were being marked:
-```{r }
+```{r ncbirths-extra-2 }
 ggplot(bw,aes(x=factor(`Premie?`),y=`Weeks Gestation`))+geom_boxplot()
 ```   
 
 The warning is because the prematurity of one of the babies is not known.
 Or
 
-```{r }
+```{r ncbirths-extra-3 }
 ggplot(bw,aes(x=`Premie?`,y=`Weeks Gestation`))+geom_point()
 ``` 
 
@@ -61,7 +61,7 @@ completely clear cut.
 
 Another way to attack this is to use `summarize`, finding the
 max and min:
-```{r }
+```{r ncbirths-extra-4 }
 bw %>% summarize( n=n(),
 min=min(`Weeks Gestation`),
 max=max(`Weeks Gestation`))
@@ -70,7 +70,7 @@ max=max(`Weeks Gestation`))
 only this is for *all* the babies, premature or not.^[I  explain the missing values below.] So we want it by prematurity,
 which means a `group_by` first:
 
-```{r }
+```{r ncbirths-extra-5 }
 bw %>% group_by(`Premie?`) %>%
 summarize( n=n(),
 min=min(`Weeks Gestation`),
@@ -98,7 +98,7 @@ missing.^[If there had been a weeks of gestation, we could have figured out whet
 Here's that baby. I'm doing a bit of fiddling to show all the columns
 (as rows, since there's only one actual row). Don't worry about the
 second line of code below; we will investigate that later.
-```{r }
+```{r ncbirths-extra-6 }
 bw %>% 
   filter(is.na(`Premie?`)) %>% 
   pivot_longer(everything(), names_to="name", values_to="value")
@@ -123,7 +123,7 @@ Solution
 This needs
 to be a scatterplot because these are both quantitative variables:
 
-```{r }
+```{r ncbirths-extra-7 }
 ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`))+geom_point()
 ``` 
 
@@ -135,14 +135,14 @@ in babies of more or less normal birth weight.
 I want to illustrate something else: how about *colouring* the
 births that were premature? Piece of cake with `ggplot`:
 
-```{r }
+```{r ncbirths-extra-8 }
 ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`,
 colour=`Premie?`))+geom_point()
 ``` 
 
 That was rather silly because `ggplot` treated prematureness as a *continuous* variable, and plotted the values on a dark blue-light blue scale. This is the same issue as on the boxplot above, and has the same solution:
 
-```{r }
+```{r ncbirths-extra-9 }
 ggplot(bw,aes(x=`Weeks Gestation`,y=`Weight (pounds)`,
 colour=factor(`Premie?`)))+geom_point()
 ``` 

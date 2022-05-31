@@ -17,7 +17,7 @@ Solution
 
 Separated by tabs means `read_tsv`:
 
-```{r}
+```{r french-1}
 my_url <- "http://ritsokiguess.site/datafiles/frenchtest.txt"
 french <- read_tsv(my_url)
 french
@@ -49,13 +49,13 @@ Seeing whether the scores have improved implies a *one*-sided test that `post` i
 
 (i):
 
-```{r}
+```{r french-2}
 with(french, t.test(pre, post, paired = TRUE, alternative = "less"))
 ```
 
 (ii):
 
-```{r}
+```{r french-3}
 with(french, t.test(post, pre, paired = T, alternative = "greater"))
 ```
 
@@ -63,7 +63,7 @@ Your choice between these two might be influenced by whether you think `pre` com
 
 (iii) working out the differences and testing those (but look ahead in the question to see whether you need the differences for anything else: you do):
 
-```{r}
+```{r french-4}
 french %>% mutate(gain = post - pre) -> french1
 with(french1, t.test(gain, mu=0, alternative = "greater"))
 ```
@@ -72,7 +72,7 @@ This last is an ordinary one-sample test, which saves you having to learn anythi
 
 A fourth alternative is to calculate the differences as `pre`  minus `post`, and then switch the `alternative` around (since if going to the French institute helps, the differences this way will be mostly *negative*):
 
-```{r}
+```{r french-5}
 french %>% mutate(gain = pre - post) -> french2
 with(french2, t.test(gain, mu=0, alternative = "less"))
 ```
@@ -101,7 +101,7 @@ Solution
 A 95% (or other level) confidence interval for the mean difference. A one-sided test doesn't give that, so you need to do the test again without the `alternative` (to make it two-sided), via any of the methods above, such as:
 
 
-```{r}
+```{r french-6}
 with(french, t.test(post, pre, paired = T))
 ```
 
@@ -109,7 +109,7 @@ This says that, with 95% confidence, the mean test score afterwards is between a
 
 If you did it the first way:
 
-```{r}
+```{r french-7}
 with(french, t.test(pre, post, paired = T))
 ```
 
@@ -129,20 +129,20 @@ The key assumption here is that the *differences* are approximately normally dis
 
 First calculate *and save* the differences (since you will need them later for a sign test; otherwise you would have to find them again). If you found the differences to make your $t$-test, use the ones you saved there.
 
-```{r}
+```{r french-8}
 french %>% mutate(gain = post - pre) -> french1
 ```
 
 
 Assess that with a histogram (with suitable number of bins):
 
-```{r}
+```{r french-9}
 ggplot(french1, aes(x=gain)) + geom_histogram(bins=6)
 ```
 
 or, better, a normal quantile plot (since the normality is our immediate concern):
 
-```{r}
+```{r french-10}
 ggplot(french1, aes(sample=gain)) + stat_qq() + stat_qq_line()
 ```
 (note that the horizontal lines of points are because the test scores were whole numbers, therefore the differences between them are whole numbers also, and some of the teachers had the same difference in scores as others.)
@@ -171,12 +171,12 @@ Extra:
 
 We can assess the $t$-test by obtaining a bootstrap distribution of the sample mean, by sampling from the differences with replacement:
 
-```{r, include=F}
+```{r french-11, include=F}
 set.seed(457299)
 ```
 
 
-```{r}
+```{r french-12}
 tibble(sim = 1:1000) %>% 
   rowwise() %>% 
   mutate(my_sample = list(sample(french1$gain, replace = T))) %>% 
@@ -202,7 +202,7 @@ Solution
 
 This works with the differences, that you calculated for the plot, so use the data frame that you saved them in:
 
-```{r}
+```{r french-13}
 sign_test(french1, gain, 0)
 ci_median(french1, gain)
 ```

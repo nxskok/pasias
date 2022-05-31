@@ -19,7 +19,7 @@ Solution
 
 
 As in the hint:
-```{r }
+```{r athletes-manova-1 }
 my_url <- "http://ritsokiguess.site/datafiles/ais.txt"
 athletes <- read_tsv(my_url)
 athletes
@@ -59,7 +59,7 @@ Solution
 
 
 Use `cbind` to glue the two columns together:
-```{r }
+```{r athletes-manova-2 }
 response <- with(athletes, cbind(Ht, Wt))
 ```
 
@@ -69,7 +69,7 @@ Either way around, height or weight first, is good. Also good is the
 dollar sign, which you'll need to do twice (and thus the `with`
 way is more elegant):
 
-```{r }
+```{r athletes-manova-3 }
 response_a <- cbind(athletes$Ht, athletes$Wt)
 ```
 
@@ -88,7 +88,7 @@ The straightforward way is small-m `manova`. I don't know
 what I should be calling my fitted model object, so I'm making
 something up. Don't forget to use the right names for the
 variables, and to include an interaction:
-```{r }
+```{r athletes-manova-4 }
 htwt.1 <- manova(response ~ Sex * Sport, data = athletes)
 summary(htwt.1)
 ```
@@ -101,7 +101,7 @@ first with the same model formula as above, and then pass *that*
 into `Manova`. This way, you just display the final result,
 rather than passing it into `summary`:
 
-```{r error=T}
+```{r athletes-manova-5, error=T}
 htwt.2 <- lm(response ~ Sex * Sport, data = athletes)
 htwt.3 <- Manova(htwt.2)
 ```
@@ -126,7 +126,7 @@ The interaction should come out, since it is not
 significant. (This is what I meant by "briefly.")
 To do that, in each case, replace the `*` with a `+`, or use
 `update`. Most of those work:
-```{r }
+```{r athletes-manova-6 }
 htwt.4 <- manova(response ~ Sex + Sport, data = athletes)
 summary(htwt.4)
 ```
@@ -135,7 +135,7 @@ summary(htwt.4)
 
 or
 
-```{r error=T}
+```{r athletes-manova-7, error=T}
 htwt.5 <- update(htwt.1, . ~ . - Sex:Sport)
 ```
 
@@ -146,7 +146,7 @@ that happened to you, try it another way.
 
 or, with `Manova`, the same two ways:
 
-```{r }
+```{r athletes-manova-8 }
 htwt.6 <- lm(response ~ Sex + Sport, data = athletes)
 htwt.7 <- Manova(htwt.6)
 htwt.7
@@ -156,7 +156,7 @@ htwt.7
 
 or
 
-```{r }
+```{r athletes-manova-9 }
 htwt.8 <- update(htwt.2, . ~ . - Sex:Sport)
 htwt.9 <- Manova(htwt.8)
 htwt.9
@@ -174,7 +174,7 @@ Any of these is good, and gets you the same answer.
 Extra: it you run `summary` on the output from `Manova`,
 you get more detail:
 
-```{r }
+```{r athletes-manova-10 }
 summary(htwt.9)
 ```
 
@@ -231,7 +231,7 @@ pushing it, then plotting symbols. Symbol sizes are hard to
 distinguish a lot of, so it's best to limit this (if you use it at
 all) to gender.
 With that in mind, I would go for this one:
-```{r }
+```{r hatzer}
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, shape = Sex)) + geom_point()
 ```
 
@@ -243,19 +243,19 @@ using `size` to distinguish values of a categorical
 variable. It will try to draw the graph, but will give you a warning,
 such as these:
 
-```{r }
+```{r delkofer}
 ggplot(athletes, aes(x = Ht, y = Wt, colour = Sport, size = Sex)) + geom_point()
 ```
 
      
 
-```{r }
+```{r vonhoedorff}
 ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, size = Sex)) + geom_point()
 ```
 
      
 
-```{r }
+```{r schmit}
 ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point()
 ```
 
@@ -287,7 +287,7 @@ The warning message for `shape` contains the words ``specify
 shapes manually if you must have them''. I was wondering how you can
 avoid that. Here's how:
 
-```{r }
+```{r marklin}
 ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
   scale_shape_manual(values = 1:10)
 ```
@@ -304,7 +304,7 @@ different values will do. A list of the possible shapes is in
 at the bottom. You can even use regular letters, but you have to refer
 to them by numeric code:
 
-```{r }
+```{r stahillin}
 ggplot(athletes, aes(x = Ht, y = Wt, shape = Sport, colour = Sex)) + geom_point() +
   scale_shape_manual(values = c(66, 70, 71, 78, 82, 83, 52, 84, 3, 87))
 ```

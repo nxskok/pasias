@@ -1,6 +1,8 @@
 ## -------------------------------------------------------------------------------------------------
 library(tidyverse)
 
+do <- T
+ndo <- 8
 
 ## -------------------------------------------------------------------------------------------------
 # setwd("old_assgt")
@@ -33,11 +35,17 @@ lines %>% str_remove_all("\"") %>%
 options(width = 132)
 d %>% filter(file_later) %>% print(n = 40)
 
-
-## -------------------------------------------------------------------------------------------------
 d %>%
   filter(file_later) %>%
   distinct(chapter) %>%
-  slice(1:6) %>%  
-  mutate(thing = walk(chapter, ~bookdown::preview_chapter(.)))
+  slice(1:ndo) 
+
+if (do) {
+  ## -------------------------------------------------------------------------------------------------
+  d %>%
+    filter(file_later) %>%
+    distinct(chapter) %>%
+    slice(1:ndo) %>%  
+    mutate(thing = walk(chapter, ~bookdown::preview_chapter(.)))
+}
 

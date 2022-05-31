@@ -16,7 +16,7 @@ Solution
 
 The data values were separated by single spaces, so this one is `read_delim`:
 
-```{r}
+```{r mercury-1}
 my_url <- "http://ritsokiguess.site/datafiles/mercury.txt"
 mercury <- read_delim(my_url, " ")
 mercury
@@ -26,7 +26,7 @@ Extra: I found these data in a textbook, and I couldn't find them online anywher
 
 First, I entered the values as a piece of text:
 
-```{r}
+```{r mercury-2}
 mercury_txt <- "
 mercury alkalinity calcium ph
 1330 2.5 2.9 4.6
@@ -72,7 +72,7 @@ O530 30.0 13.9 6.9
 
 Then, I wanted to get these into a file laid out just like that, which is what `writeLines` does:
 
-```{r}
+```{r mercury-3}
 writeLines(mercury_txt, "mercury.txt")
 ```
 
@@ -89,14 +89,14 @@ Solution
 
 The best way to do this is in one shot, using facets. This means organizing the dataframe so that there is one column of $y$-values, and also one column of $x$-values, with an additional column labelling which $x$ it is. This, as you'll recall, is exactly what `pivot_longer` does. To show you:
 
-```{r}
+```{r mercury-4}
 mercury %>% 
 pivot_longer(-mercury, names_to = "xname", values_to = "xval")
 ```
 
 and now we plot `mercury` against `xval` in facets according to `xname`. The other thing to remember is that the explanatory variables are on different scales, so we should use `scales="free"` to allow each facet to have its own scales:
 
-```{r}
+```{r hachel}
 mercury %>% 
 pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
 ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
@@ -105,7 +105,7 @@ facet_wrap(~xname, scales = "free", ncol = 2)
 
 I did one more thing, which is to note that I am going to be assessing these relationships in a moment, so I would rather have squarer plots than the tall skinny ones that come out by default (that is to say these):
 
-```{r}
+```{r endinger}
 mercury %>% 
 pivot_longer(-mercury, names_to = "xname", values_to = "xval") %>% 
 ggplot(aes(x = xval, y = mercury)) + geom_point() + geom_smooth() + 
@@ -146,7 +146,7 @@ Solution
 
 I would create the two new variables and save them back into the original dataframe, myself:
 
-```{r}
+```{r mercury-5}
 mercury %>% 
 mutate(log_alkalinity = log(alkalinity), log_calcium = log(calcium)) -> mercury
 ```
@@ -155,7 +155,7 @@ though you could equally well create a new dataframe to hold them, as long as yo
 
 The regression has no great surprises:
 
-```{r}
+```{r mercury-6}
 mercury.1 <- lm(mercury ~ log_alkalinity + log_calcium + ph, data = mercury)
 summary(mercury.1)
 ```
@@ -174,7 +174,7 @@ Box-Cox is to find out whether you need to transform the response variable, here
 
 `boxcox` comes from the `MASS` package, so install and load that first.
 
-```{r}
+```{r mercury-7}
 boxcox(mercury ~ log_alkalinity + log_calcium + ph, data = mercury)
 ```
 
@@ -193,7 +193,7 @@ Solution
 
 This says to predict log-mercury (Box-Cox) from log-alkalinity, log-calcium (the fisheries scientist) and pH:
 
-```{r}
+```{r mercury-8}
 mercury.2 <- lm(log(mercury) ~ log_alkalinity + log_calcium + ph, data = mercury)
 summary(mercury.2)
 ```
@@ -211,19 +211,19 @@ Solution
 
 residuals against fitted
 
-```{r}
+```{r spaerwer}
 ggplot(mercury.2, aes(x=.fitted, y=.resid)) + geom_point()
 ```
 
 normal quantile plot of residuals
 
-```{r}
+```{r lugglinin}
 ggplot(mercury.2, aes(sample = .resid)) + stat_qq() + stat_qq_line()
 ```
 
 against the explanatory variables. This uses the ideas of `augment` (from `broom`) and pivoting longer:
 
-```{r}
+```{r aertzinars}
 mercury.2 %>% augment(mercury) %>% 
 pivot_longer(ph:log_calcium, names_to = "xname", values_to = "xval") %>% 
 ggplot(aes(x = xval, y = .resid)) + geom_point() +
@@ -237,13 +237,13 @@ Extra: you sometimes see a downward trend on residual plots that have an outlier
 
 Extra 2: which one was that outlier anyway?
 
-```{r}
+```{r mercury-9}
 mercury.2 %>% augment(mercury) %>% 
 filter(.resid > 1)
 ```
 How do these compare to the other data values?
 
-```{r}
+```{r mercury-10}
 summary(mercury)
 ```
 
@@ -251,7 +251,7 @@ The variable values are all high (even the pH, a modest-looking 7.5, is above Q3
 
 Remember that the fitted value is of *log*-mercury, so we have to anti-log it to understand it (anti-log is "exp" since these are "natural" or base-$e$ logs):
 
-```{r}
+```{r mercury-11}
 exp(5.561902)
 ```
 

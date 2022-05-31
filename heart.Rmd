@@ -53,12 +53,12 @@ yourself that those values are reasonable.
 
 Solution
 
-```{r, child="packages.Rmd", message = FALSE}
+```{r heart-1, child="packages.Rmd", message = FALSE}
 ```
 
 
 A `.csv` file, so:
-```{r }
+```{r heart-2 }
 my_url <- "https://raw.githubusercontent.com/nxskok/datafiles/master/heartf.csv"
 heart <- read_csv(my_url)
 heart
@@ -107,7 +107,7 @@ Solution
 
 A lot of typing, since there are so many variables. Don't forget
 that the response variable *must* be a factor:
-```{r }
+```{r heart-3 }
 heart.1 <- glm(factor(heart.disease) ~ age + sex + pain.type + resting.bp + serum.chol +
   high.blood.sugar + electro + max.hr + angina + oldpeak + slope + colored + thal,
 family = "binomial", data = heart
@@ -123,7 +123,7 @@ that you have an unclosed bracket will be enough).
 
 The output is rather lengthy:
 
-```{r }
+```{r heart-4 }
 summary(heart.1)
 ```
 
@@ -165,7 +165,7 @@ Solution
 
 Following the instructions:
 
-```{r }
+```{r heart-5 }
 drop1(heart.1, test = "Chisq")
 ```
 
@@ -218,7 +218,7 @@ Solution
 
 `update` is the obvious choice here, since we're making a
 small change to a *very* big model:
-```{r }
+```{r heart-6 }
 heart.2 <- update(heart.1, . ~ . - high.blood.sugar)
 drop1(heart.2, test = "Chisq")
 ```
@@ -246,7 +246,7 @@ Solution
 
 
 The hints ought to lead you to this:
-```{r size="tiny"}
+```{r heart-7, size="tiny"}
 heart.3 <- step(heart.1, direction = "backward", test = "Chisq")
 ```
 
@@ -268,7 +268,7 @@ Solution
 
 This:
 
-```{r }
+```{r heart-8 }
 summary(heart.3)
 ```
 
@@ -309,7 +309,7 @@ different values of the categorical ones. There are several of
 each, so we want some kind of automated method.
 The easy way of getting the quartiles is via `summary`
 of the whole data frame:
-```{r }
+```{r heart-9 }
 summary(heart)
 ```
 
@@ -318,7 +318,7 @@ This is the old-fashioned "base R" way of doing it. The
 `tidyverse` way is to get the Q1 and Q3 of just the variables
 that are numeric. We are doing something to (summarizing) these variables, so we need the `across(where())` idea to get just the numeric ones. We also need a `list` at the end because we are computing two summaries for each variable, Q1 and Q3, rather than just one. Finally, something that's easy to mess up (I do it all the time) is the closing bracket of the `across`: this goes *right at the end*, because the calculation is inside the `across` as well:
 
-```{r }
+```{r heart-10 }
 heart %>% summarize(across(where(is.numeric), 
                            list(q1 = ~quantile(., 0.25),
                                 q3 = ~quantile(., 0.75))))
@@ -330,7 +330,7 @@ One way to see all the results is
 to "transpose" the result with the variable-quartile combinations in
 a column and the actual quartile values in another:
 
-```{r }
+```{r heart-11 }
 heart %>% summarize(across(where(is.numeric), 
                            list(q1 = ~quantile(., 0.25),
                                 q3 = ~quantile(., 0.75)))) %>% 
@@ -342,7 +342,7 @@ heart2
 
 If you want to be really fancy:
 
-```{r }
+```{r heart-12 }
 heart %>% summarize(across(where(is.numeric), 
                            list(q1 = ~quantile(., 0.25),
                                 q3 = ~quantile(., 0.75)))) %>% 
@@ -380,7 +380,7 @@ What I would really like to do is to save these category names
 somewhere so I don't have to type them below when I make all possible
 combinations. My go at that:
 
-```{r }
+```{r heart-13 }
 heart %>%
   select(where(is.character)) %>%
   pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
@@ -400,7 +400,7 @@ keeps one of each and throws away the rest.
 
 Hmm, another way would be to count everything:
 
-```{r }
+```{r heart-14 }
 heart %>%
   select(where(is.character)) %>%
   pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
@@ -417,7 +417,7 @@ Now, we come to setting up the variables that we are going to make all
 combinations of. For a quantitative variable such as `age`, I
 need to go back to `heart2`:
 
-```{r }
+```{r heart-15 }
 heart2
 ```
 
@@ -428,7 +428,7 @@ using `str_detect`^[If you're selecting *columns*,  you can use select-helpers, 
 `stringr`.^[Which is loaded with the `tidyverse`  so you don't have to load it.] 
 Here's how it goes for `age`:
 
-```{r }
+```{r heart-16 }
 heart2 %>%
   filter(str_detect(vq, "age_"))
 ```
@@ -437,7 +437,7 @@ heart2 %>%
 
 and one more step to get just the quartiles:
 
-```{r }
+```{r heart-17 }
 heart2 %>%
   filter(str_detect(vq, "age_")) %>%
   pull(quartile)
@@ -447,7 +447,7 @@ heart2 %>%
 
 We'll be doing this a few times, so we should write a function to do it:
 
-```{r }
+```{r heart-18 }
 get_quartiles <- function(d, x) {
   d %>%
     filter(str_detect(vq, x)) %>%
@@ -459,7 +459,7 @@ get_quartiles <- function(d, x) {
 
 and to test:
 
-```{r }
+```{r heart-19 }
 get_quartiles(heart2, "age_")
 ```
 
@@ -470,7 +470,7 @@ have `age` inside them but not at the end.
 
 For the categorical variables, we need to look in `heart3`:
 
-```{r }
+```{r heart-20 }
 heart3
 ```
 
@@ -480,7 +480,7 @@ then choose the rows with the right thing in `variable_name`, and then
 pull just the `value` column. This is sufficiently like the
 previous one that I think we can write a function right away:
 
-```{r }
+```{r heart-21 }
 get_categories <- function(d, x) {
   d %>%
     filter(variable_name == x) %>%
@@ -493,7 +493,7 @@ get_categories(heart3, "electro")
 All right, setup, using my usual habit of plural names, and using
 those functions we just wrote: 
 
-```{r }
+```{r heart-22 }
 sexes <- get_categories(heart3, "sex")
 pain.types <- get_categories(heart3, "pain.type")
 resting.bps <- get_quartiles(heart2, "resting.bp_")
@@ -509,7 +509,7 @@ thals <- get_categories(heart3, "thal")
 
 All combos of all of those (and there will be a lot of those):
 
-```{r }
+```{r heart-23 }
 heart.new <- crossing(
   sex = sexes, pain.type = pain.types, resting.bp = resting.bps,
   serum.chol = serum.chols, max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes,
@@ -535,7 +535,7 @@ Solution
 
 
 Get the predictions, which is less scary than it seems:
-```{r }
+```{r heart-24 }
 p <- predict(heart.3, heart.new, type = "response")
 ```
 
@@ -543,7 +543,7 @@ p <- predict(heart.3, heart.new, type = "response")
 
 and the easiest way to add these to `heart.new` is this:
 
-```{r }
+```{r heart-25 }
 heart.new %>% mutate(pred = p) -> heart.new
 ```
 
@@ -551,7 +551,7 @@ heart.new %>% mutate(pred = p) -> heart.new
 
 Let's take a look at a few of the predictions, by way of sanity-checking:
 
-```{r }
+```{r heart-26 }
 heart.new %>% sample_n(8)
 ```
 
@@ -570,7 +570,7 @@ Solution
 
 
 This can be done in one step:
-```{r }
+```{r heart-27 }
 heart.new %>% filter(pred == max(pred))
 ```
 
@@ -579,7 +579,7 @@ heart.new %>% filter(pred == max(pred))
 or if you didn't think of that, you can find the maximum first, and
 then display the rows with predictions close to it:
 
-```{r }
+```{r heart-28 }
 heart.new %>% summarize(m = max(pred))
 heart.new %>% filter(pred > 0.98)
 ```
@@ -588,7 +588,7 @@ heart.new %>% filter(pred > 0.98)
 
 or even find *which* row has the maximum, and then display that row:
 
-```{r }
+```{r heart-29 }
 heart.new %>% summarize(row = which.max(pred))
 heart.new %>% slice(1398)
 ```
@@ -597,7 +597,7 @@ heart.new %>% slice(1398)
 
 or sort the rows by `pred`, descending, and display the top few:
 
-```{r }
+```{r heart-30 }
 heart.new %>% arrange(desc(pred)) %>% slice(1:8)
 ```
 

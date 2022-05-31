@@ -22,7 +22,7 @@ Also, there is only one column, so you can pretend that there
 were multiple columns, separated by whatever you like. It's least
 typing to pretend that they were separated by commas like a
 `.csv` file:
-```{r }
+```{r boulder-1 }
 my_url <- "http://ritsokiguess.site/datafiles/buses.txt"
 journey.times <- read_csv(my_url)
 journey.times
@@ -41,7 +41,7 @@ You can also use what is called "camel case"
 by starting each "word" after the first with an uppercase
 letter like this:
 
-```{r eval=F}
+```{r boulder-2, eval=F}
 journeyTimes <- read_csv(my_url)
 ```
 
@@ -69,7 +69,7 @@ Solution
 
 `t.test` doesn't take a `data=` to say which
 data frame to use. Wrap it in a `with`:
-```{r }
+```{r boulder-3 }
 with(journey.times, t.test(minutes, mu = 60))
 ```
 
@@ -151,7 +151,7 @@ that comment is, as long as it's intelligent enough.
 
 Perhaps I should draw a normal quantile plot:
 
-```{r }
+```{r boulder-4 }
 ggplot(journey.times, aes(sample = minutes)) + stat_qq() + stat_qq_line()
 ```
 
@@ -168,7 +168,7 @@ If you don't like the normality, you'd use a *sign test* and test
 that the *median* is not 60 minutes, which you would (at my
 guess) utterly fail to reject:
 
-```{r }
+```{r boulder-5 }
 library(smmr)
 sign_test(journey.times, minutes, 60)
 ci_median(journey.times, minutes)

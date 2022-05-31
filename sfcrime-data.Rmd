@@ -41,7 +41,7 @@ lot of rows. (The data may take a moment to read in. You will see why.)
 Solution
 
 
-```{r cache=T}
+```{r sfcrime-data-1, cache=T}
 my_url="http://utsc.utoronto.ca/~butler/d29/sfcrime.csv"
 sfcrime=read_csv(my_url)
 sfcrime
@@ -83,7 +83,7 @@ Solution
 This can be the one you know, a group-by and summarize, followed
 by `arrange` to sort:
 
-```{r }
+```{r sfcrime-data-2 }
 sfcrime %>% group_by(Category) %>%
 summarize(count=n()) %>%
 arrange(desc(count))
@@ -93,7 +93,7 @@ arrange(desc(count))
 
 or this one does the same thing and saves a step:
 
-```{r }
+```{r sfcrime-data-3 }
 sfcrime %>% count(Category) %>%
 arrange(desc(n))
 ```
@@ -131,7 +131,7 @@ no law had been broken.
 I think the easy way to get the "top four" crimes out is to pull
 them out of the data frame that `count` produces. They are
 rows 1, 4, 5 and 6, so add a `slice` to your pipeline:
-```{r }
+```{r sfcrime-data-4 }
 my.rows=c(1,4,5,6)
 my.crimes = sfcrime %>% count(Category) %>%
 arrange(desc(n)) %>%
@@ -165,7 +165,7 @@ Solution
 
 
 This is the ultimate "try it and see":
-```{r }
+```{r sfcrime-data-5 }
 v=c('a','m',3,'Q')
 v %in% letters
 ```
@@ -200,7 +200,7 @@ Solution
 The hard part about this is to get the inputs to `%in%` the
 right way around. We are testing the things in `Category` one
 at a time for membership in the set in `my.crimes`, so this:
-```{r error=T}
+```{r sfcrime-data-6, error=T}
 sfcrimea = sfcrime %>% filter(Category %in% my.crimes) %>%
 select(c(Category,DayOfWeek,PdDistrict)) 
 sfcrimea
@@ -216,7 +216,7 @@ Down to a "mere" 359,000 rows. Don't be stressed that the
 `Category` factor still has 39 levels (the original 39 crime
 categories); only four of them have any data in them:
 
-```{r }
+```{r sfcrime-data-7 }
 sfcrimea %>% count(Category)
 ```
 
@@ -235,7 +235,7 @@ Solution
 
 
 This is `write_csv` again:
-```{r }
+```{r sfcrime-data-8 }
 write_csv(sfcrimea,"sfcrime1.csv")
 ```
 

@@ -5,14 +5,14 @@ output: html_notebook
 
 ## packages
 
-```{r}
+```{r regstan-1}
 library(tidyverse)
 library(rstan)
 ```
 
 ## read the data
 
-```{r}
+```{r regstan-2}
 vocabulary=read_delim("vocab.txt", " ")
 vocabulary
 ```
@@ -25,7 +25,7 @@ ggplot(vocabulary, aes(x=age, y=vocab))+ geom_point()
 
 ordinary regression
 
-```{r}
+```{r regstan-3}
 vocab.1=lm(vocab~age, data=vocabulary)
 summary(vocab.1)
 cbind(vocabulary$age, predict(vocab.1, interval="p") )
@@ -33,19 +33,19 @@ cbind(vocabulary$age, predict(vocab.1, interval="p") )
 
 compile
 
-```{r}
+```{r regstan-4}
 reg_code=stan_model("reg.stan")
 ```
 
 save
 
-```{r}
+```{r regstan-5}
 saveRDS(reg_code, "reg_code.rds")
 ```
   
 construct data
 
-```{r}
+```{r regstan-6}
 reg_data = list(
   n = 10,
   x = vocabulary$age,
@@ -60,7 +60,7 @@ reg.1 = sampling(reg_code, reg_data)
 reg.1
 ```
 
-```{r}
+```{r regstan-7}
 reg_samples=rstan::extract(reg.1)
 cbind(a=reg_samples$a, b=reg_samples$b, sigma=reg_samples$sigma) %>%
     as_tibble() -> sims
@@ -73,11 +73,11 @@ sims %>%
 ggplot(sims2, aes(x=sim_vocab)) + geom_histogram(bins=20)
 ```
 
-```{r}
+```{r regstan-8}
 with(sims2, quantile(sim_vocab, c(0.025, 0.975)))
 ```
 
-```{r}
+```{r regstan-9}
 vocabulary.1=lm(vocab~age, data=vocabulary)
 new=tibble(age=5)
 predict(vocabulary.1, new, interval="p")
