@@ -194,25 +194,32 @@ variable, gestational age, increases, the probability of the event
 (that the baby is breastfeeding) also increases.
 This is also what I observed above: almost all of the near-term
 (large gestational age) babies were breastfeeding, whereas a fair
-few of the small-gestational-age (very premature) ones were not.
+few of the small-gestational-age (very premature) ones were not. 
+
+We know that the event is "is breastfeeding" rather than "is not", because the first column of our response matrix is "yes" rather than "no": 
+
+```{r}
+response
+```
+
+(If you had happened to make your response matrix the other way around, the event would have been "is not breastfeeding", and then your slope would have been the same size but *negative*.)
+
+
 
 $\blacksquare$
 
 (h) Obtain the predicted probabilities that an infant will
-successfully breastfeed for each of the gestational ages in the data
-set, and display them side by side with the observed data.
-
+successfully breastfeed for a representative collection of gestational ages.
 
 Solution
 
 
-This is the easier version of `predict`, where you do not
-have to create a data frame of values to predict from (since you
-are using the original data). 
-Thus, you only need something like this:
+This is the easier version of `predictions`, where you do not
+have to create a data frame of values to predict from.
+Thus, you only need something like this, with `variables` (and no `datagrid` first):
+
 ```{r breastfeed-7 }
-p <- predict(breastfeed.1, type = "response")
-cbind(breastfeed, p)
+predictions(breastfeed.1, variables = "gest.age")
 ```
 
      
@@ -220,13 +227,12 @@ cbind(breastfeed, p)
 You can see that the predicted probabilities go steadily up as the
 gestational age goes up, just as we would have expected.
 
-If you only wanted certain gestational ages, for example 25, 30 and
+Extra: if you only wanted certain gestational ages, for example 25, 30 and
 35, you would do that like this:
 
 ```{r breastfeed-8 }
-ages.new <- data.frame(gest.age = c(25, 30, 35))
-p2 <- predict(breastfeed.1, ages.new, type = "response")
-cbind(ages.new, p2)
+new <- datagrid(model = breastfeed.1, gest.age = c(25, 30, 35))
+predictions(breastfeed.1, newdata = new)
 ```
 
  
@@ -235,44 +241,40 @@ Or, if you wanted to make a graph of the observed and predicted
 proportions/probabilities, you could do something like this:
 
 ```{r breastfeed-9 }
-breastfeed %>%
-  mutate(
-    total = bf.yes + bf.no,
-    obs = bf.yes / total
-  ) %>%
-  mutate(pred = p) %>%
-  ggplot(aes(x = gest.age, y = obs)) +
-  geom_line(aes(y = pred)) + geom_point(aes(size = total))
+plot_cap(breastfeed.1, condition = "gest.age")
+```
+
+or, if you wanted to add the data to this:
+
+```{r}
+breastfeed %>% 
+  mutate(total = bf.yes + bf.no, 
+         proportion = bf.yes / total) -> d
+plot_cap(breastfeed.1, condition = "gest.age") +
+  geom_point(data = d, aes(x = gest.age, y = proportion, size = total), inherit.aes = FALSE)
 ```
 
  
-
 What did I do there? I first created some new variables:
-`count` is the total number of babies of each gestational age,
-`obs` is the observed proportion of breastfeeding babies at
-each gestational age (number of yes divided by total), and
-`pred` which are the predictions we did above. Then I make a
-plot on which I plot the observed proportions against gestational age
-(as points), and then I want to plot the predictions joined by
-lines. To do *that*, I need to change which $y$-variable I am
-plotting (now `pred` rather than `obs`), and the way I
+`total` is the total number of babies of each gestational age, and
+`proportion` is the observed proportion of breastfeeding babies at
+each gestational age (number of yes divided by total).
+`pred` which are the predictions we did above. Then I repeat the `plot_cap`, and on that plot
+I add the observed proportions against gestational age
+(as points). To do *that*, I need to change which dataframe I am using (the temporary one called `d` with the proportions and totals in it), and the variables I am plotting (which are now the ones in `d`).
+The way I
 do that is to put an `aes` inside the `geom_line` to
-say "use the $x$ I had before, but use this $y$ instead". I also
+say "use this `x` and `y` instead". I also
 wanted to draw attention to the gestational ages where more babies
 were observed; I did this by making the *size* of the plotted
 points proportional to how many babies there were at that gestational
-age (which was the quantity `total` I calculated above). This
-took a couple of attempts to get right: I put `size=` in the
-original `aes`, but I didn't realize that it controlled the
-line thickness as well (which looked really weird). So I moved the
-`geom_point` to the end and put the `size=` in there,
-to make sure that the size thing *only* applied to the
-points. The legend for `total` tells you what size point
-corresponds to how many total babies.
+age (which was the quantity `total` I calculated above).  
+The legend for `total` tells you what size point
+corresponds to how many total babies. The final thing is that `plot_cap` defines some other things (like the min and max of the confidence interval) that we would also have to supply values for were it not for the `inherit.aes` at the end; this means "don't use anything from the original `ggplot` (the `plot_cap`), but supply everything yourself".
 
 The idea is that the observed and predicted should be reasonably
-close, or at least not grossly different, and I think they *are*
-close, which indicates that our model is doing a good job.
+close, or at least not grossly different, especially when there is a lot of data (the circles are large), and I think they *are*
+close, which indicates that our model is doing a good job. You can see that there is not much data on the left, with small gestational ages, so the confidence interval around the predictions is wider there. On the right, where there is lots of data, the interval is narrower. When the gestational age is large (the baby is closer to being full term rather than premature), there is a good chance that the baby will be able to breastfeed, and we are fairly sure about that.
     
 $\blacksquare$
 
