@@ -132,8 +132,8 @@ The procedure is to set up a data frame with the two
 regression object into `predict`, coming up in a moment.
 ```{r diabetic-3 }
 dists <- c(3, 5)
-dist.new <- tibble(distance = dists)
-dist.new
+new <- tibble(distance = dists)
+new
 ```
 
      
@@ -142,10 +142,19 @@ frame must be *exactly* the same as the name of the explanatory
 variable in the regression. If they don't match, `predict`
 won't work. At least, it won't work properly.^[It won't give you an error, but it will go back to the *original* data frame to get distances to predict from, and you will get very confused. This is another example of (base) R trying to make life easier for you, but when it fails, it *fails*.]
 
-Then, `predict`:
+If your first thought is `datagrid`, well, that will also work:
+
+```{r}
+new2 <- datagrid(model = runs.1, distance = c(5, 10))
+new2
+```
+
+Use whichever of these methods comes to your mind.
+
+Then, `predict`, because you want prediction intervals rather than confidence intervals for the mean response (which is what `marginaleffects` gives you):
 
 ```{r diabetic-4 }
-pp <- predict(runs.1, dist.new, interval = "p")
+pp <- predict(runs.1, new, interval = "p")
 pp
 ```
 
@@ -154,7 +163,7 @@ pp
 and display this with the distances by the side:
 
 ```{r diabetic-5 }
-cbind(dist.new, pp)
+cbind(new, pp)
 ```
 
  
@@ -162,7 +171,7 @@ cbind(dist.new, pp)
 or
 
 ```{r diabetic-6 }
-data.frame(dist.new, pp)
+data.frame(new, pp)
 ```
 
  
@@ -188,7 +197,7 @@ so that we have to use `as_tibble` first to turn it into a
 data frame, and thus:
 
 ```{r diabetic-8 }
-pp %>% as_tibble() %>% bind_cols(dist.new)
+pp %>% as_tibble() %>% bind_cols(new)
 ```
 
  
@@ -196,7 +205,7 @@ pp %>% as_tibble() %>% bind_cols(dist.new)
 which puts things backwards, unless you do it like this:
 
 ```{r diabetic-9 }
-dist.new %>% bind_cols(as_tibble(pp))
+new %>% bind_cols(as_tibble(pp))
 ```
 
  
@@ -208,7 +217,7 @@ I also remembered that if you finish with a `select`, you get the columns in the
 ```{r diabetic-10 }
 pp %>%
   as_tibble() %>%
-  bind_cols(dist.new) %>%
+  bind_cols(new) %>%
   select(c(distance, everything()))
 ```
 
