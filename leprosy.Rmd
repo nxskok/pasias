@@ -233,37 +233,23 @@ Solution
 First, make the new data frame for predicting from, using
 `crossing`. I'm doing this in small steps for clarity:
 first, I define all the drugs and `pre` values, and then I
-feed them into `crossing`:
+feed them into `datagrid`:
 ```{r leprosy-11 }
 drugs <- c("A", "D", "F")
 pres <- c(5, 12, 20)
-lepro.new <- crossing(drug = drugs, pre = pres)
-lepro.new
+new <- datagrid(model = lepro.2, drug = drugs, pre = pres)
+new
 ```
 
-     
-
-The names of the columns in the new data frame have to be
-*exactly* `drug` and `pre`. Anything else, and
-`predict` won't work.
 
 Now I obtain the predictions, from my best model `lepro.2`. I
 don't need intervals or anything like that:
 
 ```{r leprosy-12 }
-preds <- predict(lepro.2, lepro.new)
+preds <- predictions(lepro.2, newdata = new)
 preds
 ```
 
- 
-
-only it would be easier to see the predictions side by side with the
-values they are predictions for:
-
-```{r leprosy-13 }
-allpreds <- cbind(lepro.new, preds)
-allpreds
-```
 
  
 
@@ -271,33 +257,27 @@ I gave this a name in case I feel like using it again later.
  
 $\blacksquare$
 
-(j) Now, plot the data with the fitted lines on. You'll need to do
-the trick of using the original data frame (and plot the points),
-and the data frame of predictions (and join those points with lines).
- 
+(j) Now, plot the data with the fitted lines on. 
+
 Solution
 
+The starting point is to plot the predictions, which is `plot_cap`:
 
-
-```{r leprosy-14 }
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() +
-  geom_line(data = allpreds, aes(y = preds, linetype = drug))
+```{r}
+plot_cap(lepro.2, condition = c("pre", "drug"))
 ```
 
- 
+The olive-coloured line is actually the red and green lines right next to each other. You can check from the previous part that the predictions for drugs A and D are very close together, with those for drug F (the placebo) being higher (worse).
 
-Inside the `aes` for the `geom_line`, I only have to
-specify the things that have changed, so that the `x`
-(`pre`) and the `colour` (`drug`) are
-"inherited" unchanged from the first `aes`.
+This is a `ggplot`, so we can add things to it. The idea is to say that the next thing to plot comes from some other dataframe, and to specify everything we need (that is, not to inherit from the original `ggplot` that is lurking within `plot_cap`):
 
-`geom_line` has the `aes` as its default first argument,
-so I have to specify `data=` by name.
+```{r}
+plot_cap(lepro.2, condition = c("pre", "drug")) +
+  geom_point(data = lepro, aes(x = pre, y = post, colour = drug), inherit.aes = FALSE)
+```
 
-The `linetype=` is really overkill, but I just wanted to show
-you that you can distinguish the drugs by line type as
-well.^[The line types show up in the legend too, though they're not so easy to see.]
- 
+There is quite a lot of variability (which is why those confidence bands are so wide), but at least some of the blue points from drug F are above the others (worse), and there is very little to choose between drugs A and D.
+
 $\blacksquare$
 
 (k) Are the lines on your plot parallel, with the same slopes? Is this what you would
@@ -312,36 +292,15 @@ would make the lines *not* be parallel.
 If your best model
 *did* have the interaction term still in it, your predictions
 would have been these:
-```{r leprosy-15 }
-preds <- predict(lepro.1, lepro.new)
-cbind(lepro.new, preds)
+
+```{r}
+plot_cap(lepro.1, condition = c("pre", "drug")) +
+  geom_point(data = lepro, aes(x = pre, y = post, colour = drug), inherit.aes = FALSE)
 ```
 
-     
-
-The slopes for each drug are no longer the same (because nothing is
-forcing them to be the same). For example, if you compare drug A at
-pre score 5 and 12, it goes up by 5.2, while drug D at the same pre
-scores goes up by 7.5.
-
-The `ggplot` in this case is actually a lot easier than the
-other `ggplot`, because the lines are now just the regression
-lines for each group.  So `geom_smooth` will get them:
-
-```{r leprosy-16 }
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) +
-  geom_point() + geom_smooth(method = "lm")
-```
-
- 
-
-The grey intervals are a bit confusing.^[You can get rid of them by saying *se=F* inside the geom-smooth, as normal.] They are
-confidence intervals for the mean `post` score (as we did for regression
-early on in the course). But I left them there to show that they
-overlap substantially and thus that those slopes are not 
-"really different". That's the lack of interaction. There is, as you see, a
+There is, as you see, a
 substantial scatter in the points that would make it very difficult to
-prove that those three slopes are really different. 
+prove that those three slopes are really different, even though the lines cross.
  
 $\blacksquare$
 

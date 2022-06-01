@@ -92,43 +92,39 @@ Solution
 This time, I give you the values I want the predictions for (as
 opposed to calculating something like quartiles from the data), so
 we might as well just type them in.
-Step 1 is to save them (my preference is under plural names):
-```{r ha2-3 }
-anxieties <- c(40, 50, 60)
-angers <- c("y", "n")
-```
 
-     
+First step, `datagrid`:
 
-Step 2 is to make a data frame of combinations using
-`crossing`. I'll call mine `new`:
-
-```{r ha2-4 }
-new <- crossing(anxiety = anxieties, anger = angers)
+```{r}
+new <- datagrid(model = ha.1, anger = c("y", "n"), anxiety = c(40, 50, 60))
 new
 ```
 
- 
+The lists of values are not very long, so I think it's fine to just have one `datagrid` line with the values inside. If you want to save them first, go ahead:
 
-Step 3 is to do the predictions. Into `predict` go (in order)
-the fitted model, the new data frame that we just made, and something
-to make the predictions be probabilities:
-
-```{r ha2-5 }
-p <- predict(ha.1, new, type = "response")
+```{r}
+angers <-  c("y", "n")
+anxieties <- c(40, 50, 60) 
+new <- datagrid(model = ha.1, anger = angers, anxiety = anxieties)
+new
 ```
 
- 
+My strategy is to give the vectors of values *plural* names. If you want, you can use the same names as the variables in the model, but then your `datagrid` has stuff like `anger = anger` in it, which you might find confusing.
 
-Step 4 is to put these next to the data frame we
-created. `cbind` is easiest, since we don't know what kind of
-thing `p` might be, and `bind_cols` is pickier:
+Then, the predictions:
 
-```{r ha2-6 }
-cbind(new, p)
+```{r}
+predictions(ha.1, newdata = new)
 ```
 
- 
+Extra: In the help file for `predictions`, you will see it done in one step, with code like
+
+```
+predictions(ha.1, newdata = datagrid(anger = angers, ...))
+```
+
+This saves constructing `new` first, but the code for `datagrid` is to my mind usually rather long to fit on one line inside the `predictions(...)`.
+
 $\blacksquare$
 
 (e) Use your predictions from the previous part to describe the

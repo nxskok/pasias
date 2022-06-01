@@ -249,162 +249,18 @@ show that you understand the issue completely.
   
 $\blacksquare$
 
-(g) Obtain the median and quartiles of age, and construct a data
-frame that contains all combinations of those ages and the two
-genders, with columns called exactly `age` and
-`gender`. Use this data frame to obtain predicted probabilities
-of survival for each of those combinations of age and gender.
-
-
+(g) Obtain predicted probabilities
+of survival for each combination of some representative ages and of the two genders in this dataset.
 
 Solution
 
+This is the simplest version of `predictions`, using `variables` to pick the representative values for you:
 
-I have a standard way of doing this:
-
-
-* Make a list of all the variable values I'm going to predict
-for, using plural names
-
-* Make a data frame containing all combinations, using
-`crossing`, giving the columns the right names
-
-* Feed this data frame into `predict`, along with a
-fitted model, and get a column of predictions.
-
-* Glue those predictions onto the data frame of values to
-predict for, and display them.
-
-That way I can do it without thinking too hard.
-There is a lazy way to do step 1 (which I'll show first), and a way
-that is more work but more reliable (because you have to concentrate
-less).
-Step 1, the lazy way:
-```{r donner-13 }
-donner %>% select(age) %>% summary()
-donner %>% count(gender)
+```{r}
+predictions(donner.1, variables = c("age", "gender"))
 ```
 
-   
-
-Then construct vectors called `ages` and `genders` by
-literally copying the values output from above:
-
-```{r donner-14 }
-ages <- c(24, 28, 40)
-genders <- c("female", "male")
-```
-
- 
-
-There is a risk here, because it is very easy to make typos while
-copying, so it would be more reliable to compute these (and, as long
-as you trust your computation, reproducible as well). Thinking of
-reproducibility, if the data set changes, your computation of
-quartiles etc.\ will still work, whereas your copying above won't.
-
-So, let's get the median and quartiles of age:
-
-```{r donner-15 }
-donner %>%
-  summarize(
-    q1 = quantile(age, 0.25),
-    med = median(age),
-    q3 = quantile(age, 0.75)
-  )
-```
-
- 
-
-only these came out sideways, so we can "transpose" them:
-
-```{r donner-16 }
-donner %>%
-  summarize(
-    q1 = quantile(age, 0.25),
-    med = median(age),
-    q3 = quantile(age, 0.75)
-  ) %>%
-  pivot_longer(everything(), names_to="stat", values_to="value")
-```
-
- 
-
-and now if we "pull out" the `value` column, we are good:
-
-```{r donner-17 }
-ages <- donner %>%
-  summarize(
-    q1 = quantile(age, 0.25),
-    med = median(age),
-    q3 = quantile(age, 0.75)
-  ) %>%
-  pivot_longer(everything(), names_to="stat", values_to="value") %>% 
-  pull(value)
-ages
-```
-
- 
-
-The same kind of idea will get us both genders without typing any genders:
-
-```{r donner-18 }
-genders <- donner %>%
-  count(gender) %>%
-  pull(gender)
-genders
-```
-
- 
-
-We don't care how many there are of each gender; it's just a device to
-get the different genders.^[The counts are in a column called  `n` which we calculate and then ignore.] This is another way:
-
-```{r donner-19 }
-genders <- donner %>%
-  select(gender) %>%
-  distinct() %>%
-  pull(gender)
-genders
-```
-
- 
-
-The rationale behind this one is that `distinct()` removes
-duplicates (or duplicate combinations if you have more than one
-variable), leaving you with only the distinct ones (the ones that are
-different from each other). 
-
-I don't think the genders are ever going to change, but it's the
-principle of the thing.
-
-Step 2: 
-
-```{r donner-20 }
-donner.new <- crossing(age = ages, gender = genders)
-donner.new
-```
-
- 
-
-All combinations of the three ages and two genders.
-
-Step 3:
-
-```{r donner-21 }
-p <- predict(donner.1, donner.new, type = "response")
-p
-```
-
-
-
-Step 4:
-
-```{r donner-22 }
-cbind(donner.new, p)
-```
-
- 
+(There are five ages chosen, something like a five-number summary, and two genders here, so ten predictions.)
 
 These, remember, are predicted probabilities of *surviving*. 
 
@@ -420,9 +276,8 @@ Solution
 
 
 We said before that the probability of survival was lower if the age
-was higher. This is confirmed here: for example, look at rows 1, 3
-and 5, which are all females of increasing ages; the probability of
-survival decreases. (Or look at males, in rows 2, 4 and 6; the
+was higher. This is confirmed here: for example, look at the odd-numbered rows 1, 3, 5, 7, 9, which are all females of increasing ages; the probability of
+survival decreases. (Or look at males, in the even-numbered rows; the
 effect is the same.)
 
 To see the effect of gender, look at two predictions of different
