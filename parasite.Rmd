@@ -269,7 +269,7 @@ summary(infect.1)
 
      
 
-The "proper" way to do it is to create a new column in the data
+The "proper" way to do it is to create a new or redefined column in the data
 frame containing the factor version of `infected`. Pipeline
 fans among you can do it this way:
 
@@ -374,52 +374,66 @@ $\blacksquare$
 The first and third quartiles of `age` are 26 and 130;
 the first and third quartiles of `weight` are 9 and 16. Obtain predicted probabilities for all combinations of these and
 `sex`. (You'll need to start by making a new data frame, using
-`crossing` to get all the combinations.)
+`datagrid` to get all the combinations.)
  
 Solution
 
- Here's how `crossing`
-goes. I'll do it in steps. Note my use of plural names to denote
+ Here's how `datagrid`
+goes. Note my use of plural names to denote
 the things I want all combinations of:
 ```{r parasite-16 }
 ages <- c(26, 130)
 weights <- c(9, 16)
 sexes <- c("female", "male")
-infect.new <- crossing(age = ages, weight = weights, sex = sexes)
-infect.new
+new <- datagrid(model = infect.1, age = ages, weight = weights, sex = sexes)
+new
 ```
 
+This is about on the upper end of what you would want to do just using the one line with `datagrid` in it and putting the actual values in instead of `ages`, `weights` etc. To my mind, once it gets longer than about this long, doing on one line starts to get unwieldy. But your taste might be different than mine.
      
+Aside:
 
 I could have asked you to include some more values of `age` and
 `weight`, for example the median as well, to get a clearer
 picture. But that would have made `infect.new` bigger, so I
-stopped here. 
+stopped here. (If we had been happy with *five* representative values of `age` and `weight`, we could have done `predictions` (below) with `variables` and not had to make `new` at all.)
 
-`crossing` *makes* a data frame from input vectors, so it
+`datagrid` *makes* a data frame from input vectors, so it
 doesn't matter if those are different lengths.  In fact, it's also
 possible to make this data frame from things like quartiles stored in
-a data frame. To do that (as we did in the hospital satisfaction
-question), you wrap the whole `crossing` in a `with`.
+a data frame. To do that, you wrap the whole `datagrid` in a `with`:
+
+```{r}
+d <- tibble(age = ages, weight = weights, sex = sexes)
+d
+```
+
+```{r}
+new <- with(d, datagrid(model = infect.1, age=age, weight=weight, sex=sex))
+new
+```
+
+This one is a little confusing because in eg. `age = age`, the first `age` refers to the column that will be in `new`, and the second one refers to the values that are going in there, namely the column called `age` *in the dataframe d*.^[See, I told you it was a little confusing.] 
+
+End of aside.
 
 Next, the predictions:
 
 ```{r parasite-17 }
-pred <- predict(infect.1, infect.new, type = "response")
-cbind(infect.new, pred)
+predictions(infect.1, new)
 ```
 
  
 
-I didn't ask you to comment on these, since the question is long
+Extra: I didn't ask you to comment on these, since the question is long
 enough already. But that's not going to stop me!
 
-These are predicted probabilities of infection.^[When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.]
+These, in `predicted`, are predicted probabilities of infection.^[When you have one observation per line, the predictions are of the *second* of the two levels of the response variable. When you make that two-column response, the predictions are of the probability of being in the *first* column. That's what it is. As the young people say, don't @ me.]
 
 The way I remember the one-column-response thing is that the first
 level is the baseline (as it is in a regression with a categorical
 explanatory variable), and the second level is the one whose
-probability is modelled (in the same way that the second, third etc.\
+probability is modelled (in the same way that the second, third etc.
 levels of a categorical explanatory variable are the ones that appear
 in the `summary` table).
 
@@ -501,101 +515,58 @@ significance.^[When you have higher-order terms, you have to keep the lower-orde
 What do the squared terms do to the predictions? Before, there was a
 clear one-directional trend in the relationships with `age` and
 `weight`. Has that changed? Let's see. We'll need a few more
-ages and weights to investigate with. Below, I use `seq` a
-different way to get a filled series of a desired length:
+ages and weights to investigate with. I think the set of five representative values that comes out of `predictions` with `variables` would be ideal (and saves us having to make another `new`). 
 
-```{r parasite-22 }
-weights <- seq(9, 16, length.out = 6)
-weights
-ages <- seq(26, 130, length.out = 6)
-ages
-infect.new <- crossing(weight = weights, age = ages, sex = sexes)
-infect.new
+Let's start by assessing the effect of age:
+
+```{r}
+predictions(infect.2, variables = "age") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
+The actual values of age chosen by `predictions` are as shown. The other columns are constant; the values are the mean weight and the more common sex. We really can see the effect of age with all else constant.
 
-The values are kind of dopey, but they are equally spaced between the
-two endpoints. 
+Here, the predicted infection probabilities go up with age and then come down again, as a squared term in age will allow them to do, compared to what we had before:
 
-All right, predictions. I'm re-doing the predictions from the previous
-model (without the squared terms), for annoying technical
-reasons. Then the data frame `pp` below will contain the
-predictions from both models so that we can compare them:
-
-```{r parasite-23 }
-pred <- predict(infect.2, infect.new, type = "response")
-pred.old <- predict(infect.1, infect.new, type = "response")
-pp <- cbind(infect.new, pred.old, pred)
+```{r}
+predictions(infect.1, variables = "age") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
+where the probabilities keep on going up.
 
-This is rather a big data frame, so we'll pull out bits of it to
-assess the effect of things. First, the effect of weight (for example
-for females of age 46.8, though it is the same idea for all the other
-age-sex combinations as well):
+All right, what about the effect of weight? Here's the first model:
 
-```{r parasite-24 }
-pp %>% filter(age == 46.8, sex == "female")
+```{r}
+predictions(infect.1, variables = "weight") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
+and here's the second one with squared terms:
 
-The predicted probabilities start off a lot higher and finish a fair
-bit lower. What about the effect of `age`? Let's take males of
-weight 9:
-
-```{r parasite-25 }
-pp %>% filter(weight == 9, sex == "male")
+```{r}
+predictions(infect.2, variables = "weight") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
+This one is not so dissimilar: in the linear model, the predicted probabilities of infection start high and go down, but in the model with squared terms they go slightly up before going down.
 
-This one is rather interesting: first of all, the
-predictions are very different. Also, the old predictions went
-steadily up, but the new ones go up for a bit, level off and start
-coming back down again. This is because of the squared term: without
-it, the predicted probabilities have to keep going in the same
-direction, either up or down. 
+We couldn't have a squared term in `sex`, since there are only two sexes (in this data set), so the predictions ought to be pretty similar for the two models:
 
-Which age, weight and sex of animals is under the most risk under our
-new model? There's a trick here: work out the maximum value of
-`pred`, and then pick out the row(s) where `pred` is
-equal to that maximum value:
-
-```{r parasite-26 }
-pp %>% filter(pred == max(pred))
+```{r}
+predictions(infect.1, variables = "sex") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
+and
 
-Old, non-heavy females, but curiously enough not the *oldest*
-females (because of that squared term).
-
-This would also work:
-
-```{r parasite-27 }
-pp %>% summarize(max.pred = max(pred))
+```{r}
+predictions(infect.2, variables = "sex") %>% 
+  select(predicted, age, weight, sex)
 ```
 
- 
-but then you wouldn't see what contributed to that highest predicted
-probability. What you might do then is to say 
-"let's find all the predicted probabilities bigger than 0.8":
-
-```{r parasite-28 }
-pp %>% filter(pred > 0.8)
-```
-
- 
-
-which includes the highest and second-highest ones. Or, you can
-*sort* the predictions in descending order and look at the first few:
-
-```{r parasite-29 }
-pp %>% arrange(desc(pred)) %>% slice(1:10)
-```
+They are actually quite different.
+For the model with squared terms in age and weight, the predicted probabilities of infection are a lot higher for both males and females, at least at these (mean) ages and weights.
 
 $\blacksquare$ 
  

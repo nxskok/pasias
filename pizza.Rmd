@@ -213,7 +213,7 @@ preds <- predict(pizza.1, new, interval = "p")
 cbind(new, preds)
 ```
 
-       
+Use `datagrid` to make `new` if you like, but it is a very simple dataframe, so there is no obligation to do it that way.
 
 Or, if you like:
 
@@ -251,26 +251,14 @@ farther away from the mean fat content of all the brands. But there
 isn't much to choose. For the confidence intervals for the mean
 calories of *all* brands with these fat contents, the picture is clearer:
 
-```{r pizza-12 }
-preds <- predict(pizza.1, new, interval = "c")
-cbind(new, preds)
+```{r}
+plot_cap(pizza.1, condition = "Fat")
 ```
 
- 
+A `fat` value of 12 is close to the middle of the data, so the interval is shorter, but a value of 20 is out near the extreme and the interval is noticeably longer.
 
-or, as before:
 
-```{r pizza-13 }
-as_tibble(preds) %>% bind_cols(new) %>% select(Fat, everything())
-```
-
- 
-
-This time the fat-20 interval is noticeably longer than the fat-12
-one. And these are much shorter than the prediction intervals, as we
-would guess.
-
-This question is a fair bit of work for 3 points, so I'm not insisting that you explain
+This part was a fair bit of work for 3 points, so I'm not insisting that you explain
 your choice of a prediction interval over a confidence interval, but I
 think it is still a smart thing to do, even purely from a marks point
 of view, because if you get it wrong for a semi-plausible reason, you
