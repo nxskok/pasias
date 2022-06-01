@@ -36,7 +36,7 @@ flat or sloping down
 
 * `thal` normal, fixed defect, reversible defect
 
-* `heart.disease` 1=absent, 2=present
+* `heart.disease` yes, no (response)
 
 
 I don't know what most of those are, but we will not let that stand in
@@ -238,8 +238,8 @@ variables have an effect on heart disease. Display your final model
 variable, and asking for the summary of that. In `step`,
 you'll need to specify a starting model (the one from part
 (<a href="#part:heart-first">here</a>)), the direction of elimination, and the test
-to base the elimination decision on (the same one as you used in
-`drop1`). 
+to display the P-value for (the same one as you used in
+`drop1`). (Note: the actual decision to keep or drop explanatory variables is based on AIC rather than the P-value, with the result that `step` will sometimes keep variables you would have dropped, with P-values around 0.10.)
 
 
 Solution
@@ -291,297 +291,78 @@ it's actually between `flat` with a positive slope and
   
 $\blacksquare$
 
-(h) We are going to make a large number of predictions. Create
-a data frame that contains all combinations of representative
+(h) We are going to make a large number of predictions. Create and save
+a data frame that contains predictions for all combinations of representative
 values for all the variables in the model that came out of
 `step`. By "representative" I mean all the values for a
-categorical variable, and the first and third quartiles for a numeric
-variable.
+categorical variable, and the five-number summary for a numeric
+variable. (Note that you will get a *lot* of predictions.)
 
 
 Solution
 
+This is exactly what `predictions` with `variables` does, so that you don't have to do anything to get hold of the representative variables yourself. 
 
-Let's take a breath first.
-There are two pieces of stuff to do here: we need to get the
-quartiles of the quantitative variables, and we need all the
-different values of the categorical ones. There are several of
-each, so we want some kind of automated method.
-The easy way of getting the quartiles is via `summary`
-of the whole data frame:
-```{r heart-9 }
-summary(heart)
+The hard work is in listing all the variables. The easiest way to make sure you have them all is to look at the `summary` of your best model (mine was called `heart.3`) first, and copy them from the `Call` at the top. This is easier than looking at the table of Coefficients (or `tidy` output) because for categorical variables like `pain.type` you will have to distinguish the name of the variable from its levels. For example, the table of Coefficients has `pain.typeatypical` and `pain.typenonanginal`. Is it obvious to you where the variable name ends and its level begins?^[If it is for you, go right ahead, but for me it wasn't.]
+
+```{r}
+p <- predictions(heart.3, variables = c("sex", "pain.type", "resting.bp", "serum.chol", "max.hr", "oldpeak", "slope", "colored", "thal"))
+p
 ```
 
-         
-This is the old-fashioned "base R" way of doing it. The
-`tidyverse` way is to get the Q1 and Q3 of just the variables
-that are numeric. We are doing something to (summarizing) these variables, so we need the `across(where())` idea to get just the numeric ones. We also need a `list` at the end because we are computing two summaries for each variable, Q1 and Q3, rather than just one. Finally, something that's easy to mess up (I do it all the time) is the closing bracket of the `across`: this goes *right at the end*, because the calculation is inside the `across` as well:
+There are a mere 108,000 rows here (and a fair few columns also). That is fine --- as long as you don't display them all for a grader to have to page through!
 
-```{r heart-10 }
-heart %>% summarize(across(where(is.numeric), 
-                           list(q1 = ~quantile(., 0.25),
-                                q3 = ~quantile(., 0.75))))
-```
-
-These are the Q1 and Q3 for each variable in turn; we already had quite a lot of variables, and now we have twice as many columns as we had before.  Click the right-arrow to see everything. 
-
-One way to see all the results is
-to "transpose" the result with the variable-quartile combinations in
-a column and the actual quartile values in another:
-
-```{r heart-11 }
-heart %>% summarize(across(where(is.numeric), 
-                           list(q1 = ~quantile(., 0.25),
-                                q3 = ~quantile(., 0.75)))) %>% 
-  pivot_longer(everything(), names_to="vq", values_to="quartile") -> heart2
-heart2
-```
-
- 
-
-If you want to be really fancy:
-
-```{r heart-12 }
-heart %>% summarize(across(where(is.numeric), 
-                           list(q1 = ~quantile(., 0.25),
-                                q3 = ~quantile(., 0.75)))) %>% 
-  pivot_longer(everything(), names_to=c("variable", "which_quartile"), 
-               names_sep="_", values_to="quartile") %>% 
-  pivot_wider(names_from=which_quartile, values_from=quartile)
-```
-
-You would *definitely* benefit from running this pipeline one line at a time to see how it works! The `summarize` produces columns with names like `age_q1`, which are then split up into a variable name and a "which quartile" by the fancy version of `pivot_longer`. (If you prefer, this is the vanilla version of `pivot_longer` followed by `separate`. For yourself, do it the way that makes sense to you.) Finally, I put Q1 and Q3 in their own columns so that you can see them side by side.
- 
-
-The categorical variables are a bit trickier, because they will have
-different numbers of possible values. Here's my idea:
-
-```{r zimbru}
-heart %>%
-  select(where(is.character)) %>%
-  mutate(across(everything(), ~factor(.))) %>%
-  summary()
-```
-
- 
-
-My thought was that if you pass a genuine factor into `summary`
-(as opposed to a categorical variable that is text), it displays all
-its "levels" (different categories). So, to get to that point, I had
-to select all the categorical-as-text variables (which is actually all
-the ones that are not numeric), and then make a factor out of each of
-them. `mutate` with `across(everything())` does the same thing to all the columns: "for
-each column, run `factor` on it", and saves the results back in variables
-of the same name as they were before. Using `summary` also
-shows how many observations we had in each category.
-
-What I would really like to do is to save these category names
-somewhere so I don't have to type them below when I make all possible
-combinations. My go at that:
-
-```{r heart-13 }
-heart %>%
-  select(where(is.character)) %>%
-  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
-  distinct() %>% 
-  arrange(variable_name, value) -> heart3
-heart3
-```
-
- 
-
-Gosh, that was easier than I thought. A *lot* easier. The
-technique is a lot like that idea for making facetted plots of
-something against "all the $x$s": you collect everything up into one
-column containing a variable name and another column containing the
-variable value. This contains a lot of repeats; the `distinct`
-keeps one of each and throws away the rest.
-
-Hmm, another way would be to count everything:
-
-```{r heart-14 }
-heart %>%
-  select(where(is.character)) %>%
-  pivot_longer(everything(), names_to="variable_name", values_to="value") %>%
-  count(variable_name, value) -> heart3
-heart3 
-```
-
- 
-
-That perhaps is more obvious in retrospect, because there are no new
-tools there.
-
-Now, we come to setting up the variables that we are going to make all
-combinations of. For a quantitative variable such as `age`, I
-need to go back to `heart2`:
-
-```{r heart-15 }
-heart2
-```
-
- 
-
-and pull out the rows whose names contain `age_`. This is done
-using `str_detect`^[If you're selecting *columns*,  you can use select-helpers, but for rows, not.] from
-`stringr`.^[Which is loaded with the `tidyverse`  so you don't have to load it.] 
-Here's how it goes for `age`:
-
-```{r heart-16 }
-heart2 %>%
-  filter(str_detect(vq, "age_"))
-```
-
- 
-
-and one more step to get just the quartiles:
-
-```{r heart-17 }
-heart2 %>%
-  filter(str_detect(vq, "age_")) %>%
-  pull(quartile)
-```
-
- 
-
-We'll be doing this a few times, so we should write a function to do it:
-
-```{r heart-18 }
-get_quartiles <- function(d, x) {
-  d %>%
-    filter(str_detect(vq, x)) %>%
-    pull(quartile)
-}
-```
-
-
-
-and to test:
-
-```{r heart-19 }
-get_quartiles(heart2, "age_")
-```
-
- 
-
-Yep. I put the underscore in so as to not catch other variables that
-have `age` inside them but not at the end.
-
-For the categorical variables, we need to look in `heart3`:
-
-```{r heart-20 }
-heart3
-```
-
- 
-
-then choose the rows with the right thing in `variable_name`, and then
-pull just the `value` column. This is sufficiently like the
-previous one that I think we can write a function right away:
-
-```{r heart-21 }
-get_categories <- function(d, x) {
-  d %>%
-    filter(variable_name == x) %>%
-    pull(value)
-}
-get_categories(heart3, "electro")
-```
-
- 
-All right, setup, using my usual habit of plural names, and using
-those functions we just wrote: 
-
-```{r heart-22 }
-sexes <- get_categories(heart3, "sex")
-pain.types <- get_categories(heart3, "pain.type")
-resting.bps <- get_quartiles(heart2, "resting.bp_")
-serum.chols <- get_quartiles(heart2, "serum.chol_")
-max.hrs <- get_quartiles(heart2, "max.hr_")
-oldpeaks <- get_quartiles(heart2, "oldpeak_")
-slopes <- get_categories(heart3, "slope")
-coloreds <- get_quartiles(heart2, "colored_")
-thals <- get_categories(heart3, "thal")
-```
-
- 
-
-All combos of all of those (and there will be a lot of those):
-
-```{r heart-23 }
-heart.new <- crossing(
-  sex = sexes, pain.type = pain.types, resting.bp = resting.bps,
-  serum.chol = serum.chols, max.hr = max.hrs, oldpeak = oldpeaks, slope = slopes,
-  colored = coloreds, thal = thals
-)
-heart.new
-```
-
- 
-
-Yeah, that's a lot. Fortunately, we won't have to look at them all.
-        
 $\blacksquare$
 
-(i) Obtain the predicted probabilities of heart disease for
-the data frame you constructed in the last part, using your
-model that came out of `step`. Add these predictions to
-the data frame from the previous part (as a column in that data
-frame). 
 
-
-Solution
-
-
-Get the predictions, which is less scary than it seems:
-```{r heart-24 }
-p <- predict(heart.3, heart.new, type = "response")
-```
-
-         
-
-and the easiest way to add these to `heart.new` is this:
-
-```{r heart-25 }
-heart.new %>% mutate(pred = p) -> heart.new
-```
-
- 
-
-Let's take a look at a few of the predictions, by way of sanity-checking:
-
-```{r heart-26 }
-heart.new %>% sample_n(8)
-```
-
- 
-
-This seems at least reasonably sane.
-        
-$\blacksquare$
-
-(j) Find the largest predicted probability (which is the
+(i) Find the largest predicted probability (which is the
 predicted probability of heart disease) and display all the
 variables that it was a prediction for. 
 
 
 Solution
 
+The (at current writing) approved way to do this is to use `slice_max`. This finds the rows with maximum value(s) on a variable, which is exactly what we want. It goes like this:
 
-This can be done in one step:
-```{r heart-27 }
-heart.new %>% filter(pred == max(pred))
+```{r}
+p %>% slice_max(predicted, n = 1)
 ```
 
-         
+The inputs to `slice_max` are the column whose maximum value you want, and the number of rows you want (so `n = 3` would display the *three* rows with the highest predicted probabilities).
 
+Variations: 
+
+- by using `prop` instead of `n`, you can display the `proportion` of rows with the highest values on your variable, such as the 10% of rows with the highest predicted probabilities with `prop = 0.10`
+- there is also `slice_min` that displays the rows with the *lowest* values on a variable, or the input proportion of rows with the lowest values
+- there are alse `slice_head` and `slice_tail` that display the first and last (respectively) rows in a dataframe. The default display of a dataframe in an R Notebook is thus 
+
+```{r}
+p %>% slice_head(n = 10)
+```
+
+except that the default display also tells you how many rows there are altogether.
+
+- you may have run into `slice_sample`, which displays a randomly-chosen number or proportion of rows from a dataframe. This is useful after you read in a dataframe from a file, if you want to get a sense of what kind of values you have in your dataframe (for example, if they are ordered by something and looking at the first ten rows won't tell you the whole story, such as having males listed first and you want to check that there are some females as well):
+
+```{r}
+p %>% slice_sample(n = 10)
+```
+
+
+If you didn't think of `slice_max`, there are lots of other ways. Find one. Here are some examples:
+
+
+```{r heart-27 }
+p %>% filter(predicted == max(predicted))
+```
+
+        
 or if you didn't think of that, you can find the maximum first, and
 then display the rows with predictions close to it:
 
 ```{r heart-28 }
-heart.new %>% summarize(m = max(pred))
-heart.new %>% filter(pred > 0.98)
+p %>% summarize(m = max(predicted))
+p %>% filter(predicted > 0.999998)
 ```
 
  
@@ -589,23 +370,23 @@ heart.new %>% filter(pred > 0.98)
 or even find *which* row has the maximum, and then display that row:
 
 ```{r heart-29 }
-heart.new %>% summarize(row = which.max(pred))
-heart.new %>% slice(1398)
+p %>% summarize(row = which.max(predicted))
+p %>% slice(13049)
 ```
 
  
 
-or sort the rows by `pred`, descending, and display the top few:
+or sort the rows by `predicted`, descending, and display the top few:
 
 ```{r heart-30 }
-heart.new %>% arrange(desc(pred)) %>% slice(1:8)
+p %>% arrange(desc(predicted)) %>% slice(1:8)
 ```
 
  
         
 $\blacksquare$
 
-(k) Compare the `summary` of the final model from
+(j) Compare the `summary` of the final model from
 `step` with your highest predicted heart disease
 probability and the values of the other variables that make it
 up. Are they consistent?
@@ -624,7 +405,11 @@ baseline), and for a numeric variable, if the slope is
 positive, a *high* value is associated with heart
 disease, and if negative, a low value.
 Bearing that in mind, we go back to my
-`summary(heart.3)` and we have:
+`summary(heart.3)`:
+
+```{r}
+summary(heart.3)
+```
 
 
 * `sex`: being male has the higher risk, by a lot
@@ -651,18 +436,45 @@ value.
 
 * `thal`: `reversible` has greatest risk.
 
-Then we can do the same thing for the prediction. For the
+Then we can do the same thing for the prediction. 
+
+and the highest prediction:
+
+```{r}
+p %>% slice_max(predicted, n = 1)
+```
+
+For the
 numerical variables, we may need to check back to the previous
 part to see whether the value shown was high or low. Once you
 have done that, you can see that the variable values for the
 highest predicted probability do indeed match the ones we
 thought should be the highest risk.
-The interesting thing about this is that after adjusting for
+
+Extra: the interesting thing about this is that even after adjusting for
 all of the other variables, there is a greater risk of heart
 disease if you are male (and the model shows that the risk is
 *much* greater). That is to say, it's being male that
 makes the difference, not the fact that any of the other
 variables are different for males.
+
+It's rather difficult to scan 108,000 predictions to see the effect of being male, but we can do this:
+
+```{r}
+predictions(heart.3, variables = "sex")
+```
+
+
+What this does is to choose a single representative value for all the other variables: the mean for a quantitative variable like resting blood pressure, and the most common category for a categorical variable like `pain.type`. If you scan all the way along the two rows, you find that the values for all the variables are the same except for `sex` at the end. The predicted probabilities of heart disease are very different for males and females (much higher for males), especially given that all else really is equal.
+
+To see this graphically, we can use `plot_cap`, and we can include another variable such as resting blood pressure. It's better to list the quantitative one first:
+
+```{r}
+plot_cap(heart.3, condition = c("resting.bp", "sex"))
+```
+
+As the resting blood pressure increases, the probability of heart disease increases, but the blue line for males is well above the red one for females all the way across. For example, for a 50% chance of heart disease, this will happen for males with a resting blood pressure of about 120, but for females not until the resting blood pressure reaches 190!
+
 Perhaps, therefore, the easiest way to avoid a heart attack is to not be male!
         
 $\blacksquare$
