@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 20 Regression with categorical variables | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 20 Regression with categorical variables | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
   
   <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
   <meta name="github-repo" content="nxskok/pasias" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2022-06-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="multiple-regression.html"/>
 <link rel="next" href="dates-and-times.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,29 +49,33 @@
 
 
 
-
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +84,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -115,6 +119,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -131,16 +136,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Problems and Solutions in Applied Statistics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a><ul>
-<li class="chapter" data-level="1.1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#running-r-studio-on-jupyterhub"><i class="fa fa-check"></i><b>1.1</b> Running R Studio on Jupyterhub</a></li>
-<li class="chapter" data-level="1.2" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><i class="fa fa-check"></i><b>1.2</b> Getting an R Studio Cloud account</a></li>
-<li class="chapter" data-level="1.3" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-started"><i class="fa fa-check"></i><b>1.3</b> Getting started</a></li>
-<li class="chapter" data-level="1.4" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><i class="fa fa-check"></i><b>1.4</b> Reading data from a file</a></li>
-<li class="chapter" data-level="1.5" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><i class="fa fa-check"></i><b>1.5</b> Reading files different ways</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
 <li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
 <li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
 <li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
@@ -151,7 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
 <li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
 <li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
-<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
 <li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
 <li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
@@ -159,13 +160,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
 <li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
-<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
 <li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
 <li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
 <li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a><ul>
+<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a>
+<ul>
 <li class="chapter" data-level="16.1" data-path="treating-dandruff.html"><a href="treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
 <li class="chapter" data-level="16.2" data-path="treating-dandruff.html"><a href="treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
 <li class="chapter" data-level="16.3" data-path="treating-dandruff.html"><a href="treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
@@ -176,7 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
 <li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
 <li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
-<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
 <li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
 <li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
@@ -184,7 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
 <li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
-<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
 <li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
@@ -203,7 +208,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
 <li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
 <li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
-<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
 <li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
 </ul></li>
@@ -229,11 +235,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="regression-with-categorical-variables" class="section level1">
-<h1><span class="header-section-number">Chapter 20</span> Regression with categorical variables</h1>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div id="crickets-revisited" class="section level2">
-<h2><span class="header-section-number">20.1</span> Crickets revisited</h2>
+<div id="regression-with-categorical-variables" class="section level1 hasAnchor" number="20">
+<h1><span class="header-section-number">Chapter 20</span> Regression with categorical variables<a href="regression-with-categorical-variables.html#regression-with-categorical-variables" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="regression-with-categorical-variables.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="crickets-revisited" class="section level2 hasAnchor" number="20.1">
+<h2><span class="header-section-number">20.1</span> Crickets revisited<a href="regression-with-categorical-variables.html#crickets-revisited" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This is a continuation of the crickets problem that you
 may have seen before (minus the data tidying).</p>
 <p>Male tree crickets produce “mating songs” by rubbing their wings
@@ -268,8 +274,8 @@ the one from the <span class="math inline">\(t\)</span>-test. What does that tel
 <code>pulse.1</code>.</p></li>
 </ol>
 </div>
-<div id="pulse-rates-and-marching" class="section level2">
-<h2><span class="header-section-number">20.2</span> Pulse rates and marching</h2>
+<div id="pulse-rates-and-marching" class="section level2 hasAnchor" number="20.2">
+<h2><span class="header-section-number">20.2</span> Pulse rates and marching<a href="regression-with-categorical-variables.html#pulse-rates-and-marching" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Forty students, some male and some female, measured their resting pulse rates. Then they marched in place for one minute and measured their pulse rate again.
 Our aim is to use regression to predict the pulse rate after the marching from the pulse rate before, and to see whether that is different for males and females. The data set is in <a href="http://ritsokiguess.site/datafiles/pulsemarch.csv">http://ritsokiguess.site/datafiles/pulsemarch.csv</a>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -282,8 +288,8 @@ Our aim is to use regression to predict the pulse rate after the marching from t
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="crickets-revisited-1" class="section level2">
-<h2><span class="header-section-number">20.3</span> Crickets revisited</h2>
+<div id="crickets-revisited-1" class="section level2 hasAnchor" number="20.3">
+<h2><span class="header-section-number">20.3</span> Crickets revisited<a href="regression-with-categorical-variables.html#crickets-revisited-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This is a continuation of the crickets problem that you
 may have seen before (minus the data tidying).</p>
 <p>Male tree crickets produce “mating songs” by rubbing their wings
@@ -304,17 +310,18 @@ so, what.</p>
 </ol>
 <p>Solution</p>
 <p>Nothing terribly surprising here:</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb158-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/crickets2.csv&quot;</span></a>
-<a class="sourceLine" id="cb158-2" title="2">crickets &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   species = col_character(),
-##   temperature = col_double(),
-##   pulse_rate = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb160-1" title="1">crickets</a></code></pre></div>
-<pre><code>## # A tibble: 31 x 3
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="regression-with-categorical-variables.html#cb117-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/crickets2.csv&quot;</span></span>
+<span id="cb117-2"><a href="regression-with-categorical-variables.html#cb117-2" aria-hidden="true" tabindex="-1"></a>crickets <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## Rows: 31 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): species
+## dbl (2): temperature, pulse_rate
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="regression-with-categorical-variables.html#cb119-1" aria-hidden="true" tabindex="-1"></a>crickets</span></code></pre></div>
+<pre><code>## # A tibble: 31 × 3
 ##    species       temperature pulse_rate
 ##    &lt;chr&gt;               &lt;dbl&gt;      &lt;dbl&gt;
 ##  1 exclamationis        20.8       67.9
@@ -329,8 +336,8 @@ so, what.</p>
 ## 10 exclamationis        26.2       89.1
 ## # … with 21 more rows</code></pre>
 <p>31 crickets, which is what I remember. What species are there?</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1">crickets <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(species)</a></code></pre></div>
-<pre><code>## # A tibble: 2 x 2
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="regression-with-categorical-variables.html#cb121-1" aria-hidden="true" tabindex="-1"></a>crickets <span class="sc">%&gt;%</span> <span class="fu">count</span>(species)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
 ##   species           n
 ##   &lt;chr&gt;         &lt;int&gt;
 ## 1 exclamationis    14
@@ -343,13 +350,13 @@ differ between species. What do you conclude?</li>
 </ol>
 <p>Solution</p>
 <p>Drag your mind way back to this:</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="kw">t.test</span>(pulse_rate <span class="op">~</span><span class="st"> </span>species, <span class="dt">data =</span> crickets)</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="regression-with-categorical-variables.html#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pulse_rate <span class="sc">~</span> species, <span class="at">data =</span> crickets)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  pulse_rate by species
 ## t = 5.2236, df = 28.719, p-value = 1.401e-05
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group exclamationis and group niveus is not equal to 0
 ## 95 percent confidence interval:
 ##  14.08583 32.22677
 ## sample estimates:
@@ -367,8 +374,8 @@ species.</p>
 <p>Solution</p>
 <p>Hang onto the “pulse rate depends on species” idea and try
 that in <code>lm</code>:</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1">pulse<span class="fl">.0</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(pulse_rate <span class="op">~</span><span class="st"> </span>species, <span class="dt">data =</span> crickets)</a>
-<a class="sourceLine" id="cb166-2" title="2"><span class="kw">summary</span>(pulse<span class="fl">.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="regression-with-categorical-variables.html#cb125-1" aria-hidden="true" tabindex="-1"></a>pulse<span class="fl">.0</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(pulse_rate <span class="sc">~</span> species, <span class="at">data =</span> crickets)</span>
+<span id="cb125-2"><a href="regression-with-categorical-variables.html#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pulse<span class="fl">.0</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = pulse_rate ~ species, data = crickets)
@@ -397,13 +404,13 @@ is negative, the <span class="math inline">\(t\)</span>-statistic is almost the 
 variances everywhere (that is, within the two <code>species</code>), and
 before, we did the Welch-Satterthwaite test that does not assume equal
 variances. What if we do the pooled <span class="math inline">\(t\)</span>-test instead?</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1"><span class="kw">t.test</span>(pulse_rate <span class="op">~</span><span class="st"> </span>species, <span class="dt">data =</span> crickets, <span class="dt">var.equal =</span> T)</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="regression-with-categorical-variables.html#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pulse_rate <span class="sc">~</span> species, <span class="at">data =</span> crickets, <span class="at">var.equal =</span> T)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  pulse_rate by species
 ## t = 5.1706, df = 29, p-value = 1.579e-05
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group exclamationis and group niveus is not equal to 0
 ## 95 percent confidence interval:
 ##  13.99690 32.31571
 ## sample estimates:
@@ -422,8 +429,8 @@ from.<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a></li>
 <p>Solution</p>
 <p>One of the wonderful things about <code>ggplot</code> is that doing
 the obvious thing works:</p>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="kw">ggplot</span>(crickets, <span class="kw">aes</span>(<span class="dt">x =</span> temperature, <span class="dt">y =</span> pulse_rate, <span class="dt">colour =</span> species)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb170-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="regression-with-categorical-variables.html#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crickets, <span class="fu">aes</span>(<span class="at">x =</span> temperature, <span class="at">y =</span> pulse_rate, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb129-2"><a href="regression-with-categorical-variables.html#cb129-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/crickets-b-6-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -465,8 +472,8 @@ the one from the <span class="math inline">\(t\)</span>-test. What does that tel
 <p>Solution</p>
 <p>This is actually a so-called “analysis of covariance model”,
 which properly belongs in D29, but it’s really just a regression:</p>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" title="1">pulse<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(pulse_rate <span class="op">~</span><span class="st"> </span>species <span class="op">+</span><span class="st"> </span>temperature, <span class="dt">data =</span> crickets)</a>
-<a class="sourceLine" id="cb171-2" title="2"><span class="kw">summary</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="regression-with-categorical-variables.html#cb130-1" aria-hidden="true" tabindex="-1"></a>pulse<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(pulse_rate <span class="sc">~</span> species <span class="sc">+</span> temperature, <span class="at">data =</span> crickets)</span>
+<span id="cb130-2"><a href="regression-with-categorical-variables.html#cb130-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pulse<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = pulse_rate ~ species + temperature, data = crickets)
@@ -503,7 +510,7 @@ pulse rate for <em>niveus</em> is about 10 less than for
 <em>exclamationis</em>. This is pretty much what the scatterplot told
 us.</p>
 <p>We can go a little further here:</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" title="1"><span class="kw">confint</span>(pulse<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="regression-with-categorical-variables.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(pulse<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##                    2.5 %    97.5 %
 ## (Intercept)   -12.436265 -1.985547
 ## speciesniveus -11.571408 -8.559175
@@ -527,8 +534,8 @@ really are, when you account for temperature.</p>
 same for both species (just the intercepts differ). If you want to
 allow the slopes to differ between species, you add an interaction
 between temperature and species:</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" title="1">pulse<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(pulse_rate <span class="op">~</span><span class="st"> </span>species <span class="op">*</span><span class="st"> </span>temperature, <span class="dt">data =</span> crickets)</a>
-<a class="sourceLine" id="cb175-2" title="2"><span class="kw">summary</span>(pulse<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="regression-with-categorical-variables.html#cb134-1" aria-hidden="true" tabindex="-1"></a>pulse<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(pulse_rate <span class="sc">~</span> species <span class="sc">*</span> temperature, <span class="at">data =</span> crickets)</span>
+<span id="cb134-2"><a href="regression-with-categorical-variables.html#cb134-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pulse<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = pulse_rate ~ species * temperature, data = crickets)
@@ -552,7 +559,7 @@ between temperature and species:</p>
 <p>To see whether adding the interaction term added anything to the
 prediction,<a href="#fn28" class="footnote-ref" id="fnref28"><sup>28</sup></a>
 compare the model with and without using <code>anova</code>:</p>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" title="1"><span class="kw">anova</span>(pulse<span class="fl">.1</span>, pulse<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="regression-with-categorical-variables.html#cb136-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(pulse<span class="fl">.1</span>, pulse<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: pulse_rate ~ species + temperature
@@ -585,8 +592,8 @@ species, which we can then test to see whether it helps.</p>
 is going on.</p>
 <p><code>ggplot</code> makes it almost laughably easy to add regression lines
 for each species to our plot, thus:</p>
-<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" title="1"><span class="kw">ggplot</span>(crickets, <span class="kw">aes</span>(<span class="dt">x =</span> temperature, <span class="dt">y =</span> pulse_rate, <span class="dt">colour =</span> species)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb179-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="regression-with-categorical-variables.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(crickets, <span class="fu">aes</span>(<span class="at">x =</span> temperature, <span class="at">y =</span> pulse_rate, <span class="at">colour =</span> species)) <span class="sc">+</span></span>
+<span id="cb138-2"><a href="regression-with-categorical-variables.html#cb138-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/crickets-b-11-1.png" width="672" /></p>
 <p>The lines are almost exactly parallel, so having the same slope for
@@ -599,7 +606,7 @@ each species makes perfect sense.</p>
 <p>Solution</p>
 <p>First, the plot of residuals against fitted values (after all,
 it <em>is</em> a regression):</p>
-<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> .fitted, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="regression-with-categorical-variables.html#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pulse<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/crickets-b-12-1.png" width="672" /></p>
 <p>This looks nice and random.</p>
 <p>Now, we plot the residuals against the explanatory variables. There
@@ -610,14 +617,14 @@ in different places when we plot them. There are different ways to get
 around that. Perhaps the simplest is to use <code>pulse.1</code> as our
 “default” data frame and then get <code>temperature</code> from the
 right place:</p>
-<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> crickets<span class="op">$</span>temperature, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="regression-with-categorical-variables.html#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pulse<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> crickets<span class="sc">$</span>temperature, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/crickets-b-13-1.png" width="672" /></p>
 <p>I don’t see anything untoward there.</p>
 <p>Species. We want to compare the residuals for the two species, which
 is categorical. Since the residuals are quantitative, this suggests a
 boxplot. Remembering to get species from the right place again, that
 goes like this:</p>
-<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">x =</span> crickets<span class="op">$</span>species, <span class="dt">y =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="regression-with-categorical-variables.html#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pulse<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> crickets<span class="sc">$</span>species, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/crickets-b-14-1.png" width="672" /></p>
 <p>For the residuals, the median should be zero within each group, and
 the two groups should be approximately normal with mean 0 and about
@@ -630,7 +637,7 @@ less than zero, because the mathematics requires the overall
 mean higher than the median.</p>
 <p>Is that non-normality really problematic? Well, I could look at the
 normal quantile plot of all the residuals together:</p>
-<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" title="1"><span class="kw">ggplot</span>(pulse<span class="fl">.1</span>, <span class="kw">aes</span>(<span class="dt">sample =</span> .resid)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="regression-with-categorical-variables.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pulse<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">sample =</span> .resid)) <span class="sc">+</span> <span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/crickets-b-15-1.png" width="672" /></p>
 <p>There’s a little weirdness at the top, and a tiny indication of a
 curve (that would suggest a little right-skewedness), but not really
@@ -640,8 +647,8 @@ bit lower, I don’t think we’d have anything to complain about at all.</p>
 <p>So, I’m not worried.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="pulse-rates-and-marching-1" class="section level2">
-<h2><span class="header-section-number">20.4</span> Pulse rates and marching</h2>
+<div id="pulse-rates-and-marching-1" class="section level2 hasAnchor" number="20.4">
+<h2><span class="header-section-number">20.4</span> Pulse rates and marching<a href="regression-with-categorical-variables.html#pulse-rates-and-marching-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Forty students, some male and some female, measured their resting pulse rates. Then they marched in place for one minute and measured their pulse rate again.
 Our aim is to use regression to predict the pulse rate after the marching from the pulse rate before, and to see whether that is different for males and females. The data set is in <a href="http://ritsokiguess.site/datafiles/pulsemarch.csv">http://ritsokiguess.site/datafiles/pulsemarch.csv</a>.</p>
 <ol style="list-style-type: lower-alpha">
@@ -649,17 +656,18 @@ Our aim is to use regression to predict the pulse rate after the marching from t
 </ol>
 <p>Solution</p>
 <p>As usual:</p>
-<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/pulsemarch.csv&quot;</span></a>
-<a class="sourceLine" id="cb185-2" title="2">march &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   Sex = col_character(),
-##   Before = col_double(),
-##   After = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" title="1">march</a></code></pre></div>
-<pre><code>## # A tibble: 40 x 3
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="regression-with-categorical-variables.html#cb144-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/pulsemarch.csv&quot;</span></span>
+<span id="cb144-2"><a href="regression-with-categorical-variables.html#cb144-2" aria-hidden="true" tabindex="-1"></a>march <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## Rows: 40 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): Sex
+## dbl (2): Before, After
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="regression-with-categorical-variables.html#cb146-1" aria-hidden="true" tabindex="-1"></a>march</span></code></pre></div>
+<pre><code>## # A tibble: 40 × 3
 ##    Sex    Before After
 ##    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
 ##  1 Female     72    84
@@ -679,14 +687,14 @@ Our aim is to use regression to predict the pulse rate after the marching from t
 </ol>
 <p>Solution</p>
 <p>Two quantitative and one categorical says scatterplot, with colour distinguishing the categories (two here). <code>geom_smooth</code> adds a regression line to the plot for each <code>Sex</code>, which is what we want. I used <code>se=F</code> to remove the grey envelopes from the plot (because I thought they confused the issue):</p>
-<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb189-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="regression-with-categorical-variables.html#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(march, <span class="fu">aes</span>(<span class="at">x=</span>Before, <span class="at">y=</span>After, <span class="at">colour=</span>Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb148-2"><a href="regression-with-categorical-variables.html#cb148-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se=</span>F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/fus-1.png" width="672" /></p>
 <p>Having only one regression line is not so good because that only shows that pulse rate after goes up with pulse rate before, but not if and how the sexes differ.</p>
 <p>Extra: I took a shortcut of the process here, to make the question shorter. In practice, what you’d do is to put smooth trends on the plot first:</p>
-<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb191-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">se=</span>F)</a></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="regression-with-categorical-variables.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(march, <span class="fu">aes</span>(<span class="at">x=</span>Before, <span class="at">y=</span>After, <span class="at">colour=</span>Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb150-2"><a href="regression-with-categorical-variables.html#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_smooth</span>(<span class="at">se=</span>F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/hearter-1.png" width="672" /></p>
 <p>The red trend looks curved, but if you look carefully, pretty much all of<a href="#fn30" class="footnote-ref" id="fnref30"><sup>30</sup></a> the evidence for the curve comes from that point on the right with pulse rate before over 90 and pulse rate after around 100. If it weren’t for that, the red trend would be pretty close to linear. As you’ll recall, a decision about the kind of trend based on <em>one</em> observation is a pretty flimsy decision.</p>
@@ -706,8 +714,8 @@ if the pulse rate before is higher, so is the pulse rate after. This is true for
 </ol>
 <p>Solution</p>
 <p>Thus:</p>
-<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" title="1">march<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>Before<span class="op">+</span>Sex, <span class="dt">data=</span>march)</a>
-<a class="sourceLine" id="cb193-2" title="2"><span class="kw">summary</span>(march<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="regression-with-categorical-variables.html#cb152-1" aria-hidden="true" tabindex="-1"></a>march<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(After<span class="sc">~</span>Before<span class="sc">+</span>Sex, <span class="at">data=</span>march)</span>
+<span id="cb152-2"><a href="regression-with-categorical-variables.html#cb152-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(march<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = After ~ Before + Sex, data = march)
@@ -728,8 +736,8 @@ if the pulse rate before is higher, so is the pulse rate after. This is true for
 ## Multiple R-squared:  0.6468, Adjusted R-squared:  0.6277 
 ## F-statistic: 33.87 on 2 and 37 DF,  p-value: 4.355e-09</code></pre>
 <p>Extra: if you want “all the other variables except the response” as explanatory, there is also this shortcut:</p>
-<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" title="1">march<span class="fl">.1</span>a &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>., <span class="dt">data=</span>march)</a>
-<a class="sourceLine" id="cb195-2" title="2"><span class="kw">summary</span>(march<span class="fl">.1</span>a)</a></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="regression-with-categorical-variables.html#cb154-1" aria-hidden="true" tabindex="-1"></a>march<span class="fl">.1</span>a <span class="ot">&lt;-</span> <span class="fu">lm</span>(After<span class="sc">~</span>., <span class="at">data=</span>march)</span>
+<span id="cb154-2"><a href="regression-with-categorical-variables.html#cb154-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(march<span class="fl">.1</span>a)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = After ~ ., data = march)
@@ -757,8 +765,8 @@ if the pulse rate before is higher, so is the pulse rate after. This is true for
 <p>We noted a clear upward trend before, for both sexes, so there is no surprise that the <code>Before</code> pulse rate is significant.</p>
 <p>The red dots (females) on the graph seemed to be on average above the blue ones (males), at least for similar before pulse rates. (This is not completely convincing, so you are entitled to be surprised also; note that the P-value, while significant, is not <em>that</em> small).</p>
 <p>Extra: comparing the <em>lines</em> is less convincing, because how do we get a feel for whether these lines are more different than chance? One deceiving way to (fail to) get a feel for this is to re-draw our plot but with the grey envelopes:</p>
-<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1"><span class="kw">ggplot</span>(march, <span class="kw">aes</span>(<span class="dt">x=</span>Before, <span class="dt">y=</span>After, <span class="dt">colour=</span>Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb197-2" title="2"><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="regression-with-categorical-variables.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(march, <span class="fu">aes</span>(<span class="at">x=</span>Before, <span class="at">y=</span>After, <span class="at">colour=</span>Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb156-2"><a href="regression-with-categorical-variables.html#cb156-2" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/buttin-1.png" width="672" /></p>
 <p>The grey envelopes overlap substantially, which would make you think the lines are <em>not</em> significantly different. But, this is not the right way to compare the lines. It is a similar problem to that of comparing two <em>means</em> (that we would normally do with a two-sample test of some kind) by working out the two <em>one</em>-sample confidence intervals, and seeing whether they overlap. If they <em>do not</em>, then you can be sure that the means differ, but if they do overlap, then you cannot say anything about whether the means differ: maybe they do, maybe they don’t. This one is analogous; the grey envelopes overlap, so maybe the lines differ, maybe they don’t. Looking at the grey envelopes in this case gives you <em>no</em> insight about whether males and females differ.</p>
@@ -773,8 +781,8 @@ if the pulse rate before is higher, so is the pulse rate after. This is true for
 This value is <span class="math inline">\(-4.8\)</span>, so, at any <code>Before</code> pulse rate, the male <code>After</code> pulse rate is predicted to be 4.8 <em>less</em> than the female one.</p>
 <p>I think you have to mention the value <span class="math inline">\(-4.8\)</span>, so that you can talk intelligently about what it means for these data.</p>
 <p>Extra: the implication of our model is that the predicted difference is the <em>same</em> all the way along. You might have your doubts about that; you might think the lines are closer together on the left and further apart on the right. Another way to think about this is whether the lines are <em>parallel</em>: that is, whether they have the same slope. I’m inclined to think they do; the data points are fairly scattered, and I think the slopes would have to be a lot more different to be significantly different. But you don’t have to take my word for it: we can test this by adding an <strong>interaction term</strong> to the model. You might have seen this in ANOVA, where you are assessing the effect of one factor at different levels of the other. This is more or less the same idea. Note the <code>*</code> rather than the <code>+</code> in the model formula:<a href="#fn31" class="footnote-ref" id="fnref31"><sup>31</sup></a></p>
-<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1">march<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(After<span class="op">~</span>Before<span class="op">*</span>Sex, <span class="dt">data=</span>march)</a>
-<a class="sourceLine" id="cb199-2" title="2"><span class="kw">summary</span>(march<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="regression-with-categorical-variables.html#cb158-1" aria-hidden="true" tabindex="-1"></a>march<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(After<span class="sc">~</span>Before<span class="sc">*</span>Sex, <span class="at">data=</span>march)</span>
+<span id="cb158-2"><a href="regression-with-categorical-variables.html#cb158-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(march<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = After ~ Before * Sex, data = march)
@@ -799,7 +807,7 @@ This value is <span class="math inline">\(-4.8\)</span>, so, at any <code>Before
 <p>We were lucky here in that <code>Sex</code> has only two levels, so looking at the <code>summary</code> gave us what we wanted. If we had had an <code>Other</code> category for <code>Sex</code>, for people who don’t identify with either male or female, there would be two Estimates in the <code>summary</code> table, one comparing Male with Female, and one comparing Other with Female.<a href="#fn32" class="footnote-ref" id="fnref32"><sup>32</sup></a>
 But maybe the significant difference is Male vs. Other, and we would never see it.</p>
 <p>To look for <em>any</em> effect of a categorical variable, the right way is to use <code>drop1</code>, to see which variables, including categorical ones, can be removed as a whole, thus:<a href="#fn33" class="footnote-ref" id="fnref33"><sup>33</sup></a></p>
-<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="kw">drop1</span>(march<span class="fl">.2</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="regression-with-categorical-variables.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(march<span class="fl">.2</span>, <span class="at">test=</span><span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -808,7 +816,7 @@ But maybe the significant difference is Male vs. Other, and we would never see 
 ## &lt;none&gt;                  1738.5 158.88               
 ## Before:Sex  1    32.137 1770.7 157.61  0.6655   0.42</code></pre>
 <p>This <em>only</em> lists things that can be removed, in this case the interaction. It is not significant, so out it comes (resulting in our model <code>march.1</code>):</p>
-<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">drop1</span>(march<span class="fl">.1</span>, <span class="dt">test=</span><span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="regression-with-categorical-variables.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(march<span class="fl">.1</span>, <span class="at">test=</span><span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -823,8 +831,8 @@ But maybe the significant difference is Male vs. Other, and we would never see 
 <p>Our categorical explanatory variable has only two levels, so <code>drop1</code> and <code>summary</code> give the exact same P-values.</p>
 <p>Extra 2:</p>
 <p>Let’s go back and look at our data set again:</p>
-<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1">march</a></code></pre></div>
-<pre><code>## # A tibble: 40 x 3
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="regression-with-categorical-variables.html#cb164-1" aria-hidden="true" tabindex="-1"></a>march</span></code></pre></div>
+<pre><code>## # A tibble: 40 × 3
 ##    Sex    Before After
 ##    &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt;
 ##  1 Female     72    84
@@ -839,11 +847,11 @@ But maybe the significant difference is Male vs. Other, and we would never see 
 ## 10 Female     62    92
 ## # … with 30 more rows</code></pre>
 <p>You might have been thinking, when we started, that these are before and after measurements <em>on the same people</em>, and so what we have here is matched pairs. So we do, but it’s not the kind of matched pairs we are accustomed to. Let’s begin by taking differences, getting rid of the <code>Before</code> and <code>After</code> columns, and see what we have left:</p>
-<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1">march <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb207-2" title="2"><span class="kw">mutate</span>(<span class="dt">difference=</span>After<span class="op">-</span>Before) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb207-3" title="3"><span class="kw">select</span>(<span class="op">-</span>After, <span class="op">-</span>Before) -&gt;<span class="st"> </span>march_paired</a>
-<a class="sourceLine" id="cb207-4" title="4">march_paired</a></code></pre></div>
-<pre><code>## # A tibble: 40 x 2
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="regression-with-categorical-variables.html#cb166-1" aria-hidden="true" tabindex="-1"></a>march <span class="sc">%&gt;%</span> </span>
+<span id="cb166-2"><a href="regression-with-categorical-variables.html#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(<span class="at">difference=</span>After<span class="sc">-</span>Before) <span class="sc">%&gt;%</span> </span>
+<span id="cb166-3"><a href="regression-with-categorical-variables.html#cb166-3" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(<span class="sc">-</span>After, <span class="sc">-</span>Before) <span class="ot">-&gt;</span> march_paired</span>
+<span id="cb166-4"><a href="regression-with-categorical-variables.html#cb166-4" aria-hidden="true" tabindex="-1"></a>march_paired</span></code></pre></div>
+<pre><code>## # A tibble: 40 × 2
 ##    Sex    difference
 ##    &lt;chr&gt;       &lt;dbl&gt;
 ##  1 Female         12
@@ -860,28 +868,28 @@ But maybe the significant difference is Male vs. Other, and we would never see 
 <p>In matched pairs, we are used to having <em>one</em> column of differences, and we test that for a mean or median of zero, to express no difference between before and after (or whatever it was). But now, we have an extra column <code>Sex</code>. We are not interested here in whether the differences average out to zero;<a href="#fn34" class="footnote-ref" id="fnref34"><sup>34</sup></a> we care more about whether the differences differ (!) between males and females. That is to say, we have a two-sample matched pairs test!</p>
 <p>At this point, your head ought to be hurting!</p>
 <p>However, at this point what we are saying is that <em>if</em> you believe that the difference is a good way to summarize the effect of the exercise, then we have one measurement for each person, independent because different people’s measurements will be independent. It doesn’t matter where they came from. We have measurements on two groups, so some kind of two-sample test will be good. Which kind? Let’s look at a graph, a good one now being a boxplot:</p>
-<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1"><span class="kw">ggplot</span>(march_paired, <span class="kw">aes</span>(<span class="dt">x=</span>Sex, <span class="dt">y=</span>difference)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="regression-with-categorical-variables.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(march_paired, <span class="fu">aes</span>(<span class="at">x=</span>Sex, <span class="at">y=</span>difference)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/fridingen-1.png" width="672" /></p>
 <p>Or, if you like, a facetted normal quantile plot:</p>
-<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1"><span class="kw">ggplot</span>(march_paired, <span class="kw">aes</span>(<span class="dt">sample=</span>difference)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb210-2" title="2"><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb210-3" title="3"><span class="kw">facet_wrap</span>(<span class="op">~</span>Sex)</a></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="regression-with-categorical-variables.html#cb169-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(march_paired, <span class="fu">aes</span>(<span class="at">sample=</span>difference)) <span class="sc">+</span></span>
+<span id="cb169-2"><a href="regression-with-categorical-variables.html#cb169-2" aria-hidden="true" tabindex="-1"></a><span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>() <span class="sc">+</span></span>
+<span id="cb169-3"><a href="regression-with-categorical-variables.html#cb169-3" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>Sex)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/brugg-1.png" width="672" /></p>
 <p>It seems to me that these are normal enough for a <span class="math inline">\(t\)</span>-test, given the sample sizes (feel free to disagree):</p>
-<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1">march_paired <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>(Sex)</a></code></pre></div>
-<pre><code>## # A tibble: 2 x 2
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="regression-with-categorical-variables.html#cb170-1" aria-hidden="true" tabindex="-1"></a>march_paired <span class="sc">%&gt;%</span> <span class="fu">count</span>(Sex)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
 ##   Sex        n
 ##   &lt;chr&gt;  &lt;int&gt;
 ## 1 Female    16
 ## 2 Male      24</code></pre>
 <p>The spreads look a bit different, so I think I would prefer the Welch test here:</p>
-<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1"><span class="kw">t.test</span>(difference<span class="op">~</span>Sex, <span class="dt">data=</span>march_paired)</a></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="regression-with-categorical-variables.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(difference<span class="sc">~</span>Sex, <span class="at">data=</span>march_paired)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  difference by Sex
 ## t = 2.0307, df = 23.296, p-value = 0.05386
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group Female and group Male is not equal to 0
 ## 95 percent confidence interval:
 ##  -0.08848652  9.92181986
 ## sample estimates:
@@ -897,19 +905,19 @@ The regression approach is more flexible, because <em>any</em> linear relationsh
 <div class="footnotes">
 <hr />
 <ol start="22">
-<li id="fn22"><p>This was the actual reason I thought of this question originally: I wanted you to do this.<a href="regression-with-categorical-variables.html#fnref22" class="footnote-back">↩</a></p></li>
-<li id="fn23"><p>This was the actual reason I thought of this question originally: I wanted you to do this.<a href="regression-with-categorical-variables.html#fnref23" class="footnote-back">↩</a></p></li>
-<li id="fn24"><p>And it shows the value of looking at relevant plots.<a href="regression-with-categorical-variables.html#fnref24" class="footnote-back">↩</a></p></li>
-<li id="fn25"><p>Mistakenly.<a href="regression-with-categorical-variables.html#fnref25" class="footnote-back">↩</a></p></li>
-<li id="fn26"><p>Mixes up.<a href="regression-with-categorical-variables.html#fnref26" class="footnote-back">↩</a></p></li>
-<li id="fn27"><p>This is actually grammatically correct.<a href="regression-with-categorical-variables.html#fnref27" class="footnote-back">↩</a></p></li>
-<li id="fn28"><p>Though it’s hard to imagine being able to improve on an R-squared of 99%.<a href="regression-with-categorical-variables.html#fnref28" class="footnote-back">↩</a></p></li>
-<li id="fn29"><p>This wouldn’t have told us about the overall effect of species.<a href="regression-with-categorical-variables.html#fnref29" class="footnote-back">↩</a></p></li>
-<li id="fn30"><p>My mind just jumped to a former German soccer player by the name of Klaus Allofs.<a href="regression-with-categorical-variables.html#fnref30" class="footnote-back">↩</a></p></li>
-<li id="fn31"><p>To be precise, the * means “the main effects and the interaction together”; if you want to talk about just the interaction term, you denote it by <code>:</code>; note the <code>Before:SexMale</code> term in the summary table.<a href="regression-with-categorical-variables.html#fnref31" class="footnote-back">↩</a></p></li>
-<li id="fn32"><p>Female is the baseline, so everything gets compared with that, whether you like it or not.<a href="regression-with-categorical-variables.html#fnref32" class="footnote-back">↩</a></p></li>
-<li id="fn33"><p>The <code>test</code> piece says to do an <span class="math inline">\(F\)</span>-test, which is different from without the quotes, which would mean not to do any tests, <code>F</code> without quotes meaning <code>FALSE</code>.<a href="regression-with-categorical-variables.html#fnref33" class="footnote-back">↩</a></p></li>
-<li id="fn34"><p>I think it’s a given that pulse rates will be higher after exercise than before.<a href="regression-with-categorical-variables.html#fnref34" class="footnote-back">↩</a></p></li>
+<li id="fn22"><p>This was the actual reason I thought of this question originally: I wanted you to do this.<a href="regression-with-categorical-variables.html#fnref22" class="footnote-back">↩︎</a></p></li>
+<li id="fn23"><p>This was the actual reason I thought of this question originally: I wanted you to do this.<a href="regression-with-categorical-variables.html#fnref23" class="footnote-back">↩︎</a></p></li>
+<li id="fn24"><p>And it shows the value of looking at relevant plots.<a href="regression-with-categorical-variables.html#fnref24" class="footnote-back">↩︎</a></p></li>
+<li id="fn25"><p>Mistakenly.<a href="regression-with-categorical-variables.html#fnref25" class="footnote-back">↩︎</a></p></li>
+<li id="fn26"><p>Mixes up.<a href="regression-with-categorical-variables.html#fnref26" class="footnote-back">↩︎</a></p></li>
+<li id="fn27"><p>This is actually grammatically correct.<a href="regression-with-categorical-variables.html#fnref27" class="footnote-back">↩︎</a></p></li>
+<li id="fn28"><p>Though it’s hard to imagine being able to improve on an R-squared of 99%.<a href="regression-with-categorical-variables.html#fnref28" class="footnote-back">↩︎</a></p></li>
+<li id="fn29"><p>This wouldn’t have told us about the overall effect of species.<a href="regression-with-categorical-variables.html#fnref29" class="footnote-back">↩︎</a></p></li>
+<li id="fn30"><p>My mind just jumped to a former German soccer player by the name of Klaus Allofs.<a href="regression-with-categorical-variables.html#fnref30" class="footnote-back">↩︎</a></p></li>
+<li id="fn31"><p>To be precise, the * means “the main effects and the interaction together”; if you want to talk about just the interaction term, you denote it by <code>:</code>; note the <code>Before:SexMale</code> term in the summary table.<a href="regression-with-categorical-variables.html#fnref31" class="footnote-back">↩︎</a></p></li>
+<li id="fn32"><p>Female is the baseline, so everything gets compared with that, whether you like it or not.<a href="regression-with-categorical-variables.html#fnref32" class="footnote-back">↩︎</a></p></li>
+<li id="fn33"><p>The <code>test</code> piece says to do an <span class="math inline">\(F\)</span>-test, which is different from without the quotes, which would mean not to do any tests, <code>F</code> without quotes meaning <code>FALSE</code>.<a href="regression-with-categorical-variables.html#fnref33" class="footnote-back">↩︎</a></p></li>
+<li id="fn34"><p>I think it’s a given that pulse rates will be higher after exercise than before.<a href="regression-with-categorical-variables.html#fnref34" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -922,7 +930,6 @@ The regression approach is more flexible, because <em>any</em> linear relationsh
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -941,6 +948,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -961,6 +969,10 @@ gitbook.start({
 "text": null
 },
 "download": ["pasias.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

@@ -36,7 +36,7 @@ flat or sloping down
 
 * `thal` normal, fixed defect, reversible defect
 
-* `heart.disease` 1=absent, 2=present
+* `heart.disease` yes, no (response)
 
 
 I don't know what most of those are, but we will not let that stand in
@@ -91,8 +91,8 @@ variables have an effect on heart disease. Display your final model
 variable, and asking for the summary of that. In `step`,
 you'll need to specify a starting model (the one from part
 (<a href="#part:heart-first">here</a>)), the direction of elimination, and the test
-to base the elimination decision on (the same one as you used in
-`drop1`). 
+to display the P-value for (the same one as you used in
+`drop1`). (Note: the actual decision to keep or drop explanatory variables is based on AIC rather than the P-value, with the result that `step` will sometimes keep variables you would have dropped, with P-values around 0.10.)
 
 
 
@@ -100,30 +100,23 @@ to base the elimination decision on (the same one as you used in
 
 
 
-(h) We are going to make a large number of predictions. Create
-a data frame that contains all combinations of representative
+(h) We are going to make a large number of predictions. Create and save
+a data frame that contains predictions for all combinations of representative
 values for all the variables in the model that came out of
 `step`. By "representative" I mean all the values for a
-categorical variable, and the first and third quartiles for a numeric
-variable.
+categorical variable, and the five-number summary for a numeric
+variable. (Note that you will get a *lot* of predictions.)
 
 
 
-(i) Obtain the predicted probabilities of heart disease for
-the data frame you constructed in the last part, using your
-model that came out of `step`. Add these predictions to
-the data frame from the previous part (as a column in that data
-frame). 
 
-
-
-(j) Find the largest predicted probability (which is the
+(i) Find the largest predicted probability (which is the
 predicted probability of heart disease) and display all the
 variables that it was a prediction for. 
 
 
 
-(k) Compare the `summary` of the final model from
+(j) Compare the `summary` of the final model from
 `step` with your highest predicted heart disease
 probability and the values of the other variables that make it
 up. Are they consistent?
