@@ -161,7 +161,7 @@ The slope coefficient for `apache` is 0.1156, positive, and
 since we are modelling the probability of death (the first column
 of the response matrix), this says that as `apache` goes
 up, the probability of death goes up as well.
-If you made your response matrix with the columns the wrong way
+If you made your response matrix with the columns the other way
 around, the slope coefficient for `apache` should be
 $-0.1156$, but the explanation should come to the same place,
 because this says that the probability of survival goes down as
@@ -169,28 +169,18 @@ because this says that the probability of survival goes down as
 
 $\blacksquare$
 
-(g) Obtain the predicted probability of death for each of the
-`apache` scores that were in the data set. Display these predicted
-probabilities next to the `apache` values that they came
-from. (You can display all of them.)
+(g) Obtain the predicted probability of death for a representative collection of the
+`apache` scores that were in the data set. Do your predictions behave as you would expect (from your earlier work)?
 
 Solution
 
+"Representative" is a clue that you can let `predictions` pick the exact values using `variables`:
 
-This is the easier version of `predict` since we don't have
-to make a new data frame of values to predict from:
-```{r apache-5 }
-p <- predict(apache.1, type = "response")
-cbind(icu, p)
+```{r}
+predictions(apache.1, variables = "apache")
 ```
 
-     
-
-The `type="response"` is needed to make sure the predictions
-come out as probabilities. If you omit it, you get log-odds.
-
-The predicted probability (of dying) does indeed go up as
-`apache` goes up.
+As the `apache` score goes up, the predicted probability of death also goes up. This is what we would expect to see given the positive slope on `apache` in the model `apache.1`. (Again, if your model had the columns of the response the other way around, you were predicting the probability of *survival*, and your predictions should then show it going down rather than up to go with the negative slope you would then have had.)
 
 $\blacksquare$
 
@@ -198,66 +188,101 @@ $\blacksquare$
 `apache` score (joined by lines) with, also on the plot, the
 observed proportion of deaths within each `apache` score,
 plotted against `apache` score. Does there seem to be good
-agreement between observation and prediction?
+agreement between observation and prediction? Hint: calculate what you need to from the original dataframe first, save it, then make a plot of the predictions, and then to the plot add the appropriate thing from the dataframe you just saved.
 
 Solution
 
+All right, following the hint, let's start with the original dataframe, called `icu`. The plot of the predictions is going to show predicted probabilities of death, so from the data we need to find the observed proportions of death at each `apache` score. Our dataframe has one row for each `apache` score, so this is not too hard. We have the total number of patients at each score, and the number of deaths out of those patients, so the proportion that died is the second of those divided by the first one:
 
-This means calculating the observed proportions first, adding the
-predicted probabilities, and then making the plot, like this:
-```{r apache-6 }
-icu %>%
-  mutate(obs_prop = deaths / patients) %>%
-  mutate(pred = p) %>%
-  ggplot(aes(x = apache, y = pred)) + geom_line() +
-  geom_point(aes(y = obs_prop))
+```{r}
+icu %>% mutate(proportion = deaths / patients) -> d
+d
 ```
 
-     
+That looks all right. 
 
-You don't need to make a column in the pipeline with the predictions
-in it; you can just use what I called `p` directly in the
-`aes`. 
+To plot predicted values, your first port of call should be `plot_cap`, since the job of this function is to make a lot of predictions and construct a nice plot of them (and so is better than making a plot out of the predictions you made above):
 
-Note that you *do* need to have a new `aes` inside the
-`geom_point`, however, because the $y$ of the plot has
-changed: it needs to be the observed proportion now.
-
-What you actually have to do in this situation depends on what you
-have. In this case, we have the total number of patients at each
-`apache` score, but you might have the number of patients
-surviving in one column and dying in another, in which case you'd need
-to calculate the total first.
-
-I'd say the agreement is pretty good, except for the one patient with
-`apache` of 41 but who somehow survived.
-
-That's what I asked for, and is full marks if you got it. However, the
-points are not all based on the same number of observations. One way
-to show that on your plot is to vary the size of the plotted
-point^[By size is meant the *area* of the circle,  which is what our brains perceive as the size of   two-dimensional, like the area of a slice in a pie chart. On the  plot, the radius of the circle for 20 is less than twice that of the circle for 10, because the area depends on the radius *squared*.]
-according to the number of patients it was based on. This is not hard
-to do, since we have exactly that in `patients`:
-
-```{r apache-7 }
-icu %>%
-  mutate(obs_prop = deaths / patients) %>%
-  mutate(pred = p) %>%
-  ggplot(aes(x = apache, y = pred)) + geom_line() +
-  geom_point(aes(y = obs_prop, size = patients))
+```{r}
+plot_cap(apache.1, condition = "apache")
 ```
 
-     
-The points that are far from the prediction are mostly based on a
-small number of patients, and the observed proportions for
-`apache` scores with a lot of patients are mostly close to the
-prediction. Note that the `size`, because it is based on one of
-the variables, goes *inside* the `aes`. If you wanted the
-points all to be of size 5, say, you'd do it this way:
+This again shows that the predicted probability of death goes up sharply with `apache` score. Let's add the data to this graph. The trick is to remember how to add points to a graph you already have, when the points come from a different data set:
 
-```{r apache-8, eval=F}
-geom_point(aes(y = obs_prop), size = 5)
+```{r}
+plot_cap(apache.1, condition = "apache") +
+  geom_point(data = d, aes(x = apache, y = proportion), inherit.aes = FALSE)
 ```
+
+That does a reasonably good job, but we can do better. We observe now that most of  the points are reasonably close to the curve, except for that one in the bottom right, a patient who had the highest `apache` score of all, but who happened to survive. The observed proportions that are 1 or 0 over on the right might have been based on only one patient, and the others might have been based on more. So it would be better to encode how many patients each point is based on, for example by the size of the point (you may be able to think of other ways like colour, and you can experiment to see what gets the message across best in your opinion).
+
+A reminder that the `inherit.aes` is to tell `ggplot` not to take anything for the `geom_point` from the `plot_cap` graph (which has additional things that it would be a pain to override).
+
+All right, we can make the points different sizes according to the number of `patients` they are based on, thus:
+
+```{r}
+plot_cap(apache.1, condition = "apache") +
+  geom_point(data = d, aes(x = apache, y = proportion, size = patients), 
+             inherit.aes = FALSE)
+```
+
+This shows clearly that the points on the left and right of the graph are based on very few patients, maybe only one each time. But most of the scores between about 10 and 20 were represented by more patients, maybe up to 30. The bigger circles seem to follow the trend of the predictions pretty well, which is what we were hoping for; the proportions based on small numbers of patients might be further away from the predictions, and that's all right.
+
+Extra: you can see that we want the proportions to be based on reasonable numbers of patients, but the other end of the issue is that we don't want to combine patients with very different `apache` scores, because then you wouldn't get much of a picture of how well the data follow the trend. This is very much the same idea as choosing the number of bins on a histogram; if you have too many bins, each one will contain very few observations and you won't see the pattern very clearly, but if you have too few bins, you'll have lots of observations in each bin but you still won't see the shape. 
+
+With that in mind, perhaps we can try binning the observations in our data here. Let's see what that does. The starting point is to redefine what I called `d` before which had the proportion in it:
+
+```{r}
+break_points <- seq(-1, 45, 4)
+break_points
+icu %>% mutate(bins = cut(apache, breaks = break_points))
+```
+
+My bins are 4 `apache` points wide. I have no idea yet whether that's any good, but I want to get the procedure down so that I can come back and change that later if I want to.
+
+What I am using to make the bins is a base R function called `cut`. This makes categorical bins out of a quantitative variable (which is normally a bad idea, but we have our reasons here). It takes two inputs: a vector of numbers to bin, and the points that divide one bin from the next, which I defined into a vector called `break_points` first. The function `cut` defines bins as "half-open", meaning that the top end is included but the bottom end is excluded. (Note for example which bin an `apache` score of 3 goes into.)
+
+Now we want to total up the patients and deaths within each bin, and, for reasons you'll see later, we want to know where the middle of each bin is (for which I will use the median of the `apache` scores within that bin):
+
+```{r}
+icu %>% mutate(bins = cut(apache, breaks = break_points)) %>% 
+  group_by(bins) %>% 
+  summarize(patients = sum(patients), deaths = sum(deaths), apache = median(apache))
+```
+
+We have redefined the names: `patients` and `deaths` are now the totals of patients and deaths *within each bin*, and `apache` is now something like the middle `apache` score in each bin.
+
+Now we can work out the proportion of patients that died within each bin, and save that:
+
+```{r}
+icu %>% mutate(bins = cut(apache, breaks = break_points)) %>% 
+  group_by(bins) %>% 
+  summarize(patients = sum(patients), deaths = sum(deaths), apache = median(apache)) %>% 
+  mutate(proportion = deaths / patients) -> d
+d
+```
+
+Now we redo our graph, but using the proportions in here as the observed proportions of deaths in the data. You might now realize the reason for those values in the `apache` column: on the graph, the `proportion` values will be our $y$ coordinates, but we needed something to be the $x$ coordinates.
+
+Actually redrawing our graph is in fact *exactly* the same code as before; the thing that has changed is our definition of `d` in it:
+
+```{r}
+plot_cap(apache.1, condition = "apache") +
+  geom_point(data = d, aes(x = apache, y = proportion, size = patients), 
+             inherit.aes = FALSE)
+```
+
+And now we see, with more patients per bin, that the agreement between data and prediction is very good apart from the very small bins on the right.
+
+One modification that you might like to pursue is to have variable-width bins: wider bins at the extremes and narrower bins in the middle, so that each bin has about the same number of patients. You could do this by modifying what I called `break_points` so that the numbers in it are more spread out at the extremes and closer together in the middle.
+
+Extra extra: if you're a football fan, you could imagine doing a very similar analysis by modelling the probability of successfully kicking a field goal as it depends on the distance it is attempted from. This would probably work pretty well for the NFL and (no doubt) for the CFL as well. In both these codes of football, field goals are always attempted from between two side-to-side marks on the field called "hash marks". In the NFL, the hash marks are close together, so field goals are attempted from more or less directly in front of the goalposts. In the CFL, the hash marks are further apart, so a field goal might be attempted from off to the side of the goalposts, and then the probability of success might also depend on how far off to the side you are.
+
+If you happen also to be a rugby fan, you'll know that kicks at goal might need to be attempted from anywhere on the field, even out near the sidelines, and in that case, the chance of kicking a goal definitely depends on where on the field you are kicking it from as well as how far out it is.
+
+Extra extra extra: football (NFL and CFL) have an effective formality called the "point after": after a team scores a touchdown, the kicker kicks at goal from right in front of the posts, which is almost never missed. In rugby, the equivalent to a touchdown is called a "try", and to score a try the player must literally touch the ball down. (Thus, to a rugby fan, the NFL and CFL "touchdowns" are absurd misnomers.) After a try is scored, there is a kick at goal (called a "conversion") which is not taken from right in front of the posts like in the NFL, but from the side-to-side position on the field where the try was scored. Thus, if a try is scored near the sidelines, as it often is, the conversion has to be kicked from near the sideline as well. The kicker can go as far back down the field as they like, but as you might imagine, a sideline conversion is still very difficult to kick.
+
+Extra-to-the-fourth: the reason for those names in rugby. In the old days, if a team scored a try and kicked the conversion as well, it was called a "goal", and as a rugby player, you wanted your team to score a goal. Scoring a try allowed a team to "try" to "convert" it into a "goal" by kicking the conversion, hence the names. Because the NFL and CFL have their roots in rugby, they have the "point after" a touchdown as well (with the option now of allowing teams to try for two points after a touchdown as well).
 
 $\blacksquare$
 
