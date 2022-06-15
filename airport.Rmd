@@ -265,7 +265,7 @@ airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
-airport.2
+summary(airport.2)
 ```
 
          
@@ -278,8 +278,10 @@ with your graphs? Explain briefly.
 
 Solution
 
+Start with Mauchly's test near the bottom. This is not quite significant (for the interaction), so we are entitled to look at the univariate test for interaction, which is $2.3 \times 10^{-13}$, extremely significant. If you want a comparison, look at the Huynh-Feldt adjustment for the interaction, which is almost exactly the same ($3.57 \times 10^{-13}$), or the multivariate tests for the interaction (almost the same again).
 
-We start and end with the significant interaction: there is an
+
+So, we start and end with the significant interaction: there is an
 effect of location, but the nature of that effect depends on
 time. This is the same as we saw in the interaction plot:
 from time 2 on, the mean epinephrine levels for the children near
@@ -316,12 +318,14 @@ airport.1 <- lm(response ~ factor(location), data = airport)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 airport.2 <- Manova(airport.1, idata = times.df, idesign = ~times)
-airport.2
+summary(airport.2)
 ```
 
          
 
-The interaction is still significant, so there is still not a
+The interaction is still significant. The sphericity test is not significant, so you can use the 0.0073 in the univariate tests as your P-value (note that the Huynh-Feldt adjustment is actually not adjusted at all).
+
+So there is still not a
 consistent effect of being near the new airport on epinephrine levels:
 that is to say, the effect of the new airport *still* varies over
 time. That might be because (looking at the interaction plot) for the
@@ -444,7 +448,7 @@ loc1.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 loc1.2 <- Manova(loc1.1, idata = times.df, idesign = ~times)
-loc1.2
+summary(loc1.2)
 ```
 
  
@@ -533,14 +537,16 @@ loc2.1 <- lm(response ~ 1, data = loc1)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 loc2.2 <- Manova(loc2.1, idata = times.df, idesign = ~times)
-loc2.2
+summary(loc2.2)
 ```
 
  
 
 I think I changed everything I needed to. 
 
-There actually *is* still an effect of time. What kind of effect?
+There actually *is* still an effect of time. This is true even though sphericity fails and so the Huynh-Feldt adjustment to the P-value is fairly substantial; even so, it is still clearly significant.
+
+What kind of effect?
 We can look at that by finding epinephrine means at each time. That
 would be easier if we had long format, but I think we can still do
 it. The magic word is `across`:

@@ -127,14 +127,23 @@ since there is no reason to make things difficult for yourself:
 ```{r kazoo}
 library(car)
 response.2 <- lm(response ~ job, data = jobs)
-Manova(response.2)
+summary(Manova(response.2))
 ```
 
+This version gives the four different versions of the test (rather than just the Pillai test that `manova` gives), but the results are in this case identical for all of them.
  
 
-Oh yes, there are differences (on some or all of the variables, for
+So: oh yes, there are differences (on some or all of the variables, for
 some or all of the groups). So we need something like discriminant
 analysis to understand the differences.
+
+We really ought to follow this up with Box's M test, to be sure that the variances and correlations for each variable are equal enough across the groups, but we note off the top that the P-values (all of them) are really small, so there ought not to be much doubt about the conclusion anyway:
+
+```{r}
+summary(BoxM(response, jobs$job))
+```
+
+This is small, but not (for this test) small enough to worry about (it's not less than 0.001).
 
 This, and the `lda` below, actually works perfectly well if you use the
 original (integer) job, but then you have to remember which job number

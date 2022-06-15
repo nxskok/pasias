@@ -119,6 +119,13 @@ urine.1 <- manova(response ~ obesity, data = urine)
 summary(urine.1)
 ```
 
+At some point, you should run Box's M test, either here or at the start of the next part (before you get to your conclusions):
+
+```{r}
+summary(BoxM(response, urine$obesity))
+```
+
+This P-value is small, but not, for this test, small enough to be a problem.
      
  
 $\blacksquare$
@@ -136,16 +143,17 @@ Based on the idea that there seemed to be differences between the
 groups in the boxplots, this makes sense. (That's what I saw,
 anyway. There was a lot of variability within the groups, which is
 why the P-value didn't come out smaller.)
-The other way of doing this is the following, using
+
+Extra: the other way of doing this is the following, using
 `Manova` from `car`:
 ```{r urine-6 }
 response.1 <- lm(response ~ obesity, data = urine)
-Manova(response.1)
+summary(Manova(response.1))
 ```
 
-     
+`manova` gives you the Pillai test, but `Manova` gives you all four; here, they are all significant, but to different degrees.
 
-The result is the same. You don't need do this one here (though you
+The result is the same, or at least consistent. You don't need do this one here (though you
 can as an alternative), but when you come to repeated measures you
 *will* need to be able to use `Manova`.
 
