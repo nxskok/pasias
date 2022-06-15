@@ -93,7 +93,13 @@ htwt.1 <- manova(response ~ Sex * Sport, data = athletes)
 summary(htwt.1)
 ```
 
-     
+```{r}
+athletes %>% 
+  unite("combo", c(Sex, Sport)) -> athletes_combo
+summary(BoxM(response, athletes_combo$combo))
+```
+
+This test gives just small enough a P-value to be worried about (remembering that less than 0.001 is the problem zone). It seems unlikely, though, that the right test (whatever it is) would produce a significant interaction.
 
 The other way is apparently to use large-M `Manova` from package
 `car`. This goes as a two-stage process: fit an `lm`
@@ -103,7 +109,7 @@ rather than passing it into `summary`:
 
 ```{r athletes-manova-5, error=T}
 htwt.2 <- lm(response ~ Sex * Sport, data = athletes)
-htwt.3 <- Manova(htwt.2)
+Manova(htwt.2)
 ```
 
  
@@ -149,7 +155,7 @@ or, with `Manova`, the same two ways:
 ```{r athletes-manova-8 }
 htwt.6 <- lm(response ~ Sex + Sport, data = athletes)
 htwt.7 <- Manova(htwt.6)
-htwt.7
+summary(htwt.7)
 ```
 
  
@@ -159,7 +165,7 @@ or
 ```{r athletes-manova-9 }
 htwt.8 <- update(htwt.2, . ~ . - Sex:Sport)
 htwt.9 <- Manova(htwt.8)
-htwt.9
+summary(htwt.9)
 ```
 
  
@@ -171,8 +177,16 @@ thing being `update`d is a regular `lm`; the
 
 Any of these is good, and gets you the same answer.
 
-Extra: it you run `summary` on the output from `Manova`,
-you get more detail:
+The way you run Box's M test on these is on each explanatory variable separately:
+
+```{r}
+summary(BoxM(response, athletes$Sex))
+summary(BoxM(response, athletes$Sport))
+```
+
+The second of these, the one for Sport, is small enough to be a problem, but the P-value in the MANOVA for Sport is extremely small, so we should be safe.
+
+Extra: more about the `summary` output from `Manova`:
 
 ```{r athletes-manova-10 }
 summary(htwt.9)
@@ -181,12 +195,10 @@ summary(htwt.9)
  
 
 There are actually *four* competing tests that generalize the
-one-response-variable $F$ statistic in different ways. The one we've
-been using is called Pillai's Trace, but if you go looking in a text
-on multivariate analysis, you'll also see the others, especially
+one-response-variable $F$ statistic in different ways. If you go looking in a text
+on multivariate analysis, you'll also see about all four of them, especially
 Wilks's $\Lambda$ (that's a capital lambda). They will generally agree
-in terms of conclusion, so you can look at them all if you like, but
-it doesn't hurt much to look at only one.
+in terms of conclusion, but you should probably at least glance at all of them.
 
 I am in danger of running out of numbers for my fitted models (and am
 definitely in danger of forgetting which one is which)!

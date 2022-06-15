@@ -192,55 +192,20 @@ Then, uppercase-M `Manova`:
 
 ```{r rm-5 }
 treatment.2 <- Manova(treatment.1, idata = times.df, idesign = ~times)
-treatment.2
+summary(treatment.2)
 ```
-
- 
 
 (Since I call things by the same names every time, my code for one of
 these looks a lot like my code for any of the others.)
+
+Start near the bottom with the Mauchly tests for sphericity. These are *just* significant, so that instead of looking at the univariate tests, look at the bottom for the Huynh-Feldt adjusted P-values, the one for the interaction being 0.0061. This is a bit bigger than the one for the interaction in the univariate tests (0.0010), the latter being deceptively small because sphericity is actually no good.
+
+Compare this, if you like, with the multivariate tests for the interaction. In this case, these are actually not all the same; the largest P-value is the Pillai one, which at 0.0062 is very close to the properly adjusted univariate test.
 
 Finally, interpretation. We look *only* at the interaction. This
 is significant, so the effect of treatment is different at the
 different times. And we **stop there**.
 
-Extra: `car` also includes a thing called `Anova` with a
-capital A. That looks a bit different but gives us some extra information:
-
-```{r rm-6 }
-treatment.3 <- Anova(treatment.1, idata = times.df, idesign = ~times, type = "III")
-```
-
- 
-
-The "type" on the end is a Roman numeral 3, for the type of test to
-do. III is good:
-
-```{r rm-7 }
-summary(treatment.3, multivariate = F)
-```
-
- 
-
-What is all that about? Start in the middle, with Mauchly's test, the
-one with a P-value of 0.049. One of the assumptions of a
-repeated-measures ANOVA is of a special kind of equal spreads: that
-all comparisons of pairs of treatments have the same variance. This is
-called sphericity. Sphericity is a hard thing to judge unless we have
-a test to do it with, such as Mauchly's test. This one is on the
-borderline: do we reject sphericity or not? If you reject sphericity,
-you can't trust the results of the MANOVA. So let's assume that we
-*do* reject sphericity. What we do next is to look down the
-bottom at the two "corrections for departure from sphericity". One
-is due to Greenhouse and Geisser, the other to Huynh and Feldt. I
-don't have any suggestions for choosing between them, so the thing to
-do is to see whether they agree with each other. The two P-values for
-testing the interaction are 0.008 and 0.006, which are a bit bigger
-than before, but still definitely significant. So, whether we believe
-sphericity or not, there is an interaction between treatment and
-time. If this is your analysis, you make impressive-sounding
-pronouncements like 
-"the significance of the interaction is robust to sphericity". 
 
 $\blacksquare$
 

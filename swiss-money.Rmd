@@ -56,9 +56,10 @@ Small-m `manova` will do here:
 response <- with(swiss, cbind(length, left, right, bottom, top, diag))
 swiss.1 <- manova(response ~ status, data = swiss)
 summary(swiss.1)
+summary(BoxM(response, swiss$status))
 ```
 
-       
+That is a very significant Box's M test, which means that we shouldn't trust the MANOVA at all. It is only the fact that the MANOVA is *so* significant that provides any evidence that the discriminant analysis is worth doing.        
 
 Extra: you might be wondering whether you had to go to all that trouble to
 make the response variable. Would this work?
@@ -95,7 +96,7 @@ summary(swiss.2a)
 Anyway, the conclusion: the status of a bill (genuine or counterfeit)
 definitely has an influence on some or all of those other variables,
 since the P-value $2.2 \times 10^{-16}$ (or less) is really small. So
-it is worth running a discriminant analysis to figure out where the
+it is apparently worth running a discriminant analysis to figure out where the
 differences lie.
 
 As a piece of strategy, for creating the response matrix, you can
@@ -233,6 +234,8 @@ genuine bills, and negative ones with counterfeit bills.
 It also shows that there are three outlier bills, two counterfeit ones
 with unusually high LD1 score, and one genuine one with unusually
 *low* LD1 score, at least for a genuine bill.
+
+This goes to show that (the Box M test notwithstanding) the two types of bill really are different in a way that is worth investigating.
 
 Or you could do faceted histograms of `LD1` by `status`:
 
