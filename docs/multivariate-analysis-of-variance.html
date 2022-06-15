@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 32 Multivariate analysis of variance | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 32 Multivariate analysis of variance | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
   
   <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
   <meta name="github-repo" content="nxskok/pasias" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2022-06-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="analysis-of-covariance.html"/>
 <link rel="next" href="repeated-measures.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,29 +49,33 @@
 
 
 
-
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +84,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -115,6 +119,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -131,16 +136,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Problems and Solutions in Applied Statistics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a><ul>
-<li class="chapter" data-level="1.1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#running-r-studio-on-jupyterhub"><i class="fa fa-check"></i><b>1.1</b> Running R Studio on Jupyterhub</a></li>
-<li class="chapter" data-level="1.2" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><i class="fa fa-check"></i><b>1.2</b> Getting an R Studio Cloud account</a></li>
-<li class="chapter" data-level="1.3" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-started"><i class="fa fa-check"></i><b>1.3</b> Getting started</a></li>
-<li class="chapter" data-level="1.4" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><i class="fa fa-check"></i><b>1.4</b> Reading data from a file</a></li>
-<li class="chapter" data-level="1.5" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><i class="fa fa-check"></i><b>1.5</b> Reading files different ways</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
 <li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
 <li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
 <li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
@@ -151,7 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
 <li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
 <li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
-<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
 <li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
 <li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
@@ -159,13 +160,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
 <li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
-<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
 <li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
 <li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
 <li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a><ul>
+<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a>
+<ul>
 <li class="chapter" data-level="16.1" data-path="treating-dandruff.html"><a href="treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
 <li class="chapter" data-level="16.2" data-path="treating-dandruff.html"><a href="treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
 <li class="chapter" data-level="16.3" data-path="treating-dandruff.html"><a href="treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
@@ -176,7 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
 <li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
 <li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
-<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
 <li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
 <li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
@@ -184,7 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
 <li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
-<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
 <li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
@@ -196,7 +201,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="29" data-path="survival-analysis.html"><a href="survival-analysis.html"><i class="fa fa-check"></i><b>29</b> Survival analysis</a></li>
 <li class="chapter" data-level="30" data-path="analysis-of-variance-revisited.html"><a href="analysis-of-variance-revisited.html"><i class="fa fa-check"></i><b>30</b> Analysis of variance revisited</a></li>
 <li class="chapter" data-level="31" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>31</b> Analysis of covariance</a></li>
-<li class="chapter" data-level="32" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html"><i class="fa fa-check"></i><b>32</b> Multivariate analysis of variance</a><ul>
+<li class="chapter" data-level="32" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html"><i class="fa fa-check"></i><b>32</b> Multivariate analysis of variance</a>
+<ul>
 <li class="chapter" data-level="32.1" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html#fabricated-data"><i class="fa fa-check"></i><b>32.1</b> Fabricated data</a></li>
 <li class="chapter" data-level="32.2" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity"><i class="fa fa-check"></i><b>32.2</b> Do characteristics of urine depend on obesity?</a></li>
 <li class="chapter" data-level="32.3" data-path="multivariate-analysis-of-variance.html"><a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes"><i class="fa fa-check"></i><b>32.3</b> How do height and weight depend on sport played by elite athletes?</a></li>
@@ -210,7 +216,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
 <li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
 <li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
-<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
 <li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
 </ul></li>
@@ -236,13 +243,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multivariate-analysis-of-variance" class="section level1">
-<h1><span class="header-section-number">Chapter 32</span> Multivariate analysis of variance</h1>
+<div id="multivariate-analysis-of-variance" class="section level1 hasAnchor" number="32">
+<h1><span class="header-section-number">Chapter 32</span> Multivariate analysis of variance<a href="multivariate-analysis-of-variance.html#multivariate-analysis-of-variance" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb250-2" title="2"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div id="fabricated-data" class="section level2">
-<h2><span class="header-section-number">32.1</span> Fabricated data</h2>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="multivariate-analysis-of-variance.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb209-2"><a href="multivariate-analysis-of-variance.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="fabricated-data" class="section level2 hasAnchor" number="32.1">
+<h2><span class="header-section-number">32.1</span> Fabricated data<a href="multivariate-analysis-of-variance.html#fabricated-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The data in
 <a href="http://ritsokiguess.site/datafiles/simple-manova.txt">link</a>
 (probably made up) are measurements of two
@@ -266,8 +273,8 @@ but <em>is</em> distinguishable on your graph? Explain briefly.</p></li>
 a P-value. Note the very small P-value.</p></li>
 </ol>
 </div>
-<div id="do-characteristics-of-urine-depend-on-obesity" class="section level2">
-<h2><span class="header-section-number">32.2</span> Do characteristics of urine depend on obesity?</h2>
+<div id="do-characteristics-of-urine-depend-on-obesity" class="section level2 hasAnchor" number="32.2">
+<h2><span class="header-section-number">32.2</span> Do characteristics of urine depend on obesity?<a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A study was made of the characteristics of urine of young
 men. The men were classified into four groups based on their degree of
 obesity. (The groups are labelled <code>a, b, c, d</code>.) Four variables
@@ -288,8 +295,8 @@ as explanatory. (This is a so-called one-way MANOVA.)</p></li>
 boxplots said? Explain briefly.</p></li>
 </ol>
 </div>
-<div id="how-do-height-and-weight-depend-on-sport-played-by-elite-athletes" class="section level2">
-<h2><span class="header-section-number">32.3</span> How do height and weight depend on sport played by elite athletes?</h2>
+<div id="how-do-height-and-weight-depend-on-sport-played-by-elite-athletes" class="section level2 hasAnchor" number="32.3">
+<h2><span class="header-section-number">32.3</span> How do height and weight depend on sport played by elite athletes?<a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This question uses the data on Australian elite athletes,
 which can be found at
 <a href="http://ritsokiguess.site/datafiles/ais.txt">link</a>. 202 elite
@@ -333,8 +340,8 @@ any warnings, <em>you need to include those in what you hand in</em>).</p></li>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="fabricated-data-1" class="section level2">
-<h2><span class="header-section-number">32.4</span> Fabricated data</h2>
+<div id="fabricated-data-1" class="section level2 hasAnchor" number="32.4">
+<h2><span class="header-section-number">32.4</span> Fabricated data<a href="multivariate-analysis-of-variance.html#fabricated-data-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The data in
 <a href="http://ritsokiguess.site/datafiles/simple-manova.txt">link</a>
 (probably made up) are measurements of two
@@ -347,17 +354,18 @@ the groups.</p>
 2 numeric variables from 3 different groups.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/simple-manova.txt&quot;</span></a>
-<a class="sourceLine" id="cb251-2" title="2">simple &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   group = col_character(),
-##   y1 = col_double(),
-##   y2 = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">simple</a></code></pre></div>
-<pre><code>## # A tibble: 12 x 3
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="multivariate-analysis-of-variance.html#cb210-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/simple-manova.txt&quot;</span></span>
+<span id="cb210-2"><a href="multivariate-analysis-of-variance.html#cb210-2" aria-hidden="true" tabindex="-1"></a>simple <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 12 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot; &quot;
+## chr (1): group
+## dbl (2): y1, y2
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="multivariate-analysis-of-variance.html#cb212-1" aria-hidden="true" tabindex="-1"></a>simple</span></code></pre></div>
+<pre><code>## # A tibble: 12 × 3
 ##    group    y1    y2
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1 a         2     3
@@ -382,14 +390,14 @@ groups <code>a,b,c</code>.</p>
 among the groups? If necessary, run Tukey. What do you conclude?</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1">simple<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y1 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb255-2" title="2"><span class="kw">summary</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="multivariate-analysis-of-variance.html#cb214-1" aria-hidden="true" tabindex="-1"></a>simple<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">aov</span>(y1 <span class="sc">~</span> group, <span class="at">data =</span> simple)</span>
+<span id="cb214-2"><a href="multivariate-analysis-of-variance.html#cb214-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simple<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value   Pr(&gt;F)    
 ## group        2  63.45   31.72    21.2 0.000393 ***
 ## Residuals    9  13.47    1.50                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb257-1" title="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="multivariate-analysis-of-variance.html#cb216-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(simple<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -408,14 +416,14 @@ ran Tukey and found that group <code>c</code> is significantly bigger on
 <li>Repeat all the previous part for <code>y2</code>.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1">simple<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">aov</span>(y2 <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb259-2" title="2"><span class="kw">summary</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb218-1"><a href="multivariate-analysis-of-variance.html#cb218-1" aria-hidden="true" tabindex="-1"></a>simple<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">aov</span>(y2 <span class="sc">~</span> group, <span class="at">data =</span> simple)</span>
+<span id="cb218-2"><a href="multivariate-analysis-of-variance.html#cb218-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simple<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>##             Df Sum Sq Mean Sq F value  Pr(&gt;F)   
 ## group        2  19.05   9.525   9.318 0.00642 **
 ## Residuals    9   9.20   1.022                   
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1"><span class="kw">TukeyHSD</span>(simple<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb220-1"><a href="multivariate-analysis-of-variance.html#cb220-1" aria-hidden="true" tabindex="-1"></a><span class="fu">TukeyHSD</span>(simple<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>##   Tukey multiple comparisons of means
 ##     95% family-wise confidence level
 ## 
@@ -437,7 +445,7 @@ points distinguished by which group they are from.</li>
 <p>Solution</p>
 <p><code>y1</code> and <code>y2</code> can be either way around, since
 they are both response variables (!):</p>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="kw">ggplot</span>(simple, <span class="kw">aes</span>(<span class="dt">x =</span> y1, <span class="dt">y =</span> y2, <span class="dt">colour =</span> group)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb222-1"><a href="multivariate-analysis-of-variance.html#cb222-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(simple, <span class="fu">aes</span>(<span class="at">x =</span> y1, <span class="at">y =</span> y2, <span class="at">colour =</span> group)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/manova1-4-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
@@ -465,9 +473,9 @@ a P-value. Note the very small P-value.</li>
 <p>Solution</p>
 <p>This is just like the seed weight and yield example in class
 (deliberately so):</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(simple, <span class="kw">cbind</span>(y1, y2))</a>
-<a class="sourceLine" id="cb264-2" title="2">simple<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>group, <span class="dt">data =</span> simple)</a>
-<a class="sourceLine" id="cb264-3" title="3"><span class="kw">summary</span>(simple<span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="multivariate-analysis-of-variance.html#cb223-1" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">with</span>(simple, <span class="fu">cbind</span>(y1, y2))</span>
+<span id="cb223-2"><a href="multivariate-analysis-of-variance.html#cb223-2" aria-hidden="true" tabindex="-1"></a>simple<span class="fl">.3</span> <span class="ot">&lt;-</span> <span class="fu">manova</span>(response <span class="sc">~</span> group, <span class="at">data =</span> simple)</span>
+<span id="cb223-3"><a href="multivariate-analysis-of-variance.html#cb223-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(simple<span class="fl">.3</span>)</span></code></pre></div>
 <pre><code>##           Df Pillai approx F num Df den Df    Pr(&gt;F)    
 ## group      2 1.3534   9.4196      4     18 0.0002735 ***
 ## Residuals  9                                            
@@ -479,6 +487,12 @@ difference is essentially multivariate (it depends on the
 <em>combination</em> of <code>y1</code> and <code>y2</code> values). I only
 wanted you to note that it is smaller than either of the other
 ANOVAs; you don’t need to say anything about why.</p>
+<p>For completeness, we should do Box’s M test as well:</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="multivariate-analysis-of-variance.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">BoxM</span>(response, simple<span class="sc">$</span>group))</span></code></pre></div>
+<pre><code>##        Box&#39;s M Test 
+## 
+## Chi-Squared Value = 3.517357 , df = 6  and p-value: 0.742</code></pre>
+<p>No problems here at all.</p>
 <p>We were in the fortunate position of being able to draw a picture,
 because we had only two response variables, and we could plot them
 against each other with the groups labelled. (If we had three response
@@ -486,8 +500,8 @@ variables, like the peanuts example, we wouldn’t be able to do this,
 barring some kind of 3D-plotting procedure.)</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="do-characteristics-of-urine-depend-on-obesity-1" class="section level2">
-<h2><span class="header-section-number">32.5</span> Do characteristics of urine depend on obesity?</h2>
+<div id="do-characteristics-of-urine-depend-on-obesity-1" class="section level2 hasAnchor" number="32.5">
+<h2><span class="header-section-number">32.5</span> Do characteristics of urine depend on obesity?<a href="multivariate-analysis-of-variance.html#do-characteristics-of-urine-depend-on-obesity-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A study was made of the characteristics of urine of young
 men. The men were classified into four groups based on their degree of
 obesity. (The groups are labelled <code>a, b, c, d</code>.) Four variables
@@ -501,19 +515,18 @@ of observations and the right variables.</li>
 </ol>
 <p>Solution</p>
 <p><code>read_csv</code>:</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/urine.csv&quot;</span></a>
-<a class="sourceLine" id="cb266-2" title="2">urine &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   obesity = col_character(),
-##   x = col_double(),
-##   creatinine = col_double(),
-##   chloride = col_double(),
-##   chlorine = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1">urine</a></code></pre></div>
-<pre><code>## # A tibble: 45 x 5
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="multivariate-analysis-of-variance.html#cb227-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/urine.csv&quot;</span></span>
+<span id="cb227-2"><a href="multivariate-analysis-of-variance.html#cb227-2" aria-hidden="true" tabindex="-1"></a>urine <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## Rows: 45 Columns: 5
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (1): obesity
+## dbl (4): x, creatinine, chloride, chlorine
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="multivariate-analysis-of-variance.html#cb229-1" aria-hidden="true" tabindex="-1"></a>urine</span></code></pre></div>
+<pre><code>## # A tibble: 45 × 5
 ##    obesity     x creatinine chloride chlorine
 ##    &lt;chr&gt;   &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
 ##  1 a          24       17.6     5.15      7.5
@@ -535,19 +548,19 @@ against obesity group.</li>
 </ol>
 <p>Solution</p>
 <p>Just churn through it:</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> creatinine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="multivariate-analysis-of-variance.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(urine, <span class="fu">aes</span>(<span class="at">x =</span> obesity, <span class="at">y =</span> creatinine)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/peppercorn-1.png" width="672" /></p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chlorine)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="multivariate-analysis-of-variance.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(urine, <span class="fu">aes</span>(<span class="at">x =</span> obesity, <span class="at">y =</span> chlorine)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/peppercorn-2.png" width="672" /></p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1"><span class="kw">ggplot</span>(urine, <span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> chloride)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="multivariate-analysis-of-variance.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(urine, <span class="fu">aes</span>(<span class="at">x =</span> obesity, <span class="at">y =</span> chloride)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/peppercorn-3.png" width="672" /></p>
 <p>This also works with facets, though it is different from the other
 ones we’ve done, in that we have to collect together the <span class="math inline">\(y\)</span>-variables
 first rather than the <span class="math inline">\(x\)</span>s:</p>
-<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb273-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb273-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obesity, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb273-4" title="4"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>yname, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="multivariate-analysis-of-variance.html#cb234-1" aria-hidden="true" tabindex="-1"></a>urine <span class="sc">%&gt;%</span></span>
+<span id="cb234-2"><a href="multivariate-analysis-of-variance.html#cb234-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(creatinine<span class="sc">:</span>chlorine, <span class="at">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="at">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb234-3"><a href="multivariate-analysis-of-variance.html#cb234-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> obesity, <span class="at">y =</span> y)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb234-4"><a href="multivariate-analysis-of-variance.html#cb234-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>yname, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/urine-2-1.png" width="672" /></p>
 <p>I decided to throw a couple of things in here: first, the
 <code>scales="free"</code> thing since the <span class="math inline">\(y\)</span>-variables (this time) are
@@ -560,9 +573,9 @@ the same <span class="math inline">\(x\)</span>, I think.)</p>
 it makes it easier to have the three boxplots side by side, but it’s
 up to you whether you think that gain is worth the extra coding.</p>
 <p>Extra: let’s take another look at that longer data frame:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb274-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) </a></code></pre></div>
-<pre><code>## # A tibble: 135 x 4
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="multivariate-analysis-of-variance.html#cb235-1" aria-hidden="true" tabindex="-1"></a>urine <span class="sc">%&gt;%</span></span>
+<span id="cb235-2"><a href="multivariate-analysis-of-variance.html#cb235-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(creatinine<span class="sc">:</span>chlorine, <span class="at">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="at">values_to=</span><span class="st">&quot;y&quot;</span>) </span></code></pre></div>
+<pre><code>## # A tibble: 135 × 4
 ##    obesity     x yname          y
 ##    &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt;
 ##  1 a          24 creatinine 17.6 
@@ -577,9 +590,9 @@ up to you whether you think that gain is worth the extra coding.</p>
 ## 10 a          30 creatinine 22.3 
 ## # … with 125 more rows</code></pre>
 <p>You might say that there is one quantitative variable now, the thing we called <code>y</code>, and <em>two</em> categorical variables, <code>obesity</code> and <code>yname</code>. So why not make a grouped boxplot? All right:</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1">urine <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb276-2" title="2"><span class="st">  </span><span class="kw">pivot_longer</span>(creatinine<span class="op">:</span>chlorine, <span class="dt">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="dt">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb276-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>yname, <span class="dt">y=</span>y, <span class="dt">colour=</span>obesity)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="multivariate-analysis-of-variance.html#cb237-1" aria-hidden="true" tabindex="-1"></a>urine <span class="sc">%&gt;%</span></span>
+<span id="cb237-2"><a href="multivariate-analysis-of-variance.html#cb237-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(creatinine<span class="sc">:</span>chlorine, <span class="at">names_to=</span><span class="st">&quot;yname&quot;</span>, <span class="at">values_to=</span><span class="st">&quot;y&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb237-3"><a href="multivariate-analysis-of-variance.html#cb237-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>yname, <span class="at">y=</span>y, <span class="at">colour=</span>obesity)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/urine-4-1.png" width="672" /></p>
 <p>This actually looks a lot like the facetted boxplots (if you imagine drawing a box around each group of four boxplots and removing the <code>scales="free"</code> before). There is, as the saying goes, more than one way to skin a cat.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -603,14 +616,20 @@ as explanatory. (This is a so-called one-way MANOVA.)</li>
 </ol>
 <p>Solution</p>
 <p>Create the response variable and run <code>manova</code>:</p>
-<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(urine, <span class="kw">cbind</span>(creatinine, chlorine, chloride))</a>
-<a class="sourceLine" id="cb277-2" title="2">urine<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
-<a class="sourceLine" id="cb277-3" title="3"><span class="kw">summary</span>(urine<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="multivariate-analysis-of-variance.html#cb238-1" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">with</span>(urine, <span class="fu">cbind</span>(creatinine, chlorine, chloride))</span>
+<span id="cb238-2"><a href="multivariate-analysis-of-variance.html#cb238-2" aria-hidden="true" tabindex="-1"></a>urine<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">manova</span>(response <span class="sc">~</span> obesity, <span class="at">data =</span> urine)</span>
+<span id="cb238-3"><a href="multivariate-analysis-of-variance.html#cb238-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(urine<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##           Df  Pillai approx F num Df den Df  Pr(&gt;F)  
 ## obesity    3 0.43144   2.2956      9    123 0.02034 *
 ## Residuals 41                                         
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>At some point, you should run Box’s M test, either here or at the start of the next part (before you get to your conclusions):</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="multivariate-analysis-of-variance.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">BoxM</span>(response, urine<span class="sc">$</span>obesity))</span></code></pre></div>
+<pre><code>##        Box&#39;s M Test 
+## 
+## Chi-Squared Value = 30.8322 , df = 18  and p-value: 0.0301</code></pre>
+<p>This P-value is small, but not, for this test, small enough to be a problem.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="5" style="list-style-type: lower-alpha">
 <li>What do you conclude? Is this in line with what your
@@ -623,26 +642,48 @@ groups have the same mean on all of the variables.
 Based on the idea that there seemed to be differences between the
 groups in the boxplots, this makes sense. (That’s what I saw,
 anyway. There was a lot of variability within the groups, which is
-why the P-value didn’t come out smaller.)
-The other way of doing this is the following, using
+why the P-value didn’t come out smaller.)</p>
+<p>Extra: the other way of doing this is the following, using
 <code>Manova</code> from <code>car</code>:</p>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1">response<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>obesity, <span class="dt">data =</span> urine)</a>
-<a class="sourceLine" id="cb279-2" title="2"><span class="kw">Manova</span>(response<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="multivariate-analysis-of-variance.html#cb242-1" aria-hidden="true" tabindex="-1"></a>response<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(response <span class="sc">~</span> obesity, <span class="at">data =</span> urine)</span>
+<span id="cb242-2"><a href="multivariate-analysis-of-variance.html#cb242-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">Manova</span>(response<span class="fl">.1</span>))</span></code></pre></div>
 <pre><code>## 
-## Type II MANOVA Tests: Pillai test statistic
-##         Df test stat approx F num Df den Df  Pr(&gt;F)  
-## obesity  3   0.43144   2.2956      9    123 0.02034 *
+## Type II MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##             creatinine   chlorine   chloride
+## creatinine  496.768761 -225.02136   4.507476
+## chlorine   -225.021364 1431.85432  86.226818
+## chloride      4.507476   86.22682 152.854274
+## 
+## ------------------------------------------
+##  
+## Term: obesity 
+## 
+## Sum of squares and products for the hypothesis:
+##            creatinine  chlorine  chloride
+## creatinine  181.07035 -66.72530  40.03686
+## chlorine    -66.72530 103.80568 -41.37182
+## chloride     40.03686 -41.37182  20.03773
+## 
+## Multivariate Tests: obesity
+##                  Df test stat approx F num Df    den Df    Pr(&gt;F)   
+## Pillai            3 0.4314359 2.295559      9 123.00000 0.0203377 * 
+## Wilks             3 0.6080320 2.395937      9  95.06636 0.0171207 * 
+## Hotelling-Lawley  3 0.5800706 2.427703      9 113.00000 0.0146529 * 
+## Roy               3 0.4336849 5.927027      3  41.00000 0.0018659 **
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The result is the same. You don’t need do this one here (though you
+<p><code>manova</code> gives you the Pillai test, but <code>Manova</code> gives you all four; here, they are all significant, but to different degrees.</p>
+<p>The result is the same, or at least consistent. You don’t need do this one here (though you
 can as an alternative), but when you come to repeated measures you
 <em>will</em> need to be able to use <code>Manova</code>.</p>
 <p>To understand the differences in the variables due to the groups, we
 need to run a discriminant analysis (coming up later).</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1" class="section level2">
-<h2><span class="header-section-number">32.6</span> How do height and weight depend on sport played by elite athletes?</h2>
+<div id="how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1" class="section level2 hasAnchor" number="32.6">
+<h2><span class="header-section-number">32.6</span> How do height and weight depend on sport played by elite athletes?<a href="multivariate-analysis-of-variance.html#how-do-height-and-weight-depend-on-sport-played-by-elite-athletes-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This question uses the data on Australian elite athletes,
 which can be found at
 <a href="http://ritsokiguess.site/datafiles/ais.txt">link</a>. 202 elite
@@ -657,40 +698,31 @@ columns.</li>
 </ol>
 <p>Solution</p>
 <p>As in the hint:</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/ais.txt&quot;</span></a>
-<a class="sourceLine" id="cb281-2" title="2">athletes &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(my_url)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   Sex = col_character(),
-##   Sport = col_character(),
-##   RCC = col_double(),
-##   WCC = col_double(),
-##   Hc = col_double(),
-##   Hg = col_double(),
-##   Ferr = col_double(),
-##   BMI = col_double(),
-##   SSF = col_double(),
-##   `%Bfat` = col_double(),
-##   LBM = col_double(),
-##   Ht = col_double(),
-##   Wt = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1">athletes</a></code></pre></div>
-<pre><code>## # A tibble: 202 x 13
-##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht    Wt
-##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 female Netball  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.  59.9
-##  2 female Netball  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.  63  
-##  3 female Netball  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176   66.3
-##  4 female Netball  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.  60.7
-##  5 female Netball  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183   72.9
-##  6 female Netball  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.  67.9
-##  7 female Netball  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.  67.5
-##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.  74.1
-##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.  68.2
-## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.  68.8
-## # … with 192 more rows</code></pre>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="multivariate-analysis-of-variance.html#cb244-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/ais.txt&quot;</span></span>
+<span id="cb244-2"><a href="multivariate-analysis-of-variance.html#cb244-2" aria-hidden="true" tabindex="-1"></a>athletes <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(my_url)</span></code></pre></div>
+<pre><code>## Rows: 202 Columns: 13
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;\t&quot;
+## chr  (2): Sex, Sport
+## dbl (11): RCC, WCC, Hc, Hg, Ferr, BMI, SSF, %Bfat, LBM, Ht, Wt
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="multivariate-analysis-of-variance.html#cb246-1" aria-hidden="true" tabindex="-1"></a>athletes</span></code></pre></div>
+<pre><code>## # A tibble: 202 × 13
+##    Sex    Sport     RCC   WCC    Hc    Hg  Ferr   BMI   SSF `%Bfat`   LBM    Ht
+##    &lt;chr&gt;  &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 female Netball  4.56  13.3  42.2  13.6    20  19.2  49      11.3  53.1  177.
+##  2 female Netball  4.15   6    38    12.7    59  21.2 110.     25.3  47.1  173.
+##  3 female Netball  4.16   7.6  37.5  12.3    22  21.4  89      19.4  53.4  176 
+##  4 female Netball  4.32   6.4  37.7  12.3    30  21.0  98.3    19.6  48.8  170.
+##  5 female Netball  4.06   5.8  38.7  12.8    78  21.8 122.     23.1  56.0  183 
+##  6 female Netball  4.12   6.1  36.6  11.8    21  21.4  90.4    16.9  56.4  178.
+##  7 female Netball  4.17   5    37.4  12.7   109  21.5 107.     21.3  53.1  177.
+##  8 female Netball  3.8    6.6  36.5  12.4   102  24.4 157.     26.6  54.4  174.
+##  9 female Netball  3.96   5.5  36.3  12.4    71  22.6 101.     17.9  56.0  174.
+## 10 female Netball  4.44   9.7  41.4  14.1    64  22.8 126.     25.0  51.6  174.
+## # … with 192 more rows, and 1 more variable: Wt &lt;dbl&gt;</code></pre>
 <p>202 rows and 13 columns indeed.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="2" style="list-style-type: lower-alpha">
@@ -716,11 +748,11 @@ called <code>Ht</code> and <code>Wt</code>.</li>
 </ol>
 <p>Solution</p>
 <p>Use <code>cbind</code> to glue the two columns together:</p>
-<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1">response &lt;-<span class="st"> </span><span class="kw">with</span>(athletes, <span class="kw">cbind</span>(Ht, Wt))</a></code></pre></div>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="multivariate-analysis-of-variance.html#cb248-1" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">with</span>(athletes, <span class="fu">cbind</span>(Ht, Wt))</span></code></pre></div>
 <p>Either way around, height or weight first, is good. Also good is the
 dollar sign, which you’ll need to do twice (and thus the <code>with</code>
 way is more elegant):</p>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1">response_a &lt;-<span class="st"> </span><span class="kw">cbind</span>(athletes<span class="op">$</span>Ht, athletes<span class="op">$</span>Wt)</a></code></pre></div>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="multivariate-analysis-of-variance.html#cb249-1" aria-hidden="true" tabindex="-1"></a>response_a <span class="ot">&lt;-</span> <span class="fu">cbind</span>(athletes<span class="sc">$</span>Ht, athletes<span class="sc">$</span>Wt)</span></code></pre></div>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="4" style="list-style-type: lower-alpha">
 <li>Run a multivariate analysis of variance to see whether the
@@ -733,8 +765,8 @@ combination of both. Display the results. Use the small-m
 what I should be calling my fitted model object, so I’m making
 something up. Don’t forget to use the right names for the
 variables, and to include an interaction:</p>
-<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1">htwt<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb287-2" title="2"><span class="kw">summary</span>(htwt<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="multivariate-analysis-of-variance.html#cb250-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">manova</span>(response <span class="sc">~</span> Sex <span class="sc">*</span> Sport, <span class="at">data =</span> athletes)</span>
+<span id="cb250-2"><a href="multivariate-analysis-of-variance.html#cb250-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(htwt<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##            Df  Pillai approx F num Df den Df Pr(&gt;F)    
 ## Sex         1 0.52412  101.325      2    184 &lt;2e-16 ***
 ## Sport       9 0.87914   16.123     18    370 &lt;2e-16 ***
@@ -742,14 +774,21 @@ variables, and to include an interaction:</p>
 ## Residuals 185                                          
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb252"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb252-1"><a href="multivariate-analysis-of-variance.html#cb252-1" aria-hidden="true" tabindex="-1"></a>athletes <span class="sc">%&gt;%</span> </span>
+<span id="cb252-2"><a href="multivariate-analysis-of-variance.html#cb252-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unite</span>(<span class="st">&quot;combo&quot;</span>, <span class="fu">c</span>(Sex, Sport)) <span class="ot">-&gt;</span> athletes_combo</span>
+<span id="cb252-3"><a href="multivariate-analysis-of-variance.html#cb252-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">BoxM</span>(response, athletes_combo<span class="sc">$</span>combo))</span></code></pre></div>
+<pre><code>##        Box&#39;s M Test 
+## 
+## Chi-Squared Value = 86.605 , df = 48  and p-value: 0.000537</code></pre>
+<p>This test gives just small enough a P-value to be worried about (remembering that less than 0.001 is the problem zone). It seems unlikely, though, that the right test (whatever it is) would produce a significant interaction.</p>
 <p>The other way is apparently to use large-M <code>Manova</code> from package
 <code>car</code>. This goes as a two-stage process: fit an <code>lm</code>
 first with the same model formula as above, and then pass <em>that</em>
 into <code>Manova</code>. This way, you just display the final result,
 rather than passing it into <code>summary</code>:</p>
-<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb289-1" title="1">htwt<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">*</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb289-2" title="2">htwt<span class="fl">.3</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.2</span>)</a></code></pre></div>
-<pre><code>## Error in solve.default(wcrossprod(model.matrix(mod), w = wts)): Lapack routine dgesv: system is exactly singular: U[13,13] = 0</code></pre>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb254-1"><a href="multivariate-analysis-of-variance.html#cb254-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(response <span class="sc">~</span> Sex <span class="sc">*</span> Sport, <span class="at">data =</span> athletes)</span>
+<span id="cb254-2"><a href="multivariate-analysis-of-variance.html#cb254-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Manova</span>(htwt<span class="fl">.2</span>)</span></code></pre></div>
+<pre><code>## Error in Anova.mlm(mod, ...): model is singular</code></pre>
 <p>Except that this doesn’t work, for reasons that I don’t
 understand. <code>htwt.2</code> is fine; it’s the <code>Manova</code> that is
 not working.</p>
@@ -765,8 +804,8 @@ work. (You only need to use one of them.) Display your results.</li>
 significant. (This is what I meant by “briefly.”)
 To do that, in each case, replace the <code>*</code> with a <code>+</code>, or use
 <code>update</code>. Most of those work:</p>
-<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1">htwt<span class="fl">.4</span> &lt;-<span class="st"> </span><span class="kw">manova</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb291-2" title="2"><span class="kw">summary</span>(htwt<span class="fl">.4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="multivariate-analysis-of-variance.html#cb256-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.4</span> <span class="ot">&lt;-</span> <span class="fu">manova</span>(response <span class="sc">~</span> Sex <span class="sc">+</span> Sport, <span class="at">data =</span> athletes)</span>
+<span id="cb256-2"><a href="multivariate-analysis-of-variance.html#cb256-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(htwt<span class="fl">.4</span>)</span></code></pre></div>
 <pre><code>##            Df  Pillai approx F num Df den Df    Pr(&gt;F)    
 ## Sex         1 0.51888  102.454      2    190 &lt; 2.2e-16 ***
 ## Sport       9 0.86923   16.314     18    382 &lt; 2.2e-16 ***
@@ -774,31 +813,102 @@ To do that, in each case, replace the <code>*</code> with a <code>+</code>, or u
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1">htwt<span class="fl">.5</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a></code></pre></div>
-<pre><code>## Warning in if (projections) qr &lt;- lmcall$qr &lt;- TRUE: the condition has length &gt; 1 and only the first element will be used</code></pre>
-<pre><code>## Error in if (projections) qr &lt;- lmcall$qr &lt;- TRUE: argument is not interpretable as logical</code></pre>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="multivariate-analysis-of-variance.html#cb258-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.5</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(htwt<span class="fl">.1</span>, . <span class="sc">~</span> . <span class="sc">-</span> Sex<span class="sc">:</span>Sport)</span></code></pre></div>
+<pre><code>## Error in if (projections) qr &lt;- lmcall$qr &lt;- TRUE: the condition has length &gt; 1</code></pre>
 <p>It seems that <code>manova</code> things don’t like <code>update</code>. If
 that happened to you, try it another way.</p>
 <p>or, with <code>Manova</code>, the same two ways:</p>
-<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1">htwt<span class="fl">.6</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(response <span class="op">~</span><span class="st"> </span>Sex <span class="op">+</span><span class="st"> </span>Sport, <span class="dt">data =</span> athletes)</a>
-<a class="sourceLine" id="cb296-2" title="2">htwt<span class="fl">.7</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.6</span>)</a>
-<a class="sourceLine" id="cb296-3" title="3">htwt<span class="fl">.7</span></a></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="multivariate-analysis-of-variance.html#cb260-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.6</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(response <span class="sc">~</span> Sex <span class="sc">+</span> Sport, <span class="at">data =</span> athletes)</span>
+<span id="cb260-2"><a href="multivariate-analysis-of-variance.html#cb260-2" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.7</span> <span class="ot">&lt;-</span> <span class="fu">Manova</span>(htwt<span class="fl">.6</span>)</span>
+<span id="cb260-3"><a href="multivariate-analysis-of-variance.html#cb260-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(htwt<span class="fl">.7</span>)</span></code></pre></div>
 <pre><code>## 
-## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df    Pr(&gt;F)    
-## Sex    1   0.44278   75.489      2    190 &lt; 2.2e-16 ***
-## Sport  9   0.86923   16.314     18    382 &lt; 2.2e-16 ***
+## Type II MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##          Ht        Wt
+## Ht 6871.978  5842.771
+## Wt 5842.771 13613.021
+## 
+## ------------------------------------------
+##  
+## Term: Sex 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht       Wt
+## Ht 4582.744 6146.078
+## Wt 6146.078 8242.718
+## 
+## Multivariate Tests: Sex
+##                  Df test stat approx F num Df den Df     Pr(&gt;F)    
+## Pillai            1 0.4427781 75.48862      2    190 &lt; 2.22e-16 ***
+## Wilks             1 0.5572219 75.48862      2    190 &lt; 2.22e-16 ***
+## Hotelling-Lawley  1 0.7946171 75.48862      2    190 &lt; 2.22e-16 ***
+## Roy               1 0.7946171 75.48862      2    190 &lt; 2.22e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## ------------------------------------------
+##  
+## Term: Sport 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht        Wt
+## Ht 6162.455  7070.085
+## Wt 7070.085 13727.950
+## 
+## Multivariate Tests: Sport
+##                  Df test stat approx F num Df den Df     Pr(&gt;F)    
+## Pillai            9 0.8692278 16.31358     18    382 &lt; 2.22e-16 ***
+## Wilks             9 0.3132928 16.60578     18    380 &lt; 2.22e-16 ***
+## Hotelling-Lawley  9 1.6093145 16.89780     18    378 &lt; 2.22e-16 ***
+## Roy               9 1.0593835 22.48247      9    191 &lt; 2.22e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1">htwt<span class="fl">.8</span> &lt;-<span class="st"> </span><span class="kw">update</span>(htwt<span class="fl">.2</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>Sex<span class="op">:</span>Sport)</a>
-<a class="sourceLine" id="cb298-2" title="2">htwt<span class="fl">.9</span> &lt;-<span class="st"> </span><span class="kw">Manova</span>(htwt<span class="fl">.8</span>)</a>
-<a class="sourceLine" id="cb298-3" title="3">htwt<span class="fl">.9</span></a></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="multivariate-analysis-of-variance.html#cb262-1" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.8</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(htwt<span class="fl">.2</span>, . <span class="sc">~</span> . <span class="sc">-</span> Sex<span class="sc">:</span>Sport)</span>
+<span id="cb262-2"><a href="multivariate-analysis-of-variance.html#cb262-2" aria-hidden="true" tabindex="-1"></a>htwt<span class="fl">.9</span> <span class="ot">&lt;-</span> <span class="fu">Manova</span>(htwt<span class="fl">.8</span>)</span>
+<span id="cb262-3"><a href="multivariate-analysis-of-variance.html#cb262-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(htwt<span class="fl">.9</span>)</span></code></pre></div>
 <pre><code>## 
-## Type II MANOVA Tests: Pillai test statistic
-##       Df test stat approx F num Df den Df    Pr(&gt;F)    
-## Sex    1   0.44278   75.489      2    190 &lt; 2.2e-16 ***
-## Sport  9   0.86923   16.314     18    382 &lt; 2.2e-16 ***
+## Type II MANOVA Tests:
+## 
+## Sum of squares and products for error:
+##          Ht        Wt
+## Ht 6871.978  5842.771
+## Wt 5842.771 13613.021
+## 
+## ------------------------------------------
+##  
+## Term: Sex 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht       Wt
+## Ht 4582.744 6146.078
+## Wt 6146.078 8242.718
+## 
+## Multivariate Tests: Sex
+##                  Df test stat approx F num Df den Df     Pr(&gt;F)    
+## Pillai            1 0.4427781 75.48862      2    190 &lt; 2.22e-16 ***
+## Wilks             1 0.5572219 75.48862      2    190 &lt; 2.22e-16 ***
+## Hotelling-Lawley  1 0.7946171 75.48862      2    190 &lt; 2.22e-16 ***
+## Roy               1 0.7946171 75.48862      2    190 &lt; 2.22e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## ------------------------------------------
+##  
+## Term: Sport 
+## 
+## Sum of squares and products for the hypothesis:
+##          Ht        Wt
+## Ht 6162.455  7070.085
+## Wt 7070.085 13727.950
+## 
+## Multivariate Tests: Sport
+##                  Df test stat approx F num Df den Df     Pr(&gt;F)    
+## Pillai            9 0.8692278 16.31358     18    382 &lt; 2.22e-16 ***
+## Wilks             9 0.3132928 16.60578     18    380 &lt; 2.22e-16 ***
+## Hotelling-Lawley  9 1.6093145 16.89780     18    378 &lt; 2.22e-16 ***
+## Roy               9 1.0593835 22.48247      9    191 &lt; 2.22e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>These both work, and give the same answer. I think this is because the
@@ -806,9 +916,18 @@ thing being <code>update</code>d is a regular <code>lm</code>; the
 <code>Manova</code> bit comes after, and is calculated from the
 <code>lm</code> fit.</p>
 <p>Any of these is good, and gets you the same answer.</p>
-<p>Extra: it you run <code>summary</code> on the output from <code>Manova</code>,
-you get more detail:</p>
-<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb300-1" title="1"><span class="kw">summary</span>(htwt<span class="fl">.9</span>)</a></code></pre></div>
+<p>The way you run Box’s M test on these is on each explanatory variable separately:</p>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="multivariate-analysis-of-variance.html#cb264-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">BoxM</span>(response, athletes<span class="sc">$</span>Sex))</span></code></pre></div>
+<pre><code>##        Box&#39;s M Test 
+## 
+## Chi-Squared Value = 3.98602 , df = 3  and p-value: 0.263</code></pre>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="multivariate-analysis-of-variance.html#cb266-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">BoxM</span>(response, athletes<span class="sc">$</span>Sport))</span></code></pre></div>
+<pre><code>##        Box&#39;s M Test 
+## 
+## Chi-Squared Value = 68.16926 , df = 27  and p-value: 2.04e-05</code></pre>
+<p>The second of these, the one for Sport, is small enough to be a problem, but the P-value in the MANOVA for Sport is extremely small, so we should be safe.</p>
+<p>Extra: more about the <code>summary</code> output from <code>Manova</code>:</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="multivariate-analysis-of-variance.html#cb268-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(htwt<span class="fl">.9</span>)</span></code></pre></div>
 <pre><code>## 
 ## Type II MANOVA Tests:
 ## 
@@ -853,12 +972,10 @@ you get more detail:</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There are actually <em>four</em> competing tests that generalize the
-one-response-variable <span class="math inline">\(F\)</span> statistic in different ways. The one we’ve
-been using is called Pillai’s Trace, but if you go looking in a text
-on multivariate analysis, you’ll also see the others, especially
+one-response-variable <span class="math inline">\(F\)</span> statistic in different ways. If you go looking in a text
+on multivariate analysis, you’ll also see about all four of them, especially
 Wilks’s <span class="math inline">\(\Lambda\)</span> (that’s a capital lambda). They will generally agree
-in terms of conclusion, so you can look at them all if you like, but
-it doesn’t hurt much to look at only one.</p>
+in terms of conclusion, but you should probably at least glance at all of them.</p>
 <p>I am in danger of running out of numbers for my fitted models (and am
 definitely in danger of forgetting which one is which)!</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -898,25 +1015,27 @@ pushing it, then plotting symbols. Symbol sizes are hard to
 distinguish a lot of, so it’s best to limit this (if you use it at
 all) to gender.
 With that in mind, I would go for this one:</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb302-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">shape =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="multivariate-analysis-of-variance.html#cb270-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">colour =</span> Sport, <span class="at">shape =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/hatzer-1.png" width="672" /></p>
 <p>If you investigate, you’ll find that <code>ggplot</code> can handle about
 six different shapes (and we have ten sports), and it doesn’t care for
 using <code>size</code> to distinguish values of a categorical
 variable. It will try to draw the graph, but will give you a warning,
 such as these:</p>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">colour =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="multivariate-analysis-of-variance.html#cb271-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">colour =</span> Sport, <span class="at">size =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <pre><code>## Warning: Using size for a discrete variable is not advised.</code></pre>
 <p><img src="pasias_files/figure-html/delkofer-1.png" width="672" /></p>
-<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">size =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="multivariate-analysis-of-variance.html#cb273-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">shape =</span> Sport, <span class="at">size =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <pre><code>## Warning: Using size for a discrete variable is not advised.</code></pre>
-<pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values because more than 6 becomes difficult to discriminate; you have 10. Consider specifying
-## shapes manually if you must have them.</code></pre>
+<pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 10. Consider
+## specifying shapes manually if you must have them.</code></pre>
 <pre><code>## Warning: Removed 72 rows containing missing values (geom_point).</code></pre>
 <p><img src="pasias_files/figure-html/vonhoedorff-1.png" width="672" /></p>
-<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb309-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
-<pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values because more than 6 becomes difficult to discriminate; you have 10. Consider specifying
-## shapes manually if you must have them.</code></pre>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="multivariate-analysis-of-variance.html#cb277-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">shape =</span> Sport, <span class="at">colour =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<pre><code>## Warning: The shape palette can deal with a maximum of 6 discrete values because
+## more than 6 becomes difficult to discriminate; you have 10. Consider
+## specifying shapes manually if you must have them.</code></pre>
 <pre><code>## Warning: Removed 72 rows containing missing values (geom_point).</code></pre>
 <p><img src="pasias_files/figure-html/schmit-1.png" width="672" /></p>
 <p>Whatever plot you come up with, you can put height and weight on the
@@ -940,8 +1059,8 @@ about as well if I’d used shape for brand and colour for gender.</p>
 <p>The warning message for <code>shape</code> contains the words ``specify
 shapes manually if you must have them’’. I was wondering how you can
 avoid that. Here’s how:</p>
-<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb312-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb312-2" title="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="multivariate-analysis-of-variance.html#cb280-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">shape =</span> Sport, <span class="at">colour =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb280-2"><a href="multivariate-analysis-of-variance.html#cb280-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/marklin-1.png" width="672" /></p>
 <p>I agree with <code>ggplot2</code> that this many shapes are hard to tell
 apart,<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a> but if you can figure this out,
@@ -952,8 +1071,8 @@ different values will do. A list of the possible shapes is in
 <a href="https://stackoverflow.com/questions/16813278/cycling-through-point-shapes-when-more-than-6-factor-levels">link</a>,
 at the bottom. You can even use regular letters, but you have to refer
 to them by numeric code:</p>
-<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1"><span class="kw">ggplot</span>(athletes, <span class="kw">aes</span>(<span class="dt">x =</span> Ht, <span class="dt">y =</span> Wt, <span class="dt">shape =</span> Sport, <span class="dt">colour =</span> Sex)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb313-2" title="2"><span class="st">  </span><span class="kw">scale_shape_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="dv">66</span>, <span class="dv">70</span>, <span class="dv">71</span>, <span class="dv">78</span>, <span class="dv">82</span>, <span class="dv">83</span>, <span class="dv">52</span>, <span class="dv">84</span>, <span class="dv">3</span>, <span class="dv">87</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="multivariate-analysis-of-variance.html#cb281-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(athletes, <span class="fu">aes</span>(<span class="at">x =</span> Ht, <span class="at">y =</span> Wt, <span class="at">shape =</span> Sport, <span class="at">colour =</span> Sex)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb281-2"><a href="multivariate-analysis-of-variance.html#cb281-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="dv">66</span>, <span class="dv">70</span>, <span class="dv">71</span>, <span class="dv">78</span>, <span class="dv">82</span>, <span class="dv">83</span>, <span class="dv">52</span>, <span class="dv">84</span>, <span class="dv">3</span>, <span class="dv">87</span>))</span></code></pre></div>
 <p><img src="pasias_files/figure-html/stahillin-1.png" width="672" /></p>
 <p>I had to find something for <code>TSprnt</code>, since all the letters
 appeared to be taken.</p>
@@ -983,8 +1102,8 @@ combination.</p>
 <div class="footnotes">
 <hr />
 <ol start="36">
-<li id="fn36"><p>Like one of those crazy drinks at Starbucks.<a href="multivariate-analysis-of-variance.html#fnref36" class="footnote-back">↩</a></p></li>
-<li id="fn37"><p>Having said that, the shapes are less anbiguous than the colours, because if you’re willing to study the legend, you can work out exactly which sport a shape belongs to, whereas the colours might be hard to tell apart at all.<a href="multivariate-analysis-of-variance.html#fnref37" class="footnote-back">↩</a></p></li>
+<li id="fn36"><p>Like one of those crazy drinks at Starbucks.<a href="multivariate-analysis-of-variance.html#fnref36" class="footnote-back">↩︎</a></p></li>
+<li id="fn37"><p>Having said that, the shapes are less anbiguous than the colours, because if you’re willing to study the legend, you can work out exactly which sport a shape belongs to, whereas the colours might be hard to tell apart at all.<a href="multivariate-analysis-of-variance.html#fnref37" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -997,7 +1116,6 @@ combination.</p>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1016,6 +1134,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1036,6 +1155,10 @@ gitbook.start({
 "text": null
 },
 "download": ["pasias.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

@@ -287,10 +287,28 @@ as.dist(dissims)
 
  
 
-The key thing here is "non-square matrix": you have one more column
-than you have rows, since you have a column of fruit names.
+You have one more column
+than you have rows, since you have a column of fruit names. 
 
-This one is `as.dist` since you already have dissimilarities
+Aside: what is that stuff about `dimnames`?
+
+```{r}
+dimnames(dissims)
+```
+
+Dataframes have column names (the second element of that list), literally the names of the columns. But they can also have "row names". This is more part of the old-fashioned `data.frame` thinking, because in the tidyverse, row names are ignored. If your dataframe doesn't explicitly have row names (ours doesn't), the values 1 through the number of rows are used instead. If you like to think of it this way, a dataframe has two dimensions (rows and columns), and so `dimnames` for a dataframe is a list of length two.
+
+Now, to that error message. A `dist` object is square (well, half of a square, as it displays), so if you use `as.dist` to make it from a dataframe, that dataframe had better be square as well. The way `as.dist` checks your dataframe for squareness is to see whether it has the same number of rows as columns, and the way it does *that* is to look at its `dimnames` and checks whether they have the same length. Here, there are six row names but seven^[Count them.] column names. Hence the error message.
+
+There is, I suppose, one more thing to say: internally, a dataframe is a `list` of columns:
+
+```{r}
+dissims %>% as.list()
+```
+
+Since there are seven columns, this dataframe has seven "things" in it. This is the "array extent" that the error message talks about. But the first thing in `dimnames`, the row names, which the error message calls `'dimnames' [1]`, only has six things in it. End of aside.
+
+This one is `as.dist` rather than `dist` since you already have dissimilarities
 and you want to arrange them into the right type of
 thing. `dist` is for *calculating* dissimilarities, which
 we did before, so we don't want to do that now.
