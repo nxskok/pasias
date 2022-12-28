@@ -194,7 +194,7 @@ If you forget to round until the end, you'll have to do something like this:
 p %>% 
   select(group, predicted, Ht, Wt) %>% 
   pivot_wider(names_from = group, values_from = predicted) %>% 
-  mutate(across(BBall:WPolo, ~round(., 2)))
+  mutate(across(BBall:WPolo, \(x) round(x, 2)))
 ```
 
 In words, "for each column from `BBall` through `WPolo`, replace it by itself rounded to 2 decimals".
@@ -211,14 +211,14 @@ p %>%
   pivot_wider(names_from = group, values_from = predicted) 
 ```
 
-Once again, the time to do this is while everything is long, so that you only have one column to work with.^[`abbreviate` comes from base R; it returns an abbreviated version of its (text) input, with a minimum length of its second input. If two abbreviations come out the same, it makes them longer until they are different. It has some heuristics to get things short enough: remove vowels, then remove letters on the end.] Again, you can do this at the end, but it's more work, because you are now renaming columns:
+Once again, the time to do this is while everything is long, so that you only have one column to work with.^[`abbreviate` comes from base R; it returns an abbreviated version of its (text) input, with a minimum length as its second input. If two abbreviations come out the same, it makes them longer until they are different. It has some heuristics to get things short enough: remove vowels, then remove letters on the end.] Again, you can do this at the end, but it's more work, because you are now renaming columns:
 
 ```{r}
 p %>% 
   mutate(predicted = round(predicted, 2)) %>% 
   select(group, predicted, Ht, Wt) %>% 
   pivot_wider(names_from = group, values_from = predicted) %>% 
-  rename_with(~abbreviate(., 3), everything())
+  rename_with(\(x) abbreviate(x, 3), everything())
 ```
 
 `rename` doesn't work with `across` (you will get an error if you try it), so you need to use `rename_with`^[Which I learned about today.]. This has syntax "how to rename" first (here, with an abbreviated version of itself), and "what to rename" second (here, everything, or `BBall` through `WPolo` if you prefer). 

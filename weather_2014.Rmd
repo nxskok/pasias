@@ -75,7 +75,7 @@ I think this is the easiest way:
 
 ```{r weather-2014-3}
 weather %>% 
-  summarize(across(everything(), ~quantile(.)))
+  summarize(across(everything(), \(x) quantile(x)))
 ```
 
 This loses the actual percents of the percentiles of the five-number summary (because they are "names" of the numerical result, and the tidyverse doesn't like names.) I think you can see which percentile is which, though.
@@ -422,7 +422,7 @@ Having done these by percentile ranks in one of the other questions,
 let's see if we can do that here as well:
 
 ```{r weather-2014-20}
-weather %>% mutate(across(everything(), ~percent_rank(.))) %>% 
+weather %>% mutate(across(everything(), \(x) percent_rank(x))) %>% 
     slice(c(37, 211, 265, 47))
 ```
 

@@ -394,7 +394,8 @@ the posterior probabilities to a small number of decimals.
 Then, we can fire away with this:
 ```{r cornseed-17, error=T}
 d %>%
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), 
+                \(post) round(post, 3))) %>%
   mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```

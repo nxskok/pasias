@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 34 Discriminant analysis | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 34 Discriminant analysis | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2022-06-15" />
+<meta name="date" content="2022-12-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -92,7 +92,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -105,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -1669,7 +1669,7 @@ have a ton of decimal places which I like to round off first before I
 display them, eg. to 3 decimals here:</p>
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="discriminant-analysis.html#cb321-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
 <span id="cb321-2"><a href="discriminant-analysis.html#cb321-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(y1, y2, group, class, <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb321-3"><a href="discriminant-analysis.html#cb321-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>)))</span></code></pre></div>
+<span id="cb321-3"><a href="discriminant-analysis.html#cb321-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(post) <span class="fu">round</span>(post, <span class="dv">3</span>)))</span></code></pre></div>
 <pre><code>##    y1 y2 group class posterior.a posterior.b posterior.c
 ## 1   2  3     a     a       1.000       0.000       0.000
 ## 2   3  4     a     a       0.994       0.006       0.000
@@ -4135,7 +4135,7 @@ How do their posterior probabilities compare? These are all in columns beginning
 try to make things simpler.
 Let’s round them to three decimals, and then display only some of the columns:</p>
 <div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb391-1"><a href="discriminant-analysis.html#cb391-1" aria-hidden="true" tabindex="-1"></a>all <span class="sc">%&gt;%</span> <span class="fu">filter</span>(class.x <span class="sc">!=</span> class.y) <span class="sc">%&gt;%</span> </span>
-<span id="cb391-2"><a href="discriminant-analysis.html#cb391-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb391-2"><a href="discriminant-analysis.html#cb391-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(post) <span class="fu">round</span>(post, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb391-3"><a href="discriminant-analysis.html#cb391-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, job, <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>))</span></code></pre></div>
 <pre><code>##   id        job posterior.custserv.x posterior.mechanic.x
 ## 1 11   custserv                0.495                0.491
@@ -4148,7 +4148,7 @@ Let’s round them to three decimals, and then display only some of the columns:
 ## 2                  0.464</code></pre>
 <p>And then, because I can, let’s re-format that to make it easier to read, <code>x</code> being regular LDA and <code>y</code> being cross-validation:</p>
 <div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb393-1"><a href="discriminant-analysis.html#cb393-1" aria-hidden="true" tabindex="-1"></a>all <span class="sc">%&gt;%</span> <span class="fu">filter</span>(class.x <span class="sc">!=</span> class.y) <span class="sc">%&gt;%</span> </span>
-<span id="cb393-2"><a href="discriminant-analysis.html#cb393-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb393-2"><a href="discriminant-analysis.html#cb393-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(post) <span class="fu">round</span>(post, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb393-3"><a href="discriminant-analysis.html#cb393-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, job, <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb393-4"><a href="discriminant-analysis.html#cb393-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">&quot;post_job&quot;</span>, <span class="st">&quot;method&quot;</span>), <span class="at">names_pattern =</span> <span class="st">&quot;posterior</span><span class="sc">\\</span><span class="st">.(.*)</span><span class="sc">\\</span><span class="st">.(.)&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;prob&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb393-5"><a href="discriminant-analysis.html#cb393-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> method, <span class="at">values_from =</span> prob)</span></code></pre></div>
@@ -4186,7 +4186,7 @@ the number of columns to look at:</p>
 <div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb397-1"><a href="discriminant-analysis.html#cb397-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">457299</span>)</span>
 <span id="cb397-2"><a href="discriminant-analysis.html#cb397-2" aria-hidden="true" tabindex="-1"></a>all.mis <span class="sc">%&gt;%</span></span>
 <span id="cb397-3"><a href="discriminant-analysis.html#cb397-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is_correct <span class="sc">==</span> <span class="st">&quot;wrong&quot;</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb397-4"><a href="discriminant-analysis.html#cb397-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb397-4"><a href="discriminant-analysis.html#cb397-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(post) <span class="fu">round</span>(post, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb397-5"><a href="discriminant-analysis.html#cb397-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
 <span id="cb397-6"><a href="discriminant-analysis.html#cb397-6" aria-hidden="true" tabindex="-1"></a>    id, job, class.x, outdoor, social, conservative,</span>
 <span id="cb397-7"><a href="discriminant-analysis.html#cb397-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>)</span>
@@ -4532,7 +4532,7 @@ have, and then pull out what we need:</p>
 <p>The ones with a 1 on the end are the cross-validated ones. We need the posterior probabilities, rounded, and they need to have shorter names:</p>
 <div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="discriminant-analysis.html#cb424-1" aria-hidden="true" tabindex="-1"></a>all <span class="sc">%&gt;%</span></span>
 <span id="cb424-2"><a href="discriminant-analysis.html#cb424-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(parent, <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), LD1) <span class="sc">%&gt;%</span></span>
-<span id="cb424-3"><a href="discriminant-analysis.html#cb424-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb424-3"><a href="discriminant-analysis.html#cb424-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb424-4"><a href="discriminant-analysis.html#cb424-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(</span>
 <span id="cb424-5"><a href="discriminant-analysis.html#cb424-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">str_replace</span>(., <span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;p&quot;</span>),</span>
 <span id="cb424-6"><a href="discriminant-analysis.html#cb424-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>),</span>
@@ -4624,12 +4624,11 @@ parents have in common, all of them or most of them?</li>
 scores on <code>q1</code> through <code>q4</code>:</p>
 <div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="discriminant-analysis.html#cb426-1" aria-hidden="true" tabindex="-1"></a>all <span class="sc">%&gt;%</span></span>
 <span id="cb426-2"><a href="discriminant-analysis.html#cb426-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(q1<span class="sc">:</span>q4, parent, <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), LD1) <span class="sc">%&gt;%</span></span>
-<span id="cb426-3"><a href="discriminant-analysis.html#cb426-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb426-3"><a href="discriminant-analysis.html#cb426-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), \(x) <span class="fu">round</span>(x, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
 <span id="cb426-4"><a href="discriminant-analysis.html#cb426-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(</span>
-<span id="cb426-5"><a href="discriminant-analysis.html#cb426-5" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">str_replace</span>(., <span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;p&quot;</span>),</span>
-<span id="cb426-6"><a href="discriminant-analysis.html#cb426-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>),</span>
-<span id="cb426-7"><a href="discriminant-analysis.html#cb426-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb426-8"><a href="discriminant-analysis.html#cb426-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(LD1)</span></code></pre></div>
+<span id="cb426-5"><a href="discriminant-analysis.html#cb426-5" aria-hidden="true" tabindex="-1"></a>    \(y) <span class="fu">str_replace</span>(y, <span class="st">&quot;posterior&quot;</span>, <span class="st">&quot;p&quot;</span>),</span>
+<span id="cb426-6"><a href="discriminant-analysis.html#cb426-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb426-7"><a href="discriminant-analysis.html#cb426-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(LD1)</span></code></pre></div>
 <pre><code>##    q1 q2 q3 q4 parent p.father p.mother p.father.1 p.mother.1        LD1
 ## 19  2  1  1  1 father    0.999    0.001      0.999      0.001 -3.6088379
 ## 1   2  1  3  1 father    0.998    0.002      0.996      0.004 -3.3265660
@@ -4795,9 +4794,9 @@ soil type from the three response variables. Display the results.</li>
 ## 
 ## Coefficients of linear discriminants:
 ##                   LD1         LD2         LD3
-## yield      0.08074845  0.02081174 -0.04822432
-## water     -0.03759961 -0.09598577 -0.03231897
-## herbicide  0.50654017 -0.06979662  0.27281743
+## yield     -0.08074845 -0.02081174 -0.04822432
+## water      0.03759961  0.09598577 -0.03231897
+## herbicide -0.50654017  0.06979662  0.27281743
 ## 
 ## Proportion of trace:
 ##    LD1    LD2    LD3 
@@ -4888,13 +4887,13 @@ containing what you need.</li>
 ## 4     4 loam  88.1  45.1       4.9  loam    0.069082256      0.7696194
 ## 5     5 loam  50.2  34.1      11.7  loam    0.010588934      0.9457005
 ## 6     6 loam  55.0  31.1       6.9  loam    0.208208691      0.3194421
-##   posterior.salty posterior.sandy     x.LD1      x.LD2       x.LD3
-## 1     0.003067182      0.05849665 2.7137304  0.2765450  0.09765792
-## 2     0.134234919      0.31648283 0.6999983 -0.2264123  0.46748170
-## 3     0.008018680      0.10915147 2.1875521 -0.1644190 -2.10016387
-## 4     0.020907569      0.14039076 1.7307043 -0.8021079 -1.66560056
-## 5     0.005163698      0.03854692 2.5284069 -1.0096466  2.37276838
-## 6     0.159072574      0.31327660 0.5974055 -0.2867691  0.92872489</code></pre>
+##   posterior.salty posterior.sandy      x.LD1      x.LD2       x.LD3
+## 1     0.003067182      0.05849665 -2.7137304 -0.2765450  0.09765792
+## 2     0.134234919      0.31648283 -0.6999983  0.2264123  0.46748170
+## 3     0.008018680      0.10915147 -2.1875521  0.1644190 -2.10016387
+## 4     0.020907569      0.14039076 -1.7307043  0.8021079 -1.66560056
+## 5     0.005163698      0.03854692 -2.5284069  1.0096466  2.37276838
+## 6     0.159072574      0.31327660 -0.5974055  0.2867691  0.92872489</code></pre>
 <p>Then we use this as input to <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb445"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb445-1"><a href="discriminant-analysis.html#cb445-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(d, <span class="fu">aes</span>(<span class="at">x =</span> x.LD1, <span class="at">y =</span> x.LD2, <span class="at">colour =</span> soil)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/cornseed-9-1.png" width="672" /></p>
@@ -4996,7 +4995,7 @@ better than anything else.</p>
 <span id="cb453-5"><a href="discriminant-analysis.html#cb453-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop =</span> nn <span class="sc">/</span> <span class="fu">sum</span>(nn))</span></code></pre></div>
 <pre><code>## Error in `mutate()`:
 ## ! Problem while computing `prop = nn/sum(nn)`.
-## Caused by error:
+## Caused by error in `mask$eval_all_mutate()`:
 ## ! object &#39;nn&#39; not found</code></pre>
 <p>Note the use of <code>wt</code> on the second <code>count</code> to count the
 number of <em>observations</em> from the first <code>count</code>, not the
@@ -5053,9 +5052,10 @@ it that we want to look at. And before <em>that</em>, I want to round
 the posterior probabilities to a small number of decimals.</p>
 <p>Then, we can fire away with this:</p>
 <div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="discriminant-analysis.html#cb459-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span></span>
-<span id="cb459-2"><a href="discriminant-analysis.html#cb459-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), <span class="sc">~</span> <span class="fu">round</span>(., <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb459-3"><a href="discriminant-analysis.html#cb459-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="ot">-&gt;</span> dd</span>
-<span id="cb459-4"><a href="discriminant-analysis.html#cb459-4" aria-hidden="true" tabindex="-1"></a>dd <span class="sc">%&gt;%</span> <span class="fu">filter</span>(soil <span class="sc">!=</span> class)</span></code></pre></div>
+<span id="cb459-2"><a href="discriminant-analysis.html#cb459-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">starts_with</span>(<span class="st">&quot;posterior&quot;</span>), </span>
+<span id="cb459-3"><a href="discriminant-analysis.html#cb459-3" aria-hidden="true" tabindex="-1"></a>                \(post) <span class="fu">round</span>(post, <span class="dv">3</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb459-4"><a href="discriminant-analysis.html#cb459-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">row =</span> <span class="fu">row_number</span>()) <span class="ot">-&gt;</span> dd</span>
+<span id="cb459-5"><a href="discriminant-analysis.html#cb459-5" aria-hidden="true" tabindex="-1"></a>dd <span class="sc">%&gt;%</span> <span class="fu">filter</span>(soil <span class="sc">!=</span> class)</span></code></pre></div>
 <pre><code>##    field  soil yield water herbicide class posterior.clay posterior.loam
 ## 7      7  loam  65.4  21.6       4.3 sandy          0.174          0.214
 ## 8      8  loam  65.7  27.7       5.3 sandy          0.163          0.352
@@ -5072,20 +5072,20 @@ the posterior probabilities to a small number of decimals.</p>
 ## 31    31  clay  62.9  25.8       2.4 salty          0.320          0.024
 ## 32    32  clay  49.3  39.4       5.2 salty          0.416          0.019
 ##    posterior.salty posterior.sandy      x.LD1       x.LD2       x.LD3 row
-## 7            0.147           0.465  0.4773813  1.02300901  0.02489683   7
-## 8            0.113           0.373  0.7787883  0.37394272  0.08610126   8
-## 9            0.195           0.215  0.2347419 -1.58402466 -0.60226491   9
-## 10           0.069           0.272  1.1888399  0.05551354  0.69601339  10
-## 11           0.339           0.182 -0.6365694 -1.16783644 -0.16694577  11
-## 13           0.362           0.307 -1.1089037  1.05680853 -0.99478905  13
-## 17           0.315           0.340 -0.6033993  0.65387493 -0.37063590  17
-## 20           0.012           0.143  2.0847382  0.51018238 -0.11850210  20
-## 24           0.351           0.227 -1.0111845 -0.06204891 -1.21730783  24
-## 25           0.484           0.098 -1.8263552 -0.83185894 -0.24274038  25
-## 28           0.295           0.360 -0.4849415  0.69025922 -0.36741549  28
-## 30           0.338           0.388 -0.8727560  1.57008678 -0.28665910  30
-## 31           0.346           0.310 -0.8448346  0.70045299 -0.50863515  31
-## 32           0.418           0.146 -1.0360558 -1.08342373  0.47156646  32</code></pre>
+## 7            0.147           0.465 -0.4773813 -1.02300901  0.02489683   7
+## 8            0.113           0.373 -0.7787883 -0.37394272  0.08610126   8
+## 9            0.195           0.215 -0.2347419  1.58402466 -0.60226491   9
+## 10           0.069           0.272 -1.1888399 -0.05551354  0.69601339  10
+## 11           0.339           0.182  0.6365694  1.16783644 -0.16694577  11
+## 13           0.362           0.307  1.1089037 -1.05680853 -0.99478905  13
+## 17           0.315           0.340  0.6033993 -0.65387493 -0.37063590  17
+## 20           0.012           0.143 -2.0847382 -0.51018238 -0.11850210  20
+## 24           0.351           0.227  1.0111845  0.06204891 -1.21730783  24
+## 25           0.484           0.098  1.8263552  0.83185894 -0.24274038  25
+## 28           0.295           0.360  0.4849415 -0.69025922 -0.36741549  28
+## 30           0.338           0.388  0.8727560 -1.57008678 -0.28665910  30
+## 31           0.346           0.310  0.8448346 -0.70045299 -0.50863515  31
+## 32           0.418           0.146  1.0360558  1.08342373  0.47156646  32</code></pre>
 <p>Most of the posterior probabilities are neither especially small nor
 especially large, which adds to the impression that things are really
 rather uncertain. For example, field 8 could have been either loam
@@ -5162,14 +5162,14 @@ and down they go. This process is one you’ve seen before:</p>
 <span id="cb465-5"><a href="discriminant-analysis.html#cb465-5" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(cornseed<span class="fl">.2</span>, new)</span>
 <span id="cb465-6"><a href="discriminant-analysis.html#cb465-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(new, pred<span class="sc">$</span>x) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(LD1))</span></code></pre></div>
 <pre><code>##   yield water herbicide         LD1        LD2         LD3
-## 6    67    26         6  1.30225880  0.5153162  0.26932408
-## 8    67    37         6  0.88866305 -0.5405273 -0.08618456
-## 2    51    26         6  0.01028356  0.1823283  1.04091323
-## 5    67    26         3 -0.21736172  0.7247060 -0.54912820
-## 4    51    37         6 -0.40331219 -0.8735152  0.68540458
-## 7    67    37         3 -0.63095747 -0.3311374 -0.90463685
-## 1    51    26         3 -1.50933696  0.3917181  0.22246094
-## 3    51    37         3 -1.92293271 -0.6641254 -0.13304771</code></pre>
+## 3    51    37         3  1.92293271  0.6641254 -0.13304771
+## 1    51    26         3  1.50933696 -0.3917181  0.22246094
+## 7    67    37         3  0.63095747  0.3311374 -0.90463685
+## 4    51    37         6  0.40331219  0.8735152  0.68540458
+## 5    67    26         3  0.21736172 -0.7247060 -0.54912820
+## 2    51    26         6 -0.01028356 -0.1823283  1.04091323
+## 8    67    37         6 -0.88866305  0.5405273 -0.08618456
+## 6    67    26         6 -1.30225880 -0.5153162  0.26932408</code></pre>
 <p>I arranged the predicted LD1 scores in descending order, so the most
 loam-like combinations are at the top. The top two combinations look
 like loam; they both have high <code>herbicide</code>, as we figured
@@ -6307,7 +6307,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

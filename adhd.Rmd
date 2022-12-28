@@ -268,7 +268,7 @@ The ones with a 1 on the end are the cross-validated ones. We need the posterior
 ```{r adhd-12, error=T}
 all %>%
   select(parent, starts_with("posterior"), LD1) %>%
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), \(x) round(x, 3))) %>%
   rename_with(
     ~ str_replace(., "posterior", "p"),
     starts_with("posterior"),
@@ -345,11 +345,10 @@ scores on `q1` through `q4`:
 ```{r adhd-13 }
 all %>%
   select(q1:q4, parent, starts_with("posterior"), LD1) %>%
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), \(x) round(x, 3))) %>%
   rename_with(
-    ~ str_replace(., "posterior", "p"),
-    starts_with("posterior"),
-  ) %>%
+    \(y) str_replace(y, "posterior", "p"),
+    starts_with("posterior")) %>%
   arrange(LD1)
 ```
 

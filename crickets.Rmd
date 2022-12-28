@@ -349,9 +349,10 @@ back to compute numerical summaries of a bunch of columns:
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
+  pivot_longer(exclamationis:niveus, names_to = "species", 
+               values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate(across(c(temperature, pulse_rate), ~as.numeric(.)))
+  mutate(across(c(temperature, pulse_rate), \(x) as.numeric(x)))
 ```
 
  
@@ -362,9 +363,10 @@ Can't I just say that these are columns 2 and 3?
 crickets %>%
   unite(exclamationis, X1:X2) %>%
   unite(niveus, X3:X4) %>%
-  pivot_longer(exclamationis:niveus, names_to = "species", values_to = "temp_pulse") %>% 
+  pivot_longer(exclamationis:niveus, names_to = "species", 
+               values_to = "temp_pulse") %>% 
   separate(temp_pulse, c("temperature", "pulse_rate"), "_") %>%
-  mutate(across(2:3, ~as.numeric(.)))
+  mutate(across(2:3, \(x) as.numeric(x)))
 ```
 
  

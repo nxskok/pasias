@@ -554,7 +554,7 @@ it. The magic word is `across`:
 ```{r airport-15 }
 airport %>%
   filter(location == 2) %>%
-  summarize(across(starts_with("epi"), ~mean(.)))
+  summarize(across(starts_with("epi"), \(epi) mean(epi)))
 ```
 
 (in words, "for each column that starts with `epi`, find the mean of it.")
@@ -580,7 +580,7 @@ then apply it to each of those "nested" data frames.
 
 ```{r airport-17 }
 epi.means <- function(x) {
-  x %>% summarize(across(starts_with("epi"), ~mean(.)))
+  x %>% summarize(across(starts_with("epi"), \(epi) mean(epi)))
 }
 
 epi.means(airport)

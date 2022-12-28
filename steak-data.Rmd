@@ -188,7 +188,7 @@ variables might have missing values in them, and they won't show
 up unless we turn them into a factor first:
 ```{r steak-data-8 }
 steak0 %>%
-  mutate(across(where(is.character), ~factor(.))) %>%
+  mutate(across(where(is.character), \(x) factor(x))) %>%
   summary()
 ```
 
@@ -253,7 +253,7 @@ For proof, this is the easiest way I know:
 
 ```{r ccd}
 steak.complete %>%
-  mutate(across(where(is.character), ~factor(.))) %>%
+  mutate(across(where(is.character), \(x) factor(x))) %>%
   summary()
 ```
 

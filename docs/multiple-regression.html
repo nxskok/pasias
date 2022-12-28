@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 19 Multiple regression | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 19 Multiple regression | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
@@ -23,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2022-06-01" />
+<meta name="date" content="2022-12-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -92,7 +92,7 @@ code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -105,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -700,31 +700,40 @@ low.</p>
 <div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="multiple-regression.html#cb136-1" aria-hidden="true" tabindex="-1"></a>new <span class="ot">&lt;-</span> <span class="fu">datagrid</span>(<span class="at">model =</span> satisf<span class="fl">.1</span>, <span class="at">age =</span> <span class="fu">c</span>(<span class="dv">33</span>, <span class="fl">44.5</span>), </span>
 <span id="cb136-2"><a href="multiple-regression.html#cb136-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">severity =</span> <span class="fu">c</span>(<span class="dv">48</span>, <span class="fl">53.5</span>), <span class="at">anxiety =</span> <span class="fu">c</span>(<span class="fl">2.15</span>, <span class="fl">2.4</span>))</span>
 <span id="cb136-3"><a href="multiple-regression.html#cb136-3" aria-hidden="true" tabindex="-1"></a>new</span></code></pre></div>
-<pre><code>##     age severity anxiety
-## 1: 33.0     48.0    2.15
-## 2: 33.0     48.0    2.40
-## 3: 33.0     53.5    2.15
-## 4: 33.0     53.5    2.40
-## 5: 44.5     48.0    2.15
-## 6: 44.5     48.0    2.40
-## 7: 44.5     53.5    2.15
-## 8: 44.5     53.5    2.40</code></pre>
+<pre><code>##      satis  age severity anxiety
+## 1 61.34783 33.0     48.0    2.15
+## 2 61.34783 33.0     48.0    2.40
+## 3 61.34783 33.0     53.5    2.15
+## 4 61.34783 33.0     53.5    2.40
+## 5 61.34783 44.5     48.0    2.15
+## 6 61.34783 44.5     48.0    2.40
+## 7 61.34783 44.5     53.5    2.15
+## 8 61.34783 44.5     53.5    2.40</code></pre>
 <p>Eight rows for the <span class="math inline">\(2^3 = 8\)</span> combinations. Then get the predictions for these:</p>
 <div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="multiple-regression.html#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predictions</span>(satisf<span class="fl">.1</span>, <span class="at">newdata =</span> new)</span></code></pre></div>
-<pre><code>##   rowid     type predicted std.error conf.low conf.high  age severity anxiety
-## 1     1 response  72.45391  2.844181 66.50097  78.40685 33.0     48.0    2.15
-## 2     2 response  70.30065  4.435481 61.01709  79.58422 33.0     48.0    2.40
-## 3     3 response  68.79143  4.699081 58.95614  78.62672 33.0     53.5    2.15
-## 4     4 response  66.63817  3.661656 58.97424  74.30211 33.0     53.5    2.40
-## 5     5 response  58.53525  3.370091 51.48157  65.58893 44.5     48.0    2.15
-## 6     6 response  56.38200  4.233879 47.52038  65.24361 44.5     48.0    2.40
-## 7     7 response  54.87277  4.595489 45.25430  64.49124 44.5     53.5    2.15
-## 8     8 response  52.71951  2.725614 47.01474  58.42429 44.5     53.5    2.40</code></pre>
+<pre><code>##   rowid     type predicted std.error statistic       p.value conf.low conf.high
+## 1     1 response  72.45391  2.844181  25.47444 3.785221e-143 66.50097  78.40685
+## 2     2 response  70.30065  4.435481  15.84961  1.414492e-56 61.01709  79.58422
+## 3     3 response  68.79143  4.699081  14.63934  1.575972e-48 58.95614  78.62672
+## 4     4 response  66.63817  3.661656  18.19892  5.263714e-74 58.97424  74.30211
+## 5     5 response  58.53525  3.370091  17.36904  1.415637e-67 51.48157  65.58893
+## 6     6 response  56.38200  4.233879  13.31686  1.847055e-40 47.52038  65.24361
+## 7     7 response  54.87277  4.595489  11.94057  7.271935e-33 45.25430  64.49124
+## 8     8 response  52.71951  2.725614  19.34225  2.369127e-83 47.01474  58.42429
+##      satis  age severity anxiety
+## 1 61.34783 33.0     48.0    2.15
+## 2 61.34783 33.0     48.0    2.40
+## 3 61.34783 33.0     53.5    2.15
+## 4 61.34783 33.0     53.5    2.40
+## 5 61.34783 44.5     48.0    2.15
+## 6 61.34783 44.5     48.0    2.40
+## 7 61.34783 44.5     53.5    2.15
+## 8 61.34783 44.5     53.5    2.40</code></pre>
 <p>Extra 2: the standard errors vary quite a bit. The smallest ones are where age, severity, and anxiety are all high or all low (the last row and the first one). This is where most of the data is, because the three explanatory variables are positively correlated with each other (if you know that one of them is high, the others will probably be high too). The other standard errors are higher because there is not much data “nearby”, and so we don’t know as much about the quality of the predictions there.</p>
 <p>Extra 3: we had to copy the quartile values into the new dataframe we were making (to predict from), which ought to have caused you some concern, since there was no guarantee that we copied them correctly. It would be better to make a dataframe with just the quartiles, and feed that into <code>datagrid</code>. Here’s how we can do that.</p>
 <div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="multiple-regression.html#cb140-1" aria-hidden="true" tabindex="-1"></a>satisf <span class="sc">%&gt;%</span> </span>
 <span id="cb140-2"><a href="multiple-regression.html#cb140-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(<span class="sc">-</span>satis,</span>
-<span id="cb140-3"><a href="multiple-regression.html#cb140-3" aria-hidden="true" tabindex="-1"></a>                   <span class="sc">~</span><span class="fu">quantile</span>(., <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)))) <span class="ot">-&gt;</span> d</span>
+<span id="cb140-3"><a href="multiple-regression.html#cb140-3" aria-hidden="true" tabindex="-1"></a>                   \(x) <span class="fu">quantile</span>(x, <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>)))) <span class="ot">-&gt;</span> d</span>
 <span id="cb140-4"><a href="multiple-regression.html#cb140-4" aria-hidden="true" tabindex="-1"></a>d</span></code></pre></div>
 <pre><code>## # A tibble: 2 × 3
 ##     age severity anxiety
@@ -735,15 +744,15 @@ low.</p>
 <p>So now, we need to take the columns from here and feed them into <code>datagrid</code>. The way to do that is to use <code>with</code>:</p>
 <div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="multiple-regression.html#cb142-1" aria-hidden="true" tabindex="-1"></a>new <span class="ot">&lt;-</span> <span class="fu">with</span>(d, <span class="fu">datagrid</span>(<span class="at">model =</span> satisf<span class="fl">.1</span>, <span class="at">age =</span> age, <span class="at">severity =</span> severity, <span class="at">anxiety =</span> anxiety))</span>
 <span id="cb142-2"><a href="multiple-regression.html#cb142-2" aria-hidden="true" tabindex="-1"></a>new</span></code></pre></div>
-<pre><code>##     age severity anxiety
-## 1: 33.0     48.0    2.15
-## 2: 33.0     48.0    2.40
-## 3: 33.0     53.5    2.15
-## 4: 33.0     53.5    2.40
-## 5: 44.5     48.0    2.15
-## 6: 44.5     48.0    2.40
-## 7: 44.5     53.5    2.15
-## 8: 44.5     53.5    2.40</code></pre>
+<pre><code>##      satis  age severity anxiety
+## 1 61.34783 33.0     48.0    2.15
+## 2 61.34783 33.0     48.0    2.40
+## 3 61.34783 33.0     53.5    2.15
+## 4 61.34783 33.0     53.5    2.40
+## 5 61.34783 44.5     48.0    2.15
+## 6 61.34783 44.5     48.0    2.40
+## 7 61.34783 44.5     53.5    2.15
+## 8 61.34783 44.5     53.5    2.40</code></pre>
 <p>The clunky repetition is needed because the first (eg.) <code>age</code> in <code>age = age</code> is the name that the column in <code>new</code> is going to get, and the second <code>age</code> is the thing that supplies the values to be combined (the column of <code>d</code> called <code>age</code>). This is exactly the same <code>new</code> that we had before, and so the predictions will be exactly the same as they were before.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol style="list-style-type: lower-roman">
@@ -1170,7 +1179,7 @@ Thus <code>read_table2</code> is what you need.</p>
 <div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="multiple-regression.html#cb174-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/mathsal.txt&quot;</span></span>
 <span id="cb174-2"><a href="multiple-regression.html#cb174-2" aria-hidden="true" tabindex="-1"></a>salaries <span class="ot">&lt;-</span> <span class="fu">read_table2</span>(my_url)</span></code></pre></div>
 <pre><code>## Warning: `read_table2()` was deprecated in readr 2.0.0.
-## Please use `read_table()` instead.</code></pre>
+## ℹ Please use `read_table()` instead.</code></pre>
 <pre><code>## 
 ## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
@@ -1419,7 +1428,7 @@ largest and smallest residuals are almost exactly the size we’d expect
 them to be.</p>
 <p>Our graph for assessing fan-in or fan-out is to plot the <em>absolute</em> values of the residuals against the fitted values. The plot from (i) suggests that we won’t have any problems here, but to investigate:</p>
 <div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="multiple-regression.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(salaries<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> <span class="fu">abs</span>(.resid))) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>()</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/mathsal-11-1.png" width="672" /></p>
 <p>This is pretty nearly straight across. You might think it increases a
 bit at the beginning, but most of the evidence for that comes from the
@@ -1488,7 +1497,7 @@ grades are used as an admission criterion to university, so we
 would hope they would have some predictive value.)</p>
 <div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="multiple-regression.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gpa, <span class="fu">aes</span>(<span class="at">x =</span> high_GPA, <span class="at">y =</span> univ_GPA)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
 <span id="cb201-2"><a href="multiple-regression.html#cb201-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>()</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/gpa-2-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -1553,7 +1562,7 @@ predictions getting less as the high-school GPA increases). In case
 you are interested, I’ll look at this here. First, residuals against
 fitted values:</p>
 <div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="multiple-regression.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gpa<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> .resid)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>()</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/gpa-4-1.png" width="672" /></p>
 <p>Is that evidence of a trend in the residuals? Dunno. I’m inclined to
 call this an “inconsequential wiggle” and say it’s OK. Note that the
@@ -1567,7 +1576,7 @@ positive and negative end.</p>
 <p>The problem I was really worried about was the potential of
 fanning-in, which we can assess by looking at the absolute residuals:</p>
 <div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="multiple-regression.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gpa<span class="fl">.1</span>, <span class="fu">aes</span>(<span class="at">x =</span> .fitted, <span class="at">y =</span> <span class="fu">abs</span>(.resid))) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>()</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/gpa-6-1.png" width="672" /></p>
 <p>That is definitely a downward trend in the size of the residuals, and
 I think I was right to be worried before. The residuals should be of
@@ -1608,9 +1617,9 @@ frame to predict from. This has to contain columns for all the
 explanatory variables, just <code>high_GPA</code> in this case:</p>
 <div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb211-1"><a href="multiple-regression.html#cb211-1" aria-hidden="true" tabindex="-1"></a>new <span class="ot">&lt;-</span> <span class="fu">datagrid</span>(<span class="at">model =</span> gpa<span class="fl">.1</span>, <span class="at">high_GPA =</span> <span class="fu">c</span>(<span class="dv">3</span>,<span class="fl">3.5</span>))</span>
 <span id="cb211-2"><a href="multiple-regression.html#cb211-2" aria-hidden="true" tabindex="-1"></a>new</span></code></pre></div>
-<pre><code>##    high_GPA
-## 1:      3.0
-## 2:      3.5</code></pre>
+<pre><code>##   univ_GPA high_GPA
+## 1 3.172857      3.0
+## 2 3.172857      3.5</code></pre>
 <p>In general, the advantage to doing it this way is that you also get representative values for any other explanatory variables (means for quantitative ones, the most common category for categorical ones). But in this case, the dataframe has just one column with two values in it, so any other way to create this dataframe is equally good, and, you might say, easier, like this:</p>
 <div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb213-1"><a href="multiple-regression.html#cb213-1" aria-hidden="true" tabindex="-1"></a>gpa.new <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">high_GPA =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="fl">3.5</span>))</span>
 <span id="cb213-2"><a href="multiple-regression.html#cb213-2" aria-hidden="true" tabindex="-1"></a>gpa.new</span></code></pre></div>
@@ -1662,9 +1671,12 @@ quartile. So the thing about the length of the prediction interval is
 a bit of a mystery. Maybe it works better for the confidence interval
 for the mean:</p>
 <div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="multiple-regression.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predictions</span>(gpa<span class="fl">.1</span>, <span class="at">newdata =</span> new)</span></code></pre></div>
-<pre><code>##   rowid     type predicted  std.error conf.low conf.high high_GPA
-## 1     1 response  3.121313 0.02776760 3.066243  3.176383      3.0
-## 2     2 response  3.458728 0.03558848 3.388147  3.529309      3.5</code></pre>
+<pre><code>##   rowid     type predicted  std.error statistic p.value conf.low conf.high
+## 1     1 response  3.121313 0.02776760 112.40845       0 3.066243  3.176383
+## 2     2 response  3.458728 0.03558848  97.18673       0 3.388147  3.529309
+##   univ_GPA high_GPA
+## 1 3.172857      3.0
+## 2 3.172857      3.5</code></pre>
 <p>These intervals are a lot shorter, since we are talking about
 <em>all</em> students with the high-school GPAs in question, and we
 therefore no longer have to worry about variation from student to
@@ -2037,14 +2049,14 @@ to make a call and stand by it.</p>
 <span id="cb248-2"><a href="multiple-regression.html#cb248-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="sc">-</span>mercury, <span class="at">names_to =</span> <span class="st">&quot;xname&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;xval&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb248-3"><a href="multiple-regression.html#cb248-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> xval, <span class="at">y =</span> mercury)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
 <span id="cb248-4"><a href="multiple-regression.html#cb248-4" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>xname, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/hachel-1.png" width="672" /></p>
 <p>I did one more thing, which is to note that I am going to be assessing these relationships in a moment, so I would rather have squarer plots than the tall skinny ones that come out by default (that is to say these):</p>
 <div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb250-1"><a href="multiple-regression.html#cb250-1" aria-hidden="true" tabindex="-1"></a>mercury <span class="sc">%&gt;%</span> </span>
 <span id="cb250-2"><a href="multiple-regression.html#cb250-2" aria-hidden="true" tabindex="-1"></a><span class="fu">pivot_longer</span>(<span class="sc">-</span>mercury, <span class="at">names_to =</span> <span class="st">&quot;xname&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;xval&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb250-3"><a href="multiple-regression.html#cb250-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> xval, <span class="at">y =</span> mercury)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
 <span id="cb250-4"><a href="multiple-regression.html#cb250-4" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>xname, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/endinger-1.png" width="672" /></p>
 <p>To make this happen, I added <code>ncol=2</code>, which says to arrange the facets in <em>two</em> columns (that is, as three cells of a <span class="math inline">\(2\times 2\)</span> grid), and that makes them come out more landscape than portrait. <code>nrow=2</code> would have had the same effect.</p>
 <p>If you are stuck, get three separate graphs, but note that you are making more work for yourself (that you will have to do again later).</p>
@@ -2267,7 +2279,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');
