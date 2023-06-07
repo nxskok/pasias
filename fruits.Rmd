@@ -271,9 +271,9 @@ off the first column, since `as.dist` can get the names from
 the columns:
 
 ```{r fruits-12 }
-d <- dissims %>%
+dissims %>%
   select(-fruit) %>%
-  as.dist()
+  as.dist() -> d
 d
 ```
 
@@ -317,6 +317,7 @@ Now, after all that work, the actual cluster analysis and dendrogram:
 ```{r hkadh}
 fruits.1 <- hclust(d, method = "complete")
 plot(fruits.1)
+rect.hclust(fruits.1, 3)
 ```
 
      
@@ -347,7 +348,7 @@ the dissimilarities like this:
 
 ```
 
-apple   orange
+           apple   orange
 strawberry    3       2
 blueberry     3       2
 

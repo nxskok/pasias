@@ -54,8 +54,8 @@ we save the new data frame into one called `jobs` that we
 actually use for the analysis below:
 ```{r jobs-2 }
 job_labels <- c("custserv", "mechanic", "dispatcher")
-jobs <- jobs0 %>%
-  mutate(job = factor(job, labels = job_labels))
+jobs0 %>%
+  mutate(job = factor(job, labels = job_labels)) -> jobs
 ```
 
        
@@ -249,7 +249,7 @@ Predictions first, then make a data frame combining the predictions with the ori
 ```{r jobs-7 }
 p <- predict(job.1)
 d <- cbind(jobs, p)
-head(d)
+d
 ```
 
        
@@ -258,6 +258,8 @@ Following my suggestion, plot these the standard way with
 
 ```{r jobs-8 }
 ggplot(d, aes(x = x.LD1, y = x.LD2, colour = job)) + geom_point()
+ggplot(d, aes(x = x.LD1, y = x.LD2, colour = class)) + geom_point()
+# ggplot(d, aes(x = job, y = x.LD1)) + geom_boxplot()
 ```
 
  
@@ -448,6 +450,11 @@ new <- tribble(
   20, 17, 8
 )
 new
+```
+
+
+```{r}
+summary(jobs)
 ```
 
        

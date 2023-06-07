@@ -83,7 +83,8 @@ looks as if it is 26 long (one per patient), it's actually more
 complicated than that:
 
 ```{r ovarian-4, error=T}
-ov2 <- ovarian %>% mutate(y = Surv(futime, fustat))
+ovarian %>% mutate(y = Surv(futime, fustat)) -> ov2
+ov2
 ```
 
  
@@ -279,7 +280,7 @@ important things like `age`. Here, that could be a boxplot:
 ggplot(ovarian, aes(x = factor(rx), y = age)) + geom_boxplot()
 ```
 
- 
+ 0.14733
 
 I needed to do `factor(rx)` because `geom_boxplot`
 needs a genuine categorical variable, not just a numerical variable
@@ -379,6 +380,7 @@ ages <- c(50.17, 62.38)
 rxs <- c(1, 2)
 new <- crossing(age = ages, rx = rxs)
 new
+datagrid(age= ages, rx = rxs, model = time.1)
 ```
 
  
@@ -435,7 +437,7 @@ Solution
 Thus. The `conf.int=F` means to skip the confidence interval
 "envelopes" that I find make the plot rather messy:
 ```{r ovarian-15 }
-ggsurvplot(s, conf.int = F)
+ggsurvplot(s, conf.int = FALSE)
 ```
 
    
@@ -444,7 +446,8 @@ $\blacksquare$
 
 (k) According to your plot, how would you describe the effects of
 treatment and of age?
-
+50.17	1			
+50.17	2	
 
 Solution
 

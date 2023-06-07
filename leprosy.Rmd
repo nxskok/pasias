@@ -30,7 +30,8 @@ column headings, so `read_table` is the thing:
 ```{r leprosy-2 }
 my_url <- "http://ritsokiguess.site/datafiles/leprosy.txt"
 lepro <- read_table(my_url)
-lepro
+lepro %>% 
+  mutate(change = pre-post)
 ```
 
  
@@ -51,9 +52,12 @@ Solution
 This is the kind of thing that `ggplot` does without
 batting an eyelid:
 ```{r leprosy-3 }
-ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point()
+ggplot(lepro, aes(x = pre, y = post, colour = drug)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
 ```
 
+```{r}
+ggplot(lepro, aes(x = drug, y = post)) + geom_boxplot()
+```
        
  
 $\blacksquare$
@@ -242,8 +246,8 @@ Now I obtain the predictions, from my best model `lepro.2`. I
 don't need intervals or anything like that:
 
 ```{r leprosy-12 }
-preds <- predictions(lepro.2, newdata = new)
-preds
+preds <- cbind(predictions(lepro.2, newdata = new))
+preds %>% select(drug, pre, estimate, conf.low, conf.high)
 ```
 
 

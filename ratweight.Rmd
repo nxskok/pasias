@@ -1,7 +1,7 @@
 ##  Effect of drug on rat weight
 
 
- Box (1950) gives data on the weights of three groups of
+Box (1950) gives data on the weights of three groups of
 rats.^[This is the same Box as Box-Cox and the M test.] One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
 from Christensen (2001).)^[References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.]
@@ -63,6 +63,10 @@ weights.1 <- lm(response ~ drug, data = weights)
 ```
 
      
+```{r}
+weights %>% select(starts_with("Time")) %>% 
+  as.matrix() -> y
+```
 
 Now, we *don't* look at `weights.1`, but we *do* use
 it as input to `Manova` in a moment.
@@ -79,7 +83,9 @@ Solution
 Something like this:
 ```{r ratweight-3 }
 times <- colnames(response)
+times
 times.df <- data.frame(times=factor(times))
+times.df
 weights.2 <- Manova(weights.1, idata = times.df, idesign = ~times)
 ```
 
@@ -230,7 +236,7 @@ In the data frame `weights.long`, we plot
 according to `rat` and colouring them according to
 `drug`. 
 
-```{r mantequilla,fig.width=6,fig.height=6}
+```{r mantequilla,fig.width=6,fig.height=3}
 library(ggplot2)
 ggplot(weights.long, aes(time, weight, group = rat, colour = drug)) + geom_line()
 ```
