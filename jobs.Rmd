@@ -127,14 +127,23 @@ since there is no reason to make things difficult for yourself:
 ```{r kazoo}
 library(car)
 response.2 <- lm(response ~ job, data = jobs)
-Manova(response.2)
+summary(Manova(response.2))
 ```
 
+This version gives the four different versions of the test (rather than just the Pillai test that `manova` gives), but the results are in this case identical for all of them.
  
 
-Oh yes, there are differences (on some or all of the variables, for
+So: oh yes, there are differences (on some or all of the variables, for
 some or all of the groups). So we need something like discriminant
 analysis to understand the differences.
+
+We really ought to follow this up with Box's M test, to be sure that the variances and correlations for each variable are equal enough across the groups, but we note off the top that the P-values (all of them) are really small, so there ought not to be much doubt about the conclusion anyway:
+
+```{r}
+summary(BoxM(response, jobs$job))
+```
+
+This is small, but not (for this test) small enough to worry about (it's not less than 0.001).
 
 This, and the `lda` below, actually works perfectly well if you use the
 original (integer) job, but then you have to remember which job number
@@ -660,7 +669,7 @@ Let's round them to three decimals, and then display only some of the columns:
 
 ```{r jobs-29 }
 all %>% filter(class.x != class.y) %>% 
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), \(post) round(post, 3))) %>%
   select(id, job, starts_with("posterior"))
 ```
 
@@ -668,7 +677,7 @@ And then, because I can, let's re-format that to make it easier to read, `x` bei
 
 ```{r jobs-30}
 all %>% filter(class.x != class.y) %>% 
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), \(post) round(post, 3))) %>%
   select(id, job, starts_with("posterior")) %>% 
   pivot_longer(starts_with("posterior"), names_to = c("post_job", "method"), names_pattern = "posterior\\.(.*)\\.(.)", values_to = "prob") %>% 
   pivot_wider(names_from = method, values_from = prob)
@@ -707,7 +716,7 @@ the number of columns to look at:
 set.seed(457299)
 all.mis %>%
   filter(is_correct == "wrong") %>%
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), \(post) round(post, 3))) %>%
   select(
     id, job, class.x, outdoor, social, conservative,
     starts_with("posterior")

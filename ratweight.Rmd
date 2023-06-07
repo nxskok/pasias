@@ -2,7 +2,7 @@
 
 
  Box (1950) gives data on the weights of three groups of
-rats. One group was given thyroxin in their drinking water, one group
+rats.^[This is the same Box as Box-Cox and the M test.] One group was given thyroxin in their drinking water, one group
 thiouracil, and the third group was a control. (This description comes
 from Christensen (2001).)^[References: Box, George EP, Problems in the analysis of growth and wear curves, Biometrics vol. 6, 362-369, 1950; Christensen R, Advanced Linear Modeling, 2nd edition, Springer, 2001. Yes, that's the Box-Cox Box.]
 Weights are measured in
@@ -30,7 +30,7 @@ weights
    
 
 There are 27 rats altogether, each measured five times (labelled time
-0 through 4). 
+0 through 4). The rats are also labelled `rat` (the first column), which will be useful later.
  
 $\blacksquare$ 
 
@@ -80,7 +80,6 @@ Something like this:
 ```{r ratweight-3 }
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
-times.df
 weights.2 <- Manova(weights.1, idata = times.df, idesign = ~times)
 ```
 
@@ -96,21 +95,21 @@ drugs.^[Things would be a lot more complicated if each rat got a different drug 
  
 $\blacksquare$
 
-(e) Take a look at the output from the MANOVA. Is there a
+(e) Take a look at all the output from the MANOVA. Is there a
 significant interaction? What does its significance (or lack
 thereof) mean?
  
 Solution
 
+Look at the `summary`, which is rather long:
 
 ```{r ratweight-4 }
-weights.2
+summary(weights.2)
 ```
 
-     
+Start near the bottom with Mauchly's test. This is strongly significant (for the interaction, which is our focus here) and means that sphericity fails and the P-value for the interaction in the univariate test is not to be trusted (it is much too small). Look instead at the Huynh-Feldt adjusted P-value at the very bottom, $1.76 \times 10^{-6}$. This is strongly significant still, but it is a *billion* times bigger than the one in the univariate table! For comparison, the test for interaction in the multivariate analysis has a P-value of 0.0007 or less, depending on which of the four tests you look at (this time, they are not all the same). As usual, the multivariate tests have bigger P-values than the appropriately adjusted univariate tests, but the P-values are all pointing in the same direction.
 
-The interaction is definitely significant, with a P-value of
-0.00069. This means that the effect of time on growth is different for
+The significant interaction means that the effect of time on growth is different for
 the different drugs: that is, the effect of drug is over the whole
 time profile, not just something like 
 "a rat on Thyroxin is on average 10 grams heavier than a control rat, over all times".
@@ -208,55 +207,35 @@ differences there.
 What I thought would be interesting is to plot the growth curves for
 *all* the rats individually, colour-coded by which drug the rat
 was on. This is the repeated-measures version of the ANOVA interaction
-plot with the data on it. (We don't use the lines for the means, here,
+plot with the data on it, a so-called spaghetti plot. (We don't use the lines for the means, here,
 instead using them for joining the measurements belonging to the same
 subject.)
 
-Unfortunately, there's a bit of data awkwardness, because we need
-to know which rat is which when we plot them. To do that, we need
-to go all the way back to `weights` and introduce a
-subject-number variable. This suggests a chain of
-things. There are 27 rats altogether. First we take the original
-data frame `weights` with each row being one rat, and we
-add a variable `subject` which is 1 through 27. Then we
-pivot-longer the columns `Time0` through
-`Time4` that are different `time`s but all
-`weight`s, like we did before. Optionally, we can also
-`separate` `Time.x` into the `Time` part and
-the `x` part (`x` being 0, 1, 2, 3, 4), but I won't
-do that here. Then we save the result into a new data frame
-`wt`, and take a look at the first few lines:
+When I first used this data set, it didn't have a column identifying which rat was which, which made this plot awkward, but now it does (the column `rat`). So we can start directly from the dataframe I created above called `weights.long`:
 
 ```{r ratweight-8 }
-weights %>%
-  mutate(subject = row_number()) %>%
-  pivot_longer(starts_with("Time"), names_to="time", values_to="weight") -> wt
-wt
+weights.long
 ```
 
   
-Each rat is identified by `subject`, which repeats 5 times,
+Each rat is identified by `rat``, which repeats 5 times,
 once for each value of `time`:
 
 ```{r ratweight-9 }
-wt %>% count(rat)
+weights.long %>% count(rat)
 ```
 
- 
-
-After going through that, the logic of the actual plotting part is
-pretty straightforward. In the data frame `wt`, we plot
+In the data frame `weights.long`, we plot
 `time` ($x$) against `weight` ($y$), grouping the points
-according to subject and colouring them according to
+according to `rat` and colouring them according to
 `drug`. 
+
 ```{r mantequilla,fig.width=6,fig.height=6}
 library(ggplot2)
-ggplot(wt, aes(time, weight, group = subject, colour = drug)) + geom_line()
+ggplot(weights.long, aes(time, weight, group = rat, colour = drug)) + geom_line()
 ```
 
- 
-
-This is often called, rather aptly, a "spaghetti plot".
+As you see, "spaghetti plot" is a rather apt name for this kind of thing.
 
 I like this plot because, unlike the interaction plot, which shows
 only means, this gives a sense of variability as well. The blue and
@@ -277,20 +256,19 @@ What, you want to see that? All right. This one is kind of silly, but
 you see the point:
 
 ```{r alphington,fig.width=6,fig.height=6}
-ggplot(wt, aes(time, weight, group = subject, colour = weight)) + geom_line()
+ggplot(weights.long, aes(time, weight, group = rat, colour = weight)) + geom_line()
 ```
 
  
 
 The line segments get lighter as you go up the page.
 
-Since we went to the trouble of making the "long" data frame
-`wt`, we can also run a repeated measures analysis using the
+Since we went to the trouble of making the "long" data frame, we can also run a repeated measures analysis using the
 mixed-model idea (described more fully in the problem of the children
 near the new airport):
 
 ```{r ratweight-10 }
-wt.1 <- lmer(weight ~ drug * time + (1 | subject), data = wt)
+wt.1 <- lmer(weight ~ drug * time + (1 | rat), data = weights.long)
 drop1(wt.1, test = "Chisq")
 ```
 

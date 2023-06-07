@@ -251,7 +251,7 @@ The document linked in the hint says that this is an ordinary `ggplot` graph, so
 
 ```{r}
 plot_cap(cells.1, condition = "dose") +
-  geom_point(data = dr2, aes(x =  dose, y = prop))
+  geom_point(data = dr2, aes(x =  dose, y = prop), inherit.aes = FALSE)
 ```
 
 The message is not helpful, but I can tell you where it comes from. When you add something to a plot like this, all the things in the original `ggplot` (which you don't see because it is hidden inside `plot_cap`) are "inherited" by anything else that you add to the plot, so that you either have to overwrite them with something new (as I did with `x` and `y`) or you get the previous values, one of which was evidently `conf.low`. To override this behaviour, which we don't want because *we* have nothing called `conf.low`, add `inherit.aes = FALSE` to the `geom_point`:^[This is done in the `geom_point` on the website, which is where I learned about it.]

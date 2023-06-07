@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
   
   <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
   <meta name="github-repo" content="nxskok/pasias" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-05-17" />
+<meta name="date" content="2022-12-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 
 <link rel="next" href="getting-used-to-r-and-r-studio.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,29 +49,33 @@
 
 
 
-
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +84,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -114,6 +118,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -131,7 +136,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Problems and Solutions in Applied Statistics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
@@ -145,7 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
 <li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
 <li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
-<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
 <li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
 <li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
@@ -153,24 +160,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
 <li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
-<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
 <li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
 <li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
 <li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> A comparison of four shampoos in treating dandruff</a><ul>
-<li class="chapter" data-level="16.1" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
-<li class="chapter" data-level="16.2" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
-<li class="chapter" data-level="16.3" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
-<li class="chapter" data-level="16.4" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#assessment-of-assumptions"><i class="fa fa-check"></i><b>16.4</b> Assessment of Assumptions</a></li>
-<li class="chapter" data-level="16.5" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#conclusions"><i class="fa fa-check"></i><b>16.5</b> Conclusions</a></li>
-<li class="chapter" data-level="16.6" data-path="a-comparison-of-four-shampoos-in-treating-dandruff.html"><a href="a-comparison-of-four-shampoos-in-treating-dandruff.html#end"><i class="fa fa-check"></i><b>16.6</b> End</a></li>
+<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="treating-dandruff.html"><a href="treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
+<li class="chapter" data-level="16.2" data-path="treating-dandruff.html"><a href="treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
+<li class="chapter" data-level="16.3" data-path="treating-dandruff.html"><a href="treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
+<li class="chapter" data-level="16.4" data-path="treating-dandruff.html"><a href="treating-dandruff.html#assessment-of-assumptions"><i class="fa fa-check"></i><b>16.4</b> Assessment of Assumptions</a></li>
+<li class="chapter" data-level="16.5" data-path="treating-dandruff.html"><a href="treating-dandruff.html#conclusions"><i class="fa fa-check"></i><b>16.5</b> Conclusions</a></li>
+<li class="chapter" data-level="16.6" data-path="treating-dandruff.html"><a href="treating-dandruff.html#end"><i class="fa fa-check"></i><b>16.6</b> End</a></li>
 </ul></li>
 <li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
 <li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
 <li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
-<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
 <li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
 <li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
@@ -178,7 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
 <li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
-<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
 <li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
@@ -197,7 +208,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
 <li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
 <li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
-<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
 <li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
 </ul></li>
@@ -226,10 +238,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Problems and Solutions in Applied Statistics</h1>
 <p class="author"><em>Ken Butler</em></p>
-<p class="date"><em>2021-05-17</em></p>
+<p class="date"><em>2022-12-27</em></p>
 </div>
-<div id="introduction" class="section level1 unnumbered">
-<h1>Introduction</h1>
+<div id="introduction" class="section level1 unnumbered hasAnchor">
+<h1>Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p><a href="http://ritsokiguess.site/pasias/">This book</a> contains a collection
 of problems, and my solutions to them, in applied statistics with
 R. These come from my courses STAC32, STAC33, and STAD29 at the University of
@@ -295,38 +307,38 @@ disciplines who find themselves wanting to learn more statistics; we
 have an <a href="https://utsc.calendar.utoronto.ca/minor-program-applied-statistics-science">Applied Statistics Minor
 program</a>
 for which C32 and D29 are two of the last courses.</p>
-<div id="packages-used-somewhere-in-this-book" class="section level2 unnumbered">
-<h2>Packages used somewhere in this book</h2>
+<div id="packages-used-somewhere-in-this-book" class="section level2 unnumbered hasAnchor">
+<h2>Packages used somewhere in this book<a href="index.html#packages-used-somewhere-in-this-book" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The bottom lines are below used with the <code>conflicted</code> package: if a function by
 the name shown is in two or more packages, prefer the one from the
 package shown.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(smmr)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(nnet)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(survival)</a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">library</span>(survminer)</a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="kw">library</span>(lme4)</a>
-<a class="sourceLine" id="cb1-9" title="9"><span class="kw">library</span>(ggbiplot)</a>
-<a class="sourceLine" id="cb1-10" title="10"><span class="kw">library</span>(ggrepel)</a>
-<a class="sourceLine" id="cb1-11" title="11"><span class="kw">library</span>(broom)</a>
-<a class="sourceLine" id="cb1-12" title="12"><span class="kw">library</span>(rpart)</a>
-<a class="sourceLine" id="cb1-13" title="13"><span class="kw">library</span>(bootstrap)</a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="kw">library</span>(cmdstanr)</a>
-<a class="sourceLine" id="cb1-15" title="15"><span class="kw">library</span>(posterior)</a>
-<a class="sourceLine" id="cb1-16" title="16"><span class="kw">library</span>(bayesplot)</a>
-<a class="sourceLine" id="cb1-17" title="17"><span class="kw">library</span>(tmaptools)</a>
-<a class="sourceLine" id="cb1-18" title="18"><span class="kw">library</span>(leaflet)</a>
-<a class="sourceLine" id="cb1-19" title="19"><span class="kw">library</span>(conflicted)</a>
-<a class="sourceLine" id="cb1-20" title="20"><span class="kw">conflict_prefer</span>(<span class="st">&quot;summarize&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-21" title="21"><span class="kw">conflict_prefer</span>(<span class="st">&quot;select&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-22" title="22"><span class="kw">conflict_prefer</span>(<span class="st">&quot;filter&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-23" title="23"><span class="kw">conflict_prefer</span>(<span class="st">&quot;mutate&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-24" title="24"><span class="kw">conflict_prefer</span>(<span class="st">&quot;count&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-25" title="25"><span class="kw">conflict_prefer</span>(<span class="st">&quot;arrange&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-26" title="26"><span class="kw">conflict_prefer</span>(<span class="st">&quot;rename&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a>
-<a class="sourceLine" id="cb1-27" title="27"><span class="kw">conflict_prefer</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="index.html#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(smmr)</span>
+<span id="cb1-3"><a href="index.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb1-4"><a href="index.html#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nnet)</span>
+<span id="cb1-5"><a href="index.html#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb1-6"><a href="index.html#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survminer)</span>
+<span id="cb1-7"><a href="index.html#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-8"><a href="index.html#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)</span>
+<span id="cb1-9"><a href="index.html#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggbiplot)</span>
+<span id="cb1-10"><a href="index.html#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggrepel)</span>
+<span id="cb1-11"><a href="index.html#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-12"><a href="index.html#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rpart)</span>
+<span id="cb1-13"><a href="index.html#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bootstrap)</span>
+<span id="cb1-14"><a href="index.html#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(cmdstanr)</span>
+<span id="cb1-15"><a href="index.html#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(posterior)</span>
+<span id="cb1-16"><a href="index.html#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bayesplot)</span>
+<span id="cb1-17"><a href="index.html#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmaptools)</span>
+<span id="cb1-18"><a href="index.html#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span>
+<span id="cb1-19"><a href="index.html#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(conflicted)</span>
+<span id="cb1-20"><a href="index.html#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;summarize&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-21"><a href="index.html#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;select&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-22"><a href="index.html#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;filter&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-23"><a href="index.html#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;mutate&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-24"><a href="index.html#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;count&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-25"><a href="index.html#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;arrange&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-26"><a href="index.html#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;rename&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span>
+<span id="cb1-27"><a href="index.html#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">conflict_prefer</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;dplyr&quot;</span>)</span></code></pre></div>
 
 </div>
 </div>
@@ -340,7 +352,6 @@ package shown.</p>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -359,6 +370,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -379,6 +391,10 @@ gitbook.start({
 "text": null
 },
 "download": ["pasias.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
@@ -392,7 +408,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

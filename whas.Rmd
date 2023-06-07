@@ -97,7 +97,7 @@ and then submit all of them to a `mutate` via `across`,
 which goes like this:
 
 ```{r whas-4 }
-whas %>% mutate(across(ends_with("date"), ~dmy(.))) %>% glimpse()
+whas %>% mutate(across(ends_with("date"), \(date) dmy(date))) %>% glimpse()
 ```
 
  
@@ -112,7 +112,8 @@ names; in this case our date variables all ended with
 This overwrites the original date columns (you can see that they are now `date`s), but you can give them new names thus. This is inside the `across` inside the `mutate`, so it needs two close-brackets after (the probable reason for the error if you get one):
 
 ```{r whas-5 }
-whas %>% mutate(across(ends_with("date"), ~dmy(.), .names = "{.col}_d")) %>% glimpse()
+whas %>% mutate(across(ends_with("date"), \(date) dmy(date), 
+                       .names = "{.col}_d")) %>% glimpse()
 ```
 
 The three columns on the end are the new actual-dates we created. To give them new names, use `.names` inside `across`, and in *that* is a recipe that says how to make the new names. `{.col}` means the name the column had before, and the `_d` after that means to add that to the old name to make the new one.

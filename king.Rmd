@@ -168,7 +168,7 @@ from `car`:
 ```{r king-7 }
 king.1 <- lm(response ~ context, data = king)
 king.2 <- Manova(king.1, idata = times.df, idesign = ~times)
-king.2
+summary(king.2)
 ```
 
      
@@ -184,6 +184,10 @@ Solution
 
 The interaction term is significant, with a P-value less than
 0.05. This is where we start and stop looking.
+
+To be precise, the sphericity test fails (P-value 0.022), so that the P-value in the univariate test for interaction is too small, and we should trust the Huynh-Feldt one of 0.0014 below it. This is still significant, but not as significant as you might have thought. For comparison, the multivariate test P-values vary between 0.008 and 0.026, a bit bigger but still significant.
+
+
 This means that the effect of time on motor activity (that is, the
 way the motor activity depends on time) is different for each
 `context`. That's all we can say now.

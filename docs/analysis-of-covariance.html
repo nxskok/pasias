@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 31 Analysis of covariance | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 31 Analysis of covariance | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
   
   <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
   <meta name="github-repo" content="nxskok/pasias" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2022-06-02" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="analysis-of-variance-revisited.html"/>
 <link rel="next" href="multivariate-analysis-of-variance.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,29 +49,33 @@
 
 
 
-
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +84,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -115,6 +119,7 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -131,16 +136,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Problems and Solutions in Applied Statistics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a><ul>
-<li class="chapter" data-level="1.1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#running-r-studio-on-jupyterhub"><i class="fa fa-check"></i><b>1.1</b> Running R Studio on Jupyterhub</a></li>
-<li class="chapter" data-level="1.2" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><i class="fa fa-check"></i><b>1.2</b> Getting an R Studio Cloud account</a></li>
-<li class="chapter" data-level="1.3" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-started"><i class="fa fa-check"></i><b>1.3</b> Getting started</a></li>
-<li class="chapter" data-level="1.4" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><i class="fa fa-check"></i><b>1.4</b> Reading data from a file</a></li>
-<li class="chapter" data-level="1.5" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><i class="fa fa-check"></i><b>1.5</b> Reading files different ways</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
 <li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
 <li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
 <li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
@@ -151,7 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
 <li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
 <li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
-<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
 <li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
 <li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
@@ -159,13 +160,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
 <li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
-<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
 <li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
 <li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
 <li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a><ul>
+<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a>
+<ul>
 <li class="chapter" data-level="16.1" data-path="treating-dandruff.html"><a href="treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
 <li class="chapter" data-level="16.2" data-path="treating-dandruff.html"><a href="treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
 <li class="chapter" data-level="16.3" data-path="treating-dandruff.html"><a href="treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
@@ -176,7 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
 <li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
 <li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
-<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
 <li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
 <li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
@@ -184,7 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
 <li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
-<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
 <li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
@@ -195,7 +200,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="28" data-path="logistic-regression-with-nominal-response.html"><a href="logistic-regression-with-nominal-response.html"><i class="fa fa-check"></i><b>28</b> Logistic regression with nominal response</a></li>
 <li class="chapter" data-level="29" data-path="survival-analysis.html"><a href="survival-analysis.html"><i class="fa fa-check"></i><b>29</b> Survival analysis</a></li>
 <li class="chapter" data-level="30" data-path="analysis-of-variance-revisited.html"><a href="analysis-of-variance-revisited.html"><i class="fa fa-check"></i><b>30</b> Analysis of variance revisited</a></li>
-<li class="chapter" data-level="31" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>31</b> Analysis of covariance</a><ul>
+<li class="chapter" data-level="31" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html"><i class="fa fa-check"></i><b>31</b> Analysis of covariance</a>
+<ul>
 <li class="chapter" data-level="31.1" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html#productivity-and-research-and-development"><i class="fa fa-check"></i><b>31.1</b> Productivity and research-and-development</a></li>
 <li class="chapter" data-level="31.2" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html#treating-leprosy"><i class="fa fa-check"></i><b>31.2</b> Treating leprosy</a></li>
 <li class="chapter" data-level="31.3" data-path="analysis-of-covariance.html"><a href="analysis-of-covariance.html#productivity-and-research-and-development-1"><i class="fa fa-check"></i><b>31.3</b> Productivity and research-and-development</a></li>
@@ -208,7 +214,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
 <li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
 <li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
-<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
 <li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
 </ul></li>
@@ -234,14 +241,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="analysis-of-covariance" class="section level1">
-<h1><span class="header-section-number">Chapter 31</span> Analysis of covariance</h1>
+<div id="analysis-of-covariance" class="section level1 hasAnchor" number="31">
+<h1><span class="header-section-number">Chapter 31</span> Analysis of covariance<a href="analysis-of-covariance.html#analysis-of-covariance" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>Packages for this chapter:</p>
-<div class="sourceCode" id="cb250"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb250-1" title="1"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb250-2" title="2"><span class="kw">library</span>(car)</a>
-<a class="sourceLine" id="cb250-3" title="3"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div id="productivity-and-research-and-development" class="section level2">
-<h2><span class="header-section-number">31.1</span> Productivity and research-and-development</h2>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="analysis-of-covariance.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb209-2"><a href="analysis-of-covariance.html#cb209-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb209-3"><a href="analysis-of-covariance.html#cb209-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div id="productivity-and-research-and-development" class="section level2 hasAnchor" number="31.1">
+<h2><span class="header-section-number">31.1</span> Productivity and research-and-development<a href="analysis-of-covariance.html#productivity-and-research-and-development" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>An economist compiled data on productivity improvements for
 a sample of companies that produce electronic equipment. The companies
 were classified according to their expenditures on research and
@@ -281,8 +288,8 @@ have seen, does this surprise you? Explain briefly why you are or
 are not surprised.</p></li>
 </ol>
 </div>
-<div id="treating-leprosy" class="section level2">
-<h2><span class="header-section-number">31.2</span> Treating leprosy</h2>
+<div id="treating-leprosy" class="section level2 hasAnchor" number="31.2">
+<h2><span class="header-section-number">31.2</span> Treating leprosy<a href="analysis-of-covariance.html#treating-leprosy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Two drugs are being tested in the treatment of
 leprosy. These are labelled A and D. There is also a control drug,
 labelled F. The response variable is a post-treatment score of leprosy
@@ -324,16 +331,14 @@ three drugs at <code>pre</code> scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 <code>pre</code> scores, and then feed this into <code>predict</code> using
 your preferred model.<a href="#fn36" class="footnote-ref" id="fnref36"><sup>36</sup></a></p></li>
-<li><p>Now, plot the data with the fitted lines on. You’ll need to do
-the trick of using the original data frame (and plot the points),
-and the data frame of predictions (and join those points with lines).</p></li>
+<li><p>Now, plot the data with the fitted lines on.</p></li>
 <li><p>Are the lines on your plot parallel, with the same slopes? Is this what you would
 expect? Explain briefly.</p></li>
 </ol>
 <p>My solutions follow:</p>
 </div>
-<div id="productivity-and-research-and-development-1" class="section level2">
-<h2><span class="header-section-number">31.3</span> Productivity and research-and-development</h2>
+<div id="productivity-and-research-and-development-1" class="section level2 hasAnchor" number="31.3">
+<h2><span class="header-section-number">31.3</span> Productivity and research-and-development<a href="analysis-of-covariance.html#productivity-and-research-and-development-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>An economist compiled data on productivity improvements for
 a sample of companies that produce electronic equipment. The companies
 were classified according to their expenditures on research and
@@ -353,17 +358,18 @@ recorded this as well.</p>
 <p>The data values are separated by one space, so let’s use
 <code>read_delim</code> and display whatever displays (probably the
 first ten lines):</p>
-<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/productivity.txt&quot;</span></a>
-<a class="sourceLine" id="cb251-2" title="2">productivity &lt;-<span class="st"> </span><span class="kw">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   expenditure = col_character(),
-##   improvement = col_double(),
-##   last = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb253"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">productivity</a></code></pre></div>
-<pre><code>## # A tibble: 27 x 3
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="analysis-of-covariance.html#cb210-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/productivity.txt&quot;</span></span>
+<span id="cb210-2"><a href="analysis-of-covariance.html#cb210-2" aria-hidden="true" tabindex="-1"></a>productivity <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(my_url, <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## Rows: 27 Columns: 3
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot; &quot;
+## chr (1): expenditure
+## dbl (2): improvement, last
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="analysis-of-covariance.html#cb212-1" aria-hidden="true" tabindex="-1"></a>productivity</span></code></pre></div>
+<pre><code>## # A tibble: 27 × 3
 ##    expenditure improvement  last
 ##    &lt;chr&gt;             &lt;dbl&gt; &lt;dbl&gt;
 ##  1 low                 7.6   8.2
@@ -387,8 +393,8 @@ to keep typing it!</p>
 sorted into alphabetical order unless we stop them. They are actually
 in the right order in the data file, so maybe we should turn them into
 a factor (with the levels in the right order) now:</p>
-<div class="sourceCode" id="cb255"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb255-1" title="1">productivity <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb255-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">expenditure =</span> <span class="kw">fct_inorder</span>(expenditure)) -&gt;<span class="st"> </span>productivity</a></code></pre></div>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="analysis-of-covariance.html#cb214-1" aria-hidden="true" tabindex="-1"></a>productivity <span class="sc">%&gt;%</span></span>
+<span id="cb214-2"><a href="analysis-of-covariance.html#cb214-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">fct_inorder</span>(expenditure)) <span class="ot">-&gt;</span> productivity</span></code></pre></div>
 <p>If you don’t do this, your answers below will be different from
 mine. Probably not in any kind of consequential way, but different
 nonetheless.</p>
@@ -403,8 +409,8 @@ lines for each expenditure group.</li>
 <p>Two quantitative and one categorical variable, so plot the
 categorical variable using colour (or <code>shape</code> etc., if you
 know about that, but colour is the most obvious thing):</p>
-<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb256-1" title="1"><span class="kw">ggplot</span>(productivity, <span class="kw">aes</span>(<span class="dt">x =</span> last, <span class="dt">y =</span> improvement, <span class="dt">colour =</span> expenditure)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb256-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb215"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb215-1"><a href="analysis-of-covariance.html#cb215-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(productivity, <span class="fu">aes</span>(<span class="at">x =</span> last, <span class="at">y =</span> improvement, <span class="at">colour =</span> expenditure)) <span class="sc">+</span></span>
+<span id="cb215-2"><a href="analysis-of-covariance.html#cb215-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="pasias_files/figure-html/productivity-3-1.png" width="672" /></p>
 <p>The <code>se=F</code> is optional; no problem if you don’t include it. (If
@@ -443,8 +449,8 @@ the results through <code>drop1</code> with <code>test="F"</code> (the
 <p>Solution</p>
 <p>This looks exactly like a regression with a categorical variable,
 and is. Just the two main effects, thus:</p>
-<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb258-1" title="1">improvement<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(improvement <span class="op">~</span><span class="st"> </span>last <span class="op">+</span><span class="st"> </span>expenditure, <span class="dt">data =</span> productivity)</a>
-<a class="sourceLine" id="cb258-2" title="2"><span class="kw">drop1</span>(improvement<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="analysis-of-covariance.html#cb217-1" aria-hidden="true" tabindex="-1"></a>improvement<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(improvement <span class="sc">~</span> last <span class="sc">+</span> expenditure, <span class="at">data =</span> productivity)</span>
+<span id="cb217-2"><a href="analysis-of-covariance.html#cb217-2" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(improvement<span class="fl">.1</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -466,7 +472,7 @@ numbers in the <code>Estimate</code> column are consistent with your graph.</li>
 </ol>
 <p>Solution</p>
 <p>To begin:</p>
-<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb260-1" title="1"><span class="kw">summary</span>(improvement<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="analysis-of-covariance.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(improvement<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure, data = productivity)
@@ -543,8 +549,8 @@ are not surprised.</li>
 <p>Solution</p>
 <p>I like <code>update</code> for this (writing out the whole model is an
 alternative):</p>
-<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb262-1" title="1">improvement<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">update</span>(improvement<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">+</span><span class="st"> </span>last<span class="op">:</span>expenditure)</a>
-<a class="sourceLine" id="cb262-2" title="2"><span class="kw">drop1</span>(improvement<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="analysis-of-covariance.html#cb221-1" aria-hidden="true" tabindex="-1"></a>improvement<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">update</span>(improvement<span class="fl">.1</span>, . <span class="sc">~</span> . <span class="sc">+</span> last<span class="sc">:</span>expenditure)</span>
+<span id="cb221-2"><a href="analysis-of-covariance.html#cb221-2" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(improvement<span class="fl">.2</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -573,7 +579,7 @@ the lines in the graph, so that even a small difference in slopes can
 be signficant. You might argue that my red line is not <em>quite</em>
 as steep as the others, but the difference does look very small.</p>
 <p>Let’s take a look at the <code>summary</code> for my interaction model:</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb264-1" title="1"><span class="kw">summary</span>(improvement<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="analysis-of-covariance.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(improvement<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = improvement ~ last + expenditure + last:expenditure, 
@@ -615,35 +621,9 @@ at least, I led you through it wrong). The right way to do this would
 have been to fit the interaction model <em>first</em>, see that it is
 significant, and then done some predictions to assess the effects of
 things:</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1">lasts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</a>
-<a class="sourceLine" id="cb266-2" title="2">expenditures &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;low&quot;</span>, <span class="st">&quot;moderate&quot;</span>, <span class="st">&quot;high&quot;</span>)</a>
-<a class="sourceLine" id="cb266-3" title="3">new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">last =</span> lasts, <span class="dt">expenditure =</span> expenditures)</a>
-<a class="sourceLine" id="cb266-4" title="4">new</a></code></pre></div>
-<pre><code>## # A tibble: 9 x 2
-##    last expenditure
-##   &lt;dbl&gt; &lt;chr&gt;      
-## 1     7 high       
-## 2     7 low        
-## 3     7 moderate   
-## 4     9 high       
-## 5     9 low        
-## 6     9 moderate   
-## 7    11 high       
-## 8    11 low        
-## 9    11 moderate</code></pre>
-<p>(oh, how I wish I’d given those variables shorter names),<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a> and then:</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1">p &lt;-<span class="st"> </span><span class="kw">predict</span>(improvement<span class="fl">.2</span>, new)</a>
-<a class="sourceLine" id="cb268-2" title="2"><span class="kw">cbind</span>(new, p)</a></code></pre></div>
-<pre><code>##   last expenditure         p
-## 1    7        high  2.517338
-## 2    7         low  6.805256
-## 3    7    moderate  4.557743
-## 4    9        high  5.199343
-## 5    9         low  8.670110
-## 6    9    moderate  7.066929
-## 7   11        high  7.881348
-## 8   11         low 10.534963
-## 9   11    moderate  9.576115</code></pre>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="analysis-of-covariance.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cap</span>(improvement<span class="fl">.2</span>, <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;last&quot;</span>, <span class="st">&quot;expenditure&quot;</span>))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>The three lines are not quite parallel, and evidently non-parallel enough to be significant. (This graph does not give you any sense of how much variability there is in the <em>slopes</em>; the at-least partial non-overlapping of the confidence envelopes tells you that there is a significant effect of <em>expenditure</em>, but it doesn’t tell you about the interaction.)</p>
 <p>The effect is more or less as we described it before: as <code>last</code>
 goes up (for fixed <code>expenditure</code>), the predicted productivity
 improvements for this year go up, and as <code>expenditure</code> level
@@ -659,8 +639,8 @@ same conclusions doing it the way I asked you to do it, or doing it
 the way I just did it.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 </div>
-<div id="treating-leprosy-1" class="section level2">
-<h2><span class="header-section-number">31.4</span> Treating leprosy</h2>
+<div id="treating-leprosy-1" class="section level2 hasAnchor" number="31.4">
+<h2><span class="header-section-number">31.4</span> Treating leprosy<a href="analysis-of-covariance.html#treating-leprosy-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Two drugs are being tested in the treatment of
 leprosy. These are labelled A and D. There is also a control drug,
 labelled F. The response variable is a post-treatment score of leprosy
@@ -681,17 +661,26 @@ right thing.</li>
 <p>Take a look at the data file. The values have multiple spaces
 between them, but they are aligned with each other and the
 column headings, so <code>read_table</code> is the thing:</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb270-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/leprosy.txt&quot;</span></a>
-<a class="sourceLine" id="cb270-2" title="2">lepro &lt;-<span class="st"> </span><span class="kw">read_table</span>(my_url)</a></code></pre></div>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="analysis-of-covariance.html#cb226-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/leprosy.txt&quot;</span></span>
+<span id="cb226-2"><a href="analysis-of-covariance.html#cb226-2" aria-hidden="true" tabindex="-1"></a>lepro <span class="ot">&lt;-</span> <span class="fu">read_table</span>(my_url)</span></code></pre></div>
 <pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+## ── Column specification ────────────────────────────────────────────────────────
 ## cols(
 ##   drug = col_character(),
 ##   pre = col_double(),
 ##   post = col_double()
 ## )</code></pre>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">lepro</a></code></pre></div>
-<pre><code>## # A tibble: 30 x 3
+<pre><code>## Warning: 24 parsing failures.
+## row col  expected    actual                                             file
+##   1  -- 3 columns 4 columns &#39;http://ritsokiguess.site/datafiles/leprosy.txt&#39;
+##   2  -- 3 columns 4 columns &#39;http://ritsokiguess.site/datafiles/leprosy.txt&#39;
+##   3  -- 3 columns 4 columns &#39;http://ritsokiguess.site/datafiles/leprosy.txt&#39;
+##   4  -- 3 columns 4 columns &#39;http://ritsokiguess.site/datafiles/leprosy.txt&#39;
+##   5  -- 3 columns 4 columns &#39;http://ritsokiguess.site/datafiles/leprosy.txt&#39;
+## ... ... ......... ......... ................................................
+## See problems(...) for more details.</code></pre>
+<div class="sourceCode" id="cb229"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb229-1"><a href="analysis-of-covariance.html#cb229-1" aria-hidden="true" tabindex="-1"></a>lepro</span></code></pre></div>
+<pre><code>## # A tibble: 30 × 3
 ##    drug    pre  post
 ##    &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
 ##  1 A        11     6
@@ -716,7 +705,7 @@ different colour.</li>
 <p>Solution</p>
 <p>This is the kind of thing that <code>ggplot</code> does without
 batting an eyelid:</p>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1"><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb231-1"><a href="analysis-of-covariance.html#cb231-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(lepro, <span class="fu">aes</span>(<span class="at">x =</span> pre, <span class="at">y =</span> post, <span class="at">colour =</span> drug)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/leprosy-3-1.png" width="672" /></p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="3" style="list-style-type: lower-alpha">
@@ -754,9 +743,9 @@ the model.)</li>
 <p>Solution</p>
 <p>This is what you’d guess. <code>lm</code> handles the interaction
 properly, even though <code>pre</code> is a quantitative variable.</p>
-<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1">lepro<span class="fl">.1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">*</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</a></code></pre></div>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="analysis-of-covariance.html#cb232-1" aria-hidden="true" tabindex="-1"></a>lepro<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(post <span class="sc">~</span> pre <span class="sc">*</span> drug, <span class="at">data =</span> lepro)</span></code></pre></div>
 <p>I wanted to take a look, so I did:</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1"><span class="kw">summary</span>(lepro<span class="fl">.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="analysis-of-covariance.html#cb233-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lepro<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre * drug, data = lepro)
@@ -790,7 +779,7 @@ the interaction term significant?</li>
 </ol>
 <p>Solution</p>
 <p>Just this:</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb278-1" title="1"><span class="kw">drop1</span>(lepro<span class="fl">.1</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="analysis-of-covariance.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(lepro<span class="fl">.1</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -808,9 +797,9 @@ do (in addition, that is, to the fact that I just asked you to do it)?</li>
 </ol>
 <p>Solution</p>
 <p>Change the <code>*</code> to a <code>+</code>:</p>
-<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1">lepro<span class="fl">.2</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(post <span class="op">~</span><span class="st"> </span>pre <span class="op">+</span><span class="st"> </span>drug, <span class="dt">data =</span> lepro)</a></code></pre></div>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="analysis-of-covariance.html#cb237-1" aria-hidden="true" tabindex="-1"></a>lepro<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">lm</span>(post <span class="sc">~</span> pre <span class="sc">+</span> drug, <span class="at">data =</span> lepro)</span></code></pre></div>
 <p>Or use <code>update</code> (not much in it, here):</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1">lepro<span class="fl">.2</span>a &lt;-<span class="st"> </span><span class="kw">update</span>(lepro<span class="fl">.1</span>, . <span class="op">~</span><span class="st"> </span>. <span class="op">-</span><span class="st"> </span>pre<span class="op">:</span>drug)</a></code></pre></div>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb238-1"><a href="analysis-of-covariance.html#cb238-1" aria-hidden="true" tabindex="-1"></a>lepro<span class="fl">.2</span>a <span class="ot">&lt;-</span> <span class="fu">update</span>(lepro<span class="fl">.1</span>, . <span class="sc">~</span> . <span class="sc">-</span> pre<span class="sc">:</span>drug)</span></code></pre></div>
 <p>We just said that the interaction could come out, since it wasn’t
 significant, so this is exactly the model that we should be fitting.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
@@ -823,7 +812,7 @@ of drugs make sense?</li>
 </ol>
 <p>Solution</p>
 <p>Mine was the no-interaction model <code>lepro.2</code>:</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="kw">summary</span>(lepro<span class="fl">.2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="analysis-of-covariance.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(lepro<span class="fl">.2</span>)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = post ~ pre + drug, data = lepro)
@@ -858,7 +847,7 @@ higher score is worse, and the two “real” drugs are both better than
 the fake one.</p>
 <p>Whether there is a real drug difference, I didn’t ask you to assess,
 but you could do it by <code>drop1</code> again, this way:</p>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb284-1" title="1"><span class="kw">drop1</span>(lepro<span class="fl">.2</span>, <span class="dt">test =</span> <span class="st">&quot;F&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="analysis-of-covariance.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">drop1</span>(lepro<span class="fl">.2</span>, <span class="at">test =</span> <span class="st">&quot;F&quot;</span>)</span></code></pre></div>
 <pre><code>## Single term deletions
 ## 
 ## Model:
@@ -869,7 +858,7 @@ but you could do it by <code>drop1</code> again, this way:</p>
 ## drug    2     68.55 485.76  87.535  2.1361    0.1384    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>This is actually not significant.<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a>
+<p>This is actually not significant.<a href="#fn37" class="footnote-ref" id="fnref37"><sup>37</sup></a>
 This is one of those cases where the non-significant <code>drug</code> has
 a slightly <em>bigger</em> AIC than <code>&lt;none&gt;</code>, so <code>drop1</code>
 considers it best to leave it in the model.</p>
@@ -879,72 +868,56 @@ considers it best to leave it in the model.</p>
 three drugs at <code>pre</code> scores 5, 12 and 20. To do this, obtain
 a new data frame that has all 9 combinations of drugs and
 <code>pre</code> scores, and then feed this into <code>predict</code> using
-your preferred model.<a href="#fn39" class="footnote-ref" id="fnref39"><sup>39</sup></a></li>
+your preferred model.<a href="#fn38" class="footnote-ref" id="fnref38"><sup>38</sup></a></li>
 </ol>
 <p>Solution</p>
 <p>First, make the new data frame for predicting from, using
 <code>crossing</code>. I’m doing this in small steps for clarity:
 first, I define all the drugs and <code>pre</code> values, and then I
-feed them into <code>crossing</code>:</p>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb286-1" title="1">drugs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span>)</a>
-<a class="sourceLine" id="cb286-2" title="2">pres &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb286-3" title="3">lepro.new &lt;-<span class="st"> </span><span class="kw">crossing</span>(<span class="dt">drug =</span> drugs, <span class="dt">pre =</span> pres)</a>
-<a class="sourceLine" id="cb286-4" title="4">lepro.new</a></code></pre></div>
-<pre><code>## # A tibble: 9 x 2
-##   drug    pre
-##   &lt;chr&gt; &lt;dbl&gt;
-## 1 A         5
-## 2 A        12
-## 3 A        20
-## 4 D         5
-## 5 D        12
-## 6 D        20
-## 7 F         5
-## 8 F        12
-## 9 F        20</code></pre>
-<p>The names of the columns in the new data frame have to be
-<em>exactly</em> <code>drug</code> and <code>pre</code>. Anything else, and
-<code>predict</code> won’t work.</p>
+feed them into <code>datagrid</code>:</p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="analysis-of-covariance.html#cb243-1" aria-hidden="true" tabindex="-1"></a>drugs <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;F&quot;</span>)</span>
+<span id="cb243-2"><a href="analysis-of-covariance.html#cb243-2" aria-hidden="true" tabindex="-1"></a>pres <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">20</span>)</span>
+<span id="cb243-3"><a href="analysis-of-covariance.html#cb243-3" aria-hidden="true" tabindex="-1"></a>new <span class="ot">&lt;-</span> <span class="fu">datagrid</span>(<span class="at">model =</span> lepro<span class="fl">.2</span>, <span class="at">drug =</span> drugs, <span class="at">pre =</span> pres)</span>
+<span id="cb243-4"><a href="analysis-of-covariance.html#cb243-4" aria-hidden="true" tabindex="-1"></a>new</span></code></pre></div>
+<pre><code>##    drug pre
+## 1:    A   5
+## 2:    A  12
+## 3:    A  20
+## 4:    D   5
+## 5:    D  12
+## 6:    D  20
+## 7:    F   5
+## 8:    F  12
+## 9:    F  20</code></pre>
 <p>Now I obtain the predictions, from my best model <code>lepro.2</code>. I
 don’t need intervals or anything like that:</p>
-<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.2</span>, lepro.new)</a>
-<a class="sourceLine" id="cb288-2" title="2">preds</a></code></pre></div>
-<pre><code>##         1         2         3         4         5         6         7         8         9 
-##  1.055110  7.965396 15.862867  1.164081  8.074368 15.971838  4.501248 11.411535 19.309005</code></pre>
-<p>only it would be easier to see the predictions side by side with the
-values they are predictions for:</p>
-<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1">allpreds &lt;-<span class="st"> </span><span class="kw">cbind</span>(lepro.new, preds)</a>
-<a class="sourceLine" id="cb290-2" title="2">allpreds</a></code></pre></div>
-<pre><code>##   drug pre     preds
-## 1    A   5  1.055110
-## 2    A  12  7.965396
-## 3    A  20 15.862867
-## 4    D   5  1.164081
-## 5    D  12  8.074368
-## 6    D  20 15.971838
-## 7    F   5  4.501248
-## 8    F  12 11.411535
-## 9    F  20 19.309005</code></pre>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="analysis-of-covariance.html#cb245-1" aria-hidden="true" tabindex="-1"></a>preds <span class="ot">&lt;-</span> <span class="fu">predictions</span>(lepro<span class="fl">.2</span>, <span class="at">newdata =</span> new)</span>
+<span id="cb245-2"><a href="analysis-of-covariance.html#cb245-2" aria-hidden="true" tabindex="-1"></a>preds</span></code></pre></div>
+<pre><code>##   rowid     type predicted std.error  conf.low conf.high drug pre
+## 1     1 response  1.055110  1.450846 -1.927147  4.037367    A   5
+## 2     2 response  7.965396  1.342345  5.206168 10.724625    A  12
+## 3     3 response 15.862867  2.168562 11.405323 20.320410    A  20
+## 4     4 response  1.164081  1.510335 -1.940457  4.268619    D   5
+## 5     5 response  8.074368  1.308764  5.384165 10.764571    D  12
+## 6     6 response 15.971838  2.076191 11.704166 20.239510    D  20
+## 7     7 response  4.501248  1.814774  0.770926  8.231570    F   5
+## 8     8 response 11.411535  1.275360  8.789994 14.033075    F  12
+## 9     9 response 19.309005  1.722989 15.767350 22.850660    F  20</code></pre>
 <p>I gave this a name in case I feel like using it again later.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="10" style="list-style-type: lower-alpha">
-<li>Now, plot the data with the fitted lines on. You’ll need to do
-the trick of using the original data frame (and plot the points),
-and the data frame of predictions (and join those points with lines).</li>
+<li>Now, plot the data with the fitted lines on.</li>
 </ol>
 <p>Solution</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb292-1" title="1"><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb292-2" title="2"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> allpreds, <span class="kw">aes</span>(<span class="dt">y =</span> preds, <span class="dt">linetype =</span> drug))</a></code></pre></div>
-<p><img src="pasias_files/figure-html/leprosy-14-1.png" width="672" /></p>
-<p>Inside the <code>aes</code> for the <code>geom_line</code>, I only have to
-specify the things that have changed, so that the <code>x</code>
-(<code>pre</code>) and the <code>colour</code> (<code>drug</code>) are
-“inherited” unchanged from the first <code>aes</code>.</p>
-<p><code>geom_line</code> has the <code>aes</code> as its default first argument,
-so I have to specify <code>data=</code> by name.</p>
-<p>The <code>linetype=</code> is really overkill, but I just wanted to show
-you that you can distinguish the drugs by line type as
-well.<a href="#fn40" class="footnote-ref" id="fnref40"><sup>40</sup></a></p>
+<p>The starting point is to plot the predictions, which is <code>plot_cap</code>:</p>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb247-1"><a href="analysis-of-covariance.html#cb247-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cap</span>(lepro<span class="fl">.2</span>, <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;pre&quot;</span>, <span class="st">&quot;drug&quot;</span>))</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The olive-coloured line is actually the red and green lines right next to each other. You can check from the previous part that the predictions for drugs A and D are very close together, with those for drug F (the placebo) being higher (worse).</p>
+<p>This is a <code>ggplot</code>, so we can add things to it. The idea is to say that the next thing to plot comes from some other dataframe, and to specify everything we need (that is, not to inherit from the original <code>ggplot</code> that is lurking within <code>plot_cap</code>):</p>
+<div class="sourceCode" id="cb248"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb248-1"><a href="analysis-of-covariance.html#cb248-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cap</span>(lepro<span class="fl">.2</span>, <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;pre&quot;</span>, <span class="st">&quot;drug&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb248-2"><a href="analysis-of-covariance.html#cb248-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> lepro, <span class="fu">aes</span>(<span class="at">x =</span> pre, <span class="at">y =</span> post, <span class="at">colour =</span> drug), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>There is quite a lot of variability (which is why those confidence bands are so wide), but at least some of the blue points from drug F are above the others (worse), and there is very little to choose between drugs A and D.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 <ol start="11" style="list-style-type: lower-alpha">
 <li>Are the lines on your plot parallel, with the same slopes? Is this what you would
@@ -957,36 +930,12 @@ would make the lines <em>not</em> be parallel.
 If your best model
 <em>did</em> have the interaction term still in it, your predictions
 would have been these:</p>
-<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1">preds &lt;-<span class="st"> </span><span class="kw">predict</span>(lepro<span class="fl">.1</span>, lepro.new)</a>
-<a class="sourceLine" id="cb293-2" title="2"><span class="kw">cbind</span>(lepro.new, preds)</a></code></pre></div>
-<pre><code>##   drug pre      preds
-## 1    A   5  2.0955414
-## 2    A  12  7.3121019
-## 3    A  20 13.2738854
-## 4    D   5  0.7572581
-## 5    D  12  8.2370968
-## 6    D  20 16.7854839
-## 7    F   5  2.8637331
-## 8    F  12 11.2249823
-## 9    F  20 20.7806955</code></pre>
-<p>The slopes for each drug are no longer the same (because nothing is
-forcing them to be the same). For example, if you compare drug A at
-pre score 5 and 12, it goes up by 5.2, while drug D at the same pre
-scores goes up by 7.5.</p>
-<p>The <code>ggplot</code> in this case is actually a lot easier than the
-other <code>ggplot</code>, because the lines are now just the regression
-lines for each group. So <code>geom_smooth</code> will get them:</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1"><span class="kw">ggplot</span>(lepro, <span class="kw">aes</span>(<span class="dt">x =</span> pre, <span class="dt">y =</span> post, <span class="dt">colour =</span> drug)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb295-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</a></code></pre></div>
-<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
-<p><img src="pasias_files/figure-html/leprosy-16-1.png" width="672" /></p>
-<p>The grey intervals are a bit confusing.<a href="#fn41" class="footnote-ref" id="fnref41"><sup>41</sup></a> They are
-confidence intervals for the mean <code>post</code> score (as we did for regression
-early on in the course). But I left them there to show that they
-overlap substantially and thus that those slopes are not
-“really different”. That’s the lack of interaction. There is, as you see, a
+<div class="sourceCode" id="cb249"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb249-1"><a href="analysis-of-covariance.html#cb249-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_cap</span>(lepro<span class="fl">.1</span>, <span class="at">condition =</span> <span class="fu">c</span>(<span class="st">&quot;pre&quot;</span>, <span class="st">&quot;drug&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb249-2"><a href="analysis-of-covariance.html#cb249-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> lepro, <span class="fu">aes</span>(<span class="at">x =</span> pre, <span class="at">y =</span> post, <span class="at">colour =</span> drug), <span class="at">inherit.aes =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="pasias_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>There is, as you see, a
 substantial scatter in the points that would make it very difficult to
-prove that those three slopes are really different.</p>
+prove that those three slopes are really different, even though the lines cross.</p>
 <p><span class="math inline">\(\blacksquare\)</span></p>
 
 </div>
@@ -994,12 +943,9 @@ prove that those three slopes are really different.</p>
 <div class="footnotes">
 <hr />
 <ol start="36">
-<li id="fn36"><p>Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.<a href="analysis-of-covariance.html#fnref36" class="footnote-back">↩</a></p></li>
-<li id="fn37"><p>The expenditure levels have come out in alphabetical order again.<a href="analysis-of-covariance.html#fnref37" class="footnote-back">↩</a></p></li>
-<li id="fn38"><p>This is why I didn’t ask you to test this, since it would have confused the story.<a href="analysis-of-covariance.html#fnref38" class="footnote-back">↩</a></p></li>
-<li id="fn39"><p>Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.<a href="analysis-of-covariance.html#fnref39" class="footnote-back">↩</a></p></li>
-<li id="fn40"><p>The line types show up in the legend too, though they’re not so easy to see.<a href="analysis-of-covariance.html#fnref40" class="footnote-back">↩</a></p></li>
-<li id="fn41"><p>You can get rid of them by saying <em>se=F</em> inside the geom-smooth, as normal.<a href="analysis-of-covariance.html#fnref41" class="footnote-back">↩</a></p></li>
+<li id="fn36"><p>Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.<a href="analysis-of-covariance.html#fnref36" class="footnote-back">↩︎</a></p></li>
+<li id="fn37"><p>This is why I didn’t ask you to test this, since it would have confused the story.<a href="analysis-of-covariance.html#fnref37" class="footnote-back">↩︎</a></p></li>
+<li id="fn38"><p>Analysis of covariance is just a linear model, so <em>predict</em> works the same here as in regression.<a href="analysis-of-covariance.html#fnref38" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
             </section>
@@ -1012,7 +958,6 @@ prove that those three slopes are really different.</p>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -1031,6 +976,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -1051,6 +997,10 @@ gitbook.start({
 "text": null
 },
 "download": ["pasias.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

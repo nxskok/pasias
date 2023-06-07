@@ -332,7 +332,7 @@ Next is the tidyverse-approved way to get both quartiles for both variables at o
 ```{r myeloma-14}
 myeloma %>% 
   summarize(across(c(logbun, hgb), 
-                   ~quantile(., c(0.25, 0.75))))
+                   \(x) quantile(x, c(0.25, 0.75))))
 ```
 
 We have lost which quartile is which, but of course the lower one must be Q1 and the higher one Q3 for each variable.^[The way, as we  have seen elsewhere, is to use {\tt tidy(quantile)} or {\tt enframe(quantile)}, which  produce a two-column data frame with the percentiles shown.]

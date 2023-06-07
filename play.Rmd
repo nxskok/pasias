@@ -27,7 +27,7 @@ what I think of is `pivot_longer` with two `names_to`:
 
 ```{r play-3}
 family %>% 
-  mutate(across(starts_with("dob"), ~as.Date(.))) %>% 
+  mutate(across(starts_with("dob"), \(dob) as.Date(dob))) %>% 
   pivot_longer(-family, names_to=c("variable", "child"), names_sep="_", values_to="value")
 ```
 

@@ -100,15 +100,6 @@ new <- datagrid(model = ha.1, anger = c("y", "n"), anxiety = c(40, 50, 60))
 new
 ```
 
-Step 2 is to make a data frame of combinations using
-`datagrid`. I'll call mine `new`:
-
-```{r ha2-4 }
-new <- datagrid(model = ha.1, anxiety = anxieties, anger = angers)
-new
-```
-
-My strategy is to give the vectors of values *plural* names. If you want, you can use the same names as the variables in the model, but then your `datagrid` has stuff like `anger = anger` in it, which you might find confusing.
 
 Then, the predictions:
 
@@ -119,7 +110,7 @@ predictions(ha.1, newdata = new)
 Extra: In the help file for `predictions`, you will see it done in one step, with code like
 
 ```
-predictions(ha.1, newdata = datagrid(anger = angers, ...))
+predictions(ha.1, newdata = datagrid(anger = c("y", "n"), ...))
 ```
 
 This saves constructing `new` first, but the code for `datagrid` is to my mind usually rather long to fit on one line inside the `predictions(...)`.

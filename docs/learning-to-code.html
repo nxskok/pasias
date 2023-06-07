@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 15 Learning to code | Problems and Solutions in Applied Statistics</title>
   <meta name="description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
-  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.30 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 15 Learning to code | Problems and Solutions in Applied Statistics" />
   <meta property="og:type" content="book" />
-  <meta property="og:url" content="http://ritsokiguess.site/pasias" />
   
   <meta property="og:description" content="A set of problems and solutions, in R, on various parts of applied statistics" />
   <meta name="github-repo" content="nxskok/pasias" />
@@ -24,7 +23,7 @@
 <meta name="author" content="Ken Butler" />
 
 
-<meta name="date" content="2021-06-04" />
+<meta name="date" content="2022-12-07" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,7 +32,8 @@
   
 <link rel="prev" href="writing-reports.html"/>
 <link rel="next" href="treating-dandruff.html"/>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -49,29 +49,33 @@
 
 
 
-
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,15 +84,15 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code span.at { color: #7d9029; } /* Attribute */
 code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
+code span.bu { color: #008000; } /* BuiltIn */
 code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
 code span.ch { color: #4070a0; } /* Char */
 code span.cn { color: #880000; } /* Constant */
@@ -101,7 +105,7 @@ code span.er { color: #ff0000; font-weight: bold; } /* Error */
 code span.ex { } /* Extension */
 code span.fl { color: #40a070; } /* Float */
 code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
+code span.im { color: #008000; font-weight: bold; } /* Import */
 code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
 code span.kw { color: #007020; font-weight: bold; } /* Keyword */
 code span.op { color: #666666; } /* Operator */
@@ -114,6 +118,7 @@ code span.va { color: #19177c; } /* Variable */
 code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
+
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -131,16 +136,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><a href="./">Problems and Solutions in Applied Statistics</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html#packages-used-somewhere-in-this-book"><i class="fa fa-check"></i>Packages used somewhere in this book</a></li>
 </ul></li>
-<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a><ul>
-<li class="chapter" data-level="1.1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#running-r-studio-on-jupyterhub"><i class="fa fa-check"></i><b>1.1</b> Running R Studio on Jupyterhub</a></li>
-<li class="chapter" data-level="1.2" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-an-r-studio-cloud-account"><i class="fa fa-check"></i><b>1.2</b> Getting an R Studio Cloud account</a></li>
-<li class="chapter" data-level="1.3" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#getting-started"><i class="fa fa-check"></i><b>1.3</b> Getting started</a></li>
-<li class="chapter" data-level="1.4" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-data-from-a-file"><i class="fa fa-check"></i><b>1.4</b> Reading data from a file</a></li>
-<li class="chapter" data-level="1.5" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html#reading-files-different-ways"><i class="fa fa-check"></i><b>1.5</b> Reading files different ways</a></li>
-</ul></li>
+<li class="chapter" data-level="1" data-path="getting-used-to-r-and-r-studio.html"><a href="getting-used-to-r-and-r-studio.html"><i class="fa fa-check"></i><b>1</b> Getting used to R and R Studio</a></li>
 <li class="chapter" data-level="2" data-path="reading-in-data.html"><a href="reading-in-data.html"><i class="fa fa-check"></i><b>2</b> Reading in data</a></li>
 <li class="chapter" data-level="3" data-path="drawing-graphs.html"><a href="drawing-graphs.html"><i class="fa fa-check"></i><b>3</b> Drawing graphs</a></li>
 <li class="chapter" data-level="4" data-path="data-exploration.html"><a href="data-exploration.html"><i class="fa fa-check"></i><b>4</b> Data exploration</a></li>
@@ -151,7 +151,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9" data-path="the-sign-test.html"><a href="the-sign-test.html"><i class="fa fa-check"></i><b>9</b> The sign test</a></li>
 <li class="chapter" data-level="10" data-path="mood-median-test.html"><a href="mood-median-test.html"><i class="fa fa-check"></i><b>10</b> Mood median test</a></li>
 <li class="chapter" data-level="11" data-path="matched-pairs-t-and-sign-test.html"><a href="matched-pairs-t-and-sign-test.html"><i class="fa fa-check"></i><b>11</b> Matched pairs t and sign test</a></li>
-<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a><ul>
+<li class="chapter" data-level="12" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html"><i class="fa fa-check"></i><b>12</b> Normal quantile plots</a>
+<ul>
 <li class="chapter" data-level="12.1" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers"><i class="fa fa-check"></i><b>12.1</b> Lengths of heliconia flowers</a></li>
 <li class="chapter" data-level="12.2" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#ferritin-and-normality"><i class="fa fa-check"></i><b>12.2</b> Ferritin and normality</a></li>
 <li class="chapter" data-level="12.3" data-path="normal-quantile-plots.html"><a href="normal-quantile-plots.html#lengths-of-heliconia-flowers-1"><i class="fa fa-check"></i><b>12.3</b> Lengths of heliconia flowers</a></li>
@@ -159,13 +160,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="13" data-path="analysis-of-variance.html"><a href="analysis-of-variance.html"><i class="fa fa-check"></i><b>13</b> Analysis of variance</a></li>
 <li class="chapter" data-level="14" data-path="writing-reports.html"><a href="writing-reports.html"><i class="fa fa-check"></i><b>14</b> Writing reports</a></li>
-<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a><ul>
+<li class="chapter" data-level="15" data-path="learning-to-code.html"><a href="learning-to-code.html"><i class="fa fa-check"></i><b>15</b> Learning to code</a>
+<ul>
 <li class="chapter" data-level="15.1" data-path="learning-to-code.html"><a href="learning-to-code.html#introduction-1"><i class="fa fa-check"></i><b>15.1</b> Introduction</a></li>
 <li class="chapter" data-level="15.2" data-path="learning-to-code.html"><a href="learning-to-code.html#data-and-pre-processing"><i class="fa fa-check"></i><b>15.2</b> Data and pre-processing</a></li>
 <li class="chapter" data-level="15.3" data-path="learning-to-code.html"><a href="learning-to-code.html#analysis"><i class="fa fa-check"></i><b>15.3</b> Analysis</a></li>
 <li class="chapter" data-level="15.4" data-path="learning-to-code.html"><a href="learning-to-code.html#conclusions-see-note-9"><i class="fa fa-check"></i><b>15.4</b> Conclusions (see note 9)</a></li>
 </ul></li>
-<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a><ul>
+<li class="chapter" data-level="16" data-path="treating-dandruff.html"><a href="treating-dandruff.html"><i class="fa fa-check"></i><b>16</b> Treating dandruff</a>
+<ul>
 <li class="chapter" data-level="16.1" data-path="treating-dandruff.html"><a href="treating-dandruff.html#introduction-2"><i class="fa fa-check"></i><b>16.1</b> Introduction</a></li>
 <li class="chapter" data-level="16.2" data-path="treating-dandruff.html"><a href="treating-dandruff.html#exploratory-analysis"><i class="fa fa-check"></i><b>16.2</b> Exploratory analysis</a></li>
 <li class="chapter" data-level="16.3" data-path="treating-dandruff.html"><a href="treating-dandruff.html#analysis-of-variance-1"><i class="fa fa-check"></i><b>16.3</b> Analysis of Variance</a></li>
@@ -176,7 +179,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="17" data-path="tidying-data.html"><a href="tidying-data.html"><i class="fa fa-check"></i><b>17</b> Tidying data</a></li>
 <li class="chapter" data-level="18" data-path="simple-regression.html"><a href="simple-regression.html"><i class="fa fa-check"></i><b>18</b> Simple regression</a></li>
 <li class="chapter" data-level="19" data-path="multiple-regression.html"><a href="multiple-regression.html"><i class="fa fa-check"></i><b>19</b> Multiple regression</a></li>
-<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a><ul>
+<li class="chapter" data-level="20" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html"><i class="fa fa-check"></i><b>20</b> Regression with categorical variables</a>
+<ul>
 <li class="chapter" data-level="20.1" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited"><i class="fa fa-check"></i><b>20.1</b> Crickets revisited</a></li>
 <li class="chapter" data-level="20.2" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#pulse-rates-and-marching"><i class="fa fa-check"></i><b>20.2</b> Pulse rates and marching</a></li>
 <li class="chapter" data-level="20.3" data-path="regression-with-categorical-variables.html"><a href="regression-with-categorical-variables.html#crickets-revisited-1"><i class="fa fa-check"></i><b>20.3</b> Crickets revisited</a></li>
@@ -184,7 +188,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="21" data-path="dates-and-times.html"><a href="dates-and-times.html"><i class="fa fa-check"></i><b>21</b> Dates and times</a></li>
 <li class="chapter" data-level="22" data-path="functions.html"><a href="functions.html"><i class="fa fa-check"></i><b>22</b> Functions</a></li>
-<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a><ul>
+<li class="chapter" data-level="23" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html"><i class="fa fa-check"></i><b>23</b> Vector and matrix algebra</a>
+<ul>
 <li class="chapter" data-level="23.1" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again"><i class="fa fa-check"></i><b>23.1</b> Heights and foot lengths again</a></li>
 <li class="chapter" data-level="23.2" data-path="vector-and-matrix-algebra.html"><a href="vector-and-matrix-algebra.html#heights-and-foot-lengths-again-1"><i class="fa fa-check"></i><b>23.2</b> Heights and foot lengths again</a></li>
 </ul></li>
@@ -203,7 +208,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="36" data-path="k-means-cluster-analysis.html"><a href="k-means-cluster-analysis.html"><i class="fa fa-check"></i><b>36</b> K-means cluster analysis</a></li>
 <li class="chapter" data-level="37" data-path="drawing-maps-with-leaflet.html"><a href="drawing-maps-with-leaflet.html"><i class="fa fa-check"></i><b>37</b> Drawing maps with Leaflet</a></li>
 <li class="chapter" data-level="38" data-path="multidimensional-scaling.html"><a href="multidimensional-scaling.html"><i class="fa fa-check"></i><b>38</b> Multidimensional Scaling</a></li>
-<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a><ul>
+<li class="chapter" data-level="39" data-path="principal-components.html"><a href="principal-components.html"><i class="fa fa-check"></i><b>39</b> Principal Components</a>
+<ul>
 <li class="chapter" data-level="39.1" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere"><i class="fa fa-check"></i><b>39.1</b> The weather, somewhere</a></li>
 <li class="chapter" data-level="39.2" data-path="principal-components.html"><a href="principal-components.html#the-weather-somewhere-1"><i class="fa fa-check"></i><b>39.2</b> The weather, somewhere</a></li>
 </ul></li>
@@ -229,31 +235,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="learning-to-code" class="section level1">
-<h1><span class="header-section-number">Chapter 15</span> Learning to code</h1>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div id="learning-to-code" class="section level1 hasAnchor" number="15">
+<h1><span class="header-section-number">Chapter 15</span> Learning to code<a href="learning-to-code.html#learning-to-code" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="learning-to-code.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
 <p>A programming course, Comp Sci 101, can be taken either in-person, by attending a class at fixed days and times, or online, by doing sessions that can be taken at times the student chooses. The course coordinator wants to know whether students taking the course in these two different ways learn a different amount, as measured by their scores on the final exam for the course. This example comes from the before-times, so the final exam was taken in person by all students. The final exam was out of 45 marks. A total of 18 students took part in the study. Each student was allowed to choose the section they preferred. The data are in <a href="http://ritsokiguess.site/datafiles/proggo.csv">http://ritsokiguess.site/datafiles/proggo.csv</a>.</p>
 <p>Write a report of a complete and appropriate analysis of these data. Your report should include a description of the data in your own words, any necessary pre-processing steps, appropriate graphs, statistical analysis, assessment of assumptions for your preferred analysis, and a statement of conclusions. Imagine that your report will be read by the department Chair, who does not know about this study, and who still remembers some of their first-year Statistics course.</p>
 <p>Solution</p>
 <p>My report follows. The occasional appearance of “(see note <span class="math inline">\(x\)</span>)” from time to time indicates some extra discussion, at the end. Ignore those on your first read-through. Your report doesn’t have to be the same as mine, but it should be complete and coherent, and readable by someone with a first course in Statistics.</p>
-<div id="introduction-1" class="section level2">
-<h2><span class="header-section-number">15.1</span> Introduction</h2>
+<div id="introduction-1" class="section level2 hasAnchor" number="15.1">
+<h2><span class="header-section-number">15.1</span> Introduction<a href="learning-to-code.html#introduction-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Do students learn programming more or less effectively from an online course, completed on their own time, compared with a regular in-person lecture course that meets at the same times every week? In Comp Sci 101, a study was carried out in which 18 students, 9 each in the online and in-person sections, were assessed for learning by means of the course final exam (out of 45 marks). We compare the mean final exam scores for the students in the two sections.</p>
 </div>
-<div id="data-and-pre-processing" class="section level2">
-<h2><span class="header-section-number">15.2</span> Data and pre-processing</h2>
+<div id="data-and-pre-processing" class="section level2 hasAnchor" number="15.2">
+<h2><span class="header-section-number">15.2</span> Data and pre-processing<a href="learning-to-code.html#data-and-pre-processing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We begin by reading in the data:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">my_url &lt;-<span class="st"> &quot;http://ritsokiguess.site/datafiles/proggo.csv&quot;</span></a>
-<a class="sourceLine" id="cb68-2" title="2">prog0 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(my_url)</a></code></pre></div>
-<pre><code>## 
-## ── Column specification ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-## cols(
-##   online = col_double(),
-##   classroom = col_double()
-## )</code></pre>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">prog0</a></code></pre></div>
-<pre><code>## # A tibble: 9 x 2
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="learning-to-code.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="learning-to-code.html#cb27-1" aria-hidden="true" tabindex="-1"></a>my_url <span class="ot">&lt;-</span> <span class="st">&quot;http://ritsokiguess.site/datafiles/proggo.csv&quot;</span></span>
+<span id="cb27-2"><a href="learning-to-code.html#cb27-2" aria-hidden="true" tabindex="-1"></a>prog0 <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(my_url)</span></code></pre></div>
+<pre><code>## Rows: 9 Columns: 2
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (2): online, classroom
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="learning-to-code.html#cb29-1" aria-hidden="true" tabindex="-1"></a>prog0</span></code></pre></div>
+<pre><code>## # A tibble: 9 × 2
 ##   online classroom
 ##    &lt;dbl&gt;     &lt;dbl&gt;
 ## 1     32        35
@@ -266,11 +273,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 8     31        32
 ## 9     34        31</code></pre>
 <p>The nine students in each section are in separate columns. This is not an appropriate layout for analysis because each row contains data for <em>two</em> separate, unrelated students, and we need to have each student’s score in its own row. (See note 1.) This means making the data longer (see note 2):</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1">prog0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pivot_longer</span>(<span class="kw">everything</span>(), </a>
-<a class="sourceLine" id="cb72-2" title="2">  <span class="dt">names_to =</span> <span class="st">&quot;instruction&quot;</span>, </a>
-<a class="sourceLine" id="cb72-3" title="3">  <span class="dt">values_to =</span> <span class="st">&quot;mark&quot;</span>) -&gt;<span class="st"> </span>prog</a>
-<a class="sourceLine" id="cb72-4" title="4">prog</a></code></pre></div>
-<pre><code>## # A tibble: 18 x 2
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="learning-to-code.html#cb31-1" aria-hidden="true" tabindex="-1"></a>prog0 <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), </span>
+<span id="cb31-2"><a href="learning-to-code.html#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">names_to =</span> <span class="st">&quot;instruction&quot;</span>, </span>
+<span id="cb31-3"><a href="learning-to-code.html#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">values_to =</span> <span class="st">&quot;mark&quot;</span>) <span class="ot">-&gt;</span> prog</span>
+<span id="cb31-4"><a href="learning-to-code.html#cb31-4" aria-hidden="true" tabindex="-1"></a>prog</span></code></pre></div>
+<pre><code>## # A tibble: 18 × 2
 ##    instruction  mark
 ##    &lt;chr&gt;       &lt;dbl&gt;
 ##  1 online         32
@@ -293,20 +300,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 18 classroom      31</code></pre>
 <p>Now everything is arranged as we need, and we can proceed to analysis.</p>
 </div>
-<div id="analysis" class="section level2">
-<h2><span class="header-section-number">15.3</span> Analysis</h2>
+<div id="analysis" class="section level2 hasAnchor" number="15.3">
+<h2><span class="header-section-number">15.3</span> Analysis<a href="learning-to-code.html#analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We begin by visualizing the data. With one quantitative variable <code>mark</code> and one categorical variable <code>instruction</code>, a boxplot will give us an overall picture (see note 3):</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">x=</span> instruction, <span class="dt">y =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="learning-to-code.html#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prog, <span class="fu">aes</span>(<span class="at">x=</span> instruction, <span class="at">y =</span> mark)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>()</span></code></pre></div>
 <p><img src="pasias_files/figure-html/proggo-4-1.png" width="672" /></p>
 <p>It looks as if the average (median) mark is somewhat higher for the students in the online section. In addition, both distributions look reasonably symmetric with no outliers, and they appear to have similar spread. (see note 4.)</p>
 <p>With that in mind, it seems sensible to compare the mean final exam marks in the two groups by a pooled two-sample <span class="math inline">\(t\)</span>-test, in order to see whether the apparent difference in performance is any more than chance. The aim of the course coordinator was to see whether there was any difference between the two sections, without having any prior idea about which teaching method would be better, so a two-sided test is appropriate: (see note 5.)</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog, <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="learning-to-code.html#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mark<span class="sc">~</span>instruction, <span class="at">data =</span> prog, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Two Sample t-test
 ## 
 ## data:  mark by instruction
 ## t = -1.6495, df = 16, p-value = 0.1185
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group classroom and group online is not equal to 0
 ## 95 percent confidence interval:
 ##  -8.379039  1.045706
 ## sample estimates:
@@ -314,13 +321,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##                31.55556                35.22222</code></pre>
 <p>The P-value of 0.1185 is not smaller than 0.05, so there is no evidence of any difference between the mean final exam marks of the students in the two sections. The difference between the two groups shown on the boxplot is the kind of thing that could be observed by chance if the students were performing equally well under the two methods of instruction. (See notes 6 and 7.)</p>
 <p>This <span class="math inline">\(t\)</span>-test comes with the assumption that the data in each group come from a normal distribution, at least approximately. With two small samples, this will not be easy to assess, but we can at least look for any gross violations, using a normal quantile plot for each group:</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1"><span class="kw">ggplot</span>(prog, <span class="kw">aes</span>(<span class="dt">sample =</span> mark)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb77-2" title="2"><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="learning-to-code.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prog, <span class="fu">aes</span>(<span class="at">sample =</span> mark)) <span class="sc">+</span> <span class="fu">stat_qq</span>() <span class="sc">+</span> <span class="fu">stat_qq_line</span>() <span class="sc">+</span></span>
+<span id="cb36-2"><a href="learning-to-code.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">facet_wrap</span>(<span class="sc">~</span>instruction)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/proggo-6-1.png" width="672" /></p>
 <p>The largest observation in the classroom group and the largest two observations in the online group are a little bigger than expected, but they were not big enough to be flagged as outliers on the boxplots, so I conclude that the normality is good enough to justify the <span class="math inline">\(t\)</span>-test that we did. (See note 8.)</p>
 </div>
-<div id="conclusions-see-note-9" class="section level2">
-<h2><span class="header-section-number">15.4</span> Conclusions (see note 9)</h2>
+<div id="conclusions-see-note-9" class="section level2 hasAnchor" number="15.4">
+<h2><span class="header-section-number">15.4</span> Conclusions (see note 9)<a href="learning-to-code.html#conclusions-see-note-9" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>We found that there is no significant difference in the performance of the students learning in the classroom compared to those learning online. Before leaping to generalize to other classes, however, we should note two limitations of the study (see note 10):</p>
 <ul>
 <li>the sample sizes were very small; if we had observed this size of difference between the two groups in larger samples, we might have been able to show that the difference was significant.</li>
@@ -341,7 +348,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Conclusion <em>in the context of the data</em>, as ever. Writing “we fail to reject the null hypothesis” and then stopping invites your reader to ask “so what?”.</p></li>
 <li><p>You might have chosen to do a different test, but your choice needs to be properly justified. I think the pooled <span class="math inline">\(t\)</span>-test is the best choice here. If you thought those marks were not normal enough, then you need to do Mood’s median test, explaining why. That comes out like this:</p></li>
 </ol>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1"><span class="kw">median_test</span>(prog, mark, instruction)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="learning-to-code.html#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median_test</span>(prog, mark, instruction)</span></code></pre></div>
 <pre><code>## $table
 ##            above
 ## group       above below
@@ -355,13 +362,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 3   P-value 0.1572992</code></pre>
 <p>The (two-sided) P-value is a little bigger than the one for the pooled <span class="math inline">\(t\)</span>-test, but the conclusion is the same. (If you think the test should be one-sided, justify dividing your P-value by 2, if you can. In the case that your one-sided alternative was that classroom teaching was <em>better</em>, you cannot reject the null in favour of that, because the online students actually have better marks in these samples. In that case, halving the P-value would not be justifiable.)</p>
 <p>If you thought that the normality was all right, but the equal spreads was not, you will need to justify the unequal spreads. Perhaps the best way here is to say that you are unsure whether the spreads are close enough to equal, so you are doing the Welch test to be safe. That looks like this:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="kw">t.test</span>(mark<span class="op">~</span>instruction, <span class="dt">data =</span> prog)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="learning-to-code.html#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(mark<span class="sc">~</span>instruction, <span class="at">data =</span> prog)</span></code></pre></div>
 <pre><code>## 
 ##  Welch Two Sample t-test
 ## 
 ## data:  mark by instruction
 ## t = -1.6495, df = 15.844, p-value = 0.1187
-## alternative hypothesis: true difference in means is not equal to 0
+## alternative hypothesis: true difference in means between group classroom and group online is not equal to 0
 ## 95 percent confidence interval:
 ##  -8.382820  1.049486
 ## sample estimates:
@@ -376,8 +383,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The rest of this note is an Extra:</p>
 <p>Here is a slightly different way to approach the bootstrap in this case, that takes care of assessing the normality of both groups at once.</p>
 <p>The first step is <code>nest_by</code>, which does two things, one of which is invisible:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction)</a></code></pre></div>
-<pre><code>## # A tibble: 2 x 2
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="learning-to-code.html#cb41-1" aria-hidden="true" tabindex="-1"></a>prog <span class="sc">%&gt;%</span> <span class="fu">nest_by</span>(instruction)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 2
 ## # Rowwise:  instruction
 ##   instruction               data
 ##   &lt;chr&gt;       &lt;list&lt;tibble[,1]&gt;&gt;
@@ -385,19 +392,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 2 online                 [9 × 1]</code></pre>
 <p>This (visibly) creates a list-column containing two mini dataframes <code>data</code>. They are the original data with all the data except <code>instruction</code> in each one: that is, the other column <code>mark</code>. The top one is the nine marks for the students in the <code>classroom</code> section, and the bottom one is the nine marks for the students in the <code>online</code> section. The invisible thing is that <code>nest_by</code> includes a <code>rowwise</code>, so that what we do after this is one for <em>each</em> row, one at a time.</p>
 <p>What we do next is to generate a lot of bootstrap samples, for each group. First, a vector of simulation numbers, one for each method of instruction. This only needs to be said once because <code>nest_by</code> is like <code>group_by</code>:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb84-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>))</a></code></pre></div>
-<pre><code>## # A tibble: 2 x 3
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="learning-to-code.html#cb43-1" aria-hidden="true" tabindex="-1"></a>prog <span class="sc">%&gt;%</span> <span class="fu">nest_by</span>(instruction) <span class="sc">%&gt;%</span> </span>
+<span id="cb43-2"><a href="learning-to-code.html#cb43-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sim =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
 ## # Rowwise:  instruction
 ##   instruction               data sim       
 ##   &lt;chr&gt;       &lt;list&lt;tibble[,1]&gt;&gt; &lt;list&gt;    
 ## 1 classroom              [9 × 1] &lt;int [10]&gt;
 ## 2 online                 [9 × 1] &lt;int [10]&gt;</code></pre>
 <p>Then we need to <code>unnest</code> those <code>sim</code>s, so that we can put a bootstrap sample next to each one:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb86-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb86-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim)</a></code></pre></div>
-<pre><code>## # A tibble: 20 x 3
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="learning-to-code.html#cb45-1" aria-hidden="true" tabindex="-1"></a>prog <span class="sc">%&gt;%</span> <span class="fu">nest_by</span>(instruction) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-2"><a href="learning-to-code.html#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sim =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb45-3"><a href="learning-to-code.html#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(sim)</span></code></pre></div>
+<pre><code>## # A tibble: 20 × 3
 ## # Groups:   instruction [2]
 ##    instruction               data   sim
 ##    &lt;chr&gt;       &lt;list&lt;tibble[,1]&gt;&gt; &lt;int&gt;
@@ -422,14 +429,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 19 online                 [9 × 1]     9
 ## 20 online                 [9 × 1]    10</code></pre>
 <p>Now we draw a bootstrap sample from the <code>data</code> to the left of each <code>sim</code> (the ones next to <code>classroom</code> are the in-person ones, and the ones next to <code>online</code> are the online ones, so we will be taking bootstrap samples of the right thing). This here is where the <code>rowwise</code> goes:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">prog <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest_by</span>(instruction) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-2" title="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sim =</span> <span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-3" title="3"><span class="st">  </span><span class="kw">unnest</span>(sim) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-4" title="4"><span class="st">  </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-5" title="5"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_sample =</span> <span class="kw">list</span>(<span class="kw">sample</span>(data<span class="op">$</span>mark, <span class="dt">replace =</span> <span class="ot">TRUE</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">the_mean =</span> <span class="kw">mean</span>(the_sample)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb88-7" title="7"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">sample =</span> the_mean)) <span class="op">+</span><span class="st"> </span><span class="kw">stat_qq</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb88-8" title="8"><span class="st">    </span><span class="kw">stat_qq_line</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>instruction)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="learning-to-code.html#cb47-1" aria-hidden="true" tabindex="-1"></a>prog <span class="sc">%&gt;%</span> <span class="fu">nest_by</span>(instruction) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-2"><a href="learning-to-code.html#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sim =</span> <span class="fu">list</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="learning-to-code.html#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(sim) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-4"><a href="learning-to-code.html#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb47-5"><a href="learning-to-code.html#cb47-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">the_sample =</span> <span class="fu">list</span>(<span class="fu">sample</span>(data<span class="sc">$</span>mark, <span class="at">replace =</span> <span class="cn">TRUE</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-6"><a href="learning-to-code.html#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">the_mean =</span> <span class="fu">mean</span>(the_sample)) <span class="sc">%&gt;%</span> </span>
+<span id="cb47-7"><a href="learning-to-code.html#cb47-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">sample =</span> the_mean)) <span class="sc">+</span> <span class="fu">stat_qq</span>() <span class="sc">+</span></span>
+<span id="cb47-8"><a href="learning-to-code.html#cb47-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_qq_line</span>() <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span>instruction)</span></code></pre></div>
 <p><img src="pasias_files/figure-html/proggo-12-1.png" width="672" /></p>
 <p>These are close to their lines, which tells me indeed that the two-sample <span class="math inline">\(t\)</span>-test I did was perfectly reasonable.</p>
 <p>As I say, though, this is very much for <em>you</em>, and not for the report, given who would be reading it. If you were doing a presentation on this, the bootstrap stuff is something you would keep in reserve in case someone asks about the appropriateness of the <span class="math inline">\(t\)</span>-test, and <em>then</em> you could talk about it, but otherwise you wouldn’t mention it at all.</p>
@@ -451,7 +458,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -470,6 +476,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -490,6 +497,10 @@ gitbook.start({
 "text": null
 },
 "download": ["pasias.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }
@@ -503,7 +514,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:")
       if (/^https?:/.test(src))
         src = src.replace(/^https?:/, '');

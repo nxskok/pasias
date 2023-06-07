@@ -106,14 +106,14 @@ analysis. What do you conclude? Explain briefly.
 Solution
 
 
-Just "printing" it will get you what you want:
+Its `summary` will get you what you want:
 ```{r geriatrics-5 }
-geriatrics.2
+summary(geriatrics.2)
 ```
 
-     
+As is the way, start at the bottom and go up to Mauchly's test for sphericity. No problem here, so you can use the P-value for interaction on the univariate test as is ($3.8 \times 10^{-8}). By way of comparison, the Huynh-Feldt adjusted P-value is exactly the same (not actually adjusted at all), which makes sense because there was no lack of sphericity. The multivariate tests for the interaction have P-values that vary, but they are all (i) a bit bigger than the univariate one, and (ii) still significant.     
 
-The interaction is significant, so the effects of the treatments are
+Thus, the interaction is significant, so the effects of the treatments are
 different at different times. (It makes most sense to say it this way
 around, since treatment is something that was controlled and time was not.)
 
@@ -298,10 +298,11 @@ gg.1 <- lm(response ~ treatment, data = gg)
 times <- colnames(response)
 times.df <- data.frame(times=factor(times))
 gg.2 <- Manova(gg.1, idata = times.df, idesign = ~times)
-gg.2
+summary(gg.2)
 ```
 
- 
+The procedure, as before: Mauchly's test is not significant, so you can look at the univariate
+test for interaction. For comparison, the P-values for interaction in the multivariate test (all the same) are quite a bit bigger but still significant.
 
 There is still an interaction, but it's not as significant as it was
 before. I think it is still significant because the shape of the two
@@ -327,7 +328,7 @@ blue treatments. They both go up at time 2 and down afterwards, which
 is the time effect, but even once you allow for this time trend, there is
 too much scatter to be able to infer a difference between the treatments.
 
-Extra (maybe branch off into another question?) I was thinking that this is not terribly clear, so I thought I would
+Extra (maybe I could branch off into another question sometime?) I was thinking that this is not terribly clear, so I thought I would
 fake up some data where there is a treatment effect and a time effect
 (but no interaction), and draw a spaghetti plot, so you can see the
 difference, idealized somewhat of course. Let's try to come up with
@@ -424,17 +425,16 @@ the "time" columns. Anyway, hope you haven't forgotten what we were
 doing:^[I got sidetracked, surprise surprise.]
 
 ```{r geriatrics-17 }
-fake.2
+summary(fake.2)
 ```
 
- 
+The usual procedure: check for sphericity first. Here, that is *just* rejected, but since the P-value on the sphericity test is only just less than 0.05, you would expect the P-values on the univariate test for interaction and the Huynh-Feldt adjustment to be similar, and they are (0.510 and 0.471 respectively). Scrolling up a bit further, the multivariate test for interaction only just fails to be significant, with a P-value of 0.081. It is a mild concern that this one differs so much from the others; normally the multivariate test(s) would tell a similar story to the others.
 
-The drug-by-time interaction is not (quite) significant, so working at
-$\alpha=0.05$ (since that will help me make my point), we go ahead and
+The drug-by-time interaction is not significant, so we go ahead and
 interpret the main effects: there is a time effect (the increase at
 time 2 that I put in on purpose), and, allowing for the time effect,
 there is also a difference between the drugs (because the drug A
-scores are a bit higher than the drug B scores).
+scores are a bit higher than the drug B scores). The procedure is to look at the Huynh-Feldt adjusted P-value for time ($1.71 \times 10^{-7}$), expecting it to be a bit bigger than the one in the univariate table (it is) and comparable to the one for time in the appropriate multivariate analysis ($3.97 \times 10^{-6}$; it is, but remember to scroll back enough). In this kind of analysis, the effect of drug is averaged over time,^[See below.] so the test for the drug main effect is unaffected by sphericity. Its P-value, 0.0032, is identical in the univariate and multivariate tables, and you see that the drug main effect is not part of the sphericity testing.
 
 What if we ignored the time effect? You'd think we could do something
 like this, treating the measurements at different times as replicates:
@@ -472,7 +472,7 @@ the time information (which is useful), we would have diminished
 the significance of the drug effect. By failing to include the
 time-dependence in our model, we ought to have introduced some extra
 variability, which ought to weaken our test. But this test gives
-*exactly the same* P-value as the one in the MANOVA, and it looks
+*exactly the same* P-value as the ones in the MANOVA, and it looks
 like exactly the same test (the $F$-value is the same too). So it
 looks as if this is what the MANOVA is doing, to assess the
 `drug` effect: it's averaging over the times. Since the same

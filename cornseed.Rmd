@@ -62,6 +62,14 @@ vague, and MANOVA conclusions are vaguer than most. We will try to
 improve on this. But with an only-just-significant P-value, we should
 not be expecting miracles.
 
+We ought to check Box's M test:
+
+```{r}
+summary(BoxM(response, cornseed$soil))
+```
+
+No problems with unequal variances or correlations, at least.
+
 Here and below, `field` is neither a response variable nor an
 explanatory variable; it is an experimental unit, so `field`
 acts as an ID rather than anything else. So `field` should not
@@ -386,7 +394,8 @@ the posterior probabilities to a small number of decimals.
 Then, we can fire away with this:
 ```{r cornseed-17, error=T}
 d %>%
-  mutate(across(starts_with("posterior"), ~ round(., 3))) %>%
+  mutate(across(starts_with("posterior"), 
+                \(post) round(post, 3))) %>%
   mutate(row = row_number()) -> dd
 dd %>% filter(soil != class)
 ```

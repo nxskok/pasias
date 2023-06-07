@@ -27,8 +27,10 @@ This looks at first sight as if it's separated by spaces, but
 most of the data values are separated by *more than one*
 space. If you look further, you'll see that the values are
 *lined up in columns*, with the variable names aligned at
-the top. This is exactly the kind of thing that
-`read_table` will read. We start with the usual
+the top. 
+
+This used to be exactly the kind of thing that
+`read_table` would read, but no longer. We start with the usual
 `library(tidyverse)`:
 ```{r denali-r-1 }
 library(tidyverse)
@@ -37,9 +39,27 @@ denali <- read_table(my_url)
 denali
 ```
 
-     
+The spaces within the names have spilled into the next column, so that the dates and first names are (mostly) correct, but the initials should stay with the names.
 
-That worked: four columns with the right names, and the counts of
+The right thing now is `read_fwf`, where `fwf` stands for "fixed-width format"
+
+```{r}
+dl_file <- "caribou.txt"
+download.file(my_url, dl_file)
+read_fwf(dl_file)
+```
+
+That's much closer, but it thought the column names were part of the data. We seem to need to enter them specifically:
+
+```{r}
+my_cols <- c("date", "name", "caribou", "wolf")
+denali <- read_fwf(dl_file, fwf_empty(dl_file, col_names = my_cols), skip = 1)
+denali
+```
+
+and that's worked. The `fwf_empty` says to guess where the columns are based on where there are spaces all the way down (as `read_table` used to do), and to use the specified column names. The top line of the datafile is those column names, though, so we need to skip that row. A bit fiddly.
+
+Anyway, that (finally) worked: four columns with the right names, and the counts of
 caribou and wolf are numbers. There are only seven years of surveys;
 in real-life data you would have more. But the point here is working
 with dates.

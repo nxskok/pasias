@@ -36,14 +36,14 @@ Solution
 This first one is a bit *too* slick:
 
 ```{r ais-km-2}
-athletes %>% mutate(across(where(is.numeric), ~scale(.)))
+athletes %>% mutate(across(where(is.numeric), \(x) scale(x)))
 ```
 
 It standardizes all the columns that are numeric all right, but any other columns it finds it leaves as they are, while we want to get rid of them first. So do it in two steps: get the numeric columns, and standardize *all* of those:
 
 ```{r ais-km-3}
 athletes %>% select(where(is.numeric)) %>% 
-  mutate(across(everything(), ~scale(.))) -> athletes.s
+  mutate(across(everything(), \(x) scale(x))) -> athletes.s
 ```
 
 

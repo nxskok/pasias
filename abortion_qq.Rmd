@@ -1,0 +1,123 @@
+##  Attitudes towards abortion
+
+
+ <a name="q:abortion">*</a> Abortion is a divisive issue in the United States,
+particularly among Christians, some of whom believe that abortion is
+absolutely forbidden by the Bible. Do attitudes towards abortion
+differ among Christian denominations? The data in
+[link](http://ritsokiguess.site/datafiles/abortion.txt) come from
+the American Social Survey for the years  1972--1974. The variables
+are:
+
+
+
+* `year`: year of survey, 1972, 1973 or 1974
+
+* `religion`: Christian denomination: Southern Protestant,
+other Protestant, Catholic.
+
+* `education`: years of education: low (0--8), medium
+(8--12), high (more than 12).
+
+* `attitude` towards abortion (response). There were three abortion
+questions in the survey, asking whether the respondent thought that
+abortion should  be legal in these three circumstances:
+
+
+* when there is a strong possibility of a birth defect
+
+* when the mother's health is threatened
+
+* when the pregnancy is the result of rape.
+
+A respondent who responded "yes" to all three questions was
+recorded as having a Positive attitude towards abortion; someone who
+responded "no" to all three was recorded as Negative, and anyone
+who gave a mixture of Yes and No responses was recorded as Mixed.
+
+* `frequency` The number of respondents falling into the
+given category combination.
+
+
+
+
+(a) Read in and display the data. Do you seem to have the right
+things?
+
+
+
+(b) We have three choices for fitting logistic regressions:
+
+
+* `glm` with `family="binomial"`
+
+* `polr` (from package `MASS`)
+
+* `multinom` (from package `nnet`)
+
+Why should we be using `polr` for this analysis?
+Explain briefly.
+
+
+
+(c) `attitude` is text, and needs to be an ordered factor,
+with the values in the right order.  Create a vector, using
+`c()` if you wish, that contains the factor levels in the
+right order, and then create a new `attitude` factor using
+the `ordered` function, feeding it first the variable as read
+from the file, and second the new ordered levels that you want it to
+have.
+
+
+
+(d) Fit a model that will predict the correctly-ordered
+attitude towards abortion 
+from religious denomination and education. Don't forget that each
+row of the data file encodes a lot of people. You don't need to
+display the results.
+
+
+
+(e) Fit two more models, one containing `religion` only,
+and the other containing `education` only. Again, no need to
+look at the results.
+
+
+
+(f) Investigate whether each of `religion` and `education`
+should stay in the model, or whether they can be removed. Do this
+two ways, using `drop1` and using `anova`. What do you
+conclude? 
+
+
+
+(g) Which of your fitted models is the best? Explain briefly.
+
+
+
+
+(h) <a name="part:preds">*</a> 
+Obtain predicted probabilities for each attitude towards abortion
+for each combination of education level and religious
+denomination. 
+
+
+
+
+(i) Using your predictions from (<a href="#part:preds">here</a>), describe
+the effect of education. (This should be the same for all values of `religion`).
+
+
+
+(j) Using your predictions from (<a href="#part:preds">here</a>), describe
+the effect of `religion`. (This should be the same for all
+levels of `education`.)
+
+
+
+
+ 
+
+
+
+

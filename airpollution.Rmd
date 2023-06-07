@@ -63,7 +63,7 @@ Like this (the cleanest):
 
 ```{r airpollution-2}
 air %>% 
-  summarize(across(everything(), ~quantile(.)))
+  summarize(across(everything(), \(x) quantile(x)))
 ```
 
 
@@ -336,7 +336,7 @@ and for convenience, we'll grab the quantiles again:
 
 ```{r airpollution-13}
 air %>% 
-  summarize(across(everything(), ~quantile(.)))
+  summarize(across(everything(), \(x) quantile(x)))
 ```
 
  
@@ -356,7 +356,7 @@ observation come. Another way to approach this is to calculate
 *percentile ranks* for everything. Let's go back to our original data frame and replace everything with its percent rank: 
 
 ```{r airpollution-14 }
-air %>% mutate(across(everything(), ~ percent_rank(.))) -> pct_rank
+air %>% mutate(across(everything(), \(x) percent_rank(x))) -> pct_rank
 pct_rank
 ```
 

@@ -108,38 +108,46 @@ $\blacksquare$
 Solution
 
 
-Without naming them explicitly means using some other way to pick them out of the data frame, `summarize` with `across`. 
+Without naming them explicitly means using some other way to pick them out of the data frame, such as `summarize` with `across`. 
 
 The basic `across` comes from asking yourself what the *names* of those columns have in common: they start with C and the gender column doesn't:
 
 ```{r compatt-7 }
-anxiety %>% summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
+anxiety %>% summarize(across(starts_with("C"), 
+                             list(mean = \(cc) mean(cc), sd = \(cc) sd(cc))))
 ``` 
 
+
+Inside the calculation of the mean and SD, the columns you have chosen can have any name. You can use `x`, or, I used `cc` as a reminder to me that these columns have names that begin with C.^[The name `c` has a special meaning in R, so I avoided that.]
 
 Another way is to ask what *property* these two columns have in common: they are the only two numeric (quantitative) columns. This means using an `across` with a `where` inside it, thus:
 
 ```{r compatt-8 }
-anxiety %>% summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
+anxiety %>% summarize(across(where(is.numeric), 
+                             list(mean = \(num) mean(num), sd = \(num) sd(num))))
 ```     
 
-Read the first one as "across all the columnns whose names start with S, find the mean and SD of them." The second one is a little clunkier: "acrosss all the columns for which `is.numeric` is true, find the mean and SD of them". A shorter way for the second one is "across all the numeric (quantitative) columns, find their mean and SD", but then you have to remember exactly how to code that. The reason for the `list` is that we are calculating two statistics for each column that we find. I am using a "named list" so that the mean gets labelled with an `m` on the end of the column name, and the SD gets an `s` on the end.
+Again, you can call the selected columns `x`, or you can have a name like `num` that reminds you that these are the numeric ones.
+
+Read the first one as "across all the columnns whose names start with C, find the mean and SD of them." The second one is a little clunkier: "acrosss all the columns for which `is.numeric` is true, find the mean and SD of them". A shorter way for the second one is "across all the numeric (quantitative) columns, find their mean and SD", but then you have to remember exactly how to code that. The reason for the `list` is that we are calculating two statistics for each column that we find. I am using a "named list" so that the mean gets labelled with a `mean` on the end of the column name, and the SD gets an `sd` on the end. For this kind of `summarize`, the names of the summaries can be short (and don't need to contain a variable name), because they will be glued onto the end of the names of the variables for which they are the mean and SD.
 
 Either of these is good, or anything equivalent (like noting that the two anxiety scales both `ends\_with` S):
 
 ```{r compatt-9 }
-anxiety %>% summarize(across(ends_with("S"), list(m = ~mean(.), s = ~sd(.))))
+anxiety %>% summarize(across(ends_with("S"), 
+                             list(mean = \(s) mean(s), sd = \(s) sd(s))))
 ``` 
 
-Because I didn't say otherwise, you should tell me what the means and SDs are, rounding off suitably: the CAS scores have mean 2.82 and SD 0.48, and the CARS scores have mean 2.77 and SD 0.67.
+Because I didn't say otherwise, you should say what the means and SDs are, rounding off suitably: the CAS scores have mean 2.82 and SD 0.48, and the CARS scores have mean 2.77 and SD 0.67.
 
 Yet another way to do it is to select the columns you want first (which
-you can do by number so as not to name them), and then find the mean
+you can also do by number so as not to name them, or use the select-helper that you put inside the `across`), and then find the mean
 and SD of all of them:
 
 ```{r compatt-10 }
 anxiety %>% select(2:3) %>% 
-    summarize(across(everything(), list(m = ~mean(.), s = ~sd(.))))
+    summarize(across(everything(), 
+                     list(mean = \(x) mean(x), sd = \(x) sd(x))))
 ``` 
 
 This doesn't work:
@@ -159,14 +167,16 @@ In case you were wondering about how to do this separately by gender, well, put 
 
 ```{r compatt-12 }
 anxiety %>% group_by(gender) %>%
-summarize(across(where(is.numeric), list(m = ~mean(.), s = ~sd(.))))
+  summarize(across(where(is.numeric), 
+                   list(mean = \(num) mean(num), sd = \(num) sd(num))))
 ``` 
 
 or
 
 ```{r compatt-13 }
 anxiety %>% group_by(gender) %>%
-summarize(across(starts_with("C"), list(m = ~mean(.), s = ~sd(.))))
+    summarize(across(starts_with("C"), 
+                    list(mean = \(cc) mean(cc), sd = \(cc) sd(cc))))
 ``` 
 
 The male means are slightly higher on both tests, but the male
@@ -174,7 +184,7 @@ standard deviations are a little smaller.
 You might be wondering whether the test scores are related. They are both quantitative, so the obvious way to find out is a scatterplot:
 
 ```{r compatt-14 }
-ggplot(anxiety,aes(x=CAS,y=CARS))+geom_point()
+ggplot(anxiety,aes(x=CAS, y=CARS))+geom_point()
 ``` 
 
 The two variables can be on either axis, since there is no obvious
