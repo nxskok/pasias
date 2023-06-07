@@ -1,0 +1,71 @@
+---
+title: "pull stuff"
+format: html
+---
+
+## the idea
+
+idea: automate copying/renaming of files for pasias2
+
+```{r}
+library(tidyverse)
+row <- 14
+```
+
+
+## get chapter titles
+
+```{r}
+x <- readLines("_bookdown.yml")
+x %>% enframe() %>% 
+  mutate(value = str_replace_all(value, "\"", "")) %>% 
+  mutate(value = str_replace_all(value, ",$", "")) %>% 
+  filter(str_detect(value, "^[0-9]")) %>% 
+  select(-name) %>% 
+  rename(chapter = value) -> chapters
+chapters
+```
+
+## within a chapter, pull out files
+
+```{r}
+
+chapters %>% pluck("chapter", row) -> the_chapter
+the_chapter
+```
+
+copy this to ../pasias2, removing the two digits on the front
+
+```{r}
+the_chapter %>%  str_remove("^..-") %>% 
+  str_c("../pasias2/", .) -> the_chapter_short
+# the_chapter_short
+file.copy(the_chapter, the_chapter_short)
+```
+
+
+
+
+
+get files included in chapter
+
+```{r}
+y <- readLines(the_chapter)
+y %>% 
+  str_subset("child=") %>% 
+  str_match("child=(.*)$") %>% 
+  .[,2] %>% 
+  str_replace_all("\"", "") %>% 
+  str_replace_all(".$", "") -> filenames
+filenames
+```
+
+copy these to ../pasias2, prepending a _
+
+```{r}
+filenames %>% 
+  str_c("../pasias2/_", .) -> filenames_longer
+# filenames_longer
+file.copy(filenames, filenames_longer)
+```
+
