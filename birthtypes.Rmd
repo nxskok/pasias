@@ -84,12 +84,12 @@ the columns that it is made out of; in this case, the original year,
 month and day disappear:
 
 ```{r birthtypes-4 }
-b3 <- births %>%
+births %>%
   mutate(year = 2012, day = 1) %>%
   unite(datestr, year, month, day) %>%
   mutate(thedate = ymd(datestr)) %>%
-  mutate(cesarean_rate = cesarean / (cesarean + vaginal))
-b3
+  mutate(cesarean_rate = cesarean / (cesarean + vaginal)) -> b3
+b3 %>% mutate(the_month = month(thedate))
 ```
 
  
@@ -109,7 +109,7 @@ Solution
 
 This is a scatterplot with time on the $x$ axis:
 ```{r tann}
-ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
+ggplot(b3, aes(x = thedate, y = cesarean_rate)) + geom_point() + geom_smooth()
 ```
 
         
@@ -118,7 +118,7 @@ I like this better than joining the points by lines, since we already
 have a trend on the plot, but you can do that in some contrasting way:
 
 ```{r fletzlinger}
-ggplot(b2, aes(x = thedate, y = cesarean_rate)) + geom_point() +
+ggplot(b3, aes(x = thedate, y = cesarean_rate)) + geom_point() +
   geom_line(linetype = "dashed") + geom_smooth()
 ```
 
@@ -139,7 +139,7 @@ Solution
 Something like this is the obvious guess:
 
 ```{r birthtypes-5, error=T}
-with(b2, cor(thedate, cesarean_rate))
+with(b3, cor(thedate, cesarean_rate))
 ```
 
  
@@ -150,7 +150,7 @@ lurking in the background is how the date is actually
 passing it through `as.numeric` might turn it into that:
 
 ```{r birthtypes-6 }
-b2 %>% mutate(numeric_date = as.numeric(thedate)) -> b5
+b3 %>% mutate(numeric_date = as.numeric(thedate)) -> b5
 b5
 ```
 
